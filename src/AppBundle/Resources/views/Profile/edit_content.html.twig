@@ -1,0 +1,44 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% if not form.vars.valid %}
+    <div class="col-md-12">
+        <div class="bs-callout bs-callout-danger ">
+            {{ form_errors(form.username) }}
+            {{ form_errors(form.email) }}
+            {{ form_errors(form.current_password) }}
+        </div>
+    </div>
+{% endif %}
+
+<div class="container">
+    <div class="portlet-body form">
+        <div class="form-body">
+            {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'form-group' } }) }}
+            <h3 class="form-section">Personal Info</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.first_name) }}
+                    {{ form_widget(form.first_name , { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_label(form.username) }}
+                    {{ form_widget(form.username , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.last_name) }}
+                    {{ form_widget(form.last_name , { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_label(form.current_password) }}
+                    {{ form_widget(form.current_password , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <div style="padding-top: 20px;">
+                <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

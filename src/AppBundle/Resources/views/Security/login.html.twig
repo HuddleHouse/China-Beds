@@ -1,0 +1,39 @@
+{% extends "login.html.twig" %}
+
+{% block title %}Login{% endblock %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+{% block body %}
+    {% if error %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="bs-callout bs-callout-danger ">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            </div>
+        </div>
+    {% endif %}
+<div class="hold-transition login-page">
+    <div class="login-box" style="margin-top: 40px;">
+    <div class="login-box-body">
+        {#<img class="logo" height="35" src="{{ asset('images/logo.png') }}" alt="logo">#}
+        <form class="vertical-form" action="{{ path("fos_user_security_check") }}" method="post" style="display: block;">
+            <legend class="form-signin-heading">Log In</legend>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+            <div class="form-group">
+                <label for="username" class="sr-only">{{ 'security.login.username'|trans }}</label>
+                <input type="text" class="form-control" style="margin-bottom: 15px;" id="username" name="_username" value="{{ last_username }}" placeholder="Username" required="required" />
+
+                <label for="password" class="sr-only">{{ 'security.login.password'|trans }}</label>
+                <input type="password" class="form-control" id="password" name="_password" required="required" placeholder="Password" />
+            </div>
+
+            <input type="submit" class="btn btn-lg btn-primary btn-block" id="_submit" name="_submit" value="Log In" />
+            <p style="padding-top: 14px; margin-bottom: -10px;">
+                <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>
+            </p>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock body %}

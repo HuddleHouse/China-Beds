@@ -1,0 +1,52 @@
+{% extends ":template:layout.html.twig" %}
+
+
+{% block title %}All Invitaions{% endblock %}
+{% block page_title  %}
+All Sent Invitations
+{% endblock page_title %}
+
+{% block page_name  %}
+    <i class="fa fa-home"></i>Invitations
+{% endblock page_name %}
+
+{% block actions %}
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-fit-height default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+            Actions <i class="fa fa-angle-down"></i>
+        </button>
+        <ul class="dropdown-menu pull-right" role="menu">
+            <li>
+                <a href="{{ path('all_invitations') }}">View All Invitations</a>
+            </li>
+        </ul>
+    </div>
+{% endblock actions %}
+
+{% block content %}
+    <div class="col-md-8">
+            <table class="table table-striped">
+                <caption>All Invitations</caption>
+                <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Code</th>
+                    <th>Sent</th>
+                </tr>
+                {% for inv in invitations %}
+                    <tr>
+                        <th>{{ inv.email |e }}</th>
+                        <th>{{ inv.code |e }}</th>
+                        {% if inv.sent %}
+                            <th>Yes</th>
+                        {% else %}
+                            <th>No</th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </thead>
+            </table>
+
+    </div>
+
+{% endblock content %}

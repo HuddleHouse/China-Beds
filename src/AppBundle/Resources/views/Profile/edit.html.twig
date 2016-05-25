@@ -1,0 +1,22 @@
+{% extends ":default:layout.html.twig" %}
+{% block title %}Profile{% endblock %}
+{% block page_title  %}
+    Edit Information
+{% endblock page_title %}
+
+{% block page_name  %}
+    Edit Information
+    <style>
+        .page-content {
+            margin-top: 0px;
+            background-color: #eee;
+            border-radius: 0 0 0 4px;
+        }
+    </style>
+{% endblock page_name %}
+
+{% block content %}
+    <div class="row">
+{% include "FOSUserBundle:Profile:edit_content.html.twig" %}
+</div>
+{% endblock content %}

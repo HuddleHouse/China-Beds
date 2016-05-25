@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+        <style>
+                body {
+                        background-color: #fff !important;
+                }
+        </style>
+{% endblock %}
+
+{% block body %}
+        <div class="login">
+                {{ block('fos_user_content') }}
+                {{ block('content') }}
+        </div>
+{% endblock %}
+

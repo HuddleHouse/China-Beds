@@ -1,0 +1,13 @@
+{% extends ":default:layout.html.twig" %}
+{% block title %}Profile{% endblock %}
+{% block page_title  %}
+    Profile Information
+{% endblock page_title %}
+
+{% block page_name  %}
+    Profile Information
+{% endblock page_name %}
+
+{% block content %}
+        {% include "FOSUserBundle:Profile:show_content.html.twig" %}
+{% endblock content %}
