@@ -22,16 +22,6 @@ class RoleGroup extends BaseGroup
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-
-    /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinTable(name="role_group_users",
-     *      joinColumns={@ORM\JoinColumn(name="role_group_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-     * )
-     */
-    protected $users;
 
     /**
      * Constructor

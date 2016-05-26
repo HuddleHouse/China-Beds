@@ -71,7 +71,7 @@
 
     <!-- BEGIN CONTAINER -->
 {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new'] %}
-{% set sidebar_users = ['view_users'] %}
+{% set sidebar_users = ['view_users', 'admin_edit_user'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -154,7 +154,9 @@
                         </li>
 
 
-                        <li class="treeview {% if (app.request.get('_route') in sidebar_user_group or sidebar_users ) %} active{% endif %}">
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
+                        {% elseif (app.request.get('_route') in sidebar_users) %} active
+                        {% endif %}">
                             <a href="#">
                                 <i class="fa fa-users"></i>
                                 <span>User</span>

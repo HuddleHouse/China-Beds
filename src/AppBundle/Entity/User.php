@@ -70,7 +70,7 @@ class User extends BaseUser
     /**
      * @var int
      *
-     * @ORM\Column(name="acount_number", type="integer", nullable=true)
+     * @ORM\Column(name="zip", type="integer", nullable=true)
      */
     private $zip;
 
@@ -102,7 +102,7 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_charge_shipping = false;
+    protected $is_charge_shipping = true;
 
     /**
      *
@@ -114,21 +114,22 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_active = false;
-
-    /**
-     *
-     * @ORM\Column(type="boolean")
-     */
     protected $is_current = false;
 
     /**
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_online_intentions = false;
+    protected $is_online_intentions = true;
 
-
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\RoleGroup")
+     * @ORM\JoinTable(name="user_groups",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
 
     /**
      * @ORM\OneToOne(targetEntity="Invitation")
@@ -405,22 +406,6 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getIsActive()
-    {
-        return $this->is_active;
-    }
-
-    /**
-     * @param mixed $is_active
-     */
-    public function setIsActive($is_active)
-    {
-        $this->is_active = $is_active;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getIsCurrent()
     {
         return $this->is_current;
@@ -449,6 +434,5 @@ class User extends BaseUser
     {
         $this->is_online_intentions = $is_online_intentions;
     }
-    
-    
+
 }
