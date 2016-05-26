@@ -6,6 +6,7 @@ namespace AppBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -137,13 +138,16 @@ class User extends BaseUser
      * @Assert\NotNull(message="Your code is invalid.", groups={"Registration"})
      */
     protected $invitation;
-    
 
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        parent::__construct();
-        // your own logic
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     public function setInvitation(Invitation $invitation)
     {
@@ -435,4 +439,8 @@ class User extends BaseUser
         $this->is_online_intentions = $is_online_intentions;
     }
 
+    public function getGroups()
+    {
+        return $this->groups = new ArrayCollection;
+    }
 }
