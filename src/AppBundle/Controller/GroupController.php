@@ -82,6 +82,13 @@ class GroupController extends Controller
             /** @var $groupManager \FOS\UserBundle\Model\GroupManagerInterface */
             $groupManager = $this->get('fos_user.group_manager');
 
+            $oldRole = $group->getRoles();
+//                $group->removeRole($oldRole);
+
+            $role = "ROLE_" . strtoupper($group->getName());
+            $group->setRoles(array());
+            $group->addRole($role);
+
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_SUCCESS, $event);
             $groupManager->updateGroup($group);
@@ -93,7 +100,7 @@ class GroupController extends Controller
 
             $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
 
-            $this->addFlash('notice', 'Office updated successfully.');
+            $this->addFlash('notice', 'Role updated successfully.');
 
             return $this->redirectToRoute('fos_user_group_list');
         }
