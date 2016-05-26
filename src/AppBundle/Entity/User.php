@@ -22,29 +22,113 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min=3,
-     *     max=255,
-     *     minMessage="Your First name is too short.",
-     *     maxMessage="Your First name is too long.",
-     *     groups={"Registration", "Profile"}
-     * )
      */
     protected $first_name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min=3,
-     *     max=255,
-     *     minMessage="Your last name is too short.",
-     *     maxMessage="Your last name is too long.",
-     *     groups={"Registration", "Profile"}
-     * )
+     *
      */
     protected $last_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $company_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $address_1;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $address_2;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $city;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $state;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $phone;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="acount_number", type="integer", nullable=true)
+     */
+    private $zip;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_residential = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_show_credit = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_show_warranty = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_volume_discount = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_charge_shipping = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $sent_retail_kit = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_active = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_current = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_online_intentions = false;
+
+
 
     /**
      * @ORM\OneToOne(targetEntity="Invitation")
@@ -109,5 +193,262 @@ class User extends BaseUser
     {
         $this->first_name = $first_name;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyName()
+    {
+        return $this->company_name;
+    }
+
+    /**
+     * @param mixed $company_name
+     */
+    public function setCompanyName($company_name)
+    {
+        $this->company_name = $company_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress1()
+    {
+        return $this->address_1;
+    }
+
+    /**
+     * @param mixed $address_1
+     */
+    public function setAddress1($address_1)
+    {
+        $this->address_1 = $address_1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress2()
+    {
+        return $this->address_2;
+    }
+
+    /**
+     * @param mixed $address_2
+     */
+    public function setAddress2($address_2)
+    {
+        $this->address_2 = $address_2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    /**
+     * @param int $zip
+     */
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsResidential()
+    {
+        return $this->is_residential;
+    }
+
+    /**
+     * @param mixed $is_residential
+     */
+    public function setIsResidential($is_residential)
+    {
+        $this->is_residential = $is_residential;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsShowCredit()
+    {
+        return $this->is_show_credit;
+    }
+
+    /**
+     * @param mixed $is_show_credit
+     */
+    public function setIsShowCredit($is_show_credit)
+    {
+        $this->is_show_credit = $is_show_credit;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsShowWarranty()
+    {
+        return $this->is_show_warranty;
+    }
+
+    /**
+     * @param mixed $is_show_warranty
+     */
+    public function setIsShowWarranty($is_show_warranty)
+    {
+        $this->is_show_warranty = $is_show_warranty;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsVolumeDiscount()
+    {
+        return $this->is_volume_discount;
+    }
+
+    /**
+     * @param mixed $is_volume_discount
+     */
+    public function setIsVolumeDiscount($is_volume_discount)
+    {
+        $this->is_volume_discount = $is_volume_discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsChargeShipping()
+    {
+        return $this->is_charge_shipping;
+    }
+
+    /**
+     * @param mixed $is_charge_shipping
+     */
+    public function setIsChargeShipping($is_charge_shipping)
+    {
+        $this->is_charge_shipping = $is_charge_shipping;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSentRetailKit()
+    {
+        return $this->sent_retail_kit;
+    }
+
+    /**
+     * @param mixed $sent_retail_kit
+     */
+    public function setSentRetailKit($sent_retail_kit)
+    {
+        $this->sent_retail_kit = $sent_retail_kit;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param mixed $is_active
+     */
+    public function setIsActive($is_active)
+    {
+        $this->is_active = $is_active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsCurrent()
+    {
+        return $this->is_current;
+    }
+
+    /**
+     * @param mixed $is_current
+     */
+    public function setIsCurrent($is_current)
+    {
+        $this->is_current = $is_current;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsOnlineIntentions()
+    {
+        return $this->is_online_intentions;
+    }
+
+    /**
+     * @param mixed $is_online_intentions
+     */
+    public function setIsOnlineIntentions($is_online_intentions)
+    {
+        $this->is_online_intentions = $is_online_intentions;
+    }
+    
     
 }
