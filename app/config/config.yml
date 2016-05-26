@@ -73,7 +73,7 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\User
     group:
-            group_class: AppBundle\Entity\Office
+            group_class: AppBundle\Entity\RoleGroup
             form:
                 type: AppBundle\Form\GroupFormType
     registration:

@@ -1,0 +1,61 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% if not form.vars.valid %}
+    <div class="row">
+        <div class="col-md-122">
+            <div class="bs-callout bs-callout-danger ">
+                {{ form_errors(form.name) }}
+                {{ form_errors(form.office_number) }}
+                {{ form_errors(form.address) }}
+                {{ form_errors(form.city) }}
+                {{ form_errors(form.state) }}
+                {{ form_errors(form.zip) }}
+                {{ form_errors(form.phone) }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div class="container">
+    <div class="portlet-body form">
+        <div class="form-body">
+            {{ form_start(form, { 'action': path('fos_user_group_edit', {'groupName': group_name} ), 'attr': { 'class': 'form-group' } }) }}
+            <h3 class="form-section">Office Info</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name , { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_label(form.phone) }}
+                    {{ form_widget(form.phone , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.office_number) }}
+                    {{ form_widget(form.office_number , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
+            <h3 class="form-section">Office Address</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_label(form.address) }}
+                    {{ form_widget(form.address , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city , { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_label(form.zip) }}
+                    {{ form_widget(form.zip , { 'attr': {'class': 'form-control'} }) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.state) }}
+                    {{ form_widget(form.state , { 'attr': {'class': 'form-control'} }) }}
+
+                </div>
+            </div>
+            <div style="padding-top: 20px;">
+                <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

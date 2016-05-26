@@ -90,26 +90,28 @@
 
                         <li class="treeview">
                             <a href="$">
-                                <i class="fa fa-lock"></i>
-                                <span>Admin</span>
+                                <i class="fa fa-tasks"></i>
+                                <span>Assortment</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
                                 <li {% if app.request.get('_route') == 'fos_user_group_list' %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-users"></i> View Offices</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Categories</a>
                                 </li>
                                 <li {% if app.request.get('_route') == 'admin_part_index' %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-archive"></i> View Parts</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Products</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_part_index' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>POP Items</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_part_index' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Promo Kit Items</a>
                                 </li>
                                 <li {% if app.request.get('_route') == 'admin_partcategory_index' %} class="active"{% endif %}>
-                                    <a href=""><i
-                                                class="fa fa-folder-open-o"></i>
-                                        View
-                                        Part Categories</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Inventory Levels</a>
                                 </li>
                                 <li {% if app.request.get('_route') == 'view_users' %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-users"></i> View
-                                        Users</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Other</a>
                                 </li>
                                 {#<li {% if app.request.get('_route') == 'send_invitation' %} class="active"{% endif %}>#}
                                 {#<a href="{{ path('send_invitation') }}"><i class="fa fa-user"></i> Send User#}
@@ -119,25 +121,117 @@
 
                             </ul>
                         </li>
+
+
                         <li class="treeview">
                             <a href="#">
-                                <i class="fa fa-edit"></i>
-                                <span>Settings</span>
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Orders</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
                                 <li {% if app.request.get('_route') == 'fos_user_group_new' %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-plus-square-o"></i> Add
-                                        Office</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Current Orders</a>
                                 </li>
                                 <li {% if app.request.get('_route') == 'admin_part_new' %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-plus-square-o"></i> Add
-                                        Part</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Shipments</a>
                                 </li>
                                 <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-plus-square-o"></i>
-                                        Add
-                                        Part Category</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Payments</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Receive Container</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Container List</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Reports</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-users"></i>
+                                <span>User</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if app.request.get('_route') == 'fos_user_group_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Users</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_part_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Price Groups</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Roles</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-building-o"></i>
+                                <span>Warehouse</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if app.request.get('_route') == 'fos_user_group_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Warehouses</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_part_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Warehouse Inventory</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-bar-chart"></i>
+                                <span>Marketing</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if app.request.get('_route') == 'fos_user_group_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Promotions</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_part_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Add New Promotion</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Emails</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-info-circle"></i>
+                                <span>Support</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if app.request.get('_route') == 'fos_user_group_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Warranty</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_part_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Submitted Warranty Claims</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Rebate</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Submitted Rebates</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Request Credit</a>
+                                </li>
+                                <li {% if app.request.get('_route') == 'admin_partcategory_new' %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Credit Requests</a>
                                 </li>
                             </ul>
                         </li>

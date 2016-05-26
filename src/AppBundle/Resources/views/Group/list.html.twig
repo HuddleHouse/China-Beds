@@ -1,0 +1,28 @@
+{% extends ":template:layout.html.twig" %}
+
+{% block title %}All Offices{% endblock %}
+{% block page_title %}
+    All Registered Offices
+{% endblock page_title %}
+
+{% block page_name %}
+    <i class="fa fa-home"></i> Users
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block content %}
+    {% include "FOSUserBundle:Group:list_content.html.twig" %}
+{% endblock content %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+    </script>
+{% endblock footer %}
+

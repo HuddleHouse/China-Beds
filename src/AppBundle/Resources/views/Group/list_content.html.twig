@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="table">
+            <a class="btn btn-success" style="margin-bottom: 15px;" href="{{ path('fos_user_group_new') }}">Add a New
+                Office</a>
+            <table id="part-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Office #</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for group in groups %}
+                                <tr role="row" class="odd">
+                                    <td>
+                                        {{ group.getName() }}
+                                    </td>
+                                    <td class="">
+                                        {{ group.getOfficeNumber() }}
+                                    </td>
+                                    <td class="">
+                                        {{ group.getCity() }}
+                                    </td>
+                                    <td class="">
+                                        {{ group.getState() }}
+                                    </td>
+                                    <td class="">
+                                        {{ group.getPhone() }}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-default btn-xs purple"
+                                           href="{{ path('fos_user_group_edit', {'groupName': group.getName()} ) }}"><i
+                                                    class="fa fa-edit"></i> edit</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+        </div>
+    </div>
+

@@ -52,12 +52,7 @@ class User extends BaseUser
      * @Assert\NotNull(message="Your code is invalid.", groups={"Registration"})
      */
     protected $invitation;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Office")
-     * @ORM\JoinColumn(referencedColumnName="id")
-     */
-    protected $office;
+    
 
     public function __construct()
     {
@@ -114,21 +109,5 @@ class User extends BaseUser
     {
         $this->first_name = $first_name;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getOffice()
-    {
-        return $this->office;
-    }
-
-    /**
-     * @param mixed $office
-     */
-    public function setOffice($office)
-    {
-        $this->office = $office;
-    }
-
+    
 }
