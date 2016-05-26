@@ -26,11 +26,11 @@ class SecurityController extends Controller
         $router = $this->container->get('router');
 
         if ($authChecker->isGranted('ROLE_ADMIN')) {
-            return new RedirectResponse($router->generate('admin_home'), 307);
+            return new RedirectResponse($router->generate('fos_user_profile_show'), 307);
         }
 
         if ($authChecker->isGranted('ROLE_USER')) {
-            return new RedirectResponse($router->generate('user_home'), 307);
+            return new RedirectResponse($router->generate('fos_user_profile_show'), 307);
         }
 
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */

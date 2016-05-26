@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8"/>
     <title>{% block title %}{% endblock %}</title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
-          type="text/css"/>
-    <link rel="stylesheet"
-
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-alpha.2/css/bootstrap.css">
     {% block stylesheets %}
         {% stylesheets '@AppBundle/Resources/public/css/*' filter='cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -26,6 +22,9 @@
     {% endjavascripts %}
 {% endblock %}
 
+<script>
+
+</script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
         crossorigin="anonymous"></script>
