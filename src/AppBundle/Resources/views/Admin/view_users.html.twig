@@ -1,0 +1,70 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}All Users{% endblock %}
+{% block page_title  %}
+All Registered Users
+{% endblock page_title %}
+
+{% block page_name  %}
+    <i class="fa fa-home"></i> User
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="">
+            <table id="part-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Enabled</th>
+                    <th>Last Login</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.firstName ? user.firstName : ' ' }} {{ user.lastName ? user.lastName : ' ' }}
+                        </td>
+                        <td>
+                            {{ user.username }}
+                        </td>
+                        <td>
+                            {{ user.email |e }}
+                        </td>
+
+                        <td>
+                            {{ user.hasRole('ROLE_ADMIN') ? 'Yes' : 'No' }}
+                        </td>
+                        <td>
+                            {{ user.enabled ? 'Yes' : 'No' }}
+                        </td>
+                        <td>
+                            {{ user.lastLogin |date("F jS \\a\\t g:ia") }}
+                        </td>
+                        <td>
+                            <a class="btn btn-default btn-xs purple"
+                               href="{{ path('admin_edit_user', {'user_id': user.id}) }}"><i
+                                        class="fa fa-edit"></i> edit</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable();
+        });
+    </script>
+{% endblock footer %}
