@@ -135,7 +135,10 @@ class GroupController extends Controller
         if($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
-
+            
+            $role = "ROLE_" . strtoupper($group->getName());
+            $group->setRoles(array());
+            $group->addRole($role);
             $groupManager->updateGroup($group);
 
             $success = $group->getName() . " successfully created.";
