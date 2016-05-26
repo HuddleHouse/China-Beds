@@ -5,12 +5,6 @@
         <div class="col-md-122">
             <div class="bs-callout bs-callout-danger ">
                 {{ form_errors(form.name) }}
-                {{ form_errors(form.office_number) }}
-                {{ form_errors(form.address) }}
-                {{ form_errors(form.city) }}
-                {{ form_errors(form.state) }}
-                {{ form_errors(form.zip) }}
-                {{ form_errors(form.phone) }}
             </div>
         </div>
     </div>
@@ -24,35 +18,14 @@
             {% else %}
                 {{ form_start(form, { 'action': path(form_path), 'attr': { 'class': 'form-group' } }) }}
             {% endif %}
-            <h3 class="form-section">Office Info</h3>
+            <h3 class="form-section">Role</h3>
             <div class="row">
                 <div class="col-md-6">
                     {{ form_label(form.name) }}
                     {{ form_widget(form.name) }}
-                    {{ form_label(form.phone) }}
-                    {{ form_widget(form.phone) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_label(form.office_number) }}
-                    {{ form_widget(form.office_number) }}
-                </div>
-            </div>
-            <h3 class="form-section">Office Address</h3>
-            <div class="row">
-                <div class="col-md-12">
-                    {{ form_label(form.address) }}
-                    {{ form_widget(form.address) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_label(form.city) }}
-                    {{ form_widget(form.city) }}
-                    {{ form_label(form.zip) }}
-                    {{ form_widget(form.zip) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_label(form.state) }}
-                    {{ form_widget(form.state) }}
 
+                </div>
+                <div class="col-md-6">
                 </div>
             </div>
             <div style="padding-top: 20px;">
