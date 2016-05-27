@@ -26,7 +26,7 @@ class GroupFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\RoleGroup'
+            'data_class' => 'AppBundle\Entity\Role'
         ));
     }
 }

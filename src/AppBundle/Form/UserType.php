@@ -31,7 +31,7 @@ class UserType extends AbstractType
             ->add('state', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('password', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('groups', EntityType::class, array(
-                'class' => 'AppBundle:RoleGroup',
+                'class' => 'AppBundle:Role',
                 'label' => 'Role',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),

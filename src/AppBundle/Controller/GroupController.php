@@ -36,8 +36,16 @@ class GroupController extends Controller
     {
         $groups = $this->get('fos_user.group_manager')->findGroups();
 
+        foreach($groups as $group) {
+            $data[] = array(
+                'name' => $group->getName(),
+                'count' => count($group->getUsers()),
+                'id' => $group->getId()
+            );
+        }
+
         return $this->render('FOSUserBundle:Group:list.html.twig', array(
-            'groups' => $groups
+            'groups' => $data,
         ));
     }
 
@@ -135,7 +143,7 @@ class GroupController extends Controller
         if($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
-            
+
             $role = "ROLE_" . strtoupper($group->getName());
             $group->setRoles(array());
             $group->addRole($role);

@@ -124,10 +124,10 @@ class User extends BaseUser
     protected $is_online_intentions = true;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\RoleGroup")
-     * @ORM\JoinTable(name="user_groups",
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
+     * @ORM\JoinTable(name="role_users",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      */
     protected $groups;
