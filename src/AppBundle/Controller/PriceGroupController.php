@@ -77,7 +77,6 @@ class PriceGroupController extends Controller
      */
     public function showAction(PriceGroup $priceGroup)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         return $this->render('AppBundle:PriceGroup:show.html.twig', array(

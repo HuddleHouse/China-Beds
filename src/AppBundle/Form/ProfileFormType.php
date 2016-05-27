@@ -31,7 +31,14 @@ class ProfileFormType extends AbstractType
             ->add('state', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('groups', EntityType::class, array(
                 'class' => 'AppBundle:Role',
-                'label' => 'Role',
+                'label' => 'Roles',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'multiple' => true
+            ))
+            ->add('price_groups', EntityType::class, array(
+                'class' => 'AppBundle:PriceGroup',
+                'label' => 'Price Groups',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true

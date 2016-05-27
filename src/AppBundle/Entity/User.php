@@ -133,6 +133,11 @@ class User extends BaseUser
     protected $groups;
 
     /**
+     * @ORM\ManyToMany(targetEntity="PriceGroup", mappedBy="users")
+     */
+    private $price_groups;
+
+    /**
      * @ORM\OneToOne(targetEntity="Invitation")
      * @ORM\JoinColumn(referencedColumnName="code")
      * @Assert\NotNull(message="Your code is invalid.", groups={"Registration"})
@@ -144,6 +149,7 @@ class User extends BaseUser
     {
         parent::__construct();
         // your own logic
+        $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setInvitation(Invitation $invitation)
@@ -448,4 +454,22 @@ class User extends BaseUser
             return $this;
         }
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPriceGroups()
+    {
+        return $this->price_groups;
+    }
+
+    /**
+     * @param mixed $price_groups
+     */
+    public function setPriceGroups($price_groups)
+    {
+        $this->price_groups = $price_groups;
+    }
+
+
 }

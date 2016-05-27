@@ -27,20 +27,24 @@
             <div class="col-md-6">
                 {{ form_label(form.company_name) }}
                 {{ form_widget(form.company_name) }}
-            </div>
-            <div class="col-md-2">
                 {{ form_label(form.enabled) }}
                 {{ form_widget(form.enabled) }}
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
                 {{ form_label(form.email) }}
                 {{ form_widget(form.email) }}
+
             </div>
+        </div>
+        <hr>
+        <div class="row">
             <div class="col-md-6">
                 {{ form_label(form.groups) }}
                 {{ form_widget(form.groups) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.price_groups) }}
+                {{ form_widget(form.price_groups) }}
             </div>
         </div>
         <hr><hr>
@@ -70,10 +74,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 {{ form_label(form.is_residential) }}
                 {{ form_widget(form.is_residential) }}
             </div>
+
         </div>
         <hr><hr>
 
