@@ -49,7 +49,7 @@ class AdminController extends Controller
         }
         $em = $this->getDoctrine()->getManager();
 
-        return $this->render('@App/Admin/admin_edit_user.html.twig', array(
+        return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
             'form' => $form->createView(),
             'user_id' => $user_id
         ));
@@ -122,12 +122,12 @@ class AdminController extends Controller
                 ))
                 ->getForm();
 
-            return $this->render('@App/Security/send_invitation.html.twig', array(
+            return $this->render('AppBundle:Admin:send_invitation.html.twig', array(
                 'form' => $form->createView()
             ));
         }
 
-        return $this->render('@App/Security/send_invitation.html.twig', array(
+        return $this->render('AppBundle:Admin:send_invitation.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -140,10 +140,11 @@ class AdminController extends Controller
         $conn = $this->get('database_connection');
         $invitations = $conn->fetchAll('SELECT * FROM invitation');
 
-        return $this->render('@App/Security/invitations_sent.html.twig', array(
+        return $this->render('AppBundle:Admin:invitations_sent.html.twig', array(
             'invitations' => $invitations
         ));
     }
 
+    
 
 }
