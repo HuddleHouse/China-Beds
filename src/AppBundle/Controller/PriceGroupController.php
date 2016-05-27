@@ -50,7 +50,8 @@ class PriceGroupController extends Controller
             $em->persist($priceGroup);
             $em->flush();
 
-            return $this->redirectToRoute('admin_price_group_show', array('id' => $priceGroup->getId()));
+            $this->addFlash('notice', 'Price Group added successfully.');
+            return $this->redirectToRoute('admin_price_group_index');
         }
 
         return $this->render('AppBundle:PriceGroup:new.html.twig', array(
@@ -92,7 +93,8 @@ class PriceGroupController extends Controller
             $em->persist($priceGroup);
             $em->flush();
 
-            return $this->redirectToRoute('admin_price_group_edit', array('id' => $priceGroup->getId()));
+            $this->addFlash('notice', 'Price Group updated successfully.');
+            return $this->redirectToRoute('admin_price_group_index');
         }
 
         return $this->render('AppBundle:PriceGroup:edit.html.twig', array(

@@ -6,7 +6,7 @@ All Registered Users
 {% endblock page_title %}
 
 {% block page_name  %}
-    <i class="fa fa-home"></i> User
+    User
 {% endblock page_name %}
 
 {% block actions %}
@@ -14,8 +14,8 @@ All Registered Users
 
 {% block content %}
     <div class="col-md-12">
-        <div class="">
-            <table id="part-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <div class="table">
+            <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -27,8 +27,9 @@ All Registered Users
                     <th>Actions</th>
                 </tr>
                 </thead>
+                <tbody>
                 {% for user in users %}
-                    <tr>
+                    <tr role="row" class="odd">
                         <td>
                             {{ user.firstName ? user.firstName : ' ' }} {{ user.lastName ? user.lastName : ' ' }}
                         </td>
@@ -55,7 +56,7 @@ All Registered Users
                         </td>
                     </tr>
                 {% endfor %}
-
+                </tbody>
             </table>
         </div>
     </div>

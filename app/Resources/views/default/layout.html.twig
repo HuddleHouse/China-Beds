@@ -72,6 +72,7 @@
     <!-- BEGIN CONTAINER -->
 {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new'] %}
 {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
+{% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -156,6 +157,7 @@
 
                         <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
                         {% elseif (app.request.get('_route') in sidebar_users) %} active
+                        {% elseif (app.request.get('_route') in sidebar_price_groups) %} active
                         {% endif %}">
                             <a href="#">
                                 <i class="fa fa-users"></i>
@@ -166,7 +168,7 @@
                                 <li {% if (app.request.get('_route') in sidebar_users) %} class="active"{% endif %}>
                                     <a href="{{ path('view_users') }}"><i class="fa fa-circle-o"></i>Users</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                <li {% if (app.request.get('_route') in sidebar_price_groups) %} class="active"{% endif %}>
                                     <a href="{{ path('admin_price_group_index') }}"><i class="fa fa-circle-o"></i>Price Groups</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_user_group) %} class="active"{% endif %}>

@@ -138,16 +138,13 @@ class User extends BaseUser
      * @Assert\NotNull(message="Your code is invalid.", groups={"Registration"})
      */
     protected $invitation;
+    
 
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        parent::__construct();
+        // your own logic
     }
-
 
     public function setInvitation(Invitation $invitation)
     {
@@ -442,5 +439,13 @@ class User extends BaseUser
     public function getGroups()
     {
         return $this->groups = new ArrayCollection;
+    }
+
+    public function addRole($role)
+    {
+        $role = strtoupper($role['roles']);
+        if($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
     }
 }
