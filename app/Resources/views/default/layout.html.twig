@@ -32,7 +32,7 @@
                 <ul class="nav navbar-nav">
                     <li id="welcome-message" class="dropdown user-menu">
                         <a class="welcome">
-                            <span class="username">Welcome back {{ app.user }}</span>
+                            <span class="username">Logged in as {{ app.user }}</span>
                         </a>
                     </li>
                     <!-- BEGIN USER LOGIN DROPDOWN -->
@@ -40,26 +40,7 @@
                         <a href="#" data-toggle="control-sidebar">
                             <span class="username"><i class="fa fa-gears"></i></span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href=""><i class="fa fa-user"></i> Update Profile</a>
-                            </li>
-                            {% if not is_granted('ROLE_ADMIN') %}
-                                <li>
-                                    <a href=""><i class="fa fa-hdd-o"></i> View All Orders</a>
-                                </li>
-                            {% endif %}
-                            <li>
-                                <a href=""><i class="fa fa-key"></i> Change
-                                    Password</a>
-                            </li>
 
-                            <li class="divider">
-                            </li>
-                            <li>
-                                <a href=""><i class="icon-rocket"></i> Log Out</a>
-                            </li>
-                        </ul>
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
 
@@ -251,7 +232,7 @@
 
 
     <!-- BEGIN CONTENT -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="min-height: 100vh;">
         <section class="content-header">
             <h1>
                 {{ block('page_title') }}
@@ -292,7 +273,7 @@
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="">
+            <li class="active" style="">
                 <a href="#control-sidebar-home-tab" data-toggle="tab" aria-expanded="false">
                     <i class="fa fa-gears"></i>
                 </a>
@@ -301,10 +282,11 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- Home tab content -->
-            <div class="tab-pane" id="control-sidebar-home-tab">
-                <a style="width: 100%;" class="btn btn-flat btn-info" href="{{ path('fos_user_profile_edit') }}"><i class="fa fa-user"></i> Update Profile</a>
+            <div class="tab-pane active" id="control-sidebar-home-tab">
+                <a style="width: 100%;" class="btn btn-flat btn-default" href="{{ path('fos_user_profile_edit') }}"><i class="fa fa-user"></i> Update Info</a>
+                <a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-flat btn-default" href="{{ path('fos_user_change_password') }}"><i class="fa fa-lock"></i> Change Password</a>
                 <hr>
-                <a style="width: 100%;" class="btn btn-flat btn-default" href="{{ path('fos_user_security_logout') }}"><i class="fa fa-user"></i> Logout</a>
+                <a style="width: 100%;" class="btn btn-flat btn-default" href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
             <!-- /.tab-pane -->
         </div>
