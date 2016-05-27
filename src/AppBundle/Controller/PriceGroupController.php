@@ -27,9 +27,18 @@ class PriceGroupController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $priceGroups = $em->getRepository('AppBundle:PriceGroup')->findAll();
+        $data = array();
+
+        foreach($priceGroups as $group) {
+            $data[] = array(
+                'name' => $group->getName(),
+                'count' => count($group->getUsers()),
+                'id' => $group->getId()
+            );
+        }
 
         return $this->render('AppBundle:PriceGroup:index.html.twig', array(
-            'priceGroups' => $priceGroups,
+            'priceGroups' => $data,
         ));
     }
 
@@ -68,11 +77,12 @@ class PriceGroupController extends Controller
      */
     public function showAction(PriceGroup $priceGroup)
     {
-        $deleteForm = $this->createDeleteForm($priceGroup);
+
+        $em = $this->getDoctrine()->getManager();
 
         return $this->render('AppBundle:PriceGroup:show.html.twig', array(
-            'priceGroup' => $priceGroup,
-            'delete_form' => $deleteForm->createView(),
+            'users' => $priceGroup->getUsers(),
+            'priceGroup' => $priceGroup
         ));
     }
 
