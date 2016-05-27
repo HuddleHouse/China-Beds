@@ -31,7 +31,7 @@ All Registered Users
                 {% for user in users %}
                     <tr role="row" class="odd">
                         <td>
-                            {{ user.firstName ? user.firstName : ' ' }} {{ user.lastName ? user.lastName : ' ' }}
+                            <a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.firstName ? user.firstName : ' ' }} {{ user.lastName ? user.lastName : ' ' }}</a>
                         </td>
                         <td>
                             {{ user.username }}
@@ -50,8 +50,7 @@ All Registered Users
                             {{ user.lastLogin |date("F jS \\a\\t g:ia") }}
                         </td>
                         <td>
-                            <a class="btn btn-default btn-xs purple"
-                               href="{{ path('admin_edit_user', {'user_id': user.id}) }}"><i
+                            <a class="btn btn-default btn-xs purple" href="{{ path('admin_edit_user', {'user_id': user.id}) }}"><i
                                         class="fa fa-edit"></i> edit</a>
                         </td>
                     </tr>
