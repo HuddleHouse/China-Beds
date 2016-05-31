@@ -23,129 +23,131 @@
         </div>
     {% endif %}
 
-        <div class="portlet-body form">
-            <div class="form-body">
-                {{ form_start(form, { 'action': path('admin_edit_user', { 'user_id': user_id }), 'attr': { 'class': 'form-group' } }) }}
-                <h3 class="form-section">Edit User Info</h3><hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ form_label(form.first_name) }}
-                        {{ form_widget(form.first_name) }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form_label(form.last_name) }}
-                        {{ form_widget(form.last_name) }}
-                    </div>
+    <div class="portlet-body form">
+        <div class="form-body">
+            {{ form_start(form, { 'action': path('admin_edit_user', { 'user_id': user_id }), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.first_name) }}
+                    {{ form_widget(form.first_name) }}
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ form_label(form.company_name) }}
-                        {{ form_widget(form.company_name) }}
-                    </div>
-                    <div class="col-md-2">
-                        {{ form_label(form.enabled) }}
-                        {{ form_widget(form.enabled) }}
-                    </div>
+                <div class="col-md-6">
+                    {{ form_label(form.last_name) }}
+                    {{ form_widget(form.last_name) }}
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ form_label(form.email) }}
-                        {{ form_widget(form.email) }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form_label(form.groups) }}
-                        {{ form_widget(form.groups) }}
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.office) }}
+                    {{ form_widget(form.office) }}
+                    {{ form_label(form.enabled) }}
+                    {{ form_widget(form.enabled) }}
                 </div>
-                <hr><hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ form_label(form.address_1) }}
-                        {{ form_widget(form.address_1) }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form_label(form.address_2) }}
-                        {{ form_widget(form.address_2) }}
-                    </div>
-                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email) }}
 
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ form_label(form.city) }}
-                        {{ form_widget(form.city) }}
-                    </div>
-                    <div class="col-md-2">
-                        {{ form_label(form.state) }}
-                        {{ form_widget(form.state) }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form_label(form.zip) }}
-                        {{ form_widget(form.zip) }}
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        {{ form_label(form.is_residential) }}
-                        {{ form_widget(form.is_residential) }}
-                    </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.groups) }}
+                    {{ form_widget(form.groups) }}
                 </div>
-                <hr><hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        {{ form_label(form.is_show_credit) }}
-                        {{ form_widget(form.is_show_credit) }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form_label(form.is_volume_discount) }}
-                        {{ form_widget(form.is_volume_discount) }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form_label(form.is_charge_shipping) }}
-                        {{ form_widget(form.is_charge_shipping) }}
-                    </div>
+                <div class="col-md-6">
+                    {{ form_label(form.price_groups) }}
+                    {{ form_widget(form.price_groups) }}
                 </div>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        {{ form_label(form.is_show_warranty) }}
-                        {{ form_widget(form.is_show_warranty) }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form_label(form.sent_retail_kit) }}
-                        {{ form_widget(form.sent_retail_kit) }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form_label(form.is_current) }}
-                        {{ form_widget(form.is_current) }}
-                    </div>
+            </div>
+            <hr><hr>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.address_1) }}
+                    {{ form_widget(form.address_1) }}
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-4">
-                        {{ form_label(form.is_online_intentions) }}
-                        {{ form_widget(form.is_online_intentions) }}
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                </div>
-
-                <hr>
-                <div class="row">
-                    <div class="col-md-8">
-                        {{ form_label(form.password) }}
-                        {{ form_widget(form.password) }}
-                    </div>
-                </div>
-                <div style="padding-top: 20px;">
-                    <input class="btn-lg btn-success" type="submit" value="Update"/>
+                <div class="col-md-6">
+                    {{ form_label(form.address_2) }}
+                    {{ form_widget(form.address_2) }}
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city) }}
+                </div>
+                <div class="col-md-2">
+                    {{ form_label(form.state) }}
+                    {{ form_widget(form.state) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.zip) }}
+                    {{ form_widget(form.zip) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    {{ form_label(form.is_residential) }}
+                    {{ form_widget(form.is_residential) }}
+                </div>
+
+            </div>
+            <hr><hr>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.is_show_credit) }}
+                    {{ form_widget(form.is_show_credit) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.is_volume_discount) }}
+                    {{ form_widget(form.is_volume_discount) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.is_charge_shipping) }}
+                    {{ form_widget(form.is_charge_shipping) }}
+                </div>
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.is_show_warranty) }}
+                    {{ form_widget(form.is_show_warranty) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.sent_retail_kit) }}
+                    {{ form_widget(form.sent_retail_kit) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.is_current) }}
+                    {{ form_widget(form.is_current) }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.is_online_intentions) }}
+                    {{ form_widget(form.is_online_intentions) }}
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <hr>
+            <div class="row">
+                <div class="col-md-8">
+                </div>
+            </div>
+            <div style="padding-top: 20px;">
+                <input class="btn-lg btn-success" type="submit" value="Update"/>
+            </div>
         </div>
+
+    </div>
 
     {{ form_end(form) }}
 {% endblock content %}

@@ -37,12 +37,6 @@ class User extends BaseUser
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      */
-    protected $company_name;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     */
     protected $address_1;
 
     /**
@@ -207,22 +201,6 @@ class User extends BaseUser
     public function setFirstName($first_name)
     {
         $this->first_name = $first_name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCompanyName()
-    {
-        return $this->company_name;
-    }
-
-    /**
-     * @param mixed $company_name
-     */
-    public function setCompanyName($company_name)
-    {
-        $this->company_name = $company_name;
     }
 
     /**

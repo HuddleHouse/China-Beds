@@ -67,6 +67,8 @@ class ProfileController extends Controller
             /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
             $userManager = $this->get('fos_user.user_manager');
 
+            $this->addFlash('notice', 'Information updated successfully.');
+
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
 
