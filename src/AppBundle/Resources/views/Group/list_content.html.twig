@@ -6,7 +6,7 @@
                             <thead>
                             <tr>
                                 <th>Name</th>
-                                <th style="width: 150px;">Number of People</th>
+                                <th style="width: 150px;">Number of Users</th>
                                 <th style="width: 150px;">Actions</th>
                             </tr>
                             </thead>
@@ -17,12 +17,11 @@
                                         <a href="">{{ group.name }}</a>
                                     </td>
                                     <td>
-                                        {{ group.count }}
+                                        <center>{{ group.count }}</center>
                                     </td>
                                     <td>
-                                        <a class="btn btn-default btn-xs purple" href="{{ path('fos_user_group_edit', {'groupName': group.name} ) }}"><i class="fa fa-edit"></i> edit</a>
-                                        <a class="btn btn-info btn-xs purple" href=""><i class="fa fa-edit"></i> show users</a>
-
+                                        <a class="btn btn-default btn-xs purple" href="{{ path('fos_user_group_edit', {'groupName': group.name} ) }}"><i class="fa fa-edit"></i> Edit</a>
+                                        <a class="btn btn-info btn-xs purple" href=""><i class="fa fa-edit"></i> Show Users</a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -53,6 +53,7 @@
     <!-- BEGIN CONTAINER -->
 {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new'] %}
 {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
+{% set sidebar_offices = ['office_index', 'office_edit'] %}
 {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
 
             <!-- BEGIN SIDEBAR -->
@@ -97,12 +98,6 @@
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Other</a>
                                 </li>
-                                {#<li {% if app.request.get('_route') == 'send_invitation' %} class="active"{% endif %}>#}
-                                {#<a href="{{ path('send_invitation') }}"><i class="fa fa-user"></i> Send User#}
-                                {#Invite</a>#}
-                                {#</li>#}
-
-
                             </ul>
                         </li>
 
@@ -138,6 +133,7 @@
 
                         <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
                         {% elseif (app.request.get('_route') in sidebar_users) %} active
+                        {% elseif (app.request.get('_route') in sidebar_offices) %} active
                         {% elseif (app.request.get('_route') in sidebar_price_groups) %} active
                         {% endif %}">
                             <a href="#">
@@ -146,6 +142,9 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                <li {% if (app.request.get('_route') in sidebar_offices) %} class="active"{% endif %}>
+                                    <a href="{{ path('office_index') }}"><i class="fa fa-circle-o"></i>Offices</a>
+                                </li>
                                 <li {% if (app.request.get('_route') in sidebar_users) %} class="active"{% endif %}>
                                     <a href="{{ path('view_users') }}"><i class="fa fa-circle-o"></i>Users</a>
                                 </li>
