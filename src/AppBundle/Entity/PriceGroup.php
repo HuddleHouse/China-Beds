@@ -31,11 +31,8 @@ class PriceGroup
     protected $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User")
-     * @ORM\JoinTable(name="price_group_users",
-     *      joinColumns={@ORM\JoinColumn(name="price_group_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="price_groups")
+     * 
      */
     protected $users;
 

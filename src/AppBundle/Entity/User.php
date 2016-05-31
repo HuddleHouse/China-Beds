@@ -53,7 +53,7 @@ class User extends BaseUser
     protected $city;
 
     /**
-     * @ORM\OneToOne(targetEntity="State")
+     * @ORM\ManyToOne(targetEntity="State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
@@ -129,7 +129,11 @@ class User extends BaseUser
     protected $groups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PriceGroup", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PriceGroup")
+     * @ORM\JoinTable(name="price_group_users",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="price_group_id", referencedColumnName="id")}
+     * )
      */
     private $price_groups;
 
@@ -151,6 +155,7 @@ class User extends BaseUser
     {
         parent::__construct();
         // your own logic
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -430,8 +435,11 @@ class User extends BaseUser
 
     public function getGroups()
     {
-        return $this->groups = new ArrayCollection;
+        return $this->groups;
     }
+
+
+
 
     public function addRole($role)
     {
@@ -441,20 +449,31 @@ class User extends BaseUser
         }
     }
 
+    public function addPriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
+    {
+        $this->price_groups[] = $priceGroup;
+
+        return $this;
+    }
+
     /**
-     * @return mixed
+     * Remove payTypes
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removePriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
+    {
+        $this->price_groups->removeElement($priceGroup);
+    }
+
+    /**
+     * Get payTypes
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPriceGroups()
     {
         return $this->price_groups;
-    }
-
-    /**
-     * @param mixed $price_groups
-     */
-    public function setPriceGroups($price_groups)
-    {
-        $this->price_groups = $price_groups;
     }
 
     /**

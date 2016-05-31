@@ -82,8 +82,8 @@ fos_user:
     profile:
             form:
                 type: AppBundle\Form\ProfileFormType
-    service:
-        user_manager: matts_user_manager
+#    service:
+#        user_manager: matts_user_manager
 
 assetic:
     debug:          '%kernel.debug%'
