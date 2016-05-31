@@ -8,8 +8,7 @@ security:
 
     providers:
         fos_userbundle:
-            id: fos_user.user_provider.username
-
+            entity: { class: AppBundle\Entity\User, property: username }
     firewalls:
         main:
             pattern: ^/

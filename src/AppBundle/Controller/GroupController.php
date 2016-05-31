@@ -93,7 +93,11 @@ class GroupController extends Controller
             $oldRole = $group->getRoles();
 //                $group->removeRole($oldRole);
 
-            $role = "ROLE_" . strtoupper($group->getName());
+            $name = str_replace(' ', '_', $group->getName());
+            $name = preg_replace("/[^A-Za-z0-9_]/", '', $name);
+            $name = strtoupper($name);
+
+            $role = "ROLE_" . $name;
             $group->setRoles(array());
             $group->addRole($role);
 
