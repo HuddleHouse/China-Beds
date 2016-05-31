@@ -77,7 +77,7 @@ class OfficeController extends Controller
         $deleteForm = $this->createDeleteForm($office);
 
         return $this->render('AppBundle:Office:show.html.twig', array(
-            'office' => $office,
+            'users' => $office->getUsers(),
             'delete_form' => $deleteForm->createView(),
         ));
     }

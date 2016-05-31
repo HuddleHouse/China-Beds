@@ -57,7 +57,7 @@ class GroupController extends Controller
         $group = $this->findGroupBy('name', $groupName);
 
         return $this->render('FOSUserBundle:Group:show.html.twig', array(
-            'group' => $group
+            'users' => $group->getUsers()
         ));
     }
 

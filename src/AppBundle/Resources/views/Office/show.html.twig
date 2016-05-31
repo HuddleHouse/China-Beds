@@ -24,23 +24,26 @@ Office
 {% endblock footer %}
 
 {% block content %}
-    <table>
-        <tbody>
-            <tr>
-                <th style="padding-right: 44px;">Id</th>
-                <td>{{ office.id }}</td>
-            </tr>
-            <tr>
+    <div class="table">
+        <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+            <thead>
+            <tr role="row">
                 <th>Name</th>
-                <td>{{ office.name }}</td>
+                <th>Company</th>
+                <th>City</th>
+                <th>State</th>
             </tr>
-        </tbody>
-    </table>
-
-    <ul style="margin-top: 30px;">
-            <a class="btn btn-default" href="{{ path('office_edit', { 'id': office.id }) }}">Edit</a>
-            {{ form_start(delete_form) }}
-                <input class="btn btn-warning" type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-    </ul>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr role="row" class="odd">
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>{{ user.companyName }}</td>
+                    <td>{{ user.city }}</td>
+                    <td>{{ user.state }}</td>
+                </tr>
+            {%  endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

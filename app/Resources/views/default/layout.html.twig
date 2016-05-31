@@ -53,7 +53,7 @@
     <!-- BEGIN CONTAINER -->
 {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new'] %}
 {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
-{% set sidebar_offices = ['office_index', 'office_edit'] %}
+{% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
 {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
 
             <!-- BEGIN SIDEBAR -->
@@ -138,7 +138,7 @@
                         {% endif %}">
                             <a href="#">
                                 <i class="fa fa-users"></i>
-                                <span>User</span>
+                                <span>User Management</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">

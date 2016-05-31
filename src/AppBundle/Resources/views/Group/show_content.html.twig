@@ -1,6 +1,24 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-<div class="fos_user_group_show">
-
-    <p>{{ 'group.show.name'|trans }}: {{ group.getName() }}</p>
+<div class="table">
+    <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+        <thead>
+        <tr role="row">
+            <th>Name</th>
+            <th>Company</th>
+            <th>City</th>
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr role="row" class="odd">
+                <td>{{ user.firstName }} {{ user.lastName }}</td>
+                <td>{{ user.companyName }}</td>
+                <td>{{ user.city }}</td>
+                <td>{{ user.state }}</td>
+            </tr>
+        {%  endfor %}
+        </tbody>
+    </table>
 </div>
