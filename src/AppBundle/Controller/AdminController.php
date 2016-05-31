@@ -40,12 +40,21 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $userManager->updateUser($user);
-            $successMessage = "User information updated succesfully.";
-            $this->addFlash('notice', $successMessage);
+            try {
+                $event = new FormEvent($form, $request);
+                $userManager->updateUser($user);
+                $successMessage = "User information updated succesfully.";
+                $this->addFlash('notice', $successMessage);
 
-            return $this->redirectToRoute('view_users');
+                return $this->redirectToRoute('view_users');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+                return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+                    'form' => $form->createView(),
+                    'user_id' => $user_id
+                ));
+            }
         }
         $em = $this->getDoctrine()->getManager();
 

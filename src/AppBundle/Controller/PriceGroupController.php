@@ -55,12 +55,21 @@ class PriceGroupController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($priceGroup);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($priceGroup);
+                $em->flush();
 
-            $this->addFlash('notice', 'Price Group added successfully.');
-            return $this->redirectToRoute('admin_price_group_index');
+                $this->addFlash('notice', 'Price Group added successfully.');
+                return $this->redirectToRoute('admin_price_group_index');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error adding Price Group: ' . $e->getMessage());
+                return $this->render('AppBundle:PriceGroup:new.html.twig', array(
+                    'priceGroup' => $priceGroup,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('AppBundle:PriceGroup:new.html.twig', array(
@@ -98,12 +107,22 @@ class PriceGroupController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($priceGroup);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($priceGroup);
+                $em->flush();
 
-            $this->addFlash('notice', 'Price Group updated successfully.');
-            return $this->redirectToRoute('admin_price_group_index');
+                $this->addFlash('notice', 'Price Group updated successfully.');
+                return $this->redirectToRoute('admin_price_group_index');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating Price Group: ' . $e->getMessage());
+                return $this->render('AppBundle:PriceGroup:edit.html.twig', array(
+                    'priceGroup' => $priceGroup,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
         return $this->render('AppBundle:PriceGroup:edit.html.twig', array(
@@ -125,9 +144,15 @@ class PriceGroupController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($priceGroup);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($priceGroup);
+                $em->flush();
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Price Group: ' . $e->getMessage());
+                return $this->redirectToRoute('admin_price_group_index');
+            }
         }
 
         return $this->redirectToRoute('admin_price_group_index');

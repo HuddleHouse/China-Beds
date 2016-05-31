@@ -18,7 +18,6 @@
             {% else %}
                 {{ form_start(form, { 'action': path(form_path), 'attr': { 'class': 'form-group' } }) }}
             {% endif %}
-            <h3 class="form-section">Role</h3>
             <div class="row">
                 <div class="col-md-6">
                     {{ form_label(form.name) }}
@@ -29,7 +28,7 @@
                 </div>
             </div>
             <div style="padding-top: 20px;">
-                <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
+                <input class="btn btn-success" type="submit" value="Create"/>
             </div>
 
             {{ form_end(form) }}

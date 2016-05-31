@@ -17,6 +17,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseGroupEvent;
 use FOS\UserBundle\Event\GroupEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -87,34 +88,44 @@ class GroupController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            /** @var $groupManager \FOS\UserBundle\Model\GroupManagerInterface */
-            $groupManager = $this->get('fos_user.group_manager');
+            try {
+                /** @var $groupManager \FOS\UserBundle\Model\GroupManagerInterface */
+                $groupManager = $this->get('fos_user.group_manager');
 
-            $oldRole = $group->getRoles();
-//                $group->removeRole($oldRole);
+                $oldRole = $group->getRoles();
 
-            $name = str_replace(' ', '_', $group->getName());
-            $name = preg_replace("/[^A-Za-z0-9_]/", '', $name);
-            $name = strtoupper($name);
+                $name = str_replace(' ', '_', $group->getName());
+                $name = preg_replace("/[^A-Za-z0-9_]/", '', $name);
+                $name = strtoupper($name);
 
-            $role = "ROLE_" . $name;
-            $group->setRoles(array());
-            $group->addRole($role);
+                $role = "ROLE_" . $name;
+                $group->setRoles(array());
+                $group->addRole($role);
 
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_SUCCESS, $event);
-            $groupManager->updateGroup($group);
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_SUCCESS, $event);
+                $groupManager->updateGroup($group);
 
-            if(null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_group_show', array('groupName' => $group->getName()));
-                $response = new RedirectResponse($url);
+                if(null === $response = $event->getResponse()) {
+                    $url = $this->generateUrl('fos_user_group_show', array('groupName' => $group->getName()));
+                    $response = new RedirectResponse($url);
+                }
+
+                $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+
+                $this->addFlash('notice', 'Role updated successfully.');
+
+                return $this->redirectToRoute('fos_user_group_list');
             }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating role: ' . $e->getMessage());
 
-            $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
-
-            $this->addFlash('notice', 'Role updated successfully.');
-
-            return $this->redirectToRoute('fos_user_group_list');
+                return $this->render('FOSUserBundle:Group:edit.html.twig', array(
+                    'form' => $form->createview(),
+                    'group_name' => $group->getName(),
+                    'form_path' => 'fos_user_group_edit'
+                ));
+            }
         }
 
         return $this->render('FOSUserBundle:Group:edit.html.twig', array(
@@ -145,26 +156,37 @@ class GroupController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
+            try {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
 
-            $role = "ROLE_" . strtoupper($group->getName());
-            $group->setRoles(array());
-            $group->addRole($role);
-            $groupManager->updateGroup($group);
+                $role = "ROLE_" . strtoupper($group->getName());
+                $group->setRoles(array());
+                $group->addRole($role);
+                $groupManager->updateGroup($group);
 
-            $success = $group->getName() . " successfully created.";
+                $success = $group->getName() . " successfully created.";
 
-            $group = $groupManager->createGroup('');
+                $group = $groupManager->createGroup('');
 
-            $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_INITIALIZE, new GroupEvent($group, $request));
+                $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_INITIALIZE, new GroupEvent($group, $request));
 
-            $form2 = $formFactory->createForm();
-            $form2->setData($group);
+                $form2 = $formFactory->createForm();
+                $form2->setData($group);
 
-            $this->addFlash('notice', $success);
+                $this->addFlash('notice', $success);
 
-            return $this->redirectToRoute('fos_user_group_list');
+                return $this->redirectToRoute('fos_user_group_list');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating role: ' . $e->getMessage());
+
+                return $this->render('FOSUserBundle:Group:new.html.twig', array(
+                    'form' => $form->createview(),
+                    'groupName' => '',
+                    'form_path' => 'fos_user_group_new'
+                ));
+            }
         }
         return $this->render('FOSUserBundle:Group:new.html.twig', array(
             'form' => $form->createview(),

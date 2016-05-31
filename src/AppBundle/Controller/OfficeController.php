@@ -53,11 +53,21 @@ class OfficeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($office);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($office);
+                $em->flush();
 
-            return $this->redirectToRoute('office_show', array('id' => $office->getId()));
+                return $this->redirectToRoute('office_show', array('id' => $office->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Office: ' . $e->getMessage());
+
+                return $this->render('AppBundle:Office:new.html.twig', array(
+                    'office' => $office,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('AppBundle:Office:new.html.twig', array(
@@ -95,12 +105,23 @@ class OfficeController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($office);
-            $em->flush();
-            $this->addFlash('notice', 'Office updated successfully.');
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($office);
+                $em->flush();
+                $this->addFlash('notice', 'Office updated successfully.');
 
-            return $this->redirectToRoute('office_index');
+                return $this->redirectToRoute('office_index');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating office: ' . $e->getMessage());
+
+                return $this->render('AppBundle:Office:edit.html.twig', array(
+                    'office' => $office,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
         return $this->render('AppBundle:Office:edit.html.twig', array(
@@ -122,9 +143,15 @@ class OfficeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($office);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($office);
+                $em->flush();
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting office: ' . $e->getMessage());
+                return $this->redirectToRoute('office_index');
+            }
         }
 
         return $this->redirectToRoute('office_index');
