@@ -14,7 +14,7 @@
                             {% for group in groups %}
                                 <tr role="row" class="odd">
                                     <td>
-                                        <a href="">{{ group.name }}</a>
+                                        <a href="{{ path('fos_user_group_edit', {'groupName': group.name} ) }}">{{ group.name }}</a>
                                     </td>
                                     <td>
                                         <center>{{ group.count }}</center>
