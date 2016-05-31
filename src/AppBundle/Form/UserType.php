@@ -27,7 +27,12 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
-            ->add('state', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('state', EntityType::class, array(
+                'class' => 'AppBundle:State',
+                'label' => 'State',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+            ))
             ->add('office', EntityType::class, array(
                 'class' => 'AppBundle:Office',
                 'label' => 'Office',

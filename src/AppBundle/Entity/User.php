@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
 
 /**
  * @ORM\Entity
@@ -52,8 +53,8 @@ class User extends BaseUser
     protected $city;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
+     * @ORM\OneToOne(targetEntity="State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
 
