@@ -201,8 +201,15 @@ class GroupController extends Controller
      */
     public function deleteAction(Request $request, $groupName)
     {
-        $group = $this->findGroupBy('name', $groupName);
-        $this->get('fos_user.group_manager')->deleteGroup($group);
+        try {
+            $group = $this->findGroupBy('name', $groupName);
+            $this->get('fos_user.group_manager')->deleteGroup($group);
+            $this->addFlash('notice', 'Role deleted successfully.');
+        }
+        catch(\Exception $e) {
+            $this->addFlash('error', 'Error deleting role: ' . $e->getMessage());
+            $response = new RedirectResponse($this->generateUrl('fos_user_group_list'));
+        }
 
         $response = new RedirectResponse($this->generateUrl('fos_user_group_list'));
 
