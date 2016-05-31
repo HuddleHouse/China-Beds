@@ -96,7 +96,7 @@ class GroupController extends Controller
                 $oldRole = $group->getRoles();
 
                 $name = str_replace(' ', '_', $group->getName());
-                $name = preg_replace("/[^A-Za-z0-9_]/", '', $name);
+                $name = preg_replace("/[^A-Za-z0-9(_)]/", '', $name);
                 $name = strtoupper($name);
 
                 $role = "ROLE_" . $name;
@@ -202,7 +202,7 @@ class GroupController extends Controller
      */
     public function deleteAction(Request $request, $groupName)
     {
-        if($groupName != 'Admin' || $groupName)
+        if($groupName != 'Admin' || $groupName != 'Sales Rep' || $groupName != 'Sales Manager')
         try {
             $group = $this->findGroupBy('name', $groupName);
             $this->get('fos_user.group_manager')->deleteGroup($group);

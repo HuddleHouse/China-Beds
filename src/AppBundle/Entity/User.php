@@ -137,6 +137,8 @@ class User extends BaseUser
      */
     private $price_groups;
 
+    
+
     /**
      * @ORM\OneToOne(targetEntity="Invitation")
      * @ORM\JoinColumn(referencedColumnName="code")
