@@ -58,7 +58,8 @@ class GroupController extends Controller
         $group = $this->findGroupBy('name', $groupName);
 
         return $this->render('FOSUserBundle:Group:show.html.twig', array(
-            'users' => $group->getUsers()
+            'users' => $group->getUsers(),
+            'group' => $group
         ));
     }
 
@@ -201,6 +202,7 @@ class GroupController extends Controller
      */
     public function deleteAction(Request $request, $groupName)
     {
+        if($groupName != 'Admin' || $groupName)
         try {
             $group = $this->findGroupBy('name', $groupName);
             $this->get('fos_user.group_manager')->deleteGroup($group);

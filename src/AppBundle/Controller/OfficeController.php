@@ -84,11 +84,9 @@ class OfficeController extends Controller
      */
     public function showAction(Office $office)
     {
-        $deleteForm = $this->createDeleteForm($office);
-
         return $this->render('AppBundle:Office:show.html.twig', array(
             'users' => $office->getUsers(),
-            'delete_form' => $deleteForm->createView(),
+            'office' => $office
         ));
     }
 
