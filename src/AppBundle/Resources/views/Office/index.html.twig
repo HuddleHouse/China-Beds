@@ -16,35 +16,38 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-                paging: false
             });
         });
     </script>
 {% endblock footer %}
 
 {% block content %}
-<div class="table">
-    <a class="btn btn-success" href="{{ path('office_new') }}">Create an Office</a>
-    <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th style="width: 150px;">Number of Users</th>
-                <th style="width: 150px;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for office in offices %}
-            <tr>
-                <td><a href="{{ path('office_show', { 'id': office.id }) }}">{{ office.name }}</a></td>
-                <td><center>{{ office.count }}</center></td>
-                <td>
-                    <a class="btn btn-info btn-xs purple" href="{{ path('office_edit', { 'id': office.id }) }}"><i class="fa fa-edit"></i> Edit</a>
-                    <a class="btn btn-default btn-xs purple" href="{{ path('office_show', { 'id': office.id }) }}"><i class="fa fa-edit"></i> Show Users</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <a class="btn btn-success" href="{{ path('office_new') }}" style="margin-bottom: 15px;">Create an Office</a>
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th style="width: 150px;">Number of Users</th>
+                        <th style="width: 150px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for office in offices %}
+                        <tr>
+                            <td><a href="{{ path('office_show', { 'id': office.id }) }}">{{ office.name }}</a></td>
+                            <td><center>{{ office.count }}</center></td>
+                            <td>
+                                <a class="btn btn-info btn-xs purple" href="{{ path('office_edit', { 'id': office.id }) }}"><i class="fa fa-edit"></i> Edit</a>
+                                <a class="btn btn-default btn-xs purple" href="{{ path('office_show', { 'id': office.id }) }}"><i class="fa fa-edit"></i> Show Users</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

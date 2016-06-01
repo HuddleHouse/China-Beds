@@ -1,26 +1,31 @@
 {% trans_default_domain 'FOSUserBundle' %}
+
 <div class="row">
     <center><h2>{{ group.name }}</h2></center>
 </div>
-<div class="table">
-    <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
-        <thead>
-        <tr role="row">
-            <th>Name</th>
-            <th>Company</th>
-            <th>City</th>
-            <th>State</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr role="row" class="odd">
-                <td><a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a></td>
-                <td><a href="{{ path('office_show', {'id': user.office.id}) }}">{{ user.office.name ? user.office.name : '' }}</a></td>
-                <td>{{ user.city }}</td>
-                <td>{{ user.state.name }}</td>
-            </tr>
-        {%  endfor %}
-        </tbody>
-    </table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table">
+            <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                <thead>
+                <tr role="row">
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>City</th>
+                    <th>State</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr role="row" class="odd">
+                        <td><a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a></td>
+                        <td><a href="{{ path('office_show', {'id': user.office.id}) }}">{{ user.office.name ? user.office.name : '' }}</a></td>
+                        <td>{{ user.city }}</td>
+                        <td>{{ user.state.name }}</td>
+                    </tr>
+                {%  endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

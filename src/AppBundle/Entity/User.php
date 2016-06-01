@@ -120,7 +120,7 @@ class User extends BaseUser
     protected $is_online_intentions = true;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
      * @ORM\JoinTable(name="role_users",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
@@ -129,7 +129,7 @@ class User extends BaseUser
     protected $groups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PriceGroup")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PriceGroup", inversedBy="users")
      * @ORM\JoinTable(name="price_group_users",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="price_group_id", referencedColumnName="id")}
