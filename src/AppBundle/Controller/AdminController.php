@@ -11,8 +11,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdminController extends Controller
 {
@@ -174,17 +174,62 @@ class AdminController extends Controller
 
             }
             else {
-                $data[] = array('path' => $params->getPath());
+                $data[] = array('path' => $params->getPath(), 'route' => $route);
             }
         }
 
         $em = $this->getDoctrine()->getManager();
         $roles = $em->getRepository('AppBundle:Role')->findAll();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select concat(role_id, route_name) as name from role_permissions");
+        $statement->execute();
+        $tmp = $statement->fetchAll();
+        $permissions = array();
+        foreach($tmp as $t) {
+            $permissions[] = $t['name'];
+        }
 
         return $this->render('AppBundle:Admin:access_restriction.html.twig', array(
             'routes' => $data,
-            'roles' => $roles
+            'roles' => $roles,
+            'permissions' => $permissions
         ));
+    }
+
+    
+    /**
+     * @Route("/admin/api/api-role-permission", name="api_add_role_permission")
+     */
+    public function apiAddRolePermissionAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $role_id = $request->request->get('role_id');
+        $route = $request->request->get('route');
+        $checked = $request->request->get('checked');
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select id from role_permissions where route_name = :route_name and role_id = :role_id");
+        $statement->bindValue('route_name', $route);
+        $statement->bindValue('role_id', $role_id);
+        $statement->execute();
+        $exists = $statement->fetch();
+
+
+        if($checked && $exists == false){
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("insert into role_permissions (route_name, role_id) values (:route_name, :role_id)");
+            $statement->bindValue('route_name', $route);
+            $statement->bindValue('role_id', $role_id);
+            $statement->execute();
+        }
+        else if($checked == 0 && $exists) {
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("delete from role_permissions where route_name = :route_name and role_id = :role_id");
+            $statement->bindValue('route_name', $route);
+            $statement->bindValue('role_id', $role_id);
+            $statement->execute();
+        }
+        return JsonResponse::create(true);
     }
 
 

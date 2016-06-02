@@ -16,18 +16,33 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-                paging: false,
+                "paging": false,
                 "autoWidth": true,
                 "searching": false,
                 "columns": [
                     { "orderable": false },
-                    null,
-                    null,
-                    null,
-                    null
                 ]
             });
         });
+
+        function addPermission(role_id, route) {
+            var checked = 0;
+            if($("#"+role_id+route).is(':checked')) {
+                checked = 1;
+            }
+            $.ajax({
+                beforeSend: function () {
+                    console.log('json load cart');
+                },
+                type: 'POST',
+                url: "{{ path('api_add_role_permission') }}",
+                data: {role_id: role_id, checked: checked, route: route},
+                dataType: 'json',
+                success: function (data) {
+
+                }
+            });
+        }
     </script>
 {% endblock footer %}
 
@@ -45,10 +60,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for route in routes %}
+                {% for key, route in routes %}
                     <tr role="row" class="odd">
                         {% for role in roles %}
-                            <td><center><input type="checkbox" name="" value="{{ role.name }}"></center></td>
+                            {% set newname = role.id~route.route %}
+                            {% if newname in permissions %}
+                                <td><center><input type="checkbox" id="{{ role.id }}{{ route.route }}" checked name="{{ role.id }}@{{ route.route }}" onclick="addPermission({{ role.id }}, '{{ route.route }}')" value="{{ role.name }}"></center></td>
+                            {% else %}
+                                <td><center><input type="checkbox" id="{{ role.id }}{{ route.route }}" name="{{ role.id }}@{{ route.route }}" onclick="addPermission({{ role.id }}, '{{ route.route }}')" value="{{ role.name }}"></center></td>
+                            {% endif %}
                         {% endfor %}
                         <td>{{ route.path }}</td>
                     </tr>
