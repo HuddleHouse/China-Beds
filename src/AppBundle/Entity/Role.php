@@ -25,9 +25,14 @@ class Role extends BaseGroup
     protected $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="groups")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="groups")
      */
     private $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\RolePermission", mappedBy="roles")
+     */
+    private $permissions;
 
     /**
      * Constructor
@@ -35,6 +40,7 @@ class Role extends BaseGroup
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
