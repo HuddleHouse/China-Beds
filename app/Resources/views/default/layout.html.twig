@@ -2,15 +2,6 @@
 
 {% block body %}
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <style>
-            .page-content {
-                margin-top: 0px;
-                background-color: #eee;
-                border-radius: 0 0 0 4px;
-            }
-        </style>
-    {% endif %}
     <div class="wrapper">
     <header class="main-header">
 
@@ -50,7 +41,7 @@
         </nav>
     </header>
 
-    <!-- BEGIN CONTAINER -->
+        <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
 {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
 {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
 {% set sidebar_access_restriction = ['access_restriction'] %}
@@ -74,6 +65,8 @@
                             </a>
                         </li>
 
+
+                        <!-- ASSORTMENT SECTION -->
                         <li class="treeview">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -102,7 +95,7 @@
                             </ul>
                         </li>
 
-
+                        <!-- ORDERS SECTION -->
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-shopping-cart"></i>
@@ -131,7 +124,7 @@
                             </ul>
                         </li>
 
-
+                        <!-- USER MANAGEMENT SECTION -->
                         <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
                         {% elseif (app.request.get('_route') in sidebar_users) %} active
                         {% elseif (app.request.get('_route') in sidebar_offices) %} active
@@ -162,7 +155,7 @@
                             </ul>
                         </li>
 
-
+                        <!-- WAREHOUSE SECTION -->
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-building-o"></i>
@@ -179,7 +172,7 @@
                             </ul>
                         </li>
 
-
+                        <!-- MARKETING SECTION -->
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-bar-chart"></i>
@@ -199,6 +192,7 @@
                             </ul>
                         </li>
 
+                        <!-- SUPPORT SECTION -->
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-info-circle"></i>
