@@ -30,7 +30,8 @@ class Role extends BaseGroup
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\RolePermission", mappedBy="roles")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RolePermission", mappedBy="role")
+     *
      */
     private $permissions;
 

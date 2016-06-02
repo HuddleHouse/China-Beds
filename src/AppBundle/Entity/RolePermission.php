@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * RoutePermission
@@ -21,9 +22,10 @@ class RolePermission
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="permissions")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Role", inversedBy="permissions")
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
-    private $roles;
+    private $role;
     
 
     /**
@@ -71,17 +73,17 @@ class RolePermission
     /**
      * @return mixed
      */
-    public function getRoles()
+    public function getRole()
     {
-        return $this->roles;
+        return $this->role;
     }
 
     /**
      * @param mixed $roles
      */
-    public function setRoles($roles)
+    public function setRole($role)
     {
-        $this->roles = $roles;
+        $this->role = $role;
     }
     
 }
