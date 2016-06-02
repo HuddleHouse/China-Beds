@@ -11,6 +11,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Router;
 
 class AdminController extends Controller
 {
@@ -154,6 +156,36 @@ class AdminController extends Controller
         ));
     }
 
-    
+    /**
+     * @Route("/admin/access-restriction", name="access_restriction")
+     */
+    public function showAddressRestrictionAction(Request $request)
+    {
+        /** @var $router \Symfony\Component\Routing\Router */
+        $router = $this->container->get('router');
+        /** @var $collection \Symfony\Component\Routing\RouteCollection */
+        $collection = $router->getRouteCollection();
+        $allRoutes = $collection->all();
+        $data = array();
+
+        foreach ($allRoutes as $route => $params)
+        {
+            if (substr($route, 0, 1) === '_') {
+
+            }
+            else {
+                $data[] = array('path' => $params->getPath());
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $roles = $em->getRepository('AppBundle:Role')->findAll();
+
+        return $this->render('AppBundle:Admin:access_restriction.html.twig', array(
+            'routes' => $data,
+            'roles' => $roles
+        ));
+    }
+
 
 }
