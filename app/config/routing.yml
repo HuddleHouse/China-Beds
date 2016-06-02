@@ -8,4 +8,4 @@ _user_bundle:
     resource: "@AppBundle/Resources/config/routing.yml"
 fos_user_group:
     resource: "@FOSUserBundle/Resources/config/routing/group.xml"
-    prefix: /admin/group
+    prefix: /admin/role
