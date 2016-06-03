@@ -107,7 +107,7 @@ class SecurityController extends Controller
      */
     public function notFoundAction()
     {
-        $this->addFlash('error', "I'm sorry you do not permission to view that page.");
+        $this->addFlash('error', "I'm sorry you do not have permission to view that page.");
         return $this->render('AppBundle:Security:404.html.twig');
     }
 }

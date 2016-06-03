@@ -21,7 +21,7 @@ security:
                 success_handler: authentication.handler.login_success_handler
             logout:
                 path: /logout
-                target: /
+                target: /login
             anonymous:    true
 
     access_control:
