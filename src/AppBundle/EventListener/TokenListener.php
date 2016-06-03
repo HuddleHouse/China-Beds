@@ -39,7 +39,6 @@ class TokenListener
             'fos_user_security_logout',
             'fos_user_security_login',
             'fos_user_security_check',
-            'fos_user_profile_edit',
             'fos_user_resetting_request',
             'fos_user_resetting_send_email',
             'fos_user_resetting_check_email ',
@@ -59,6 +58,8 @@ class TokenListener
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
                 }
                 $route_names = $user->getRouteNames();
+                setcookie('route_names', implode(',', $route_names), time()+3600);
+                setcookie('route_names', implode(',', $route_names), time()+3600);
                 setcookie('route_names', implode(',', $route_names), time()+3600);
                 $_POST['route_names'] = implode(',', $route_names);
             }

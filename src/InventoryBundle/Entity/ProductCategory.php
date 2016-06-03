@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ProductCategory
  *
- * @ORM\Table(name="product_category")
+ * @ORM\Table(name="product_categories")
  * @ORM\Entity(repositoryClass="InventoryBundle\Repository\ProductCategoryRepository")
  */
 class ProductCategory
@@ -56,6 +56,8 @@ class ProductCategory
     public function setName($name)
     {
         $this->name = $name;
+
+        $this->setCode(preg_replace("/[^a-zA-Z0-9]+/", "", $name));
 
         return $this;
     }

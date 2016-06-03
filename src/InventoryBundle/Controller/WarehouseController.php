@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -46,11 +47,21 @@ class WarehouseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($warehouse);
-            $em->flush();
-            $this->addFlash('notice', 'Warehouse created successfully.');
-            return $this->redirectToRoute('warehouse_edit', array('id' => $warehouse->getId()));
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($warehouse);
+                $em->flush();
+                $this->addFlash('notice', 'Warehouse created successfully.');
+                return $this->redirectToRoute('warehouse_edit', array('id' => $warehouse->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating warehouse ' . $e->getMessage());
+
+                return $this->render('@Inventory/Warehouse/new.html.twig', array(
+                    'warehouse' => $warehouse,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/Warehouse/new.html.twig', array(
@@ -88,12 +99,23 @@ class WarehouseController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($warehouse);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($warehouse);
+                $em->flush();
 
-            $this->addFlash('notice', 'Warehouse updated successfully.');
-            return $this->redirectToRoute('warehouse_edit', array('id' => $warehouse->getId()));
+                $this->addFlash('notice', 'Warehouse updated successfully.');
+                return $this->redirectToRoute('warehouse_edit', array('id' => $warehouse->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());
+
+                return $this->render('@Inventory/Warehouse/edit.html.twig', array(
+                    'warehouse' => $warehouse,
+                    'form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/Warehouse/edit.html.twig', array(
@@ -115,9 +137,16 @@ class WarehouseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($warehouse);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($warehouse);
+                $em->flush();
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting warehouse ' . $e->getMessage());
+
+                return $this->redirectToRoute('warehouse_index');
+            }
         }
 
         return $this->redirectToRoute('warehouse_index');

@@ -43,7 +43,7 @@
 
         <!-- COOKIE TO HOLD ALL OF THE ROUTES THAT THE USER CAN ACCESS -->
         {% set route_names = app.request.cookies.get('route_names') |split(',') %}
-
+{#{{ dump(route_names) }}#}
         <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
         {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
         {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
@@ -51,6 +51,7 @@
         {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
         {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
         {% set sidebar_warehouse = ['warehouse_index', 'warehouse_new', 'warehouse_edit', 'warehouse_show'] %}
+        {% set sidebar_assortment = ['product_category_index', 'product_category_new', 'product_category_edit', 'product_category_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -62,7 +63,7 @@
                         <li class="header">MAIN NAVIGATION</li>
 
 
-                        <li {% if (app.request.get('_route') in 'fos_user_profile_show') %} class="active"{% endif %}>
+                        <li >
                             <a href="{{ path('fos_user_profile_show') }}">
                                 <i class="fa fa-dashboard"></i>
                                 <span class="title">Dashboard</span>
@@ -71,15 +72,15 @@
 
 
                         <!-- ASSORTMENT SECTION -->
-                        <li class="treeview">
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_assortment) %} active{% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
                                 <span>Assortment</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Categories</a>
+                                <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
+                                    <a href="{{ path('product_category_index') }}"><i class="fa fa-circle-o"></i>Product Categories</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Products</a>
