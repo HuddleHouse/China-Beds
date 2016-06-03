@@ -41,12 +41,15 @@
         </nav>
     </header>
 
+        <!-- COOKIE TO HOLD ALL OF THE ROUTES THAT THE USER CAN ACCESS -->
+        {% set route_names = app.request.cookies.get('route_names') |split(',') %}
+
         <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
-{% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
-{% set sidebar_users = ['view_users', 'admin_edit_user'] %}
-{% set sidebar_access_restriction = ['access_restriction'] %}
-{% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
-{% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
+        {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
+        {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
+        {% set sidebar_access_restriction = ['access_restriction'] %}
+        {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
+        {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -125,35 +128,53 @@
                         </li>
 
                         <!-- USER MANAGEMENT SECTION -->
-                        <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
-                        {% elseif (app.request.get('_route') in sidebar_users) %} active
-                        {% elseif (app.request.get('_route') in sidebar_offices) %} active
-                        {% elseif (app.request.get('_route') in sidebar_access_restriction) %} active
-                        {% elseif (app.request.get('_route') in sidebar_price_groups) %} active
-                        {% endif %}">
+                        {% if 'office_index' in route_names
+                            or 'view_users' in route_names
+                            or 'admin_price_group_index' in route_names
+                            or 'fos_user_group_list' in route_names
+                            or 'access_restriction' in route_names
+                        %}
+                            <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
+                            {% elseif (app.request.get('_route') in sidebar_users) %} active
+                            {% elseif (app.request.get('_route') in sidebar_offices) %} active
+                            {% elseif (app.request.get('_route') in sidebar_access_restriction) %} active
+                            {% elseif (app.request.get('_route') in sidebar_price_groups) %} active
+                            {% endif %}">
+
                             <a href="#">
-                                <i class="fa fa-users"></i>
-                                <span>User Management</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in sidebar_offices) %} class="active"{% endif %}>
-                                    <a href="{{ path('office_index') }}"><i class="fa fa-circle-o"></i>Offices</a>
-                                </li>
-                                <li {% if (app.request.get('_route') in sidebar_users) %} class="active"{% endif %}>
-                                    <a href="{{ path('view_users') }}"><i class="fa fa-circle-o"></i>Users</a>
-                                </li>
-                                <li {% if (app.request.get('_route') in sidebar_price_groups) %} class="active"{% endif %}>
-                                    <a href="{{ path('admin_price_group_index') }}"><i class="fa fa-circle-o"></i>Price Groups</a>
-                                </li>
-                                <li {% if (app.request.get('_route') in sidebar_user_group) %} class="active"{% endif %}>
-                                    <a href="{{ path('fos_user_group_list') }}"><i class="fa fa-circle-o"></i>Roles</a>
-                                </li>
-                                <li {% if (app.request.get('_route') in sidebar_access_restriction) %} class="active"{% endif %}>
-                                    <a href="{{ path('access_restriction') }}"><i class="fa fa-circle-o"></i>Access Restriction</a>
-                                </li>
-                            </ul>
-                        </li>
+                                    <i class="fa fa-users"></i>
+                                    <span>User Management</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    {% if 'office_index' in route_names %}
+                                        <li {% if (app.request.get('_route') in sidebar_offices) %} class="active"{% endif %}>
+                                            <a href="{{ path('office_index') }}"><i class="fa fa-circle-o"></i>Offices</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'view_users' in route_names %}
+                                        <li {% if (app.request.get('_route') in sidebar_users) %} class="active"{% endif %}>
+                                            <a href="{{ path('view_users') }}"><i class="fa fa-circle-o"></i>Users</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'admin_price_group_index' in route_names %}
+                                        <li {% if (app.request.get('_route') in sidebar_price_groups) %} class="active"{% endif %}>
+                                            <a href="{{ path('admin_price_group_index') }}"><i class="fa fa-circle-o"></i>Price Groups</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'fos_user_group_list' in route_names %}
+                                        <li {% if (app.request.get('_route') in sidebar_user_group) %} class="active"{% endif %}>
+                                            <a href="{{ path('fos_user_group_list') }}"><i class="fa fa-circle-o"></i>Roles</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'access_restriction' in route_names %}
+                                        <li {% if (app.request.get('_route') in sidebar_access_restriction) %} class="active"{% endif %}>
+                                            <a href="{{ path('access_restriction') }}"><i class="fa fa-circle-o"></i>Access Restriction</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        {% endif %}
 
                         <!-- WAREHOUSE SECTION -->
                         <li class="treeview">
