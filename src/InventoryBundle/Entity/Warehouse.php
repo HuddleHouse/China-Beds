@@ -70,6 +70,11 @@ class Warehouse
      */
     private $zip;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     */
+    protected $state;
 
     /**
      * Get id
@@ -248,5 +253,23 @@ class Warehouse
     {
         return $this->zip;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+    
+    
 }
 

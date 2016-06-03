@@ -50,6 +50,7 @@
         {% set sidebar_access_restriction = ['access_restriction'] %}
         {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
         {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
+        {% set sidebar_warehouse = ['warehouse_index', 'warehouse_new', 'warehouse_edit', 'warehouse_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -177,22 +178,25 @@
                         {% endif %}
 
                         <!-- WAREHOUSE SECTION -->
-                        <li class="treeview">
+                        {% if 'warehouse_index' in route_names %}
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_warehouse) %} active {% endif %}" >
                             <a href="#">
                                 <i class="fa fa-building-o"></i>
                                 <span>Warehouse</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Warehouses</a>
-                                </li>
+                                {% if 'warehouse_index' in route_names %}
+                                    <li {% if (app.request.get('_route') in sidebar_warehouse) %} class="active"{% endif %}>
+                                        <a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>
+                                    </li>
+                                {% endif %}
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Warehouse Inventory</a>
                                 </li>
                             </ul>
                         </li>
-
+                {% endif %}
                         <!-- MARKETING SECTION -->
                         <li class="treeview">
                             <a href="#">
