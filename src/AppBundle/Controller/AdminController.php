@@ -58,7 +58,6 @@ class AdminController extends Controller
                 ));
             }
         }
-        $em = $this->getDoctrine()->getManager();
 
         return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
             'form' => $form->createView(),
@@ -73,7 +72,7 @@ class AdminController extends Controller
     public function sendInvitationAction(Request $request)
     {
         $invitation = new Invitation();
-        $officeRepository = $this->getDoctrine()->getRepository('AppBundle:Office');
+        $officeRepository = $this->getDoctrine()->getRepository('InventoryBundle:Office');
 
         $form = $this->createFormBuilder($invitation)
             ->add('email', EmailType::class)
@@ -82,12 +81,9 @@ class AdminController extends Controller
                 'required' => false,
             ))
             ->add('office', EntityType::class, array(
-                'class' => 'AppBundle:Office',
+                'class' => 'InventoryBundle\Entity\Office',
                 'label' => 'Office to assign to?',
                 'choice_label' => 'name',
-                'query_builder' => function (OfficeRepository $officeRepository) {
-                    return $officeRepository->createQueryBuilder('u')->orderBy('u.name', 'ASC');
-                }
             ))
             ->getForm();
         $form->handleRequest($request);
@@ -127,7 +123,7 @@ class AdminController extends Controller
                     'required' => false,
                 ))
                 ->add('office', EntityType::class, array(
-                    'class' => 'AppBundle:Office',
+                    'class' => 'InventoryBundle\Entity\Office',
                     'label' => 'Office to assign to?',
                     'choice_label' => 'name'
                 ))

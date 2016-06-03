@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\OneToMany;
  * Office
  *
  * @ORM\Table(name="office")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\OfficeRepository")
+ * @ORM\Entity()
  */
 class Office
 {
@@ -31,7 +31,7 @@ class Office
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="office")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="office")
      */
     private $users;
 

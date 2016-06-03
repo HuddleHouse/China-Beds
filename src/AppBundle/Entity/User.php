@@ -147,7 +147,7 @@ class User extends BaseUser
     protected $invitation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Office", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Office", inversedBy="users")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      */
     private $office;

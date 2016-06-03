@@ -1,3 +1,7 @@
+inventory:
+    resource: "@InventoryBundle/Controller/"
+    type:     annotation
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation

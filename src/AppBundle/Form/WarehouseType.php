@@ -5,9 +5,8 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class OfficeType extends AbstractType
+class WarehouseType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,7 +15,13 @@ class OfficeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('name')
+            ->add('phone')
+            ->add('email')
+            ->add('address1')
+            ->add('address2')
+            ->add('city')
+            ->add('zip')
         ;
     }
     
@@ -26,7 +31,7 @@ class OfficeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Office'
+            'data_class' => 'AppBundle\Entity\Warehouse'
         ));
     }
 }

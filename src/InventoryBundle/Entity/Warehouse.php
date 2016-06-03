@@ -1,14 +1,14 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Warehouse
  *
- * @ORM\Table(name="warehouse")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\WarehouseRepository")
+ * @ORM\Table(name="warehouses")
+ * @ORM\Entity()
  */
 class Warehouse
 {

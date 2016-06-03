@@ -1,13 +1,13 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace InventoryBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\Office;
-use AppBundle\Form\OfficeType;
+use InventoryBundle\Entity\Office;
+use InventoryBundle\Form\OfficeType;
 
 /**
  * Office controller.
@@ -26,7 +26,7 @@ class OfficeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $offices = $em->getRepository('AppBundle:Office')->findAll();
+        $offices = $em->getRepository('InventoryBundle:Office')->findAll();
         foreach($offices as $group) {
             $data[] = array(
                 'name' => $group->getName(),
@@ -35,7 +35,7 @@ class OfficeController extends Controller
             );
         }
         
-        return $this->render('AppBundle:Office:index.html.twig', array(
+        return $this->render('InventoryBundle:Office:index.html.twig', array(
             'offices' => $data
         ));
     }
@@ -49,7 +49,7 @@ class OfficeController extends Controller
     public function newAction(Request $request)
     {
         $office = new Office();
-        $form = $this->createForm('AppBundle\Form\OfficeType', $office);
+        $form = $this->createForm('InventoryBundle\Form\OfficeType', $office);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -63,14 +63,14 @@ class OfficeController extends Controller
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Office: ' . $e->getMessage());
 
-                return $this->render('AppBundle:Office:new.html.twig', array(
+                return $this->render('InventoryBundle:Office:new.html.twig', array(
                     'office' => $office,
                     'form' => $form->createView(),
                 ));
             }
         }
 
-        return $this->render('AppBundle:Office:new.html.twig', array(
+        return $this->render('InventoryBundle:Office:new.html.twig', array(
             'office' => $office,
             'form' => $form->createView(),
         ));
@@ -84,7 +84,7 @@ class OfficeController extends Controller
      */
     public function showAction(Office $office)
     {
-        return $this->render('AppBundle:Office:show.html.twig', array(
+        return $this->render('InventoryBundle:Office:show.html.twig', array(
             'users' => $office->getUsers(),
             'office' => $office
         ));
@@ -99,7 +99,7 @@ class OfficeController extends Controller
     public function editAction(Request $request, Office $office)
     {
         $deleteForm = $this->createDeleteForm($office);
-        $editForm = $this->createForm('AppBundle\Form\OfficeType', $office);
+        $editForm = $this->createForm('InventoryBundle\Form\OfficeType', $office);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -114,7 +114,7 @@ class OfficeController extends Controller
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating office: ' . $e->getMessage());
 
-                return $this->render('AppBundle:Office:edit.html.twig', array(
+                return $this->render('InventoryBundle:Office:edit.html.twig', array(
                     'office' => $office,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
@@ -122,7 +122,7 @@ class OfficeController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Office:edit.html.twig', array(
+        return $this->render('InventoryBundle:Office:edit.html.twig', array(
             'office' => $office,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
