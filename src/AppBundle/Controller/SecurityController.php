@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class SecurityController extends Controller
 {
@@ -99,5 +100,14 @@ class SecurityController extends Controller
     public function logoutAction()
     {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+    }
+    
+    /**
+     * @Route("/not-found", name="404")
+     */
+    public function notFoundAction()
+    {
+        $this->addFlash('error', "I'm sorry you do not permission to view that page.");
+        return $this->render('AppBundle:Security:404.html.twig');
     }
 }

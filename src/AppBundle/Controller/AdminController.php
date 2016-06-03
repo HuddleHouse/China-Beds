@@ -214,7 +214,6 @@ class AdminController extends Controller
         $statement->execute();
         $exists = $statement->fetch();
 
-
         if($checked && $exists == false){
             $connection = $em->getConnection();
             $statement = $connection->prepare("insert into role_permissions (route_name, role_id) values (:route_name, :role_id)");
@@ -230,7 +229,7 @@ class AdminController extends Controller
             $statement->execute();
         }
         return JsonResponse::create(true);
-    }
+}
 
 
 }

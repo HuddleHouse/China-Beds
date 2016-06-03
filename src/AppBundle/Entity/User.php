@@ -161,6 +161,16 @@ class User extends BaseUser
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function hasAccessToRoute($routeName) {
+        foreach($this->groups as $role) {
+            foreach($role->getPermissions() as $permission) {
+                if($permission->getRouteName() == $routeName)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public function setInvitation(Invitation $invitation)
     {
         $this->invitation = $invitation;
