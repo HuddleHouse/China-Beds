@@ -2,12 +2,13 @@
 
 namespace InventoryBundle\Controller;
 
+use InventoryBundle\Entity\OptionValue;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\ManageOption;
-use InventoryBundle\Form\ManageOptionType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * ManageOption controller.
@@ -96,6 +97,7 @@ class ManageOptionController extends Controller
     {
         $deleteForm = $this->createDeleteForm($manageOption);
         $editForm = $this->createForm('InventoryBundle\Form\ManageOptionType', $manageOption);
+        
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -115,6 +117,7 @@ class ManageOptionController extends Controller
                     'manageOption' => $manageOption,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
+//                    'new_option_value_form' => $newValueForm->createView(),
                 ));
             }
 
@@ -124,6 +127,7 @@ class ManageOptionController extends Controller
             'manageOption' => $manageOption,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+//            'new_option_value_form' => $newValueForm->createView(),
         ));
     }
 

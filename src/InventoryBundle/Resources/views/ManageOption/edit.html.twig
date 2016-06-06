@@ -19,43 +19,116 @@
                 paging: false
             });
         });
+
+
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function($scope) {
+            $scope.names = [];
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_values') }}",
+                data: {id: {{ manageOption.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.names = data;
+                    });
+                }
+            });
+
+            $scope.addOptionValue = function () {
+                console.log('lkdjf');
+                var new_option_value = $('#new_option_value').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_option_value') }}",
+                    dataType: 'json',
+                    data: {id: {{ manageOption.id }}, new_option_value: new_option_value },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.names = data;
+                            $('#new_option_value').val('');
+                        });
+                    }
+                });
+            };
+        });
+
     </script>
+
 {% endblock footer %}
 
 {% block content %}
-    {{ form_start(edit_form, {'attr': {'id': 'manage_option'}}) }}
+    <div  ng-app="myApp" ng-controller="myCtrl">
+        {{ form_start(edit_form, {'attr': {'id': 'manage_option'}}) }}
         {{ form_widget(edit_form) }}
-    {{ form_end(edit_form) }}
-    <br>
-    <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
-        <i class="fa fa-plus"></i>
-        Add Value
-    </a>
-
-    <hr>
-    <hr style="border-top: 1px solid #8aa4af;">
-    <input class="btn btn-success" type="submit" value="Update" form="manage_option"/>
-    {{ form_start(delete_form) }}
-    <input style="margin-top: -56px; margin-left: 81px;" class="btn btn-warning" type="submit" value="Delete">
-    {{ form_end(delete_form) }}
+        {{ form_end(edit_form) }}
+        <br>
 
 
-    <div class="modal fade" id="attributes-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+        <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th style="width: 150px">Options</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% verbatim %}
+                    <tr ng-repeat="(i, name) in names track by $index">
+                        <td>{{name.value}}</td>
+                        <td>
+                            <a class="btn btn-default btn-xs">Edit</a>
+                            <a class="btn btn-danger btn-xs" ng-click="deleteValue(name.id)">Delete</a>
+                        </td>
+                    </tr>
+                {% endverbatim %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+
+
+        <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
+            <i class="fa fa-plus"></i>
+            Add Value
+        </a>
+
+        <hr>
+        <hr style="border-top: 1px solid #8aa4af;">
+        <input class="btn btn-success" type="submit" value="Update" form="manage_option"/>
+        {{ form_start(delete_form) }}
+        <input style="margin-top: -56px; margin-left: 81px;" class="btn btn-warning" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+
+
+        <div class="modal fade" id="attributes-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add Value</h4>
+                    </div>
+                    <div class="modal-body">
+                            <label for="new_option_value" class="required">Name</label>
+                            <input type="text" id="new_option_value" name="product[name]" required="required" class="form-control" style="margin-bottom: 10px">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="addOptionValue()" data-dismiss="modal">Save changes</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}

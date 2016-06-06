@@ -43,6 +43,8 @@ class TokenListener
             'fos_user_resetting_send_email',
             'fos_user_resetting_check_email ',
             'fos_user_resetting_reset',
+            'api_add_option_value',
+            'api_get_values'
         ); //These are excluded routes. These are always allowed. Required for login page
 
 

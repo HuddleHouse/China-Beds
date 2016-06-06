@@ -35,17 +35,13 @@ class ManageOption
      * @ORM\Column(name="code", type="string", length=255)
      */
     private $code;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\OptionValue", inversedBy="users")
-     * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
-     */
-    private $office;
+    
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\OptionValue", mappedBy="option")
      */
     private $option_values;
+    
     public function __construct() {
         $this->option_values = new ArrayCollection();
     }
