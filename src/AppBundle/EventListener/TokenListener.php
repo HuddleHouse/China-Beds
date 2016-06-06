@@ -48,8 +48,6 @@ class TokenListener
 
         if(!is_int(array_search($route, $routeArr)) && $route != null) //This is for excluding routes that you don't want to check for.
         {
-
-
             if(isset($_COOKIE['route_names'])) {
                 $route_names = explode(',', $_COOKIE['route_names']);
             }
@@ -58,11 +56,11 @@ class TokenListener
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
                 }
                 $route_names = $user->getRouteNames();
-                setcookie('route_names', implode(',', $route_names), time()+3600);
-                setcookie('route_names', implode(',', $route_names), time()+3600);
+                
                 setcookie('route_names', implode(',', $route_names), time()+3600);
                 $_POST['route_names'] = implode(',', $route_names);
             }
+
 
             if(!in_array($route, $route_names))
             {

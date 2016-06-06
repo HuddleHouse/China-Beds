@@ -32,6 +32,7 @@
                             <span class="username"><i class="fa fa-gears"></i></span>
                         </a>
 
+
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
 
@@ -82,14 +83,17 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
-                                    <a href="{{ path('product_category_index') }}"><i class="fa fa-circle-o"></i>Product Categories</a>
-                                </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Products</a>
                                 </li>
+                                <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
+                                    <a href="{{ path('product_category_index') }}"><i class="fa fa-circle-o"></i>Categories</a>
+                                </li>
                                 <li {% if (app.request.get('_route') in sidebar_manage_options) %} class="active"{% endif %}>
-                                    <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Manage Options</a>
+                                    <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Options</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Attributes</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>POP Items</a>
@@ -100,9 +104,7 @@
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Inventory Levels</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Other</a>
-                                </li>
+
                             </ul>
                         </li>
 
