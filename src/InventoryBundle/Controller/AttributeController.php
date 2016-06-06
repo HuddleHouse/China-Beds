@@ -46,12 +46,23 @@ class AttributeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $attribute->upload();
-            $em->persist($attribute);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $attribute->upload();
+                $em->persist($attribute);
+                $em->flush();
+                $this->addFlash('notice', 'Attribute created successfully.');
 
-            return $this->redirectToRoute('attribute_show', array('id' => $attribute->getId()));
+                return $this->redirectToRoute('attribute_edit', array('id' => $attribute->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating attribute: ' . $e->getMessage());
+
+                return $this->render('@Inventory/Attribute/new.html.twig', array(
+                    'attribute' => $attribute,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/Attribute/new.html.twig', array(
@@ -89,13 +100,23 @@ class AttributeController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $attribute->upload();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $attribute->upload();
 
-            $em->persist($attribute);
-            $em->flush();
-
-            return $this->redirectToRoute('attribute_edit', array('id' => $attribute->getId()));
+                $em->persist($attribute);
+                $em->flush();
+                $this->addFlash('notice', 'Attribute updated successfully.');
+                return $this->redirectToRoute('attribute_edit', array('id' => $attribute->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error editing attribute: ' . $e->getMessage());
+                return $this->render('@Inventory/Attribute/edit.html.twig', array(
+                    'attribute' => $attribute,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/Attribute/edit.html.twig', array(
@@ -117,9 +138,17 @@ class AttributeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($attribute);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($attribute);
+                $em->flush();
+
+                $this->addFlash('notice', 'Attribute deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting attribute: ' . $e->getMessage());
+                return $this->redirectToRoute('attribute_index');
+            }
         }
 
         return $this->redirectToRoute('attribute_index');

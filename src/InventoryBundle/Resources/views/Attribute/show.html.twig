@@ -1,14 +1,31 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
+{% block title %}Attribute list{% endblock %}
+{% block page_title %}
+    Attribute list
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('attribute_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
     <h1>Attribute</h1>
 
     <table>
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ attribute.id }}</td>
-            </tr>
             <tr>
                 <th>Name</th>
                 <td>{{ attribute.name }}</td>
@@ -17,20 +34,15 @@
                 <th>Code</th>
                 <td>{{ attribute.code }}</td>
             </tr>
+            <tr>
+                <th>image</th>
+                <td><img src="{{ attribute.webPath }}"> </td>
+            </tr>
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('attribute_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('attribute_edit', { 'id': attribute.id }) }}">Edit</a>
-        </li>
-        <li>
+        <a class="btn btn-success" href="{{ path('attribute_edit', { 'id': attribute.id }) }}">Edit</a>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input class="btn btn-warning" type="submit" value="Delete">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}
