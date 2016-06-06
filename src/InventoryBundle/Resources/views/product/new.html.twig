@@ -1,16 +1,32 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
-    <h1>Product creation</h1>
+{% block title %}Product creation{% endblock %}
+{% block page_title %}
+    Product creation
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('admin_product_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+    {% include '@Inventory/Product/product-form.html.twig' %}
+        <input class="btn btn-success" type="submit" value="Create" />
     {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_product_index') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}

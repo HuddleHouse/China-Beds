@@ -1,21 +1,74 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
-    <h1>Product edit</h1>
+{% block title %}Edit Product creation{% endblock %}
+{% block page_title %}
+    Edit Product
+{% endblock page_title %}
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+{% block page_name %}
+    <a href="{{ path('admin_product_index') }}">< Back to the list</a>
+{% endblock page_name %}
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_product_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
+            <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Attributes</a></li>
+            <li class=""><a href="#associations" data-toggle="tab" aria-expanded="false">Associations</a></li>
+            <li class=""><a href="#categorization" data-toggle="tab" aria-expanded="false">Categorization</a></li>
+            <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
+            <li class=""><a href="#channels" data-toggle="tab" aria-expanded="false">Channels</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="product">
+                {{ form_start(form) }}
+                {% include '@Inventory/Product/product-form.html.twig' %}
+                <br>
+                <br>
+                <input class="btn btn-lg btn-success" type="submit" value="Update" />
+                <a class="btn btn-lg btn-warning" href="{{ path('admin_product_index') }}">Cancel</a>
+                {{ form_end(form) }}
+            </div>
+
+            <div class="tab-pane" id="attributes">
+
+            </div>
+
+            <div class="tab-pane" id="associations">
+
+            </div>
+
+
+            <div class="tab-pane" id="categorization">
+
+            </div>
+
+
+            <div class="tab-pane" id="images">
+
+            </div>
+
+
+            <div class="tab-pane" id="channels">
+
+            </div>
+        </div>
+        <!-- /.tab-content -->
+    </div>
+
+
+
 {% endblock %}

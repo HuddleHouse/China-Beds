@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AttributeType extends AbstractType
 {
@@ -18,6 +19,13 @@ class AttributeType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('type', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'choices' => array(
+                    'Product Specification' => 'spec',
+                    'Image' => 'image',
+                ),
+            ))
             ->add('file', FileType::class, array(
                 'attr' => array(
                     'style' => 'margin-bottom: 29px'),

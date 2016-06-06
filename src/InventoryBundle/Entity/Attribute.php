@@ -33,6 +33,13 @@ class Attribute
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="code", type="string", length=255)
      */
     private $code;
@@ -178,5 +185,23 @@ class Attribute
         // when displaying uploaded doc/image in the view.
         return 'uploads/documents';
     }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    
+    
 }
 

@@ -105,7 +105,7 @@ class WarehouseController extends Controller
                 $em->flush();
 
                 $this->addFlash('notice', 'Warehouse updated successfully.');
-                return $this->redirectToRoute('warehouse_edit', array('id' => $warehouse->getId()));
+                return $this->redirectToRoute('warehouse_index', array('id' => $warehouse->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());

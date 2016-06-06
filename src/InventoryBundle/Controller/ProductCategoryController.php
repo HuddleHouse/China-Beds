@@ -105,7 +105,7 @@ class ProductCategoryController extends Controller
                 $em->flush();
 
                 $this->addFlash('notice', 'Product Category updated successfully.');
-                return $this->redirectToRoute('product_category_edit', array('id' => $productCategory->getId()));
+                return $this->redirectToRoute('product_category_index', array('id' => $productCategory->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating Product Category ' . $e->getMessage());
