@@ -141,6 +141,7 @@ class ProductCategoryController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($productCategory);
                 $em->flush();
+                $this->addFlash('notice', 'Product Category deleted successfully.');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error deleting Product Category ' . $e->getMessage());
