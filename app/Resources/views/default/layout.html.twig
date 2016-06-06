@@ -55,6 +55,7 @@
         {% set sidebar_assortment = ['product_category_index', 'product_category_new', 'product_category_edit', 'product_category_show'] %}
         {% set sidebar_manage_options = ['manage_options_index', 'manage_options_new', 'manage_options_edit', 'manage_options_show'] %}
         {% set sidebar_attribute = ['attribute_index', 'attribute_new', 'attribute_edit', 'attribute_show'] %}
+        {% set sidebar_admin_products = ['admin_product_index', 'admin_product_new', 'admin_product_edit', 'admin_product_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -78,10 +79,12 @@
                     {% if 'product_category_index' in route_names
                         or 'manage_options_index' in route_names
                         or 'attribute_index' in route_names
+                        or 'admin_product_index' in route_names
                         %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_assortment) %} active
                         {% elseif (app.request.get('_route') in sidebar_manage_options) %} active
                         {% elseif (app.request.get('_route') in sidebar_attribute) %} active
+                        {% elseif (app.request.get('_route') in sidebar_admin_products) %} active
                         {% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -89,8 +92,8 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Products</a>
+                                <li {% if (app.request.get('_route') in sidebar_admin_products) %} class="active"{% endif %}>
+                                    <a href="{{ path('admin_product_index') }}"><i class="fa fa-circle-o"></i>Products</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
                                     <a href="{{ path('product_category_index') }}"><i class="fa fa-circle-o"></i>Categories</a>

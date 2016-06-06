@@ -28,7 +28,7 @@ class ProductController extends Controller
 
         $products = $em->getRepository('InventoryBundle:Product')->findAll();
 
-        return $this->render('product/index.html.twig', array(
+        return $this->render('@Inventory/Product/index.html.twig', array(
             'products' => $products,
         ));
     }
@@ -46,14 +46,23 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
-
-            return $this->redirectToRoute('admin_product_show', array('id' => $product->getId()));
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($product);
+                $em->flush();
+                $this->addFlash('notice', 'Product Created successfully.');
+                return $this->redirectToRoute('admin_product_edit', array('id' => $product->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Product ' . $e->getMessage());
+                return $this->render('@Inventory/Product/new.html.twig', array(
+                    'product' => $product,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
-        return $this->render('product/new.html.twig', array(
+        return $this->render('@Inventory/Product/new.html.twig', array(
             'product' => $product,
             'form' => $form->createView(),
         ));
@@ -69,7 +78,7 @@ class ProductController extends Controller
     {
         $deleteForm = $this->createDeleteForm($product);
 
-        return $this->render('product/show.html.twig', array(
+        return $this->render('@Inventory/Product/show.html.twig', array(
             'product' => $product,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -88,16 +97,26 @@ class ProductController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
-
-            return $this->redirectToRoute('admin_product_edit', array('id' => $product->getId()));
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($product);
+                $em->flush();
+                $this->addFlash('notice', 'Product updated successfully.');
+                return $this->redirectToRoute('admin_product_edit', array('id' => $product->getId())); 
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating Product ' . $e->getMessage());
+                return $this->render('@Inventory/Product/edit.html.twig', array(
+                    'product' => $product,
+                    'form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
-        return $this->render('product/edit.html.twig', array(
+        return $this->render('@Inventory/Product/edit.html.twig', array(
             'product' => $product,
-            'edit_form' => $editForm->createView(),
+            'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -114,9 +133,16 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($product);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($product);
+                $em->flush();
+                $this->addFlash('notice', 'Product deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Product ' . $e->getMessage());
+                return $this->redirectToRoute('admin_product_index');
+            }
         }
 
         return $this->redirectToRoute('admin_product_index');

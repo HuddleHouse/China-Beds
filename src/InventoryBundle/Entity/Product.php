@@ -31,14 +31,14 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="meta_description", type="text", nullable=true)
      */
     private $metaDescription;
 
@@ -52,37 +52,23 @@ class Product
     /**
      * @var string
      *
+     * @ORM\Column(name="tagline", type="string", length=255, nullable=true)
+     */
+    private $tagline;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="front_headline", type="string", length=255, nullable=true)
+     */
+    private $front_headline;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="sku", type="string", length=255, nullable=true)
      */
     private $sku;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="weight", type="integer", nullable=true)
-     */
-    private $weight;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="length", type="integer", nullable=true)
-     */
-    private $length;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="width", type="integer", nullable=true)
-     */
-    private $width;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="height", type="integer", nullable=true)
-     */
-    private $height;
 
     /**
      * @var bool
@@ -127,6 +113,24 @@ class Product
     }
 
     /**
+     * @return string
+     */
+    public function getFrontHeadline()
+    {
+        return $this->front_headline;
+    }
+
+    /**
+     * @param string $front_headline
+     */
+    public function setFrontHeadline($front_headline)
+    {
+        $this->front_headline = $front_headline;
+    }
+
+    
+    
+    /**
      * Set description
      *
      * @param string $description
@@ -150,6 +154,24 @@ class Product
         return $this->description;
     }
 
+    /**
+     * @return string
+     */
+    public function getTagline()
+    {
+        return $this->tagline;
+    }
+
+    /**
+     * @param string $tagline
+     */
+    public function setTagline($tagline)
+    {
+        $this->tagline = $tagline;
+    }
+
+    
+    
     /**
      * Set metaDescription
      *
@@ -220,102 +242,6 @@ class Product
     public function getSku()
     {
         return $this->sku;
-    }
-
-    /**
-     * Set weight
-     *
-     * @param integer $weight
-     *
-     * @return Product
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return int
-     */
-    public function getWeight()
-    {
-        return $this->weight;
-    }
-
-    /**
-     * Set length
-     *
-     * @param integer $length
-     *
-     * @return Product
-     */
-    public function setLength($length)
-    {
-        $this->length = $length;
-
-        return $this;
-    }
-
-    /**
-     * Get length
-     *
-     * @return int
-     */
-    public function getLength()
-    {
-        return $this->length;
-    }
-
-    /**
-     * Set width
-     *
-     * @param integer $width
-     *
-     * @return Product
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    /**
-     * Get width
-     *
-     * @return int
-     */
-    public function getWidth()
-    {
-        return $this->width;
-    }
-
-    /**
-     * Set height
-     *
-     * @param integer $height
-     *
-     * @return Product
-     */
-    public function setHeight($height)
-    {
-        $this->height = $height;
-
-        return $this;
-    }
-
-    /**
-     * Get height
-     *
-     * @return int
-     */
-    public function getHeight()
-    {
-        return $this->height;
     }
 
     /**
