@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -77,6 +78,20 @@ class Product
      */
     private $active;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="attribute_id")
+     */
+    private $attributes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductCategory")
+     * @ORM\JoinColumn(name="product_category_id", referencedColumnName="id")
+     */
+    protected $product_category;
+
+    public function __construct() {
+        $this->attributes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -86,6 +101,22 @@ class Product
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param mixed $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
     }
 
     /**
@@ -267,5 +298,23 @@ class Product
     {
         return $this->active;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProductCategory()
+    {
+        return $this->product_category;
+    }
+
+    /**
+     * @param mixed $product_category
+     */
+    public function setProductCategory($product_category)
+    {
+        $this->product_category = $product_category;
+    }
+
+    
 }
 

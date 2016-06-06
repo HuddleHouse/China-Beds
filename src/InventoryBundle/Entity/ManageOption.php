@@ -2,12 +2,13 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ManageOption
  *
- * @ORM\Table(name="manage_option")
+ * @ORM\Table(name="options")
  * @ORM\Entity(repositoryClass="InventoryBundle\Repository\ManageOptionRepository")
  */
 class ManageOption
@@ -35,6 +36,19 @@ class ManageOption
      */
     private $code;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\OptionValue", inversedBy="users")
+     * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
+     */
+    private $office;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\OptionValue", mappedBy="option")
+     */
+    private $option_values;
+    public function __construct() {
+        $this->option_values = new ArrayCollection();
+    }
 
     /**
      * Get id

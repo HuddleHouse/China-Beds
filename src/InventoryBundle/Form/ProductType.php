@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
@@ -9,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ProductType extends AbstractType
@@ -37,6 +37,12 @@ class ProductType extends AbstractType
                     'Yes' => 1,
                     'No' => 0,
                 ),
+            ))
+            ->add('product_category', EntityType::class, array(
+                'class' => 'InventoryBundle\Entity\ProductCategory',
+                'label' => 'Category',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
         ;
     }

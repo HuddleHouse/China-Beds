@@ -27,8 +27,6 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
             <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Attributes</a></li>
-            <li class=""><a href="#associations" data-toggle="tab" aria-expanded="false">Associations</a></li>
-            <li class=""><a href="#categorization" data-toggle="tab" aria-expanded="false">Categorization</a></li>
             <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
             <li class=""><a href="#channels" data-toggle="tab" aria-expanded="false">Channels</a></li>
         </ul>
@@ -43,24 +41,13 @@
                 {{ form_end(form) }}
             </div>
 
-            <div class="tab-pane" id="attributes">
-
+            <div class="tab-pane" id="attributes" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-attribute.html.twig' %}
             </div>
-
-            <div class="tab-pane" id="associations">
-
-            </div>
-
-
-            <div class="tab-pane" id="categorization">
-
-            </div>
-
 
             <div class="tab-pane" id="images">
 
             </div>
-
 
             <div class="tab-pane" id="channels">
 
