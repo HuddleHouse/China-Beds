@@ -1,0 +1,62 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Attribute list{% endblock %}
+{% block page_title %}
+    Attribute list
+{% endblock page_title %}
+
+{% block page_name %}
+    Assortment
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <a class="btn btn-success" href="{{ path('attribute_new') }}" style="margin-bottom: 15px;">Create a new attribute</a>
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for attribute in attributes %}
+                        <tr>
+                            <td><a href="{{ path('attribute_show', { 'id': attribute.id }) }}">{{ attribute.id }}</a></td>
+                            <td>{{ attribute.name }}</td>
+                            <td>{{ attribute.code }}</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('attribute_show', { 'id': attribute.id }) }}">show</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('attribute_edit', { 'id': attribute.id }) }}">edit</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

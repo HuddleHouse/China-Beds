@@ -54,6 +54,7 @@
         {% set sidebar_warehouse = ['warehouse_index', 'warehouse_new', 'warehouse_edit', 'warehouse_show'] %}
         {% set sidebar_assortment = ['product_category_index', 'product_category_new', 'product_category_edit', 'product_category_show'] %}
         {% set sidebar_manage_options = ['manage_options_index', 'manage_options_new', 'manage_options_edit', 'manage_options_show'] %}
+        {% set sidebar_attribute = ['attribute_index', 'attribute_new', 'attribute_edit', 'attribute_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -74,8 +75,13 @@
 
 
                         <!-- ASSORTMENT SECTION -->
+                    {% if 'product_category_index' in route_names
+                        or 'manage_options_index' in route_names
+                        or 'attribute_index' in route_names
+                        %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_assortment) %} active
                         {% elseif (app.request.get('_route') in sidebar_manage_options) %} active
+                        {% elseif (app.request.get('_route') in sidebar_attribute) %} active
                         {% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -92,8 +98,8 @@
                                 <li {% if (app.request.get('_route') in sidebar_manage_options) %} class="active"{% endif %}>
                                     <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Options</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Attributes</a>
+                                <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
+                                    <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Attributes</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>POP Items</a>
@@ -107,6 +113,7 @@
 
                             </ul>
                         </li>
+                    {% endif %}
 
                         <!-- ORDERS SECTION -->
                         <li class="treeview">
