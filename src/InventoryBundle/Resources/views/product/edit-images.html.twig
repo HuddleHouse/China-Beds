@@ -1,0 +1,58 @@
+<div id="display-attributes">
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th style="width: 150px">Options</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% verbatim %}
+                    <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
+                        <td><img src="http://placehold.it/50x50" alt="Product Image"> </td>
+                        <td>
+                            <a class="btn btn-danger" ng-click="deleteValue(name.id)">Delete</a>
+                        </td>
+                    </tr>
+                {% endverbatim %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+</div>
+
+
+<hr>
+<a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#images-modal">
+    <i class="fa fa-plus"></i>
+    Add An Image
+</a>
+
+
+<div class="modal fade" id="images-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4">Image</h4>
+            </div>
+            <div class="modal-body">
+                <label for="image_select">Attribute</label>
+                <select id="image_select" class="form-control" style="margin-bottom: 10px">
+                    {% for attr in image_attributes %}
+                        <option value="{{ attr.id }}">{{ attr.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
