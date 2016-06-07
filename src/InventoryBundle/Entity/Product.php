@@ -84,6 +84,11 @@ class Product
     private $attributes;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product")
+     */
+    private $channels;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product")
      */
     private $specifications;
@@ -97,6 +102,7 @@ class Product
     public function __construct() {
         $this->attributes = new ArrayCollection();
         $this->specifications = new ArrayCollection();
+        $this->channels = new ArrayCollection();
     }
 
     /**
@@ -319,6 +325,38 @@ class Product
     public function setProductCategory($product_category)
     {
         $this->product_category = $product_category;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
+
+    /**
+     * @param mixed $channels
+     */
+    public function setChannels($channels)
+    {
+        $this->channels = $channels;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSpecifications()
+    {
+        return $this->specifications;
+    }
+
+    /**
+     * @param mixed $specifications
+     */
+    public function setSpecifications($specifications)
+    {
+        $this->specifications = $specifications;
     }
 
     

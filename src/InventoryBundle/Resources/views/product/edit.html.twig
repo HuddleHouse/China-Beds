@@ -121,11 +121,13 @@
             </div>
 
             <div class="tab-pane" id="images">
-
+                {% include '@Inventory/Product/edit-images.html.twig' %}
             </div>
 
             <div class="tab-pane" id="channels">
-
+                <div class="tab-pane" id="specs" style="padding-top: 25px;">
+                    {% include '@Inventory/Product/edit-channels.html.twig' %}
+                </div>
             </div>
         </div>
         <!-- /.tab-content -->

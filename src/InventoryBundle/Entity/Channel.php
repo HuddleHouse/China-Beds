@@ -36,6 +36,16 @@ class Channel
     private $url;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="channel")
+     */
+    private $product_attributes;
+
+
+    public function __construct() {
+        $this->product_attributes = new ArrayCollection();
+    }
+    
+    /**
      * Get id
      *
      * @return int
@@ -84,5 +94,22 @@ class Channel
     {
         $this->url = $url;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProductAttributes()
+    {
+        return $this->product_attributes;
+    }
+
+    /**
+     * @param mixed $product_attributes
+     */
+    public function setProductAttributes($product_attributes)
+    {
+        $this->product_attributes = $product_attributes;
+    }
+    
 }
 

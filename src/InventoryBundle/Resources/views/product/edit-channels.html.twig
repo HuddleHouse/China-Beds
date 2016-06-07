@@ -1,0 +1,31 @@
+<div id="display-attributes">
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th style="width: 150px">Active?</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for channel in all_channels %}
+                    <tr>
+                        <td>{{channel.name}}</td>
+                        <td>{{ channel.url }}</td>
+                        <td>
+                            <input type="checkbox" id="channel-{{ channel.id }}">
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+</div>
+

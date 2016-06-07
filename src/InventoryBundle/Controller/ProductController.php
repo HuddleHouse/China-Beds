@@ -100,6 +100,7 @@ class ProductController extends Controller
 
         $specs = $em->getRepository('InventoryBundle:Specification')->findAll();
         $image_attributes = $em->getRepository('InventoryBundle:Attribute')->findAll();
+        $channels = $em->getRepository('InventoryBundle:Channel')->findAll();
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
@@ -116,7 +117,8 @@ class ProductController extends Controller
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
                     'specs' => $specs,
-                    'image_attributes' => $image_attributes
+                    'image_attributes' => $image_attributes,
+                    'all_channels' => $channels
                 ));
             }
         }
@@ -126,7 +128,8 @@ class ProductController extends Controller
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'specs' => $specs,
-            'image_attributes' => $image_attributes
+            'image_attributes' => $image_attributes,
+            'all_channels' => $channels
         ));
     }
 

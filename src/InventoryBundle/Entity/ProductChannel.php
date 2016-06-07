@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ProductAttribute
  *
- * @ORM\Table(name="product_attributes")
- * @ORM\Entity(repositoryClass="InventoryBundle\Repository\ProductAttributeRepository")
+ * @ORM\Table(name="product_channels")
+ * @ORM\Entity()
  */
-class ProductAttribute
+class ProductChannel
 {
     /**
      * @var int
@@ -22,10 +22,10 @@ class ProductAttribute
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Attribute", inversedBy="attributes")
-     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="channels")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
      */
-    private $attribute;
+    private $channel;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="attributes")
@@ -66,24 +66,22 @@ class ProductAttribute
     {
         return $this->product;
     }
-    
 
     /**
      * @return mixed
      */
-    public function getAttribute()
+    public function getChannel()
     {
-        return $this->attribute;
+        return $this->channel;
     }
 
     /**
-     * @param mixed $attribute
+     * @param mixed $channel
      */
-    public function setAttribute($attribute)
+    public function setChannel($channel)
     {
-        $this->attribute = $attribute;
+        $this->channel = $channel;
     }
-
     
 }
 
