@@ -79,9 +79,14 @@ class Product
     private $active;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="attribute_id")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")
      */
     private $attributes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product")
+     */
+    private $specifications;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductCategory")
@@ -91,6 +96,7 @@ class Product
 
     public function __construct() {
         $this->attributes = new ArrayCollection();
+        $this->specifications = new ArrayCollection();
     }
 
     /**

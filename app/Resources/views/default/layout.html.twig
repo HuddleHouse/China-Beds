@@ -102,7 +102,10 @@
                                     <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Options</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
-                                    <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Attributes</a>
+                                    <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Specifications</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
+                                    <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Image Attributes</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>POP Items</a>

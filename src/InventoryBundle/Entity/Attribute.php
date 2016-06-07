@@ -33,13 +33,6 @@ class Attribute
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
-     */
-    private $type;
-    
-    /**
-     * @var string
-     *
      * @ORM\Column(name="code", type="string", length=255)
      */
     private $code;
@@ -53,6 +46,16 @@ class Attribute
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="attribute")
+     */
+    private $product_attributes;
+
+
+    public function __construct() {
+        $this->product_attributes = new ArrayCollection();
+    }
     
     /**
      * Get id

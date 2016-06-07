@@ -114,6 +114,13 @@ class ProductController extends Controller
             }
         }
 
+        $em = $this->getDoctrine()->getManager();
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select value, option_id, id from option_values where option_id = :option_id");
+        $statement->bindValue('option_id', $id);
+
+
         return $this->render('@Inventory/Product/edit.html.twig', array(
             'product' => $product,
             'form' => $editForm->createView(),

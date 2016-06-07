@@ -20,7 +20,6 @@ class OptionsController extends Controller
      */
     public function addOptionValueAction(Request $request)
     {
-        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $id = $request->request->get('id');
         $new_option_value = $request->request->get('new_option_value');
@@ -44,7 +43,6 @@ class OptionsController extends Controller
      */
     public function getValuesAction(Request $request)
     {
-        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $id = $request->request->get('id');
 

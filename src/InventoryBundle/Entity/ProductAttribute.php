@@ -22,22 +22,14 @@ class ProductAttribute
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Attribute", inversedBy="attributes")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
      */
-    private $description;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="product_id", type="integer")
-     */
-    private $attribute_id;
+    private $attribute;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="attributes")
-     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
 
@@ -49,33 +41,6 @@ class ProductAttribute
     public function getId()
     {
         return $this->id;
-    }
-
-
-    
-    
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return ProductAttribute
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**

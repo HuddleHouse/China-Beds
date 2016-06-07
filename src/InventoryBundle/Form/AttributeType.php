@@ -19,13 +19,6 @@ class AttributeType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
-            ->add('type', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'choices' => array(
-                    'Product Specification' => 'spec',
-                    'Image' => 'image',
-                ),
-            ))
             ->add('file', FileType::class, array(
                 'attr' => array(
                     'style' => 'margin-bottom: 29px'),

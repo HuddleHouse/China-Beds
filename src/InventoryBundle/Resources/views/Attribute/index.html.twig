@@ -30,7 +30,6 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Type</th>
                         <th>Code</th>
                         <th>Actions</th>
                     </tr>
@@ -39,13 +38,6 @@
                     {% for attribute in attributes %}
                         <tr>
                             <td><a href="{{ path('attribute_edit', { 'id': attribute.id }) }}">{{ attribute.name }}</a></td>
-                            {% if attribute.type == 'spec' %}
-                            <td>Prod Spec</td>
-                            {% elseif attribute.type == 'image' %}
-                            <td>Image</td>
-                            {% else %}
-                            <td> </td>
-                            {% endif %}
                             <td>{{ attribute.code }}</td>
                             <td>
                                 <a class="btn btn-default btn-xs purple" href="{{ path('attribute_edit', { 'id': attribute.id }) }}"><i class="fa fa-edit"></i> edit</a>
