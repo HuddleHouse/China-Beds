@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Specification list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for specification in specifications %}
+            <tr>
+                <td><a href="{{ path('specification_show', { 'id': specification.id }) }}">{{ specification.id }}</a></td>
+                <td>{{ specification.name }}</td>
+                <td>{{ specification.code }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('specification_show', { 'id': specification.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('specification_edit', { 'id': specification.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('specification_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
