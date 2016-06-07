@@ -6,16 +6,16 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Image</th>
+                    <th>Value</th>
                     <th style="width: 150px">Options</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 {% verbatim %}
-                    <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
+                    <tr ng-repeat="(i, spec) in specifications track by $index">
                         <td>{{spec.name}}</td>
-                        <td><img src="http://placehold.it/50x50" alt="Product Image"> </td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="spec.description"> </td>
                         <td>
                             <a class="btn btn-danger" ng-click="deleteValue(name.id)">Delete</a>
                         </td>
@@ -26,34 +26,38 @@
         </div>
         <!-- /.box-body -->
     </div>
+
 </div>
 
 
 <hr>
-<a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
+<a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#specs-modal">
     <i class="fa fa-plus"></i>
-    Add Attribute
+    Add Specification
 </a>
 
 
-<div class="modal fade" id="attributes-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="specs-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Image Attributes</h4>
+                <h4 class="modal-title" id="myModalLabel">Add Specification</h4>
             </div>
             <div class="modal-body">
-                <label for="image_select">Attribute</label>
-                <select id="image_select" class="form-control" style="margin-bottom: 10px">
-                    {% for attr in image_attributes %}
-                        <option value="{{ attr.id }}">{{ attr.name }}</option>
+                <label for="spec_select">Specification</label>
+                <select id="spec_select" class="form-control" style="margin-bottom: 10px">
+                    {% for spec in specs %}
+                        <option value="{{ spec.id }}">{{ spec.name }}</option>
                     {% endfor %}
                 </select>
+
+                <label for="spec_value" class="required">Value</label>
+                <input type="text" id="spec_value" name="" required="required" class="form-control" style="margin-bottom: 10px">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-click="addSpecValue()" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>

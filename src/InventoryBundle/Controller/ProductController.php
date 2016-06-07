@@ -99,6 +99,7 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $specs = $em->getRepository('InventoryBundle:Specification')->findAll();
+        $image_attributes = $em->getRepository('InventoryBundle:Attribute')->findAll();
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
@@ -114,7 +115,8 @@ class ProductController extends Controller
                     'product' => $product,
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
-                    'specs' => $specs
+                    'specs' => $specs,
+                    'image_attributes' => $image_attributes
                 ));
             }
         }
@@ -123,7 +125,8 @@ class ProductController extends Controller
             'product' => $product,
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'specs' => $specs
+            'specs' => $specs,
+            'image_attributes' => $image_attributes
         ));
     }
 

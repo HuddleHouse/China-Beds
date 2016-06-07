@@ -19,14 +19,85 @@
                 paging: false
             });
         });
+
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function($scope) {
+            $scope.specifications = [];
+            $scope.image_attributes_data = [];
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_spec_values') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.specifications = data;
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_attribute_values') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.image_attributes_data = data;
+                    });
+                }
+            });
+
+            $scope.addSpecValue = function () {
+                var spec_value = $('#spec_value').val();
+                var spec_id = $('#spec_select option:selected').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_spec_value') }}",
+                    dataType: 'json',
+                    data: {spec_id: spec_id, spec_value: spec_value, product_id: {{ product.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.specifications = data;
+                            $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
+
+            $scope.addAttributeValue = function () {
+                console.log('lkdjf');
+                var attribute_id = $('#image_select option:selected').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_attribute_value') }}",
+                    dataType: 'json',
+                    data: {attribute_id: attribute_id, product_id: {{ product.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.image_attributes_data = data;
+                            $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
+
+        });
     </script>
 {% endblock footer %}
 
 {% block content %}
+<div  ng-app="myApp" ng-controller="myCtrl">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
-            <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Attributes</a></li>
+            <li class=""><a href="#specs" data-toggle="tab" aria-expanded="false">Specifications</a></li>
+            <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Image Attributes</a></li>
             <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
             <li class=""><a href="#channels" data-toggle="tab" aria-expanded="false">Channels</a></li>
         </ul>
@@ -45,6 +116,10 @@
                 {% include '@Inventory/Product/edit-attribute.html.twig' %}
             </div>
 
+            <div class="tab-pane" id="specs" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-specification.html.twig' %}
+            </div>
+
             <div class="tab-pane" id="images">
 
             </div>
@@ -55,7 +130,5 @@
         </div>
         <!-- /.tab-content -->
     </div>
-
-
-
+</div>
 {% endblock %}

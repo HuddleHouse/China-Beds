@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/API/SpecificationsController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/API/AttributesController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/product/edit-specification.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php" afterPath="$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/SpecificationController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/SpecificationController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Form/SpecificationType.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/SpecificationType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Attribute/show.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Attribute/show.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/edit.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/edit.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/index.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/show.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/show.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/product/edit-attribute.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/product/edit-attribute.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/product/edit.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/product/edit.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,24 +29,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TokenListener.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ProductController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+            <state relative-caret-position="423">
+              <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding>
                 <element signature="e#710#735#1#PHP" expanded="true" />
                 <element signature="e#3087#3118#1#PHP" expanded="true" />
+                <element signature="e#3179#3206#1#PHP" expanded="true" />
+                <element signature="e#4164#4199#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -61,52 +47,26 @@
       <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="51" column="49" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
+            <state relative-caret-position="399">
+              <caret line="48" column="52" selection-start-line="48" selection-start-column="52" selection-end-line="48" selection-end-column="52" />
               <folding>
                 <element signature="e#12#37#0#Twig" expanded="true" />
-                <element signature="e#3158#3201#0#Twig" expanded="true" />
-                <element signature="e#3327#3374#0#Twig" expanded="true" />
+                <element signature="e#4335#4378#0#Twig" expanded="true" />
+                <element signature="e#4504#4551#0#Twig" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="edit-specification.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-specification.html.twig">
+      <file leaf-file-name="edit-attribute.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-attribute.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
+            <state relative-caret-position="900">
+              <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
               <folding>
-                <element signature="n#style#0;n#select#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-                <marker date="1465308392000" expanded="true" signature="512:865" ph="..." />
-                <marker date="1465308392000" expanded="true" signature="636:648" ph="..." />
-                <marker date="1465308392000" expanded="true" signature="712:839" ph="..." />
+                <marker date="1465309857000" expanded="true" signature="519:840" ph="..." />
+                <marker date="1465309857000" expanded="true" signature="687:814" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/edit.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
-              <folding>
-                <element signature="e#12#37#0#Twig" expanded="true" />
-                <element signature="n#style#0;n#input#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Attribute/edit.html.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="27" selection-end-column="26" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -114,8 +74,8 @@
       <file leaf-file-name="SpecificationsController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/SpecificationsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="855">
-              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+            <state relative-caret-position="621">
+              <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding>
                 <element signature="e#50#95#0#PHP" expanded="true" />
                 <marker date="1465308138000" expanded="true" signature="887:1003" ph="insert into product_specification... " />
@@ -125,15 +85,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/edit.html.twig">
+      <file leaf-file-name="edit-specification.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-specification.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="24">
-              <caret line="57" column="11" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="11" />
+            <state relative-caret-position="510">
+              <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
               <folding>
-                <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <marker date="1465254621000" expanded="true" signature="2506:2814" ph="..." />
-                <marker date="1465254621000" expanded="true" signature="2583:2788" ph="..." />
+                <marker date="1465308392000" expanded="true" signature="512:865" ph="..." />
+                <marker date="1465308392000" expanded="true" signature="636:648" ph="..." />
+                <marker date="1465308392000" expanded="true" signature="712:839" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AttributesController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/AttributesController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="49" column="168" selection-start-line="49" selection-start-column="168" selection-end-line="49" selection-end-column="168" />
+              <folding>
+                <marker date="1465309787000" expanded="true" signature="853:935" ph="insert into product_attributes... " />
+                <marker date="1465309787000" expanded="true" signature="1631:1760" ph="select s.id,... product_attributes" />
               </folding>
             </state>
           </provider>
@@ -183,12 +156,14 @@
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/index.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Attribute/show.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/show.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/API/SpecificationsController.php" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-specification.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/edit.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/API/AttributesController.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-attribute.html.twig" />
       </list>
     </option>
   </component>
@@ -415,7 +390,7 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Attribute" />
+              <option name="myItemId" value="Product" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -745,7 +720,7 @@
       <updated>1464130077300</updated>
       <workItem from="1464130078502" duration="1879000" />
       <workItem from="1464195927701" duration="12022000" />
-      <workItem from="1465299706763" duration="8967000" />
+      <workItem from="1465299706763" duration="10349000" />
     </task>
     <task id="LOCAL-00001" summary="Updating user restricing layer&#10;">
       <created>1465300434195</created>
@@ -768,11 +743,18 @@
       <option name="project" value="LOCAL" />
       <updated>1465303651981</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fixing Entity relationshiops&#10;">
+      <created>1465308693902</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1465308693902</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22868000" />
+    <option name="totallyTimeSpent" value="24250000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -785,10 +767,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="387" y="23" width="2173" height="1413" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14265603" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14265603" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.5037353" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -828,9 +810,9 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/SpecificationsController.php</url>
-          <line>47</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/AttributesController.php</url>
+          <line>22</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -841,19 +823,11 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="5" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/css/3e7b5a2_part_1_AdminLTE_1.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/css/3e7b5a2.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1153,14 +1127,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-attribute.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/new.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1221,17 +1187,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding>
-            <element signature="e#710#735#1#PHP" expanded="true" />
-            <element signature="e#3087#3118#1#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/edit.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="24">
@@ -1240,44 +1195,6 @@
             <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
             <marker date="1465254621000" expanded="true" signature="2506:2814" ph="..." />
             <marker date="1465254621000" expanded="true" signature="2583:2788" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/SpecificationsController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding>
-            <element signature="e#50#95#0#PHP" expanded="true" />
-            <marker date="1465308138000" expanded="true" signature="887:1003" ph="insert into product_specification... " />
-            <marker date="1465308138000" expanded="true" signature="1733:1880" ph="select s.id,... product_specification" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="51" column="49" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
-          <folding>
-            <element signature="e#12#37#0#Twig" expanded="true" />
-            <element signature="e#3158#3201#0#Twig" expanded="true" />
-            <element signature="e#3327#3374#0#Twig" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-specification.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="52" selection-start-line="19" selection-start-column="52" selection-end-line="19" selection-end-column="52" />
-          <folding>
-            <element signature="n#style#0;n#select#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <marker date="1465308392000" expanded="true" signature="512:865" ph="..." />
-            <marker date="1465308392000" expanded="true" signature="636:648" ph="..." />
-            <marker date="1465308392000" expanded="true" signature="712:839" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1297,6 +1214,77 @@
           <folding>
             <element signature="e#12#37#0#Twig" expanded="true" />
             <element signature="n#style#0;n#input#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-specification.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
+          <folding>
+            <marker date="1465308392000" expanded="true" signature="512:865" ph="..." />
+            <marker date="1465308392000" expanded="true" signature="636:648" ph="..." />
+            <marker date="1465308392000" expanded="true" signature="712:839" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ProductController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding>
+            <element signature="e#710#735#1#PHP" expanded="true" />
+            <element signature="e#3087#3118#1#PHP" expanded="true" />
+            <element signature="e#3179#3206#1#PHP" expanded="true" />
+            <element signature="e#4164#4199#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/SpecificationsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding>
+            <element signature="e#50#95#0#PHP" expanded="true" />
+            <marker date="1465308138000" expanded="true" signature="887:1003" ph="insert into product_specification... " />
+            <marker date="1465308138000" expanded="true" signature="1733:1880" ph="select s.id,... product_specification" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="48" column="52" selection-start-line="48" selection-start-column="52" selection-end-line="48" selection-end-column="52" />
+          <folding>
+            <element signature="e#12#37#0#Twig" expanded="true" />
+            <element signature="e#4335#4378#0#Twig" expanded="true" />
+            <element signature="e#4504#4551#0#Twig" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/AttributesController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="49" column="168" selection-start-line="49" selection-start-column="168" selection-end-line="49" selection-end-column="168" />
+          <folding>
+            <marker date="1465309787000" expanded="true" signature="853:935" ph="insert into product_attributes... " />
+            <marker date="1465309787000" expanded="true" signature="1631:1760" ph="select s.id,... product_attributes" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-attribute.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+          <folding>
+            <marker date="1465309857000" expanded="true" signature="519:840" ph="..." />
+            <marker date="1465309857000" expanded="true" signature="687:814" ph="..." />
           </folding>
         </state>
       </provider>
