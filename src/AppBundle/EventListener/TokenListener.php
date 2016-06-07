@@ -64,8 +64,14 @@ class TokenListener
             }
 
             $roles = $this->token_storage->getToken()->getRoles();
+            $roleData = array();
 
-            if(!in_array($route, $route_names) && !in_array('ROLE_ADMIN', $roles))
+            foreach($roles as $role) {
+                $roleData[$role->getRole()] = $role->getRole();
+            }
+
+
+            if(!in_array($route, $route_names) && !in_array('ROLE_ADMIN', $roleData))
             {
                 //A matching role and route was not found so we do not give access to the user here and redirect to another page.
                 $event->setResponse(new RedirectResponse($this->router->generate('404')));

@@ -1,9 +1,30 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
+{% block title %}Specification{% endblock %}
+{% block page_title %}
+    Specification
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('specification_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
     <h1>Specification</h1>
 
-    <table>
+    <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -20,17 +41,8 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('specification_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('specification_edit', { 'id': specification.id }) }}">Edit</a>
-        </li>
-        <li>
+            <a class="btn btn-default" href="{{ path('specification_edit', { 'id': specification.id }) }}">Edit</a>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input style="margin: -55px 0px 0px 60px;" class="btn btn-danger" type="submit" value="Delete">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}

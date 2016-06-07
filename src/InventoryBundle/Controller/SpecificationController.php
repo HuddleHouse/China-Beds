@@ -53,19 +53,19 @@ class SpecificationController extends Controller
 
                 $this->addFlash('notice', 'Specification created successfully.');
                 
-                return $this->redirectToRoute('specification_show', array('id' => $specification->getId()));
+                return $this->redirectToRoute('specification_index', array('id' => $specification->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating specification: ' . $e->getMessage());
                 
-                return $this->render('@Inventory/Specificationnew.html.twig', array(
+                return $this->render('@Inventory/Specification/new.html.twig', array(
                     'specification' => $specification,
                     'form' => $form->createView(),
                 ));
             }
         }
 
-        return $this->render('@Inventory/Specificationnew.html.twig', array(
+        return $this->render('@Inventory/Specification/new.html.twig', array(
             'specification' => $specification,
             'form' => $form->createView(),
         ));
@@ -81,7 +81,7 @@ class SpecificationController extends Controller
     {
         $deleteForm = $this->createDeleteForm($specification);
 
-        return $this->render('@Inventory/Specificationshow.html.twig', array(
+        return $this->render('@Inventory/Specification/show.html.twig', array(
             'specification' => $specification,
             'delete_form' => $deleteForm->createView(),
         ));

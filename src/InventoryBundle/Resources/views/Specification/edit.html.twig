@@ -1,21 +1,40 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
-    <h1>Specification edit</h1>
+{% block title %}Attribute Edit{% endblock %}
+{% block page_title %}
+    Attribute Edit
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('specification_index') }}"> < Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+        <input class="btn btn-success" type="submit" value="Edit" />
     {{ form_end(edit_form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('specification_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        {{ form_start(delete_form) }}
+        <input style="    margin: -55px 0 0 60px;" class="btn btn-danger" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+        </div>
+    </div>
 {% endblock %}

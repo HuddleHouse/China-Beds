@@ -96,6 +96,10 @@ class ProductController extends Controller
         $editForm = $this->createForm('InventoryBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
 
+        $em = $this->getDoctrine()->getManager();
+
+        $specs = $em->getRepository('InventoryBundle:Specification')->findAll();
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
@@ -110,21 +114,16 @@ class ProductController extends Controller
                     'product' => $product,
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
+                    'specs' => $specs
                 ));
             }
         }
-
-        $em = $this->getDoctrine()->getManager();
-
-        $connection = $em->getConnection();
-        $statement = $connection->prepare("select value, option_id, id from option_values where option_id = :option_id");
-        $statement->bindValue('option_id', $id);
-
 
         return $this->render('@Inventory/Product/edit.html.twig', array(
             'product' => $product,
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'specs' => $specs
         ));
     }
 
