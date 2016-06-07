@@ -19,10 +19,11 @@ class AttributeType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('alt_tag', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('file', FileType::class, array(
                 'attr' => array('style' => 'margin-bottom: 29px'),
                 'label' => 'Picture',
-                'required' => true,
+                'required' => false,
             ));
         ;
     }

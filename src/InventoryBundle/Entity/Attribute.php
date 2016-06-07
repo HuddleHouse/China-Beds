@@ -48,6 +48,11 @@ class Attribute
     public $path;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    public $alt_tag;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="attribute")
      */
     private $product_attributes;
@@ -204,6 +209,54 @@ class Attribute
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductAttributes()
+    {
+        return $this->product_attributes;
+    }
+
+    /**
+     * @param mixed $product_attributes
+     */
+    public function setProductAttributes($product_attributes)
+    {
+        $this->product_attributes = $product_attributes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAltTag()
+    {
+        return $this->alt_tag;
+    }
+
+    /**
+     * @param mixed $alt_tag
+     */
+    public function setAltTag($alt_tag)
+    {
+        $this->alt_tag = $alt_tag;
     }
     
     

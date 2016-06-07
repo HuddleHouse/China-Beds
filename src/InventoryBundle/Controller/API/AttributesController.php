@@ -47,7 +47,7 @@ class AttributesController extends Controller
         $id = $request->request->get('product_id');
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select s.id, sp.name, sp.path from product_attributes s left join attribute sp on sp.id = s.attribute_id where s.product_id = :id");
+        $statement = $connection->prepare("select s.id, sp.name, sp.path, sp.alt_tag from product_attributes s left join attribute sp on sp.id = s.attribute_id where s.product_id = :id");
         $statement->bindValue('id', $id);
 
         try {

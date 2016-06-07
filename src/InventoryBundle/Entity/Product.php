@@ -94,6 +94,11 @@ class Product
     private $specifications;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product")
+     */
+    private $images;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductCategory")
      * @ORM\JoinColumn(name="product_category_id", referencedColumnName="id")
      */
@@ -103,6 +108,7 @@ class Product
         $this->attributes = new ArrayCollection();
         $this->specifications = new ArrayCollection();
         $this->channels = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -357,6 +363,22 @@ class Product
     public function setSpecifications($specifications)
     {
         $this->specifications = $specifications;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param mixed $images
+     */
+    public function setImages($images)
+    {
+        $this->images = $images;
     }
 
     
