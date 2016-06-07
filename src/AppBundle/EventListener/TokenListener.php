@@ -58,13 +58,14 @@ class TokenListener
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
                 }
                 $route_names = $user->getRouteNames();
-                
+
                 setcookie('route_names', implode(',', $route_names), time()+3600);
                 $_POST['route_names'] = implode(',', $route_names);
             }
 
+            $roles = $this->token_storage->getToken()->getRoles();
 
-            if(!in_array($route, $route_names))
+            if(!in_array($route, $route_names) && !in_array('ROLE_ADMIN', $roles))
             {
                 //A matching role and route was not found so we do not give access to the user here and redirect to another page.
                 $event->setResponse(new RedirectResponse($this->router->generate('404')));
