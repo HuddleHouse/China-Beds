@@ -57,6 +57,7 @@
         {% set sidebar_attribute = ['attribute_index', 'attribute_new', 'attribute_edit', 'attribute_show'] %}
         {% set sidebar_admin_products = ['admin_product_index', 'admin_product_new', 'admin_product_edit', 'admin_product_show'] %}
         {% set sidebar_specification = ['specification_index', 'specification_new', 'specification_edit', 'specification_show'] %}
+        {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -67,14 +68,12 @@
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
 
-
                         <li >
                             <a href="{{ path('fos_user_profile_show') }}">
                                 <i class="fa fa-dashboard"></i>
                                 <span class="title">Dashboard</span>
                             </a>
                         </li>
-
 
                         <!-- ASSORTMENT SECTION -->
                     {% if 'product_category_index' in route_names
@@ -159,12 +158,14 @@
                             or 'admin_price_group_index' in route_names
                             or 'fos_user_group_list' in route_names
                             or 'access_restriction' in route_names
+                            or 'admin_channel_index' in route_names
                         %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
                             {% elseif (app.request.get('_route') in sidebar_users) %} active
                             {% elseif (app.request.get('_route') in sidebar_offices) %} active
                             {% elseif (app.request.get('_route') in sidebar_access_restriction) %} active
                             {% elseif (app.request.get('_route') in sidebar_price_groups) %} active
+                            {% elseif (app.request.get('_route') in sidebar_channel) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -196,6 +197,11 @@
                                     {% if 'access_restriction' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_access_restriction) %} class="active"{% endif %}>
                                             <a href="{{ path('access_restriction') }}"><i class="fa fa-circle-o"></i>Access Restriction</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if 'admin_channel_index' in route_names %}
+                                        <li {% if (app.request.get('_route') in sidebar_channel) %} class="active"{% endif %}>
+                                            <a href="{{ path('admin_channel_index') }}"><i class="fa fa-circle-o"></i>Channels</a>
                                         </li>
                                     {% endif %}
                                 </ul>
