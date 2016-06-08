@@ -61,4 +61,25 @@ class SpecificationsController extends Controller
             return JsonResponse::create(false);
         }
     }
+
+    /**
+     * @Route("/api_remove_spec_value", name="api_remove_spec_value")
+     */
+    public function removeSpecValueAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $spec_id = $request->request->get('spec_id');
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("delete from product_specification where :spec_id = id");
+        $statement->bindValue('spec_id', $spec_id);
+
+        try {
+            $statement->execute();
+            return $this->getAllSpecValuesAction($request);
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+    }
 }
