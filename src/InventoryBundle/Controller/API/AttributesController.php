@@ -59,4 +59,25 @@ class AttributesController extends Controller
             return JsonResponse::create(false);
         }
     }
+
+    /**
+     * @Route("/api_remove_attribute_value", name="api_remove_attribute_value")
+     */
+    public function removeAttributeValueAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $attribute_id = $request->request->get('attribute_id');
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("delete from product_attributes where :attribute_id = id");
+        $statement->bindValue('attribute_id', $attribute_id);
+
+        try {
+            $statement->execute();
+            return $this->getAllAttributeValuesAction($request);
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+    }
 }

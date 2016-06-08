@@ -15,9 +15,9 @@
                 {% verbatim %}
                     <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
                         <td>{{spec.name}}</td>
-                        <td><img src="http://placehold.it/50x50" alt="Product Image"> </td>
+                        <td><img ng-src="/uploads/documents/{{spec.path}}" style="max-height: 90px;"> </td>
                         <td>
-                            <a class="btn btn-danger" ng-click="deleteValue(name.id)">Delete</a>
+                            <a class="btn btn-danger" ng-click="deleteAttributeValue(spec.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
