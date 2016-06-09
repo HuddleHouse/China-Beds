@@ -38,18 +38,6 @@
                 }
             });
 
-            $.ajax({
-                beforeSend: function () {
-                },
-                type: 'POST',
-                url: "{{ path('api_get_all_attribute_values') }}",
-                data: {product_id: {{ product.id }}},
-                success: function (data) {
-                    $scope.$apply(function () {
-                        $scope.image_attributes_data = data;
-                    });
-                }
-            });
 
             $scope.addSpecValue = function () {
                 var spec_value = $('#spec_value').val();
@@ -69,6 +57,67 @@
                 });
             };
 
+            $scope.getAllSpecValue = function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_get_all_spec_values') }}",
+                    dataType: 'json',
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.$apply(function () {
+                            $scope.specifications = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.deleteSpecValue = function (id) {
+                var spec_id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_spec_value') }}",
+                    dataType: 'json',
+                    data: {spec_id: spec_id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllSpecValue();
+                    }
+                });
+            };
+
+
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_attribute_values') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.image_attributes_data = data;
+                    });
+                }
+            });
+
+            $scope.getAllAttributeValue = function () {
+                $.ajax({
+                    beforeSend: function () {
+                    },
+                    type: 'POST',
+                    url: "{{ path('api_get_all_attribute_values') }}",
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.image_attributes_data = data;
+                        });
+                    }
+                });
+            }
+
             $scope.addAttributeValue = function () {
                 console.log('lkdjf');
                 var attribute_id = $('#image_select option:selected').val();
@@ -83,6 +132,21 @@
                             $scope.image_attributes_data = data;
                             $('#spec_value').val('');
                         });
+                    }
+                });
+            };
+
+            $scope.deleteAttributeValue = function (id) {
+                var attribute_id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_attribute_value') }}",
+                    dataType: 'json',
+                    data: {attribute_id: attribute_id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllAttributeValue();
                     }
                 });
             };
