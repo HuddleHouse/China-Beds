@@ -22,13 +22,13 @@ class ProductChannel
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="channels")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="product_channels")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
      */
     private $channel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="attributes")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="channels")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;

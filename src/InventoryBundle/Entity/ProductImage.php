@@ -24,7 +24,7 @@ class ProductImage
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="attributes")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="images")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
@@ -38,7 +38,6 @@ class ProductImage
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
-    
 
     /**
      * Get id
