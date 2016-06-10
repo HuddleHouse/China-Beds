@@ -35,7 +35,7 @@ class ProductSpecification
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Specification", inversedBy="specifications")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Specification", inversedBy="product_specifications")
      * @ORM\JoinColumn(name="specification_id", referencedColumnName="id")
      */
     private $specification;
@@ -80,6 +80,22 @@ class ProductSpecification
     public function setSpecification($specification)
     {
         $this->specification = $specification;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param mixed $product
+     */
+    public function setProduct($product)
+    {
+        $this->product = $product;
     }
 
 
