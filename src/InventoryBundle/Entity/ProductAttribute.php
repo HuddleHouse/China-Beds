@@ -22,7 +22,7 @@ class ProductAttribute
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Attribute", inversedBy="attributes")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Attribute", inversedBy="product_attributes")
      * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
      */
     private $attribute;
