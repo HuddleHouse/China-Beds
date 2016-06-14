@@ -25,6 +25,21 @@
 {% endblock %}
 
 <script>
+    $(document).ready(function () {
+        intuit.ipp.anywhere.setup({
+            grantUrl: 'https://appcenter.intuit.com/Playground/OAuth/BeginIAFlow',
+
+            datasources: {
+                quickbooks: true,
+                payments: false
+
+
+            }
+
+
+        });
+    });
+
     var AdminLTEOptions = {
         //Enable sidebar expand on hover effect for sidebar mini
         //This option is forced to true if both the fixed layout and sidebar mini
@@ -40,7 +55,10 @@ crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/responsive.bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
-
+<script
+        type="text/javascript"
+        src="https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere-1.3.3.js">
+</script>
 </body>
 {% block footer %}{% endblock %}
 <script>
