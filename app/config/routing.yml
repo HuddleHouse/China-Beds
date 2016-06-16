@@ -1,3 +1,8 @@
+quickbooks:
+    resource: "@QuickbooksBundle/Controller/"
+    type:     annotation
+    prefix:   /qb
+
 inventory:
     resource: "@InventoryBundle/Controller/"
     type:     annotation

@@ -1,0 +1,4 @@
+services:
+#    quickbooks.example:
+#        class: QuickbooksBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
