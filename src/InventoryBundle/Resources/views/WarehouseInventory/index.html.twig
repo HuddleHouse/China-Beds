@@ -39,7 +39,7 @@
                     <tbody>
                     {% for warehouse in warehouses %}
                         <tr>
-                            <td><a href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
+                            <td><a href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
                             <td><center>{{ warehouse.quantity | number_format(2) }}</center></td>
                             <td><center>{{ warehouse.po_quantity | number_format(2) }}</center></td>
                             {% if warehouse.list_id != null %}

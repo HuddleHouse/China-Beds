@@ -33,4 +33,15 @@ class ItemController extends Controller
         
         return $results;
     }
+
+    public function qbItemQuantityForWarehouse($warehouseListID)
+    {
+        $statement = $this->connection->prepare('select * from ItemSitesQueryRs
+	where InventorySiteRefListID = :id group by ItemInventoryRefListID');
+        $statement->bindParam(':id', $warehouseListID);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_OBJ);
+
+        return $results;
+    }
 }
