@@ -22,14 +22,14 @@ class ItemController extends Controller
         $this->connection = new PDO('mysql:host=localhost;dbname=quick;charset=utf8', 'quick', 'quick');
     }
 
-    /**
-     * @Route("/get-all-items", name="qb_get_all_items")
-     */
-    public function qbGetAllItems()
+    
+    public function qbQuantityForWarehouse($warehouseListID)
     {
-        $statement = $this->connection->prepare('select * from ItemQueryRs');
+        $statement = $this->connection->prepare('select sum(QuantityOnHand) as quantity, sum(QuantityOnPurchaseOrders) as po_quantity from ItemSitesQueryRs
+	where InventorySiteRefListID = :id');
+        $statement->bindParam(':id', $warehouseListID);
         $statement->execute();
-        $results = $statement->fetchAll(PDO::FETCH_OBJ);
+        $results = $statement->fetch(PDO::FETCH_OBJ);
         
         return $results;
     }

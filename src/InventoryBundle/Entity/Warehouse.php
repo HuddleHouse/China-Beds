@@ -24,7 +24,7 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
@@ -45,7 +45,7 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="address_1", type="string", length=255, nullable=true)
+     * @ORM\Column(name="address_1", type="string", length=255)
      */
     private $address1;
 
@@ -59,28 +59,28 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="list_id", type="string", length=255, nullable=true)
+     * @ORM\Column(name="list_id", type="string", length=255)
      */
     private $list_id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     * @ORM\Column(name="contact", type="string", length=255)
      */
     private $contact;
     

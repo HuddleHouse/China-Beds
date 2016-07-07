@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\Warehouse;
 use InventoryBundle\Form\WarehouseType;
+use QuickbooksBundle\Controller\ItemController;
 
 /**
  * Warehouse controller.
@@ -29,8 +30,22 @@ class WarehouseInventoryController extends Controller
 
         $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
 
+        $data = array();
+        $itemController = new ItemController();
+
+        foreach($warehouses as $warehouse) {
+            $quan = $itemController->qbQuantityForWarehouse($warehouse->getListId());
+            $data[] = array(
+                'id' => $warehouse->getId(),
+                'name' => $warehouse->getName(),
+                'list_id' => $warehouse->getListId(),
+                'quantity' => $quan->quantity,
+                'po_quantity' => $quan->po_quantity
+            );
+        }
+
         return $this->render('@Inventory/Warehouse/index.html.twig', array(
-            'warehouses' => $warehouses,
+            'warehouses' => $data,
         ));
     }
 
