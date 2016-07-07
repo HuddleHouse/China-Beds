@@ -1,0 +1,69 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Import Settings{% endblock %}
+{% block page_title %}
+    Import Settings
+{% endblock page_title %}
+
+{% block page_name %}
+    Import
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+
+
+        angular.module('myApp', [])
+                .directive('loading', function () {
+            return {
+                restrict: 'E',
+                replace:true,
+                template: '<div class="loading"><img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" /> IMPORTING...</div>',
+                link: function (scope, element, attr) {
+                    scope.$watch('loading', function (val) {
+                        if (val)
+                            $(element).show();
+                        else
+                            $(element).hide();
+                    });
+                }
+            }
+        }).controller('myController', function($scope, $http) {
+                    $scope.cars = [];
+
+                    $scope.importProducts = function() {
+                        $scope.loading = true;
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('qb_import_items') }}",
+                            dataType: 'json',
+                            success: function (data) {
+                                console.log('matt');
+                                $scope.loading = false;
+                            },
+                            error: function (data) {
+                                $scope.loading = false;
+                                console.log(data);
+                            }
+                        });
+                    }
+
+                });
+
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <style>
+        .loading { padding:20px; margin:40px 5px;}
+    </style>
+
+
+    <body ng-app="myApp" ng-controller="myController">
+    <loading></loading>
+    <button ng-click="importProducts()" class="btn btn-primary">Import Products From QuickBooks</button>
+    </body>
+{% endblock %}

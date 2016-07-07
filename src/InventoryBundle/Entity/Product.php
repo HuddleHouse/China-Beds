@@ -63,7 +63,14 @@ class Product
      * @ORM\Column(name="front_headline", type="string", length=255, nullable=true)
      */
     private $front_headline;
-    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="list_id", type="string", length=255, nullable=true)
+     */
+    private $list_id;
+
     /**
      * @var string
      *
@@ -379,6 +386,22 @@ class Product
     public function setImages($images)
     {
         $this->images = $images;
+    }
+
+    /**
+     * @return string
+     */
+    public function getListId()
+    {
+        return $this->list_id;
+    }
+
+    /**
+     * @param string $list_id
+     */
+    public function setListId($list_id)
+    {
+        $this->list_id = $list_id;
     }
 
     
