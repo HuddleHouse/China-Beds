@@ -52,6 +52,7 @@
         {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
         {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show'] %}
         {% set sidebar_warehouse = ['warehouse_index', 'warehouse_new', 'warehouse_edit', 'warehouse_show'] %}
+        {% set sidebar_warehouse_inventory = ['warehouse_inventory_index'] %}
         {% set sidebar_assortment = ['product_category_index', 'product_category_new', 'product_category_edit', 'product_category_show'] %}
         {% set sidebar_manage_options = ['manage_options_index', 'manage_options_new', 'manage_options_edit', 'manage_options_show'] %}
         {% set sidebar_attribute = ['attribute_index', 'attribute_new', 'attribute_edit', 'attribute_show'] %}
@@ -210,7 +211,9 @@
 
                         <!-- WAREHOUSE SECTION -->
                         {% if 'warehouse_index' in route_names %}
-                        <li class="treeview {% if (app.request.get('_route') in sidebar_warehouse) %} active {% endif %}" >
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_warehouse) %} active
+                        {% elseif (app.request.get('_route') in sidebar_warehouse_inventory) %} active
+                        {% endif %}" >
                             <a href="#">
                                 <i class="fa fa-building-o"></i>
                                 <span>Warehouse</span>
@@ -222,8 +225,8 @@
                                         <a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                     </li>
                                 {% endif %}
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Warehouse Inventory</a>
+                                <li {% if (app.request.get('_route') in sidebar_warehouse_inventory) %} class="active"{% endif %}>
+                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Warehouse Inventory</a>
                                 </li>
                             </ul>
                         </li>
