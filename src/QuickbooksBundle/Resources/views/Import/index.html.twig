@@ -21,7 +21,7 @@
             return {
                 restrict: 'E',
                 replace:true,
-                template: '<div class="loading"><img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" /> IMPORTING...</div>',
+                template: '<div class="loading"><img src="http://www.nasa.gov/multimedia/videogallery/ajax-loader.gif" width="20" height="20" /> UPDATING...</div>',
                 link: function (scope, element, attr) {
                     scope.$watch('loading', function (val) {
                         if (val)
@@ -34,24 +34,75 @@
         }).controller('myController', function($scope, $http) {
                     $scope.cars = [];
 
-                    $scope.importProducts = function() {
-                        $scope.loading = true;
-                        $.ajax({
-                            type: 'POST',
-                            url: "{{ path('qb_import_items') }}",
-                            dataType: 'json',
-                            success: function (data) {
-                                console.log('matt');
-                                $scope.loading = false;
-                            },
-                            error: function (data) {
-                                $scope.loading = false;
-                                console.log(data);
-                            }
-                        });
+            $scope.importProducts = function() {
+                $scope.loading = true;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('qb_import_items') }}",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('matt');
+                        $scope.loading = false;
+                    },
+                    error: function (data) {
+                        $scope.loading = false;
+                        console.log(data);
                     }
-
                 });
+            }
+
+            $scope.removeProducts = function() {
+                $scope.loading = true;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('qb_import_remove_items') }}",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('matt');
+                        $scope.loading = false;
+                    },
+                    error: function (data) {
+                        $scope.loading = false;
+                        console.log(data);
+                    }
+                });
+            }
+
+            $scope.importWarehouses = function() {
+                $scope.loading = true;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('qb_import_warehouses') }}",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('matt');
+                        $scope.loading = false;
+                    },
+                    error: function (data) {
+                        $scope.loading = false;
+                        console.log(data);
+                    }
+                });
+            }
+
+            $scope.removeWarehouses = function() {
+                $scope.loading = true;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('qb_import_remove_warehouses') }}",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('matt');
+                        $scope.loading = false;
+                    },
+                    error: function (data) {
+                        $scope.loading = false;
+                        console.log(data);
+                    }
+                });
+            }
+
+        });
 
     </script>
 {% endblock footer %}
@@ -64,6 +115,31 @@
 
     <body ng-app="myApp" ng-controller="myController">
     <loading></loading>
-    <button ng-click="importProducts()" class="btn btn-primary">Import Products From QuickBooks</button>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3>Products</h3>
+                </div>
+                <div class="box-body">
+                    <a ng-click="importProducts()" class="btn btn-primary">Import From QuickBooks</a>
+                    <a ng-click="removeProducts()" class="btn btn-warning">Remove QuickBooks Import</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3>Warehouses</h3>
+                </div>
+                <div class="box-body">
+                    <a ng-click="importWarehouses()" class="btn btn-primary">Import From QuickBooks</a>
+                    <a ng-click="removeWarehouses()" class="btn btn-warning">Remove QuickBooks Import</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
     </body>
 {% endblock %}

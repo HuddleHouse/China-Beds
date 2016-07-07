@@ -24,7 +24,7 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
@@ -45,7 +45,7 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="address_1", type="string", length=255)
+     * @ORM\Column(name="address_1", type="string", length=255, nullable=true)
      */
     private $address1;
 
@@ -59,10 +59,31 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="list_id", type="string", length=255, nullable=true)
+     */
+    private $list_id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     */
+    private $contact;
+    
     /**
      * @var int
      *
@@ -268,6 +289,54 @@ class Warehouse
     public function setState($state)
     {
         $this->state = $state;
+    }
+
+    /**
+     * @return string
+     */
+    public function getListId()
+    {
+        return $this->list_id;
+    }
+
+    /**
+     * @param string $list_id
+     */
+    public function setListId($list_id)
+    {
+        $this->list_id = $list_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * @param string $contact
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
     }
     
     
