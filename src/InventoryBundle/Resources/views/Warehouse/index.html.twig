@@ -30,10 +30,9 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Phone</th>
-                        <th>Address1</th>
+                        <th>Contact</th>
                         <th>City</th>
-                        <th>Zip</th>
+                        <th>Quickbooks</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -41,10 +40,13 @@
                     {% for warehouse in warehouses %}
                         <tr>
                             <td><a href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
-                            <td>{{ warehouse.phone }}</td>
-                            <td>{{ warehouse.address1 }}</td>
+                            <td>{{ warehouse.contact }}</td>
                             <td>{{ warehouse.city }}</td>
-                            <td>{{ warehouse.zip }}</td>
+                            {% if warehouse.listId != null %}
+                            <td><center><i class="fa fa-check" aria-hidden="true"></i></center></td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
                             <td>
                                 <a class="btn btn-info btn-xs purple" href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}"><i class="fa fa-edit"></i> edit</a>
                                 <a class="btn btn-default btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> show</a>
