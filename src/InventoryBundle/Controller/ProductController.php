@@ -28,8 +28,6 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $products = $em->getRepository('InventoryBundle:Product')->findAll();
-        $matt = new ItemController();
-        $other_products = $matt->qbGetAllItems();
 
         return $this->render('@Inventory/Product/index.html.twig', array(
             'products' => $products,

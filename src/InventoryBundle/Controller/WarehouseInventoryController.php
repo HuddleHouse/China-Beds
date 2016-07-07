@@ -44,7 +44,7 @@ class WarehouseInventoryController extends Controller
             );
         }
 
-        return $this->render('@Inventory/Warehouse/index.html.twig', array(
+        return $this->render('@Inventory/WarehouseInventory/index.html.twig', array(
             'warehouses' => $data,
         ));
     }
