@@ -1,6 +1,27 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
+{% block title %}PopItem{% endblock %}
+{% block page_title %}
+    PopItem
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('pop_item_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                "iDisplayLength": 50});
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
     <h1>PopItem</h1>
 
     <table>

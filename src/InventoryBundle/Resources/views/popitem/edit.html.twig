@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}PopItem creation{% endblock %}
+{% block title %}PopItem edit{% endblock %}
 {% block page_title %}
-    PopItem creation
+    PopItem edit
 {% endblock page_title %}
 
 {% block page_name %}
@@ -23,19 +23,19 @@
 {% endblock footer %}
 
 {% block content %}
-    {{ form_start(form) }}
+    {{ form_start(edit_form) }}
     <div class="row">
         <div class="col-md-6">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name) }}
+            {{ form_label(edit_form.name) }}
+            {{ form_widget(edit_form.name) }}
         </div>
         <div class="col-md-6">
-            {{ form_label(form.sku) }}
-            {{ form_widget(form.sku) }}
+            {{ form_label(edit_form.sku) }}
+            {{ form_widget(edit_form.sku) }}
         </div>
     </div>
 
-    {{ form_widget(form) }}
+    {{ form_widget(edit_form) }}
     <div class="row">
         {% if popItem.webPath %}
             <div id="preview-pane" style="margin-bottom: 30px;">
@@ -46,7 +46,10 @@
         {% endif %}
     </div>
 
-    <input class="btn btn-success" type="submit" value="Create" />
-    {{ form_end(form) }}
+        <input class="btn btn-success" type="submit" value="Update" />
+    {{ form_end(edit_form) }}
 
+    {{ form_start(delete_form) }}
+        <input type="submit" class="btn btn-warning" style="margin-left: 80px; margin-top: -56px;" value="Delete">
+    {{ form_end(delete_form) }}
 {% endblock %}
