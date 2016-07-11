@@ -102,6 +102,41 @@
                 });
             }
 
+            $scope.importPopItems = function() {
+                $scope.loading = true;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('qb_import_pop_items') }}",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('matt');
+                        $scope.loading = false;
+                    },
+                    error: function (data) {
+                        $scope.loading = false;
+                        console.log(data);
+                    }
+                });
+            }
+
+            $scope.removePopItems = function() {
+                $scope.loading = true;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('qb_import_remove_pop_items') }}",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('matt');
+                        $scope.loading = false;
+                    },
+                    error: function (data) {
+                        $scope.loading = false;
+                        console.log(data);
+                    }
+                });
+            }
+
+
         });
 
     </script>
@@ -136,6 +171,31 @@
                 <div class="box-body">
                     <a ng-click="importWarehouses()" class="btn btn-primary">Import From QuickBooks</a>
                     <a ng-click="removeWarehouses()" class="btn btn-warning">Remove QuickBooks Import</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3>POP Items</h3>
+                </div>
+                <div class="box-body">
+                    <a ng-click="importPopItems()" class="btn btn-primary">Import From QuickBooks</a>
+                    <a ng-click="removePopItems()" class="btn btn-warning">Remove QuickBooks Import</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3></h3>
+                </div>
+                <div class="box-body">
                 </div>
 
             </div>

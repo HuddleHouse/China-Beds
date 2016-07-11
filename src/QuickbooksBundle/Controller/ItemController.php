@@ -44,4 +44,14 @@ class ItemController extends Controller
 
         return $results;
     }
+
+    public function qbGetPOPItems()
+    {
+        $statement = $this->connection->prepare('select * from ItemInventoryQueryRs where ManufacturerPartNumber = :pop');
+        $statement->bindParam(':pop', "POP");
+        $statement->execute();
+        $results = $statement->fetch(PDO::FETCH_OBJ);
+
+        return $results;
+    }
 }

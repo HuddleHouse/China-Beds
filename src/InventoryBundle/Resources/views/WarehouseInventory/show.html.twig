@@ -41,8 +41,8 @@
                     {% for data in inventory_data %}
                         <tr>
                             <td>{{ data.ItemInventoryRefFullName }}</td>
-                            <td>{{ data.QuantityOnHand }}</td>
-                            <td>{{ data.QuantityOnPurchaseOrders }}</td>
+                            <td><center>{{ data.QuantityOnHand }}</center></td>
+                            <td><center>{{ data.QuantityOnPurchaseOrders }}</center></td>
                         </tr>
                     {% endfor %}
                     </tbody>

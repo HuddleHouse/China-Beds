@@ -133,4 +133,56 @@ class ImportController extends Controller
         return JsonResponse::create(true);
     }
 
+
+    /**
+     * @Route("/pop-items", name="qb_import_pop_items")
+     */
+    public function qbImportPopItems()
+    {
+        $param = "POP";
+        $statement = $this->connection->prepare('select * from ItemInventoryQueryRs where ManufacturerPartNumber = :pop');
+        $statement->bindParam(':pop', $param);
+        $statement->execute();
+        $results = $statement->fetch(PDO::FETCH_OBJ);
+
+        foreach($results as $result) {
+            $product = $em->getRepository('InventoryBundle:Product')->findOneBy(array('list_id' => $result->ListID));
+            if($product == null) {
+                $newProduct = new Product();
+                $newProduct->setName($result->Name);
+                $newProduct->setDescription($result->SalesDesc);
+                $newProduct->setMetaDescription($result->SalesDesc);
+                $newProduct->setShortDescription($result->SalesDesc);
+                $newProduct->setSku($result->EditSequence);
+                $newProduct->setListId($result->ListID);
+                $newProduct->setActive(1);
+                $newProduct->setFrontHeadline($result->Name);
+                $em->persist($newProduct);
+            }
+        }
+
+        $em->flush();
+        return JsonResponse::create(true);
+    }
+
+    /**
+     * @Route("/remove-pop-items", name="qb_import_remove_pop_items")
+     */
+    public function qbImportRemovePopItems()
+    {
+        $statement = $this->connection->prepare('select * from ItemQueryRs');
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_OBJ);
+        $em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository('InventoryBundle:Product')->findAll();
+        foreach($products as $result) {
+            if($result->getListId() != null) {
+                $em->remove($result);
+                $em->flush();
+            }
+        }
+
+        return JsonResponse::create(true);
+    }
 }
