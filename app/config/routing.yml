@@ -1,3 +1,7 @@
+inventory_pop_item:
+    resource: "@InventoryBundle/Controller/PopItemController.php"
+    type:     annotation
+
 quickbooks:
     resource: "@QuickbooksBundle/Controller/"
     type:     annotation

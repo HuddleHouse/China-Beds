@@ -54,6 +54,7 @@
         {% set sidebar_warehouse = ['warehouse_index', 'warehouse_new', 'warehouse_edit', 'warehouse_show'] %}
         {% set sidebar_warehouse_inventory = ['warehouse_inventory_index', 'warehouse_inventory_show'] %}
         {% set sidebar_assortment = ['product_category_index', 'product_category_new', 'product_category_edit', 'product_category_show'] %}
+        {% set sidebar_pop_item_edit = ['pop_item_index', 'pop_item_new', 'pop_item_edit', 'pop_item_show'] %}
         {% set sidebar_manage_options = ['manage_options_index', 'manage_options_new', 'manage_options_edit', 'manage_options_show'] %}
         {% set sidebar_attribute = ['attribute_index', 'attribute_new', 'attribute_edit', 'attribute_show'] %}
         {% set sidebar_admin_products = ['admin_product_index', 'admin_product_new', 'admin_product_edit', 'admin_product_show'] %}
@@ -88,6 +89,7 @@
                         {% elseif (app.request.get('_route') in sidebar_attribute) %} active
                         {% elseif (app.request.get('_route') in sidebar_admin_products) %} active
                         {% elseif (app.request.get('_route') in sidebar_specification) %} active
+                        {% elseif (app.request.get('_route') in sidebar_pop_item_edit) %} active
                         {% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -110,8 +112,8 @@
                                 <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
                                     <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Image Attributes</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>POP Items</a>
+                                <li {% if (app.request.get('_route') in sidebar_pop_item_edit) %} class="active"{% endif %}>
+                                    <a href="{{ path('pop_item_index') }}"><i class="fa fa-circle-o"></i>POP Items</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Promo Kit Items</a>
