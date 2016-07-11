@@ -63,6 +63,12 @@ class PopItem
      */
     private $active;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="list_id", type="string", length=255, nullable=true)
+     */
+    private $list_id;
 
     /**
      * Get id
@@ -217,5 +223,22 @@ class PopItem
     {
         return $this->active;
     }
+
+    /**
+     * @return string
+     */
+    public function getListId()
+    {
+        return $this->list_id;
+    }
+
+    /**
+     * @param string $list_id
+     */
+    public function setListId($list_id)
+    {
+        $this->list_id = $list_id;
+    }
+    
 }
 

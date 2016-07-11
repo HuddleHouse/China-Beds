@@ -4,6 +4,7 @@ namespace QuickbooksBundle\Controller;
 
 //require "/Users/work/Sites/resume/vendor/consolibyte/quickbooks/QuickBooks.php";
 
+use InventoryBundle\Entity\PopItem;
 use InventoryBundle\Entity\Product;
 use InventoryBundle\Entity\Warehouse;
 use QuickbooksBundle\QuickbooksBundle;
@@ -143,21 +144,18 @@ class ImportController extends Controller
         $statement = $this->connection->prepare('select * from ItemInventoryQueryRs where ManufacturerPartNumber = :pop');
         $statement->bindParam(':pop', $param);
         $statement->execute();
-        $results = $statement->fetch(PDO::FETCH_OBJ);
+        $results = $statement->fetchAll(PDO::FETCH_OBJ);
+        $em = $this->getDoctrine()->getManager();
 
         foreach($results as $result) {
-            $product = $em->getRepository('InventoryBundle:Product')->findOneBy(array('list_id' => $result->ListID));
-            if($product == null) {
-                $newProduct = new Product();
-                $newProduct->setName($result->Name);
-                $newProduct->setDescription($result->SalesDesc);
-                $newProduct->setMetaDescription($result->SalesDesc);
-                $newProduct->setShortDescription($result->SalesDesc);
-                $newProduct->setSku($result->EditSequence);
-                $newProduct->setListId($result->ListID);
-                $newProduct->setActive(1);
-                $newProduct->setFrontHeadline($result->Name);
-                $em->persist($newProduct);
+            $popItem = $em->getRepository('InventoryBundle:PopItem')->findOneBy(array('list_id' => $result->ListID));
+            if($popItem == null) {
+                $newPopItem = new PopItem();
+                $newPopItem->setName($result->Name);
+                $newPopItem->setDescription($result->SalesDesc);
+                $newPopItem->setListId($result->ListID);
+                $newPopItem->setActive(1);
+                $em->persist($newPopItem);
             }
         }
 
