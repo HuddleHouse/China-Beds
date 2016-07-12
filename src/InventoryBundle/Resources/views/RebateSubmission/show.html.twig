@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>RebateSubmission</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rebateSubmission.id }}</td>
+            </tr>
+            <tr>
+                <th>Amountrequested</th>
+                <td>{{ rebateSubmission.amountRequested }}</td>
+            </tr>
+            <tr>
+                <th>Amountissued</th>
+                <td>{{ rebateSubmission.amountIssued }}</td>
+            </tr>
+            <tr>
+                <th>Creditissued</th>
+                <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('rebate_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('rebate_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

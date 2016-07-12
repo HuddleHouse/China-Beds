@@ -46,11 +46,22 @@ class WarrantyClaimController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($warrantyClaim);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('warrantyclaim_show', array('id' => $warrantyClaim->getId()));
+                $warrantyClaim->setUser($this->getUser());
+                $em->persist($warrantyClaim);
+                $em->flush();
+                $this->addFlash('notice', 'Warranty Claim created successfully.');
+                return $this->redirectToRoute('warrantyclaim_show', array('id' => $warrantyClaim->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Warranty Claim Item: ' . $e->getMessage());
+                return $this->render('@Inventory/WarrantyClaim/new.html.twig', array(
+                    'warrantyClaim' => $warrantyClaim,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/WarrantyClaim/new.html.twig', array(
@@ -88,11 +99,23 @@ class WarrantyClaimController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($warrantyClaim);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $warrantyClaim->setUser($this->getUser());
 
-            return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
+                $em->persist($warrantyClaim);
+                $em->flush();
+                $this->addFlash('notice', 'Warranty Claim updated successfully.');
+                return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating Warranty Claim Item: ' . $e->getMessage());
+                return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
+                    'warrantyClaim' => $warrantyClaim,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
@@ -114,9 +137,16 @@ class WarrantyClaimController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($warrantyClaim);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($warrantyClaim);
+                $em->flush();
+                $this->addFlash('notice', 'Warranty Claim deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Warranty Claim Item: ' . $e->getMessage());
+                return $this->redirectToRoute('warrantyclaim_index');
+            }
         }
 
         return $this->redirectToRoute('warrantyclaim_index');

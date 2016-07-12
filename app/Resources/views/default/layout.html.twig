@@ -276,10 +276,10 @@
                                     <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>My Warranty Claims</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Rebate Claim</a>
+                                    <a href="{{ path('rebate_new') }}"><i class="fa fa-circle-o"></i>Rebate Claim</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Rebates Available</a>
+                                    <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Rebates Submitted</a>

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>RebateSubmission list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Amountrequested</th>
+                <th>Amountissued</th>
+                <th>Creditissued</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rebateSubmission in rebateSubmissions %}
+            <tr>
+                <td><a href="{{ path('rebate_show', { 'id': rebateSubmission.id }) }}">{{ rebateSubmission.id }}</a></td>
+                <td>{{ rebateSubmission.amountRequested }}</td>
+                <td>{{ rebateSubmission.amountIssued }}</td>
+                <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('rebate_show', { 'id': rebateSubmission.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('rebate_edit', { 'id': rebateSubmission.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('rebate_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
