@@ -152,11 +152,22 @@ class User extends BaseUser
      */
     private $office;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="rebate_submissions")
+     */
+    private $rebate_submissions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="rebate_submissions")
+     */
+    private $warranty_claims;
 
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+        
+        $this->warranty_claims = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -503,5 +514,35 @@ class User extends BaseUser
         $this->office = $office;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRebateSubmissions()
+    {
+        return $this->rebate_submissions;
+    }
 
+    /**
+     * @param mixed $rebate_submissions
+     */
+    public function setRebateSubmissions($rebate_submissions)
+    {
+        $this->rebate_submissions = $rebate_submissions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarrantyClaims()
+    {
+        return $this->warranty_claims;
+    }
+
+    /**
+     * @param mixed $warranty_claims
+     */
+    public function setWarrantyClaims($warranty_claims)
+    {
+        $this->warranty_claims = $warranty_claims;
+    }
 }

@@ -22,11 +22,16 @@ class RebateSubmission
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="rebate_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="submissions")
+     * @ORM\JoinColumn(name="rebate_id", referencedColumnName="id")
      */
-    private $rebateId;
+    private $rebate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="rebate_submissions")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
     /**
      * @var int
@@ -34,13 +39,6 @@ class RebateSubmission
      * @ORM\Column(name="amount_requested", type="integer", nullable=true)
      */
     private $amountRequested;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
-     */
-    private $userId;
 
     /**
      * @var int
@@ -68,29 +66,21 @@ class RebateSubmission
     }
 
     /**
-     * Set rebateId
-     *
-     * @param integer $rebateId
-     *
-     * @return RebateSubmission
+     * @return mixed
      */
-    public function setRebateId($rebateId)
+    public function getRebate()
     {
-        $this->rebateId = $rebateId;
-
-        return $this;
+        return $this->rebate;
     }
 
     /**
-     * Get rebateId
-     *
-     * @return int
+     * @param mixed $rebate
      */
-    public function getRebateId()
+    public function setRebate($rebate)
     {
-        return $this->rebateId;
+        $this->rebate = $rebate;
     }
-
+    
     /**
      * Set amountRequested
      *
@@ -113,30 +103,6 @@ class RebateSubmission
     public function getAmountRequested()
     {
         return $this->amountRequested;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return RebateSubmission
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -185,6 +151,22 @@ class RebateSubmission
     public function getCreditIssued()
     {
         return $this->creditIssued;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 }
 

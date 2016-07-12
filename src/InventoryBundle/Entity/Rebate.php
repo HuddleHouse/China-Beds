@@ -3,6 +3,7 @@
 namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Rebate
@@ -42,6 +43,15 @@ class Rebate
      */
     private $active;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="rebate")
+     */
+    private $submissions;
+    
+    public function __construct()
+    {
+        $this->submissions = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -124,5 +134,23 @@ class Rebate
     {
         return $this->active;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmissions()
+    {
+        return $this->submissions;
+    }
+
+    /**
+     * @param mixed $submissions
+     */
+    public function setSubmissions($submissions)
+    {
+        $this->submissions = $submissions;
+    }
+    
+    
 }
 
