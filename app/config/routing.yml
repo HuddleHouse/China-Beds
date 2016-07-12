@@ -1,3 +1,7 @@
+inventory_warranty_claim:
+    resource: "@InventoryBundle/Controller/WarrantyClaimController.php"
+    type:     annotation
+
 inventory_promo_kit:
     resource: "@InventoryBundle/Controller/PromoKitController.php"
     type:     annotation
