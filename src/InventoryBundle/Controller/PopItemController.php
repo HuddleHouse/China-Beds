@@ -49,6 +49,7 @@ class PopItemController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($popItem);
             $em->flush();
+            $this->addFlash('notice', 'POP Item created successfully.');
 
             return $this->redirectToRoute('pop_item_show', array('id' => $popItem->getId()));
         }
@@ -94,7 +95,8 @@ class PopItemController extends Controller
 
                 $em->persist($popItem);
                 $em->flush();
-
+                $this->addFlash('notice', 'POP Item updated successfully.');
+                
                 return $this->redirectToRoute('pop_item_edit', array('id' => $popItem->getId()));
             }
             catch(\Exception $e) {

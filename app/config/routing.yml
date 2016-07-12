@@ -1,3 +1,7 @@
+inventory_promo_kit:
+    resource: "@InventoryBundle/Controller/PromoKitController.php"
+    type:     annotation
+
 inventory_pop_item:
     resource: "@InventoryBundle/Controller/PopItemController.php"
     type:     annotation

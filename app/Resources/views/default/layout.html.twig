@@ -60,6 +60,7 @@
         {% set sidebar_admin_products = ['admin_product_index', 'admin_product_new', 'admin_product_edit', 'admin_product_show'] %}
         {% set sidebar_specification = ['specification_index', 'specification_new', 'specification_edit', 'specification_show'] %}
         {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
+        {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -90,6 +91,7 @@
                         {% elseif (app.request.get('_route') in sidebar_admin_products) %} active
                         {% elseif (app.request.get('_route') in sidebar_specification) %} active
                         {% elseif (app.request.get('_route') in sidebar_pop_item_edit) %} active
+                        {% elseif (app.request.get('_route') in sidebar_promokit) %} active
                         {% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -115,8 +117,8 @@
                                 <li {% if (app.request.get('_route') in sidebar_pop_item_edit) %} class="active"{% endif %}>
                                     <a href="{{ path('pop_item_index') }}"><i class="fa fa-circle-o"></i>POP Items</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Promo Kit Items</a>
+                                <li {% if (app.request.get('_route') in sidebar_promokit) %} class="active"{% endif %}>
+                                    <a href="{{ path('promokit_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Items</a>
                                 </li>
                             </ul>
                         </li>
