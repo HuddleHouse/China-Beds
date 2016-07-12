@@ -1,0 +1,81 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Warranty Claim{% endblock %}
+{% block page_title %}
+    Warranty Claim
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('warrantyclaim_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                "iDisplayLength": 50});
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <h1>Warranty Claim</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ warrantyClaim.id }}</td>
+            </tr>
+            <tr>
+                <th>Datemadeaware</th>
+                <td>{% if warrantyClaim.dateMadeAware %}{{ warrantyClaim.dateMadeAware|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Dateofclaim</th>
+                <td>{% if warrantyClaim.dateOfClaim %}{{ warrantyClaim.dateOfClaim|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Ratailer</th>
+                <td>{{ warrantyClaim.ratailer }}</td>
+            </tr>
+            <tr>
+                <th>Mattressmodelid</th>
+                <td>{{ warrantyClaim.mattressModelId }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ warrantyClaim.quantity }}</td>
+            </tr>
+            <tr>
+                <th>Creditrequested</th>
+                <td>{{ warrantyClaim.creditRequested }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ warrantyClaim.description }}</td>
+            </tr>
+            <tr>
+                <th>Resolution</th>
+                <td>{{ warrantyClaim.resolution }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('warrantyclaim_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('warrantyclaim_edit', { 'id': warrantyClaim.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

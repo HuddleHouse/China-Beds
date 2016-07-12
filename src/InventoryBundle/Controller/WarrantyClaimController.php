@@ -28,7 +28,7 @@ class WarrantyClaimController extends Controller
 
         $warrantyClaims = $em->getRepository('InventoryBundle:WarrantyClaim')->findAll();
 
-        return $this->render('warrantyclaim/index.html.twig', array(
+        return $this->render('@Inventory/WarrantyClaim/index.html.twig', array(
             'warrantyClaims' => $warrantyClaims,
         ));
     }
@@ -53,7 +53,7 @@ class WarrantyClaimController extends Controller
             return $this->redirectToRoute('warrantyclaim_show', array('id' => $warrantyClaim->getId()));
         }
 
-        return $this->render('warrantyclaim/new.html.twig', array(
+        return $this->render('@Inventory/WarrantyClaim/new.html.twig', array(
             'warrantyClaim' => $warrantyClaim,
             'form' => $form->createView(),
         ));
@@ -69,7 +69,7 @@ class WarrantyClaimController extends Controller
     {
         $deleteForm = $this->createDeleteForm($warrantyClaim);
 
-        return $this->render('warrantyclaim/show.html.twig', array(
+        return $this->render('@Inventory/WarrantyClaim/show.html.twig', array(
             'warrantyClaim' => $warrantyClaim,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -95,7 +95,7 @@ class WarrantyClaimController extends Controller
             return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
         }
 
-        return $this->render('warrantyclaim/edit.html.twig', array(
+        return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
             'warrantyClaim' => $warrantyClaim,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
