@@ -1,12 +1,12 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Rebate Submission creation{% endblock %}
+{% block title %}Rebate creation{% endblock %}
 {% block page_title %}
-    Rebate Submission creation
+    Rebate creation
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('rebate_index') }}">< Back to the list</a>
+    <a href="{{ path('rebate_submit_index') }}">< View My Submitted Rebates</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -23,26 +23,7 @@
 {% endblock footer %}
 
 {% block content %}
-
     {{ form_start(form) }}
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_label(form.description) }}
-            {{ form_widget(form.description) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            {{ form_label(form.active) }}
-            {{ form_widget(form.active) }}
-        </div>
-    </div>
         {{ form_widget(form) }}
         <input class="btn btn-success" type="submit" value="Create" />
     {{ form_end(form) }}

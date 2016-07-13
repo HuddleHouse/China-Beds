@@ -1,0 +1,61 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Rebate{% endblock %}
+{% block page_title %}
+    Rebate
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('rebate_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                "iDisplayLength": 50});
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <h1>Rebate</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rebate.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ rebate.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ rebate.description }}</td>
+            </tr>
+            <tr>
+                <th>Active</th>
+                <td>{% if rebate.active %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('rebate_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('rebate_edit', { 'id': rebate.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

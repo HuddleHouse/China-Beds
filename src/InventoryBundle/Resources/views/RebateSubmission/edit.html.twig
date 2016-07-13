@@ -5,12 +5,23 @@
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
+
+    <div class="row">
+        {% if rebateSubmission.webPath %}
+            <div id="preview-pane" style="margin-bottom: 30px;">
+                <div class="preview-container">
+                    <img src="/{{ rebateSubmission.webPath }}" style="max-height: 200px;"/><br/>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
         <input type="submit" value="Edit" />
     {{ form_end(edit_form) }}
 
     <ul>
         <li>
-            <a href="{{ path('rebate_index') }}">Back to the list</a>
+            <a href="{{ path('rebate_submit_index') }}">Back to the list</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

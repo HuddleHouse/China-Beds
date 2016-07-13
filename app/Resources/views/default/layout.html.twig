@@ -64,6 +64,9 @@
         {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
         {% set sidebar_warranty_claims = ['warrantyclaim_index', 'warrantyclaim_edit', 'warrantyclaim_show'] %}
         {% set sidebar_warranty = ['warrantyclaim_new'] %}
+        {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
+        {% set sidebar_rebate_submit = ['rebate_submit_index', 'rebate_submit_edit', 'rebate_submit_show'] %}
+        {% set sidebar_rebate_submit_new = ['rebate_submit_new'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -259,7 +262,9 @@
 
                         <li class="treeview {% if (app.request.get('_route') in sidebar_warranty_claims) %} active
                             {% elseif (app.request.get('_route') in sidebar_warranty) %} active
-                            {% elseif (app.request.get('_route') in sidebar_rebate) %} active
+                            {% elseif (app.request.get('_route') in sidebar_rebate_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
+                            {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -277,14 +282,17 @@
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>My Warranty Claims</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_new') }}"><i class="fa fa-circle-o"></i>Rebate Claim</a>
+                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_new) %} class="active"{% endif %}>
+                                    <a href="{{ path('rebate_submit_new') }}"><i class="fa fa-circle-o"></i>Rebate Claim</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in sidebar_rebate) %} class="active"{% endif %}>
+                                <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
                                 </li>
+                                <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
+                                    <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebates Submitted</a>
+                                </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Rebates Submitted</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>My Rebate Claims</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Request Credit</a>

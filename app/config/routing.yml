@@ -1,3 +1,7 @@
+inventory_rebate_submission:
+    resource: "@InventoryBundle/Controller/RebateSubmissionController.php"
+    type:     annotation
+
 inventory_rebate:
     resource: "@InventoryBundle/Controller/RebateController.php"
     type:     annotation

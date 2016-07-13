@@ -10,26 +10,26 @@
                 <td>{{ rebateSubmission.id }}</td>
             </tr>
             <tr>
-                <th>Name</th>
-                <td>{{ rebateSubmission.name }}</td>
+                <th>Amountrequested</th>
+                <td>{{ rebateSubmission.amountRequested }}</td>
             </tr>
             <tr>
-                <th>Description</th>
-                <td>{{ rebateSubmission.description }}</td>
+                <th>Amountissued</th>
+                <td>{{ rebateSubmission.amountIssued }}</td>
             </tr>
             <tr>
-                <th>Is Active</th>
-                <td>{% if rebateSubmission.active %}Yes{% else %}No{% endif %}</td>
+                <th>Creditissued</th>
+                <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
             </tr>
         </tbody>
     </table>
 
     <ul>
         <li>
-            <a href="{{ path('rebate_index') }}">Back to the list</a>
+            <a href="{{ path('rebate_submit_index') }}">Back to the list</a>
         </li>
         <li>
-            <a href="{{ path('rebate_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
+            <a href="{{ path('rebate_submit_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
         </li>
         <li>
             {{ form_start(delete_form) }}
