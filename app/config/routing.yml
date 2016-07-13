@@ -1,5 +1,5 @@
-inventory_rebate_submission:
-    resource: "@InventoryBundle/Controller/RebateSubmissionController.php"
+inventory_rebate:
+    resource: "@InventoryBundle/Controller/RebateController.php"
     type:     annotation
 
 inventory_warranty_claim:

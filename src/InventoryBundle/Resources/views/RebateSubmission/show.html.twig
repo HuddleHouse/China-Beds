@@ -10,16 +10,16 @@
                 <td>{{ rebateSubmission.id }}</td>
             </tr>
             <tr>
-                <th>Amountrequested</th>
-                <td>{{ rebateSubmission.amountRequested }}</td>
+                <th>Name</th>
+                <td>{{ rebateSubmission.name }}</td>
             </tr>
             <tr>
-                <th>Amountissued</th>
-                <td>{{ rebateSubmission.amountIssued }}</td>
+                <th>Description</th>
+                <td>{{ rebateSubmission.description }}</td>
             </tr>
             <tr>
-                <th>Creditissued</th>
-                <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
+                <th>Is Active</th>
+                <td>{% if rebateSubmission.active %}Yes{% else %}No{% endif %}</td>
             </tr>
         </tbody>
     </table>

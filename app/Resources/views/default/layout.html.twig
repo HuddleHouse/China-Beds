@@ -58,6 +58,7 @@
         {% set sidebar_manage_options = ['manage_options_index', 'manage_options_new', 'manage_options_edit', 'manage_options_show'] %}
         {% set sidebar_attribute = ['attribute_index', 'attribute_new', 'attribute_edit', 'attribute_show'] %}
         {% set sidebar_admin_products = ['admin_product_index', 'admin_product_new', 'admin_product_edit', 'admin_product_show'] %}
+        {% set sidebar_rebate = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_specification = ['specification_index', 'specification_new', 'specification_edit', 'specification_show'] %}
         {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
         {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
@@ -258,6 +259,7 @@
 
                         <li class="treeview {% if (app.request.get('_route') in sidebar_warranty_claims) %} active
                             {% elseif (app.request.get('_route') in sidebar_warranty) %} active
+                            {% elseif (app.request.get('_route') in sidebar_rebate) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -278,7 +280,7 @@
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_new') }}"><i class="fa fa-circle-o"></i>Rebate Claim</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                <li {% if (app.request.get('_route') in sidebar_rebate) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
