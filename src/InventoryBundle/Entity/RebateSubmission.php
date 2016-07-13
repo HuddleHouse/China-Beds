@@ -40,21 +40,21 @@ class RebateSubmission
      *
      * @ORM\Column(name="amount_requested", type="integer", nullable=true)
      */
-    private $amountRequested;
+    private $amountRequested = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="amount_issued", type="integer", nullable=true)
      */
-    private $amountIssued;
+    private $amountIssued = 0;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="credit_issued", type="boolean")
+     * @ORM\Column(name="credit_issued", type="boolean", nullable=true)
      */
-    private $creditIssued;
+    private $creditIssued = 0;
 
     /**
      * @Assert\File(maxSize="6000000")
@@ -101,7 +101,7 @@ class RebateSubmission
      */
     public function setAmountRequested($amountRequested)
     {
-        $this->amountRequested = $amountRequested;
+        $this->amountRequested = $amountRequested*100;
 
         return $this;
     }
@@ -113,7 +113,7 @@ class RebateSubmission
      */
     public function getAmountRequested()
     {
-        return $this->amountRequested;
+        return $this->amountRequested/100;
     }
 
     /**
@@ -125,7 +125,7 @@ class RebateSubmission
      */
     public function setAmountIssued($amountIssued)
     {
-        $this->amountIssued = $amountIssued;
+        $this->amountIssued = $amountIssued*100;
 
         return $this;
     }
@@ -137,7 +137,7 @@ class RebateSubmission
      */
     public function getAmountIssued()
     {
-        return $this->amountIssued;
+        return $this->amountIssued/100;
     }
 
     /**

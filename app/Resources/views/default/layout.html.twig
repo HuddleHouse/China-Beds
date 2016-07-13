@@ -67,6 +67,7 @@
         {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_rebate_submit = ['rebate_submit_index', 'rebate_submit_edit', 'rebate_submit_show'] %}
         {% set sidebar_rebate_submit_new = ['rebate_submit_new'] %}
+        {% set sidebar_rebate_submit_user_claims = ['rebate_submit_user_claims'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar">
@@ -265,6 +266,7 @@
                             {% elseif (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
+                            {% elseif (app.request.get('_route') in sidebar_rebate_submit_user_claims) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -291,8 +293,8 @@
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebates Submitted</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>My Rebate Claims</a>
+                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_user_claims) %} class="active"{% endif %}>
+                                    <a href="{{ path('rebate_submit_user_claims') }}"><i class="fa fa-circle-o"></i>My Rebate Claims</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Request Credit</a>

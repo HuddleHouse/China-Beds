@@ -2,19 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/RebateSubmissionType.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/rebate/edit.html.twig" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/rebate/show.html.twig" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/user-rebate-submissions.html.twig" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/rebate/index.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/routing.yml" afterPath="$PROJECT_DIR$/app/config/routing.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/edit.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/edit.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Form/RebateSubmissionType.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/RebateSubmissionType.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/show.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/show.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Tests/Controller/RebateSubmissionControllerTest.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Tests/Controller/RebateSubmissionControllerTest.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/rebate/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/rebate/new.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,11 +32,41 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/new.html.twig">
+      <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
+            <state relative-caret-position="585">
+              <caret line="39" column="55" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RebateSubmissionController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="495">
+              <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="56" />
+              <folding>
+                <element signature="e#764#798#1#PHP" expanded="true" />
+                <element signature="e#842#887#0#PHP" expanded="true" />
+                <element signature="e#1272#1306#1#PHP" expanded="true" />
+                <element signature="e#1382#1445#0#PHP" expanded="true" />
+                <element signature="e#2561#2604#0#PHP" expanded="true" />
+                <element signature="e#2799#2842#0#PHP" expanded="true" />
+                <element signature="e#3283#3327#0#PHP" expanded="true" />
+                <element signature="e#4526#4570#0#PHP" expanded="true" />
+                <element signature="e#4838#4882#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user-rebate-submissions.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/user-rebate-submissions.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -49,20 +75,8 @@
       <file leaf-file-name="RebateSubmission.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4035">
-              <caret line="269" column="5" selection-start-line="269" selection-start-column="5" selection-end-line="269" selection-end-column="5" />
-              <folding>
-                <element signature="e#42#74#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProductImage.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/ProductImage.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="639">
-              <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+            <state relative-caret-position="414">
+              <caret line="86" column="7" selection-start-line="86" selection-start-column="7" selection-end-line="86" selection-end-column="7" />
               <folding>
                 <element signature="e#42#74#0#PHP" expanded="true" />
               </folding>
@@ -73,58 +87,18 @@
       <file leaf-file-name="layout.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="639">
-              <caret line="265" column="93" selection-start-line="265" selection-start-column="93" selection-end-line="265" selection-end-column="93" />
-              <folding>
-                <element signature="e#12#26#0#Twig" expanded="false" />
-                <marker date="1468423468000" expanded="true" signature="32:23646" ph="{% block body ...%}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RebateSubmissionType.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/RebateSubmissionType.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
-              <folding>
-                <element signature="e#40#89#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RebateSubmissionController.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="48" column="53" selection-start-line="48" selection-start-column="53" selection-end-line="48" selection-end-column="53" />
-              <folding>
-                <element signature="e#842#887#0#PHP" expanded="true" />
-                <element signature="e#1695#1738#0#PHP" expanded="true" />
-                <element signature="e#2179#2223#0#PHP" expanded="true" />
-                <element signature="e#3181#3225#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProductImageType.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/ProductImageType.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="504">
+              <caret line="268" column="101" selection-start-line="268" selection-start-column="101" selection-end-line="268" selection-end-column="101" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductType.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/ProductType.php">
+      <file leaf-file-name="RebateController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
+            <state relative-caret-position="408">
+              <caret line="52" column="16" selection-start-line="52" selection-start-column="16" selection-end-line="52" selection-end-column="74" />
               <folding />
             </state>
           </provider>
@@ -138,7 +112,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Specification/show.html.twig" />
         <option value="$PROJECT_DIR$/var/cache/dev/profiler/43/d1/f0d143" />
         <option value="$PROJECT_DIR$/var/cache/dev/profiler/4e/db/a8db4e" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/index.html.twig" />
@@ -180,15 +153,16 @@
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Rebate/show.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Form/RebateType.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Rebate/edit.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Rebate/index.html.twig" />
-        <option value="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Rebate/new.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/new.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/edit.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Form/RebateSubmissionType.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php" />
+        <option value="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/user-rebate-submissions.html.twig" />
       </list>
     </option>
   </component>
@@ -629,50 +603,6 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="InventoryBundle" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controller" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="API" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resume" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resume" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AppBundle" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resume" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resume" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
@@ -774,11 +704,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission" />
       <recent name="$PROJECT_DIR$/src/InventoryBundle/Resources/views" />
       <recent name="$PROJECT_DIR$/src/InventoryBundle/Controller" />
       <recent name="$PROJECT_DIR$/src/QuickbooksBundle/Resources/views/Import" />
       <recent name="$PROJECT_DIR$/src/QuickbooksBundle/Controller" />
-      <recent name="$PROJECT_DIR$/src/AppBundle/Entity" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/InventoryBundle/Resources/views" />
@@ -899,7 +829,7 @@
       <workItem from="1468253590021" duration="1560000" />
       <workItem from="1468255396288" duration="5425000" />
       <workItem from="1468329133741" duration="12793000" />
-      <workItem from="1468419122146" duration="4764000" />
+      <workItem from="1468419122146" duration="7307000" />
     </task>
     <task id="LOCAL-00001" summary="Updating user restricing layer&#10;">
       <created>1465300434195</created>
@@ -1167,11 +1097,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468421572793</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Adding the final few entities and thier places on the menu.">
+      <created>1468423933435</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1468423933435</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="143789000" />
+    <option name="totallyTimeSpent" value="146332000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1331,7 +1268,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php</url>
-          <line>43</line>
+          <line>60</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
@@ -1348,16 +1285,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Promokit/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
-          <folding>
-            <element signature="e#12#37#0#Twig" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Promokit/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1539,21 +1466,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1560">
-          <caret line="109" column="56" selection-start-line="109" selection-start-column="56" selection-end-line="109" selection-end-column="56" />
-          <folding>
-            <element signature="e#758#793#0#PHP" expanded="false" />
-            <element signature="e#1738#1771#0#PHP" expanded="false" />
-            <element signature="e#1947#1980#0#PHP" expanded="false" />
-            <element signature="e#2354#2388#0#PHP" expanded="false" />
-            <element signature="e#3475#3509#0#PHP" expanded="false" />
-            <element signature="e#3757#3791#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/show.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1574,14 +1486,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="28" selection-end-column="127" />
           <folding />
         </state>
       </provider>
@@ -1636,16 +1540,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="35" selection-end-column="12" />
-          <folding>
-            <element signature="e#12#26#0#Twig" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Promokit/new.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1666,17 +1560,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="639">
-          <caret line="265" column="93" selection-start-line="265" selection-start-column="93" selection-end-line="265" selection-end-column="93" />
-          <folding>
-            <element signature="e#12#26#0#Twig" expanded="false" />
-            <marker date="1468423468000" expanded="true" signature="32:23646" ph="{% block body ...%}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Rebate/new.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -1689,7 +1572,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="38" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
-          <folding />
+          <folding>
+            <element signature="e#12#37#0#Twig" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1698,17 +1583,7 @@
         <state relative-caret-position="639">
           <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
           <folding>
-            <element signature="e#42#74#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4035">
-          <caret line="269" column="5" selection-start-line="269" selection-start-column="5" selection-end-line="269" selection-end-column="5" />
-          <folding>
-            <element signature="e#42#74#0#PHP" expanded="true" />
+            <element signature="e#42#74#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1770,31 +1645,86 @@
         <state relative-caret-position="135">
           <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
           <folding>
-            <element signature="e#12#26#0#Twig" expanded="true" />
+            <element signature="e#12#26#0#Twig" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/RebateSubmissionType.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
+        <state relative-caret-position="375">
+          <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
           <folding>
             <element signature="e#40#89#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="52" column="16" selection-start-line="52" selection-start-column="16" selection-end-line="52" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/RebateSubmission.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="86" column="7" selection-start-line="86" selection-start-column="7" selection-end-line="86" selection-end-column="7" />
+          <folding>
+            <element signature="e#42#74#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/RebateSubmissionController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="48" column="53" selection-start-line="48" selection-start-column="53" selection-end-line="48" selection-end-column="53" />
+        <state relative-caret-position="495">
+          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="56" />
           <folding>
+            <element signature="e#764#798#1#PHP" expanded="true" />
             <element signature="e#842#887#0#PHP" expanded="true" />
-            <element signature="e#1695#1738#0#PHP" expanded="true" />
-            <element signature="e#2179#2223#0#PHP" expanded="true" />
-            <element signature="e#3181#3225#0#PHP" expanded="true" />
+            <element signature="e#1272#1306#1#PHP" expanded="true" />
+            <element signature="e#1382#1445#0#PHP" expanded="true" />
+            <element signature="e#2561#2604#0#PHP" expanded="true" />
+            <element signature="e#2799#2842#0#PHP" expanded="true" />
+            <element signature="e#3283#3327#0#PHP" expanded="true" />
+            <element signature="e#4526#4570#0#PHP" expanded="true" />
+            <element signature="e#4838#4882#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="55" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="268" column="101" selection-start-line="268" selection-start-column="101" selection-end-line="268" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/RebateSubmission/user-rebate-submissions.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>

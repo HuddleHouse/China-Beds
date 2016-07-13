@@ -18,17 +18,17 @@ class RebateSubmissionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('amountRequested', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('rebate', EntityType::class, array(
                 'class' => 'InventoryBundle\Entity\Rebate',
-                'label' => 'Category',
+                'label' => 'Rebate Name *',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
+            ->add('amountRequested', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => true, 'label' => "Rebate credit requested *"))
             ->add('file', FileType::class, array(
                 'attr' => array('style' => 'margin-bottom: 29px'),
-                'label' => 'Picture',
-                'required' => false,
+                'label' => 'Copy of invoice with qualifying purchase or sale *',
+                'required' => true,
             ))
         ;
     }

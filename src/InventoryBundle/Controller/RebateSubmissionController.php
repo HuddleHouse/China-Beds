@@ -34,6 +34,23 @@ class RebateSubmissionController extends Controller
     }
 
     /**
+     * Lists all RebateSubmission entities.
+     *
+     * @Route("/claims", name="rebate_submit_user_claims")
+     * @Method({"GET", "POST"})
+     */
+    public function userClaimsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $rebateSubmissions = $em->getRepository('InventoryBundle:RebateSubmission')->findBy(array('user' => $this->getUser()));
+
+        return $this->render('@Inventory/RebateSubmission/user-rebate-submissions.html.twig', array(
+            'rebateSubmissions' => $rebateSubmissions,
+        ));
+    }
+
+    /**
      * Creates a new RebateSubmission entity.
      *
      * @Route("/new", name="rebate_submit_new")
@@ -46,11 +63,22 @@ class RebateSubmissionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($rebateSubmission);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $rebateSubmission->setUser($this->getUser());
 
-            return $this->redirectToRoute('rebate_submit_show', array('id' => $rebateSubmission->getId()));
+                $em->persist($rebateSubmission);
+                $em->flush();
+                $this->addFlash('notice', 'Rebate submitted successfully.');
+                return $this->redirectToRoute('rebate_submit_index', array('id' => $rebateSubmission->getId()));
+            }
+            catch(\Exception $e){
+                $this->addFlash('error', 'Error submitting Rebate ' . $e->getMessage());
+                return $this->render('@Inventory/RebateSubmission/new.html.twig', array(
+                    'rebateSubmission' => $rebateSubmission,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/RebateSubmission/new.html.twig', array(
@@ -88,11 +116,21 @@ class RebateSubmissionController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($rebateSubmission);
-            $em->flush();
-
-            return $this->redirectToRoute('rebate_submit_edit', array('id' => $rebateSubmission->getId()));
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($rebateSubmission);
+                $em->flush();
+                $this->addFlash('notice', 'Rebate updated successfully.');
+                return $this->redirectToRoute('rebate_submit_edit', array('id' => $rebateSubmission->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating Rebate ' . $e->getMessage());
+                return $this->render('@Inventory/RebateSubmission/edit.html.twig', array(
+                    'rebateSubmission' => $rebateSubmission,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/RebateSubmission/edit.html.twig', array(
@@ -114,9 +152,16 @@ class RebateSubmissionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($rebateSubmission);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($rebateSubmission);
+                $em->flush();
+                $this->addFlash('notice', 'Rebate deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Rebate ' . $e->getMessage());
+                return $this->redirectToRoute('rebate_submit_index');
+            }
         }
 
         return $this->redirectToRoute('rebate_submit_index');
