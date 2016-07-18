@@ -91,6 +91,16 @@ class Product
     private $attributes;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
+     */
+    private $variant;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product")
+     */
+    private $price_group_prices;
+    
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product")
      */
     private $channels;
@@ -116,6 +126,7 @@ class Product
         $this->specifications = new ArrayCollection();
         $this->channels = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->variant = new ArrayCollection();
     }
 
     /**
@@ -404,6 +415,36 @@ class Product
         $this->list_id = $list_id;
     }
 
-    
+    /**
+     * @return mixed
+     */
+    public function getVariant()
+    {
+        return $this->variant;
+    }
+
+    /**
+     * @param mixed $variant
+     */
+    public function setVariant($variant)
+    {
+        $this->variant = $variant;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPriceGroupPrices()
+    {
+        return $this->price_group_prices;
+    }
+
+    /**
+     * @param mixed $price_group_prices
+     */
+    public function setPriceGroupPrices($price_group_prices)
+    {
+        $this->price_group_prices = $price_group_prices;
+    }
 }
 

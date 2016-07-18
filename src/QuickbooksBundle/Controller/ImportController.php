@@ -47,7 +47,11 @@ class ImportController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         foreach($results as $result) {
-            $product = $em->getRepository('InventoryBundle:Product')->findOneBy(array('list_id' => $result->ListID));
+            $name = $this->_formatProductName($result->Name);
+            $result->Name = $name['name'];
+
+            //check to see if the parent product has already been created. If not create it.
+            $product = $em->getRepository('InventoryBundle:Product')->findOneBy(array('name' => $result->Name));
             if($product == null) {
                 $newProduct = new Product();
                 $newProduct->setName($result->Name);
@@ -60,11 +64,60 @@ class ImportController extends Controller
                 $newProduct->setFrontHeadline($result->Name);
                 $em->persist($newProduct);
             }
+
+            // check to see if the variant has been created yet. If not create it.
+
+
+
         }
 
         $em->flush();
         return JsonResponse::create(true);
     }
+
+
+    public function _addProductVariant() {
+
+    }
+
+    public function _formatProductName($name ){
+        $productName = explode(' ', $name);
+        $type = array_pop($productName);
+        $name = '';
+
+        while($productName){
+            $name .= array_shift($productName) . " ";
+        }
+
+        //parse and format name
+        if($type == 'Twin') {
+
+        }
+        else if($type == 'XL') {
+
+        }
+        else if($type == 'Full') {
+
+        }
+        else if($type == 'Queen') {
+
+        }
+        else if($type == 'King') {
+            // there are two types of King mattresses.
+        }
+        else {
+            $name .= $type . " ";
+            $type = 'none';
+        }
+
+        $name = substr($name, 0, -1);
+
+        return array(
+            'name' => $name,
+            'type' => $type
+        );
+    }
+
 
     /**
      * @Route("/remove-items", name="qb_import_remove_items")

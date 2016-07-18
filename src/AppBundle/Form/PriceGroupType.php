@@ -21,7 +21,7 @@ class PriceGroupType extends AbstractType
             ->add('users',  EntityType::class, array(
                 'class' => 'AppBundle:User',
                 'label' => 'Users',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 30px; height: 300px;'),
                 'multiple' => true))
         ;
     }

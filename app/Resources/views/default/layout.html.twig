@@ -140,7 +140,16 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Current Orders</a>
+                                    <a href=""><i class="fa fa-circle-o"></i>Order Products</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Order POP</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>View My Orders</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>All Current Orders</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Shipments</a>
@@ -297,10 +306,16 @@
                                     <a href="{{ path('rebate_submit_user_claims') }}"><i class="fa fa-circle-o"></i>My Rebate Claims</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Credit Status</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Request Credit</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Credit Requests</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href=""><i class="fa fa-circle-o"></i>Resources</a>
                                 </li>
                             </ul>
                         </li>
