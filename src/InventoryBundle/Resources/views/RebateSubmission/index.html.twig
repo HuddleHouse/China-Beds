@@ -41,7 +41,7 @@
                 <td><center>$ {{ rebateSubmission.amountIssued |number_format(2, '.', ',') }}</center></td>
                 <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
                 <td>
-                    <a class="btn btn-xs btn-" href="{{ path('rebate_submit_show', { 'id': rebateSubmission.id }) }}">show</a>
+                    <a class="btn btn-raised btn-xs btn-" href="{{ path('rebate_submit_show', { 'id': rebateSubmission.id }) }}">show</a>
                 </td>
             </tr>
         {% endfor %}

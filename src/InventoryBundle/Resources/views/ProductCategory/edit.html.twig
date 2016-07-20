@@ -25,10 +25,10 @@
 {% block content %}
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
-        <input class="btn btn-success" type="submit" value="Save" />
+        <input class="btn btn-raised btn-success" type="submit" value="Save" />
     {{ form_end(edit_form) }}
 
     {{ form_start(delete_form) }}
-    <input style="margin-top: -56px; margin-left: 71px;" class="btn btn-warning" type="submit" value="Delete">
+    <input style="margin-top: -56px; margin-left: 71px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
     {{ form_end(delete_form) }}
 {% endblock %}

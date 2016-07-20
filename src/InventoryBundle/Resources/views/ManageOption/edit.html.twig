@@ -85,8 +85,8 @@
                     <tr ng-repeat="(i, name) in names track by $index">
                         <td>{{name.value}}</td>
                         <td>
-                            <a class="btn btn-default btn-xs">Edit</a>
-                            <a class="btn btn-danger btn-xs" ng-click="deleteValue(name.id)">Delete</a>
+                            <a class="btn btn-raised btn-default btn-xs">Edit</a>
+                            <a class="btn btn-raised btn-danger btn-xs" ng-click="deleteValue(name.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -99,16 +99,16 @@
 
 
 
-        <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
+        <a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
             <i class="fa fa-plus"></i>
             Add Value
         </a>
 
         <hr>
         <hr style="border-top: 1px solid #8aa4af;">
-        <input class="btn btn-success" type="submit" value="Update" form="manage_option"/>
+        <input class="btn btn-raised btn-success" type="submit" value="Update" form="manage_option"/>
         {{ form_start(delete_form) }}
-        <input style="margin-top: -56px; margin-left: 81px;" class="btn btn-warning" type="submit" value="Delete">
+        <input style="margin-top: -56px; margin-left: 81px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
         {{ form_end(delete_form) }}
 
 
@@ -124,8 +124,8 @@
                             <input type="text" id="new_option_value" name="product[name]" required="required" class="form-control" style="margin-bottom: 10px">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-click="addOptionValue()" data-dismiss="modal">Save changes</button>
+                        <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-raised btn-primary" ng-click="addOptionValue()" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
             </div>

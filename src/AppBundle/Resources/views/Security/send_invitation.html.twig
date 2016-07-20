@@ -9,8 +9,8 @@
 {% endblock page_name %}
 
 {% block actions %}
-    <div class="btn-group pull-right">
-        <button type="button" class="btn btn-fit-height default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+    <div class="btn btn-raised-group pull-right">
+        <button type="button" class="btn btn-raised btn-fit-height default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
             Actions <i class="fa fa-angle-down"></i>
         </button>
         <ul class="dropdown-menu pull-right" role="menu">
@@ -39,7 +39,7 @@
             {{ form_label(form.office) }}
             {{ form_widget(form.office , { 'attr': {'class': 'form-control'} }) }}
             <div style="padding-bottom: 20px;padding-top: 20px;">
-            <input class="btn btn-success" type="submit" value="Send Invitation" />
+            <input class="btn btn-raised btn-success" type="submit" value="Send Invitation" />
             </div>
             {{ form_end(form) }}
         </div>

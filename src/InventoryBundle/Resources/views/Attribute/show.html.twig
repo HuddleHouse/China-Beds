@@ -41,8 +41,8 @@
         </tbody>
     </table>
 
-        <a class="btn btn-success" href="{{ path('attribute_edit', { 'id': attribute.id }) }}">Edit</a>
+        <a class="btn btn-raised btn-success" href="{{ path('attribute_edit', { 'id': attribute.id }) }}">Edit</a>
             {{ form_start(delete_form) }}
-                <input style="margin: -55px 0px 0 60px;" class="btn btn-danger" type="submit" value="Delete">
+                <input style="margin: -55px 0px 0 60px;" class="btn btn-raised btn-danger" type="submit" value="Delete">
             {{ form_end(delete_form) }}
 {% endblock %}

@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="table">
-            <a class="btn btn-success" href="{{ path('pop_item_new') }}" style="margin-bottom: 15px;">Create a POP Item</a>
+            <a class="btn btn-raised btn-success" href="{{ path('pop_item_new') }}" style="margin-bottom: 15px;">Create a POP Item</a>
             <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -52,8 +52,8 @@
                 <td>{{ popItem.shippingPer }}</td>
                 <td>{% if popItem.active %}Yes{% else %}No{% endif %}</td>
                 <td>
-                    <a class="btn btn-info btn-xs purple" href="{{ path('pop_item_edit', { 'id': popItem.id }) }}"><i class="fa fa-edit"></i> edit</a>
-                    <a class="btn btn-default btn-xs purple" href="{{ path('pop_item_show', { 'id': popItem.id }) }}"><i class="fa fa-list"></i> show</a>
+                    <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('pop_item_edit', { 'id': popItem.id }) }}"><i class="fa fa-edit"></i> edit</a>
+                    <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('pop_item_show', { 'id': popItem.id }) }}"><i class="fa fa-list"></i> show</a>
                 </td>
             </tr>
         {% endfor %}

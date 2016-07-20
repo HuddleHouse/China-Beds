@@ -15,7 +15,7 @@
                     <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
                         <td><img src="https://placehold.it/50x50" alt="Product Image"> </td>
                         <td>
-                            <a class="btn btn-danger" ng-click="deleteValue(name.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger" ng-click="deleteValue(name.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -28,7 +28,7 @@
 
 
 <hr>
-<a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#images-modal">
+<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#images-modal">
     <i class="fa fa-plus"></i>
     Add An Image
 </a>
@@ -50,8 +50,8 @@
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-raised btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
