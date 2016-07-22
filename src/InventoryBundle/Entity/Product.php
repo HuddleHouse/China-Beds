@@ -93,7 +93,7 @@ class Product
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
      */
-    private $variant;
+    private $variants;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product")
@@ -126,7 +126,7 @@ class Product
         $this->specifications = new ArrayCollection();
         $this->channels = new ArrayCollection();
         $this->images = new ArrayCollection();
-        $this->variant = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     /**
@@ -418,17 +418,17 @@ class Product
     /**
      * @return mixed
      */
-    public function getVariant()
+    public function getVariants()
     {
-        return $this->variant;
+        return $this->variants;
     }
 
     /**
      * @param mixed $variant
      */
-    public function setVariant($variant)
+    public function setVariants($variants)
     {
-        $this->variant = $variant;
+        $this->variants = $variants;
     }
 
     /**

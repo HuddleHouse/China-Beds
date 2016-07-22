@@ -4,6 +4,7 @@ namespace AppBundle\EventListener;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Bundle\TwigBundle\TwigEngine;
@@ -18,13 +19,14 @@ class TokenListener
     protected $templating;
     protected $router;
     protected $resolver;
-    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, ControllerResolver $resolver)
+    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, ControllerResolver $resolver, Session $session)
     {
         $this->em = $em;
         $this->token_storage = $token_storage;
         $this->templating = $templating;
         $this->router = $router;
         $this->resolver = $resolver;
+        $this->session = $session;
     }
 
 
@@ -51,8 +53,8 @@ class TokenListener
 
         if(!is_int(array_search($route, $routeArr)) && $route != null) //This is for excluding routes that you don't want to check for.
         {
-            if(isset($_COOKIE['route_names'])) {
-                $route_names = explode(',', $_COOKIE['route_names']);
+            if(null !== $this->session->get('route_names')) {
+                $route_names = explode(',', $this->session->get('route_names'));
             }
             else {
                 if(!($user = $this->token_storage->getToken()->getUser())) {
@@ -60,8 +62,8 @@ class TokenListener
                 }
                 $route_names = $user->getRouteNames();
 
-                setcookie('route_names', implode(',', $route_names), time()+3600);
-                $_POST['route_names'] = implode(',', $route_names);
+//                setcookie('route_names', implode(',', $route_names), time()+3600);
+                $this->session->set('route_names', implode(',', $route_names));
             }
 
             $roles = $this->token_storage->getToken()->getRoles();

@@ -42,6 +42,7 @@ services:
             templating: "@templating"
             router: "@router"
             resolver: "@controller_resolver"
+            session: "@session"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
         scope: request

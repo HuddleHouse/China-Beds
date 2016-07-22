@@ -23,8 +23,10 @@
 {% endblock footer %}
 
 {% block content %}
+<div class="well bs-component">
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_widget(form, {'attr': { 'class': 'form-horizontal' } }) }}
         <input class="btn btn-raised btn-success" type="submit" value="Create" />
     {{ form_end(form) }}
+    </div>
 {% endblock %}

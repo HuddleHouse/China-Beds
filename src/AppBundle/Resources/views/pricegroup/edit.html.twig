@@ -23,13 +23,16 @@
 {% endblock footer %}
 
 {% block content %}
-    {{ form_start(edit_form) }}
+    <div class="well bs-component">
+        {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
         {{ form_widget(edit_form) }}
         <input class="btn btn-raised btn-success" type="submit" value="Save" />
 
-    {{ form_end(edit_form) }}
-    {{ form_start(delete_form) }}
-    <input style="margin: -57px 0 0 65px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
-    {{ form_end(delete_form) }}
+        {{ form_end(edit_form) }}
+        {{ form_start(delete_form) }}
+        <input style="margin: -79px 0 0 120px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </div>
+
 
 {% endblock %}

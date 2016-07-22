@@ -5,7 +5,7 @@
     <div class="wrapper">
     <header class="main-header">
 
-        <a href="{{ path('fos_user_profile_show') }}" class="logo">
+        <a href="{{ path('fos_user_profile_show') }}" class="logo" style="min-height: 60px;">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>M</b>H</span>
             <!-- logo for regular state and mobile devices -->
@@ -43,7 +43,7 @@
     </header>
 
         <!-- COOKIE TO HOLD ALL OF THE ROUTES THAT THE USER CAN ACCESS -->
-        {% set route_names = app.request.cookies.get('route_names') |split(',') %}
+        {% set route_names = app.session.get('route_names') %}
 {#{{ dump(route_names) }}#}
         <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
         {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
@@ -70,7 +70,7 @@
         {% set sidebar_rebate_submit_user_claims = ['rebate_submit_user_claims'] %}
 
             <!-- BEGIN SIDEBAR -->
-            <aside class="main-sidebar">
+            <aside class="main-sidebar" style="margin-top: 10px;">
                 <section class="sidebar" style="height: auto;">
 
 
@@ -362,7 +362,7 @@
         <footer class="main-footer">
             <div >
                 <a href="http://245tech.com"><img style="max-width: 40px;" src="https://245.tech/wp-content/uploads/2015/06/logoforslider.png" /></a>
-                <b>Version</b> 0.1
+                <b>Version</b> 0.2
             </div>
         </footer>
 

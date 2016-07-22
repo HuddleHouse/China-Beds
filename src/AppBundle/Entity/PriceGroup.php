@@ -32,9 +32,19 @@ class PriceGroup
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="price_groups")
-     * 
+     * @ORM\JoinTable(name="price_group_users",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="price_group_id", referencedColumnName="id")}
+     * )
      */
     protected $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="price_group")
+     */
+    private $prices;
+
+
 
     /**
      * Constructor
@@ -42,6 +52,7 @@ class PriceGroup
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->prices = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -99,4 +110,22 @@ class PriceGroup
     {
         return $this->users;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
+    /**
+     * @param mixed $prices
+     */
+    public function setPrices($prices)
+    {
+        $this->prices = $prices;
+    }
+
+
 }

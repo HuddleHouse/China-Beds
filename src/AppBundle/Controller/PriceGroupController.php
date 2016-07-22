@@ -110,10 +110,15 @@ class PriceGroupController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($priceGroup);
+//                foreach()
                 $em->flush();
 
                 $this->addFlash('notice', 'Price Group updated successfully.');
-                return $this->redirectToRoute('admin_price_group_index');
+                return $this->render('AppBundle:PriceGroup:edit.html.twig', array(
+                    'priceGroup' => $priceGroup,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating Price Group: ' . $e->getMessage());

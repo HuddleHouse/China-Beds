@@ -2468,7 +2468,7 @@ a:focus {
   border-top-left-radius: 3px;
 }
 .nav-tabs-custom > .nav-tabs > li {
-  border-top: 3px solid transparent;
+  border-top: 6px solid transparent;
   margin-bottom: -2px;
   margin-right: 5px;
 }

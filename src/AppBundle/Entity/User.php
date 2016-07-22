@@ -130,10 +130,7 @@ class User extends BaseUser
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PriceGroup", inversedBy="users")
-     * @ORM\JoinTable(name="price_group_users",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="price_group_id", referencedColumnName="id")}
-     * )
+     *
      */
     private $price_groups;
 
@@ -153,12 +150,12 @@ class User extends BaseUser
     private $office;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="rebate_submissions")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="user")
      */
     private $rebate_submissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="rebate_submissions")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="user")
      */
     private $warranty_claims;
 
