@@ -154,6 +154,11 @@ class User extends BaseUser
     private $rebate_submissions;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\UserChannel", mappedBy="user")
+     */
+    private $channels;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="user")
      */
     private $warranty_claims;
@@ -542,4 +547,26 @@ class User extends BaseUser
     {
         $this->warranty_claims = $warranty_claims;
     }
+
+    public function getName() {
+        return $this->getFirstName() . " " . $this->getLastName();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
+
+    /**
+     * @param mixed $channels
+     */
+    public function setChannels($channels)
+    {
+        $this->channels = $channels;
+    }
+
+
 }

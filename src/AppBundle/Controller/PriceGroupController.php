@@ -147,6 +147,41 @@ class PriceGroupController extends Controller
     }
 
     /**
+     * Displays a form to edit an existing PriceGroup entity.
+     *
+     * @Route("/{id}/edit/prices", name="admin_price_group_edit_prices")
+     * @Method({"GET", "POST"})
+     */
+    public function editPricesAction(Request $request, PriceGroup $priceGroup)
+    {
+
+//            try {
+//                $em = $this->getDoctrine()->getManager();
+//
+//
+//
+//                $this->addFlash('notice', 'Price Group updated successfully.');
+//                return $this->render('AppBundle:PriceGroup:edit-prices.html.twig', array(
+//                    'priceGroup' => $priceGroup,
+//                ));
+//            }
+//            catch(\Exception $e) {
+//                $this->addFlash('error', 'Error updating Price Group: ' . $e->getMessage());
+//                return $this->render('AppBundle:PriceGroup:edit-prices.html.twig', array(
+//                    'priceGroup' => $priceGroup,
+//                ));
+//            }
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->findAll();
+
+        return $this->render('AppBundle:PriceGroup:edit-prices.html.twig', array(
+            'priceGroup' => $priceGroup,
+            'products' => $products,
+            ));
+    }
+
+
+    /**
      * Deletes a PriceGroup entity.
      *
      * @Route("/{id}", name="admin_price_group_delete")

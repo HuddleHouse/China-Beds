@@ -36,6 +36,13 @@ class ProductVariant
     private $listId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="msrp", type="integer", nullable=true)
+     */
+    private $msrp = 0;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="variants")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
@@ -114,5 +121,23 @@ class ProductVariant
     {
         $this->product = $product;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMsrp()
+    {
+        return $this->msrp / 100;
+    }
+
+    /**
+     * @param mixed $msrp
+     */
+    public function setMsrp($msrp)
+    {
+        $this->msrp = $msrp * 100;
+    }
+
+
 }
 

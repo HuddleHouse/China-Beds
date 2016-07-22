@@ -29,7 +29,7 @@
                     <tr>
                         <th>Name</th>
                         <th style="width: 150px;">Number of Users</th>
-                        <th style="width: 150px;">Actions</th>
+                        <th style="width: 350px;">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,7 +38,8 @@
                             <td><a href="{{ path('admin_price_group_show', { 'id': priceGroup.id }) }}">{{ priceGroup.name }}</a></td>
                             <td><center>{{ priceGroup.count }}</center></td>
                             <td>
-                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('admin_price_group_edit', { 'id': priceGroup.id }) }}"><i class="fa fa-edit"></i> Edit</a>
+                                <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('admin_price_group_edit', { 'id': priceGroup.id }) }}"><i class="fa fa-edit"></i> Edit Users</a>
+                                <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('admin_price_group_edit_prices', { 'id': priceGroup.id }) }}"><i class="fa fa-edit"></i> Edit Prices</a>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('admin_price_group_show', { 'id': priceGroup.id }) }}"><i class="fa fa-list"></i> Show Users</a>
                             </td>
                         </tr>

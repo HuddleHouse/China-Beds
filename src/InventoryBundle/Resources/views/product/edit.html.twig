@@ -157,9 +157,10 @@
 
 {% block content %}
 <div ng-app="myApp" ng-controller="myCtrl">
-    <div class="nav-tabs-custom">
+    <div class="nav-tabs-custom" style="    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
+            <li class=""><a href="#variants" data-toggle="tab" aria-expanded="false">Variants</a></li>
             <li class=""><a href="#specs" data-toggle="tab" aria-expanded="false">Specifications</a></li>
             <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Image Attributes</a></li>
             <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
@@ -174,6 +175,10 @@
                 <input class="btn btn-raised btn-lg btn-success" type="submit" value="Update" />
                 <a class="btn btn-raised btn-lg btn-warning" href="{{ path('admin_product_index') }}">Cancel</a>
                 {{ form_end(form) }}
+            </div>
+
+            <div class="tab-pane" id="variants" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-variant.html.twig' %}
             </div>
 
             <div class="tab-pane" id="attributes" style="padding-top: 25px;">
