@@ -24,7 +24,6 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table">
-                <a class="btn btn-raised btn-success" href="{{ path('admin_price_group_new') }}" style="margin-bottom: 15px;">Create a price group</a>
                 <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
@@ -48,5 +47,12 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    <a id="new-button" href="{{ path('admin_price_group_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">add</i>
+    </a>
+    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
+        Create a new Price Group
     </div>
 {% endblock %}
