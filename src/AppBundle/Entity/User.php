@@ -130,10 +130,9 @@ class User extends BaseUser
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PriceGroup", inversedBy="users")
-     *
+     * @ORM\JoinTable(name="user_price_groups")
      */
     private $price_groups;
-
     
 
     /**
@@ -470,7 +469,8 @@ class User extends BaseUser
 
     public function addPriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
     {
-        $this->price_groups[] = $priceGroup;
+        if(!$this->price_groups->contains($priceGroup))
+            $this->price_groups[] = $priceGroup;
 
         return $this;
     }

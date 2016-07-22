@@ -109,6 +109,15 @@ class PriceGroupController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                $formData = $editForm->getData();
+
+                foreach($priceGroup->getUsers() as $user) {
+                    $user->removePriceGroup($priceGroup);
+                    $em->persist($priceGroup);
+                }
+                foreach($formData->getUsers() as $user)
+                    $user->addPriceGroup($priceGroup);
+
                 $em->persist($priceGroup);
 //                foreach()
                 $em->flush();
