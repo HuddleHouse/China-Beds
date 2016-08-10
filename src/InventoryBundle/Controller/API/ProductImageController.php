@@ -15,6 +15,29 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class ProductImageController extends Controller
 {
+
+    /**
+     * @Route("/api_get_all_product_images", name="api_get_all_product_images")
+     */
+    public function getImagesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->request->get('product_id');
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select * from product_images i where i.product_id = :id");
+        $statement->bindValue('id', $id);
+
+        try {
+            $statement->execute();
+            $data = $statement->fetchAll();
+            return JsonResponse::create($data);
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+    }
+
     /**
      * @Route("/add-product-image", name="api_add_product_image")
      */
@@ -58,14 +81,12 @@ class ProductImageController extends Controller
         $id = $request->request->get('id');
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select value, option_id, id from option_values where option_id = :option_id");
-        $statement->bindValue('option_id', $id);
-
+        $statement = $connection->prepare("delete from product_images where :id = id");
+        $statement->bindValue('id', $id);
 
         try {
             $statement->execute();
-            $data = $statement->fetchAll();
-            return JsonResponse::create($data);
+            return $this->getImagesAction($request);
         }
         catch(\Exception $e) {
             return JsonResponse::create(false);
