@@ -6,18 +6,18 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Image</th>
+                    <th>MSRP</th>
                     <th style="width: 150px">Options</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 {% verbatim %}
-                    <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
-                        <td>{{spec.name}}</td>
-                        <td><img ng-src="/uploads/documents/{{spec.path}}" style="max-height: 90px;"> </td>
+                    <tr ng-repeat="(i, variant) in product_variants track by $index">
+                        <td>{{variant.name}}</td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.msrp"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="deleteAttributeValue(spec.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger" ng-click="deleteProductVariant(variant.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -30,33 +30,31 @@
 
 
 <hr>
-<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
+<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#product-variant-modal">
     <i class="fa fa-plus"></i>
     Add Variant
 </a>
 
 
-{#<div class="modal fade" id="attributes-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
-    {#<div class="modal-dialog">#}
-        {#<div class="modal-content">#}
-            {#<div class="modal-header">#}
-                {#<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>#}
-                {#<h4 class="modal-title" id="myModalLabel">Image Attributes</h4>#}
-            {#</div>#}
-            {#<div class="modal-body">#}
-                {#<label for="image_select">Attribute</label>#}
-                {#<select id="image_select" class="form-control" style="margin-bottom: 10px">#}
-                    {#{% for attr in image_attributes %}#}
-                        {#<option value="{{ attr.id }}">{{ attr.name }}</option>#}
-                    {#{% endfor %}#}
-                {#</select>#}
-            {#</div>#}
-            {#<div class="modal-footer">#}
-                {#<button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>#}
-                {#<button type="button" class="btn btn-raised btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>#}
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-{#</div>#}
+<div class="modal fade" id="product-variant-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Variant</h4>
+            </div>
+            <div class="modal-body">
+                <label for="variant_name" class="required">Name</label>
+                <input type="text" id="variant_name" name="" required="required" class="form-control" style="margin-bottom: 10px">
+                <label for="msrp" class="required">MSRP</label>
+                <input type="text" id="msrp" name="" required="required" class="form-control" style="margin-bottom: 10px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-raised btn-primary" ng-click="addProductVariant()" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 

@@ -50,6 +50,8 @@
             $scope.specifications = [];
             $scope.image_attributes_data = [];
             $scope.product_images_data = [];
+            $scope.product_images = [];
+            $scope.product_variants = [];
 
             $.ajax({
                 beforeSend: function () {
@@ -60,6 +62,32 @@
                 success: function (data) {
                     $scope.$apply(function () {
                         $scope.specifications = data;
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_product_variants') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.product_variants = data;
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_product_images') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.product_images = data;
                     });
                 }
             });
@@ -198,6 +226,19 @@
                 {#});#}
             {#};#}
 
+            $scope.getAllProductImages = function () {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_get_all_product_images') }}",
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_images = data;
+                        });
+                    }
+                });
+            };
+
             $scope.addProductImage = function(file, errFiles) {
                 $scope.f = file;
                 $scope.errFile = errFiles && errFiles[0];
@@ -209,9 +250,8 @@
                     });
 
                     file.upload.then(function (response) {
-                        $timeout(function () {
-                            file.result = response.data;
-                        });
+                        $scope.getAllProductImages();
+                        file.result = response.data;
                     }, function (response) {
                         if (response.status > 0)
                             $scope.errorMsg = response.status + ': ' + response.data;
@@ -220,19 +260,19 @@
                                 evt.loaded / evt.total));
                     });
                 }
-            }
+            };
 
-            $scope.deleteProductImage = function (id) {
-                var attribute_id = id;
+            $scope.removeProductImage = function (id) {
+                var id = id;
 
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_remove_product_image') }}",
                     dataType: 'json',
-                    data: {attribute_id: attribute_id},
+                    data: {id: id},
                     success: function (data) {
                         console.log(data);
-                        $scope.getAllAttributeValue();
+                        $scope.getAllProductImages();
                     }
                 });
             };

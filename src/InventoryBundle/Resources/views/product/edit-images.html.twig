@@ -12,10 +12,10 @@
 
                 <tbody>
                 {% verbatim %}
-                    <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
-                        <td><img src="https://placehold.it/50x50" alt="Product Image"> </td>
+                    <tr ng-repeat="(i, image) in product_images track by $index">
+                        <td><img src="/uploads/products/{{image.path}}" alt="Product Image" style="max-height: 150px;"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="removeProductImage(name.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger" ng-click="removeProductImage(image.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
