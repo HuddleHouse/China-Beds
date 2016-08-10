@@ -97,6 +97,8 @@ class ProductController extends Controller
         $editForm = $this->createForm('InventoryBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
 
+        $productImageForm = $this->createForm('InventoryBundle\Form\ProductImageType');
+
         $em = $this->getDoctrine()->getManager();
 
         $specs = $em->getRepository('InventoryBundle:Specification')->findAll();
@@ -119,7 +121,8 @@ class ProductController extends Controller
                     'delete_form' => $deleteForm->createView(),
                     'specs' => $specs,
                     'image_attributes' => $image_attributes,
-                    'all_channels' => $channels
+                    'all_channels' => $channels,
+                    'product_image_form' => $productImageForm->createView()
                 ));
             }
         }
@@ -130,7 +133,8 @@ class ProductController extends Controller
             'delete_form' => $deleteForm->createView(),
             'specs' => $specs,
             'image_attributes' => $image_attributes,
-            'all_channels' => $channels
+            'all_channels' => $channels,
+            'product_image_form' => $productImageForm->createView()
         ));
     }
 

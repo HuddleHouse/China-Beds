@@ -15,7 +15,7 @@
                     <tr ng-repeat="(i, spec) in image_attributes_data track by $index">
                         <td><img src="https://placehold.it/50x50" alt="Product Image"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="deleteValue(name.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger" ng-click="removeProductImage(name.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -28,13 +28,13 @@
 
 
 <hr>
-<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#images-modal">
+<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#image-modal">
     <i class="fa fa-plus"></i>
     Add An Image
 </a>
 
 
-<div class="modal fade" id="images-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel4" aria-hidden="true">
+<div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -42,17 +42,26 @@
                 <h4 class="modal-title" id="myModalLabel4">Image</h4>
             </div>
             <div class="modal-body">
-                <label for="image_select">Attribute</label>
-                <select id="image_select" class="form-control" style="margin-bottom: 10px">
-                    {% for attr in image_attributes %}
-                        <option value="{{ attr.id }}">{{ attr.name }}</option>
-                    {% endfor %}
-                </select>
+                {% verbatim %}
+                <h4>Upload on file select</h4>
+                <button type="file" ngf-select="addProductImage($file, $invalidFiles)"
+                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" class="btn btn-raised btn-primary">
+                    Select File</button>
+                <br><br>
+                File:
+
+                <div style="font:smaller">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
+                    <span class="progress" ng-show="f.progress >= 0">
+          <div style="width:{{f.progress}}%"
+               ng-bind="f.progress + '%'"></div>
+      </span>
+                </div>
+                {{errorMsg}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-raised btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>
             </div>
+            {% endverbatim %}
         </div>
     </div>
 </div>

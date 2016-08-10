@@ -15,8 +15,7 @@ class ProductImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('path')
-            ->add('product')
+            ->add('file', null, array('label' => 'Product Image', 'required' => false))
         ;
     }
     
@@ -26,7 +25,8 @@ class ProductImageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'InventoryBundle\Entity\ProductImage'
+            'data_class' => 'InventoryBundle\Entity\ProductImage',
+            'enctype' => "multipart/form-data"
         ));
     }
 }

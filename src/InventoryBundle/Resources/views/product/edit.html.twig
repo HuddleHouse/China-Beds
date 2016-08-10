@@ -10,6 +10,31 @@
 {% endblock page_name %}
 
 {% block actions %}
+    <style>
+        .thumb {
+            width: 24px;
+            height: 24px;
+            float: none;
+            position: relative;
+            top: 7px;
+        }
+
+        form .progress {
+            line-height: 15px;
+        }
+
+        .progress {
+            display: inline-block;
+            width: 100px;
+            border: 3px groove #CCC;
+        }
+
+        .progress div {
+            font-size: smaller;
+            background: orange;
+            width: 0;
+        }
+    </style>
 {% endblock actions %}
 
 {% block footer %}
@@ -20,10 +45,11 @@
             });
         });
 
-        var app = angular.module('myApp', []);
-        app.controller('myCtrl', function($scope) {
+        var app = angular.module('myApp', ['ngFileUpload']);
+        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
             $scope.specifications = [];
             $scope.image_attributes_data = [];
+            $scope.product_images_data = [];
 
             $.ajax({
                 beforeSend: function () {
@@ -119,9 +145,7 @@
             }
 
             $scope.addAttributeValue = function () {
-                console.log('lkdjf');
                 var attribute_id = $('#image_select option:selected').val();
-
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_add_attribute_value') }}",
@@ -151,7 +175,68 @@
                 });
             };
 
-        });
+
+            {#$scope.addProductImage = function () {#}
+                {#var attribute_id = $('#product_image_select option:selected').val();#}
+                {#var form = document.getElementById("product_image");#}
+                {#var form2 = new FormData(form);#}
+{#//                console.log("--  "+$(this)[0].serialize());#}
+
+                {#$.ajax({#}
+                    {#type: 'POST',#}
+                    {#url: "{{ path('api_add_product_image') }}",#}
+                    {#dataType: 'json',#}
+                    {#processData: false,#}
+                    {#cache:false,#}
+                    {#data: new FormData(form[0]),#}
+                    {#success: function (data) {#}
+                        {#$scope.$apply(function () {#}
+                            {#$scope.image_attributes_data = data;#}
+                            {#$('#spec_value').val('');#}
+                        {#});#}
+                    {#}#}
+                {#});#}
+            {#};#}
+
+            $scope.addProductImage = function(file, errFiles) {
+                $scope.f = file;
+                $scope.errFile = errFiles && errFiles[0];
+                console.log($scope.f);
+                if (file) {
+                    file.upload = Upload.upload({
+                        url: '{{ path('api_add_product_image') }}',
+                        data: {file: file, product_id: {{ product.id }} }
+                    });
+
+                    file.upload.then(function (response) {
+                        $timeout(function () {
+                            file.result = response.data;
+                        });
+                    }, function (response) {
+                        if (response.status > 0)
+                            $scope.errorMsg = response.status + ': ' + response.data;
+                    }, function (evt) {
+                        file.progress = Math.min(100, parseInt(100.0 *
+                                evt.loaded / evt.total));
+                    });
+                }
+            }
+
+            $scope.deleteProductImage = function (id) {
+                var attribute_id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_product_image') }}",
+                    dataType: 'json',
+                    data: {attribute_id: attribute_id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllAttributeValue();
+                    }
+                });
+            };
+        }]);
     </script>
 {% endblock footer %}
 

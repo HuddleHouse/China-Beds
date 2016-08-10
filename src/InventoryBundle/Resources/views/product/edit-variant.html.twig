@@ -36,27 +36,27 @@
 </a>
 
 
-<div class="modal fade" id="attributes-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Image Attributes</h4>
-            </div>
-            <div class="modal-body">
-                <label for="image_select">Attribute</label>
-                <select id="image_select" class="form-control" style="margin-bottom: 10px">
-                    {% for attr in image_attributes %}
-                        <option value="{{ attr.id }}">{{ attr.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-raised btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+{#<div class="modal fade" id="attributes-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
+    {#<div class="modal-dialog">#}
+        {#<div class="modal-content">#}
+            {#<div class="modal-header">#}
+                {#<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>#}
+                {#<h4 class="modal-title" id="myModalLabel">Image Attributes</h4>#}
+            {#</div>#}
+            {#<div class="modal-body">#}
+                {#<label for="image_select">Attribute</label>#}
+                {#<select id="image_select" class="form-control" style="margin-bottom: 10px">#}
+                    {#{% for attr in image_attributes %}#}
+                        {#<option value="{{ attr.id }}">{{ attr.name }}</option>#}
+                    {#{% endfor %}#}
+                {#</select>#}
+            {#</div>#}
+            {#<div class="modal-footer">#}
+                {#<button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>#}
+                {#<button type="button" class="btn btn-raised btn-primary" ng-click="addAttributeValue()" data-dismiss="modal">Save changes</button>#}
+            {#</div>#}
+        {#</div>#}
+    {#</div>#}
+{#</div>#}
 
 
