@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -96,6 +97,27 @@ class Warehouse
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouse_1")
+     */
+    protected $users_1;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouse_2")
+     */
+    protected $users_2;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouse_3")
+     */
+    protected $users_3;
+
+    public function __construct() {
+        $this->users_1 = new ArrayCollection();
+        $this->users_2 = new ArrayCollection();
+        $this->users_3 = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -337,6 +359,54 @@ class Warehouse
     public function setContact($contact)
     {
         $this->contact = $contact;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsers1()
+    {
+        return $this->users_1;
+    }
+
+    /**
+     * @param mixed $users_1
+     */
+    public function setUsers1($users_1)
+    {
+        $this->users_1 = $users_1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsers2()
+    {
+        return $this->users_2;
+    }
+
+    /**
+     * @param mixed $users_2
+     */
+    public function setUsers2($users_2)
+    {
+        $this->users_2 = $users_2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsers3()
+    {
+        return $this->users_3;
+    }
+
+    /**
+     * @param mixed $users_3
+     */
+    public function setUsers3($users_3)
+    {
+        $this->users_3 = $users_3;
     }
     
     

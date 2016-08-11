@@ -33,6 +33,27 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
+            ->add('warehouse_1', EntityType::class, array(
+                'class' => 'InventoryBundle\Entity\Warehouse',
+                'label' => 'Warehouse #1',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false
+            ))
+            ->add('warehouse_2', EntityType::class, array(
+                'class' => 'InventoryBundle\Entity\Warehouse',
+                'label' => 'Warehouse #2',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false
+            ))
+            ->add('warehouse_3', EntityType::class, array(
+                'class' => 'InventoryBundle\Entity\Warehouse',
+                'label' => 'Warehouse #3',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false
+            ))
             ->add('office', EntityType::class, array(
                 'class' => 'InventoryBundle:Office',
                 'label' => 'Office',
@@ -51,6 +72,14 @@ class UserType extends AbstractType
             ->add('price_groups', EntityType::class, array(
                 'class' => 'AppBundle:PriceGroup',
                 'label' => 'Price Groups',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'multiple' => true,
+                'required' => false
+            ))
+            ->add('user_channels', EntityType::class, array(
+                'class' => 'InventoryBundle\Entity\Channel',
+                'label' => 'Channels',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,

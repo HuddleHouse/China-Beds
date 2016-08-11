@@ -41,9 +41,10 @@ class Channel
     private $product_channels;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\UserChannel", mappedBy="channel")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="user_channels")
+     *
      */
-    private $user_channels;
+    protected $users;
 
     public function __construct() {
         $this->product_channels = new ArrayCollection();
@@ -118,18 +119,18 @@ class Channel
     /**
      * @return mixed
      */
-    public function getUserChannels()
+    public function getUsers()
     {
-        return $this->user_channels;
+        return $this->users;
     }
 
     /**
-     * @param mixed $user_channels
+     * @param mixed $users
      */
-    public function setUserChannels($user_channels)
+    public function setUsers($users)
     {
-        $this->user_channels = $user_channels;
+        $this->users = $users;
     }
-    
+
 }
 

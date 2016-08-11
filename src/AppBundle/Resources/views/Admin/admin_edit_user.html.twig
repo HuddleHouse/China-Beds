@@ -26,7 +26,12 @@
     <div class="well bs-component">
         <div class="form-body">
             {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
+
             <div class="row">
+                <div class="col-md-12">
+                    <h2>Information</h2>
+                    <hr>
+                </div>
                 <div class="col-md-6">
                     {{ form_label(form.first_name) }}
                     {{ form_widget(form.first_name) }}
@@ -51,6 +56,10 @@
             </div>
             <hr>
             <div class="row">
+                <div class="col-md-12">
+                    <h2>Admin</h2>
+                    <hr>
+                </div>
                 <div class="col-md-6">
                     {{ form_label(form.groups) }}
                     {{ form_widget(form.groups) }}
@@ -60,8 +69,12 @@
                     {{ form_widget(form.price_groups) }}
                 </div>
             </div>
-            <hr><hr>
+            <hr>
             <div class="row">
+                <div class="col-md-12">
+                    <h2>Address</h2>
+                    <hr>
+                </div>
                 <div class="col-md-6">
                     {{ form_label(form.address_1) }}
                     {{ form_widget(form.address_1) }}
@@ -71,7 +84,6 @@
                     {{ form_widget(form.address_2) }}
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-6">
                     {{ form_label(form.city) }}
@@ -91,11 +103,13 @@
                     {{ form_label(form.is_residential) }}
                     {{ form_widget(form.is_residential) }}
                 </div>
-
             </div>
-            <hr><hr>
-
+            <hr>
             <div class="row">
+                <div class="col-md-12">
+                    <h2>Retailer Info</h2>
+                    <hr>
+                </div>
                 <div class="col-md-4">
                     {{ form_label(form.is_show_credit) }}
                     {{ form_widget(form.is_show_credit) }}
@@ -134,6 +148,34 @@
                 <div class="col-md-4">
                 </div>
                 <div class="col-md-4">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Order Information</h1>
+                    <hr>
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.user_channels) }}
+                    {{ form_widget(form.user_channels) }}
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.warehouse_1) }}
+                    {{ form_widget(form.warehouse_1) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.warehouse_2) }}
+                    {{ form_widget(form.warehouse_2) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.warehouse_3) }}
+                    {{ form_widget(form.warehouse_3) }}
                 </div>
             </div>
 

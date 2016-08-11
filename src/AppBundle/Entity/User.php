@@ -130,10 +130,15 @@ class User extends BaseUser
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\PriceGroup", inversedBy="users")
-     * @ORM\JoinTable(name="user_price_groups")
+     * @ORM\JoinTable(name="price_group_users")
      */
     private $price_groups;
-    
+
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\Channel", inversedBy="users")
+     * @ORM\JoinTable(name="user_channels")
+     */
+    private $user_channels;
 
     /**
      * @ORM\OneToOne(targetEntity="Invitation")
@@ -154,20 +159,34 @@ class User extends BaseUser
     private $rebate_submissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\UserChannel", mappedBy="user")
-     */
-    private $channels;
-
-    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="user")
      */
     private $warranty_claims;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\JoinColumn(name="warehouse_1", referencedColumnName="id")
+     */
+    private $warehouse_1;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\JoinColumn(name="warehouse_2", referencedColumnName="id")
+     */
+    private $warehouse_2;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\JoinColumn(name="warehouse_3", referencedColumnName="id")
+     */
+    private $warehouse_3;
 
     public function __construct()
     {
         parent::__construct();
         
         $this->warranty_claims = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_channels = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
@@ -500,6 +519,34 @@ class User extends BaseUser
         return $this->price_groups;
     }
 
+    public function addUserChannel($userChannel)
+    {
+        if(!$this->user_channels->contains($userChannel))
+            $this->user_channels[] = $userChannel;
+
+        return $this;
+    }
+
+    /**
+     * Remove payTypes
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUserChannel($userChannel)
+    {
+        $this->user_channels->removeElement($userChannel);
+    }
+
+    /**
+     * Get payTypes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserChannels()
+    {
+        return $this->user_channels;
+    }
+
     /**
      * @return mixed
      */
@@ -566,6 +613,54 @@ class User extends BaseUser
     public function setChannels($channels)
     {
         $this->channels = $channels;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouse1()
+    {
+        return $this->warehouse_1;
+    }
+
+    /**
+     * @param mixed $warehouse_1
+     */
+    public function setWarehouse1($warehouse_1)
+    {
+        $this->warehouse_1 = $warehouse_1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouse2()
+    {
+        return $this->warehouse_2;
+    }
+
+    /**
+     * @param mixed $warehouse_2
+     */
+    public function setWarehouse2($warehouse_2)
+    {
+        $this->warehouse_2 = $warehouse_2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouse3()
+    {
+        return $this->warehouse_3;
+    }
+
+    /**
+     * @param mixed $warehouse_3
+     */
+    public function setWarehouse3($warehouse_3)
+    {
+        $this->warehouse_3 = $warehouse_3;
     }
 
 
