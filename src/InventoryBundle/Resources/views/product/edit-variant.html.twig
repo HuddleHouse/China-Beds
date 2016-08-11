@@ -1,4 +1,4 @@
-<div id="display-attributes">
+<div id="display-variants">
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body no-padding">
@@ -17,7 +17,7 @@
                         <td>{{variant.name}}</td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.msrp"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="deleteProductVariant(variant.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger" ng-click="removeProductVariant(variant.id)">Delete</a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -47,7 +47,7 @@
                 <label for="variant_name" class="required">Name</label>
                 <input type="text" id="variant_name" name="" required="required" class="form-control" style="margin-bottom: 10px">
                 <label for="msrp" class="required">MSRP</label>
-                <input type="text" id="msrp" name="" required="required" class="form-control" style="margin-bottom: 10px">
+                <input type="text" id="variant_msrp" name="" required="required" class="form-control" style="margin-bottom: 10px">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>

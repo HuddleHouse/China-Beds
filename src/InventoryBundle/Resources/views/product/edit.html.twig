@@ -203,28 +203,53 @@
                 });
             };
 
+            $scope.addProductVariant = function () {
+                var variant_msrp = $('#variant_msrp').val();
+                var variant_name = $('#variant_name').val();
 
-            {#$scope.addProductImage = function () {#}
-                {#var attribute_id = $('#product_image_select option:selected').val();#}
-                {#var form = document.getElementById("product_image");#}
-                {#var form2 = new FormData(form);#}
-{#//                console.log("--  "+$(this)[0].serialize());#}
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_product_variant') }}",
+                    dataType: 'json',
+                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                            $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
 
-                {#$.ajax({#}
-                    {#type: 'POST',#}
-                    {#url: "{{ path('api_add_product_image') }}",#}
-                    {#dataType: 'json',#}
-                    {#processData: false,#}
-                    {#cache:false,#}
-                    {#data: new FormData(form[0]),#}
-                    {#success: function (data) {#}
-                        {#$scope.$apply(function () {#}
-                            {#$scope.image_attributes_data = data;#}
-                            {#$('#spec_value').val('');#}
-                        {#});#}
-                    {#}#}
-                {#});#}
-            {#};#}
+            $scope.getAllProductVariants = function () {
+                $.ajax({
+                    beforeSend: function () {
+                    },
+                    type: 'POST',
+                    url: "{{ path('api_get_all_product_variants') }}",
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.removeProductVariant = function (id) {
+                var id = id;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_product_variant') }}",
+                    dataType: 'json',
+                    data: {id: id, product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                        });
+                    }
+                });
+            };
 
             $scope.getAllProductImages = function () {
                 $.ajax({
