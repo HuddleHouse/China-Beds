@@ -135,7 +135,7 @@ class User extends BaseUser
     private $price_groups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\Channel", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="users")
      * @ORM\JoinTable(name="user_channels")
      */
     private $user_channels;

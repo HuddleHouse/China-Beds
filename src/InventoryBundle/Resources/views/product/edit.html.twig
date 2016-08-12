@@ -70,6 +70,22 @@
                 beforeSend: function () {
                 },
                 type: 'POST',
+                url: "{{ path('api_get_all_product_channel_checks') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    console.log(data);
+                    $scope.$apply(function () {
+                        angular.forEach(data, function(value, key) {
+                            $('#channel-'+value.channel_id).prop('checked', true);
+                        });
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
                 url: "{{ path('api_get_all_product_variants') }}",
                 data: {product_id: {{ product.id }}},
                 success: function (data) {
@@ -206,12 +222,13 @@
             $scope.addProductVariant = function () {
                 var variant_msrp = $('#variant_msrp').val();
                 var variant_name = $('#variant_name').val();
+                var variant_sku = $('#variant_sku').val();
 
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_add_product_variant') }}",
                     dataType: 'json',
-                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp },
+                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp, sku: variant_sku},
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.product_variants = data;
@@ -301,6 +318,19 @@
                     }
                 });
             };
+
+            $scope.toggleChannel = function (id) {
+                var id = id;
+                $.ajax({
+                    beforeSend: function () {
+                    },
+                    type: 'POST',
+                    url: "{{ path('api_toggle_product_channel') }}",
+                    data: {product_id: {{ product.id }}, id: id},
+                    success: function (data) {
+                    }
+                });
+            }
         }]);
     </script>
 {% endblock footer %}

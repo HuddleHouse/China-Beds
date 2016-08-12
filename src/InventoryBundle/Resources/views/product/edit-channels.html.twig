@@ -17,7 +17,7 @@
                         <td>{{channel.name}}</td>
                         <td>{{ channel.url }}</td>
                         <td>
-                            <input type="checkbox" id="channel-{{ channel.id }}">
+                            <input type="checkbox" id="channel-{{ channel.id }}" ng-click="toggleChannel({{ channel.id }})">
                         </td>
                     </tr>
                 {% endfor %}

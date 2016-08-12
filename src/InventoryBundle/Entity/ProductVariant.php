@@ -43,6 +43,13 @@ class ProductVariant
     private $msrp = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="sku", type="string", length=255, nullable=true)
+     */
+    private $sku;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="variants")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
@@ -138,6 +145,20 @@ class ProductVariant
         $this->msrp = $msrp * 100;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
 
+    /**
+     * @param mixed $sku
+     */
+    public function setSku($sku)
+    {
+        $this->sku = $sku;
+    }
 }
 
