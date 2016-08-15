@@ -67,6 +67,7 @@
         {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_rebate_submit = ['rebate_submit_index', 'rebate_submit_edit', 'rebate_submit_show'] %}
         {% set sidebar_rebate_submit_new = ['rebate_submit_new'] %}
+        {% set sidebar_order = ['order_products_index', 'order_pop_index'] %}
         {% set sidebar_rebate_submit_user_claims = ['rebate_submit_user_claims'] %}
 
             <!-- BEGIN SIDEBAR -->
@@ -132,18 +133,22 @@
                     {% endif %}
 
                         <!-- ORDERS SECTION -->
-                        <li class="treeview">
+                        {% if 'product_category_index' in route_names
+                            or 'order_products_index' in route_names
+                        %}
+                    <li class="treeview {% if (app.request.get('_route') in sidebar_order) %} active
+                        {% endif %}">
                             <a href="#">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Orders</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Order Products</a>
+                                <li {% if (app.request.get('_route') in sidebar_order) %} class="active"{% endif %}>
+                                    <a href="{{ path('order_products_index') }}"><i class="fa fa-circle-o"></i>Order Products</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Order POP</a>
+                                    <a href="{{ path('order_pop_index') }}"><i class="fa fa-circle-o"></i>Order POP</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>View My Orders</a>
@@ -168,6 +173,8 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+
 
                         <!-- USER MANAGEMENT SECTION -->
                         {% if 'office_index' in route_names

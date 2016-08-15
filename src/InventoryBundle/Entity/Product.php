@@ -94,11 +94,6 @@ class Product
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
      */
     private $variants;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product")
-     */
-    private $price_group_prices;
     
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product")
@@ -429,22 +424,6 @@ class Product
     public function setVariants($variants)
     {
         $this->variants = $variants;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPriceGroupPrices()
-    {
-        return $this->price_group_prices;
-    }
-
-    /**
-     * @param mixed $price_group_prices
-     */
-    public function setPriceGroupPrices($price_group_prices)
-    {
-        $this->price_group_prices = $price_group_prices;
     }
 }
 

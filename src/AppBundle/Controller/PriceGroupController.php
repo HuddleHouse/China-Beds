@@ -154,10 +154,50 @@ class PriceGroupController extends Controller
      */
     public function editPricesAction(Request $request, PriceGroup $priceGroup)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id
+	from product p
+		left join product_channels c
+			on c.product_id = p.id
+		left join channel ch 
+			on c.channel_id = ch.id
+		left join product_variant v
+			on p.id = v.product_id
+		where p.active = 1
+		group by c.id");
+
+        $product_data = array();
+
+        try {
+            $statement->execute();
+            $products = $statement->fetchAll();
+
+            foreach($products as $product) {
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("select *, v.id as variant_id, p.price/100 as price
+	from product_variant v 
+		left join price_group_prices p 
+			on p.product_variant_id = v.id
+		where v.product_id = :product_id");
+                $statement->bindValue('product_id', $product['id']);
+                $statement->execute();
+                $variants = $statement->fetchAll();
+
+                $product['variants'] = $variants;
+
+                $product_data[$product['channel_name']][] = $product;
+            }
+
+
+        } catch(\Exception $e) {
+            $this->addFlash('error', 'Error loading Information: ' . $e->getMessage());
+        }
 
         return $this->render('AppBundle:PriceGroup:edit-prices.html.twig', array(
             'priceGroup' => $priceGroup,
-            ));
+            'products' => $product_data
+        ));
     }
 
 

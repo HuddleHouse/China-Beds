@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,6 +55,15 @@ class ProductVariant
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product")
+     */
+    private $price_group_prices;
+
+    public function __construct() {
+        $this->price_group_prices = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -159,6 +169,22 @@ class ProductVariant
     public function setSku($sku)
     {
         $this->sku = $sku;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPriceGroupPrices()
+    {
+        return $this->price_group_prices;
+    }
+
+    /**
+     * @param mixed $price_group_prices
+     */
+    public function setPriceGroupPrices($price_group_prices)
+    {
+        $this->price_group_prices = $price_group_prices;
     }
 }
 

@@ -29,10 +29,10 @@ class PriceGroupPrices
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="price_group_prices")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="price_group_prices")
+     * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
      */
-    private $product;
+    private $product_variant;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PriceGroup", inversedBy="prices")
@@ -76,27 +76,19 @@ class PriceGroupPrices
     }
 
     /**
-     * Set product
-     *
-     * @param string $product
-     *
-     * @return PriceGroupPrices
+     * @return mixed
      */
-    public function setProduct($product)
+    public function getProductVariant()
     {
-        $this->product = $product;
-
-        return $this;
+        return $this->product_variant;
     }
 
     /**
-     * Get product
-     *
-     * @return string
+     * @param mixed $product_variant
      */
-    public function getProduct()
+    public function setProductVariant($product_variant)
     {
-        return $this->product;
+        $this->product_variant = $product_variant;
     }
 
     /**
