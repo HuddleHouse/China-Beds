@@ -26,6 +26,13 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $categories = $em->getRepository('InventoryBundle:ProductCategory')->findAll();
         $user = $this->getUser();
+        //get user price groups and format string for SQL query
+        $user_price_groups = "(";
+        foreach($user->getPriceGroups() as $group) {
+            $user_price_groups .= $group->getId(). ", ";
+        }
+        $user_price_groups = substr($user_price_groups, 0, -2);
+        $user_price_groups .= ')';
 
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id, cat.name as category_name
@@ -49,11 +56,12 @@ class OrderProductsController extends Controller
 
             foreach($products as $product) {
                 $connection = $em->getConnection();
-                $statement = $connection->prepare("select *, v.id as variant_id, p.price/100 as price
+                $statement = $connection->prepare("select *, v.id as variant_id, min(p.price/100) as price
 	from product_variant v 
 		left join price_group_prices p 
 			on p.product_variant_id = v.id
-		where v.product_id = :product_id");
+		where v.product_id = :product_id
+		and p.price_group_id in ".$user_price_groups." group by v.id");
                 $statement->bindValue('product_id', $product['id']);
                 $statement->execute();
                 $variants = $statement->fetchAll();
@@ -71,6 +79,7 @@ class OrderProductsController extends Controller
 
         return $this->render('@Inventory/OrderProducts/index.html.twig', array(
             'products' => $product_data,
+            'categories' => $categories
         ));
     }
 

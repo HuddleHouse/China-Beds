@@ -156,6 +156,7 @@ class PriceGroupController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
+        //get all products
         $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id
 	from product p
 		left join product_channels c
@@ -167,6 +168,7 @@ class PriceGroupController extends Controller
 		where p.active = 1
 		group by c.id");
 
+        //will store formatted array
         $product_data = array();
 
         try {
@@ -174,15 +176,16 @@ class PriceGroupController extends Controller
             $products = $statement->fetchAll();
 
             foreach($products as $product) {
+                //get a list of all products
                 $statement = $connection->prepare("select *, v.id as variant_id
 	from product_variant v 
 		where v.product_id = :product_id");
                 $statement->bindValue('product_id', $product['id']);
-//                $statement->bindValue('price_group_id', $priceGroup->getId());
                 $statement->execute();
                 $variant_data = $statement->fetchAll();
                 $variants = array();
 
+                //loop through said list to update prices, if they exist in the db already.
                 foreach($variant_data as $var) {
                     $statement = $connection->prepare("select price/100 as price from price_group_prices
 	where product_variant_id = :product_variant_id
@@ -191,6 +194,7 @@ class PriceGroupController extends Controller
                     $statement->bindValue('price_group_id', $priceGroup->getId());
                     $statement->execute();
                     $price = $statement->fetch();
+
                     if($price == false)
                         $price['price'] = 0;
                     $var['price'] = $price['price'];

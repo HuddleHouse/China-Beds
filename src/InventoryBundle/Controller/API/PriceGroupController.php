@@ -89,7 +89,7 @@ class PriceGroupController extends Controller
                 else {
                     // if price is 0 then delete it
                     // otherwise update value
-                    if($product['price'] == 0) {
+                    if($product['price'] == 0 || $product['price'] == '') {
                         $statement = $connection->prepare("delete from price_group_prices where id = :id");
                         $statement->bindValue('id', $price_group_price['id']);
                         $statement->execute();
