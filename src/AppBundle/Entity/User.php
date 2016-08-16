@@ -135,7 +135,7 @@ class User extends BaseUser
     private $price_groups;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\Channel", inversedBy="users")
      * @ORM\JoinTable(name="user_channels")
      */
     private $user_channels;
@@ -597,22 +597,6 @@ class User extends BaseUser
 
     public function getName() {
         return $this->getFirstName() . " " . $this->getLastName();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChannels()
-    {
-        return $this->channels;
-    }
-
-    /**
-     * @param mixed $channels
-     */
-    public function setChannels($channels)
-    {
-        $this->channels = $channels;
     }
 
     /**

@@ -18,13 +18,218 @@
             $('#part-table').DataTable({
             "iDisplayLength": 50});
         });
+
+        var $grid = $('.grid').isotope({
+            itemSelector: '.element-item',
+            layoutMode: 'fitRows'
+        });
+
+        // filter functions
+        var filterFns = {
+            // show if number is greater than 50
+            numberGreaterThan50: function() {
+                var number = $(this).find('.number').text();
+                return parseInt( number, 10 ) > 50;
+            },
+            // show if name ends with -ium
+            ium: function() {
+                var name = $(this).find('.name').text();
+                return name.match( /ium$/ );
+            }
+        };
+        // bind filter button click
+        $('.filters-button-group').on( 'click', 'button', function() {
+            var filterValue = $( this ).attr('data-filter');
+            // use filterFn if matches value
+            filterValue = filterFns[ filterValue ] || filterValue;
+            $grid.isotope({ filter: filterValue });
+        });
+        // change is-checked class on buttons
+        $('.button-group').each( function( i, buttonGroup ) {
+            var $buttonGroup = $( buttonGroup );
+            $buttonGroup.on( 'click', 'button', function() {
+                $buttonGroup.find('.is-checked').removeClass('is-checked');
+                $( this ).addClass('is-checked');
+            });
+        });
+
     </script>
 {% endblock footer %}
 
 {% block content %}
-    <div class="row">
-        <div class="table">
-            <div class="col-md-12">
+    <style>
+        .form_field {
+            border: 1px solid rgba(149,152,154,.37);
+            display: block;
+            width: 100%;
+            border-radius: 8px;
+        }
+        .cart_info {
+            background-color: #fff !important;
+            text-align: center;
+            color: #078BB2;
+            font-size: large;
+        }
+        .review_cart_button {
+            padding-left: 6px;
+            padding-right: 6px;
+            margin-left: -13px;
+            margin-top: 20px;
+            -webkit-box-shadow: 0 0 0 0 !important;
+            height: 38px !important;
+        }
+        .button {
+            display: inline-block;
+            margin-bottom: 10px;
+            background: #EEE;
+            border: none;
+            border-radius: 7px;
+            color: #222;
+            font-family: sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        .button:hover {
+            color: #02B1F2;
+        }
+
+        .button:active,
+        .button.is-checked {
+            color: #02B1F2;
+        }
+
+        .button.is-checked {
+            color: #02B1F2;
+        }
+
+        .button:active {
+            box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+        }
+
+        .price_box_row {
+            text-align: center;
+        }
+
+    </style>
+
+    <div class="table">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="table" style="background-color: #EFEFEF;">
+                <center><h2>Order Form</h2></center>
+                    <form class="form-horizontal">
+                        <fieldset>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label" for="textinput">PO#</label>
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form_field input-md">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label" for="Pick Up Date">Pick Up Date</label>
+                                    <input id="Pick Up Date" name="Pick Up Date" type="text" placeholder="" class="form_field input-md">
+
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label" for="Pick Up Agent Name">Pick Up Agent Name</label>
+                                    <input id="Pick Up Agent Name" name="Pick Up Agent Name" type="text" placeholder="" class="form_field input-md">
+                                </div>
+                                <div class="col-md-3" style="margin-top: 18px;">
+                                    <input type="checkbox" name="checkboxes" id="checkboxes-0" value="ship" style="display: inline;margin-right: 8px;
+}">
+                                    <label class="checkbox" for="checkboxes-0" style="display: inline;">Ship</label>
+                                </div>
+                                <div class="col-md-3" style="margin-top: 18px;">
+                                    <input type="checkbox" name="checkboxes" id="checkboxes-1" value="pick_up" style="display: inline;margin-right: 8px;
+}">
+                                    <label class="checkbox" for="checkboxes-1" style="display: inline;">Pick Up</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="control-label" for="Comments">Comments</label>
+                                    <textarea class="form_field" id="Comments" name="Comments" style="min-height: 50px;"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="table" style="background:rgba(2,177,242,.35); min-height: 250px;">
+                    <br>
+                    <center><h1 style="color: #fff;">Get More, Make More</h1></center>
+                    <center><h2>Specials</h2></center>
+                    <center><h4>Save up to 25% on closeout items!</h4></center>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-bottom: 40px;padding-top: 40px;">
+            <div class="col-md-7">
+                <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
+                    <button class="button is-checked" data-filter="*">ALL</button>
+                    {% for category in categories %}
+                        <button class="button" data-filter=".{{ category.id }}">{{ category.name }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="table" style="background-color: #02B1F2;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <center>Item (s)</center>
+                            <input type="number" value="0" class="form-control cart_info" style="" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <center>Total ($)</center>
+                            <input type="number" value="0" class="form-control cart_info" style="" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <a class="btn btn-raised review_cart_button">Review Order ></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="grid">
+            {% for product in products %}
+                <div class="col-md-6 element-item {{ product.category_id }}" style="padding: 15px; min-height: 285px;">
+                    <div class="product_image" style="display: table; margin: 0 auto;">
+                        <img src="http://placehold.it/350x150" style="border: 1px solid #95989A;">
+                        <div class="product_name">
+                            <center>{{ product.name }}</center>
+                        </div>
+                    </div>
+                    {#<div cl#}
+                    <div class="price_box_row">
+                    {% for variant in product.variants %}
+
+                            <div class="col-md-2">
+                                <div class="variant_name">
+                                    {{ variant.name }}
+                                </div>
+                                <div class="variant_quantity">
+                                    <input type="number" class="form-control" value="0" style="text-align: center;">
+                                </div>
+                                <div class="variant_price">
+                                    {{ variant.price | number_format(2, '.', ',')}}
+                                </div>
+                            </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
             </div>
         </div>
     </div>
