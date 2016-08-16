@@ -174,16 +174,28 @@ class PriceGroupController extends Controller
             $products = $statement->fetchAll();
 
             foreach($products as $product) {
-                $connection = $em->getConnection();
-                $statement = $connection->prepare("select *, v.id as variant_id, p.price/100 as price
+                $statement = $connection->prepare("select *, v.id as variant_id
 	from product_variant v 
-		left join price_group_prices p 
-			on p.product_variant_id = v.id
 		where v.product_id = :product_id");
                 $statement->bindValue('product_id', $product['id']);
+//                $statement->bindValue('price_group_id', $priceGroup->getId());
                 $statement->execute();
-                $variants = $statement->fetchAll();
+                $variant_data = $statement->fetchAll();
+                $variants = array();
 
+                foreach($variant_data as $var) {
+                    $statement = $connection->prepare("select price/100 as price from price_group_prices
+	where product_variant_id = :product_variant_id
+	and price_group_id = :price_group_id");
+                    $statement->bindValue('product_variant_id', $var['id']);
+                    $statement->bindValue('price_group_id', $priceGroup->getId());
+                    $statement->execute();
+                    $price = $statement->fetch();
+                    if($price == false)
+                        $price['price'] = 0;
+                    $var['price'] = $price['price'];
+                    $variants[] = $var;
+                }
                 $product['variants'] = $variants;
 
                 $product_data[$product['channel_name']][] = $product;

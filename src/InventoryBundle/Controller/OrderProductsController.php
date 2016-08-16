@@ -23,20 +23,54 @@ class OrderProductsController extends Controller
      */
     public function orderProductsAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
+        $categories = $em->getRepository('InventoryBundle:ProductCategory')->findAll();
         $user = $this->getUser();
 
-        //If user is Admin, then return all products
-        $products = $em->getRepository('InventoryBundle:Product')->findAll();
-        $prduct_data = array();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id, cat.name as category_name
+	from product p
+		left join product_channels c
+			on c.product_id = p.id
+		left join channel ch 
+			on c.channel_id = ch.id
+		left join product_variant v
+			on p.id = v.product_id
+		left join product_categories cat
+			on cat.id = p.product_category_id
+		where p.active = 1
+		group by c.id");
 
-        foreach($products as $product) {
-            $i = 1;
+        $product_data = array();
+
+        try {
+            $statement->execute();
+            $products = $statement->fetchAll();
+
+            foreach($products as $product) {
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("select *, v.id as variant_id, p.price/100 as price
+	from product_variant v 
+		left join price_group_prices p 
+			on p.product_variant_id = v.id
+		where v.product_id = :product_id");
+                $statement->bindValue('product_id', $product['id']);
+                $statement->execute();
+                $variants = $statement->fetchAll();
+
+                $product['variants'] = $variants;
+
+                $product_data[$product['channel_name']][] = $product;
+            }
+
+
+        } catch(\Exception $e) {
+            $this->addFlash('error', 'Error loading Information: ' . $e->getMessage());
         }
 
 
         return $this->render('@Inventory/OrderProducts/index.html.twig', array(
-            'products' => $products,
+            'products' => $product_data,
         ));
     }
 

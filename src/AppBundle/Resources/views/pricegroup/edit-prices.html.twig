@@ -22,20 +22,51 @@
 
         var app = angular.module('myApp', []);
         app.controller('myCtrl', ['$scope', function($scope) {
-            $scope.products = [];
+            $scope.changed_products = [];
 
-            $.ajax({
-                beforeSend: function () {
-                },
-                type: 'POST',
-                url: "{{ path('api_get_all_price_group_products') }}",
-                data: {price_group_id: {{ priceGroup.id }}},
-                success: function (data) {
-                    $scope.$apply(function () {
-                        $scope.products = data;
-                    });
+            $scope.changeProductVariantPrice = function (id) {
+                if($scope.changed_products[id]) {
+                    var price = $('#'+id).val();
+                    $scope.changed_products[id].price = price;
                 }
-            });
+                else {
+                    var price = $('#'+id).val();
+                    $scope.changed_products[id] = {product_variant_id: id, price: price, price_group_id: {{ priceGroup.id }}};
+                }
+
+                console.log($scope.changed_products);
+            };
+
+            $scope.save = function () {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_update_product_price') }}",
+                    dataType: 'json',
+                    data: {changed_products: $scope.changed_products},
+                    success: function (data) {
+                        var $div = $("#alert");
+                        $scope.$apply(function () {
+                            $div.show();
+                            setTimeout(function() {
+                                $div.hide();
+                            }, 3000);
+                        });
+                    }
+                });
+            };
+
+            {#$.ajax({#}
+                {#beforeSend: function () {#}
+                {#},#}
+                {#type: 'POST',#}
+                {#url: "{{ path('api_get_all_price_group_products') }}",#}
+                {#data: {price_group_id: {{ priceGroup.id }}},#}
+                {#success: function (data) {#}
+                    {#$scope.$apply(function () {#}
+                        {#$scope.products_1 = data;#}
+                    {#});#}
+                {#}#}
+            {#});#}
 
             $scope.updateProductPrice = function () {
                 $.ajax({
@@ -49,49 +80,60 @@
                     }
                 });
             };
-
         }]);
-
-
-
     </script>
 {% endblock footer %}
 
 {% block content %}
-
-
     <style>
         #price_group_users label {
             padding-left: 15px;
             padding-right: 15px;
-
         }
     </style>
+    <div id="alert" class="alert alert-success" role="alert" style="display: none;">Price Group Saved Successfully</div>
     <div class="well bs-component" ng-app="myApp" ng-controller="myCtrl">
         <h2>{{ priceGroup.name }}</h2>
-        <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px;">SAVE</a>
+        <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px;" ng-click="save()">SAVE</a>
         <hr>
-        <table class="table" style="width: 50%;">
+
+        <div class="row">
+        {% for key, product in products %}
+            <div class="col-md-6">
+                <h3>{{ key }}</h3>
+        <table class="table" style="">
             <thead>
             <tr>
                 <th>Name</th>
+                <th></th>
                 <th style="width: 150px">Price</th>
             </tr>
             </thead>
-
             <tbody>
-                    <tr ng-repeat="(i, prod) in products track by $index">
-                        {% verbatim %}
-                        <th>{{prod.name}}</th>
-                       {% endverbatim %}
-                        <th>
-                        <input type="text" class="form-control" name="product.id" ng-model="prod.price" style="    text-align: center;">
-                        </th>
+            {% for p in product %}
+                    <tr>
+                        <th>{{ p.name }}</th>
+                        <th></th>
+                        <th></th>
                     </tr>
+                {% for variant in p.variants %}
+                    <tr>
+                        <th></th>
+                        <th><p>{{ variant.name }}</p></th>
+                        <th><input type="text"
+                                   class="form-control"
+                                   id="{{ variant.variant_id }}"
+                                   ng-init="variant[{{ variant.variant_id }}]='{{ variant.price |number_format(2, '.', ',')}}'"
+                                   ng-model="variant[{{ variant.variant_id }}]"
+                                   ng-change="changeProductVariantPrice({{ variant.variant_id }})"
+                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"> </th>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
             </tbody>
         </table>
-        <div class="row">
-
+                </div>
+        {% endfor %}
         </div>
     </div>
 

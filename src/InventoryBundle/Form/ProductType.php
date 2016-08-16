@@ -43,6 +43,7 @@ class ProductType extends AbstractType
                 'label' => 'Category',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => true
             ))
         ;
     }
