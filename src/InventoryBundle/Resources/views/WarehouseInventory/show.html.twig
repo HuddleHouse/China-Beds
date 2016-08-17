@@ -15,10 +15,43 @@
 
 {% block footer %}
     <script>
-        $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50});
-        });
+
+        var app = angular.module('myApp', ['ngFileUpload']);
+        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
+            $scope.inventory_data = [];
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_warehouse_inventory') }}",
+                data: {warehouse_id: {{ warehouse.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.inventory_data = data;
+                    });
+                }
+            });
+
+            $scope.addInventory = function () {
+                var variant_id = $('#variant').val();
+                var quantity = $('#quantity').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_warehouse_inventory') }}",
+                    dataType: 'json',
+                    data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.inventory_data = data;
+                            $('#quantity').val('');
+                        });
+                    }
+                });
+            };
+
+        }]);
     </script>
 {% endblock footer %}
 
@@ -36,24 +69,24 @@
                         <th>Name</th>
                         <th>Quantity on Hand</th>
                         <th>Quantity on P.O.</th>
-                        <th>Options</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for data in inventory_data %}
                         <tr>
-                            <td>{{ data.name }}</td>
-                            <td><center>{{ data.quantity }}</center></td>
-                            <td><center>{{ data.po_quantity }}</center></td>
-
+                            {% verbatim %}
+                                <tr ng-repeat="(i, data) in inventory_data track by $index">
+                                    <td>{{ data.name }}</td>
+                                    <td ng-model="data.quantity"><center>{{ data.quantity }}</center></td>
+                                    <td ng-model="data.po_quantity"><center>{{ data.po_quantity }}</center></td>
+                                </tr>
+                            {% endverbatim %}
                         </tr>
-                    {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-</div>
+
 
 
     <div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -64,22 +97,24 @@
                     <h4 class="modal-title" id="myModalLabel">Add Variant</h4>
                 </div>
                 <div class="modal-body">
-                    <label for="variant_name" class="required">Name</label>
-                    <input type="text" id="variant_name" name="" required="required" class="form-control" style="margin-bottom: 10px">
-                    <label for="sku" class="required">SKU</label>
-                    <input type="text" id="variant_sku" name="" required="required" class="form-control" style="margin-bottom: 10px">
-                    <label for="msrp" class="required">MSRP</label>
-                    <input type="text" id="variant_msrp" name="" required="required" class="form-control" style="margin-bottom: 10px">
+                    <label for="variant">Product</label>
+                    <select id="variant" class="form-control" style="margin-bottom: 10px">
+                        {% for attr in products %}
+                            <option value="{{ attr.id }}">{{ attr.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="sku" class="required">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" required="required" class="form-control" style="margin-bottom: 10px">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-raised btn-primary" ng-click="addProductVariant()" data-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn btn-raised btn-primary" ng-click="addInventory()" >Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 
-
+</div>
     <a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons">add</i>
     </a>

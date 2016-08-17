@@ -58,20 +58,23 @@ class WarehouseInventoryController extends Controller
     {
         $inventory_data = array();
 
-        foreach($warehouse->getInventory() as $item) {
-//            $quan = $this->getWarehouseInventory($warehouse);
 
-            $inventory_data[] = array(
-                'id' => $item->getId(),
-                'name' => $item->getProduct()->getName(),
-                'quantity' => $item->getQuantity(),
-                'po_quantity' => 0
-            );
+        $em = $this->getDoctrine()->getManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            foreach($prod->getVariants() as $variant)
+                $products[] = array(
+                    'name' => $prod->getName().": ".$variant->getName(),
+                    'id' => $variant->getId()
+                );
         }
 
         return $this->render('@Inventory/WarehouseInventory/show.html.twig', array(
             'warehouse' => $warehouse,
-            'inventory_data' => $inventory_data
+            'inventory_data' => $inventory_data,
+            'products' => $products
         ));
     }
 
