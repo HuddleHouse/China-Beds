@@ -113,10 +113,16 @@ class Warehouse
      */
     protected $users_3;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarehouseInventory", mappedBy="warehouse")
+     */
+    private $inventory;
+
     public function __construct() {
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
         $this->users_3 = new ArrayCollection();
+        $this->inventory = new ArrayCollection();
     }
 
     /**
@@ -407,6 +413,22 @@ class Warehouse
     public function setUsers3($users_3)
     {
         $this->users_3 = $users_3;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInventory()
+    {
+        return $this->inventory;
+    }
+
+    /**
+     * @param mixed $inventory
+     */
+    public function setInventory($inventory)
+    {
+        $this->inventory = $inventory;
     }
     
     

@@ -32,7 +32,6 @@
                         <th>Name</th>
                         <th>Total Inventory</th>
                         <th>P.O.</th>
-                        <th>Quickbooks</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -42,11 +41,6 @@
                             <td><a href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
                             <td><center>{{ warehouse.quantity | number_format(2) }}</center></td>
                             <td><center>{{ warehouse.po_quantity | number_format(2) }}</center></td>
-                            {% if warehouse.list_id != null %}
-                                <td><center><i class="fa fa-check" aria-hidden="true"></i></center></td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}"><i class="fa fa-edit"></i> edit</a>
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> show</a>

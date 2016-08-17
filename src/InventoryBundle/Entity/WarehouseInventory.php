@@ -1,0 +1,111 @@
+<?php
+
+namespace InventoryBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * WarehouseInventory
+ *
+ * @ORM\Table(name="warehouse_inventory")
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\WarehouseInventoryRepository")
+ */
+class WarehouseInventory
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="integer", nullable=true)
+     */
+    private $quantity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="warehouses")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     */
+    private $product;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="warehouse_inventory")
+     * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")
+     */
+    private $warehouse;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return WarehouseInventory
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProduct($product)
+    {
+        $this->product = $product;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouse()
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param mixed $warehouse
+     */
+    public function setWarehouse($warehouse)
+    {
+        $this->warehouse = $warehouse;
+    }
+
+
+}
+

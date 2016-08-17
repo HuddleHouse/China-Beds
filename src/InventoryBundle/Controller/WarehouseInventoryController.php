@@ -21,26 +21,24 @@ class WarehouseInventoryController extends Controller
     /**
      * Lists all Warehouse entities.
      *
-     * @Route("/", name="warehouse_inventory_index")
+     * @Route("/", name="warehouse_inventory_index")d
      * @Method("GET")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
-
         $data = array();
-        $itemController = new ItemController();
 
         foreach($warehouses as $warehouse) {
-            $quan = $itemController->qbQuantityForWarehouse($warehouse->getListId());
+            $quan = $this->getWarehouseInventory($warehouse);
+
             $data[] = array(
                 'id' => $warehouse->getId(),
                 'name' => $warehouse->getName(),
                 'list_id' => $warehouse->getListId(),
-                'quantity' => $quan->quantity,
-                'po_quantity' => $quan->po_quantity
+                'quantity' => $quan,
+                'po_quantity' => 0
             );
         }
 
@@ -65,6 +63,17 @@ class WarehouseInventoryController extends Controller
             'warehouse' => $warehouse,
             'inventory_data' => $inventory_data
         ));
+    }
+
+    public function getWarehouseInventory(Warehouse $warehouse) {
+        if(count($warehouse->getInventory()) == 0)
+            return 0;
+
+        $quantity = 0;
+        foreach($warehouse->getInventory() as $item) {
+            $quantity += $item->getQuantity();
+        }
+        return $quantity;
     }
     
 }

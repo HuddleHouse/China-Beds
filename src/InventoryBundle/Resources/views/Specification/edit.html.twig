@@ -24,17 +24,19 @@
 {% endblock footer %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8">
+    <div class="table">
+        <div class="row">
+            <div class="col-md-8">
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input class="btn btn-raised btn-success" type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+                {{ form_start(edit_form) }}
+                {{ form_widget(edit_form) }}
+                <input class="btn btn-raised btn-success" type="submit" value="Edit" />
+                {{ form_end(edit_form) }}
 
-        {{ form_start(delete_form) }}
-        <input style="    margin: -55px 0 0 60px;" class="btn btn-raised btn-danger" type="submit" value="Delete">
-        {{ form_end(delete_form) }}
+                {{ form_start(delete_form) }}
+                <input style="    margin: -55px 0 0 60px;" class="btn btn-raised btn-danger" type="submit" value="Delete">
+                {{ form_end(delete_form) }}
+            </div>
         </div>
     </div>
 {% endblock %}

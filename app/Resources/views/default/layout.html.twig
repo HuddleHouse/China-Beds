@@ -251,6 +251,15 @@
                                 <li {% if (app.request.get('_route') in sidebar_warehouse_inventory) %} class="active"{% endif %}>
                                     <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Warehouse Inventory</a>
                                 </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Purchase Orders</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
+                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
+                                </li>
                             </ul>
                         </li>
                 {% endif %}
