@@ -116,18 +116,12 @@ class Product
      */
     protected $product_category;
 
-    /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarehouseInventory", mappedBy="product")
-     */
-    private $warehouses;
-
     public function __construct() {
         $this->attributes = new ArrayCollection();
         $this->specifications = new ArrayCollection();
         $this->channels = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->variants = new ArrayCollection();
-        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -430,22 +424,6 @@ class Product
     public function setVariants($variants)
     {
         $this->variants = $variants;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWarehouses()
-    {
-        return $this->warehouses;
-    }
-
-    /**
-     * @param mixed $warehouses
-     */
-    public function setWarehouses($warehouses)
-    {
-        $this->warehouses = $warehouses;
     }
 
 

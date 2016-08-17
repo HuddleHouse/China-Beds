@@ -29,10 +29,10 @@ class WarehouseInventory
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="warehouses")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouses")
+     * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
      */
-    private $product;
+    private $product_variant;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="warehouse_inventory")
@@ -77,17 +77,17 @@ class WarehouseInventory
     /**
      * @return mixed
      */
-    public function getProduct()
+    public function getProductVariant()
     {
-        return $this->product;
+        return $this->product_variant;
     }
 
     /**
-     * @param mixed $products
+     * @param mixed $product_variant
      */
-    public function setProduct($product)
+    public function setProductVariant($product_variant)
     {
-        $this->product = $product;
+        $this->product_variant = $product_variant;
     }
 
     /**

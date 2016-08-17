@@ -52,7 +52,7 @@ class OrderProductsController extends Controller
 			on i.product_id = p.id
 		where p.active = 1
 		and c.channel_id in (".$user_channels.")
-		group by c.id");
+		group by p.id");
 
         $product_data = array();
 

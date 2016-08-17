@@ -61,8 +61,14 @@ class ProductVariant
      */
     private $price_group_prices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarehouseInventory", mappedBy="product")
+     */
+    private $warehouses;
+
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -186,5 +192,22 @@ class ProductVariant
     {
         $this->price_group_prices = $price_group_prices;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouses()
+    {
+        return $this->warehouses;
+    }
+
+    /**
+     * @param mixed $warehouses
+     */
+    public function setWarehouses($warehouses)
+    {
+        $this->warehouses = $warehouses;
+    }
+
 }
 

@@ -56,8 +56,18 @@ class WarehouseInventoryController extends Controller
      */
     public function showAction(Warehouse $warehouse)
     {
-        $itemController = new ItemController();
-        $inventory_data = $itemController->qbItemQuantityForWarehouse($warehouse->getListId());
+        $inventory_data = array();
+
+        foreach($warehouse->getInventory() as $item) {
+//            $quan = $this->getWarehouseInventory($warehouse);
+
+            $inventory_data[] = array(
+                'id' => $item->getId(),
+                'name' => $item->getProduct()->getName(),
+                'quantity' => $item->getQuantity(),
+                'po_quantity' => 0
+            );
+        }
 
         return $this->render('@Inventory/WarehouseInventory/show.html.twig', array(
             'warehouse' => $warehouse,
@@ -65,6 +75,12 @@ class WarehouseInventoryController extends Controller
         ));
     }
 
+    /**
+     * Returns the number of total items in the warehouse
+     *
+     * @param Warehouse $warehouse
+     * @return int
+     */
     public function getWarehouseInventory(Warehouse $warehouse) {
         if(count($warehouse->getInventory()) == 0)
             return 0;

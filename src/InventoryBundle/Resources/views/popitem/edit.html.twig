@@ -23,7 +23,9 @@
 {% endblock footer %}
 
 {% block content %}
-    {{ form_start(edit_form) }}
+<div class="table">
+
+{{ form_start(edit_form) }}
     <div class="row">
         <div class="col-md-6">
             {{ form_label(edit_form.name) }}
@@ -52,4 +54,5 @@
     {{ form_start(delete_form) }}
         <input type="submit" class="btn btn-raised btn-warning" style="margin-left: 80px; margin-top: -56px;" value="Delete">
     {{ form_end(delete_form) }}
-{% endblock %}
+</div>
+    {% endblock %}

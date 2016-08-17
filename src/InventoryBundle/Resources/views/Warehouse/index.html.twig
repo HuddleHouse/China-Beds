@@ -38,11 +38,12 @@
                     <tbody>
                     {% for warehouse in warehouses %}
                         <tr>
-                            <td><a href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
+                            <td><a href="{{ path('warehouse_show', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
                             <td>{{ warehouse.contact }}</td>
                             <td>{{ warehouse.city }}</td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}"><i class="fa fa-edit"></i> edit</a>
+                                <a class="btn btn-raised btn-success btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> view</a>
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> show</a>
                             </td>
                         </tr>

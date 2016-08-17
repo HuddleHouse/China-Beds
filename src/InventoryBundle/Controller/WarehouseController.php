@@ -105,7 +105,11 @@ class WarehouseController extends Controller
                 $em->flush();
 
                 $this->addFlash('notice', 'Warehouse updated successfully.');
-                return $this->redirectToRoute('warehouse_index', array('id' => $warehouse->getId()));
+                return $this->render('@Inventory/Warehouse/edit.html.twig', array(
+                    'warehouse' => $warehouse,
+                    'form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());
