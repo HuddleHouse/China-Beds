@@ -53,6 +53,19 @@
             });
         });
 
+
+
+
+        $('.input_class_checkbox').each(function(){
+            $(this).hide().after('<div class="class_checkbox" />');
+
+        });
+
+        $('.class_checkbox').on('click',function(){
+            console.log('matt');
+            $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
+        });
+
     </script>
 {% endblock footer %}
 
@@ -90,28 +103,61 @@
             cursor: pointer;
             background-color: transparent;
         }
-
         .button:hover {
             color: #02B1F2;
         }
-
         .button:active,
         .button.is-checked {
             color: #02B1F2;
         }
-
         .button.is-checked {
             color: #02B1F2;
         }
-
         .button:active {
             box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
         }
-
         .price_box_row {
             text-align: center;
+            /*display: table;*/
+            /*margin-left: auto;*/
+            /*margin-right: auto;*/
+        }
+        .gray_box {
+            border: 1px solid #EFEFEF;
+        }
+        .variant_price {
+            font-weight: 600;
+        }
+        .variant_name {
+            font-weight: 600;
+        }
+        .product_name {
+            font-weight: 800;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .element-item {
+            padding: 15px;
+            min-height: 285px;
+        }
+        .col-md-2 {
+            padding-left: 3px !important;
+            padding-right: 3px !important;
         }
 
+        .class_checkbox {
+            width: 20px;
+            height: 20px;
+            background-image: url("/images/unchecked@2x.png");
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+        }
+        .class_checkbox.checked {
+            background-image: url("/images/checked@2x.png");
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+        }
     </style>
 
     <div class="table">
@@ -134,21 +180,20 @@
                                 </div>
                             </div>
 
-
                             <div class="row">
                                 <div class="col-md-6">
                                     <label class="control-label" for="Pick Up Agent Name">Pick Up Agent Name</label>
                                     <input id="Pick Up Agent Name" name="Pick Up Agent Name" type="text" placeholder="" class="form_field input-md">
                                 </div>
-                                <div class="col-md-3" style="margin-top: 18px;">
-                                    <input type="checkbox" name="checkboxes" id="checkboxes-0" value="ship" style="display: inline;margin-right: 8px;
+                                <div class="col-md-2" style="margin-top: 25px; display: inline-flex;">
+                                    <input type="checkbox" name="checkboxes" id="ship" class="input_class_checkbox" value="ship" style="display: inline;margin-right: 8px;
 }">
-                                    <label class="checkbox" for="checkboxes-0" style="display: inline;">Ship</label>
+                                    <label class="checkbox" for="ship" style="margin-left: 8px; margin-top: -7px;">Ship</label>
                                 </div>
-                                <div class="col-md-3" style="margin-top: 18px;">
-                                    <input type="checkbox" name="checkboxes" id="checkboxes-1" value="pick_up" style="display: inline;margin-right: 8px;
+                                <div class="col-md-4" style="margin-top: 25px; display: inline-flex;">
+                                    <input type="checkbox" name="checkboxes" id="pick-up" class="input_class_checkbox" value="pick_up" style="display: inline;margin-right: 8px;
 }">
-                                    <label class="checkbox" for="checkboxes-1" style="display: inline;">Pick Up</label>
+                                    <label class="checkbox" for="pick-up" style="margin-left: 8px; margin-top: -7px;">Pick Up</label>
                                 </div>
                             </div>
 
@@ -186,11 +231,11 @@
                     <div class="row">
                         <div class="col-md-3">
                             <center>Item (s)</center>
-                            <input type="number" value="0" class="form-control cart_info" style="" readonly>
+                            <input value="0" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
                         <div class="col-md-4">
                             <center>Total ($)</center>
-                            <input type="number" value="0" class="form-control cart_info" style="" readonly>
+                            <input value="$0.00" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
                         <div class="col-md-4">
                             <a class="btn btn-raised review_cart_button">Review Order ></a>
@@ -204,9 +249,9 @@
         <div class="row">
             <div class="grid">
             {% for product in products %}
-                <div class="col-md-6 element-item {{ product.category_id }}" style="padding: 15px; min-height: 285px;">
+                <div class="col-md-6 element-item {{ product.category_id }}">
                     <div class="product_image" style="display: table; margin: 0 auto;">
-                        <img src="http://placehold.it/350x150" style="border: 1px solid #95989A;">
+                        <img src="/uploads/products/{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                         <div class="product_name">
                             <center>{{ product.name }}</center>
                         </div>
@@ -215,15 +260,15 @@
                     <div class="price_box_row">
                     {% for variant in product.variants %}
 
-                            <div class="col-md-2">
-                                <div class="variant_name">
+                            <div class="col-md-2" style="align">
+                                <div class="variant_name gray_box">
                                     {{ variant.name }}
                                 </div>
-                                <div class="variant_quantity">
-                                    <input type="number" class="form-control" value="0" style="text-align: center;">
+                                <div class="variant_quantity gray_box">
+                                    <input type="text"  value="0" style="text-align: center; width: 100%; border: 1px solid #EFEFEF;">
                                 </div>
                                 <div class="variant_price">
-                                    {{ variant.price | number_format(2, '.', ',')}}
+                                    ${{ variant.price | number_format(2, '.', ',')}}
                                 </div>
                             </div>
                     {% endfor %}

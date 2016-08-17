@@ -123,6 +123,7 @@
                         <th><input type="text"
                                    class="form-control"
                                    id="{{ variant.variant_id }}"
+                                   style="text-align: center;"
                                    ng-init="variant[{{ variant.variant_id }}]='{{ variant.price |number_format(2, '.', ',')}}'"
                                    ng-model="variant[{{ variant.variant_id }}]"
                                    ng-change="changeProductVariantPrice({{ variant.variant_id }})"
