@@ -105,6 +105,7 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>MSRP</th>
                 <th></th>
                 <th style="width: 150px">Price</th>
             </tr>
@@ -115,10 +116,12 @@
                         <th>{{ p.name }}</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                 {% for variant in p.variants %}
                     <tr>
                         <th></th>
+                        <th>{{ variant.msrp|number_format(2, '.', ',') }}</th>
                         <th><p>{{ variant.name }}</p></th>
                         <th><input type="text"
                                    class="form-control"

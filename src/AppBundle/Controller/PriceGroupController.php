@@ -177,7 +177,7 @@ class PriceGroupController extends Controller
 
             foreach($products as $product) {
                 //get a list of all products
-                $statement = $connection->prepare("select *, v.id as variant_id
+                $statement = $connection->prepare("select *, v.id as variant_id, v.msrp/100 as msrp
 	from product_variant v 
 		where v.product_id = :product_id");
                 $statement->bindValue('product_id', $product['id']);
