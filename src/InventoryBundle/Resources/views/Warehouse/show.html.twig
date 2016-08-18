@@ -63,21 +63,19 @@
                 </div>
 
                 <div class="tab-pane" id="all" style="padding-top: 25px;">
-                    {% include '@Inventory/Warehouse/show-active.html.twig' %}
+                    {% include '@Inventory/Warehouse/show-all.html.twig' %}
                 </div>
 
                 <div class="tab-pane" id="purchase_orders" style="padding-top: 25px;">
-                    {#{% include '@Inventory/Product/edit-specification.html.twig' %}#}
+                    {% include '@Inventory/Warehouse/show-purchase-orders.html.twig' %}
                 </div>
 
                 <div class="tab-pane" id="stock_transfers">
-                    {#{% include '@Inventory/Product/edit-images.html.twig' %}#}
+                    {% include '@Inventory/Warehouse/show-transfer.html.twig' %}
                 </div>
 
-                <div class="tab-pane" id="stock_adjustment">
-                    <div class="tab-pane" id="specs" style="padding-top: 25px;">
-                        {#{% include '@Inventory/Product/edit-channels.html.twig' %}#}
-                    </div>
+                <div class="tab-pane" id="stock_adjustments">
+                    {% include '@Inventory/Warehouse/show-adjustments.html.twig' %}
                 </div>
             </div>
             <!-- /.tab-content -->
