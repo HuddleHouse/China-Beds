@@ -38,7 +38,7 @@ class OrderProductsController extends Controller
             $user_channels = substr($user_channels, 0, -2);
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id, cat.name as category_name, cat.id as category_id, i.path
+        $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id, cat.name as category_name, cat.id as category_id, ANY_VALUE(i.path)
 	from product p
 		left join product_channels c
 			on c.product_id = p.id
