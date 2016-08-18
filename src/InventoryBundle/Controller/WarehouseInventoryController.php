@@ -51,7 +51,7 @@ class WarehouseInventoryController extends Controller
     /**
      * Finds and displays a Warehouse entity.
      *
-     * @Route("/{id}", name="warehouse_inventory_show")
+     * @Route("/{id}", name="warehouse_inventory_shosdfw")
      * @Method("GET")
      */
     public function showAction(Warehouse $warehouse)

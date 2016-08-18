@@ -16,7 +16,7 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-            "iDisplayLength": 50});
+                "iDisplayLength": 50});
         });
     </script>
 {% endblock footer %}
@@ -29,8 +29,8 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Contact</th>
-                        <th>City</th>
+                        <th>Total Inventory</th>
+                        <th>P.O.</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -38,12 +38,12 @@
                     {% for warehouse in warehouses %}
                         <tr>
                             <td><a href="{{ path('warehouse_show', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
-                            <td>{{ warehouse.contact }}</td>
-                            <td>{{ warehouse.city }}</td>
+                            <td><center>{{ warehouse.quantity }}</center></td>
+                            <td><center>{{ warehouse.po_quantity }}</center></td>
                             <td>
+                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> view</a>
+                                <a class="btn btn-raised btn-warning btn-xs purple" href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}"><i class="fa fa-shopping-basket"></i> inventory</a>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}"><i class="fa fa-edit"></i> edit</a>
-                                <a class="btn btn-raised btn-success btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> view</a>
-                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> show</a>
                             </td>
                         </tr>
                     {% endfor %}
