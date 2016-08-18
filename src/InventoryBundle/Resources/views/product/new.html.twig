@@ -23,10 +23,11 @@
 {% endblock footer %}
 
 {% block content %}
-
+    <div class="table">
     {{ form_start(form) }}
     {% include '@Inventory/Product/product-form.html.twig' %}
         <input class="btn btn-raised btn-success" type="submit" value="Create" />
     {{ form_end(form) }}
+    </div>
 
 {% endblock %}
