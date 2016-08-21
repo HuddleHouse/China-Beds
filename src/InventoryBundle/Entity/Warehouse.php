@@ -123,9 +123,19 @@ class Warehouse
      */
     private $purchase_orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransfer", mappedBy="warehouse")
+     */
+    private $stock_transfers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockAdjustment", mappedBy="warehouse")
+     */
+    private $stock_adjustments;
 
     public function __construct() {
         $this->purchase_orders = new ArrayCollection();
+        $this->stock_adjustments = new ArrayCollection();
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
         $this->users_3 = new ArrayCollection();
@@ -436,6 +446,54 @@ class Warehouse
     public function setInventory($inventory)
     {
         $this->inventory = $inventory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchase_orders;
+    }
+
+    /**
+     * @param mixed $purchase_orders
+     */
+    public function setPurchaseOrders($purchase_orders)
+    {
+        $this->purchase_orders = $purchase_orders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockTransfers()
+    {
+        return $this->stock_transfers;
+    }
+
+    /**
+     * @param mixed $stock_transfers
+     */
+    public function setStockTransfers($stock_transfers)
+    {
+        $this->stock_transfers = $stock_transfers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockAdjustments()
+    {
+        return $this->stock_adjustments;
+    }
+
+    /**
+     * @param mixed $stock_adjustments
+     */
+    public function setStockAdjustments($stock_adjustments)
+    {
+        $this->stock_adjustments = $stock_adjustments;
     }
     
     

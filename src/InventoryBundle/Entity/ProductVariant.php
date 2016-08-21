@@ -62,6 +62,16 @@ class ProductVariant
     private $purchase_order_product_variant;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransferProductVariant", mappedBy="product_variant")
+     */
+    private $stock_transfer_product_variant;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockAdjustmentProductVariant", mappedBy="product_variant")
+     */
+    private $stock_adjustment_product_variant;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product_variant")
      */
     private $price_group_prices;
@@ -75,6 +85,8 @@ class ProductVariant
         $this->price_group_prices = new ArrayCollection();
         $this->warehouse = new ArrayCollection();
         $this->purchase_order_product_variant = new ArrayCollection();
+        $this->stock_transfer_product_variant = new ArrayCollection();
+        $this->stock_adjustment_product_variant = new ArrayCollection();
     }
 
     /**
@@ -229,6 +241,38 @@ class ProductVariant
     public function setWarehouse($warehouse)
     {
         $this->warehouse = $warehouse;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockTransferProductVariant()
+    {
+        return $this->stock_transfer_product_variant;
+    }
+
+    /**
+     * @param mixed $stock_transfer_product_variant
+     */
+    public function setStockTransferProductVariant($stock_transfer_product_variant)
+    {
+        $this->stock_transfer_product_variant = $stock_transfer_product_variant;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockAdjustmentProductVariant()
+    {
+        return $this->stock_adjustment_product_variant;
+    }
+
+    /**
+     * @param mixed $stock_adjustment_product_variant
+     */
+    public function setStockAdjustmentProductVariant($stock_adjustment_product_variant)
+    {
+        $this->stock_adjustment_product_variant = $stock_adjustment_product_variant;
     }
 
 

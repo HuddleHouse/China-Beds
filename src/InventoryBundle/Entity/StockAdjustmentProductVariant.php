@@ -5,12 +5,12 @@ namespace InventoryBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PurchaseOrderProductVariant
+ * StockAdjustmentProductVariant
  *
- * @ORM\Table(name="purchase_order_product_variants")
- * @ORM\Entity(repositoryClass="InventoryBundle\Repository\PurchaseOrderProductVariantRepository")
+ * @ORM\Table(name="stock_adjustment_product_variants")
+ * @ORM\Entity()
  */
-class PurchaseOrderProductVariant
+class StockAdjustmentProductVariant
 {
     /**
      * @var int
@@ -29,13 +29,13 @@ class PurchaseOrderProductVariant
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PurchaseOrder", inversedBy="product_variants")
-     * @ORM\JoinColumn(name="purchase_order_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\StockAdjustment", inversedBy="product_variants")
+     * @ORM\JoinColumn(name="stock_adjustment_id", referencedColumnName="id")
      */
-    private $purchase_order;
+    private $stock_adjustment;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="purchase_order_product_variant")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="stock_adjustment_product_variant")
      * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
      */
     private $product_variant;
@@ -77,18 +77,19 @@ class PurchaseOrderProductVariant
     /**
      * @return mixed
      */
-    public function getPurchaseOrder()
+    public function getStockAdjustment()
     {
-        return $this->purchase_order;
+        return $this->stock_adjustment;
     }
 
     /**
-     * @param mixed $purchase_order
+     * @param mixed $stock_adjustment
      */
-    public function setPurchaseOrder($purchase_order)
+    public function setStockAdjustment($stock_adjustment)
     {
-        $this->purchase_order = $purchase_order;
+        $this->stock_adjustment = $stock_adjustment;
     }
+
 
     /**
      * @return mixed

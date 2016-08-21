@@ -51,9 +51,8 @@ class PurchaseOrder
     private $message;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Status", inversedBy="purchase_orders")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     private $status;
 
@@ -67,6 +66,12 @@ class PurchaseOrder
      * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")
      */
     private $warehouse;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="purchase_orders")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
     public function __construct() {
         $this->product_variants = new ArrayCollection();
@@ -250,5 +255,23 @@ class PurchaseOrder
     {
         return $this->status;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+
 }
 

@@ -164,6 +164,21 @@ class User extends BaseUser
     private $warranty_claims;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PurchaseOrder", mappedBy="user")
+     */
+    private $purchase_orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransfer", mappedBy="user")
+     */
+    private $stock_transfers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockAdjustment", mappedBy="user")
+     */
+    private $stock_adjustments;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_1")
      * @ORM\JoinColumn(name="warehouse_1", referencedColumnName="id")
      */
@@ -190,6 +205,8 @@ class User extends BaseUser
         $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->purchase_orders = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->stock_adjustments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getRouteNames() {
@@ -645,6 +662,54 @@ class User extends BaseUser
     public function setWarehouse3($warehouse_3)
     {
         $this->warehouse_3 = $warehouse_3;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchase_orders;
+    }
+
+    /**
+     * @param mixed $purchase_orders
+     */
+    public function setPurchaseOrders($purchase_orders)
+    {
+        $this->purchase_orders = $purchase_orders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockTransfers()
+    {
+        return $this->stock_transfers;
+    }
+
+    /**
+     * @param mixed $stock_transfers
+     */
+    public function setStockTransfers($stock_transfers)
+    {
+        $this->stock_transfers = $stock_transfers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockAdjustments()
+    {
+        return $this->stock_adjustments;
+    }
+
+    /**
+     * @param mixed $stock_adjustments
+     */
+    public function setStockAdjustments($stock_adjustments)
+    {
+        $this->stock_adjustments = $stock_adjustments;
     }
 
 
