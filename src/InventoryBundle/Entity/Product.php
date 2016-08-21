@@ -111,10 +111,10 @@ class Product
     private $images;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductCategory")
-     * @ORM\JoinColumn(name="product_category_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    protected $product_category;
+    protected $category;
 
     public function __construct() {
         $this->attributes = new ArrayCollection();
@@ -333,17 +333,17 @@ class Product
     /**
      * @return mixed
      */
-    public function getProductCategory()
+    public function getCategory()
     {
-        return $this->product_category;
+        return $this->category;
     }
 
     /**
-     * @param mixed $product_category
+     * @param mixed $category
      */
-    public function setProductCategory($product_category)
+    public function setCategory($category)
     {
-        $this->product_category = $product_category;
+        $this->category = $category;
     }
 
     /**

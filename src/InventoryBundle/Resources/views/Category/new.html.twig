@@ -1,12 +1,12 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Product Category creation{% endblock %}
+{% block title %}Category creation{% endblock %}
 {% block page_title %}
-    Product Category creation
+    Category creation
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('product_category_index') }}">< Back to the list</a>
+    <a href="{{ path('category_index') }}">< Back to the list</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -25,6 +25,7 @@
 
 {% block content %}
 
+    <div class="table">
     <div class="row">
         <div class="col-md-6">
             {{ form_start(form) }}
@@ -32,6 +33,7 @@
             <input class="btn btn-raised btn-success" type="submit" value="Create" />
             {{ form_end(form) }}
         </div>
+    </div>
     </div>
 
 

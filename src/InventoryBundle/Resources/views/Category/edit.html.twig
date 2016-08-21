@@ -1,12 +1,12 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Product Category edit{% endblock %}
+{% block title %}Category edit{% endblock %}
 {% block page_title %}
-    Product Category edit
+    Category edit
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('product_category_index') }}">< Back to the list</a>
+    <a href="{{ path('category_index') }}">< Back to the list</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -23,6 +23,7 @@
 {% endblock footer %}
 
 {% block content %}
+    <div class="table">
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
         <input class="btn btn-raised btn-success" type="submit" value="Save" />
@@ -31,4 +32,5 @@
     {{ form_start(delete_form) }}
     <input style="margin-top: -56px; margin-left: 71px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
     {{ form_end(delete_form) }}
+        </div>
 {% endblock %}

@@ -29,13 +29,13 @@ class WarehouseInventory
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouses")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse")
      * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
      */
     private $product_variant;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="warehouse_inventory")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="inventory")
      * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")
      */
     private $warehouse;

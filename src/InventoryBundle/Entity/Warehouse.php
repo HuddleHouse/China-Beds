@@ -118,7 +118,14 @@ class Warehouse
      */
     private $inventory;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PurchaseOrder", mappedBy="warehouse")
+     */
+    private $purchase_orders;
+
+
     public function __construct() {
+        $this->purchase_orders = new ArrayCollection();
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
         $this->users_3 = new ArrayCollection();

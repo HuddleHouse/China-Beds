@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ProductCategory
  *
- * @ORM\Table(name="product_categories")
- * @ORM\Entity(repositoryClass="InventoryBundle\Repository\ProductCategoryRepository")
+ * @ORM\Table(name="categories")
+ * @ORM\Entity()
  */
-class ProductCategory
+class Category
 {
     /**
      * @var int

@@ -6,66 +6,66 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use InventoryBundle\Entity\ProductCategory;
-use InventoryBundle\Form\ProductCategoryType;
+use InventoryBundle\Entity\Category;
+use InventoryBundle\Form\CategoryType;
 
 /**
  * ProductCategory controller.
  *
- * @Route("/product/category")
+ * @Route("/category")
  */
-class ProductCategoryController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Lists all ProductCategory entities.
      *
-     * @Route("/", name="product_category_index")
+     * @Route("/", name="category_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $productCategories = $em->getRepository('InventoryBundle:ProductCategory')->findAll();
+        $productCategories = $em->getRepository('InventoryBundle:Category')->findAll();
 
-        return $this->render('@Inventory/ProductCategory/index.html.twig', array(
-            'productCategories' => $productCategories,
+        return $this->render('@Inventory/Category/index.html.twig', array(
+            'categories' => $productCategories,
         ));
     }
 
     /**
      * Creates a new ProductCategory entity.
      *
-     * @Route("/new", name="product_category_new")
+     * @Route("/new", name="category_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $productCategory = new ProductCategory();
-        $form = $this->createForm('InventoryBundle\Form\ProductCategoryType', $productCategory);
+        $category = new Category();
+        $form = $this->createForm('InventoryBundle\Form\CategoryType', $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($productCategory);
+                $em->persist($category);
                 $em->flush();
 
-                $this->addFlash('notice', 'Product Category created successfully.');
-                return $this->redirectToRoute('product_category_edit', array('id' => $productCategory->getId()));
+                $this->addFlash('notice', 'Category created successfully.');
+                return $this->redirectToRoute('category_edit', array('id' => $category->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Product Category ' . $e->getMessage());
 
-                return $this->render('@Inventory/ProductCategory/new.html.twig', array(
-                    'productCategory' => $productCategory,
+                return $this->render('@Inventory/Category/new.html.twig', array(
+                    'category' => $category,
                     'form' => $form->createView(),
                 ));
             }
         }
 
-        return $this->render('@Inventory/ProductCategory/new.html.twig', array(
-            'productCategory' => $productCategory,
+        return $this->render('@Inventory/Category/new.html.twig', array(
+            'category' => $category,
             'form' => $form->createView(),
         ));
     }
@@ -73,15 +73,15 @@ class ProductCategoryController extends Controller
     /**
      * Finds and displays a ProductCategory entity.
      *
-     * @Route("/{id}", name="product_category_show")
+     * @Route("/{id}", name="category_show")
      * @Method("GET")
      */
-    public function showAction(ProductCategory $productCategory)
+    public function showAction(Category $category)
     {
-        $deleteForm = $this->createDeleteForm($productCategory);
+        $deleteForm = $this->createDeleteForm($category);
 
-        return $this->render('@Inventory/ProductCategory/show.html.twig', array(
-            'productCategory' => $productCategory,
+        return $this->render('@Inventory/Category/index.html.twig', array(
+            'category' => $category,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -89,37 +89,37 @@ class ProductCategoryController extends Controller
     /**
      * Displays a form to edit an existing ProductCategory entity.
      *
-     * @Route("/{id}/edit", name="product_category_edit")
+     * @Route("/{id}/edit", name="category_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, ProductCategory $productCategory)
+    public function editAction(Request $request, Category $category)
     {
-        $deleteForm = $this->createDeleteForm($productCategory);
-        $editForm = $this->createForm('InventoryBundle\Form\ProductCategoryType', $productCategory);
+        $deleteForm = $this->createDeleteForm($category);
+        $editForm = $this->createForm('InventoryBundle\Form\CategoryType', $category);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($productCategory);
+                $em->persist($category);
                 $em->flush();
 
-                $this->addFlash('notice', 'Product Category updated successfully.');
-                return $this->redirectToRoute('product_category_index', array('id' => $productCategory->getId()));
+                $this->addFlash('notice', 'Category updated successfully.');
+                return $this->redirectToRoute('category_index', array('id' => $category->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating Product Category ' . $e->getMessage());
 
-                return $this->render('@Inventory/ProductCategory/edit.html.twig', array(
-                    'productCategory' => $productCategory,
+                return $this->render('@Inventory/Category/edit.html.twig', array(
+                    'category' => $category,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
                 ));
             }
         }
 
-        return $this->render('@Inventory/ProductCategory/edit.html.twig', array(
-            'productCategory' => $productCategory,
+        return $this->render('@Inventory/Category/edit.html.twig', array(
+            'category' => $category,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -128,7 +128,7 @@ class ProductCategoryController extends Controller
     /**
      * Deletes a ProductCategory entity.
      *
-     * @Route("/{id}", name="product_category_delete")
+     * @Route("/{id}", name="category_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, ProductCategory $productCategory)
@@ -160,10 +160,10 @@ class ProductCategoryController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(ProductCategory $productCategory)
+    private function createDeleteForm(Category $productCategory)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('product_category_delete', array('id' => $productCategory->getId())))
+            ->setAction($this->generateUrl('category_delete', array('id' => $productCategory->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

@@ -57,18 +57,24 @@ class ProductVariant
     private $product;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PurchaseOrderProductVariant", mappedBy="product_variant")
+     */
+    private $purchase_order_product_variant;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="product_variant")
      */
     private $price_group_prices;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarehouseInventory", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarehouseInventory", mappedBy="product_variant")
      */
-    private $warehouses;
+    private $warehouse;
 
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
-        $this->warehouses = new ArrayCollection();
+        $this->warehouse = new ArrayCollection();
+        $this->purchase_order_product_variant = new ArrayCollection();
     }
 
     /**
@@ -196,18 +202,35 @@ class ProductVariant
     /**
      * @return mixed
      */
-    public function getWarehouses()
+    public function getPurchaseOrderProductVariant()
     {
-        return $this->warehouses;
+        return $this->purchase_order_product_variant;
     }
 
     /**
-     * @param mixed $warehouses
+     * @param mixed $purchase_order_product_variant
      */
-    public function setWarehouses($warehouses)
+    public function setPurchaseOrderProductVariant($purchase_order_product_variant)
     {
-        $this->warehouses = $warehouses;
+        $this->purchase_order_product_variant = $purchase_order_product_variant;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouse()
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param mixed $warehouse
+     */
+    public function setWarehouse($warehouse)
+    {
+        $this->warehouse = $warehouse;
+    }
+
 
 }
 

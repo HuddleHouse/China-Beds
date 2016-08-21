@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Product Categories{% endblock %}
+{% block title %}Categories{% endblock %}
 {% block page_title %}
-    Product Categories
+    Categories
 {% endblock page_title %}
 
 {% block page_name %}
@@ -36,14 +36,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for productCategory in productCategories %}
+                    {% for productCategory in categories %}
                         <tr>
-                            <td><a href="{{ path('product_category_edit', { 'id': productCategory.id }) }}">{{ productCategory.name }}</a></td>
+                            <td><a href="{{ path('category_edit', { 'id': productCategory.id }) }}">{{ productCategory.name }}</a></td>
                             <td>{{ productCategory.code }}</td>
                             <td><center>8,734</center></td>
                             <td>
-                                <a class="btn btn-raised btn-xs btn-default" href="{{ path('product_category_edit', { 'id': productCategory.id }) }}"><i class="fa fa-edit"></i> edit</a>
-                                <a class="btn btn-raised btn-xs btn-info" href="{{ path('product_category_show', { 'id': productCategory.id }) }}"><i class="fa fa-list"></i> show</a>
+                                <a class="btn btn-raised btn-xs btn-default" href="{{ path('category_edit', { 'id': productCategory.id }) }}"><i class="fa fa-edit"></i> edit</a>
+                                <a class="btn btn-raised btn-xs btn-info" href="{{ path('category_show', { 'id': productCategory.id }) }}"><i class="fa fa-list"></i> show</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -53,10 +53,10 @@
         </div>
     </div>
 
-    <a id="new-button" href="{{ path('product_category_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+    <a id="new-button" href="{{ path('category_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons">add</i>
     </a>
     <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Create a Product Category
+        Create a Category
     </div>
 {% endblock %}

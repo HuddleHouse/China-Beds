@@ -164,19 +164,19 @@ class User extends BaseUser
     private $warranty_claims;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_1")
      * @ORM\JoinColumn(name="warehouse_1", referencedColumnName="id")
      */
     private $warehouse_1;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_2")
      * @ORM\JoinColumn(name="warehouse_2", referencedColumnName="id")
      */
     private $warehouse_2;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_3")
      * @ORM\JoinColumn(name="warehouse_3", referencedColumnName="id")
      */
     private $warehouse_3;
