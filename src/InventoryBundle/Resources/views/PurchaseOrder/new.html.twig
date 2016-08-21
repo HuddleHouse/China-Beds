@@ -1,0 +1,39 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}New Purchase Order{% endblock %}
+{% block page_title %}
+    New Purchase Order
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('purchaseorder_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+
+        $('.order-date select').addClass( "form-control");
+        $('.order-date select select').addClass( "form-control");
+        $('.order-date select select select').addClass( "form-control");
+        $('.due-date select').addClass( "form-control");
+        $('.due-date select select').addClass( "form-control");
+        $('.due-date select select select').addClass( "form-control");
+    </script>
+{% endblock footer %}
+
+{% block content %}
+<div class="table">
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Create" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}

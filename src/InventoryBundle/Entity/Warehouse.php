@@ -124,9 +124,14 @@ class Warehouse
     private $purchase_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransfer", mappedBy="warehouse")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransfer", mappedBy="receiving_warehouse")
      */
-    private $stock_transfers;
+    private $stock_transfer_receiving;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransfer", mappedBy="departing_warehouse")
+     */
+    private $stock_transfer_departing;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockAdjustment", mappedBy="warehouse")
@@ -139,6 +144,8 @@ class Warehouse
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
         $this->users_3 = new ArrayCollection();
+        $this->stock_transfer_departing = new ArrayCollection();
+        $this->stock_transfer_receiving = new ArrayCollection();
         $this->inventory = new ArrayCollection();
     }
 
@@ -467,17 +474,17 @@ class Warehouse
     /**
      * @return mixed
      */
-    public function getStockTransfers()
+    public function getStockTransferreceiving()
     {
-        return $this->stock_transfers;
+        return $this->stock_transfer_receiving;
     }
 
     /**
-     * @param mixed $stock_transfers
+     * @param mixed $stock_transfer_receiving
      */
-    public function setStockTransfers($stock_transfers)
+    public function setStockTransferreceiving($stock_transfer_receiving)
     {
-        $this->stock_transfers = $stock_transfers;
+        $this->stock_transfer_receiving = $stock_transfer_receiving;
     }
 
     /**
@@ -494,6 +501,22 @@ class Warehouse
     public function setStockAdjustments($stock_adjustments)
     {
         $this->stock_adjustments = $stock_adjustments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockTransferDeparting()
+    {
+        return $this->stock_transfer_departing;
+    }
+
+    /**
+     * @param mixed $stock_transfer_departing
+     */
+    public function setStockTransferDeparting($stock_transfer_departing)
+    {
+        $this->stock_transfer_departing = $stock_transfer_departing;
     }
     
     

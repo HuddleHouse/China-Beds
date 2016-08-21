@@ -4,6 +4,7 @@ namespace InventoryBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * StockTransfer
@@ -61,6 +62,7 @@ class StockAdjustment
 
     public function __construct() {
         $this->product_variants = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
 

@@ -1,0 +1,34 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}New Stock Adjustment{% endblock %}
+{% block page_title %}
+    New Stock Adjustment
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('stockadjustment_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+
+            v
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+<div class="table">
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input class="btn btn-raised btn-success" type="submit" value="Create" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}

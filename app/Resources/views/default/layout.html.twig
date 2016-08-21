@@ -63,6 +63,9 @@
         {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
         {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
         {% set sidebar_status = ['status_index', 'status_new', 'status_edit', 'status_show'] %}
+        {% set sidebar_stock_adjustment = ['stockadjustment_index', 'stockadjustment_new', 'stockadjustment_edit', 'stockadjustment_show'] %}
+        {% set sidebar_purchase_orders = ['purchaseorder_index', 'purchaseorder_new', 'purchaseorder_edit', 'purchaseorder_show'] %}
+        {% set sidebar_stock_transfer = ['stocktransfer_index', 'stocktransfer_new', 'stocktransfer_edit', 'stocktransfer_show'] %}
         {% set sidebar_warranty_claims = ['warrantyclaim_index', 'warrantyclaim_edit', 'warrantyclaim_show'] %}
         {% set sidebar_warranty = ['warrantyclaim_new'] %}
         {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
@@ -239,6 +242,9 @@
                         <li class="treeview {% if (app.request.get('_route') in sidebar_warehouse) %} active
                         {% elseif (app.request.get('_route') in sidebar_warehouse_inventory) %} active
                         {% elseif (app.request.get('_route') in sidebar_status) %} active
+                        {% elseif (app.request.get('_route') in sidebar_stock_adjustment) %} active
+                        {% elseif (app.request.get('_route') in sidebar_stock_transfer) %} active
+                        {% elseif (app.request.get('_route') in sidebar_purchase_orders) %} active
                         {% endif %}" >
                             <a href="#">
                                 <i class="fa fa-building-o"></i>
@@ -251,14 +257,14 @@
                                         <a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                     </li>
                                 {% endif %}
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Purchase Orders</a>
+                                <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
+                                    <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Purchase Orders</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
+                                <li {% if (app.request.get('_route') in sidebar_stock_transfer) %} class="active"{% endif %}>
+                                    <a href="{{ path('stocktransfer_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
+                                <li {% if (app.request.get('_route') in sidebar_stock_adjustment) %} class="active"{% endif %}>
+                                    <a href="{{ path('stockadjustment_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_status) %} class="active"{% endif %}>
                                     <a href="{{ path('status_index') }}"><i class="fa fa-circle-o"></i>Status</a>

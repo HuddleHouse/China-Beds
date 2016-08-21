@@ -4,6 +4,7 @@ namespace InventoryBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * StockTransfer
@@ -48,10 +49,16 @@ class StockTransfer
     private $product_variants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="stock_transfers")
-     * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="stock_transfer_receiving")
+     * @ORM\JoinColumn(name="receiving_warehouse_id", referencedColumnName="id")
      */
-    private $warehouse;
+    private $receiving_warehouse;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="stock_transfer_departing")
+     * @ORM\JoinColumn(name="departing_warehouse_id", referencedColumnName="id")
+     */
+    private $departing_warehouse;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="stock_transfers")
@@ -61,6 +68,7 @@ class StockTransfer
 
     public function __construct() {
         $this->product_variants = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
 
@@ -141,17 +149,17 @@ class StockTransfer
     /**
      * @return mixed
      */
-    public function getWarehouse()
+    public function getReceivingWarehouse()
     {
-        return $this->warehouse;
+        return $this->receiving_warehouse;
     }
 
     /**
-     * @param mixed $warehouse
+     * @param mixed $receiving_warehouse
      */
-    public function setWarehouse($warehouse)
+    public function setReceivingWarehouse($receiving_warehouse)
     {
-        $this->warehouse = $warehouse;
+        $this->receiving_warehouse = $receiving_warehouse;
     }
 
     /**
@@ -168,6 +176,22 @@ class StockTransfer
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDepartingWarehouse()
+    {
+        return $this->departing_warehouse;
+    }
+
+    /**
+     * @param mixed $departing_warehouse
+     */
+    public function setDepartingWarehouse($departing_warehouse)
+    {
+        $this->departing_warehouse = $departing_warehouse;
     }
 
 

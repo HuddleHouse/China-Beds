@@ -75,6 +75,8 @@ class PurchaseOrder
 
     public function __construct() {
         $this->product_variants = new ArrayCollection();
+        $this->stockDueDate = new \DateTime();
+        $this->orderDate = new \DateTime();
     }
 
 
