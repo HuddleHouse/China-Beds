@@ -1,3 +1,7 @@
+inventory_status:
+    resource: "@InventoryBundle/Controller/StatusController.php"
+    type:     annotation
+
 inventory_rebate_submission:
     resource: "@InventoryBundle/Controller/RebateSubmissionController.php"
     type:     annotation

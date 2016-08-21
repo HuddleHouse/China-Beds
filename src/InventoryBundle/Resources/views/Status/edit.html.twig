@@ -1,0 +1,37 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Status Edit{% endblock %}
+{% block page_title %}
+    Status Edit
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('status_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+<div class="table">
+
+    {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <input class="btn btn-raised btn-success" type="submit" value="Edit" />
+    {{ form_end(edit_form) }}
+
+            {{ form_start(delete_form) }}
+                <input style="margin: -78px 0 0 110px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+</div>
+{% endblock %}

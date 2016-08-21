@@ -62,6 +62,7 @@
         {% set sidebar_specification = ['specification_index', 'specification_new', 'specification_edit', 'specification_show'] %}
         {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
         {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
+        {% set sidebar_status = ['status_index', 'status_new', 'status_edit', 'status_show'] %}
         {% set sidebar_warranty_claims = ['warrantyclaim_index', 'warrantyclaim_edit', 'warrantyclaim_show'] %}
         {% set sidebar_warranty = ['warrantyclaim_new'] %}
         {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
@@ -237,6 +238,7 @@
                         {% if 'warehouse_index' in route_names %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_warehouse) %} active
                         {% elseif (app.request.get('_route') in sidebar_warehouse_inventory) %} active
+                        {% elseif (app.request.get('_route') in sidebar_status) %} active
                         {% endif %}" >
                             <a href="#">
                                 <i class="fa fa-building-o"></i>
@@ -257,6 +259,9 @@
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href="{{ path('warehouse_inventory_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in sidebar_status) %} class="active"{% endif %}>
+                                    <a href="{{ path('status_index') }}"><i class="fa fa-circle-o"></i>Status</a>
                                 </li>
                             </ul>
                         </li>
