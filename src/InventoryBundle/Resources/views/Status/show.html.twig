@@ -1,36 +1,52 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
-    <h1>Status</h1>
+{% block title %}Status{% endblock %}
+{% block page_title %}
+    Status
+{% endblock page_title %}
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ status.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ status.name }}</td>
-            </tr>
-            <tr>
-                <th>Color</th>
-                <td>{{ status.color }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block page_name %}
+    <a href="{{ path('status_index') }}">< Back to the list</a>
+{% endblock page_name %}
 
-    <ul>
-        <li>
-            <a href="{{ path('status_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('status_edit', { 'id': status.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ status.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ status.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Color</th>
+                        <td>{{ status.color }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                {{ form_start(delete_form) }}
                 <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

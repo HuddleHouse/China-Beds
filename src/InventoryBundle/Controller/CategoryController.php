@@ -131,7 +131,7 @@ class CategoryController extends Controller
      * @Route("/{id}", name="category_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, ProductCategory $productCategory)
+    public function deleteAction(Request $request, Category $productCategory)
     {
         $form = $this->createDeleteForm($productCategory);
         $form->handleRequest($request);
@@ -146,11 +146,11 @@ class CategoryController extends Controller
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error deleting Product Category ' . $e->getMessage());
 
-                return $this->redirectToRoute('product_category_index');
+                return $this->redirectToRoute('category_index');
             }
         }
 
-        return $this->redirectToRoute('product_category_index');
+        return $this->redirectToRoute('category_index');
     }
 
     /**

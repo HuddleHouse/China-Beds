@@ -46,11 +46,17 @@ class StatusController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($status);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($status);
+                $em->flush();
+                $this->addFlash('notice', 'Status created successfully.');
+                return $this->redirectToRoute('status_index', array('id' => $status->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Status: ' . $e->getMessage());
+            }
 
-            return $this->redirectToRoute('status_index', array('id' => $status->getId()));
         }
 
         return $this->render('@Inventory/Status/new.html.twig', array(
@@ -88,11 +94,16 @@ class StatusController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($status);
-            $em->flush();
-
-            return $this->redirectToRoute('status_edit', array('id' => $status->getId()));
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($status);
+                $em->flush();
+                $this->addFlash('notice', 'Status updated successfully.');
+                return $this->redirectToRoute('status_edit', array('id' => $status->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating Status: ' . $e->getMessage());
+            }
         }
 
         return $this->render('@Inventory/Status/edit.html.twig', array(
@@ -114,9 +125,15 @@ class StatusController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($status);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($status);
+                $em->flush();
+                $this->addFlash('notice', 'Status deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Status: ' . $e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('status_index');

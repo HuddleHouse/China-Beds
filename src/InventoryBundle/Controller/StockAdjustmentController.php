@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -46,11 +47,20 @@ class StockAdjustmentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($stockAdjustment);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($stockAdjustment);
+                $em->flush();
+                $this->addFlash('notice', 'Stock Adjustment created successfully.');
 
-            return $this->redirectToRoute('stockadjustment_show', array('id' => $stockAdjustment->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Stock Adjustment: ' . $e->getMessage());
+                return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
+                    'stockAdjustment' => $stockAdjustment,
+                    'form' => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
@@ -114,9 +124,18 @@ class StockAdjustmentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($stockAdjustment);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($stockAdjustment);
+                $em->flush();
+                $this->addFlash('notice', 'Stock Adjustment deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Stock Adjustment: ' . $e->getMessage());
+
+                return $this->redirectToRoute('stockadjustment_index');
+            }
+
         }
 
         return $this->redirectToRoute('stockadjustment_index');

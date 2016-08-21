@@ -46,11 +46,21 @@ class StockTransferController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($stockTransfer);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($stockTransfer);
+                $em->flush();
+                $this->addFlash('notice', 'Stock Transfer created successfully.');
+                return $this->redirectToRoute('stocktransfer_show', array('id' => $stockTransfer->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Stock Transfer: ' . $e->getMessage());
+                return $this->render('@Inventory/StockTransfer/new.html.twig', array(
+                    'stockTransfer' => $stockTransfer,
+                    'form' => $form->createView(),
+                ));
+            }
 
-            return $this->redirectToRoute('stocktransfer_show', array('id' => $stockTransfer->getId()));
         }
 
         return $this->render('@Inventory/StockTransfer/new.html.twig', array(
@@ -114,9 +124,15 @@ class StockTransferController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($stockTransfer);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($stockTransfer);
+                $em->flush();
+                $this->addFlash('notice', 'Stock Transfer deleted successfully.');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error deleting Stock Transfer: ' . $e->getMessage());
+            }
         }
 
         return $this->redirectToRoute('vstocktransfer_index');
