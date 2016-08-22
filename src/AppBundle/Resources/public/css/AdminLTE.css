@@ -256,12 +256,15 @@ a:focus {
   background-image: none;
   padding: 20px 20px;
   font-family: fontAwesome;
+  text-decoration: none !important;
 }
 .main-header .sidebar-toggle:before {
+  text-decoration: none !important;
   content: "\f0c9";
 }
-.main-header .sidebar-toggle:hover {
+.main-header .sidebar-toggle:hover{
   color: #fff;
+  text-decoration: none !important;
 }
 .main-header .sidebar-toggle:focus,
 .main-header .sidebar-toggle:active {
