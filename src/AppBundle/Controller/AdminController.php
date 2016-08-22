@@ -14,10 +14,13 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * @Route("/admin")
+ */
 class AdminController extends Controller
 {
     /**
-     * @Route("/admin/view-users", name="view_users")
+     * @Route("/view-users", name="view_users")
      */
     public function viewAllUsersAction(Request $request)
     {
@@ -30,7 +33,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/view-users/edit/{user_id}", name="admin_edit_user")
+     * @Route("/view-users/edit/{user_id}", name="admin_edit_user")
      */
     public function viewAdminEditUserAction(Request $request, $user_id)
     {
@@ -70,7 +73,7 @@ class AdminController extends Controller
 
 
     /**
-     * @Route("/admin/add-user", name="send_invitation")
+     * @Route("/add-user", name="send_invitation")
      */
     public function sendInvitationAction(Request $request)
     {
@@ -143,7 +146,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/add-user/sent-invitations", name="all_invitations")
+     * @Route("/add-user/sent-invitations", name="all_invitations")
      */
     public function showAllInvitationsAction(Request $request)
     {
@@ -156,7 +159,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/access-restriction", name="access_restriction")
+     * @Route("/access-restriction", name="access_restriction")
      */
     public function showAccessRestrictionAction(Request $request)
     {
@@ -197,7 +200,7 @@ class AdminController extends Controller
 
     
     /**
-     * @Route("/admin/api/api-role-permission", name="api_add_role_permission")
+     * @Route("/api/api-role-permission", name="api_add_role_permission")
      */
     public function apiAddRolePermissionAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
