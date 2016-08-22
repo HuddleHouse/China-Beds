@@ -91,10 +91,25 @@ class WarehouseController extends Controller
     public function showAction(Warehouse $warehouse)
     {
         $deleteForm = $this->createDeleteForm($warehouse);
+        $inventory_data = array();
+
+        $em = $this->getDoctrine()->getManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            foreach($prod->getVariants() as $variant)
+                $products[] = array(
+                    'name' => $prod->getName().": ".$variant->getName(),
+                    'id' => $variant->getId()
+                );
+        }
 
         return $this->render('@Inventory/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
             'delete_form' => $deleteForm->createView(),
+            'products' => $products,
+            'inventory_data' => $inventory_data
         ));
     }
 
@@ -184,6 +199,34 @@ class WarehouseController extends Controller
         ;
     }
 
+    /**
+     * Finds and displays a Warehouse entity.
+     *
+     * @Route("/{id}/purchase-order", name="warehouse_new_purchase_order")
+     * @Method("GET")
+     */
+    public function warehouseInventoryShowAction(Warehouse $warehouse)
+    {
+        $inventory_data = array();
+
+        $em = $this->getDoctrine()->getManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            foreach($prod->getVariants() as $variant)
+                $products[] = array(
+                    'name' => $prod->getName().": ".$variant->getName(),
+                    'id' => $variant->getId()
+                );
+        }
+
+        return $this->render('@Inventory/Warehouse/inventory.html.twig', array(
+            'warehouse' => $warehouse,
+            'inventory_data' => $inventory_data,
+            'products' => $products
+        ));
+    }
 
     /**
      * Finds and displays a Warehouse entity.
@@ -194,7 +237,6 @@ class WarehouseController extends Controller
     public function warehouseInventoryShowAction(Warehouse $warehouse)
     {
         $inventory_data = array();
-
 
         $em = $this->getDoctrine()->getManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();

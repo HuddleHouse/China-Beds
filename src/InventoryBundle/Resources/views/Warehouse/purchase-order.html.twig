@@ -1,0 +1,123 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Purchase Order{% endblock %}
+
+{% block page_title %}
+    Purchase Order
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+
+        var app = angular.module('myApp', ['ngFileUpload']);
+        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
+            $scope.inventory_data = [];
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_warehouse_inventory') }}",
+                data: {warehouse_id: {{ warehouse.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.inventory_data = data;
+                    });
+                }
+            });
+
+            $scope.addInventory = function () {
+                var variant_id = $('#variant').val();
+                var quantity = $('#quantity').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_warehouse_inventory') }}",
+                    dataType: 'json',
+                    data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.inventory_data = data;
+                            $('#quantity').val('');
+                        });
+                    }
+                });
+            };
+
+        }]);
+    </script>
+{% endblock footer %}
+
+{% block content %}
+<div ng-app="myApp" ng-controller="myCtrl">
+    <div class="row">
+        <center><h2>{{ warehouse.name }}</h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr role="row">
+                        <th>Name</th>
+                        <th>Quantity on Hand</th>
+                        <th>Quantity on P.O.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% verbatim %}
+                                <tr ng-repeat="(i, data) in inventory_data track by $index">
+                                    <td>{{ data.name }}</td>
+                                    <td ng-model="data.quantity"><center>{{ data.quantity }}</center></td>
+                                    <td ng-model="data.po_quantity"><center>{{ data.po_quantity }}</center></td>
+                                </tr>
+                            {% endverbatim %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Variant</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="variant">Product</label>
+                    <select id="variant" class="form-control" style="margin-bottom: 10px">
+                        {% for attr in products %}
+                            <option value="{{ attr.id }}">{{ attr.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="sku" class="required">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" required="required" class="form-control" style="margin-bottom: 10px">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-raised btn-primary" ng-click="addInventory()" >Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">add</i>
+    </a>
+    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
+        Create an inventory item.
+    </div>
+{% endblock %}

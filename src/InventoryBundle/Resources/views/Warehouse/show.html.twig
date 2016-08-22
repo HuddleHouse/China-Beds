@@ -19,8 +19,41 @@
                 paging: false
             });
         });
-        var app = angular.module('myApp', []);
-        app.controller('myCtrl', ['$scope', function($scope) {
+
+        var app = angular.module('myApp', ['ngFileUpload']);
+        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
+            $scope.inventory_data = [];
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_warehouse_inventory') }}",
+                data: {warehouse_id: {{ warehouse.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.inventory_data = data;
+                    });
+                }
+            });
+
+            $scope.addInventory = function () {
+                var variant_id = $('#variant').val();
+                var quantity = $('#quantity').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_warehouse_inventory') }}",
+                    dataType: 'json',
+                    data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.inventory_data = data;
+                            $('#quantity').val('');
+                        });
+                    }
+                });
+            };
 
         }]);
     </script>
@@ -42,10 +75,10 @@
     </div>
     <div class="row" style="margin-bottom: 25px;">
         <div class="col-md-12">
-            <center> <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Purchase Order</a>
+            <center>
+                <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Purchase Order</a>
             <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Adjustment</a>
             <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Transfer</a>
-            <a href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}" class="btn btn-raised btn-warning">Inventory</a><center>
         </div>
     </div>
     <div ng-app="myApp" ng-controller="myCtrl">
@@ -56,6 +89,7 @@
                 <li class=""><a href="#purchase_orders" data-toggle="tab" aria-expanded="false">Purchase Orders</a></li>
                 <li class=""><a href="#stock_transfers" data-toggle="tab" aria-expanded="false">Stock Transfers</a></li>
                 <li class=""><a href="#stock_adjustments" data-toggle="tab" aria-expanded="false">Stock Adjustments</a></li>
+                <li class=""><a href="#inventory" data-toggle="tab" aria-expanded="false">Inventory</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="all_active" style="padding-top: 25px;">
@@ -76,6 +110,10 @@
 
                 <div class="tab-pane" id="stock_adjustments">
                     {% include '@Inventory/Warehouse/show-adjustments.html.twig' %}
+                </div>
+
+                <div class="tab-pane" id="inventory">
+                    {% include '@Inventory/Warehouse/show-inventory.html.twig' %}
                 </div>
             </div>
             <!-- /.tab-content -->
