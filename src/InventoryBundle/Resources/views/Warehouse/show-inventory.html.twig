@@ -1,0 +1,59 @@
+<div >
+    <div class="box-body">
+        <div class="table-responsive">
+            <table id="part-table" class="table no-margin" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th style="text-align: center;">Quantity on Hand</th>
+                    <th style="text-align: center;">Quantity on P.O.</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% verbatim %}
+                                <tr ng-repeat="(i, data) in inventory_data track by $index">
+                                    <td>{{ data.name }}</td>
+                                    <td ng-model="data.quantity"><center>{{ data.quantity }}</center></td>
+                                    <td ng-model="data.po_quantity"><center>{{ data.po_quantity }}</center></td>
+                                </tr>
+                            {% endverbatim %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Variant</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="variant">Product</label>
+                    <select id="variant" class="form-control" style="margin-bottom: 10px">
+                        {% for attr in products %}
+                            <option value="{{ attr.id }}">{{ attr.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="sku" class="required">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" required="required" class="form-control" style="margin-bottom: 10px">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-raised btn-primary" ng-click="addInventory()" >Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">add</i>
+    </a>
+    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
+        Create an inventory item.
+    </div>
