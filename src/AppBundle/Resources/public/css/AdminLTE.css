@@ -254,7 +254,7 @@ a:focus {
   float: left;
   background-color: transparent;
   background-image: none;
-  padding: 15px 15px;
+  padding: 20px 20px;
   font-family: fontAwesome;
 }
 .main-header .sidebar-toggle:before {

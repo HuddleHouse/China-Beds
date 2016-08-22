@@ -5,27 +5,25 @@
     <title>{% block title %}{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    {#<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">#}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.blue-deep_orange.min.css" />
     {% block stylesheets %}
-        {% stylesheets '@AppBundle/Resources/public/css/*' filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% stylesheets '@AppBundle/Resources/public/css/*' filter="cssrewrite" output="css/appBundle.css" %}
         {% endstylesheets %}
-        {% stylesheets '@QuickbooksBundle/Resources/public/css/*' filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% stylesheets '@QuickbooksBundle/Resources/public/css/*' filter="cssrewrite" output="css/quickbooksBundle.css" %}
         {% endstylesheets %}
     {% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/appBundle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/quickbooksBundle.css') }}" />
+
+
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    <script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+
 
 </head>
 
@@ -42,14 +40,16 @@
 
 
 {% block javascripts %}
-    {% javascripts '@AppBundle/Resources/public/js/*' %}
-    <script src="{{ asset_url }}"></script>
+    {% javascripts '@AppBundle/Resources/public/js/*' filter="jsqueeze" output="js/appBundle.js"%}
     {% endjavascripts %}
-    {% javascripts '@QuickbooksBundle/Resources/public/js/*' %}
-    <script src="{{ asset_url }}"></script>
+    {% javascripts '@QuickbooksBundle/Resources/public/js/*' filter="?jsqueeze" output="js/quickbooksBundle.js"%}
     {% endjavascripts %}
 {% endblock %}
-
+<script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
@@ -58,10 +58,9 @@
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/responsive.bootstrap.min.js"></script>
 <script src="https://npmcdn.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
 <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
-{#<script#}
-        {#type="text/javascript"#}
-        {#src="https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere-1.3.3.js">#}
-{#</script>#}
+<script src="{{ asset('js/appBundle.js') }}"></script>
+<script src="{{ asset('js/quickbooksBundle.js') }}"></script>
+
 </body>
 {% block footer %}{% endblock %}
 <script>

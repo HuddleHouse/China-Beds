@@ -30,7 +30,9 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "symfony/assetic-bundle": "^2.7",
         "symfony/http-foundation": "^3.1",
-        "consolibyte/quickbooks": "^3.1"
+        "consolibyte/quickbooks": "^3.1",
+        "leafo/scssphp": "^0.6.5",
+        "patchwork/jsqueeze": "^2.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

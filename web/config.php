@@ -136,7 +136,7 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                       <button type="submit" class="sf-button">
                           <span class="border-l">
                             <span class="border-r">
-                                <span class="btn-bg">OK</span>
+                                <span class=mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--white-bg">OK</span>
                             </span>
                         </span>
                       </button>
