@@ -158,7 +158,7 @@ class AdminController extends Controller
     /**
      * @Route("/admin/access-restriction", name="access_restriction")
      */
-    public function showAddressRestrictionAction(Request $request)
+    public function showAccessRestrictionAction(Request $request)
     {
         /** @var $router \Symfony\Component\Routing\Router */
         $router = $this->container->get('router');
