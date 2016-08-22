@@ -76,9 +76,10 @@
     <div class="row" style="margin-bottom: 25px;">
         <div class="col-md-12">
             <center>
-                <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Purchase Order</a>
-            <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Adjustment</a>
-            <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Transfer</a>
+                <a href="{{ path('warehouse_index', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Purchase Order</a>
+                <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Adjustment</a>
+                <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Transfer</a>
+            </center>
         </div>
     </div>
     <div ng-app="myApp" ng-controller="myCtrl">

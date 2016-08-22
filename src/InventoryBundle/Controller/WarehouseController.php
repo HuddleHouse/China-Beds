@@ -205,7 +205,7 @@ class WarehouseController extends Controller
      * @Route("/{id}/purchase-order", name="warehouse_new_purchase_order")
      * @Method("GET")
      */
-    public function warehouseInventoryShowAction(Warehouse $warehouse)
+    public function warehouseNewPurchaseOrderAction(Warehouse $warehouse)
     {
         $inventory_data = array();
 
