@@ -14,18 +14,21 @@
 
 {% block footer %}
     <script>
+        var selected = [];
         $(document).ready(function () {
             $('#part-table').DataTable({
                 "paging": false,
                 "autoWidth": true,
                 "searching": false,
                 "columns": [
-                    { "orderable": false },
+                    { "orderable": false }
                 ]
             });
         });
 
         function addPermission(role_id, route) {
+            console.log("role_id: "+role_id);
+            console.log("route: "+route);
             var checked = 0;
             if($("#"+role_id+route).is(':checked')) {
                 checked = 1;
@@ -39,8 +42,25 @@
                 data: {role_id: role_id, checked: checked, route: route},
                 dataType: 'json',
                 success: function (data) {
-
                 }
+            });
+        }
+
+        function batchAddPermission(category, name) {
+            var checked = 1;
+            var i = selected.indexOf(category+name);
+            if(i == -1) {
+                console.log("-1");
+                selected.push(category+name);
+            }
+            else {
+                console.log("inarray");
+                checked = 0;
+                selected.splice(i, 1);
+            }
+            $('input[data-category="'+category+'"]').filter('[value="'+name+'"]').each(function(){
+                $(this).prop("checked", checked);
+                addPermission($(this).data("id"), $(this).data("route"));
             });
         }
     </script>
@@ -54,7 +74,16 @@
                 <thead>
                     <tr>
                         {% for role in roles %}
-                        <th>{{ role.name }}</th>
+                        <th class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ role.name }} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li style="text-align: center">Click below to batch toggle categories</li>
+                                <li role="separator" class="divider"></li>
+                                {% for cat in categories %}
+                                    <li><a href="#" onclick="batchAddPermission('{{ cat }}', '{{ role.name }}')">{{ cat }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </th>
                         {% endfor %}
                         <th>Route</th>
                     </tr>
@@ -65,9 +94,9 @@
                         {% for role in roles %}
                             {% set newname = role.id~route.route %}
                             {% if newname in permissions %}
-                                <td><center><input type="checkbox" id="{{ role.id }}{{ route.route }}" checked name="{{ role.id }}@{{ route.route }}" onclick="addPermission({{ role.id }}, '{{ route.route }}')" value="{{ role.name }}"></center></td>
+                                <td><center><input type="checkbox" id="{{ role.id }}{{ route.route }}" checked name="{{ role.id }}@{{ route.route }}" onclick="addPermission({{ role.id }}, '{{ route.route }}')" value="{{ role.name }}" data-id="{{ role.id }}" data-route="{{ route.route }}" data-category="{{ route.category }}"></center></td>
                             {% else %}
-                                <td><center><input type="checkbox" id="{{ role.id }}{{ route.route }}" name="{{ role.id }}@{{ route.route }}" onclick="addPermission({{ role.id }}, '{{ route.route }}')" value="{{ role.name }}"></center></td>
+                                <td><center><input type="checkbox" id="{{ role.id }}{{ route.route }}" name="{{ role.id }}@{{ route.route }}" onclick="addPermission({{ role.id }}, '{{ route.route }}')" value="{{ role.name }}" data-id="{{ role.id }}" data-route="{{ route.route }}" data-category="{{ route.category }}"></center></td>
                             {% endif %}
                         {% endfor %}
                         <td>{{ route.path }}</td>
