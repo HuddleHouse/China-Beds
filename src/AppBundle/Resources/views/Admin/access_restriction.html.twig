@@ -27,22 +27,17 @@
         });
 
         function addPermission(role_id, route) {
-            console.log("role_id: "+role_id);
-            console.log("route: "+route);
             var checked = 0;
             if($("#"+role_id+route).is(':checked')) {
                 checked = 1;
             }
             $.ajax({
-                beforeSend: function () {
-                    console.log('json load cart');
-                },
+                beforeSend: function () {},
                 type: 'POST',
                 url: "{{ path('api_add_role_permission') }}",
                 data: {role_id: role_id, checked: checked, route: route},
                 dataType: 'json',
-                success: function (data) {
-                }
+                success: function (data) {}
             });
         }
 
@@ -50,11 +45,9 @@
             var checked = 1;
             var i = selected.indexOf(category+name);
             if(i == -1) {
-                console.log("-1");
                 selected.push(category+name);
             }
             else {
-                console.log("inarray");
                 checked = 0;
                 selected.splice(i, 1);
             }
