@@ -236,9 +236,8 @@ class WarehouseController extends Controller
      */
     public function warehouseInventoryShowAction(Warehouse $warehouse)
     {
-        $inventory_data = array();
-
         $em = $this->getDoctrine()->getManager();
+        $inventory_data = array();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 
