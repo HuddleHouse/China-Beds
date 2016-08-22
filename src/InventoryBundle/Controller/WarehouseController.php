@@ -221,7 +221,7 @@ class WarehouseController extends Controller
                 );
         }
 
-        return $this->render('@Inventory/Warehouse/inventory.html.twig', array(
+        return $this->render('@Inventory/Warehouse/purchase-order.html.twig', array(
             'warehouse' => $warehouse,
             'inventory_data' => $inventory_data,
             'products' => $products
