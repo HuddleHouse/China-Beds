@@ -24,9 +24,16 @@ class PurchaseOrderProductVariant
     /**
      * @var int
      *
-     * @ORM\Column(name="quantity", type="integer", nullable=true)
+     * @ORM\Column(name="ordered_quantity", type="integer", nullable=true)
      */
-    private $quantity;
+    private $ordered_quantity;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="received_quantity", type="integer", nullable=true)
+     */
+    private $received_quantity = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PurchaseOrder", inversedBy="product_variants")
@@ -53,13 +60,13 @@ class PurchaseOrderProductVariant
     /**
      * Set quantity
      *
-     * @param integer $quantity
+     * @param integer $ordered_quantity
      *
      * @return PurchaseOrderProductVariant
      */
-    public function setQuantity($quantity)
+    public function setOrderedQuantity($ordered_quantity)
     {
-        $this->quantity = $quantity;
+        $this->ordered_quantity = $ordered_quantity;
 
         return $this;
     }
@@ -69,9 +76,9 @@ class PurchaseOrderProductVariant
      *
      * @return int
      */
-    public function getQuantity()
+    public function getOrderedQuantity()
     {
-        return $this->quantity;
+        return $this->ordered_quantity;
     }
 
     /**
@@ -104,6 +111,22 @@ class PurchaseOrderProductVariant
     public function setProductVariant($product_variant)
     {
         $this->product_variant = $product_variant;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReceivedQuantity()
+    {
+        return $this->received_quantity;
+    }
+
+    /**
+     * @param mixed $received_quantity
+     */
+    public function setReceivedQuantity($received_quantity)
+    {
+        $this->received_quantity = $received_quantity;
     }
 
 

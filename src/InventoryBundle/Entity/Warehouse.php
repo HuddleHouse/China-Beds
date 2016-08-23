@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Warehouse
  *
  * @ORM\Table(name="warehouses")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\WarehouseRepository")
  */
 class Warehouse
 {
