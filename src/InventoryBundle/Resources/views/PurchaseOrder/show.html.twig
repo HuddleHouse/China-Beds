@@ -114,8 +114,7 @@
                 function getCartTotal() {
                     var total = 0;
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.add_quantity;
-
+                        total += value.received_quantity;
                     });
                     return total;
                 }
@@ -196,7 +195,7 @@
 
 
         <div class="table">
-            <h3>{{ purchaseOrder.warehouse.name }}</h3>
+            <h3>{{ purchaseOrder.warehouse.name }} <span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></h3>
             <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
             <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
             <hr>
@@ -215,8 +214,8 @@
                         <thead>
                         <tr>
                             <th class="mdl-data-table__cell--non-numeric">Item</th>
-                            <th class="table-name" style="width: 100px;">Quantity</th>
-                            <th class="table-name" style="width: 175px;">To Receive</th>
+                            <th class="table-name" style="width: 150px;">Quantity</th>
+                            <th class="table-name" style="width: 100px;">To Receive</th>
                             <th class="table-name" style="width: 175px;">Warehouse After</th>
                             <th class="table-name" style="width: 175px;">Total After</th>
                         </tr>
@@ -230,10 +229,10 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control number_select" disabled>
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " disabled style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.received_quantity" type="number" ng-change="ctrl.updateCartItem()" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" >
+                                <input ng-model="item.received_quantity" type="number" max="{{item.ordered_quantity}}" jq-spinner ng-change="ctrl.updateCartItem()" class="form-control number_select"  >
                             </td>
                             <td class="table-form" >
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
@@ -243,49 +242,6 @@
                             </td>
                         {% endverbatim %}
                             </div>
-                        </tr>
-                        <tr id="search">
-                            <td class="mdl-data-table__cell--non-numeric" style="padding: 0px;">
-                                {% verbatim %}
-<md-content>
-                            <md-autocomplete
-                                ng-disabled="ctrl.isDisabled"
-                                md-no-cache="true"
-                                md-selected-item="ctrl.selectedItem"
-                                md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-                                md-search-text="ctrl.searchText"
-                                md-selected-item-change="ctrl.selectedItemChange(item)"
-                                md-items="item in ctrl.querySearch(ctrl.searchText)"
-                                md-item-text="item.name"
-                                md-min-length="0"
-                                placeholder="Pick a Product"
-                                md-autofocus="false"
-                                md-menu-class="autocomplete-custom-template">
-                                <md-item-template>
-                                    <span class="item-title">
-                                        <img src="/{{item.image_url}}" style="max-width: 50px;">
-                                        <span> {{item.name}} </span>
-                                    </span>
-                                    <span class="item-metadata">
-                                        <span class="item-metastat">
-                                            <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
-                                        </span>
-                                        <span class="item-metastat">
-                                           <strong>{{item.total_quantity}}</strong> total quantity
-                                        </span>
-
-                                     </span>
-                                </md-item-template>
-                                <md-not-found>
-                                       No product matching "{{ctrl.searchText}}" were found.
-                                    </md-not-found>
-                            </md-autocomplete>
-                            </md-content>
-                                {% endverbatim %}
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         </tbody>
                     </table>
