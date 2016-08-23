@@ -49,8 +49,7 @@ class PurchaseOrder
      * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;
-
-
+    
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Status", inversedBy="purchase_orders")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
