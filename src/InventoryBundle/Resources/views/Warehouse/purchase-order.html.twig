@@ -127,7 +127,7 @@
                         dataType: 'json',
                         data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ warehouse.id }}, status: draft },
                         success: function (data) {
-                            window.location.href = "app_dev.php/purchase-order/"+data;
+                            window.location.href = "/purchase-order/"+data;
                         }
                     });
 
