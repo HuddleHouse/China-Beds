@@ -24,7 +24,7 @@ class OrderProductsController extends Controller
     public function orderProductsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $categories = $em->getRepository('InventoryBundle:ProductCategory')->findAll();
+        $categories = $em->getRepository('InventoryBundle:Category')->findAll();
         $user = $this->getUser();
 
         //get user price groups and format string for SQL query

@@ -210,6 +210,11 @@ class PurchaseOrder
         return $this->product_variants;
     }
 
+    public function addPurchaseOrderProductVariant(PurchaseOrderProductVariant $productVariant) {
+        $this->product_variants[] = $productVariant;
+        return $this->product_variants;
+    }
+
     /**
      * Set warehouseId
      *
