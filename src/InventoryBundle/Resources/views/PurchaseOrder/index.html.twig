@@ -30,8 +30,8 @@
                     <tr>
                         <th>Ordernumber</th>
                         <th>Status</th>
-                        <th>Order Date</th>
-                        <th>Stock Due</th>
+                        <th>Warehouse</th>
+                        <th>Due Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -40,7 +40,7 @@
                         <tr>
                             <td><a href="{{ path('purchaseorder_show', { 'id': purchaseOrder.id }) }}">{{ purchaseOrder.orderNumber }}</a></td>
                             <td><span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></td>
-                            <td>{% if purchaseOrder.orderDate %}{{ purchaseOrder.orderDate|date('Y-m-d') }}{% endif %}</td>
+                            <td><a href="{{ path('warehouse_show', { 'id': purchaseOrder.warehouse.id }) }}">{{ purchaseOrder.warehouse.name }}</a></td>
                             <td>{% if purchaseOrder.stockDueDate %}{{ purchaseOrder.stockDueDate|date('Y-m-d') }}{% endif %}</td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('purchaseorder_show', { 'id': purchaseOrder.id }) }}">show</a>
