@@ -75,32 +75,28 @@ class PurchaseOrderController extends Controller
 
 
 
-//    /**
-//     * Displays a form to edit an existing PurchaseOrder entity.
-//     *
-//     * @Route("/{id}/edit", name="purchaseorder_edit")
-//     * @Method({"GET", "POST"})
-//     */
-//    public function editAction(Request $request, PurchaseOrder $purchaseOrder)
-//    {
-//        $deleteForm = $this->createDeleteForm($purchaseOrder);
-//        $editForm = $this->createForm('InventoryBundle\Form\PurchaseOrderType', $purchaseOrder);
-//        $editForm->handleRequest($request);
-//
-//        if ($editForm->isSubmitted() && $editForm->isValid()) {
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($purchaseOrder);
-//            $em->flush();
-//
-//            return $this->redirectToRoute('purchaseorder_edit', array('id' => $purchaseOrder->getId()));
-//        }
-//
-//        return $this->render('@Inventory/PurchaseOrder/edit.html.twig', array(
-//            'purchaseOrder' => $purchaseOrder,
-//            'edit_form' => $editForm->createView(),
-//            'delete_form' => $deleteForm->createView(),
-//        ));
-//    }
+    /**
+     * Displays a form to edit an existing PurchaseOrder entity.
+     *
+     * @Route("/{id}/edit", name="purchaseorder_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, PurchaseOrder $purchaseOrder)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $cart = $em->getRepository('InventoryBundle:PurchaseOrder')->getCartArray($purchaseOrder);
+
+        return $this->render('@Inventory/PurchaseOrder/edit.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'cart' => $cart,
+            'purchase_order' => $purchaseOrder
+        ));
+    }
 
     /**
      * Deletes a PurchaseOrder entity.
