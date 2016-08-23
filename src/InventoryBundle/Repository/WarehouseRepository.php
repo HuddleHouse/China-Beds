@@ -30,7 +30,20 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getAllWarehousesArray() {
+        $warehouses = $this->findAll();
 
-}
+        foreach($warehouses as $warehouse) {
+            $quan = $this->getWarehouseInventory($warehouse);
+
+            $data[] = array(
+                'id' => $warehouse->getId(),
+                'name' => $warehouse->getName(),
+                'list_id' => $warehouse->getListId(),
+                'quantity' => $quan,
+                'po_quantity' => 0
+            );
+        }
+        return $data;
+    }
 
 }
