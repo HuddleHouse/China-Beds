@@ -41,7 +41,8 @@
                 self.selectedItem = [];
                 self.searchText = '';
                 self.message = '';
-                self.cart_total = 0;
+                self.cart_total = {{ total | json_encode | raw }};
+                self.initial_total = {{ total | json_encode | raw }};
                 self.due_date = new Date();
 
 
@@ -134,27 +135,27 @@
 
                 }
 
-                function setActive(draft){
+                function setActive(){
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_set_purchase_order_active') }}",
                         dataType: 'json',
                         data: { id: {{ purchaseOrder.id }}},
                         success: function (data) {
-                            window.location.href = "/purchase-order/"+data;
+                            window.location.href = "/app_dev.php/purchase-order/"+data;
                         }
                     });
 
                 }
 
-                function receiveAll(draft){
+                function receiveAll(){
                     $.ajax({
                         type: 'POST',
-                        url: "{{ path('api_set_purchase_order_active') }}",
+                        url: "{{ path('api_purchase_order_receive_all') }}",
                         dataType: 'json',
-                        data: { id: {{ purchaseOrder.id }}},
+                        data: { cart: self.cart, due_date: self.due_date, message: self.message, purchase_order_id: {{ purchaseOrder.id }} },
                         success: function (data) {
-                            window.location.href = "/purchase-order/"+data;
+                            window.location.href = "/app_dev.php/purchase-order/"+data;
                         }
                     });
 
@@ -220,7 +221,6 @@
     </style>
     <div  ng-controller="myCtrl as ctrl" layout="column" ng-cloak="" class="autocompletedemoCustomTemplate" ng-app="myApp">
 
-
         <div class="table">
             <h3>{{ purchaseOrder.warehouse.name }} <span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></h3>
             {% if purchaseOrder.status.name == 'Active' %}
@@ -268,7 +268,7 @@
                                 {% if purchaseOrder.status.name == 'Active' %}
                                     {% verbatim %}
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.received_quantity" type="number" max="{{item.ordered_quantity}}"jq-spinner ng-change="ctrl.updateCartItem()" class="form-control number_select"  >
+                                <input ng-model="item.received_quantity" type="number" max="{{item.ordered_quantity}}" jq-spinner ng-change="ctrl.updateCartItem()" class="form-control number_select"  >
                             </td>
                             {% endverbatim %}
 

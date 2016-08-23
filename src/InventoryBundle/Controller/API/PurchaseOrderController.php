@@ -94,5 +94,73 @@ class PurchaseOrderController extends Controller
     }
 
 
+    /**
+     * @Route("/api_purchase_order_receive_all", name="api_purchase_order_receive_all")
+     */
+    public function purchaseOrderReceiveAllActive(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cart = $request->request->get('cart');
+        $due_date = new \DateTime($request->request->get('due_date'));
+        $message = $request->request->get('message');
+        $po_id = $request->request->get('purchase_order_id');
+        $po = $em->getRepository('InventoryBundle:PurchaseOrder')->find($po_id);
+        $warehouse = $po->getWarehouse();
+
+        foreach($cart as $item) {
+            $variant = $em->getRepository('InventoryBundle:PurchaseOrderProductVariant')->find($item['id']);
+            $variant->setReceivedQuantity($item['received_quantity']);
+            $em->persist($variant);
+
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("select i.id as id
+	from warehouse_inventory i
+	where i.warehouse_id = :warehouse_id
+	and i.product_variant_id = :product_variant_id");
+            $statement->bindValue('warehouse_id', $warehouse->getId());
+            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+            $statement->execute();
+            $warehouse_inventory_id = $statement->fetch();
+
+            if($warehouse_inventory_id == false) {
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("insert into warehouse_inventory (quantity, warehouse_id, product_variant_id) values (:quantity, :warehouse_id, :product_variant_id)");
+                $statement->bindValue('quantity', $item['received_quantity']);
+                $statement->bindValue('warehouse_id', $warehouse->getId());
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+
+                try {
+                    $statement->execute();
+                }
+                catch(\Exception $e) {
+                    return JsonResponse::create(false);
+                }
+            }
+            else {
+                $warehouse_inventory = $em->getRepository('InventoryBundle:WarehouseInventory')->find($warehouse_inventory_id['id']);
+                $warehouse_inventory->setQuantity($warehouse_inventory->getQuantity() + $item['received_quantity']);
+                $em->persist($warehouse_inventory);
+            }
+        }
+
+        $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");
+        $statement->bindValue('name', 'Received');
+        $statement->execute();
+        $status_id = $statement->fetch();
+        $status = $em->getRepository('InventoryBundle:Status')->find($status_id['id']);
+
+        $po->setStatus($status);
+        $em->persist($po);
+        try {
+            $em->flush();
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+
+
+        return JsonResponse::create($po->getId());
+    }
+
 }
 

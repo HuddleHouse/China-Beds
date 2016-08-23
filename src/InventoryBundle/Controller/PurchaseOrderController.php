@@ -81,7 +81,8 @@ class PurchaseOrderController extends Controller
 
         return $this->render('@Inventory/PurchaseOrder/show.html.twig', array(
             'purchaseOrder' => $purchaseOrder,
-            'cart' => $cart
+            'cart' => $cart['cart'],
+            'total' => $cart['total']
         ));
     }
 
@@ -90,6 +91,7 @@ class PurchaseOrderController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $cart = array();
+        $total = 0;
         foreach($purchaseOrder->getProductvariants() as $variant) {
             $image_url = '';
             foreach($variant->getProductVariant()->getProduct()->getImages() as $image) {
@@ -110,9 +112,11 @@ class PurchaseOrderController extends Controller
             $statement->execute();
             $warehouse_quantity = $statement->fetch();
 
+            $total += $variant->getOrderedQuantity();
+
             $cart[] = array(
                 'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
-                'id' => $variant->getProductVariant(),
+                'id' => $variant->getProductVariant()->getId(),
                 'image_url' => $image_url,
                 'total_quantity' => $total_quantity['total'] + $variant->getOrderedQuantity(),
                 'warehouse_quantity' => $warehouse_quantity['total'] + $variant->getOrderedQuantity(),
@@ -120,7 +124,10 @@ class PurchaseOrderController extends Controller
                 'received_quantity' => $variant->getOrderedQuantity()
             );
         }
-        return $cart;
+        return array(
+            'cart' => $cart,
+            'total' => $total
+        );
     }
 
 //    /**
