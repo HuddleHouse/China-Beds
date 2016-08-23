@@ -77,41 +77,50 @@ class PurchaseOrderController extends Controller
      */
     public function showAction(PurchaseOrder $purchaseOrder)
     {
-        $warehouse = $purchaseOrder->getWarehouse();
-        $products = $this->getAllProductsWithQuantityArray($warehouse);
+        $cart = $this->getAllProductsInCart($purchaseOrder);
 
         return $this->render('@Inventory/PurchaseOrder/show.html.twig', array(
             'purchaseOrder' => $purchaseOrder,
-            'warehouse' => $warehouse,
-            'products' => $products
+            'cart' => $cart
         ));
     }
 
-    public function getAllProductsWithQuantityArray(Warehouse $warehouse)
+    public function getAllProductsInCart(PurchaseOrder $purchaseOrder)
     {
         $em = $this->getDoctrine()->getManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
-        $products = array();
 
-        foreach($products_all as $prod) {
+        $cart = array();
+        foreach($purchaseOrder->getProductvariants() as $variant) {
             $image_url = '';
-            foreach($prod->getImages() as $image) {
-                $image_url = $image->getWebPath();
+            foreach($variant->getProductVariant()->getProduct()->getImages() as $image) {
+                $image_url = '/'.$image->getWebPath();
                 break;
             }
 
-            foreach($prod->getVariants() as $variant)
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId(),
-                    'image_url' => $image_url,
-                    'total_quantity' => rand(0, 1000),
-                    'warehouse_quantity' => rand(0, 200),
-                    'add_quantity' => 0
-                );
-        }
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
+            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+            $statement->execute();
+            $total_quantity = $statement->fetch();
 
-        return $products;
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
+            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+            $statement->bindValue('warehouse_id', $purchaseOrder->getWarehouse()->getId());
+            $statement->execute();
+            $warehouse_quantity = $statement->fetch();
+
+            $cart[] = array(
+                'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
+                'id' => $variant->getProductVariant(),
+                'image_url' => $image_url,
+                'total_quantity' => $total_quantity['total'],
+                'warehouse_quantity' => $warehouse_quantity['total'],
+                'ordered_quantity' => $variant->getOrderedQuantity(),
+                'received_quantity' => $variant->getReceivedQuantity()
+            );
+        }
+        return $cart;
     }
 
 //    /**
