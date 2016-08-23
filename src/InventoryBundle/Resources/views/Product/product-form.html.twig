@@ -1,0 +1,61 @@
+<div class="portlet-body form">
+    <div class="form-body">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.sku) }}
+                {{ form_widget(form.sku) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.tagline) }}
+                {{ form_widget(form.tagline) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.front_headline) }}
+                {{ form_widget(form.front_headline) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+            </div>
+        </div>
+        <hr>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.shortDescription) }}
+                {{ form_widget(form.shortDescription) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.metaDescription) }}
+                {{ form_widget(form.metaDescription) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_label(form.category) }}
+                {{ form_widget(form.category) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_label(form.active) }}
+                {{ form_widget(form.active) }}
+            </div>
+        </div>
+    </div>
+</div>

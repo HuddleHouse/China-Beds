@@ -1,0 +1,44 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Price Group{% endblock %}
+{% block page_title %}
+    Edit Price Group
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('admin_price_group_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                paging: false
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <style>
+        #price_group_users label {
+            padding-left: 15px;
+            padding-right: 15px;
+
+        }
+    </style>
+    <div class="well bs-component">
+        {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
+        {{ form_widget(edit_form) }}
+        <input class="btn btn-raised btn-success" type="submit" value="Save" />
+        {{ form_end(edit_form) }}
+        {{ form_start(delete_form) }}
+        <input style="margin: -79px 0 0 120px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </div>
+
+
+{% endblock %}
