@@ -114,10 +114,10 @@ class PurchaseOrderController extends Controller
                 'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
                 'id' => $variant->getProductVariant(),
                 'image_url' => $image_url,
-                'total_quantity' => $total_quantity['total'],
-                'warehouse_quantity' => $warehouse_quantity['total'],
+                'total_quantity' => $total_quantity['total'] + $variant->getOrderedQuantity(),
+                'warehouse_quantity' => $warehouse_quantity['total'] + $variant->getOrderedQuantity(),
                 'ordered_quantity' => $variant->getOrderedQuantity(),
-                'received_quantity' => $variant->getReceivedQuantity()
+                'received_quantity' => $variant->getOrderedQuantity()
             );
         }
         return $cart;
