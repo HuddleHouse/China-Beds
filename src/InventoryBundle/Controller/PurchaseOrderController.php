@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use InventoryBundle\Entity\Warehouse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -12,7 +13,7 @@ use InventoryBundle\Form\PurchaseOrderType;
 /**
  * PurchaseOrder controller.
  *
- * @Route("/purchaseorder")
+ * @Route("/purchase-order")
  */
 class PurchaseOrderController extends Controller
 {
@@ -76,12 +77,41 @@ class PurchaseOrderController extends Controller
      */
     public function showAction(PurchaseOrder $purchaseOrder)
     {
-        $deleteForm = $this->createDeleteForm($purchaseOrder);
+        $warehouse = $purchaseOrder->getWarehouse();
+        $products = $this->getAllProductsWithQuantityArray($warehouse);
 
         return $this->render('@Inventory/PurchaseOrder/show.html.twig', array(
             'purchaseOrder' => $purchaseOrder,
-            'delete_form' => $deleteForm->createView(),
+            'warehouse' => $warehouse,
+            'products' => $products
         ));
+    }
+
+    public function getAllProductsWithQuantityArray(Warehouse $warehouse)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            $image_url = '';
+            foreach($prod->getImages() as $image) {
+                $image_url = $image->getWebPath();
+                break;
+            }
+
+            foreach($prod->getVariants() as $variant)
+                $products[] = array(
+                    'name' => $prod->getName().": ".$variant->getName(),
+                    'id' => $variant->getId(),
+                    'image_url' => $image_url,
+                    'total_quantity' => rand(0, 1000),
+                    'warehouse_quantity' => rand(0, 200),
+                    'add_quantity' => 0
+                );
+        }
+
+        return $products;
     }
 
 //    /**

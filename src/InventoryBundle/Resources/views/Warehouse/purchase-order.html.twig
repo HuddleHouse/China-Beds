@@ -15,8 +15,6 @@
 
 {% block footer %}
     <script>
-
-
         (function () {
             'use strict';
             angular.module('myApp',['ngMaterial', 'ngMessages'])
@@ -123,23 +121,13 @@
                 }
 
                 function save(draft){
-                    $log.info(self.cart);
-                    $log.info(self.due_date);
-                    $log.info(self.message);
-                    if(draft == 1)
-                        draft = 'active';
-                    else
-                        draft = 'draft';
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_save_purchase_order') }}",
                         dataType: 'json',
                         data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ warehouse.id }}, status: draft },
                         success: function (data) {
-                            $scope.$apply(function () {
-                                $scope.specifications = data;
-                                $('#spec_value').val('');
-                            });
+                            window.location.href = "/app_dev.php/purchase-order/"+data;
                         }
                     });
 
@@ -209,8 +197,8 @@
 
     <div class="table">
         <h3>{{ warehouse.name }}</h3>
-        <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save(1)">SAVE</a>
-        <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save(2)">SAVE DRAFT</a>
+        <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
+        <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
         <hr>
         <div class="row">
             <div class="col-md-6">

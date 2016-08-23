@@ -51,7 +51,14 @@ class WarehouseController extends Controller
     public function savePurchaseOrder(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $status = $request->request->get('status');
+        $status_name = $request->request->get('status');
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");
+        $statement->bindValue('name', $status_name);
+        $statement->execute();
+        $status_id = $statement->fetch();
+        $status = $em->getRepository('InventoryBundle:Status')->find($status_id['id']);
+
         /**
          * Add status to PO
          * Add order NUmber to PO
@@ -68,6 +75,8 @@ class WarehouseController extends Controller
         $purchase_order->setWarehouse($warehouse);
         $purchase_order->setStockDueDate($due_date);
         $purchase_order->setMessage($message);
+        $purchase_order->setStatus($status);
+
 
         foreach($cart as $item) {
             $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
@@ -80,7 +89,13 @@ class WarehouseController extends Controller
         $em->persist($purchase_order);
         $em->flush();
 
-        return JsonResponse::create(true);
+        $purchase_order->setOrderNumber('PO-'. str_pad($purchase_order->getId(), 5, "0", STR_PAD_LEFT));
+        $em->persist($purchase_order);
+        $em->flush();
+
+        return JsonResponse::create($purchase_order->getId());
     }
+
+
 }
 
