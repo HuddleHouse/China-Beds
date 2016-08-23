@@ -1,12 +1,13 @@
 {% extends ':default:layout.html.twig' %}
 
 {% block title %}Purchase Order{% endblock %}
+
 {% block page_title %}
     Purchase Order
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('purchaseorder_index') }}">< Back to the list</a>
+    <a href="{{ path('warehouse_show', { 'id': purchaseOrder.warehouse.id }) }}">< Back to {{ purchaseOrder.warehouse.name }}</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -14,46 +15,320 @@
 
 {% block footer %}
     <script>
-        $(document).ready(function () {
-            $('#part-table').DataTable({
-                paging: false
-            });
-        });
+        (function () {
+            'use strict';
+            angular.module('myApp',['ngMaterial', 'ngMessages'])
+                    .controller('myCtrl', MyCtrl)
+                    .directive('jqSpinner', jqSpinner);
+
+            function MyCtrl ($timeout, $q, $log) {
+                var self = this;
+
+                self.simulateQuery = false;
+                self.isDisabled    = false;
+
+                self.repos         = loadAll();
+                self.querySearch   = querySearch;
+                self.selectedItemChange = selectedItemChange;
+                self.searchTextChange   = searchTextChange;
+                self.updateCartItem   = updateCartItem;
+                self.getCartTotal   = getCartTotal;
+                self.setActive   = setActive;
+                self.receiveAll   = receiveAll;
+                self.save = save;
+                self.cart = {{ cart | json_encode | raw}};
+                self.cart_items = [];
+                self.selectedItem = [];
+                self.searchText = '';
+                self.message = '';
+                self.cart_total = {{ total | json_encode | raw }};
+                self.initial_total = {{ total | json_encode | raw }};
+                self.due_date = new Date();
+
+
+                /**
+                 * Search for repos... use $timeout to simulate
+                 * remote dataservice call.
+                 */
+                function querySearch (query) {
+                    var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+                            deferred;
+                    if (self.simulateQuery) {
+                        deferred = $q.defer();
+                        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+                        return deferred.promise;
+                    } else {
+                        return results;
+                    }
+                }
+
+                function searchTextChange(text) {
+                    $log.info('Text changed to ' + text);
+                }
+
+                function selectedItemChange(item) {
+
+                    if(item != undefined) {
+                        if(!self.cart_items[self.selectedItem.id]) {
+                            var index = self.cart.push(self.selectedItem) - 1;
+                            self.cart_items[self.selectedItem.id] = index;
+                            resetSearch();
+                        }
+                    }
+                }
+
+                function resetSearch() {
+                    self.selectedItem = null;
+                    self.searchText = null;
+                    $("#search").attr("aria-expanded","false");
+                }
+
+
+                /**
+                 * Build `components` list of key/value pairs
+                 */
+                function loadAll() {
+                    var repos = {{ cart | json_encode | raw}};
+
+                    return repos.map( function (repo) {
+                        repo.value = repo.name.toLowerCase();
+                        return repo;
+                    });
+                }
+
+                /**
+                 * Create filter function for a query string
+                 */
+                function createFilterFor(query) {
+                    var lowercaseQuery = angular.lowercase(query);
+
+                    return function filterFn(item) {
+                        return (item.value.indexOf(lowercaseQuery) === 0);
+                    };
+                }
+
+                /**
+                 * Create filter function for a query string
+                 */
+                function updateCartItem() {
+                    self.cart_total = getCartTotal();
+                }
+
+                function getCartTotal() {
+                    var total = 0;
+                    angular.forEach(self.cart, function(value, key) {
+                        total += value.received_quantity;
+                    });
+                    return total;
+                }
+
+                function save(draft){
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_save_purchase_order') }}",
+                        dataType: 'json',
+                        data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ purchaseOrder.warehouse.id }}, status: draft },
+                        success: function (data) {
+                            window.location.href = "/app_dev.php/purchase-order/"+data;
+                        }
+                    });
+
+                }
+
+                function setActive(){
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_set_purchase_order_active') }}",
+                        dataType: 'json',
+                        data: { id: {{ purchaseOrder.id }}},
+                        success: function (data) {
+                            window.location.href = "/app_dev.php/purchase-order/"+data;
+                        }
+                    });
+
+                }
+
+                function receiveAll(){
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_purchase_order_receive_all') }}",
+                        dataType: 'json',
+                        data: { cart: self.cart, due_date: self.due_date, message: self.message, purchase_order_id: {{ purchaseOrder.id }} },
+                        success: function (data) {
+                            window.location.href = "/app_dev.php/purchase-order/"+data;
+                        }
+                    });
+
+                }
+            };
+
+            function jqSpinner() {
+                return {
+                    require: 'ngModel',
+                    link: function (scope, element, attrs, self) {
+                        element.spinner({
+                            spin: function (event, ui) {
+                                self.$setViewValue(ui.value);
+                            }
+                        });
+                    }
+                };
+            };
+
+        })();
+
+
     </script>
 {% endblock footer %}
 
 {% block content %}
-    <div class="table">
-        <div class="col-md-12">
-            <div class="table">
-                <tbody>
-                <tr>
-                    <th>Id</th>
-                    <td>{{ purchaseOrder.id }}</td>
-                </tr>
-                <tr>
-                    <th>Orderdate</th>
-                    <td>{% if purchaseOrder.orderDate %}{{ purchaseOrder.orderDate|date('Y-m-d') }}{% endif %}</td>
-                </tr>
-                <tr>
-                    <th>Stockduedate</th>
-                    <td>{% if purchaseOrder.stockDueDate %}{{ purchaseOrder.stockDueDate|date('Y-m-d') }}{% endif %}</td>
-                </tr>
-                <tr>
-                    <th>Ordernumber</th>
-                    <td>{{ purchaseOrder.orderNumber }}</td>
-                </tr>
-                <tr>
-                    <th>Message</th>
-                    <td>{{ purchaseOrder.message }}</td>
-                </tr>
-                </tbody>
-                </table>
+    <style>
 
-                {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-                {{ form_end(delete_form) }}
+        .table-form {
+            padding: 0px !important;
+        }
+        .table-form input {
+            text-align: center !important;
+            margin-bottom: -2px !important;
+            height: 60px !important;
+        }
+        .table-name {
+            text-align: center !important;
+        }
+
+        span.ui-spinner.ui-state-default.ui-widget.ui-widget-content.ui-corner-all {
+            display: flex;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            opacity: 0;
+        }
+        .ui-spinner-button {
+            height: 50%;
+            position: absolute;
+        }
+        .ui-spinner-up:hover, .ui-spinner-down:hover {
+            text-decoration: none;
+        }
+        .ui-spinner-up {
+            top: 12px;
+            right: 0;
+        }
+        .ui-spinner-down {
+            bottom: -5px;
+            right: 0;
+        }
+    </style>
+    <div  ng-controller="myCtrl as ctrl" layout="column" ng-cloak="" class="autocompletedemoCustomTemplate" ng-app="myApp">
+
+        <div class="table">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>{{ purchaseOrder.warehouse.name }} <span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></h3>
+                </div>
+                <div class="col-md-6">
+                    {% if purchaseOrder.status.name == 'Active' %}
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
+                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" href="{{ path('purchaseorder_edit', { 'id': purchaseOrder.id }) }}">EDIT</a>
+                    {% elseif purchaseOrder.status.name == 'Draft' %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Stock Due-date <md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date" disabled></md-datepicker></h5>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">Item</th>
+                            <th class="table-name" style="width: 150px;">Quantity</th>
+                            {% if purchaseOrder.status.name == 'Active' %}
+                            <th class="table-name" style="width: 100px;">To Receive</th>
+                            {% endif %}
+                            <th class="table-name" style="width: 175px;">Warehouse After</th>
+                            <th class="table-name" style="width: 175px;">Total After</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr  ng-model="cart" ng-repeat="(key, item) in ctrl.cart track by $index">
+                            <div  ng-if="item.name != null">
+                                {% verbatim %}
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <img src="{{item.image_url}}" style="height: 34px; padding-right: 15px;">
+                                {{ item.name }}
+                            </td>
+                            <td class="table-form">
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " disabled style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
+                            </td>
+                            {% endverbatim %}
+                                {% if purchaseOrder.status.name == 'Active' %}
+                                    {% verbatim %}
+                            <td class="table-form" style="text-align: center;">
+                                <input ng-model="item.received_quantity" type="number" max="{{item.ordered_quantity}}" jq-spinner ng-change="ctrl.updateCartItem()" class="form-control number_select"  >
+                            </td>
+                            {% endverbatim %}
+
+                                {% endif %}
+                                {% verbatim %}
+                            <td class="table-form" >
+                                <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
+                            </td>
+                            <td class="table-form" >
+                                <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
+                            </td>
+                                  {% endverbatim %}
+
+                            </div>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr>
+            <div class="row" style="margin-top: 10px;">
+                <!-- accepted payments column -->
+                <div class="col-xs-9">
+                    <p class="text-muted well well-sm no-shadow" >
+                        <label for="message">Comments</label>
+                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
+                    </p>
+
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-3">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th style="width:50%">Total Items:</th>
+                                <td>
+                                    {% verbatim %}
+                                <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
+                                {% endverbatim %}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- /.col -->
             </div>
         </div>
+
+
+
+
+
     </div>
 {% endblock %}

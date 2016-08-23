@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\Warehouse;
 use InventoryBundle\Form\WarehouseType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Warehouse controller.
@@ -26,23 +27,10 @@ class WarehouseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
-        $data = array();
-
-        foreach($warehouses as $warehouse) {
-            $quan = $this->getWarehouseInventory($warehouse);
-
-            $data[] = array(
-                'id' => $warehouse->getId(),
-                'name' => $warehouse->getName(),
-                'list_id' => $warehouse->getListId(),
-                'quantity' => $quan,
-                'po_quantity' => 0
-            );
-        }
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
 
         return $this->render('@Inventory/Warehouse/index.html.twig', array(
-            'warehouses' => $data,
+            'warehouses' => $warehouses,
         ));
     }
 
@@ -94,22 +82,17 @@ class WarehouseController extends Controller
         $inventory_data = array();
 
         $em = $this->getDoctrine()->getManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
-        $products = array();
-
-        foreach($products_all as $prod) {
-            foreach($prod->getVariants() as $variant)
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId()
-                );
-        }
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
+        $active_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
+        $all_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 
         return $this->render('@Inventory/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
             'delete_form' => $deleteForm->createView(),
             'products' => $products,
-            'inventory_data' => $inventory_data
+            'inventory_data' => $inventory_data,
+            'active_po' => $active_po,
+            'all_po' => $all_po
         ));
     }
 
@@ -200,7 +183,6 @@ class WarehouseController extends Controller
     }
 
     /**
-     * Finds and displays a Warehouse entity.
      *
      * @Route("/{id}/purchase-order", name="warehouse_new_purchase_order")
      * @Method("GET")
@@ -208,20 +190,10 @@ class WarehouseController extends Controller
     public function warehouseNewPurchaseOrderAction(Warehouse $warehouse)
     {
         $inventory_data = array();
-
         $em = $this->getDoctrine()->getManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
-        $products = array();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray($warehouse);
 
-        foreach($products_all as $prod) {
-            foreach($prod->getVariants() as $variant)
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId()
-                );
-        }
-
-        return $this->render('@Inventory/Warehouse/inventory.html.twig', array(
+        return $this->render('@Inventory/Warehouse/purchase-order.html.twig', array(
             'warehouse' => $warehouse,
             'inventory_data' => $inventory_data,
             'products' => $products
@@ -229,7 +201,6 @@ class WarehouseController extends Controller
     }
 
     /**
-     * Finds and displays a Warehouse entity.
      *
      * @Route("/{id}/inventory", name="warehouse_inventory_show")
      * @Method("GET")
@@ -237,18 +208,8 @@ class WarehouseController extends Controller
     public function warehouseInventoryShowAction(Warehouse $warehouse)
     {
         $inventory_data = array();
-
         $em = $this->getDoctrine()->getManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
-        $products = array();
-
-        foreach($products_all as $prod) {
-            foreach($prod->getVariants() as $variant)
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId()
-                );
-        }
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
 
         return $this->render('@Inventory/Warehouse/inventory.html.twig', array(
             'warehouse' => $warehouse,
@@ -258,20 +219,4 @@ class WarehouseController extends Controller
     }
 
 
-    /**
-     * Returns the number of total items in the warehouse
-     *
-     * @param Warehouse $warehouse
-     * @return int
-     */
-    public function getWarehouseInventory(Warehouse $warehouse) {
-        if(count($warehouse->getInventory()) == 0)
-            return 0;
-
-        $quantity = 0;
-        foreach($warehouse->getInventory() as $item) {
-            $quantity += $item->getQuantity();
-        }
-        return $quantity;
-    }
 }

@@ -7,6 +7,7 @@
 {% endblock page_title %}
 
 {% block page_name %}
+    <a href="{{ path('warehouse_show', { 'id': warehouse.id }) }}">< Back to {{ warehouse.name }}</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -14,110 +15,313 @@
 
 {% block footer %}
     <script>
+        (function () {
+            'use strict';
+            angular.module('myApp',['ngMaterial', 'ngMessages'])
+                    .controller('myCtrl', MyCtrl)
+                    .directive('jqSpinner', jqSpinner);
 
-        var app = angular.module('myApp', ['ngFileUpload']);
-        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
-            $scope.inventory_data = [];
+            function MyCtrl ($timeout, $q, $log) {
+                var self = this;
 
-            $.ajax({
-                beforeSend: function () {
-                },
-                type: 'POST',
-                url: "{{ path('api_get_warehouse_inventory') }}",
-                data: {warehouse_id: {{ warehouse.id }}},
-                success: function (data) {
-                    $scope.$apply(function () {
-                        $scope.inventory_data = data;
+                self.simulateQuery = false;
+                self.isDisabled    = false;
+
+                self.repos         = loadAll();
+                self.querySearch   = querySearch;
+                self.selectedItemChange = selectedItemChange;
+                self.searchTextChange   = searchTextChange;
+                self.updateCartItem   = updateCartItem;
+                self.getCartTotal   = getCartTotal;
+                self.save = save;
+                self.cart = [];
+                self.cart_items = [];
+                self.selectedItem = [];
+                self.searchText = '';
+                self.message = '';
+                self.cart_total = 0;
+                self.due_date = new Date();
+
+
+                /**
+                 * Search for repos... use $timeout to simulate
+                 * remote dataservice call.
+                 */
+                function querySearch (query) {
+                    var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+                            deferred;
+                    if (self.simulateQuery) {
+                        deferred = $q.defer();
+                        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+                        return deferred.promise;
+                    } else {
+                        return results;
+                    }
+                }
+
+                function searchTextChange(text) {
+                    $log.info('Text changed to ' + text);
+                }
+
+                function selectedItemChange(item) {
+
+                    if(item != undefined) {
+                        if(!self.cart_items[self.selectedItem.id]) {
+                            var index = self.cart.push(self.selectedItem) - 1;
+                            self.cart_items[self.selectedItem.id] = index;
+                            resetSearch();
+                        }
+                    }
+                }
+
+                function resetSearch() {
+                    self.selectedItem = null;
+                    self.searchText = null;
+                    $("#search").attr("aria-expanded","false");
+                }
+
+
+                /**
+                 * Build `components` list of key/value pairs
+                 */
+                function loadAll() {
+                    var repos = {{ products | json_encode | raw}};
+
+                    return repos.map( function (repo) {
+                        repo.value = repo.name.toLowerCase();
+                        return repo;
                     });
                 }
-            });
 
-            $scope.addInventory = function () {
-                var variant_id = $('#variant').val();
-                var quantity = $('#quantity').val();
+                /**
+                 * Create filter function for a query string
+                 */
+                function createFilterFor(query) {
+                    var lowercaseQuery = angular.lowercase(query);
 
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ path('api_add_warehouse_inventory') }}",
-                    dataType: 'json',
-                    data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
-                    success: function (data) {
-                        $scope.$apply(function () {
-                            $scope.inventory_data = data;
-                            $('#quantity').val('');
-                        });
-                    }
-                });
+                    return function filterFn(item) {
+                        return (item.value.indexOf(lowercaseQuery) === 0);
+                    };
+                }
+
+                /**
+                 * Create filter function for a query string
+                 */
+                function updateCartItem() {
+                    self.cart_total = getCartTotal();
+                }
+
+                function getCartTotal() {
+                    var total = 0;
+                    angular.forEach(self.cart, function(value, key) {
+                        total += value.add_quantity;
+
+                    });
+                    return total;
+                }
+
+                function save(draft){
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_save_purchase_order') }}",
+                        dataType: 'json',
+                        data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ warehouse.id }}, status: draft },
+                        success: function (data) {
+                            window.location.href = "app_dev.php/purchase-order/"+data;
+                        }
+                    });
+
+                }
+
             };
 
-        }]);
+            function jqSpinner() {
+                return {
+                    require: 'ngModel',
+                    link: function (scope, element, attrs, self) {
+                        element.spinner({
+                            spin: function (event, ui) {
+                                self.$setViewValue(ui.value);
+                            }
+                        });
+                    }
+                };
+            };
+
+        })();
+
+
     </script>
 {% endblock footer %}
 
 {% block content %}
-<div ng-app="myApp" ng-controller="myCtrl">
-    <div class="row">
-        <center><h2>{{ warehouse.name }}</h2></center>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table">
-                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+    <style>
+
+        .table-form {
+            padding: 0px !important;
+        }
+        .table-form input {
+            text-align: center !important;
+            margin-bottom: -2px !important;
+            height: 60px !important;
+        }
+        .table-name {
+            text-align: center !important;
+        }
+
+        span.ui-spinner.ui-state-default.ui-widget.ui-widget-content.ui-corner-all {
+            display: flex;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            opacity: 0;
+        }
+        .ui-spinner-button {
+            height: 50%;
+            position: absolute;
+        }
+        .ui-spinner-up:hover, .ui-spinner-down:hover {
+            text-decoration: none;
+        }
+        .ui-spinner-up {
+            top: 12px;
+            right: 0;
+        }
+        .ui-spinner-down {
+            bottom: -5px;
+            right: 0;
+        }
+    </style>
+<div  ng-controller="myCtrl as ctrl" layout="column" ng-cloak="" class="autocompletedemoCustomTemplate" ng-app="myApp">
+
+
+    <div class="table">
+        <h3>{{ warehouse.name }}</h3>
+        <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
+        <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Stock Due-date <md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
                     <thead>
-                    <tr role="row">
-                        <th>Name</th>
-                        <th>Quantity on Hand</th>
-                        <th>Quantity on P.O.</th>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric">Item</th>
+                        <th class="table-name" style="width: 100px;">Quantity</th>
+                        <th class="table-name" style="width: 175px;">Warehouse Inventory</th>
+                        <th class="table-name" style="width: 175px;">Total Inventory</th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                    <tr  ng-model="cart" ng-repeat="(key, item) in ctrl.cart track by $index">
+                        <div  ng-if="item.name != null">
                             {% verbatim %}
-                                <tr ng-repeat="(i, data) in inventory_data track by $index">
-                                    <td>{{ data.name }}</td>
-                                    <td ng-model="data.quantity"><center>{{ data.quantity }}</center></td>
-                                    <td ng-model="data.po_quantity"><center>{{ data.po_quantity }}</center></td>
-                                </tr>
-                            {% endverbatim %}
-                        </tr>
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <img src="/{{item.image_url}}" style="height: 34px; padding-right: 15px;">
+                                {{ item.name }}
+                            </td>
+                            <td class="table-form">
+                                 <input id="{{item.id}}" ng-model="item.add_quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
+                            </td>
+                            <td class="table-form" style="text-align: center;">
+                                <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
+                            </td>
+                            <td class="table-form" >
+                                <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
+                            </td>
+                        {% endverbatim %}
+                        </div>
+                    </tr>
+                    <tr id="search">
+                        <td class="mdl-data-table__cell--non-numeric" style="padding: 0px;">
+                            {% verbatim %}
+<md-content>
+                            <md-autocomplete
+                                ng-disabled="ctrl.isDisabled"
+                                md-no-cache="true"
+                                md-selected-item="ctrl.selectedItem"
+                                md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+                                md-search-text="ctrl.searchText"
+                                md-selected-item-change="ctrl.selectedItemChange(item)"
+                                md-items="item in ctrl.querySearch(ctrl.searchText)"
+                                md-item-text="item.name"
+                                md-min-length="0"
+                                placeholder="Pick a Product"
+                                md-autofocus="false"
+                                md-menu-class="autocomplete-custom-template">
+                                <md-item-template>
+                                    <span class="item-title">
+                                        <img src="/{{item.image_url}}" style="max-width: 50px;">
+                                        <span> {{item.name}} </span>
+                                    </span>
+                                    <span class="item-metadata">
+                                        <span class="item-metastat">
+                                            <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
+                                        </span>
+                                        <span class="item-metastat">
+                                           <strong>{{item.total_quantity}}</strong> total quantity
+                                        </span>
+
+                                     </span>
+                                </md-item-template>
+                                <md-not-found>
+                                       No product matching "{{ctrl.searchText}}" were found.
+                                    </md-not-found>
+                            </md-autocomplete>
+                            </md-content>
+                                {% endverbatim %}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+        <hr>
+        <div class="row" style="margin-top: 10px;">
+            <!-- accepted payments column -->
+            <div class="col-xs-9">
+                <p class="text-muted well well-sm no-shadow" >
+                    <label for="message">Comments</label>
+                    <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
+                </p>
 
-
-
-    <div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add Variant</h4>
-                </div>
-                <div class="modal-body">
-                    <label for="variant">Product</label>
-                    <select id="variant" class="form-control" style="margin-bottom: 10px">
-                        {% for attr in products %}
-                            <option value="{{ attr.id }}">{{ attr.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="sku" class="required">Quantity</label>
-                    <input type="number" id="quantity" name="quantity" required="required" class="form-control" style="margin-bottom: 10px">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-raised btn-primary" ng-click="addInventory()" >Save changes</button>
-                </div>
             </div>
+            <!-- /.col -->
+            <div class="col-xs-3">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th style="width:50%">Total Items:</th>
+                            <td>
+                                {% verbatim %}
+                                <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
+                                {% endverbatim %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <!-- /.col -->
         </div>
     </div>
 
+
+
+
+
 </div>
-    <a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons">add</i>
-    </a>
-    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Create an inventory item.
-    </div>
 {% endblock %}
