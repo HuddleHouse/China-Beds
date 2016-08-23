@@ -121,15 +121,20 @@
                 }
 
                 function save(draft){
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{ path('api_save_purchase_order') }}",
-                        dataType: 'json',
-                        data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft },
-                        success: function (data) {
-                            window.location.href = "/purchase-order/"+data;
-                        }
-                    });
+                    if($('#warehouse').val()) {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('api_save_purchase_order') }}",
+                            dataType: 'json',
+                            data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft, warehouse_id: $('#warehouse').val()},
+                            success: function (data) {
+                                window.location.href = "/purchase-order/"+data;
+                            }
+                        });
+                    }
+                    else {
+
+                    }
 
                 }
 
@@ -196,16 +201,25 @@
 
 
         <div class="table">
-
-            <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
-            <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
-            <hr>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h5>Stock Due-date <md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
-                <div class="col-md-6">
-
+                <div class="col-md-4">
+                    <form id="warehouse-form">
+                        <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;" required>
+                            <option value="" disabled selected>Warehouse</option>
+                            {% for warehouse in warehouses %}
+                                <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="" style="margin: 15px 20px 0;">
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
+                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
+                    </div>
                 </div>
             </div>
             <hr>
@@ -290,7 +304,7 @@
             <hr>
             <div class="row" style="margin-top: 10px;">
                 <!-- accepted payments column -->
-                <div class="col-xs-9">
+                <div class="col-md-9">
                     <p class="text-muted well well-sm no-shadow" >
                         <label for="message">Comments</label>
                         <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
@@ -298,7 +312,7 @@
 
                 </div>
                 <!-- /.col -->
-                <div class="col-xs-3">
+                <div class="col-md-3">
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
