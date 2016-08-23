@@ -3,6 +3,7 @@
 namespace InventoryBundle\Controller\API;
 
 use InventoryBundle\Entity\PurchaseOrder;
+use InventoryBundle\Entity\PurchaseOrderProductVariant;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -50,20 +51,36 @@ class WarehouseController extends Controller
     public function savePurchaseOrder(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $status = $request->request->get('status');
+        /**
+         * Add status to PO
+         * Add order NUmber to PO
+         */
+
         $cart = $request->request->get('cart');
         $due_date = new \DateTime($request->request->get('due_date'));
         $message = $request->request->get('message');
         $warehouse_id = $request->request->get('warehouse_id');
-
         $warehouse = $em->getRepository('InventoryBundle:Warehouse')->find($warehouse_id);
+
         $purchase_order = new PurchaseOrder();
+        $purchase_order->setUser($this->getUser());
+        $purchase_order->setWarehouse($warehouse);
+        $purchase_order->setStockDueDate($due_date);
+        $purchase_order->setMessage($message);
 
         foreach($cart as $item) {
-            $image_url = '';
-
+            $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
+            $purchase_order_variant = new PurchaseOrderProductVariant();
+            $purchase_order_variant->setProductVariant($variant);
+            $purchase_order_variant->setPurchaseOrder($purchase_order);
+            $purchase_order_variant->setOrderedQuantity($item['add_quantity']);
+            $em->persist($purchase_order_variant);
         }
+        $em->persist($purchase_order);
+        $em->flush();
 
-        return JsonResponse::create($products);
+        return JsonResponse::create(true);
     }
 }
 

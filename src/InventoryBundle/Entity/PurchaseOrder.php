@@ -49,7 +49,7 @@ class PurchaseOrder
      * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Status", inversedBy="purchase_orders")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
@@ -207,6 +207,11 @@ class PurchaseOrder
      */
     public function getProductvariants()
     {
+        return $this->product_variants;
+    }
+
+    public function addPurchaseOrderProductVariant(PurchaseOrderProductVariant $productVariant) {
+        $this->product_variants[] = $productVariant;
         return $this->product_variants;
     }
 
