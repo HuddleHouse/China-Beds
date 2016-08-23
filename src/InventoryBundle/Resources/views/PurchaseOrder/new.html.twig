@@ -121,19 +121,22 @@
                 }
 
                 function save(draft){
-                    if($('#warehouse').val()) {
+                    if($('#warehouse').val() && self.cart.length > 0) {
                         $.ajax({
                             type: 'POST',
                             url: "{{ path('api_save_purchase_order') }}",
                             dataType: 'json',
                             data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft, warehouse_id: $('#warehouse').val()},
                             success: function (data) {
-                                window.location.href = "/purchase-order/"+data;
+                                window.location.href = "/app_dev.php/purchase-order/"+data;
                             }
                         });
                     }
                     else {
-
+                        if(self.cart.length > 0)
+                            $('#error-message').append("<div class='alert alert-error'>Please select a warehouse.</div>");
+                        else if(self.cart.length == 0)
+                            $('#error-message').append("<div class='alert alert-error'>Please add at least one item to the Purchase Order to continue.</div>");
                     }
 
                 }
@@ -197,6 +200,9 @@
             right: 0;
         }
     </style>
+    <div id="error-message">
+
+    </div>
     <div  ng-controller="myCtrl as ctrl" layout="column" ng-cloak="" class="autocompletedemoCustomTemplate" ng-app="myApp">
 
 

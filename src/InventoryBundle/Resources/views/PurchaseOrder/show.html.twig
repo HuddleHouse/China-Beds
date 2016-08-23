@@ -222,13 +222,19 @@
     <div  ng-controller="myCtrl as ctrl" layout="column" ng-cloak="" class="autocompletedemoCustomTemplate" ng-app="myApp">
 
         <div class="table">
-            <h3>{{ purchaseOrder.warehouse.name }} <span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></h3>
-            {% if purchaseOrder.status.name == 'Active' %}
-                <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
-                <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.edit()">EDIT</a>
-            {% elseif purchaseOrder.status.name == 'Draft' %}
-                <a class="btn btn-raised btn-warning" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
-            {% endif %}
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>{{ purchaseOrder.warehouse.name }} <span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></h3>
+                </div>
+                <div class="col-md-6">
+                    {% if purchaseOrder.status.name == 'Active' %}
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
+                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.edit()">EDIT</a>
+                    {% elseif purchaseOrder.status.name == 'Draft' %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
+                    {% endif %}
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-6">
