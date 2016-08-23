@@ -42,30 +42,13 @@ class PurchaseOrderController extends Controller
      */
     public function newAction(Request $request)
     {
-        $purchaseOrder = new PurchaseOrder();
-        $form = $this->createForm('InventoryBundle\Form\PurchaseOrderType', $purchaseOrder);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($purchaseOrder);
-                $em->flush();
-                $this->addFlash('notice', 'Purchase Order created successfully.');
-                return $this->redirectToRoute('purchaseorder_show', array('id' => $purchaseOrder->getId()));
-            }
-            catch(\Exception $e) {
-                $this->addFlash('error', 'Error creating Purchase Order: ' . $e->getMessage());
-                return $this->render('@Inventory/PurchaseOrder/new.html.twig', array(
-                    'purchaseOrder' => $purchaseOrder,
-                    'form' => $form->createView(),
-                ));
-            }
-        }
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
 
         return $this->render('@Inventory/PurchaseOrder/new.html.twig', array(
-            'purchaseOrder' => $purchaseOrder,
-            'form' => $form->createView(),
+            'inventory_data' => $inventory_data,
+            'products' => $products
         ));
     }
 

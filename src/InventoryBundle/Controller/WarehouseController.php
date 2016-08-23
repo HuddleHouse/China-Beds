@@ -31,7 +31,7 @@ class WarehouseController extends Controller
         $data = array();
 
         foreach($warehouses as $warehouse) {
-            $quan = $this->getWarehouseInventory($warehouse);
+            $quan = $em->getRepository('InventoryBundle:Warehouse')->getWarehouseInventory($warehouse);
 
             $data[] = array(
                 'id' => $warehouse->getId(),
@@ -227,7 +227,8 @@ class WarehouseController extends Controller
     public function warehouseInventoryShowAction(Warehouse $warehouse)
     {
         $inventory_data = array();
-        $products = $this->getAllProductsArray();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
 
         return $this->render('@Inventory/Warehouse/inventory.html.twig', array(
             'warehouse' => $warehouse,
@@ -237,84 +238,4 @@ class WarehouseController extends Controller
     }
 
 
-    /**
-     * Returns the number of total items in the warehouse
-     *
-     * @param Warehouse $warehouse
-     * @return int
-     */
-    public function getWarehouseInventory(Warehouse $warehouse)
-    {
-        if(count($warehouse->getInventory()) == 0)
-            return 0;
-
-        $quantity = 0;
-        foreach($warehouse->getInventory() as $item) {
-            $quantity += $item->getQuantity();
-        }
-        return $quantity;
-    }
-
-    /**
-     * Returns a formatted array with all products
-     *
-     * @param Warehouse $warehouse
-     * @return array
-     */
-    public function getAllProductsArray()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
-        $products = array();
-
-        foreach($products_all as $prod) {
-            $image_url = '';
-            foreach($prod->getImages() as $image) {
-                $image_url = $image->getWebPath();
-                break;
-            }
-
-            foreach($prod->getVariants() as $variant)
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId(),
-                    'image_url' => $image_url
-                );
-        }
-
-        return $products;
-    }
-
-    /**
-     * Returns a formatted array with all products
-     *
-     * @param Warehouse $warehouse
-     * @return array
-     */
-    public function getAllProductsWithQuantityArray(Warehouse $warehouse)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
-        $products = array();
-
-        foreach($products_all as $prod) {
-            $image_url = '';
-            foreach($prod->getImages() as $image) {
-                $image_url = $image->getWebPath();
-                break;
-            }
-
-            foreach($prod->getVariants() as $variant)
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId(),
-                    'image_url' => $image_url,
-                    'total_quantity' => rand(0, 1000),
-                    'warehouse_quantity' => rand(0, 200),
-                    'add_quantity' => 0
-                );
-        }
-
-        return $products;
-    }
 }
