@@ -83,12 +83,16 @@ class WarehouseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
+        $active_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
+        $all_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 
         return $this->render('@Inventory/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
             'delete_form' => $deleteForm->createView(),
             'products' => $products,
-            'inventory_data' => $inventory_data
+            'inventory_data' => $inventory_data,
+            'active_po' => $active_po,
+            'all_po' => $all_po
         ));
     }
 

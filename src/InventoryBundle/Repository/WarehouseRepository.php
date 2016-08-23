@@ -29,18 +29,31 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
+    public function getWarehouseInventoryOnPurchaseOrder(Warehouse $warehouse)
+    {
+        $quantity = 0;
+        if(count($warehouse->getPurchaseOrders()) == 0)
+            return 0;
+
+        foreach($warehouse->getPurchaseOrders() as $item) {
+            if($item->getStatus()->getName() == 'Active')
+                foreach($item->getProductvariants() as $variant)
+                    $quantity += $variant->getOrderedQuantity();
+        }
+
+        return $quantity;
+    }
+
     public function getAllWarehousesArray() {
         $warehouses = $this->findAll();
 
         foreach($warehouses as $warehouse) {
-            $quan = $this->getWarehouseInventory($warehouse);
-
             $data[] = array(
                 'id' => $warehouse->getId(),
                 'name' => $warehouse->getName(),
                 'list_id' => $warehouse->getListId(),
-                'quantity' => $quan,
-                'po_quantity' => 0
+                'quantity' => $this->getWarehouseInventory($warehouse),
+                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
             );
         }
         return $data;

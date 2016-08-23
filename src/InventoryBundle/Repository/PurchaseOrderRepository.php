@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Repository;
 use InventoryBundle\Entity\PurchaseOrder;
+use InventoryBundle\Entity\Warehouse;
 
 /**
  * PurchaseOrderRepository
@@ -53,6 +54,37 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
             'cart' => $cart,
             'total' => $total
         );
+    }
+
+    public function getActiveForWarehouseArray(Warehouse $warehouse) {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
+	from warehouses w
+		left join purchase_order p
+			on p.warehouse_id = w.id
+		left join status s
+			on s.id = p.status_id
+	where w.id = :warehouse_id 
+	and s.name = 'Active'");
+        $statement->bindValue('warehouse_id', $warehouse->getId());
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    public function getAllForWarehouseArray(Warehouse $warehouse) {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
+	from warehouses w
+		left join purchase_order p
+			on p.warehouse_id = w.id
+		left join status s
+			on s.id = p.status_id
+	where w.id = :warehouse_id");
+        $statement->bindValue('warehouse_id', $warehouse->getId());
+        $statement->execute();
+        return $statement->fetchAll();
     }
 
 }
