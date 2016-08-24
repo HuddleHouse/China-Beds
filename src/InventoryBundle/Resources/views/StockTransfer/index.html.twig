@@ -29,19 +29,26 @@
                     <thead>
                     <tr>
                         <th>Date</th>
+                        <th>Status</th>
                         <th>Departing Warehouse</th>
                         <th>Recieving Warehouse</th>
-                        <th>Message</th>
                         <th style="width: 150px;">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for stockTransfer in stockTransfers %}
                         <tr>
-                            <td><a href="{{ path('stocktransfer_show', { 'id': stockTransfer.id }) }}">{% if stockTransfer.date %}{{ stockTransfer.date|date('Y-m-d') }}{% endif %}</a></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{ stockTransfer.message }}</td>
+                            <td><a href="{{ path('stocktransfer_show', { 'id': stockTransfer.id }) }}">{{ stockTransfer.orderNumber }}</a></td>
+                            <td>
+                                <span class="mdl-chip mdl-chip--contact" >
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ stockTransfer.status.color }};">{{ stockTransfer.status.nameFirstLetter }}</span>
+                                    <span class="mdl-chip__text">
+                                        {{ stockTransfer.status.name }}
+                                    </span>
+                            </span>
+                            </td>
+                            <td><a href="{{ path('warehouse_show', { 'id': stockTransfer.departingWarehouse.id }) }}">{{ stockTransfer.departingWarehouse.name }}</a></td>
+                            <td><a href="{{ path('warehouse_show', { 'id': stockTransfer.receivingWarehouse.id }) }}">{{ stockTransfer.receivingWarehouse.name }}</a></td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('stocktransfer_show', { 'id': stockTransfer.id }) }}">show</a>
                             </td>

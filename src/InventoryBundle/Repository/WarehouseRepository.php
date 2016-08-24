@@ -1,7 +1,9 @@
 <?php
 
 namespace InventoryBundle\Repository;
+use InventoryBundle\Entity\ProductVariant;
 use InventoryBundle\Entity\Warehouse;
+use InventoryBundle\Entity\WarehouseInventory;
 
 /**
  * WarehouseRepository
@@ -79,5 +81,42 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
             return true;
 
         return $inventory_data;
+    }
+
+    /**
+     * @param WarehouseInventory $id
+     * @param Warehouse $warehouse
+     * @param $quantity
+     */
+    public function updateWarehouseInventoryById($id, $quantity) {
+        $em = $this->getEntityManager();
+
+        $warehouseInventory = $em->getRepository('InventoryBundle:WarehouseInventory')->find($id);
+        if($warehouseInventory) {
+            $tmp = $warehouseInventory->getQuantity() - (int)$quantity;
+            $warehouseInventory->setQuantity($tmp);
+            $em->persist($warehouseInventory);
+            $em->flush();
+        }
+
+
+        return $warehouseInventory;
+    }
+
+    /**
+     * @param Warehouse $warehouse
+     * @param ProductVariant $productVariant
+     * @param $quantity
+     */
+    public function addWarehouseInventory(Warehouse $warehouse, ProductVariant $productVariant, $quantity) {
+        $em = $this->getEntityManager();
+        $warehouseInventory = new WarehouseInventory();
+        $warehouseInventory->setWarehouse($warehouse);
+        $warehouseInventory->setProductVariant($productVariant);
+        $warehouseInventory->setQuantity((int)$quantity);
+        $em->persist($warehouseInventory);
+        $em->flush();
+
+        return $warehouseInventory;
     }
 }

@@ -39,7 +39,7 @@ class StockTransferController extends Controller
      * @Route("/new", name="stocktransfer_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
@@ -61,11 +61,18 @@ class StockTransferController extends Controller
      */
     public function showAction(StockTransfer $stockTransfer)
     {
-        $deleteForm = $this->createDeleteForm($stockTransfer);
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $cart = $em->getRepository('InventoryBundle:StockTransfer')->getCartArray($stockTransfer);
 
-        return $this->render('stocktransfer/show.html.twig', array(
+        return $this->render('@Inventory/StockTransfer/show.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
             'stockTransfer' => $stockTransfer,
-            'delete_form' => $deleteForm->createView(),
+            'cart' => $cart
         ));
     }
 

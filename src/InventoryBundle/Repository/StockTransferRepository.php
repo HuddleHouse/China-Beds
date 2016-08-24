@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Repository;
 use InventoryBundle\Entity\PurchaseOrder;
+use InventoryBundle\Entity\StockTransfer;
 use InventoryBundle\Entity\Warehouse;
 
 /**
@@ -13,43 +14,13 @@ use InventoryBundle\Entity\Warehouse;
 class StockTransferRepository extends \Doctrine\ORM\EntityRepository
 {
 
-
-    /**
-     * @param PurchaseOrder $purchaseOrder
-     * @return array
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     */
-
-    public function getCartArray(PurchaseOrder $purchaseOrder)
+    public function getCartArray(StockTransfer $stockTransfer)
     {
         $em = $this->getEntityManager();
 
         $cart = array();
         $total = 0;
-        foreach($purchaseOrder->getProductvariants() as $variant) {
+        foreach($stockTransfer->getProductvariants() as $variant) {
             $image_url = '';
             foreach($variant->getProductVariant()->getProduct()->getImages() as $image) {
                 $image_url = '/'.$image->getWebPath();
@@ -57,29 +28,29 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
             }
 
             $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
+            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
             $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+            $statement->bindValue('warehouse_id', $stockTransfer->getDepartingWarehouse()->getId());
             $statement->execute();
-            $total_quantity = $statement->fetch();
+            $departing_warehouse_quantity = $statement->fetch();
 
             $connection = $em->getConnection();
             $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
             $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->bindValue('warehouse_id', $purchaseOrder->getWarehouse()->getId());
+            $statement->bindValue('warehouse_id', $stockTransfer->getReceivingWarehouse()->getId());
             $statement->execute();
-            $warehouse_quantity = $statement->fetch();
+            $receiving_warehouse_quantity = $statement->fetch();
 
-            $total += $variant->getOrderedQuantity();
+            $total += $variant->getQuantity();
 
             $cart[] = array(
                 'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
                 'id' => $variant->getProductVariant()->getId(),
-                'purchase_order_product_variant_id' => $variant->getId(),
+                'stock_transfer_product_variant_id' => $variant->getId(),
                 'image_url' => $image_url,
-                'total_quantity' => $total_quantity['total'] + $variant->getOrderedQuantity(),
-                'warehouse_quantity' => $warehouse_quantity['total'] + $variant->getOrderedQuantity(),
-                'ordered_quantity' => $variant->getOrderedQuantity(),
-                'received_quantity' => $variant->getOrderedQuantity()
+                'quantity' => $variant->getQuantity(),
+                'departing_warehouse_quantity' => $departing_warehouse_quantity['total'] - $variant->getQuantity(),
+                'receiving_warehouse_quantity' => $receiving_warehouse_quantity['total'] + $variant->getQuantity()
             );
         }
         return array(
