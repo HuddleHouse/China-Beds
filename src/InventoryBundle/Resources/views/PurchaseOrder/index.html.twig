@@ -39,7 +39,14 @@
                     {% for purchaseOrder in purchaseOrders %}
                         <tr>
                             <td><a href="{{ path('purchaseorder_show', { 'id': purchaseOrder.id }) }}">{{ purchaseOrder.orderNumber }}</a></td>
-                            <td><span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></td>
+                            <td>
+                                <span class="mdl-chip mdl-chip--contact" >
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.nameFirstLetter }}</span>
+                                    <span class="mdl-chip__text">
+                                    {{ purchaseOrder.status.name }}
+                                    </span>
+                                </span>
+                            </td>
                             <td><a href="{{ path('warehouse_show', { 'id': purchaseOrder.warehouse.id }) }}">{{ purchaseOrder.warehouse.name }}</a></td>
                             <td>{% if purchaseOrder.stockDueDate %}{{ purchaseOrder.stockDueDate|date('Y-m-d') }}{% endif %}</td>
                             <td>

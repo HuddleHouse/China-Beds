@@ -138,9 +138,9 @@
                     }
                     else {
                         if(self.cart.length > 0)
-                            $('#error-message').append("<div class='alert alert-error'>Please select a warehouse.</div>");
+                            $('#error-message').append("<div class='alert alert-error'>Please select a warehouse.</div>").fadeOut(5000);
                         else if(self.cart.length == 0)
-                            $('#error-message').append("<div class='alert alert-error'>Please add at least one item to the Purchase Order to continue.</div>");
+                            $('#error-message').append("<div class='alert alert-error'>Please add at least one item to the Purchase Order to continue.</div>").fadeOut(5000);
                     }
 
                 }

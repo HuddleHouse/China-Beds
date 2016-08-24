@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints\Date;
  * StockTransfer
  *
  * @ORM\Table(name="stock_transfers")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\StockTransferRepository")
  */
 class StockTransfer
 {
