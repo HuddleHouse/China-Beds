@@ -120,8 +120,7 @@ class PurchaseOrderController extends Controller
 
         return JsonResponse::create($purchase_order->getId());
     }
-
-
+    
     /**
      * @Route("/api_set_purchase_order_active", name="api_set_purchase_order_active")
      */
