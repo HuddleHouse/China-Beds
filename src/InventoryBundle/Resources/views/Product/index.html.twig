@@ -1,0 +1,62 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Product list{% endblock %}
+{% block page_title %}
+    Product list
+{% endblock page_title %}
+
+{% block page_name %}
+    Assortment
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+            "iDisplayLength": 50});
+        });
+    </script>
+{% endblock footer %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Sku</th>
+                        <th>Active</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td><a href="{{ path('admin_product_edit', { 'id': product.id }) }}">{{ product.name }}</a></td>
+                            <td>{{ product.sku }}</td>
+                            <td>{% if product.active %}Yes{% else %}No{% endif %}</td>
+                            <td>
+                                <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('admin_product_edit', { 'id': product.id }) }}"><i class="fa fa-edit"></i> edit</a>
+                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('admin_product_show', { 'id': product.id }) }}"><i class="fa fa-list"></i> show</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <a id="new-button" href="{{ path('admin_product_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">add</i>
+    </a>
+    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
+        Create a new product
+    </div>
+{% endblock %}

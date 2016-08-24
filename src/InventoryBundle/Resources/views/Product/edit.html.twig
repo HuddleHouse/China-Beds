@@ -1,0 +1,379 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Edit Product creation{% endblock %}
+{% block page_title %}
+    Edit Product
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('admin_product_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+    <style>
+        .thumb {
+            width: 24px;
+            height: 24px;
+            float: none;
+            position: relative;
+            top: 7px;
+        }
+
+        form .progress {
+            line-height: 15px;
+        }
+
+        .progress {
+            display: inline-block;
+            width: 100px;
+            border: 3px groove #CCC;
+        }
+
+        .progress div {
+            font-size: smaller;
+            background: orange;
+            width: 0;
+        }
+    </style>
+{% endblock actions %}
+
+{% block footer %}
+        <script>
+        var app = angular.module('myApp', ['ngFileUpload']);
+        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
+            $scope.specifications = [];
+            $scope.image_attributes_data = [];
+            $scope.product_images_data = [];
+            $scope.product_images = [];
+            $scope.product_variants = [];
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_spec_values') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.specifications = data;
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_product_channel_checks') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    console.log(data);
+                    $scope.$apply(function () {
+                        angular.forEach(data, function(value, key) {
+                            $('#channel-'+value.channel_id).prop('checked', true);
+                        });
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_product_variants') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.product_variants = data;
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_product_images') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.product_images = data;
+                    });
+                }
+            });
+
+
+            $scope.addSpecValue = function () {
+                var spec_value = $('#spec_value').val();
+                var spec_id = $('#spec_select option:selected').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_spec_value') }}",
+                    dataType: 'json',
+                    data: {spec_id: spec_id, spec_value: spec_value, product_id: {{ product.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.specifications = data;
+                            $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
+
+            $scope.getAllSpecValue = function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_get_all_spec_values') }}",
+                    dataType: 'json',
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.$apply(function () {
+                            $scope.specifications = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.deleteSpecValue = function (id) {
+                var spec_id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_spec_value') }}",
+                    dataType: 'json',
+                    data: {spec_id: spec_id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllSpecValue();
+                    }
+                });
+            };
+
+
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_attribute_values') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.image_attributes_data = data;
+                    });
+                }
+            });
+
+            $scope.getAllAttributeValue = function () {
+                $.ajax({
+                    beforeSend: function () {
+                    },
+                    type: 'POST',
+                    url: "{{ path('api_get_all_attribute_values') }}",
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.image_attributes_data = data;
+                        });
+                    }
+                });
+            }
+
+            $scope.addAttributeValue = function () {
+                var attribute_id = $('#image_select option:selected').val();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_attribute_value') }}",
+                    dataType: 'json',
+                    data: {attribute_id: attribute_id, product_id: {{ product.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.image_attributes_data = data;
+                            $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
+
+            $scope.deleteAttributeValue = function (id) {
+                var attribute_id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_attribute_value') }}",
+                    dataType: 'json',
+                    data: {attribute_id: attribute_id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllAttributeValue();
+                    }
+                });
+            };
+
+            $scope.addProductVariant = function () {
+                var variant_msrp = $('#variant_msrp').val();
+                var variant_name = $('#variant_name').val();
+                var variant_sku = $('#variant_sku').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_product_variant') }}",
+                    dataType: 'json',
+                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp, sku: variant_sku},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                            $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
+
+            $scope.getAllProductVariants = function () {
+                $.ajax({
+                    beforeSend: function () {
+                    },
+                    type: 'POST',
+                    url: "{{ path('api_get_all_product_variants') }}",
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.removeProductVariant = function (id) {
+                var id = id;
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_product_variant') }}",
+                    dataType: 'json',
+                    data: {id: id, product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.getAllProductImages = function () {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_get_all_product_images') }}",
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_images = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.addProductImage = function(file, errFiles) {
+                $scope.f = file;
+                $scope.errFile = errFiles && errFiles[0];
+                console.log($scope.f);
+                if (file) {
+                    file.upload = Upload.upload({
+                        url: '{{ path('api_add_product_image') }}',
+                        data: {file: file, product_id: {{ product.id }} }
+                    });
+
+                    file.upload.then(function (response) {
+                        $scope.getAllProductImages();
+                        file.result = response.data;
+                    }, function (response) {
+                        if (response.status > 0)
+                            $scope.errorMsg = response.status + ': ' + response.data;
+                    }, function (evt) {
+                        file.progress = Math.min(100, parseInt(100.0 *
+                                evt.loaded / evt.total));
+                    });
+                }
+            };
+
+            $scope.removeProductImage = function (id) {
+                var id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_product_image') }}",
+                    dataType: 'json',
+                    data: {id: id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllProductImages();
+                    }
+                });
+            };
+
+            $scope.toggleChannel = function (id) {
+                var id = id;
+                $.ajax({
+                    beforeSend: function () {
+                    },
+                    type: 'POST',
+                    url: "{{ path('api_toggle_product_channel') }}",
+                    data: {product_id: {{ product.id }}, id: id},
+                    success: function (data) {
+                    }
+                });
+            }
+        }]);
+    </script>
+{% endblock footer %}
+
+{% block content %}
+<div ng-app="myApp" ng-controller="myCtrl">
+    <div class="nav-tabs-custom" style="    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
+            <li class=""><a href="#variants" data-toggle="tab" aria-expanded="false">Variants</a></li>
+            <li class=""><a href="#specs" data-toggle="tab" aria-expanded="false">Specifications</a></li>
+            <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Image Attributes</a></li>
+            <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
+            <li class=""><a href="#channels" data-toggle="tab" aria-expanded="false">Channels</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="product">
+                {{ form_start(form, { 'action': path('admin_product_edit', {'id': product.id})}) }}
+                {% include '@Inventory/Product/product-form.html.twig' %}
+                <br>
+                <br>
+                <input class="btn btn-raised btn-lg btn-success" type="submit" value="Update" />
+                <a class="btn btn-raised btn-lg btn-warning" href="{{ path('admin_product_index') }}">Cancel</a>
+                {{ form_end(form) }}
+            </div>
+
+            <div class="tab-pane" id="variants" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-variant.html.twig' %}
+            </div>
+
+            <div class="tab-pane" id="attributes" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-attribute.html.twig' %}
+            </div>
+
+            <div class="tab-pane" id="specs" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-specification.html.twig' %}
+            </div>
+
+            <div class="tab-pane" id="images">
+                {% include '@Inventory/Product/edit-images.html.twig' %}
+            </div>
+
+            <div class="tab-pane" id="channels">
+                <div class="tab-pane" id="specs" style="padding-top: 25px;">
+                    {% include '@Inventory/Product/edit-channels.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <!-- /.tab-content -->
+    </div>
+</div>
+{% endblock %}
