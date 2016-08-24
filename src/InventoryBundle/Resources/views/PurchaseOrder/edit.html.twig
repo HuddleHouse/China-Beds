@@ -118,7 +118,7 @@
                 function getCartTotal() {
                     var total = 0;
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.add_quantity;
+                        total += value.ordered_quantity;
 
                     });
                     return total;

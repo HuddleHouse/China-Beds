@@ -114,7 +114,7 @@
                 function getCartTotal() {
                     var total = 0;
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.add_quantity;
+                        total += value.ordered_quantity;
 
                     });
                     return total;
@@ -249,7 +249,7 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.add_quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>

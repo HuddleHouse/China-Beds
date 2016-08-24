@@ -61,6 +61,13 @@ class StockTransfer
     private $departing_warehouse;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="order_number", type="string", length=255, nullable=true)
+     */
+    private $orderNumber;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="stock_transfers")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -194,7 +201,21 @@ class StockTransfer
         $this->departing_warehouse = $departing_warehouse;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
 
+    /**
+     * @param mixed $orderNumber
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
+    }
     
 }
 

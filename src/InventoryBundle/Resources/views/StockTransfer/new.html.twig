@@ -40,7 +40,7 @@
                 self.searchText = '';
                 self.message = '';
                 self.cart_total = 0;
-                self.due_date = new Date();
+                self.transfer_date = new Date();
 
 
                 /**
@@ -114,7 +114,7 @@
                 function getCartTotal() {
                     var total = 0;
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.add_quantity;
+                        total += value.ordered_quantity;
 
                     });
                     return total;
@@ -126,7 +126,7 @@
                             type: 'POST',
                             url: "{{ path('api_save_stock_transfer') }}",
                             dataType: 'json',
-                            data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft, departing_warehouse_id: $('#departing-warehouse').val(), receiving_warehouse_id: $('#receiving-warehouse').val()},
+                            data: {cart: self.cart, transfer_date: self.transfer_date, message: self.message, status: draft, departing_warehouse_id: $('#departing-warehouse').val(), receiving_warehouse_id: $('#receiving-warehouse').val()},
                             success: function (data) {
                                 window.location.href = "/purchase-order/"+data;
                             }
@@ -208,7 +208,7 @@
         <div class="table">
             <div class="row">
                 <div class="col-md-5">
-                    <h5>Stock Due-date <md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
+                    <h5>Transfer Date <md-datepicker ng-model="ctrl.transfer_date" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
                 <div class="col-md-7">
                     <div class="" style="margin: 15px 20px 0;">
@@ -264,7 +264,7 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.add_quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
                             </td>
                             <td></td>
                             <td></td>
