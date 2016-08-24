@@ -43,6 +43,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
             $cart[] = array(
                 'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
                 'id' => $variant->getProductVariant()->getId(),
+                'purchase_order_product_variant_id' => $variant->getId(),
                 'image_url' => $image_url,
                 'total_quantity' => $total_quantity['total'] + $variant->getOrderedQuantity(),
                 'warehouse_quantity' => $warehouse_quantity['total'] + $variant->getOrderedQuantity(),
