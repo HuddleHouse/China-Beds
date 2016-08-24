@@ -14,18 +14,22 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.bootstrap.min.css">
     {% block stylesheets %}
-        {% stylesheets '@AppBundle/Resources/public/css/*' filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% stylesheets '@AppBundle/Resources/public/css/*' filter="cssrewrite" output="css/appBundle.css" %}
+        {% endstylesheets %}
+        {% stylesheets '@QuickbooksBundle/Resources/public/css/*' filter="cssrewrite" output="css/quickbooksBundle.css" %}
         {% endstylesheets %}
     {% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/appBundle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/quickbooksBundle.css') }}" />
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 </head>
 <body class="hold-transition login-page">
 {% block body %}{% endblock %}
 <script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
 {% block javascripts %}
-    {% javascripts '@AppBundle/Resources/public/js/*' %}
-    <script src="{{ asset_url }}"></script>
+    {% javascripts '@AppBundle/Resources/public/js/*' filter="jsqueeze" output="js/appBundle.js"%}
+    {% endjavascripts %}
+    {% javascripts '@QuickbooksBundle/Resources/public/js/*' filter="?jsqueeze" output="js/quickbooksBundle.js"%}
     {% endjavascripts %}
 {% endblock %}
 
@@ -39,7 +43,8 @@
 <script type="text/javascript"
         src="https://cdn.datatables.net/responsive/2.0.2/js/responsive.bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
-
+<script src="{{ asset('js/appBundle.js') }}"></script>
+<script src="{{ asset('js/quickbooksBundle.js') }}"></script>
 
 </body>
 {% block footer %}{% endblock %}

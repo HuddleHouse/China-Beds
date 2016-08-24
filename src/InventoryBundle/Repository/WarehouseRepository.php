@@ -59,4 +59,25 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $data;
     }
 
+    /**
+     * THIS NEEDS TO BE FIXED
+     *
+     * @param Warehouse $warehouse
+     * @return array|bool
+     */
+    public function getWarehouseInventoryArray(Warehouse $warehouse) {
+
+        foreach($warehouse->getInventory() as $item)
+            $inventory_data[] = array(
+                'id' => $item->getId(),
+                'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
+                'quantity' => $this->getWarehouseInventory($warehouse),
+                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
+            );
+
+        if(!isset($inventory_data))
+            return true;
+
+        return $inventory_data;
+    }
 }

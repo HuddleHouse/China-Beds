@@ -65,18 +65,10 @@ class WarehouseInventoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $id = $request->request->get('warehouse_id');
         $warehouse = $em->getRepository('InventoryBundle:Warehouse')->find($id);
+        $inventory_data = $em->getRepository('InventoryBundle:WareHouse')->getWarehouseInventoryArray($warehouse);
 
-        foreach($warehouse->getInventory() as $item)
-            $inventory_data[] = array(
-                'id' => $item->getId(),
-                'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
-                'quantity' => $item->getQuantity(),
-                'po_quantity' => 0
-            );
-
-        if(!isset($inventory_data))
+        if($inventory_data === true)
             return JsonResponse::create(true);
-
         return JsonResponse::create($inventory_data);
     }
 }

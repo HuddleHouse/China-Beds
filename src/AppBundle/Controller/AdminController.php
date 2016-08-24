@@ -169,6 +169,19 @@ class AdminController extends Controller
         $collection = $router->getRouteCollection();
         $allRoutes = $collection->all();
         $data = array();
+        $categories = array();
+
+        // THESE ARE THE EXCLUDED CATEGORIES
+        $exclude = array(
+            'login',
+            'login_check',
+            'logout',
+            'not-found',
+            '',
+            'register',
+            'profile',
+            'resetting'
+        );
 
         foreach ($allRoutes as $route => $params)
         {
@@ -176,10 +189,15 @@ class AdminController extends Controller
 
             }
             else {
-                $data[] = array('path' => $params->getPath(), 'route' => $route);
+                $category = explode('/', $params->getPath())[1];
+                if(!in_array($category, $exclude)) {
+                    $categories[] = $category;
+                    $data[] = array('path' => $params->getPath(), 'route' => $route, 'category' => $category);
+                }
             }
         }
 
+        $categories = array_unique($categories);
         $em = $this->getDoctrine()->getManager();
         $roles = $em->getRepository('AppBundle:Role')->findAll();
         $connection = $em->getConnection();
@@ -194,7 +212,8 @@ class AdminController extends Controller
         return $this->render('AppBundle:Admin:access_restriction.html.twig', array(
             'routes' => $data,
             'roles' => $roles,
-            'permissions' => $permissions
+            'permissions' => $permissions,
+            'categories' => $categories
         ));
     }
 

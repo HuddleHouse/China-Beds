@@ -38,7 +38,7 @@
                 self.searchTextChange   = searchTextChange;
                 self.updateCartItem   = updateCartItem;
                 self.getCartTotal   = getCartTotal;
-                self.save = save;
+                self.update = update;
                 self.cart = {{ cart.cart | json_encode | raw}};
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -124,13 +124,13 @@
                     return total;
                 }
 
-                function save(draft){
+                function update(draft){
                     if($('#warehouse').val() && self.cart.length > 0) {
                         $.ajax({
                             type: 'POST',
-                            url: "{{ path('api_save_purchase_order') }}",
+                            url: "{{ path('api_update_purchase_order') }}",
                             dataType: 'json',
-                            data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft, warehouse_id: $('#warehouse').val()},
+                            data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft, warehouse_id: $('#warehouse').val(), purchase_order_id: {{ purchase_order.id }} },
                             success: function (data) {
                                 window.location.href = "/app_dev.php/purchase-order/"+data;
                             }
@@ -225,8 +225,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="" style="margin: 15px 20px 0;">
-                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
-                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.update('Active')">Update</a>
                     </div>
                 </div>
             </div>

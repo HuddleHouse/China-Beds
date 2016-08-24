@@ -127,7 +127,7 @@
                         dataType: 'json',
                         data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ warehouse.id }}, status: draft },
                         success: function (data) {
-                            window.location.href = "app_dev.php/purchase-order/"+data;
+                            window.location.href = "/purchase-order/"+data;
                         }
                     });
 
@@ -196,9 +196,18 @@
 
 
     <div class="table">
-        <h3>{{ warehouse.name }}</h3>
-        <a class="btn btn-raised btn-success" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
-        <a class="btn btn-raised btn-default" style="float: right; margin-top: -45px; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
+        <div class="row">
+            <div class="col-md-8">
+                <h3>{{ warehouse.name }}</h3>
+            </div>
+
+            <div class="col-md-4">
+                <a class="btn btn-raised btn-success" style="float: right; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
+                <a class="btn btn-raised btn-default" style="float: right; font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
+            </div>
+        </div>
+
+
         <hr>
         <div class="row">
             <div class="col-md-6">
