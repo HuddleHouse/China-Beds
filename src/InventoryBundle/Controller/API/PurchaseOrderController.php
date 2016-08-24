@@ -56,7 +56,7 @@ class PurchaseOrderController extends Controller
             $purchase_order_variant = new PurchaseOrderProductVariant();
             $purchase_order_variant->setProductVariant($variant);
             $purchase_order_variant->setPurchaseOrder($purchase_order);
-            $purchase_order_variant->setOrderedQuantity($item['add_quantity']);
+            $purchase_order_variant->setOrderedQuantity($item['ordered_quantity']);
             $em->persist($purchase_order_variant);
         }
         $em->persist($purchase_order);
@@ -111,7 +111,7 @@ class PurchaseOrderController extends Controller
                 $purchase_order_variant->setPurchaseOrder($purchase_order);
             }
 
-            $purchase_order_variant->setOrderedQuantity($item['add_quantity']);
+            $purchase_order_variant->setOrderedQuantity($item['ordered_quantity']);
             $em->persist($purchase_order_variant);
         }
 
@@ -120,8 +120,7 @@ class PurchaseOrderController extends Controller
 
         return JsonResponse::create($purchase_order->getId());
     }
-
-
+    
     /**
      * @Route("/api_set_purchase_order_active", name="api_set_purchase_order_active")
      */

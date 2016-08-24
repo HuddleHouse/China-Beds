@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints\Date;
  * StockTransfer
  *
  * @ORM\Table(name="stock_transfers")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\StockTransferRepository")
  */
 class StockTransfer
 {
@@ -59,6 +59,13 @@ class StockTransfer
      * @ORM\JoinColumn(name="departing_warehouse_id", referencedColumnName="id")
      */
     private $departing_warehouse;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="order_number", type="string", length=255, nullable=true)
+     */
+    private $orderNumber;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="stock_transfers")
@@ -194,7 +201,21 @@ class StockTransfer
         $this->departing_warehouse = $departing_warehouse;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
 
+    /**
+     * @param mixed $orderNumber
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
+    }
     
 }
 

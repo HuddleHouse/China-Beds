@@ -41,31 +41,15 @@ class StockTransferController extends Controller
      */
     public function newAction(Request $request)
     {
-        $stockTransfer = new StockTransfer();
-        $form = $this->createForm('InventoryBundle\Form\StockTransferType', $stockTransfer);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($stockTransfer);
-                $em->flush();
-                $this->addFlash('notice', 'Stock Transfer created successfully.');
-                return $this->redirectToRoute('stocktransfer_show', array('id' => $stockTransfer->getId()));
-            }
-            catch(\Exception $e) {
-                $this->addFlash('error', 'Error creating Stock Transfer: ' . $e->getMessage());
-                return $this->render('@Inventory/StockTransfer/new.html.twig', array(
-                    'stockTransfer' => $stockTransfer,
-                    'form' => $form->createView(),
-                ));
-            }
-
-        }
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
 
         return $this->render('@Inventory/StockTransfer/new.html.twig', array(
-            'stockTransfer' => $stockTransfer,
-            'form' => $form->createView(),
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses
         ));
     }
 
