@@ -133,7 +133,7 @@
                             dataType: 'json',
                             data: {cart: self.cart, transfer_date: self.transfer_date, message: self.message, status: draft, departing_warehouse_id: $('#departing-warehouse').val(), receiving_warehouse_id: $('#receiving-warehouse').val(), complete: true, stock_transfer_id: {{ stockTransfer.id}} },
                             success: function (data) {
-                                window.location.href = "/app_dev.php/transfer/"+data;
+                                window.location.href = "/app_dev.php/stock-transfer/"+data;
                             }
                         });
                     }
