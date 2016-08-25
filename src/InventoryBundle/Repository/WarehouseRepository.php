@@ -94,7 +94,6 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
             );
         }
 
-
         if(!isset($inventory_data))
             return true;
 
