@@ -46,6 +46,22 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
+    public function getWarehouseInventoryForItemOnPurchaseOrder(Warehouse $warehouse, ProductVariant $productVariant)
+    {
+        $quantity = 0;
+        if(count($warehouse->getPurchaseOrders()) == 0)
+            return 0;
+
+        foreach($warehouse->getPurchaseOrders() as $item)
+            if($item->getStatus()->getName() == 'Active')
+                foreach($item->getProductvariants() as $variant)
+                    if($variant->getId() == $productVariant->getId())
+                        $quantity += $variant->getOrderedQuantity();
+
+
+        return $quantity;
+    }
+
     public function getAllWarehousesArray() {
         $warehouses = $this->findAll();
 
@@ -69,13 +85,15 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getWarehouseInventoryArray(Warehouse $warehouse) {
 
-        foreach($warehouse->getInventory() as $item)
+        foreach($warehouse->getInventory() as $item) {
             $inventory_data[] = array(
                 'id' => $item->getId(),
                 'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
-                'quantity' => $this->getWarehouseInventory($warehouse),
-                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                'quantity' => $item->getQuantity(),
+                'po_quantity' => $this->getWarehouseInventoryForItemOnPurchaseOrder($warehouse, $item->getProductVariant())
             );
+        }
+
 
         if(!isset($inventory_data))
             return true;
