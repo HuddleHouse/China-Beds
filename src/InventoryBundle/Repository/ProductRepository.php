@@ -85,7 +85,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     'image_url' => $image_url,
                     'total_quantity' => $total_quantity['total'],
                     'warehouse_quantity' => $warehouse_quantity['total'],
-                    'ordered_quantity' => 0
+                    'ordered_quantity' => 0,
+                    'quantity' => 0
                 );
             }
         }

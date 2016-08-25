@@ -1,13 +1,13 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Stock Transfer{% endblock %}
+{% block title %}Stock Adjustment{% endblock %}
 
 {% block page_title %}
-    Stock Transfer
+    Stock Adjustment
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('stocktransfer_index') }}">< Back to Stock Transfers</a>
+    <a href="{{ path('stocktransfer_index') }}">< Back to Stock Adjustments</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -40,7 +40,7 @@
                 self.searchText = '';
                 self.message = '';
                 self.cart_total = 0;
-                self.transfer_date = new Date();
+                self.date = new Date();
 
 
                 /**
@@ -121,20 +121,20 @@
                 }
 
                 function save(draft){
-                    if($('#departing-warehouse').val() && $('#receiving-warehouse').val() && self.cart.length > 0) {
+                    if($('#warehouse').val()&& self.cart.length > 0) {
                         $.ajax({
                             type: 'POST',
-                            url: "{{ path('api_save_stock_transfer') }}",
+                            url: "{{ path('api_save_stock_adjustment') }}",
                             dataType: 'json',
-                            data: {cart: self.cart, transfer_date: self.transfer_date, message: self.message, status: draft, departing_warehouse_id: $('#departing-warehouse').val(), receiving_warehouse_id: $('#receiving-warehouse').val()},
+                            data: {cart: self.cart, date: self.date, message: self.message, status: draft, warehouse_id: $('#warehouse').val()},
                             success: function (data) {
-                                window.location.href = "/app_dev.php/transfer/"+data;
+                                window.location.href = "/app_dev.php/adjustment/"+data;
                             }
                         });
                     }
                     else {
-                        if(!$('#departing-warehouse').val() || !$('#receiving-warehouse').val())
-                            $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please select a Departing AND Receiving warehouse.</div>");
+                        if(!$('#warehouse').val())
+                            $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please select a warehouse.</div>");
                         else if(self.cart.length == 0)
                             $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please add at least one item to the Stock Transfer to continue.</div>");
                     }
@@ -208,7 +208,7 @@
         <div class="table">
             <div class="row">
                 <div class="col-md-5">
-                    <h5>Transfer Date <md-datepicker ng-model="ctrl.transfer_date" md-placeholder="Enter date"></md-datepicker></h5>
+                    <h5>Transfer Date <md-datepicker ng-model="ctrl.date" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
                 <div class="col-md-7">
                     <div class="" style="margin: 15px 20px 0;">
@@ -221,8 +221,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <form id="warehouse-form">
-                        <label for="departing-warehouse">Warehouse</label>
-                        <select class="form-control" id="departing-warehouse" style="width: 100%;margin: 24px 0 16px;" required>
+                        <label for="warehouse">Warehouse</label>
+                        <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;" required>
                             <option value="" disabled selected>-- Warehouse --</option>
                             {% for warehouse in warehouses %}
                                 <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
@@ -300,7 +300,6 @@
                             </md-content>
                                 {% endverbatim %}
                             </td>
-                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

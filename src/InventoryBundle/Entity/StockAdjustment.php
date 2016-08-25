@@ -60,6 +60,14 @@ class StockAdjustment
      */
     private $user;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="order_number", type="string", length=255, nullable=true)
+     */
+    private $orderNumber;
+
+
     public function __construct() {
         $this->product_variants = new ArrayCollection();
         $this->date = new \DateTime();
@@ -170,6 +178,22 @@ class StockAdjustment
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
+
+    /**
+     * @param string $orderNumber
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
     }
 
 
