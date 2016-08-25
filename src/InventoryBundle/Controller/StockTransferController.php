@@ -12,7 +12,7 @@ use InventoryBundle\Form\StockTransferType;
 /**
  * StockTransfer controller.
  *
- * @Route("/transfer")
+ * @Route("/stock-transfer")
  */
 class StockTransferController extends Controller
 {
