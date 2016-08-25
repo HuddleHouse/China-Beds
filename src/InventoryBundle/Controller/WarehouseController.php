@@ -202,6 +202,27 @@ class WarehouseController extends Controller
 
     /**
      *
+     * @Route("/{id}/stock-transfer", name="warehouse_new_stock_transfer")
+     * @Method("GET")
+     */
+    public function warehouseNewStockTransferAction(Warehouse $warehouse)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+
+        return $this->render('@Inventory/Warehouse/new-stock-transfer.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'warehouse' => $warehouse
+        ));
+    }
+
+
+    /**
+     *
      * @Route("/{id}/inventory", name="warehouse_inventory_show")
      * @Method("GET")
      */

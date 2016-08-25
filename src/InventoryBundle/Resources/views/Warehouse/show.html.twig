@@ -81,7 +81,7 @@
             <center>
                 <a href="{{ path('warehouse_new_purchase_order', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Purchase Order</a>
                 <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Adjustment</a>
-                <a href="{{ path('warehouse_index') }}" class="btn btn-raised btn-primary">New Transfer</a>
+                <a href="{{ path('warehouse_new_stock_transfer', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Transfer</a>
             </center>
         </div>
     </div>

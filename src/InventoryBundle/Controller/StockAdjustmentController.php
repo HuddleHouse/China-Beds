@@ -42,30 +42,15 @@ class StockAdjustmentController extends Controller
      */
     public function newAction(Request $request)
     {
-        $stockAdjustment = new StockAdjustment();
-        $form = $this->createForm('InventoryBundle\Form\StockAdjustmentType', $stockAdjustment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($stockAdjustment);
-                $em->flush();
-                $this->addFlash('notice', 'Stock Adjustment created successfully.');
-
-            }
-            catch(\Exception $e) {
-                $this->addFlash('error', 'Error creating Stock Adjustment: ' . $e->getMessage());
-                return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
-                    'stockAdjustment' => $stockAdjustment,
-                    'form' => $form->createView(),
-                ));
-            }
-        }
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
 
         return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
-            'stockAdjustment' => $stockAdjustment,
-            'form' => $form->createView(),
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses
         ));
     }
 

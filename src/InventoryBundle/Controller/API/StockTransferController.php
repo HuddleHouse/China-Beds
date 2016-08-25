@@ -50,7 +50,6 @@ class StockTransferController extends Controller
         $stock_transfer->setMessage($message);
         $stock_transfer->setStatus($status);
 
-
         foreach($cart as $item) {
             $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
             if(isset($item['stock_transfer_product_variant_id']))

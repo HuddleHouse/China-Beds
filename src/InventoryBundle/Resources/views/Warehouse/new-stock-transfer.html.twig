@@ -15,6 +15,9 @@
 
 {% block footer %}
     <script>
+        $(function() {
+            $("#departing-warehouse").val('{{ warehouse.id }}');
+        });
         (function () {
             'use strict';
             angular.module('myApp',['ngMaterial', 'ngMessages'])
@@ -222,7 +225,7 @@
                 <div class="col-md-6">
                     <form id="warehouse-form">
                         <label for="departing-warehouse">Departing Warehouse</label>
-                        <select class="form-control" id="departing-warehouse" style="width: 100%;margin: 24px 0 16px;" required>
+                        <select class="form-control" disabled id="departing-warehouse" style="width: 100%;margin: 24px 0 16px;" required>
                             <option value="" disabled selected>-- Warehouse --</option>
                             {% for warehouse in warehouses %}
                                 <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>

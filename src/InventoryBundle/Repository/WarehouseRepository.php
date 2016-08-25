@@ -94,7 +94,6 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
             );
         }
 
-
         if(!isset($inventory_data))
             return true;
 
@@ -111,12 +110,11 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
 
         $warehouseInventory = $em->getRepository('InventoryBundle:WarehouseInventory')->find($id);
         if($warehouseInventory) {
-            $tmp = $warehouseInventory->getQuantity() - (int)$quantity;
+            $tmp = $warehouseInventory->getQuantity() + (int)$quantity;
             $warehouseInventory->setQuantity($tmp);
             $em->persist($warehouseInventory);
             $em->flush();
         }
-
 
         return $warehouseInventory;
     }
