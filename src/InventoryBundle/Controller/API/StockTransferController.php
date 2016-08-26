@@ -112,7 +112,7 @@ class StockTransferController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $id = $request->request->get('id');
-        $stock_adjustment = $em->getRepository('InventoryBundle:StockAdjustment')->find($id);
+        $stock_adjustment = $em->getRepository('InventoryBundle:StockTransfer')->find($id);
 
         $connection = $em->getConnection();
         $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");

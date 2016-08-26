@@ -77,32 +77,28 @@ class StockAdjustmentController extends Controller
         ));
     }
 
-//    /**
-//     * Displays a form to edit an existing StockAdjustment entity.
-//     *
-//     * @Route("/{id}/edit", name="stockadjustment_edit")
-//     * @Method({"GET", "POST"})
-//     */
-//    public function editAction(Request $request, StockAdjustment $stockAdjustment)
-//    {
-//        $deleteForm = $this->createDeleteForm($stockAdjustment);
-//        $editForm = $this->createForm('InventoryBundle\Form\StockAdjustmentType', $stockAdjustment);
-//        $editForm->handleRequest($request);
-//
-//        if ($editForm->isSubmitted() && $editForm->isValid()) {
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($stockAdjustment);
-//            $em->flush();
-//
-//            return $this->redirectToRoute('stockadjustment_edit', array('id' => $stockAdjustment->getId()));
-//        }
-//
-//        return $this->render('@Inventory/StockAdjustment/edit.html.twig', array(
-//            'stockAdjustment' => $stockAdjustment,
-//            'edit_form' => $editForm->createView(),
-//            'delete_form' => $deleteForm->createView(),
-//        ));
-//    }
+    /**
+     * Displays a form to edit an existing StockAdjustment entity.
+     *
+     * @Route("/{id}/edit", name="stockadjustment_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, StockAdjustment $stockAdjustment)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $cart = $em->getRepository('InventoryBundle:StockAdjustment')->getCartArray($stockAdjustment);
+
+        return $this->render('@Inventory/StockAdjustment/edit.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'stockAdjustment' => $stockAdjustment,
+            'cart' => $cart
+        ));
+    }
 
     /**
      * Deletes a StockAdjustment entity.
