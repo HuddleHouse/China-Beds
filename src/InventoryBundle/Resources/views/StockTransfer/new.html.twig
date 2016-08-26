@@ -7,7 +7,12 @@
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('stocktransfer_index') }}">< Back to Stock Transfers</a>
+    {% if warehouse_id != 'none' %}
+        <a href="{{ path('warehouse_show', { 'id': warehouse_id }) }}">< Back to Warehouse</a>
+    {% else %}
+        <a href="{{ path('stocktransfer_index') }}">< Back to Stock Transfers</a>
+    {% endif %}
+
 {% endblock page_name %}
 
 {% block actions %}
@@ -15,6 +20,13 @@
 
 {% block footer %}
     <script>
+        $(function() {
+        {% if warehouse_id != 'none' %}
+            $("#departing-warehouse").val('{{ warehouse_id }}');
+            $( "#departing-warehouse" ).prop( "disabled", true );
+        {% endif %}
+        });
+
         (function () {
             'use strict';
             angular.module('myApp',['ngMaterial', 'ngMessages'])
@@ -260,7 +272,7 @@
                             <div  ng-if="item.name != null">
                                 {% verbatim %}
                             <td class="mdl-data-table__cell--non-numeric">
-                                <img src="/{{item.image_url}}" style="height: 34px; padding-right: 15px;">
+                                <img src="{{item.image_url}}" style="height: 34px; padding-right: 15px;">
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
@@ -291,7 +303,7 @@
                                 md-menu-class="autocomplete-custom-template">
                                 <md-item-template>
                                     <span class="item-title">
-                                        <img src="/{{item.image_url}}" style="max-width: 50px;">
+                                        <img src="{{item.image_url}}" style="max-width: 50px;">
                                         <span> {{item.name}} </span>
                                     </span>
                                     <span class="item-metadata">

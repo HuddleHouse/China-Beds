@@ -49,7 +49,8 @@ class StockTransferController extends Controller
         return $this->render('@Inventory/StockTransfer/new.html.twig', array(
             'inventory_data' => $inventory_data,
             'products' => $products,
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'warehouse_id' => 'none'
         ));
     }
 
