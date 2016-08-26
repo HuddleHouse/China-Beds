@@ -46,7 +46,7 @@
                 self.message = '';
                 self.cart_total = {{ cart.total | json_encode | raw}};
                 self.transfer_date = new Date();
-
+                self.setActive = setActive;
 
                 /**
                  * Search for repos... use $timeout to simulate
@@ -107,6 +107,19 @@
                     return function filterFn(item) {
                         return (item.value.indexOf(lowercaseQuery) === 0);
                     };
+                }
+
+                function setActive(){
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_set_stock_transfer_active') }}",
+                        dataType: 'json',
+                        data: { id: {{ stockTransfer.id }}},
+                        success: function (data) {
+                            window.location.href = "/app_dev.php/stock-transfer/"+data;
+                        }
+                    });
+
                 }
 
                 /**
@@ -225,7 +238,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="" style="margin: 15px 20px 0;">
-                        {% if stockTransfer.status.name != 'Completed' %}
+                        {% if stockTransfer.status.name == 'Draft' %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
+                        {% elseif stockTransfer.status.name != 'Completed' %}
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Completed')">COMPLETE</a>
                         <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.edit('Draft')">EDIT</a>
                         {% endif %}

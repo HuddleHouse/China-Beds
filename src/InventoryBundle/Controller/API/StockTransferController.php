@@ -103,4 +103,30 @@ class StockTransferController extends Controller
 
         return JsonResponse::create($stock_transfer->getId());
     }
+
+
+    /**
+     * @Route("/api_set_stock_transfer_active", name="api_set_stock_transfer_active")
+     */
+    public function setStockTransferActive(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->request->get('id');
+        $stock_adjustment = $em->getRepository('InventoryBundle:StockAdjustment')->find($id);
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");
+        $statement->bindValue('name', 'Active');
+        $statement->execute();
+        $status_id = $statement->fetch();
+        $status = $em->getRepository('InventoryBundle:Status')->find($status_id['id']);
+
+        $stock_adjustment->setStatus($status);
+
+        $em->persist($stock_adjustment);
+        $em->flush();
+
+        return JsonResponse::create($stock_adjustment->getId());
+    }
+
 }
