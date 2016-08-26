@@ -76,32 +76,28 @@ class StockTransferController extends Controller
         ));
     }
 
-//    /**
-//     * Displays a form to edit an existing StockTransfer entity.
-//     *
-//     * @Route("/{id}/edit", name="stocktransfer_edit")
-//     * @Method({"GET", "POST"})
-//     */
-//    public function editAction(Request $request, StockTransfer $stockTransfer)
-//    {
-//        $deleteForm = $this->createDeleteForm($stockTransfer);
-//        $editForm = $this->createForm('InventoryBundle\Form\StockTransferType', $stockTransfer);
-//        $editForm->handleRequest($request);
-//
-//        if ($editForm->isSubmitted() && $editForm->isValid()) {
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($stockTransfer);
-//            $em->flush();
-//
-//            return $this->redirectToRoute('stocktransfer_edit', array('id' => $stockTransfer->getId()));
-//        }
-//
-//        return $this->render('@Inventory/StockTransfer/edit.html.twig', array(
-//            'stockTransfer' => $stockTransfer,
-//            'edit_form' => $editForm->createView(),
-//            'delete_form' => $deleteForm->createView(),
-//        ));
-//    }
+    /**
+     * Displays a form to edit an existing StockTransfer entity.
+     *
+     * @Route("/{id}/edit", name="stocktransfer_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, StockTransfer $stockTransfer)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $cart = $em->getRepository('InventoryBundle:StockTransfer')->getCartArray($stockTransfer);
+
+        return $this->render('@Inventory/StockTransfer/show.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'stockTransfer' => $stockTransfer,
+            'cart' => $cart
+        ));
+    }
 
     /**
      * Deletes a StockTransfer entity.

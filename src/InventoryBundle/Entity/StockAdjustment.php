@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * StockTransfer
  *
  * @ORM\Table(name="stock_adjustments")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\StockAdjustmentRepository")
  */
 class StockAdjustment
 {
@@ -59,6 +59,14 @@ class StockAdjustment
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="order_number", type="string", length=255, nullable=true)
+     */
+    private $orderNumber;
+
 
     public function __construct() {
         $this->product_variants = new ArrayCollection();
@@ -170,6 +178,22 @@ class StockAdjustment
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
+
+    /**
+     * @param string $orderNumber
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
     }
 
 
