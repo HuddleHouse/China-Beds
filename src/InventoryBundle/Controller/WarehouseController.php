@@ -86,13 +86,26 @@ class WarehouseController extends Controller
         $active_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
         $all_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 
+        $all_st = $em->getRepository('InventoryBundle:StockTransfer')->getAllForWarehouseArray($warehouse);
+        $active_st = $em->getRepository('InventoryBundle:StockTransfer')->getActiveForWarehouseArray($warehouse);
+
+        $all_adj = $em->getRepository('InventoryBundle:StockAdjustment')->getAllForWarehouseArray($warehouse);
+        $active_adj = $em->getRepository('InventoryBundle:StockAdjustment')->getActiveForWarehouseArray($warehouse);
+
+        $all = array_merge($all_po, $all_st, $all_adj);
+        $active = array_merge($active_po, $active_st, $active_adj);
+
         return $this->render('@Inventory/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
             'delete_form' => $deleteForm->createView(),
             'products' => $products,
             'inventory_data' => $inventory_data,
             'active_po' => $active_po,
-            'all_po' => $all_po
+            'all_po' => $all_po,
+            'all_st' => $all_st,
+            'all_adj' => $all_adj,
+            'all' => $all,
+            'active' => $active
         ));
     }
 

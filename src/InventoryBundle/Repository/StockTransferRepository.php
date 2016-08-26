@@ -62,13 +62,22 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
     public function getActiveForWarehouseArray(Warehouse $warehouse) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
-	from warehouses w
-		left join purchase_order p
-			on p.warehouse_id = w.id
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
+	from stock_transfers p 
+		left join warehouses w
+			on p.receiving_warehouse_id = w.id
 		left join status s
 			on s.id = p.status_id
-	where w.id = :warehouse_id 
+	where w.id = :warehouse_id
+	and s.name = 'Active'
+	union
+select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
+	from stock_transfers p 
+		left join warehouses w
+			on p.departing_warehouse_id = w.id
+		left join status s
+			on s.id = p.status_id
+	where w.id = :warehouse_id
 	and s.name = 'Active'");
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
@@ -78,10 +87,19 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
     public function getAllForWarehouseArray(Warehouse $warehouse) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
-	from warehouses w
-		left join purchase_order p
-			on p.warehouse_id = w.id
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
+	from stock_transfers p 
+		left join warehouses w
+			on p.receiving_warehouse_id = w.id
+		left join status s
+			on s.id = p.status_id
+	where w.id = :warehouse_id
+	and s.name = 'Active'
+	union
+select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
+	from stock_transfers p 
+		left join warehouses w
+			on p.departing_warehouse_id = w.id
 		left join status s
 			on s.id = p.status_id
 	where w.id = :warehouse_id");

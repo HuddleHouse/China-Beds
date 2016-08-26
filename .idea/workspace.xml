@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="updating some entitiies.&#10;">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/new-stock-transfer.html.twig" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/resume.iml" afterPath="$PROJECT_DIR$/.idea/resume.iml" />
+    <list default="true" id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/StockAdjustmentController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/StockAdjustmentController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/StockTransferController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/StockTransferController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/PurchaseOrder/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/PurchaseOrder/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockAdjustment/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockAdjustment/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Repository/PurchaseOrderRepository.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Repository/PurchaseOrderRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Repository/StockAdjustmentRepository.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Repository/StockAdjustmentRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Repository/StockTransferRepository.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Repository/StockTransferRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-active.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-active.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-adjustments.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-adjustments.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-all.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-all.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-purchase-orders.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-purchase-orders.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-transfer.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-transfer.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,53 +32,88 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig">
+      <file leaf-file-name="show.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="85" selection-start-line="10" selection-start-column="85" selection-end-line="10" selection-end-column="85" />
+            <state relative-caret-position="706">
+              <caret line="99" column="52" selection-start-line="99" selection-start-column="43" selection-end-line="99" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="show-active.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-active.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="show-all.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-all.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="28" selection-start-line="14" selection-start-column="15" selection-end-line="36" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="show-transfer.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-transfer.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="629">
+              <caret line="37" column="28" selection-start-line="15" selection-start-column="15" selection-end-line="37" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="show-inventory.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-inventory.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <marker date="1472244582000" expanded="true" signature="5682:5689" ph="×" />
-                <marker date="1472244582000" expanded="true" signature="6026:6033" ph="×" />
-                <marker date="1472244582000" expanded="true" signature="11040:11228" ph="..." />
-                <marker date="1472244582000" expanded="false" signature="11111:11145" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="11280:11491" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="11918:13984" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="11964:13942" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="12828:13703" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="12890:13099" ph="..." />
-                <marker date="1472244582000" expanded="false" signature="12969:12985" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="13164:13651" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="13233:13389" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="13458:13605" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="13750:13895" ph="..." />
-                <marker date="1472244582000" expanded="false" signature="15334:15393" ph="..." />
+                <marker date="1471874735000" expanded="true" signature="607:926" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockAdjustment/new.html.twig">
+      <file leaf-file-name="show-adjustments.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-adjustments.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="85" selection-start-line="10" selection-start-column="85" selection-end-line="10" selection-end-column="85" />
+            <state relative-caret-position="255">
+              <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="show-purchase-orders.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-purchase-orders.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="21" column="21" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PurchaseOrderRepository.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/PurchaseOrderRepository.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1173">
+              <caret line="78" column="128" selection-start-line="78" selection-start-column="128" selection-end-line="78" selection-end-column="128" />
               <folding>
-                <marker date="1472244582000" expanded="true" signature="5479:5486" ph="×" />
-                <marker date="1472244582000" expanded="true" signature="5799:5806" ph="×" />
-                <marker date="1472244582000" expanded="true" signature="10063:10251" ph="..." />
-                <marker date="1472244582000" expanded="false" signature="10134:10168" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="10303:10514" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="10903:12969" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="10949:12927" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="11813:12688" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="11875:12084" ph="..." />
-                <marker date="1472244582000" expanded="false" signature="11954:11970" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="12149:12636" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="12218:12374" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="12443:12590" ph="..." />
-                <marker date="1472244582000" expanded="true" signature="12735:12880" ph="..." />
-                <marker date="1472244582000" expanded="false" signature="14281:14340" ph="..." />
+                <marker date="1472245944000" expanded="true" signature="862:975" ph="SELECT COALE... warehouse_inventory" />
+                <marker date="1472245944000" expanded="true" signature="1258:1404" ph="SELECT COALE... warehouse_inventory" />
+                <marker date="1472245944000" expanded="true" signature="2742:3010" ph="select p.*, purchase_order" />
+                <marker date="1472245944000" expanded="true" signature="3355:3599" ph="select p.*, purchase_order" />
               </folding>
             </state>
           </provider>
@@ -88,39 +122,28 @@
       <file leaf-file-name="WarehouseController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="986">
-              <caret line="231" column="56" selection-start-line="231" selection-start-column="56" selection-end-line="231" selection-end-column="56" />
+            <state relative-caret-position="401">
+              <caret line="107" column="31" selection-start-line="107" selection-start-column="31" selection-end-line="107" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layout.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
+      <file leaf-file-name="StockTransferRepository.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/StockTransferRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="53" column="231" selection-start-line="53" selection-start-column="231" selection-end-line="53" selection-end-column="231" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StockTransferController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/StockTransferController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="48" column="51" selection-start-line="48" selection-start-column="51" selection-end-line="48" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StockAdjustmentController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/StockAdjustmentController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
-              <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
-              <folding />
+            <state relative-caret-position="519">
+              <caret line="73" column="94" selection-start-line="73" selection-start-column="94" selection-end-line="73" selection-end-column="94" />
+              <folding>
+                <marker date="1472246213000" expanded="true" signature="905:1051" ph="SELECT COALE... warehouse_inventory" />
+                <marker date="1472246213000" expanded="true" signature="1449:1595" ph="SELECT COALE... warehouse_inventory" />
+                <marker date="1472246213000" expanded="true" signature="2893:3172" ph="select p.*, stock_transfers" />
+                <marker date="1472246213000" expanded="true" signature="2893:3459" ph="select p.*, " />
+                <marker date="1472246213000" expanded="true" signature="3180:3459" ph="select p.*, stock_transfers" />
+                <marker date="1472246213000" expanded="true" signature="3804:4083" ph="select p.*, stock_transfers" />
+                <marker date="1472246213000" expanded="true" signature="3804:4347" ph="select p.*, " />
+                <marker date="1472246213000" expanded="true" signature="4091:4347" ph="select p.*, stock_transfers" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -133,14 +156,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/show.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/edit.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/index.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/new.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/edit.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/index.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/new.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/edit.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/index.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/new.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-attribute.html.twig" />
@@ -181,9 +196,17 @@
         <option value="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/StockTransferController.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/StockAdjustmentController.php" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockAdjustment/new.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Repository/StockAdjustmentRepository.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Repository/PurchaseOrderRepository.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Repository/StockTransferRepository.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-purchase-orders.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-active.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-all.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-transfer.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-adjustments.html.twig" />
       </list>
     </option>
   </component>
@@ -503,6 +526,28 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="Repository" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resume" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resume" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="InventoryBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="Controller" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
@@ -783,7 +828,8 @@
       <workItem from="1468329133741" duration="12793000" />
       <workItem from="1468419122146" duration="12203000" />
       <workItem from="1468850342335" duration="4323000" />
-      <workItem from="1472242957095" duration="1549000" />
+      <workItem from="1472242957095" duration="1660000" />
+      <workItem from="1472244730629" duration="2044000" />
     </task>
     <task id="LOCAL-00001" summary="Updating user restricing layer&#10;">
       <created>1465300434195</created>
@@ -1072,11 +1118,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468508177625</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="updating some entitiies.&#10;">
+      <created>1472244612165</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1472244612165</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="157553000" />
+    <option name="totallyTimeSpent" value="159708000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1089,26 +1142,26 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1413" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15565287" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15687053" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.5022753" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28236184" sideWeight="0.49374288" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.24313408" sideWeight="0.5026495" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42392126" sideWeight="0.49772468" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32853898" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42392126" sideWeight="0.49772468" order="4" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="6" side_tool="false" content_ui="tabs" />
@@ -1270,6 +1323,11 @@
           <line>83</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php</url>
+          <line>83</line>
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -1279,96 +1337,11 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="67" />
+      <option name="time" value="68" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/edit.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/edit.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Office/new.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/edit.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="21" selection-start-line="48" selection-start-column="21" selection-end-line="48" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Popitem/new.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="17" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-attribute.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-images.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="37" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-specification.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="173" column="29" selection-start-line="173" selection-start-column="29" selection-end-line="173" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -1474,7 +1447,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
           <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1482,7 +1454,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="29" column="39" selection-start-line="29" selection-start-column="39" selection-end-line="29" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1490,7 +1461,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="765">
           <caret line="45" column="13" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1498,7 +1468,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1508,7 +1477,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1516,7 +1484,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1524,7 +1491,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="29" column="21" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1532,42 +1498,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/PurchaseOrder/new.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="247" column="42" selection-start-line="247" selection-start-column="42" selection-end-line="247" selection-end-column="42" />
-          <folding>
-            <marker date="1472243190000" expanded="true" signature="9283:9471" ph="..." />
-            <marker date="1472243190000" expanded="false" signature="9354:9388" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="9523:9742" ph="..." />
-            <marker date="1472243190000" expanded="false" signature="9802:9821" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="9822:10041" ph="..." />
-            <marker date="1472243190000" expanded="false" signature="9926:9997" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="10093:10262" ph="..." />
-            <marker date="1472243190000" expanded="false" signature="10198:10218" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="10567:12633" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="10613:12591" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="11477:12352" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="11539:11748" ph="..." />
-            <marker date="1472243190000" expanded="false" signature="11618:11634" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="11813:12300" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="11882:12038" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="12107:12254" ph="..." />
-            <marker date="1472243190000" expanded="true" signature="12399:12544" ph="..." />
-            <marker date="1472243190000" expanded="false" signature="13945:14004" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="82" column="64" selection-start-line="82" selection-start-column="64" selection-end-line="82" selection-end-column="64" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1575,31 +1505,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="867">
           <caret line="53" column="231" selection-start-line="53" selection-start-column="231" selection-end-line="53" selection-end-column="231" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/new-stock-adjustment.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="11" selection-start-line="17" selection-start-column="8" selection-end-line="19" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="986">
-          <caret line="231" column="56" selection-start-line="231" selection-start-column="56" selection-end-line="231" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/new-stock-adjustment.html.twig" />
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/ManageOption/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="40" column="70" selection-start-line="40" selection-start-column="70" selection-end-line="40" selection-end-column="97" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1607,7 +1520,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1627,11 +1539,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/new-stock-transfer.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/new-stock-transfer.html.twig" />
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/PurchaseOrder/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="11" selection-start-line="17" selection-start-column="8" selection-end-line="19" selection-end-column="11" />
-          <folding />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/PurchaseOrder/new.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2720">
+          <caret line="247" column="42" selection-start-line="247" selection-start-column="42" selection-end-line="247" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="85" selection-start-line="10" selection-start-column="85" selection-end-line="10" selection-end-column="85" />
         </state>
       </provider>
     </entry>
@@ -1659,27 +1585,127 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/StockAdjustmentRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="85" selection-start-line="10" selection-start-column="85" selection-end-line="10" selection-end-column="85" />
+        <state relative-caret-position="944">
+          <caret line="73" column="130" selection-start-line="73" selection-start-column="130" selection-end-line="73" selection-end-column="130" />
           <folding>
-            <marker date="1472244582000" expanded="true" signature="5682:5689" ph="×" />
-            <marker date="1472244582000" expanded="true" signature="6026:6033" ph="×" />
-            <marker date="1472244582000" expanded="true" signature="11040:11228" ph="..." />
-            <marker date="1472244582000" expanded="false" signature="11111:11145" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="11280:11491" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="11918:13984" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="11964:13942" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="12828:13703" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="12890:13099" ph="..." />
-            <marker date="1472244582000" expanded="false" signature="12969:12985" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="13164:13651" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="13233:13389" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="13458:13605" ph="..." />
-            <marker date="1472244582000" expanded="true" signature="13750:13895" ph="..." />
-            <marker date="1472244582000" expanded="false" signature="15334:15393" ph="..." />
+            <marker date="1472245944000" expanded="true" signature="957:1103" ph="SELECT COALE... warehouse_inventory" />
+            <marker date="1472245944000" expanded="true" signature="2250:2523" ph="select p.*, stock_adjustments" />
+            <marker date="1472245944000" expanded="true" signature="2868:3117" ph="select p.*, stock_adjustments" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/src/Symfony/Component/HttpKernel/HttpKernel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/WarehouseRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="39" column="45" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/PurchaseOrderRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1173">
+          <caret line="78" column="128" selection-start-line="78" selection-start-column="128" selection-end-line="78" selection-end-column="128" />
+          <folding>
+            <marker date="1472245944000" expanded="true" signature="862:975" ph="SELECT COALE... warehouse_inventory" />
+            <marker date="1472245944000" expanded="true" signature="1258:1404" ph="SELECT COALE... warehouse_inventory" />
+            <marker date="1472245944000" expanded="true" signature="2742:3010" ph="select p.*, purchase_order" />
+            <marker date="1472245944000" expanded="true" signature="3355:3599" ph="select p.*, purchase_order" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/StockTransferRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="73" column="94" selection-start-line="73" selection-start-column="94" selection-end-line="73" selection-end-column="94" />
+          <folding>
+            <marker date="1472246213000" expanded="true" signature="905:1051" ph="SELECT COALE... warehouse_inventory" />
+            <marker date="1472246213000" expanded="true" signature="1449:1595" ph="SELECT COALE... warehouse_inventory" />
+            <marker date="1472246213000" expanded="true" signature="2893:3172" ph="select p.*, stock_transfers" />
+            <marker date="1472246213000" expanded="true" signature="2893:3459" ph="select p.*, " />
+            <marker date="1472246213000" expanded="true" signature="3180:3459" ph="select p.*, stock_transfers" />
+            <marker date="1472246213000" expanded="true" signature="3804:4083" ph="select p.*, stock_transfers" />
+            <marker date="1472246213000" expanded="true" signature="3804:4347" ph="select p.*, " />
+            <marker date="1472246213000" expanded="true" signature="4091:4347" ph="select p.*, stock_transfers" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/WarehouseController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401">
+          <caret line="107" column="31" selection-start-line="107" selection-start-column="31" selection-end-line="107" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="706">
+          <caret line="99" column="52" selection-start-line="99" selection-start-column="43" selection-end-line="99" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-all.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="28" selection-start-line="14" selection-start-column="15" selection-end-line="36" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-active.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-purchase-orders.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="21" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-transfer.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="37" column="28" selection-start-line="15" selection-start-column="15" selection-end-line="37" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-inventory.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1471874735000" expanded="true" signature="607:926" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Warehouse/show-adjustments.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>

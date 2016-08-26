@@ -60,7 +60,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
     public function getActiveForWarehouseArray(Warehouse $warehouse) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'purchase_order' as type
 	from purchase_order p
 		left join warehouses w
 			on p.warehouse_id = w.id
@@ -76,7 +76,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
     public function getAllForWarehouseArray(Warehouse $warehouse) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'purchase_order' as type
 	from purchase_order p
 		left join warehouses w
 			on p.warehouse_id = w.id
