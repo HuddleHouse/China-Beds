@@ -223,8 +223,20 @@
 
         <div class="table">
             <div class="row">
+
                 <div class="col-md-9">
-                    <h4>{{ purchaseOrder.warehouse.name }} <span class="label" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.name }}</span></h4>
+                    <h4>
+                        {{ purchaseOrder.warehouse.name }}
+
+                    </h4>
+                    <div class="status">
+                        <span class="mdl-chip mdl-chip--contact" >
+                            <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.nameFirstLetter }}</span>
+                            <span class="mdl-chip__text">
+                                {{ purchaseOrder.status.name }}
+                            </span>
+                        </span>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     {% if purchaseOrder.status.name == 'Active' %}

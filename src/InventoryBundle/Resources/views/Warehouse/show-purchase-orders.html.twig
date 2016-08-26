@@ -9,7 +9,6 @@
                     <th>Warehouse</th>
                     <th>Status</th>
                     <th>Due</th>
-                    <th>Last Updated</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,7 +19,6 @@
                         <td>{{ item.warehouse_name }}</td>
                         <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
                         <td>{{ item.stock_due_date | date("m/d/Y")  }}</td>
-                        <td>{{ item.order_date | date("m/d/Y")  }}</td>
                     </tr>
                 {% endfor %}
             </table>

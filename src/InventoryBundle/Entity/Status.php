@@ -91,6 +91,10 @@ class Status
         return $this->name;
     }
 
+    public function getNameFirstLetter()
+    {
+        return substr($this->name, 0, 1);
+    }
     /**
      * Set color
      *

@@ -8,19 +8,31 @@
                     <th>Type</th>
                     <th>Warehouse</th>
                     <th>Status</th>
-                    <th>Due</th>
-                    <th>Last Updated</th>
+                    <th>Date</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for item in all_po %}
+                {% for item in all %}
                     <tr>
-                        <td><a href="{{ path('purchaseorder_show', { 'id': item.id }) }}">{{ item.order_number }}</a></td>
-                        <td>Purchase Order</td>
-                        <td>{{ item.warehouse_name }}</td>
-                        <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
-                        <td>{{ item.stock_due_date | date("m/d/Y")  }}</td>
-                        <td>{{ item.order_date | date("m/d/Y")  }}</td>
+                        {% if item.type == "purchase_order" %}
+                            <td><a href="{{ path('purchaseorder_show', { 'id': item.id }) }}">{{ item.order_number }}</a></td>
+                            <td>Purchase Order</td>
+                            <td>{{ item.warehouse_name }}</td>
+                            <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
+                            <td>{{ item.stock_due_date | date("m/d/Y")  }}</td>
+                        {% elseif item.type == "stock_transfer" %}
+                            <td><a href="{{ path('stocktransfer_show', { 'id': item.id }) }}">{{ item.order_number }}</a></td>
+                            <td>Stock Transfer</td>
+                            <td>{{ item.warehouse_name }}</td>
+                            <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
+                            <td>{{ item.date | date("m/d/Y")  }}</td>
+                        {% elseif item.type == "stock_adjustment" %}
+                            <td><a href="{{ path('stockadjustment_show', { 'id': item.id }) }}">{{ item.order_number }}</a></td>
+                            <td>Stock Adjustment</td>
+                            <td>{{ item.warehouse_name }}</td>
+                            <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
+                            <td>{{ item.date | date("m/d/Y")  }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </table>

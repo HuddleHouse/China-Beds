@@ -86,13 +86,26 @@ class WarehouseController extends Controller
         $active_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
         $all_po = $em->getRepository('InventoryBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 
+        $all_st = $em->getRepository('InventoryBundle:StockTransfer')->getAllForWarehouseArray($warehouse);
+        $active_st = $em->getRepository('InventoryBundle:StockTransfer')->getActiveForWarehouseArray($warehouse);
+
+        $all_adj = $em->getRepository('InventoryBundle:StockAdjustment')->getAllForWarehouseArray($warehouse);
+        $active_adj = $em->getRepository('InventoryBundle:StockAdjustment')->getActiveForWarehouseArray($warehouse);
+
+        $all = array_merge($all_po, $all_st, $all_adj);
+        $active = array_merge($active_po, $active_st, $active_adj);
+
         return $this->render('@Inventory/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
             'delete_form' => $deleteForm->createView(),
             'products' => $products,
             'inventory_data' => $inventory_data,
             'active_po' => $active_po,
-            'all_po' => $all_po
+            'all_po' => $all_po,
+            'all_st' => $all_st,
+            'all_adj' => $all_adj,
+            'all' => $all,
+            'active' => $active
         ));
     }
 
@@ -185,7 +198,6 @@ class WarehouseController extends Controller
     /**
      *
      * @Route("/{id}/purchase-order", name="warehouse_new_purchase_order")
-     * @Method("GET")
      */
     public function warehouseNewPurchaseOrderAction(Warehouse $warehouse)
     {
@@ -202,8 +214,46 @@ class WarehouseController extends Controller
 
     /**
      *
+     * @Route("/{id}/stock-transfer", name="warehouse_new_stock_transfer")
+     */
+    public function warehouseNewStockTransferAction(Warehouse $warehouse)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+
+        return $this->render('@Inventory/StockTransfer/new.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'warehouse_id' => $warehouse->getId()
+        ));
+    }
+
+    /**
+     *
+     * @Route("/{id}/stock-adjustment", name="warehouse_new_stock_adjustment")
+     */
+    public function newStockAdjustmentAction(Warehouse $warehouse)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+
+        return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'warehouse_id' => $warehouse->getId()
+        ));
+    }
+
+
+    /**
+     *
      * @Route("/{id}/inventory", name="warehouse_inventory_show")
-     * @Method("GET")
      */
     public function warehouseInventoryShowAction(Warehouse $warehouse)
     {

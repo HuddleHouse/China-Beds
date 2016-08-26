@@ -1,7 +1,9 @@
 <?php
 
 namespace InventoryBundle\Repository;
+use InventoryBundle\Entity\ProductVariant;
 use InventoryBundle\Entity\Warehouse;
+use InventoryBundle\Entity\WarehouseInventory;
 
 /**
  * WarehouseRepository
@@ -44,6 +46,22 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
+    public function getWarehouseInventoryForItemOnPurchaseOrder(Warehouse $warehouse, ProductVariant $productVariant)
+    {
+        $quantity = 0;
+        if(count($warehouse->getPurchaseOrders()) == 0)
+            return 0;
+
+        foreach($warehouse->getPurchaseOrders() as $item)
+            if($item->getStatus()->getName() == 'Active')
+                foreach($item->getProductvariants() as $variant)
+                    if($variant->getId() == $productVariant->getId())
+                        $quantity += $variant->getOrderedQuantity();
+
+
+        return $quantity;
+    }
+
     public function getAllWarehousesArray() {
         $warehouses = $this->findAll();
 
@@ -67,17 +85,54 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getWarehouseInventoryArray(Warehouse $warehouse) {
 
-        foreach($warehouse->getInventory() as $item)
+        foreach($warehouse->getInventory() as $item) {
             $inventory_data[] = array(
                 'id' => $item->getId(),
                 'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
-                'quantity' => $this->getWarehouseInventory($warehouse),
-                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                'quantity' => $item->getQuantity(),
+                'po_quantity' => $this->getWarehouseInventoryForItemOnPurchaseOrder($warehouse, $item->getProductVariant())
             );
+        }
 
         if(!isset($inventory_data))
             return true;
 
         return $inventory_data;
+    }
+
+    /**
+     * @param WarehouseInventory $id
+     * @param Warehouse $warehouse
+     * @param $quantity
+     */
+    public function updateWarehouseInventoryById($id, $quantity) {
+        $em = $this->getEntityManager();
+
+        $warehouseInventory = $em->getRepository('InventoryBundle:WarehouseInventory')->find($id);
+        if($warehouseInventory) {
+            $tmp = $warehouseInventory->getQuantity() + (int)$quantity;
+            $warehouseInventory->setQuantity($tmp);
+            $em->persist($warehouseInventory);
+            $em->flush();
+        }
+
+        return $warehouseInventory;
+    }
+
+    /**
+     * @param Warehouse $warehouse
+     * @param ProductVariant $productVariant
+     * @param $quantity
+     */
+    public function addWarehouseInventory(Warehouse $warehouse, ProductVariant $productVariant, $quantity) {
+        $em = $this->getEntityManager();
+        $warehouseInventory = new WarehouseInventory();
+        $warehouseInventory->setWarehouse($warehouse);
+        $warehouseInventory->setProductVariant($productVariant);
+        $warehouseInventory->setQuantity((int)$quantity);
+        $em->persist($warehouseInventory);
+        $em->flush();
+
+        return $warehouseInventory;
     }
 }

@@ -118,7 +118,7 @@
                 function getCartTotal() {
                     var total = 0;
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.add_quantity;
+                        total += value.ordered_quantity;
 
                     });
                     return total;
@@ -138,9 +138,9 @@
                     }
                     else {
                         if(self.cart.length > 0)
-                            $('#error-message').append("<div class='alert alert-error'>Please select a warehouse.</div>");
+                            $('#error-message').append("<div class='alert alert-error'>Please select a warehouse.</div>").fadeOut(5000);
                         else if(self.cart.length == 0)
-                            $('#error-message').append("<div class='alert alert-error'>Please add at least one item to the Purchase Order to continue.</div>");
+                            $('#error-message').append("<div class='alert alert-error'>Please add at least one item to the Purchase Order to continue.</div>").fadeOut(5000);
                     }
 
                 }
@@ -280,7 +280,7 @@
                                 md-menu-class="autocomplete-custom-template">
                                 <md-item-template>
                                     <span class="item-title">
-                                        <img src="/{{item.image_url}}" style="max-width: 50px;">
+                                        <img src="{{item.image_url}}" style="max-width: 50px;">
                                         <span> {{item.name}} </span>
                                     </span>
                                     <span class="item-metadata">
