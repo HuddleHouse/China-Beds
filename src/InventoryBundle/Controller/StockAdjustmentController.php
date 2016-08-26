@@ -50,7 +50,8 @@ class StockAdjustmentController extends Controller
         return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
             'inventory_data' => $inventory_data,
             'products' => $products,
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'warehouse_id' => 'none'
         ));
     }
 

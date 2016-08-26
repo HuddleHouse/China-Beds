@@ -185,7 +185,6 @@ class WarehouseController extends Controller
     /**
      *
      * @Route("/{id}/purchase-order", name="warehouse_new_purchase_order")
-     * @Method("GET")
      */
     public function warehouseNewPurchaseOrderAction(Warehouse $warehouse)
     {
@@ -203,7 +202,6 @@ class WarehouseController extends Controller
     /**
      *
      * @Route("/{id}/stock-transfer", name="warehouse_new_stock_transfer")
-     * @Method("GET")
      */
     public function warehouseNewStockTransferAction(Warehouse $warehouse)
     {
@@ -212,11 +210,30 @@ class WarehouseController extends Controller
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
         $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
 
-        return $this->render('@Inventory/Warehouse/new-stock-transfer.html.twig', array(
+        return $this->render('@Inventory/StockTransfer/new.html.twig', array(
             'inventory_data' => $inventory_data,
             'products' => $products,
             'warehouses' => $warehouses,
-            'warehouse' => $warehouse
+            'warehouse_id' => $warehouse->getId()
+        ));
+    }
+
+    /**
+     *
+     * @Route("/{id}/stock-adjustment", name="warehouse_new_stock_adjustment")
+     */
+    public function newStockAdjustmentAction(Warehouse $warehouse)
+    {
+        $inventory_data = array();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+
+        return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
+            'inventory_data' => $inventory_data,
+            'products' => $products,
+            'warehouses' => $warehouses,
+            'warehouse_id' => $warehouse->getId()
         ));
     }
 
@@ -224,7 +241,6 @@ class WarehouseController extends Controller
     /**
      *
      * @Route("/{id}/inventory", name="warehouse_inventory_show")
-     * @Method("GET")
      */
     public function warehouseInventoryShowAction(Warehouse $warehouse)
     {
