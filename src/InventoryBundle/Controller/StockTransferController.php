@@ -90,7 +90,7 @@ class StockTransferController extends Controller
         $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
         $cart = $em->getRepository('InventoryBundle:StockTransfer')->getCartArray($stockTransfer);
 
-        return $this->render('@Inventory/StockTransfer/edit.html.twig', array(
+        return $this->render('@Inventory/StockTransfer/show.html.twig', array(
             'inventory_data' => $inventory_data,
             'products' => $products,
             'warehouses' => $warehouses,

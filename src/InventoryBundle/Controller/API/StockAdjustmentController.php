@@ -73,29 +73,29 @@ class StockAdjustmentController extends Controller
 
         if($complete != null) {
             foreach($stock_adjustment->getProductVariants() as $variant) {
-                $connection = $em->getConnection();
-                $statement = $connection->prepare("SELECT id FROM warehouse_inventory where warehouse_id = :warehouse_id and product_variant_id = :product_variant_id");
-                $statement->bindValue('warehouse_id', $receiving_warehouse->getId());
-                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-                $statement->execute();
-                $receiving_warehouse_inventory_id = $statement->fetch();
-
-                if($receiving_warehouse_inventory_id != false)
-                    $em->getRepository('InventoryBundle:Warehouse')->updateWarehouseInventoryById($receiving_warehouse_inventory_id['id'], $variant->getQuantity());
-                else {
-                    $em->getRepository('InventoryBundle:Warehouse')->addWarehouseInventory($receiving_warehouse, $variant->getProductVariant(), $variant->getQuantity());
-                }
-
-                $statement = $connection->prepare("SELECT id FROM warehouse_inventory where warehouse_id = :warehouse_id and product_variant_id = :product_variant_id");
-                $statement->bindValue('warehouse_id', $warehouse->getId());
-                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-                $statement->execute();
-                $departing_warehouse_inventory_id = $statement->fetch();
-
-                if($departing_warehouse_inventory_id != false)
-                    $em->getRepository('InventoryBundle:Warehouse')->updateWarehouseInventoryById($departing_warehouse_inventory_id['id'], $variant->getQuantity()*-1);
-                else
-                    $em->getRepository('InventoryBundle:Warehouse')->addWarehouseInventory($warehouse, $variant->getProductVariant(), $variant->getQuantity()*-1);
+//                $connection = $em->getConnection();
+//                $statement = $connection->prepare("SELECT id FROM warehouse_inventory where warehouse_id = :warehouse_id and product_variant_id = :product_variant_id");
+//                $statement->bindValue('warehouse_id', $receiving_warehouse->getId());
+//                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+//                $statement->execute();
+//                $receiving_warehouse_inventory_id = $statement->fetch();
+//
+//                if($receiving_warehouse_inventory_id != false)
+//                    $em->getRepository('InventoryBundle:Warehouse')->updateWarehouseInventoryById($receiving_warehouse_inventory_id['id'], $variant->getQuantity());
+//                else {
+//                    $em->getRepository('InventoryBundle:Warehouse')->addWarehouseInventory($receiving_warehouse, $variant->getProductVariant(), $variant->getQuantity());
+//                }
+//
+//                $statement = $connection->prepare("SELECT id FROM warehouse_inventory where warehouse_id = :warehouse_id and product_variant_id = :product_variant_id");
+//                $statement->bindValue('warehouse_id', $warehouse->getId());
+//                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+//                $statement->execute();
+//                $departing_warehouse_inventory_id = $statement->fetch();
+//
+//                if($departing_warehouse_inventory_id != false)
+//                    $em->getRepository('InventoryBundle:Warehouse')->updateWarehouseInventoryById($departing_warehouse_inventory_id['id'], $variant->getQuantity()*-1);
+//                else
+//                    $em->getRepository('InventoryBundle:Warehouse')->addWarehouseInventory($warehouse, $variant->getProductVariant(), $variant->getQuantity()*-1);
 
             }
         }
