@@ -61,8 +61,8 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
-	from warehouses w
-		left join purchase_order p
+	from purchase_order p
+		left join warehouses w
 			on p.warehouse_id = w.id
 		left join status s
 			on s.id = p.status_id
@@ -77,8 +77,8 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name
-	from warehouses w
-		left join purchase_order p
+	from purchase_order p
+		left join warehouses w
 			on p.warehouse_id = w.id
 		left join status s
 			on s.id = p.status_id
