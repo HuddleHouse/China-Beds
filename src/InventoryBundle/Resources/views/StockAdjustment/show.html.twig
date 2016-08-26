@@ -17,6 +17,7 @@
     <script>
         $(function() {
             $("#warehouse").val('{{ stockAdjustment.warehouse.id }}');
+            $(".ui-spinner-button").hide();
         });
 
         (function () {
@@ -46,6 +47,8 @@
                 self.cart_total = {{ cart.total | json_encode | raw}};
                 self.date = new Date();
                 self.setActive = setActive;
+                self.setEdit = setEdit;
+                self.isEdit = 0;
 
 
                 /**
@@ -77,6 +80,12 @@
                             resetSearch();
                         }
                     }
+                }
+
+                function setEdit(val){
+                    self.isEdit = val;
+                    if(self.isEdit == 1)
+                        $(".ui-spinner-button").show();
                 }
 
                 function setActive(){
@@ -226,7 +235,7 @@
         <div class="table">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Transfer Date <md-datepicker ng-model="ctrl.date" disabled md-placeholder="Enter date"></md-datepicker></h5>
+                    <h5>Transfer Date <md-datepicker ng-model="ctrl.date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
                 <div class="col-md-2">
                     <span class="mdl-chip mdl-chip--contact" style="margin-top: 27px;">
@@ -237,13 +246,16 @@
                         </span>
                 </div>
                 <div class="col-md-6">
-                    <div class="" style="margin: 15px 20px 0;">
+                    <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 0">
                         {% if stockAdjustment.status.name == 'Draft' %}
                         <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
                         {% elseif stockAdjustment.status.name != 'Completed' %}
                             <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Completed')">COMPLETE</a>
-                            <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" href="{{ path('stockadjustment_edit', {'id': stockAdjustment.id}) }}">EDIT</a>
+                            <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
                         {% endif %}
+                    </div>
+                    <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
+                            <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE</a>
                     </div>
                 </div>
             </div>
@@ -252,7 +264,7 @@
                 <div class="col-md-6">
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
-                        <select class="form-control" id="warehouse" disabled style="width: 100%;margin: 24px 0 16px;" required>
+                        <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;" required>
                             <option value="" disabled selected>-- Warehouse --</option>
                             {% for warehouse in warehouses %}
                                 <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
@@ -284,56 +296,56 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" ng-change="ctrl.updateCartItem()" disabled class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner ng-disabled="ctrl.isEdit == 0" class="form-control number_select">
                             </td>
                             <td></td>
                             <td></td>
                                 {% endverbatim %}
                             </div>
                         </tr>
-                        {#<tr id="search">#}
-                            {#<td class="mdl-data-table__cell--non-numeric" style="padding: 0px;">#}
-                                {#{% verbatim %}#}
-                            {#<md-content>#}
-                            {#<md-autocomplete#}
-                                {#ng-disabled="ctrl.isDisabled"#}
-                                {#md-no-cache="true"#}
-                                {#md-selected-item="ctrl.selectedItem"#}
-                                {#md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"#}
-                                {#md-search-text="ctrl.searchText"#}
-                                {#md-selected-item-change="ctrl.selectedItemChange(item)"#}
-                                {#md-items="item in ctrl.querySearch(ctrl.searchText)"#}
-                                {#md-item-text="item.name"#}
-                                {#md-min-length="0"#}
-                                {#placeholder="Pick a Product"#}
-                                {#md-autofocus="false"#}
-                                {#md-menu-class="autocomplete-custom-template">#}
-                                {#<md-item-template>#}
-                                    {#<span class="item-title">#}
-                                        {#<img src="/{{item.image_url}}" style="max-width: 50px;">#}
-                                        {#<span> {{item.name}} </span>#}
-                                    {#</span>#}
-                                    {#<span class="item-metadata">#}
-                                        {#<span class="item-metastat">#}
-                                            {#<strong>{{item.warehouse_quantity}}</strong> warehouse quantity#}
-                                        {#</span>#}
-                                        {#<span class="item-metastat">#}
-                                           {#<strong>{{item.total_quantity}}</strong> total quantity#}
-                                        {#</span>#}
+                        <tr id="search" ng-if="ctrl.isEdit == 1">
+                            <td class="mdl-data-table__cell--non-numeric" style="padding: 0px;">
+                                {% verbatim %}
+                            <md-content>
+                            <md-autocomplete
+                                ng-disabled="ctrl.isDisabled"
+                                md-no-cache="true"
+                                md-selected-item="ctrl.selectedItem"
+                                md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+                                md-search-text="ctrl.searchText"
+                                md-selected-item-change="ctrl.selectedItemChange(item)"
+                                md-items="item in ctrl.querySearch(ctrl.searchText)"
+                                md-item-text="item.name"
+                                md-min-length="0"
+                                placeholder="Pick a Product"
+                                md-autofocus="false"
+                                md-menu-class="autocomplete-custom-template">
+                                <md-item-template>
+                                    <span class="item-title">
+                                        <img src="{{item.image_url}}" style="max-width: 50px;">
+                                        <span> {{item.name}} </span>
+                                    </span>
+                                    <span class="item-metadata">
+                                        <span class="item-metastat">
+                                            <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
+                                        </span>
+                                        <span class="item-metastat">
+                                           <strong>{{item.total_quantity}}</strong> total quantity
+                                        </span>
 
-                                     {#</span>#}
-                                {#</md-item-template>#}
-                                {#<md-not-found>#}
-                                       {#No product matching "{{ctrl.searchText}}" were found.#}
-                                    {#</md-not-found>#}
-                            {#</md-autocomplete>#}
-                            {#</md-content>#}
-                                {#{% endverbatim %}#}
-                            {#</td>#}
-                            {#<td></td>#}
-                            {#<td></td>#}
-                            {#<td></td>#}
-                        {#</tr>#}
+                                     </span>
+                                </md-item-template>
+                                <md-not-found>
+                                       No product matching "{{ctrl.searchText}}" were found.
+                                    </md-not-found>
+                            </md-autocomplete>
+                            </md-content>
+                                {% endverbatim %}
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

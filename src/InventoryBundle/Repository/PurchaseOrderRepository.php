@@ -19,9 +19,9 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
         $cart = array();
         $total = 0;
         foreach($purchaseOrder->getProductvariants() as $variant) {
-            $image_url = '';
+            $image_url = '/';
             foreach($variant->getProductVariant()->getProduct()->getImages() as $image) {
-                $image_url = '/'.$image->getWebPath();
+                $image_url .= $image->getWebPath();
                 break;
             }
 

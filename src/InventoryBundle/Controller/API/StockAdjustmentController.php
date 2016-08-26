@@ -52,7 +52,7 @@ class StockAdjustmentController extends Controller
         foreach($cart as $item) {
             $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
             if(isset($item['stock_adjustment_product_variant_id']))
-                $stock_transfer_variant = $em->getRepository('InventoryBundle:StockAdjustmentProductVariant')->find($item['stock_transfer_product_variant_id']);
+                $stock_transfer_variant = $em->getRepository('InventoryBundle:StockAdjustmentProductVariant')->find($item['stock_adjustment_product_variant_id']);
             else {
                 $stock_transfer_variant = new StockAdjustmentProductVariant();
                 $stock_transfer_variant->setProductVariant($variant);

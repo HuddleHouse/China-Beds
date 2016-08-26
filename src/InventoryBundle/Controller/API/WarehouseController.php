@@ -28,9 +28,9 @@ class WarehouseController extends Controller
         $products = array();
 
         foreach($products_all as $prod) {
-            $image_url = '';
+            $image_url = '/';
             foreach($prod->getImages() as $image) {
-                $image_url = $image->getWebPath();
+                $image_url .= $image->getWebPath();
                 break;
             }
 

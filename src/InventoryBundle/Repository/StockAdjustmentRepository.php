@@ -22,9 +22,9 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
         $cart = array();
         $total = 0;
         foreach($stockAdjustment->getProductvariants() as $variant) {
-            $image_url = '';
+            $image_url = '/';
             foreach($variant->getProductVariant()->getProduct()->getImages() as $image) {
-                $image_url = '/'.$image->getWebPath();
+                $image_url .= $image->getWebPath();
                 break;
             }
 
@@ -40,7 +40,7 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
             $cart[] = array(
                 'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
                 'id' => $variant->getProductVariant()->getId(),
-                'stock_transfer_product_variant_id' => $variant->getId(),
+                'stock_adjustment_product_variant_id' => $variant->getId(),
                 'image_url' => $image_url,
                 'quantity' => $variant->getQuantity(),
                 'warehouse_quantity' => $warehouse_quantity['total'] - $variant->getQuantity()
