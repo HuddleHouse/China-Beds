@@ -50,7 +50,8 @@ class PurchaseOrderController extends Controller
         return $this->render('@Inventory/PurchaseOrder/new.html.twig', array(
             'inventory_data' => $inventory_data,
             'products' => $products,
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'warehouse_id' => 'none'
         ));
     }
 
@@ -64,39 +65,16 @@ class PurchaseOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $cart = $em->getRepository('InventoryBundle:PurchaseOrder')->getCartArray($purchaseOrder);
-
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
 
         return $this->render('@Inventory/PurchaseOrder/show.html.twig', array(
             'purchaseOrder' => $purchaseOrder,
             'cart' => $cart['cart'],
-            'total' => $cart['total']
+            'total' => $cart['total'],
+            'warehouses' => $warehouses
         ));
     }
 
-
-
-    /**
-     * Displays a form to edit an existing PurchaseOrder entity.
-     *
-     * @Route("/{id}/edit", name="purchaseorder_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, PurchaseOrder $purchaseOrder)
-    {
-        $inventory_data = array();
-        $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
-        $cart = $em->getRepository('InventoryBundle:PurchaseOrder')->getCartArray($purchaseOrder);
-
-        return $this->render('@Inventory/PurchaseOrder/edit.html.twig', array(
-            'inventory_data' => $inventory_data,
-            'products' => $products,
-            'warehouses' => $warehouses,
-            'cart' => $cart,
-            'purchase_order' => $purchaseOrder
-        ));
-    }
 
     /**
      * Deletes a PurchaseOrder entity.

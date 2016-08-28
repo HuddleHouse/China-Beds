@@ -79,29 +79,6 @@ class StockAdjustmentController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing StockAdjustment entity.
-     *
-     * @Route("/{id}/edit", name="stockadjustment_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, StockAdjustment $stockAdjustment)
-    {
-        $inventory_data = array();
-        $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
-        $cart = $em->getRepository('InventoryBundle:StockAdjustment')->getCartArray($stockAdjustment);
-
-        return $this->render('@Inventory/StockAdjustment/edit.html.twig', array(
-            'inventory_data' => $inventory_data,
-            'products' => $products,
-            'warehouses' => $warehouses,
-            'stockAdjustment' => $stockAdjustment,
-            'cart' => $cart
-        ));
-    }
-
-    /**
      * Deletes a StockAdjustment entity.
      *
      * @Route("/{id}", name="stockadjustment_delete")
