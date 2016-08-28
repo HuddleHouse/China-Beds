@@ -43,7 +43,11 @@ class PurchaseOrderController extends Controller
         $warehouse_id = $request->request->get('warehouse_id');
         $warehouse = $em->getRepository('InventoryBundle:Warehouse')->find($warehouse_id);
 
-        $purchase_order = new PurchaseOrder();
+        $purchase_order_id = $request->request->get('purchase_order_id');
+        if($purchase_order_id != null)
+            $purchase_order = $em->getRepository('InventoryBundle:PurchaseOrder')->find($purchase_order_id);
+        else
+            $purchase_order = new PurchaseOrder();
         $purchase_order->setUser($this->getUser());
         $purchase_order->setWarehouse($warehouse);
         $purchase_order->setStockDueDate($due_date);
@@ -52,10 +56,16 @@ class PurchaseOrderController extends Controller
 
 
         foreach($cart as $item) {
-            $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
-            $purchase_order_variant = new PurchaseOrderProductVariant();
-            $purchase_order_variant->setProductVariant($variant);
-            $purchase_order_variant->setPurchaseOrder($purchase_order);
+            if($item['purchase_order_product_variant_id'])
+                $purchase_order_variant = $em->getRepository('InventoryBundle:PurchaseOrderProductVariant')->find($item['purchase_order_product_variant_id']);
+            else
+            {
+                $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
+                $purchase_order_variant = new PurchaseOrderProductVariant();
+                $purchase_order_variant->setProductVariant($variant);
+                $purchase_order_variant->setPurchaseOrder($purchase_order);
+            }
+
             $purchase_order_variant->setOrderedQuantity($item['ordered_quantity']);
             $em->persist($purchase_order_variant);
         }

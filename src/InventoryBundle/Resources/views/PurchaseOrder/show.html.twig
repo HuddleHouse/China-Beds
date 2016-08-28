@@ -15,6 +15,11 @@
 
 {% block footer %}
     <script>
+        $(function() {
+            $("#warehouse").val('{{ purchaseOrder.warehouse.id }}');
+            $(".ordered-quantity .ui-spinner-button").hide();
+        });
+
         (function () {
             'use strict';
             angular.module('myApp',['ngMaterial', 'ngMessages'])
@@ -44,6 +49,15 @@
                 self.cart_total = {{ total | json_encode | raw }};
                 self.initial_total = {{ total | json_encode | raw }};
                 self.due_date = new Date();
+                self.setEdit = setEdit;
+                self.isEdit = 0;
+
+
+                function setEdit(val){
+                    self.isEdit = val;
+                    if(self.isEdit == 1)
+                        $(".ui-spinner-button").show();
+                }
 
 
                 /**
@@ -127,7 +141,7 @@
                         type: 'POST',
                         url: "{{ path('api_save_purchase_order') }}",
                         dataType: 'json',
-                        data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ purchaseOrder.warehouse.id }}, status: draft },
+                        data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ purchaseOrder.warehouse.id }}, status: draft, purchase_order_id: {{ purchaseOrder.id }} },
                         success: function (data) {
                             window.location.href = "/app_dev.php/purchase-order/"+data;
                         }
@@ -224,36 +238,45 @@
         <div class="table">
             <div class="row">
 
-                <div class="col-md-9">
-                    <h4>
-                        {{ purchaseOrder.warehouse.name }}
-
-                    </h4>
-                    <div class="status">
-                        <span class="mdl-chip mdl-chip--contact" >
+                <div class="col-md-4">
+                    <h5>Stock Due Date <md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                </div>
+                <div class="col-md-2">
+                    <span class="mdl-chip mdl-chip--contact" style="margin-top: 27px;">
                             <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.nameFirstLetter }}</span>
                             <span class="mdl-chip__text">
                                 {{ purchaseOrder.status.name }}
                             </span>
                         </span>
-                    </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
+                    <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 0">
                     {% if purchaseOrder.status.name == 'Active' %}
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
-                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" href="{{ path('purchaseorder_edit', { 'id': purchaseOrder.id }) }}">EDIT</a>
+                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
                     {% elseif purchaseOrder.status.name == 'Draft' %}
                         <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
                     {% endif %}
+                    </div>
+                    <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE</a>
+                    </div>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="col-md-6">
-                    <h5>Stock Due-date <md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date" disabled></md-datepicker></h5>
+                    <form id="warehouse-form">
+                        <label for="warehouse">Warehouse</label>
+                        <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;" required>
+                            <option value="" disabled selected>-- Warehouse --</option>
+                            {% for warehouse in warehouses %}
+                                <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
                 </div>
                 <div class="col-md-6">
-
                 </div>
             </div>
             <hr>
@@ -279,8 +302,8 @@
                                 <img src="{{item.image_url}}" style="height: 34px; padding-right: 15px;">
                                 {{ item.name }}
                             </td>
-                            <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " disabled style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
+                            <td class="table-form ordered-quantity">
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
                             {% endverbatim %}
                                 {% if purchaseOrder.status.name == 'Active' %}
