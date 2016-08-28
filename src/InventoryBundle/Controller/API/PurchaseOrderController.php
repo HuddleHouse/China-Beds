@@ -56,7 +56,7 @@ class PurchaseOrderController extends Controller
 
 
         foreach($cart as $item) {
-            if($item['purchase_order_product_variant_id'])
+            if(isset($item['purchase_order_product_variant_id']))
                 $purchase_order_variant = $em->getRepository('InventoryBundle:PurchaseOrderProductVariant')->find($item['purchase_order_product_variant_id']);
             else
             {
