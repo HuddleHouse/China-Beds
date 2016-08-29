@@ -16,5 +16,5 @@
 /web/bundles/
 /web/css/
 /web/js/
-.idea/workspace.xml
+.idea/*
 /src/InventoryBundle/Controller/PurchaseOrderController.php
