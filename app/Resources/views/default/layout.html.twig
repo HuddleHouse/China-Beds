@@ -266,9 +266,6 @@
                                 <li {% if (app.request.get('_route') in sidebar_stock_adjustment) %} class="active"{% endif %}>
                                     <a href="{{ path('stockadjustment_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in sidebar_status) %} class="active"{% endif %}>
-                                    <a href="{{ path('status_index') }}"><i class="fa fa-circle-o"></i>Status</a>
-                                </li>
                             </ul>
                         </li>
                 {% endif %}
