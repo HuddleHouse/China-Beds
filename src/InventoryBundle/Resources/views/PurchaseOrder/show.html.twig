@@ -110,6 +110,7 @@
                         if(!self.cart_items[self.selectedItem.id]) {
                             var index = self.cart.push(self.selectedItem) - 1;
                             self.cart_items[self.selectedItem.id] = index;
+                            updateCart();
                             resetSearch();
                         }
                     }

@@ -233,12 +233,14 @@
                 <div class="col-md-6">
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
-                        <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;" required>
-                            <option value="" disabled selected>-- Warehouse --</option>
-                            {% for warehouse in warehouses %}
-                                <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
-                            {% endfor %}
+                        {% verbatim %}
+                        <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;"
+                            ng-model="ctrl.warehouse"
+                            ng-change="ctrl.warehouseChange()"
+                            ng-options="option.name for option in ctrl.warehouses track by option.id" required>
+                            <option value="" disabled selected>Warehouse</option>
                         </select>
+                        {% endverbatim %}
                     </form>
                 </div>
                 <div class="col-md-6">
@@ -295,9 +297,6 @@
                                         <span> {{item.name}} </span>
                                     </span>
                                     <span class="item-metadata">
-                                        <span class="item-metastat">
-                                            <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
-                                        </span>
                                         <span class="item-metastat">
                                            <strong>{{item.total_quantity}}</strong> total quantity
                                         </span>
