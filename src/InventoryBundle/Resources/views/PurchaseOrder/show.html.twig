@@ -48,7 +48,7 @@
                 self.message = '';
                 self.cart_total = {{ total | json_encode | raw }};
                 self.initial_total = {{ total | json_encode | raw }};
-                self.due_date = new Date();
+                self.due_date = new Date("{{ purchaseOrder.stockDueDate |date("Y,m,d") }}");
                 self.setEdit = setEdit;
                 self.isEdit = 0;
 

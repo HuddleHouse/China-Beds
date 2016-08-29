@@ -46,7 +46,7 @@
                 self.searchText = '';
                 self.message = '';
                 self.cart_total = {{ cart.total | json_encode | raw}};
-                self.transfer_date = new Date();
+                self.transfer_date = new Date("{{ stockTransfer.date |date("Y,m,d") }}");
                 self.setActive = setActive;
                 self.setEdit = setEdit;
                 self.isEdit = 0;

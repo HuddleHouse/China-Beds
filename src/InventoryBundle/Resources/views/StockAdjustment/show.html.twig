@@ -45,7 +45,7 @@
                 self.searchText = '';
                 self.message = '';
                 self.cart_total = {{ cart.total | json_encode | raw}};
-                self.date = new Date();
+                self.date = new Date("{{ stockAdjustment.date |date("Y,m,d") }}");
                 self.setActive = setActive;
                 self.setEdit = setEdit;
                 self.isEdit = 0;
