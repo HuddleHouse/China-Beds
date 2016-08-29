@@ -56,7 +56,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
                 'total_quantity' => $tq,
                 'warehouse_quantity' => $wq,
                 'ordered_quantity' => $variant->getOrderedQuantity(),
-                'received_quantity' => $variant->getOrderedQuantity()
+                'received_quantity' => ($purchaseOrder->getStatus()->getName() === 'Received' ? $variant->getReceivedQuantity() : $variant->getOrderedQuantity())
             );
         }
         return array(

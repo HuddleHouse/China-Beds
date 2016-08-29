@@ -140,7 +140,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
 
     public function getInventoryForProduct(ProductVariant $productVariant, Warehouse $warehouse)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $warehouse_id = $warehouse->getId();
         $product_variant_id = $productVariant->getId();
 

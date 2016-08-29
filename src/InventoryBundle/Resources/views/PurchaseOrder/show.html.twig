@@ -17,7 +17,11 @@
     <script>
         $(function() {
             $("#warehouse").val('{{ purchaseOrder.warehouse.id }}');
+            {% if purchaseOrder.status.name == 'Active' %}
             $(".ordered-quantity .ui-spinner-button").hide();
+            {% else %}
+            $(".ui-spinner-button").hide();
+            {% endif %}
         });
 
         (function () {
@@ -41,6 +45,7 @@
                 self.setActive   = setActive;
                 self.receiveAll   = receiveAll;
                 self.save = save;
+                self.warehouseChange = warehouseChange;
                 self.cart = {{ cart | json_encode | raw}};
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -51,6 +56,8 @@
                 self.due_date = new Date("{{ purchaseOrder.stockDueDate |date("Y,m,d") }}");
                 self.setEdit = setEdit;
                 self.isEdit = 0;
+                self.warehouses = {{ warehouses | json_encode | raw}};
+                self.warehouse = {{ purchaseOrder.warehouse.id }};
 
 
                 function setEdit(val){
@@ -59,11 +66,28 @@
                         $(".ui-spinner-button").show();
                 }
 
+                function warehouseChange() {
+                    updateCart()
+                }
 
-                /**
-                 * Search for repos... use $timeout to simulate
-                 * remote dataservice call.
-                 */
+                function updateCart() {
+                    angular.forEach(self.cart, function(value, key) {
+                        $log.info(value);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('api_get_warehouse_inventory_for_product') }}",
+                            dataType: 'json',
+                            data: {product_variant_id: value.id, warehouse_id: $('#warehouse').val()},
+                            success: function (data) {
+                                $scope.$apply(function () {
+                                    self.cart[key].warehouse_quantity = parseInt(data, 10) + parseInt(self.cart[key].ordered_quantity, 10);
+                                });
+                            }
+                        });
+                    });
+                }
+
                 function querySearch (query) {
                     var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
                             deferred;
@@ -121,13 +145,6 @@
                     };
                 }
 
-                /**
-                 * Create filter function for a query string
-                 */
-                function updateCartItem() {
-                    self.cart_total = getCartTotal();
-                }
-
                 function getCartTotal() {
                     var total = 0;
                     angular.forEach(self.cart, function(value, key) {
@@ -160,6 +177,20 @@
                         }
                     });
 
+                }
+
+                /**
+                 * Create filter function for a query string
+                 */
+                function updateCartItem(newVal, oldVal, index) {
+                    var total = 0;
+                    self.cart[index].warehouse_quantity = parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
+                    self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
+                    angular.forEach(self.cart, function(value, key) {
+
+                        total += value.received_quantity;
+                    });
+                    self.cart_total = total;
                 }
 
                 function receiveAll(){
@@ -268,12 +299,13 @@
                 <div class="col-md-6">
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
-                        <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;" required>
-                            <option value="" disabled selected>-- Warehouse --</option>
-                            {% for warehouse in warehouses %}
-                                <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
-                            {% endfor %}
+                        {% verbatim %}
+                        <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;"
+                            ng-model="ctrl.warehouse"
+                            ng-change="ctrl.warehouseChange()"
+                            ng-options="option.name for option in ctrl.warehouses track by option.id" required>
                         </select>
+                        {% endverbatim %}
                     </form>
                 </div>
                 <div class="col-md-6">
@@ -287,9 +319,7 @@
                         <tr>
                             <th class="mdl-data-table__cell--non-numeric">Item</th>
                             <th class="table-name" style="width: 150px;">Quantity</th>
-                            {% if purchaseOrder.status.name == 'Active' %}
                             <th class="table-name" style="width: 100px;">To Receive</th>
-                            {% endif %}
                             <th class="table-name" style="width: 175px;">Warehouse After</th>
                             <th class="table-name" style="width: 175px;">Total After</th>
                         </tr>
@@ -303,18 +333,11 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form ordered-quantity">
-                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
-                            {% endverbatim %}
-                                {% if purchaseOrder.status.name == 'Active' %}
-                                    {% verbatim %}
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.received_quantity" type="number" max="{{item.ordered_quantity}}" jq-spinner ng-change="ctrl.updateCartItem()" class="form-control number_select"  >
+                                <input ng-model="item.received_quantity" type="number" jq-spinner ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)" class="form-control number_select"  >
                             </td>
-                            {% endverbatim %}
-
-                                {% endif %}
-                                {% verbatim %}
                             <td class="table-form" >
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
                             </td>

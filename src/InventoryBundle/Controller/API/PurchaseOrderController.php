@@ -121,7 +121,7 @@ class PurchaseOrderController extends Controller
         $warehouse = $po->getWarehouse();
 
         foreach($cart as $item) {
-            $variant = $em->getRepository('InventoryBundle:PurchaseOrderProductVariant')->find($item['id']);
+            $variant = $em->getRepository('InventoryBundle:PurchaseOrderProductVariant')->find($item['purchase_order_product_variant_id']);
             $variant->setReceivedQuantity($item['received_quantity']);
             $variant->setTotalQuantityAfter($item['total_quantity']);
             $variant->setWarehouseQuantityAfter($item['warehouse_quantity']);
