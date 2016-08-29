@@ -94,7 +94,6 @@ select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_tra
 		left join status s
 			on s.id = p.status_id
 	where w.id = :warehouse_id
-	and s.name = 'Active'
 	union
 select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
 	from stock_transfers p 
