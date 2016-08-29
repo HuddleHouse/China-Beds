@@ -25,28 +25,36 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
-            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->execute();
-            $total_quantity = $statement->fetch();
-
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->bindValue('warehouse_id', $purchaseOrder->getWarehouse()->getId());
-            $statement->execute();
-            $warehouse_quantity = $statement->fetch();
-
             $total += $variant->getOrderedQuantity();
+
+            if($purchaseOrder->getStatus()->getName() === 'Received') {
+                $tq = $variant->getTotalQuantityAfter();
+                $wq = $variant->getWarehouseQuantityAfter();
+            }
+            else {
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+                $statement->execute();
+                $total_quantity = $statement->fetch();
+                $tq = $total_quantity['total'] + $variant->getOrderedQuantity();
+
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+                $statement->bindValue('warehouse_id', $purchaseOrder->getWarehouse()->getId());
+                $statement->execute();
+                $warehouse_quantity = $statement->fetch();
+                $wq = $warehouse_quantity['total'] + $variant->getOrderedQuantity();
+            }
 
             $cart[] = array(
                 'name' => $variant->getProductVariant()->getProduct()->getName().": ".$variant->getProductVariant()->getName(),
                 'id' => $variant->getProductVariant()->getId(),
                 'purchase_order_product_variant_id' => $variant->getId(),
                 'image_url' => $image_url,
-                'total_quantity' => $total_quantity['total'] + $variant->getOrderedQuantity(),
-                'warehouse_quantity' => $warehouse_quantity['total'] + $variant->getOrderedQuantity(),
+                'total_quantity' => $tq,
+                'warehouse_quantity' => $wq,
                 'ordered_quantity' => $variant->getOrderedQuantity(),
                 'received_quantity' => $variant->getOrderedQuantity()
             );
