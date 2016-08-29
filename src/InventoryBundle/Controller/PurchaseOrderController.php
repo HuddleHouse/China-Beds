@@ -37,7 +37,7 @@ class PurchaseOrderController extends Controller
     /**
      * Creates a new PurchaseOrder entity.
      *
-     * @Route("/new", name="purchaseorder_new")
+     * @Route("/new", name="purchaseorder_new", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -58,7 +58,7 @@ class PurchaseOrderController extends Controller
     /**
      * Finds and displays a PurchaseOrder entity.
      *
-     * @Route("/{id}", name="purchaseorder_show")
+     * @Route("/{id}", name="purchaseorder_show", options={"expose"=true})
      * @Method("GET")
      */
     public function showAction(PurchaseOrder $purchaseOrder)

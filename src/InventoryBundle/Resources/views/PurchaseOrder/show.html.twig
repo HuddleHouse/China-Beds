@@ -143,7 +143,7 @@
                         dataType: 'json',
                         data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ purchaseOrder.warehouse.id }}, status: draft, purchase_order_id: {{ purchaseOrder.id }} },
                         success: function (data) {
-                            window.location.href = "/app_dev.php/purchase-order/"+data;
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
                         }
                     });
 
@@ -156,7 +156,7 @@
                         dataType: 'json',
                         data: { id: {{ purchaseOrder.id }}},
                         success: function (data) {
-                            window.location.href = "/app_dev.php/purchase-order/"+data;
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
                         }
                     });
 
@@ -169,7 +169,7 @@
                         dataType: 'json',
                         data: { cart: self.cart, due_date: self.due_date, message: self.message, purchase_order_id: {{ purchaseOrder.id }} },
                         success: function (data) {
-                            window.location.href = "/app_dev.php/purchase-order/"+data;
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
                         }
                     });
 

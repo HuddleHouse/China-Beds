@@ -37,7 +37,7 @@ class StockAdjustmentController extends Controller
     /**
      * Creates a new StockAdjustment entity.
      *
-     * @Route("/new", name="stockadjustment_new")
+     * @Route("/new", name="stockadjustment_new", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -58,7 +58,7 @@ class StockAdjustmentController extends Controller
     /**
      * Finds and displays a StockAdjustment entity.
      *
-     * @Route("/{id}", name="stockadjustment_show")
+     * @Route("/{id}", name="stockadjustment_show", options={"expose"=true})
      * @Method("GET")
      */
     public function showAction(StockAdjustment $stockAdjustment)

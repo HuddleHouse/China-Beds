@@ -95,7 +95,7 @@
                         dataType: 'json',
                         data: { id: {{ stockAdjustment.id }}},
                         success: function (data) {
-                            window.location.href = "/app_dev.php/adjustment/"+data;
+                            window.location.href = Routing.generate('stockadjustment_show', {id: data});
                         }
                     });
 
@@ -155,7 +155,7 @@
                             dataType: 'json',
                             data: {cart: self.cart, date: self.date, message: self.message, status: draft, warehouse_id: $('#warehouse').val(), complete: complete, stock_adjustment_id: {{ stockAdjustment.id}} },
                             success: function (data) {
-                                window.location.href = "/app_dev.php/adjustment/"+data;
+                                window.location.href = Routing.generate('stockadjustment_show', {id: data});
                             }
                         });
                     }

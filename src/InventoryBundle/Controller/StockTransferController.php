@@ -36,7 +36,7 @@ class StockTransferController extends Controller
     /**
      * Creates a new StockTransfer entity.
      *
-     * @Route("/new", name="stocktransfer_new")
+     * @Route("/new", name="stocktransfer_new", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
     public function newAction()
@@ -57,7 +57,7 @@ class StockTransferController extends Controller
     /**
      * Finds and displays a StockTransfer entity.
      *
-     * @Route("/{id}", name="stocktransfer_show")
+     * @Route("/{id}", name="stocktransfer_show", options={"expose"=true})
      * @Method("GET")
      */
     public function showAction(StockTransfer $stockTransfer)
