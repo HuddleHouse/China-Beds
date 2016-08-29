@@ -284,7 +284,7 @@
                             <th class="mdl-data-table__cell--non-numeric">Item</th>
                             <th class="table-name" style="width: 100px;">Quantity</th>
                             <th class="table-name" style="width: 100px;">Warehouse Inv</th>
-                            <th style="width: 50px;"></th>
+                            <th class="table-name" style="width: 175px;">Total Inventory</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -298,8 +298,12 @@
                             <td class="table-form">
                                  <input id="{{item.id}}" ng-model="item.quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner ng-disabled="ctrl.isEdit == 0" class="form-control number_select">
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td class="table-form" style="text-align: center;">
+                                <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
+                            </td>
+                            <td class="table-form" >
+                                <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
+                            </td>
                                 {% endverbatim %}
                             </div>
                         </tr>

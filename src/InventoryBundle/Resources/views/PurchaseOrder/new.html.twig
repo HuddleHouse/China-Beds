@@ -7,7 +7,12 @@
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('purchaseorder_index') }}">< Back to Purchase Orders</a>
+    {% if warehouse_id != 'none' %}
+        <a href="{{ path('warehouse_show', { 'id': warehouse_id }) }}">< Back to Warehouse</a>
+    {% else %}
+        <a href="{{ path('purchaseorder_index') }}">< Back to Purchase Orders</a>
+    {% endif %}
+
 {% endblock page_name %}
 
 {% block actions %}
@@ -99,7 +104,6 @@
                 }
 
                 function selectedItemChange(item) {
-
                     if(item != undefined) {
                         if(!self.cart_items[self.selectedItem.id]) {
                             var index = self.cart.push(self.selectedItem) - 1;
@@ -140,9 +144,6 @@
                     };
                 }
 
-                /**
-                 * Create filter function for a query string
-                 */
                 function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
                     self.cart[index].warehouse_quantity += parseInt(newVal - oldVal,10);

@@ -21,7 +21,6 @@
     <script>
         $(function() {
             {% if warehouse_id != 'none' %}
-            $("#warehouse").val('{{ warehouse_id }}');
             $( "#warehouse" ).prop( "disabled", true );
             {% endif %}
         });
@@ -32,7 +31,7 @@
                     .controller('myCtrl', MyCtrl)
                     .directive('jqSpinner', jqSpinner);
 
-            function MyCtrl ($timeout, $q, $log) {
+            function MyCtrl ($scope, $timeout, $q, $log) {
                 var self = this;
 
                 self.simulateQuery = false;
@@ -42,8 +41,8 @@
                 self.querySearch   = querySearch;
                 self.selectedItemChange = selectedItemChange;
                 self.searchTextChange   = searchTextChange;
+                self.warehouseChange = warehouseChange;
                 self.updateCartItem   = updateCartItem;
-                self.getCartTotal   = getCartTotal;
                 self.save = save;
                 self.cart = [];
                 self.cart_items = [];
@@ -52,12 +51,37 @@
                 self.message = '';
                 self.cart_total = 0;
                 self.date = new Date();
+                self.warehouses = {{ warehouses | json_encode | raw}};
+                {% if warehouse_id != 'none' %}
+                self.warehouse = {{ warehouse_id }};
+                {% else %}
+                self.warehouse = {};
+                {% endif %}
 
 
-                /**
-                 * Search for repos... use $timeout to simulate
-                 * remote dataservice call.
-                 */
+                function warehouseChange() {
+                    updateCart()
+                }
+
+                function updateCart() {
+                    angular.forEach(self.cart, function(value, key) {
+                        $log.info(value);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('api_get_warehouse_inventory_for_product') }}",
+                            dataType: 'json',
+                            data: {product_variant_id: value.id, warehouse_id: $('#warehouse').val()},
+                            success: function (data) {
+                                $scope.$apply(function () {
+                                    self.cart[key].warehouse_quantity = parseInt(data, 10) + parseInt(self.cart[key].quantity, 10);
+                                });
+                            }
+                        });
+                    });
+                }
+
+
                 function querySearch (query) {
                     var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
                             deferred;
@@ -80,6 +104,7 @@
                         if(!self.cart_items[self.selectedItem.id]) {
                             var index = self.cart.push(self.selectedItem) - 1;
                             self.cart_items[self.selectedItem.id] = index;
+                            updateCart();
                             resetSearch();
                         }
                     }
@@ -115,21 +140,17 @@
                     };
                 }
 
-                /**
-                 * Create filter function for a query string
-                 */
-                function updateCartItem() {
-                    self.cart_total = getCartTotal();
-                }
-
-                function getCartTotal() {
+                function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
+                    self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
+                    self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.quantity;
 
+                        total += value.quantity;
                     });
-                    return total;
+                    self.cart_total = total;
                 }
+
 
                 function save(draft){
                     if($('#warehouse').val()&& self.cart.length > 0) {
@@ -254,8 +275,8 @@
                         <tr>
                             <th class="mdl-data-table__cell--non-numeric">Item</th>
                             <th class="table-name" style="width: 100px;">Quantity</th>
-                            <th class="table-name" style="width: 100px;">Warehouse Inv</th>
-                            <th style="width: 50px;"></th>
+                            <th class="table-name" style="width: 175px;">Warehouse Inv</th>
+                            <th class="table-name" style="width: 175px;">Total Inventory</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -267,10 +288,14 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="form-control number_select">
                             </td>
-                            <td></td>
-                            <td></td>
+                            <td class="table-form" style="text-align: center;">
+                                <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
+                            </td>
+                            <td class="table-form" >
+                                <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
+                            </td>
                                 {% endverbatim %}
                             </div>
                         </tr>
