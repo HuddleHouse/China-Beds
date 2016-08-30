@@ -7,7 +7,12 @@
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('purchaseorder_index') }}">< Back to Purchase Orders</a>
+    {% if warehouse_id != 'none' %}
+        <a href="{{ path('warehouse_show', { 'id': warehouse_id }) }}">< Back to Warehouse</a>
+    {% else %}
+        <a href="{{ path('purchaseorder_index') }}">< Back to Purchase Orders</a>
+    {% endif %}
+
 {% endblock page_name %}
 
 {% block actions %}
@@ -18,7 +23,6 @@
         $(function() {
             {% if warehouse_id != 'none' %}
             $("#warehouse").val('{{ warehouse_id }}');
-            $( "#warehouse" ).prop( "disabled", true );
             {% endif %}
         });
 
@@ -28,7 +32,7 @@
                     .controller('myCtrl', MyCtrl)
                     .directive('jqSpinner', jqSpinner);
 
-            function MyCtrl ($timeout, $q, $log) {
+            function MyCtrl ($scope, $timeout, $q, $log) {
                 var self = this;
 
                 self.simulateQuery = false;
@@ -39,8 +43,9 @@
                 self.selectedItemChange = selectedItemChange;
                 self.searchTextChange   = searchTextChange;
                 self.updateCartItem   = updateCartItem;
-                self.getCartTotal   = getCartTotal;
                 self.save = save;
+                self.add = add;
+                self.warehouseChange = warehouseChange;
                 self.cart = [];
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -48,12 +53,40 @@
                 self.message = '';
                 self.cart_total = 0;
                 self.due_date = new Date();
+                {% if warehouse_id != 'none' %}
+                    self.warehouse = {{ warehouse_id }};
+                {% else %}
+                    self.warehouse = {};
+                {% endif %}
 
+                self.warehouses = {{ warehouses | json_encode | raw}};
 
-                /**
-                 * Search for repos... use $timeout to simulate
-                 * remote dataservice call.
-                 */
+                function add(a, b) {
+                    return parseInt(a,10) + parseInt(b,10);
+                }
+
+                function warehouseChange() {
+                    updateCart()
+                }
+
+                function updateCart() {
+                    angular.forEach(self.cart, function(value, key) {
+                        $log.info(value);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('api_get_warehouse_inventory_for_product') }}",
+                            dataType: 'json',
+                            data: {product_variant_id: value.id, warehouse_id: $('#warehouse').val()},
+                            success: function (data) {
+                                $scope.$apply(function () {
+                                    self.cart[key].warehouse_quantity = parseInt(data, 10) + parseInt(self.cart[key].ordered_quantity, 10);
+                                });
+                            }
+                        });
+                    });
+                }
+
                 function querySearch (query) {
                     var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
                             deferred;
@@ -71,11 +104,11 @@
                 }
 
                 function selectedItemChange(item) {
-
                     if(item != undefined) {
                         if(!self.cart_items[self.selectedItem.id]) {
                             var index = self.cart.push(self.selectedItem) - 1;
                             self.cart_items[self.selectedItem.id] = index;
+                            updateCart();
                             resetSearch();
                         }
                     }
@@ -111,20 +144,15 @@
                     };
                 }
 
-                /**
-                 * Create filter function for a query string
-                 */
-                function updateCartItem() {
-                    self.cart_total = getCartTotal();
-                }
-
-                function getCartTotal() {
+                function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
+                    self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
+                    self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
                     angular.forEach(self.cart, function(value, key) {
-                        total += value.ordered_quantity;
 
+                        total += value.ordered_quantity;
                     });
-                    return total;
+                    self.cart_total = total;
                 }
 
                 function save(draft){
@@ -220,12 +248,14 @@
                 </div>
                 <div class="col-md-4">
                     <form id="warehouse-form">
-                        <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;" required>
+                        {% verbatim %}
+                        <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;"
+                            ng-model="ctrl.warehouse"
+                            ng-change="ctrl.warehouseChange()"
+                            ng-options="option.name for option in ctrl.warehouses track by option.id" required>
                             <option value="" disabled selected>Warehouse</option>
-                            {% for warehouse in warehouses %}
-                                <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
-                            {% endfor %}
                         </select>
+                        {% endverbatim %}
                     </form>
                 </div>
                 <div class="col-md-4">
@@ -256,13 +286,13 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" ng-change="ctrl.updateCartItem()" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
                             </td>
                             <td class="table-form" >
-                                <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
+                                <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
                             </td>
                         {% endverbatim %}
                             </div>
@@ -290,9 +320,9 @@
                                         <span> {{item.name}} </span>
                                     </span>
                                     <span class="item-metadata">
-                                        <span class="item-metastat">
-                                            <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
-                                        </span>
+                                        <!--<span class="item-metastat">-->
+                                            <!--<strong>{{item.warehouse_quantity}}</strong> warehouse quantity-->
+                                        <!--</span>-->
                                         <span class="item-metastat">
                                            <strong>{{item.total_quantity}}</strong> total quantity
                                         </span>

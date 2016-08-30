@@ -204,7 +204,7 @@ class WarehouseController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray($warehouse);
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
 
         return $this->render('@Inventory/PurchaseOrder/new.html.twig', array(
             'warehouse' => $warehouse,
@@ -224,7 +224,7 @@ class WarehouseController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
 
         return $this->render('@Inventory/StockTransfer/new.html.twig', array(
             'inventory_data' => $inventory_data,
@@ -243,7 +243,7 @@ class WarehouseController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
 
         return $this->render('@Inventory/StockAdjustment/new.html.twig', array(
             'inventory_data' => $inventory_data,

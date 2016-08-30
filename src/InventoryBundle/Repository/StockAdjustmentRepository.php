@@ -28,12 +28,26 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->bindValue('warehouse_id', $stockAdjustment->getWarehouse()->getId());
-            $statement->execute();
-            $warehouse_quantity = $statement->fetch();
+            if($stockAdjustment->getStatus()->getName() === 'Completed') {
+                $tq = $variant->getTotalQuantityAfter();
+                $wq = $variant->getWarehouseQuantityAfter();
+            }
+            else {
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+                $statement->execute();
+                $total_quantity = $statement->fetch();
+                $tq = $total_quantity['total'] + $variant->getQuantity();
+
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+                $statement->bindValue('warehouse_id', $stockAdjustment->getWarehouse()->getId());
+                $statement->execute();
+                $warehouse_quantity = $statement->fetch();
+                $wq = $warehouse_quantity['total'] + $variant->getQuantity();
+            }
 
             $total += $variant->getQuantity();
 
@@ -43,7 +57,8 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
                 'stock_adjustment_product_variant_id' => $variant->getId(),
                 'image_url' => $image_url,
                 'quantity' => $variant->getQuantity(),
-                'warehouse_quantity' => $warehouse_quantity['total'] - $variant->getQuantity()
+                'total_quantity' => $tq,
+                'warehouse_quantity' => $wq,
             );
         }
         return array(

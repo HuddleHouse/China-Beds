@@ -1,6 +1,7 @@
 <?php
 
 namespace InventoryBundle\Repository;
+use InventoryBundle\Entity\Product;
 use InventoryBundle\Entity\ProductVariant;
 use InventoryBundle\Entity\Warehouse;
 use InventoryBundle\Entity\WarehouseInventory;
@@ -134,5 +135,25 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         $em->flush();
 
         return $warehouseInventory;
+    }
+
+
+    public function getInventoryForProduct(ProductVariant $productVariant, Warehouse $warehouse)
+    {
+        $em = $this->getEntityManager();
+        $warehouse_id = $warehouse->getId();
+        $product_variant_id = $productVariant->getId();
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT quantity from warehouse_inventory where product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
+        $statement->bindValue('product_variant_id', $product_variant_id);
+        $statement->bindValue('warehouse_id', $warehouse_id);
+        $statement->execute();
+        $quantity = $statement->fetch();
+
+        if($quantity == false)
+            return 0;
+        else
+            return $quantity['quantity'];
     }
 }

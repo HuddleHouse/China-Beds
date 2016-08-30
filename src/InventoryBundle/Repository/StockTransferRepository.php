@@ -27,19 +27,28 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->bindValue('warehouse_id', $stockTransfer->getDepartingWarehouse()->getId());
-            $statement->execute();
-            $departing_warehouse_quantity = $statement->fetch();
+            if($stockTransfer->getStatus()->getName() === 'Completed') {
+                $dwq = $variant->getDepartingWarehouseQuantityAfter();
+                $rwq = $variant->getReceivingWarehouseQuantityAfter();
+            }
+            else {
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+                $statement->bindValue('warehouse_id', $stockTransfer->getDepartingWarehouse()->getId());
+                $statement->execute();
+                $departing_warehouse_quantity = $statement->fetch();
+                $dwq = $departing_warehouse_quantity['total'] - $variant->getQuantity();
 
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->bindValue('warehouse_id', $stockTransfer->getReceivingWarehouse()->getId());
-            $statement->execute();
-            $receiving_warehouse_quantity = $statement->fetch();
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
+                $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
+                $statement->bindValue('warehouse_id', $stockTransfer->getReceivingWarehouse()->getId());
+                $statement->execute();
+                $receiving_warehouse_quantity = $statement->fetch();
+                $rwq = $receiving_warehouse_quantity['total'] + $variant->getQuantity();
+            }
+
 
             $total += $variant->getQuantity();
 
@@ -49,8 +58,8 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
                 'stock_transfer_product_variant_id' => $variant->getId(),
                 'image_url' => $image_url,
                 'quantity' => $variant->getQuantity(),
-                'departing_warehouse_quantity' => $departing_warehouse_quantity['total'] - $variant->getQuantity(),
-                'receiving_warehouse_quantity' => $receiving_warehouse_quantity['total'] + $variant->getQuantity()
+                'departing_warehouse_quantity' => $dwq,
+                'receiving_warehouse_quantity' => $rwq
             );
         }
         return array(
@@ -94,7 +103,6 @@ select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_tra
 		left join status s
 			on s.id = p.status_id
 	where w.id = :warehouse_id
-	and s.name = 'Active'
 	union
 select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
 	from stock_transfers p 

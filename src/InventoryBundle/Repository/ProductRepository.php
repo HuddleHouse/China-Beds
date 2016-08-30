@@ -68,12 +68,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 $total_quantity = $statement->fetch();
 
                 if(isset($warehouse)) {
-                    $connection = $em->getConnection();
-                    $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-                    $statement->bindValue('product_variant_id', $variant->getId());
-                    $statement->bindValue('warehouse_id', $warehouse->getId());
-                    $statement->execute();
-                    $warehouse_quantity = $statement->fetch();
+                    $warehouse_quantity = $em->getRepository('InventoryBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
                 }
                 else {
                     $warehouse_quantity = 0;
@@ -84,7 +79,9 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     'id' => $variant->getId(),
                     'image_url' => $image_url,
                     'total_quantity' => $total_quantity['total'],
-                    'warehouse_quantity' => $warehouse_quantity['total'],
+                    'warehouse_quantity' => $warehouse_quantity,
+                    'departing_warehouse_quantity' => 0,
+                    'receiving_warehouse_quantity' => 0,
                     'ordered_quantity' => 0,
                     'quantity' => 0
                 );

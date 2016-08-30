@@ -45,7 +45,7 @@ class PurchaseOrderController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
 
         return $this->render('@Inventory/PurchaseOrder/new.html.twig', array(
             'inventory_data' => $inventory_data,
@@ -65,7 +65,7 @@ class PurchaseOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $cart = $em->getRepository('InventoryBundle:PurchaseOrder')->getCartArray($purchaseOrder);
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
 
         return $this->render('@Inventory/PurchaseOrder/show.html.twig', array(

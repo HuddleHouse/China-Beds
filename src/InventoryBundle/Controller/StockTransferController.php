@@ -44,7 +44,7 @@ class StockTransferController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
 
         return $this->render('@Inventory/StockTransfer/new.html.twig', array(
             'inventory_data' => $inventory_data,
@@ -65,7 +65,7 @@ class StockTransferController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('InventoryBundle:Warehouse')->getAllWarehousesArray();
         $cart = $em->getRepository('InventoryBundle:StockTransfer')->getCartArray($stockTransfer);
 
         return $this->render('@Inventory/StockTransfer/show.html.twig', array(

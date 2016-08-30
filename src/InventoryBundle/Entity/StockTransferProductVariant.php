@@ -29,6 +29,20 @@ class StockTransferProductVariant
     private $quantity;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="departing_warehouse_quantity_after", type="integer", nullable=true)
+     */
+    private $departing_warehouse_quantity_after = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="receiving_warehouse_quantity_after", type="integer", nullable=true)
+     */
+    private $receiving_warehouse_quantity_after = 0;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\StockTransfer", inversedBy="product_variants")
      * @ORM\JoinColumn(name="stock_transfer_id", referencedColumnName="id")
      */
@@ -108,6 +122,36 @@ class StockTransferProductVariant
         $this->product_variant = $product_variant;
     }
 
+    /**
+     * @return int
+     */
+    public function getDepartingWarehouseQuantityAfter()
+    {
+        return $this->departing_warehouse_quantity_after;
+    }
 
+    /**
+     * @param int $departing_warehouse_quantity_after
+     */
+    public function setDepartingWarehouseQuantityAfter($departing_warehouse_quantity_after)
+    {
+        $this->departing_warehouse_quantity_after = $departing_warehouse_quantity_after;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReceivingWarehouseQuantityAfter()
+    {
+        return $this->receiving_warehouse_quantity_after;
+    }
+
+    /**
+     * @param int $receiving_warehouse_quantity_after
+     */
+    public function setReceivingWarehouseQuantityAfter($receiving_warehouse_quantity_after)
+    {
+        $this->receiving_warehouse_quantity_after = $receiving_warehouse_quantity_after;
+    }
 }
 
