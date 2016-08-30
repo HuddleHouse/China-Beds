@@ -59,7 +59,8 @@ class StockTransferController extends Controller
                 $stock_transfer_variant->setProductVariant($variant);
                 $stock_transfer_variant->setStockTransfer($stock_transfer);
             }
-
+            $stock_transfer_variant->setDepartingWarehouseQuantityAfter($item['departing_warehouse_quantity']);
+            $stock_transfer_variant->setReceivingWarehouseQuantityAfter($item['receiving_warehouse_quantity']);
             $stock_transfer_variant->setQuantity($item['quantity']);
             $em->persist($stock_transfer_variant);
         }
@@ -72,7 +73,7 @@ class StockTransferController extends Controller
 
         $complete = $request->request->get('complete');
 
-        if($complete != null) {
+        if($complete != "false") {
             foreach($stock_transfer->getProductVariants() as $variant) {
                 $connection = $em->getConnection();
                 $statement = $connection->prepare("SELECT id FROM warehouse_inventory where warehouse_id = :warehouse_id and product_variant_id = :product_variant_id");

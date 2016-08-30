@@ -31,16 +31,16 @@ class StockTransferProductVariant
     /**
      * @var int
      *
-     * @ORM\Column(name="total_quantity_after", type="integer", nullable=true)
+     * @ORM\Column(name="departing_warehouse_quantity_after", type="integer", nullable=true)
      */
-    private $total_quantity_after = 0;
+    private $departing_warehouse_quantity_after = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="warehouse_quantity_after", type="integer", nullable=true)
+     * @ORM\Column(name="receiving_warehouse_quantity_after", type="integer", nullable=true)
      */
-    private $warehouse_quantity_after = 0;
+    private $receiving_warehouse_quantity_after = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\StockTransfer", inversedBy="product_variants")
@@ -123,37 +123,35 @@ class StockTransferProductVariant
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getTotalQuantityAfter()
+    public function getDepartingWarehouseQuantityAfter()
     {
-        return $this->total_quantity_after;
+        return $this->departing_warehouse_quantity_after;
     }
 
     /**
-     * @param mixed $total_quantity_after
+     * @param int $departing_warehouse_quantity_after
      */
-    public function setTotalQuantityAfter($total_quantity_after)
+    public function setDepartingWarehouseQuantityAfter($departing_warehouse_quantity_after)
     {
-        $this->total_quantity_after = $total_quantity_after;
+        $this->departing_warehouse_quantity_after = $departing_warehouse_quantity_after;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getWarehouseQuantityAfter()
+    public function getReceivingWarehouseQuantityAfter()
     {
-        return $this->warehouse_quantity_after;
+        return $this->receiving_warehouse_quantity_after;
     }
 
     /**
-     * @param mixed $warehouse_quantity_after
+     * @param int $receiving_warehouse_quantity_after
      */
-    public function setWarehouseQuantityAfter($warehouse_quantity_after)
+    public function setReceivingWarehouseQuantityAfter($receiving_warehouse_quantity_after)
     {
-        $this->warehouse_quantity_after = $warehouse_quantity_after;
+        $this->receiving_warehouse_quantity_after = $receiving_warehouse_quantity_after;
     }
-
-
 }
 
