@@ -47,7 +47,8 @@ class TokenListener
             'fos_user_resetting_reset',
             'api_add_option_value',
             'api_get_values',
-            'quickbooks_default_index'
+            'quickbooks_default_index',
+            'fos_user_profile_show'
         ); //These are excluded routes. These are always allowed. Required for login page
 
 
