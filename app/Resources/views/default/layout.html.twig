@@ -269,7 +269,12 @@
                             </ul>
                         </li>
                 {% endif %}
-    {% if 'marketing_index' in route_names %}
+                        {% if 'product_category_index' in route_names
+                        or 'manage_options_index' in route_names
+                        or 'attribute_index' in route_names
+                        or 'admin_product_index' in route_names
+                        or 'specification_index' in route_names
+                        %}
                         <!-- MARKETING SECTION -->
                         <li class="treeview">
                             <a href="#">
@@ -289,10 +294,14 @@
                                 </li>
                             </ul>
                         </li>
-    {% endif %}
+                        {% endif %}
                         <!-- SUPPORT SECTION -->
-                        <li class="treeview">
-
+    {% if 'product_category_index' in route_names
+    or 'manage_options_index' in route_names
+    or 'attribute_index' in route_names
+    or 'admin_product_index' in route_names
+    or 'specification_index' in route_names
+    %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_warranty_claims) %} active
                             {% elseif (app.request.get('_route') in sidebar_warranty) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_index) %} active
@@ -342,7 +351,7 @@
                                 </li>
                             </ul>
                         </li>
-
+    {% endif %}
 
                     </ul>
                     <!-- END SIDEBAR MENU -->
