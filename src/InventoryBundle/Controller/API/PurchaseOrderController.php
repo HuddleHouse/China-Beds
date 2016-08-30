@@ -32,11 +32,6 @@ class PurchaseOrderController extends Controller
         $status_id = $statement->fetch();
         $status = $em->getRepository('InventoryBundle:Status')->find($status_id['id']);
 
-        /**
-         * Add status to PO
-         * Add order NUmber to PO
-         */
-
         $cart = $request->request->get('cart');
         $due_date = new \DateTime($request->request->get('due_date'));
         $message = $request->request->get('message');

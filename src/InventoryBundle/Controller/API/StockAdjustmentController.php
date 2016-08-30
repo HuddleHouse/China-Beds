@@ -58,7 +58,8 @@ class StockAdjustmentController extends Controller
                 $stock_transfer_variant->setProductVariant($variant);
                 $stock_transfer_variant->setStockAdjustment($stock_adjustment);
             }
-
+            $stock_transfer_variant->setTotalQuantityAfter($item['total_quantity']);
+            $stock_transfer_variant->setWarehouseQuantityAfter($item['warehouse_quantity']);
             $stock_transfer_variant->setQuantity($item['quantity']);
             $em->persist($stock_transfer_variant);
         }
@@ -71,7 +72,7 @@ class StockAdjustmentController extends Controller
 
         $complete = $request->request->get('complete');
 
-        if($complete != null) {
+        if($complete != "false") {
             foreach($stock_adjustment->getProductVariants() as $variant) {
                 $connection = $em->getConnection();
                 $statement = $connection->prepare("SELECT id FROM warehouse_inventory where warehouse_id = :warehouse_id and product_variant_id = :product_variant_id");

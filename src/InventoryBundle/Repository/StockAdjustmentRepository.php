@@ -28,7 +28,7 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
-            if($stockAdjustment->getStatus()->getName() === 'Received') {
+            if($stockAdjustment->getStatus()->getName() === 'Completed') {
                 $tq = $variant->getTotalQuantityAfter();
                 $wq = $variant->getWarehouseQuantityAfter();
             }
@@ -48,13 +48,6 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
                 $warehouse_quantity = $statement->fetch();
                 $wq = $warehouse_quantity['total'] + $variant->getQuantity();
             }
-
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-            $statement->bindValue('product_variant_id', $variant->getProductVariant()->getId());
-            $statement->bindValue('warehouse_id', $stockAdjustment->getWarehouse()->getId());
-            $statement->execute();
-            $warehouse_quantity = $statement->fetch();
 
             $total += $variant->getQuantity();
 

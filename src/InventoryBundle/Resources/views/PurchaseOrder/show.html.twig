@@ -180,9 +180,6 @@
 
                 }
 
-                /**
-                 * Create filter function for a query string
-                 */
                 function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
                     self.cart[index].warehouse_quantity = parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
