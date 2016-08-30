@@ -146,7 +146,7 @@
 
                 function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
-                    self.cart[index].warehouse_quantity += parseInt(newVal - oldVal,10);
+                    self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
                     angular.forEach(self.cart, function(value, key) {
 
