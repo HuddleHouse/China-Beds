@@ -33,6 +33,22 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
+            ->add('is_distributor', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Distributor?',
+                'choices' => array(
+                    'Yes' => 1,
+                    'No' => 0,
+                ),
+            ))
+            ->add('is_retailer', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Retailer?',
+                'choices' => array(
+                    'Yes' => 1,
+                    'No' => 0,
+                ),
+            ))
             ->add('warehouse_1', EntityType::class, array(
                 'class' => 'InventoryBundle\Entity\Warehouse',
                 'label' => 'Warehouse #1',
