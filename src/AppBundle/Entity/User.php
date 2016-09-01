@@ -218,6 +218,26 @@ class User extends BaseUser
         return $data;
     }
 
+    public function getUserChannelsArray() {
+        foreach($this->user_channels as $channel)
+            $data[$channel->getId()] = array(
+                'id' => $channel->getId(),
+                'name' => $channel->getName(),
+                'url' => $channel->getUrl()
+            );
+        return $data;
+    }
+
+    public function getPriceGroupsString() {
+        //get user price groups and format string for SQL query
+        $user_price_groups = "";
+        foreach($this->price_groups as $group)
+            $user_price_groups .= $group->getId(). ", ";
+
+        $user_price_groups = substr($user_price_groups, 0, -2);
+        return $user_price_groups;
+    }
+
     public function setInvitation(Invitation $invitation)
     {
         $this->invitation = $invitation;

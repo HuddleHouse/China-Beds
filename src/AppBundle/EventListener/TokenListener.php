@@ -62,8 +62,8 @@ class TokenListener
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
                 }
                 $route_names = $user->getRouteNames();
-
-//                setcookie('route_names', implode(',', $route_names), time()+3600);
+                $user_channels = $user->getUserChannelsArray();
+                $this->session->set('user_channels', implode(',', $user_channels));
                 $this->session->set('route_names', implode(',', $route_names));
             }
 

@@ -11,6 +11,7 @@ use FOS\UserBundle\Model\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -29,6 +30,13 @@ class ProfileController extends Controller
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
+        $route_names = $user->getRouteNames();
+        $user_channels = $user->getUserChannelsArray();
+
+        $session = new Session();
+
+        $session->set('user_channels', $user_channels);
+        $session->set('route_names', implode(',', $route_names));
 
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user
