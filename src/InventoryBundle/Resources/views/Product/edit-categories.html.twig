@@ -1,0 +1,62 @@
+<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#specs-modal">
+    <i class="fa fa-plus"></i>
+    Add Specification
+</a>
+<hr>
+<div id="display-attributes">
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th style="width: 150px">Options</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% verbatim %}
+                    <tr ng-repeat="(i, spec) in specifications track by $index">
+                        <td>{{spec.name}}</td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="spec.description"> </td>
+                        <td>
+                            <a class="btn btn-raised btn-danger" ng-click="deleteSpecValue(spec.id)">Delete</a>
+                        </td>
+                    </tr>
+                {% endverbatim %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="specs-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Specification</h4>
+            </div>
+            <div class="modal-body">
+                <label for="spec_select">Specification</label>
+                <select id="spec_select" class="form-control" style="margin-bottom: 10px">
+                    {% for spec in specs %}
+                        <option value="{{ spec.id }}">{{ spec.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="spec_value" class="required">Value</label>
+                <input type="text" id="spec_value" name="" required="required" class="form-control" style="margin-bottom: 10px">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-raised btn-primary" ng-click="addSpecValue()" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
