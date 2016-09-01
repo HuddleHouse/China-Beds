@@ -41,17 +41,26 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
                 'sku' => $product->getSku(),
                 'category' => $product->getCategory()->getName(),
                 'category_id' => $product->getCategory()->getId(),
-                'path' => $image_url
+                'path' => $image_url,
+                'quantity' => 0
             );
+
+            $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
 
             // get only the product variants the user has a price in their price group for
             $connection = $em->getConnection();
-            $statement = $connection->prepare("select *, v.id as variant_id, min(p.price/100) as price
+            $statement = $connection->prepare("
+select *, v.id as variant_id, min(p.price/100) as price, 
+	(select coalesce(sum(i.quantity), 0) as quantity
+		from warehouse_inventory i
+			where i.warehouse_id in ".$warehouse_ids." 
+			and i.product_variant_id = p.product_variant_id) as inventory
 	from product_variant v 
 		left join price_group_prices p 
 			on p.product_variant_id = v.id
 		where v.product_id = :product_id
-		and p.price_group_id in (".$user_price_groups.") group by v.id");
+			and p.price_group_id in (".$user_price_groups.") 
+		group by v.id;");
             $statement->bindValue('product_id', $product->getId());
             $statement->execute();
             $variants = $statement->fetchAll();

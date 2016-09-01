@@ -222,6 +222,7 @@ class User extends BaseUser
     }
 
     public function getRouteNames() {
+        $data = array();
         foreach($this->groups as $role) {
             foreach($role->getPermissions() as $permission) {
                 $data[$permission->getRouteName()] = $permission->getRouteName();
@@ -231,6 +232,7 @@ class User extends BaseUser
     }
 
     public function getUserChannelsArray() {
+        $data = array();
         foreach($this->user_channels as $channel)
             $data[$channel->getId()] = array(
                 'id' => $channel->getId(),
