@@ -2,7 +2,7 @@
 
 {% block title %}Order Products{% endblock %}
 {% block page_title %}
-    Order Products
+    Order {{ channel.name }} Products
 {% endblock page_title %}
 
 {% block page_name %}
@@ -158,6 +158,10 @@
             background-size: 20px 20px;
             background-repeat: no-repeat;
         }
+        .price_box {
+             max-width: 15%;
+             display: inline-block;
+         }
     </style>
 
     <div class="table">
@@ -251,7 +255,7 @@
             {% for product in products %}
                 <div class="col-md-6 element-item {{ product.category_id }}">
                     <div class="product_image" style="display: table; margin: 0 auto;">
-                        <img src="/uploads/products/{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
+                        <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                         <div class="product_name">
                             <center>{{ product.name }}</center>
                         </div>
@@ -260,7 +264,7 @@
                     <div class="price_box_row">
                     {% for variant in product.variants %}
 
-                            <div class="col-md-2" style="align">
+                            <div class="price_box" style="align">
                                 <div class="variant_name gray_box">
                                     {{ variant.name }}
                                 </div>
