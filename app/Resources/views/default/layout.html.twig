@@ -44,6 +44,7 @@
 
         <!-- COOKIE TO HOLD ALL OF THE ROUTES THAT THE USER CAN ACCESS -->
         {% set route_names = app.session.get('route_names') %}
+        {% set sidebar_user_channels = app.session.get('user_channels') %}
 {#{{ dump(route_names) }}#}
         <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
         {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
@@ -149,9 +150,14 @@
                             </a>
                             <ul class="treeview-menu">
 
+
+                                {% for channel in sidebar_user_channels %}
                                 <li {% if (app.request.get('_route') in sidebar_order) %} class="active"{% endif %}>
-                                    <a href="{{ path('order_products_index') }}"><i class="fa fa-circle-o"></i>Order Products</a>
+                                    <a href="{{ path('order_products_index') }}"><i class="fa fa-circle-o"></i>Order {{ channel.name }} Products</a>
                                 </li>
+                                {%  endfor %}
+
+
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href="{{ path('order_pop_index') }}"><i class="fa fa-circle-o"></i>Order POP</a>
                                 </li>

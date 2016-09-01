@@ -218,6 +218,16 @@ class User extends BaseUser
         return $data;
     }
 
+    public function getUserChannelsArray() {
+        foreach($this->user_channels as $channel)
+            $data[$channel->getId()] = array(
+                'id' => $channel->getId(),
+                'name' => $channel->getName(),
+                'url' => $channel->getUrl()
+            );
+        return $data;
+    }
+
     public function setInvitation(Invitation $invitation)
     {
         $this->invitation = $invitation;
