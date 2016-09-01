@@ -54,22 +54,57 @@
         });
 
 
+//        $('.input_class_checkbox').each(function(){
+//            $(this).hide().after('<div class="class_checkbox" />');
+//
+//        });
+//
+//        $('.class_checkbox').on('click',function(){
+//            console.log('matt');
+//            $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
+//        });
 
 
-        $('.input_class_checkbox').each(function(){
-            $(this).hide().after('<div class="class_checkbox" />');
-
-        });
-
-        $('.class_checkbox').on('click',function(){
-            console.log('matt');
-            $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
-        });
 
 
-        var app = angular.module('myApp', []);
+        var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
+            $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
+            $scope.po = '';
+            $scope.pick_up_date = new Date();
+            $scope.pick_up_agent_name = '';
+            $scope.ship = false;
+            $scope.pick_up = false;
+            $scope.comments = '';
+            $scope.ship_name = '';
+            $scope.address = '';
+            $scope.address2 = '';
+            $scope.city = '';
+            $scope.state = '';
+            $scope.zip = '';
+            $scope.phone = '';
+            $scope.email = '';
+            $scope.products = {{ products | json_encode | raw}};
 
+
+            $scope.submit = function () {
+                console.log($scope);
+            };
+
+            $scope.shipping = function () {
+                console.log($scope.ship);
+                if($scope.is_distributor == 0)
+                    $('#retailer-ship').show();
+
+            };
+
+            $scope.pickUp = function () {
+                console.log($scope.pick_up);
+                if($scope.is_distributor == 0)
+                    $('#retailer-ship').hide();
+            };
+
+            console.log($scope.is_distributor);
         }]);
 
     </script>
@@ -168,55 +203,21 @@
              max-width: 15%;
              display: inline-block;
          }
+        #retailer-ship {
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -15px;
+        }
     </style>
 <div ng-app="myApp" ng-controller="myCtrl">
-    <div class="table">
+    <div class="table"  style="min-height: 100vh;">
         <div class="row">
+            {%  if (app.user.isRetailer ? 1 : 0) == 1 %}
             <div class="col-md-6">
-                <div class="table" style="background-color: #EFEFEF;">
-                <center><h2>Order Form</h2></center>
-                    <form class="form-horizontal">
-                        <fieldset>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="control-label" for="textinput">PO#</label>
-                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form_field input-md">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label" for="Pick Up Date">Pick Up Date</label>
-                                    <input id="Pick Up Date" name="Pick Up Date" type="text" placeholder="" class="form_field input-md">
-
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="control-label" for="Pick Up Agent Name">Pick Up Agent Name</label>
-                                    <input id="Pick Up Agent Name" name="Pick Up Agent Name" type="text" placeholder="" class="form_field input-md">
-                                </div>
-                                <div class="col-md-2" style="margin-top: 25px; display: inline-flex;">
-                                    <input type="checkbox" name="checkboxes" id="ship" class="input_class_checkbox" value="ship" style="display: inline;margin-right: 8px;
-}">
-                                    <label class="checkbox" for="ship" style="margin-left: 8px; margin-top: -7px;">Ship</label>
-                                </div>
-                                <div class="col-md-4" style="margin-top: 25px; display: inline-flex;">
-                                    <input type="checkbox" name="checkboxes" id="pick-up" class="input_class_checkbox" value="pick_up" style="display: inline;margin-right: 8px;
-}">
-                                    <label class="checkbox" for="pick-up" style="margin-left: 8px; margin-top: -7px;">Pick Up</label>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label class="control-label" for="Comments">Comments</label>
-                                    <textarea class="form_field" id="Comments" name="Comments" style="min-height: 50px;"></textarea>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+               {% include '@Inventory/OrderProducts/retailer-order-form.html.twig' %}
             </div>
+            {% endif %}
             <div class="col-md-6">
                 <div class="table" style="background:rgba(2,177,242,.35); min-height: 250px;">
                     <br>
@@ -248,45 +249,81 @@
                             <input value="$0.00" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
                         <div class="col-md-4">
-                            <a class="btn btn-raised review_cart_button">Review Order ></a>
+                            <a class="btn btn-raised review_cart_button" ng-click="submit()">Review Order ></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!--
+
+
+        REDO THIS LOGIC. GO AHEAD AND FORMAT ALL THE DATA SO THAT IT IS
+
+        NOT LOOPING THROUGH PRODUCTS AND VAR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        !-->
 
         <div class="row">
             <div class="grid">
-            {% for product in products %}
-                <div class="col-md-6 element-item {{ product.category_id }}">
-                    <div class="product_image" style="display: table; margin: 0 auto;">
-                        <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
-                        <div class="product_name">
-                            <center>{{ product.name }}</center>
+                {% for product in products %}
+                    <div class="col-md-6 element-item {{ product.category_id }}">
+                        <div class="product_image" style="display: table; margin: 0 auto;">
+                            <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
+                            <div class="product_name">
+                                <center>{{ product.name }}</center>
+                            </div>
+                        </div>
+                        <div class="price_box_row">
+                            {% for variant in product.variants %}
+
+                                <div class="price_box" style="align">
+                                    <div class="variant_name gray_box">
+                                        {{ variant.name }}
+                                    </div>
+                                    <div class="variant_quantity gray_box">
+                                        <input type="number" max="{{ variant.inventory}}" value="0" {% if variant.inventory <= 0 %}disabled{% endif %} style="text-align: center; width: 100%; border: 1px solid #EFEFEF;">
+                                    </div>
+                                    <div class="variant_price">
+                                        ${{ variant.price | number_format(2, '.', ',')}}
+                                    </div>
+                                    <div class="variant_inventory">
+                                        {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {#<div cl#}
-                    <div class="price_box_row">
-                    {% for variant in product.variants %}
-
-                            <div class="price_box" style="align">
-                                <div class="variant_name gray_box">
-                                    {{ variant.name }}
-                                </div>
-                                <div class="variant_quantity gray_box">
-                                    <input type="text"  value="0" style="text-align: center; width: 100%; border: 1px solid #EFEFEF;">
-                                </div>
-                                <div class="variant_price">
-                                    ${{ variant.price | number_format(2, '.', ',')}}
-                                </div>
-                            </div>
-                    {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
+
+
     </div>
 </div>
 

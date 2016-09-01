@@ -117,6 +117,18 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean")
      */
+    protected $is_distributor = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $is_retailer = true;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
     protected $is_online_intentions = true;
 
     /**
@@ -210,6 +222,7 @@ class User extends BaseUser
     }
 
     public function getRouteNames() {
+        $data = array();
         foreach($this->groups as $role) {
             foreach($role->getPermissions() as $permission) {
                 $data[$permission->getRouteName()] = $permission->getRouteName();
@@ -219,6 +232,7 @@ class User extends BaseUser
     }
 
     public function getUserChannelsArray() {
+        $data = array();
         foreach($this->user_channels as $channel)
             $data[$channel->getId()] = array(
                 'id' => $channel->getId(),
@@ -730,6 +744,38 @@ class User extends BaseUser
     public function setStockAdjustments($stock_adjustments)
     {
         $this->stock_adjustments = $stock_adjustments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsDistributor()
+    {
+        return $this->is_distributor;
+    }
+
+    /**
+     * @param mixed $is_distributor
+     */
+    public function setIsDistributor($is_distributor)
+    {
+        $this->is_distributor = $is_distributor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsRetailer()
+    {
+        return $this->is_retailer;
+    }
+
+    /**
+     * @param mixed $is_retailer
+     */
+    public function setIsRetailer($is_retailer)
+    {
+        $this->is_retailer = $is_retailer;
     }
 
 

@@ -1,0 +1,79 @@
+<div class="table" style="background-color: #EFEFEF;">
+    <center><h2>Retailer Order Form</h2></center>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label" for="po">PO#</label>
+                    <input id="po" name="po" ng-model="po" type="text" class="form_field input-md">
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label" for="pick_up_date">Pick Up Date</label>
+                    <md-datepicker ng-model="pick_up_date"></md-datepicker>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label" for="agent_name">Pick Up Agent Name</label>
+                    <input id="agent_name" ng-model="agent_name" name="agent_name" type="text" class="form_field input-md">
+                </div>
+                <div class="col-md-2" style="margin-top: 25px; display: inline-flex;">
+                    <input type="checkbox" ng-model="ship" name="shipping" id="shipping" class="input_class_checkbox" style="display: inline;margin-right: 8px;" ng-click="shipping()">
+                    <label class="checkbox" for="shipping" style="margin-left: 8px; margin-top: -7px;">Ship</label>
+                </div>
+                <div class="col-md-4" style="margin-top: 25px; display: inline-flex;">
+                    <input type="checkbox" ng-model="pick_up" name="pick_up" id="pick_up" class="input_class_checkbox" ng-click="pickUp()" style="display: inline;margin-right: 8px;">
+                    <label class="checkbox" for="pick_up" style="margin-left: 8px; margin-top: -7px;">Pick Up</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" style="    margin-bottom: 25px;">
+                    <label class="control-label" for="comments">Comments</label>
+                    <textarea class="form_field" ng-model="comments" id="comments" name="comments" style="min-height: 50px;"></textarea>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="table" id='retailer-ship' style="background-color: #EFEFEF; display: none;">
+    <div class="row">
+        <div class="col-md-12">
+            <label class="control-label" for="ship_name">Name *</label>
+            <input id="ship_name" name="ship_name" ng-model="ship_name" type="text" class="form_field input-md">
+        </div>
+        <div class="col-md-12">
+            <label class="control-label" for="address">Address *</label>
+            <input id="address" name="address" ng-model="address" type="text" class="form_field input-md">
+        </div>
+        <div class="col-md-12">
+            <label class="control-label" for="address2">Address 2/Province</label>
+            <input id="address2"  ng-model="address2" type="text" class="form_field input-md">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label class="control-label" for="city">City *</label>
+            <input id="city" ng-model="city" type="text" class="form_field input-md">
+        </div>
+        <div class="col-md-3">
+            <label class="control-label" for="state">ST *</label>
+            <input id="state"  ng-model="state" type="text" class="form_field input-md">
+        </div>
+        <div class="col-md-3">
+            <label class="control-label" for="zip">Zip *</label>
+            <input id="zip" ng-model="zip" type="text" class="form_field input-md">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label class="control-label" for="phone">Phone *</label>
+            <input id="phone" ng-model="phone" type="text" class="form_field input-md">
+        </div>
+        <div class="col-md-12">
+            <label class="control-label" for="email">Email *</label>
+            <input id="email"  ng-model="email" type="text" class="form_field input-md">
+        </div>
+    </div>
+</div>
