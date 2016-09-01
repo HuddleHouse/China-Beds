@@ -66,6 +66,12 @@
             $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
         });
 
+
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', ['$scope', function($scope) {
+
+        }]);
+
     </script>
 {% endblock footer %}
 
@@ -163,7 +169,7 @@
              display: inline-block;
          }
     </style>
-
+<div ng-app="myApp" ng-controller="myCtrl">
     <div class="table">
         <div class="row">
             <div class="col-md-6">
@@ -282,5 +288,6 @@
             </div>
         </div>
     </div>
+</div>
 
 {% endblock %}
