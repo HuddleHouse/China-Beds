@@ -60,7 +60,7 @@ select *, v.id as variant_id, min(p.price/100) as price,
 			on p.product_variant_id = v.id
 		where v.product_id = :product_id
 			and p.price_group_id in (".$user_price_groups.") 
-		group by v.id;");
+		group by variant_id;");
             $statement->bindValue('product_id', $product->getId());
             $statement->execute();
             $variants = $statement->fetchAll();
