@@ -42,6 +42,7 @@
         var app = angular.module('myApp', ['ngFileUpload']);
         app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
             $scope.specifications = [];
+            $scope.categories = [];
             $scope.image_attributes_data = [];
             $scope.product_images_data = [];
             $scope.product_images = [];
@@ -56,6 +57,19 @@
                 success: function (data) {
                     $scope.$apply(function () {
                         $scope.specifications = data;
+                    });
+                }
+            });
+
+            $.ajax({
+                beforeSend: function () {
+                },
+                type: 'POST',
+                url: "{{ path('api_get_all_cat_values') }}",
+                data: {product_id: {{ product.id }}},
+                success: function (data) {
+                    $scope.$apply(function () {
+                        $scope.categories = data;
                     });
                 }
             });
@@ -152,6 +166,54 @@
                 });
             };
 
+
+            $scope.addCatValue = function () {
+                var cat_id = $('#cat_select option:selected').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_cat_value') }}",
+                    dataType: 'json',
+                    data: {cat_id: cat_id, product_id: {{ product.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.categories = data;
+                            $('#cat_value').val('');
+                        });
+                    }
+                });
+            };
+
+            $scope.getAllCatValues = function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_get_all_cat_values') }}",
+                    dataType: 'json',
+                    data: {product_id: {{ product.id }}},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.$apply(function () {
+                            $scope.categories = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.deleteCatValue = function (id) {
+                var cat_id = id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_remove_cat_value') }}",
+                    dataType: 'json',
+                    data: {cat_id: cat_id},
+                    success: function (data) {
+                        console.log(data);
+                        $scope.getAllCatValues();
+                    }
+                });
+            };
 
 
             $.ajax({
@@ -335,6 +397,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
             <li class=""><a href="#variants" data-toggle="tab" aria-expanded="false">Variants</a></li>
+            <li class=""><a href="#categories" data-toggle="tab" aria-expanded="false">Categories</a></li>
             <li class=""><a href="#specs" data-toggle="tab" aria-expanded="false">Specifications</a></li>
             <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Image Attributes</a></li>
             <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
@@ -353,6 +416,10 @@
 
             <div class="tab-pane" id="variants" style="padding-top: 25px;">
                 {% include '@Inventory/Product/edit-variant.html.twig' %}
+            </div>
+
+            <div class="tab-pane" id="categories" style="padding-top: 25px;">
+                {% include '@Inventory/Product/edit-categories.html.twig' %}
             </div>
 
             <div class="tab-pane" id="attributes" style="padding-top: 25px;">
