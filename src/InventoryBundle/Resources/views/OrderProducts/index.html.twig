@@ -32,6 +32,7 @@
                 scope();
                 scope.$apply(function () {
                     $('#submit-button').prop('disabled', true);
+                    $('#submit-button').addClass('disabled');
                     $(".overlay").show();
                     scope.submit();
                 });
@@ -116,9 +117,10 @@
                 console.log($scope);
             };
 
-            $scope.updateCart = function (variantId, cost) {
-                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null)
+            $scope.updateCart = function (variantId, cost, max) {
+                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
                     $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
+                }
                 else {
                     $scope.cart[variantId] = {
                         variant_id: variantId,
@@ -126,8 +128,19 @@
                         cost: cost
                     };
                 }
-                $scope.calculateCart();
+                if($scope.product_variant_order_quan[variantId] > max) {
+                    $('#'+variantId).addClass('error');
+                    $('#submit-button').prop('disabled', true);
+                    $('#submit-button').addClass('button-error');
+                    console.log('error');
+                }
+                else {
+                    $('#'+variantId).removeClass('error', 500);
+                    $('#submit-button').prop('disabled', false);
+                    $('#submit-button').removeClass('button-error');
+                }
 
+                $scope.calculateCart();
             };
 
             $scope.submit = function () {
@@ -222,7 +235,7 @@
             /*margin-right: auto;*/
         }
         .gray_box {
-            border: 1px solid #EFEFEF;
+            border: 2px solid #EFEFEF;
         }
         .variant_price {
             font-weight: 600;
@@ -272,12 +285,12 @@
         .form-control {
             margin-bottom: 0px !important;
         }
-        button.btn.btn-raised.review_cart_button.disabled {
-            color: antiquewhite;
-            background-color: lightcoral;
+        button.btn.btn-raised.review_cart_button.disabled, .button-error {
+            color: antiquewhite !important;
+            background-color: lightcoral !important;
         }
         .spinner {
-            top: 28% !important;
+            top: 40% !important;
         }
         .overlay {
             background: #e9e9e9;  <- I left your 'gray' background
@@ -288,6 +301,9 @@
             bottom: 0;
             left: 0;
             opacity: 0.5;
+        }
+        .error {
+            border: 2px solid lightcoral;
         }
     </style>
 
@@ -365,17 +381,17 @@
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
-                                    <div class="variant_quantity gray_box">
+                                    <div id="{{ variant.variant_id }}" class="variant_quantity gray_box">
                                         <input type="number"
-                                               max="{{ variant.inventory}}"
+
                                                min="0"
                                                {% if variant.inventory <= 0 %}disabled{% endif %}
                                                onclick="this.select()"
-                                               class="form-control"
-                                               style="text-align: center; width: 100%; border: 1px solid #EFEFEF;"
+
+                                               style="text-align: center; width: 100%;    border: none;"
                                                ng-model="product_variant_order_quan[{{ variant.variant_id }}]"
                                                ng-init="product_variant_order_quan[{{ variant.variant_id }}] = 0"
-                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price | number_format(2, '.', ',')}})"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price | number_format(2, '.', ',')}}, {{ variant.inventory}})"
                                         >
                                     </div>
                                     <div class="variant_price">
