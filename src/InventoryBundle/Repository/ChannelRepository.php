@@ -33,18 +33,23 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
+            $cat_ids = '';
+
+            foreach($product->getCategories() as $category)
+                $cat_ids .= $category->getCategory()->getId() . ' ';
+
             // format needed data to array
             $product_array = array(
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'description' => $product->getDescription(),
                 'sku' => $product->getSku(),
-                'category' => $product->getCategory()->getName(),
-                'category_id' => $product->getCategory()->getId(),
+                'cat_ids' => $cat_ids,
                 'path' => $image_url,
                 'quantity' => 0
             );
 
+            // Fix this. Would error when a user doesn't have three warehouses.
             $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
 
             // get only the product variants the user has a price in their price group for
