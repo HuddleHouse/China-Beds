@@ -101,6 +101,7 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $specs = $em->getRepository('InventoryBundle:Specification')->findAll();
+        $cats = $em->getRepository('InventoryBundle:Category')->findAll();
         $image_attributes = $em->getRepository('InventoryBundle:Attribute')->findAll();
         $channels = $em->getRepository('InventoryBundle:Channel')->findAll();
 
@@ -119,6 +120,7 @@ class ProductController extends Controller
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
                     'specs' => $specs,
+                    'cats' => $cats,
                     'image_attributes' => $image_attributes,
                     'all_channels' => $channels,
                 ));
@@ -130,6 +132,7 @@ class ProductController extends Controller
             'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'specs' => $specs,
+            'cats' => $cats,
             'image_attributes' => $image_attributes,
             'all_channels' => $channels,
         ));
