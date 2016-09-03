@@ -157,6 +157,11 @@
 
                 function save(draft){
                     if($('#warehouse').val() && self.cart.length > 0) {
+                        $('.overlay').show();
+                        var target = document.getElementById('loading-img');
+                        var spinner = new Spinner(opts).spin(target);
+                        target.appendChild(spinner.el);
+
                         $.ajax({
                             type: 'POST',
                             url: "{{ path('api_save_purchase_order') }}",

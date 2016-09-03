@@ -155,6 +155,11 @@
                 }
 
                 function save(draft){
+                    $('.overlay').show();
+                    var target = document.getElementById('loading-img');
+                    var spinner = new Spinner(opts).spin(target);
+                    target.appendChild(spinner.el);
+
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_save_purchase_order') }}",
@@ -192,6 +197,11 @@
                 }
 
                 function receiveAll(){
+                    $('.overlay').show();
+                    var target = document.getElementById('loading-img');
+                    var spinner = new Spinner(opts).spin(target);
+                    target.appendChild(spinner.el);
+
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_purchase_order_receive_all') }}",
