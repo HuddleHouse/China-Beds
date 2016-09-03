@@ -103,6 +103,13 @@
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
     }
+
+    function addSpinner() {
+        $('.overlay').show();
+        var target = document.getElementById('loading-img');
+        var spinner = new Spinner(opts).spin(target);
+        target.appendChild(spinner.el);
+    }
 </script>
 {% block footer %}{% endblock %}
 

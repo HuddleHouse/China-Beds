@@ -155,10 +155,7 @@
                 }
 
                 function save(draft){
-                    $('.overlay').show();
-                    var target = document.getElementById('loading-img');
-                    var spinner = new Spinner(opts).spin(target);
-                    target.appendChild(spinner.el);
+                    addSpinner();
 
                     $.ajax({
                         type: 'POST',
@@ -173,6 +170,7 @@
                 }
 
                 function setActive(){
+                    addSpinner();
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_set_purchase_order_active') }}",
@@ -197,10 +195,7 @@
                 }
 
                 function receiveAll(){
-                    $('.overlay').show();
-                    var target = document.getElementById('loading-img');
-                    var spinner = new Spinner(opts).spin(target);
-                    target.appendChild(spinner.el);
+                    addSpinner();
 
                     $.ajax({
                         type: 'POST',

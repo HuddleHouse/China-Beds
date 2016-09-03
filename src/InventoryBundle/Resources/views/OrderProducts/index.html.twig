@@ -122,10 +122,7 @@
             };
 
             $scope.submitCart = function () {
-                $('.overlay').show();
-                var target = document.getElementById('loading-img');
-                var spinner = new Spinner(opts).spin(target);
-                target.appendChild(spinner.el);
+                addSpinner();
 
                 console.log($scope.cart);
             };

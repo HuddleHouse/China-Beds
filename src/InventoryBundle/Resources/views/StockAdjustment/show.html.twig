@@ -110,6 +110,7 @@
                 }
 
                 function setActive(){
+                    addSpinner();
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_set_stock_adjustment_active') }}",
@@ -173,10 +174,7 @@
 
                 function save(draft, complete){
                     if($('#warehouse').val()&& self.cart.length > 0) {
-                        $('.overlay').show();
-                        var target = document.getElementById('loading-img');
-                        var spinner = new Spinner(opts).spin(target);
-                        target.appendChild(spinner.el);
+                        addSpinner();
 
                         $.ajax({
                             type: 'POST',
