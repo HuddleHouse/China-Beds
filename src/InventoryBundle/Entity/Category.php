@@ -3,9 +3,10 @@
 namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * ProductCategory
+ * Category
  *
  * @ORM\Table(name="categories")
  * @ORM\Entity()
@@ -35,6 +36,15 @@ class Category
      */
     private $code;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="category")
+     */
+    private $product_categories;
+
+
+    public function __construct() {
+        $this->product_categories = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -51,7 +61,7 @@ class Category
      *
      * @param string $name
      *
-     * @return ProductCategory
+     * @return Category
      */
     public function setName($name)
     {
@@ -77,7 +87,7 @@ class Category
      *
      * @param string $code
      *
-     * @return ProductCategory
+     * @return Category
      */
     public function setCode($code)
     {
@@ -95,5 +105,22 @@ class Category
     {
         return $this->code;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProductCategories()
+    {
+        return $this->product_categories;
+    }
+
+    /**
+     * @param mixed $product_categories
+     */
+    public function setProductCategories($product_categories)
+    {
+        $this->product_categories = $product_categories;
+    }
+
 }
 

@@ -1,0 +1,57 @@
+<a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#cats-modal">
+    <i class="fa fa-plus"></i>
+    Add Category
+</a>
+<hr>
+<div id="display-attributes">
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th style="width: 150px">Options</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% verbatim %}
+                    <tr ng-repeat="(i, cat) in categories track by $index">
+                        <td>{{cat.name}}</td>
+                        <td>
+                            <a class="btn btn-raised btn-danger" ng-click="deleteCatValue(cat.id)">Delete</a>
+                        </td>
+                    </tr>
+                {% endverbatim %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="cats-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Category</h4>
+            </div>
+            <div class="modal-body">
+                <label for="cat_select">Categories</label>
+                <select id="cat_select" class="form-control" style="margin-bottom: 10px">
+                    {% for cat in cats %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-raised btn-primary" ng-click="addCatValue()" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

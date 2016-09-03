@@ -91,6 +91,11 @@ class Product
     private $attributes;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product")
+     */
+    private $categories;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
      */
     private $variants;
@@ -118,6 +123,7 @@ class Product
 
     public function __construct() {
         $this->attributes = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->specifications = new ArrayCollection();
         $this->channels = new ArrayCollection();
         $this->images = new ArrayCollection();
@@ -148,6 +154,14 @@ class Product
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @param mixed $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
     }
 
     /**
