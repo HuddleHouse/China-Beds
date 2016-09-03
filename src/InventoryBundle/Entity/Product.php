@@ -115,11 +115,6 @@ class Product
      */
     private $images;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
-    protected $category;
 
     public function __construct() {
         $this->attributes = new ArrayCollection();
@@ -157,12 +152,22 @@ class Product
     }
 
     /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
      * @param mixed $categories
      */
     public function setCategories($categories)
     {
         $this->categories = $categories;
     }
+
+
 
     /**
      * Set name
@@ -211,7 +216,7 @@ class Product
      *
      * @param string $description
      *
-     * @return Product
+     * @return Produsrc/InventoryBundle/Repository/ChannelRepository.php:20
      */
     public function setDescription($description)
     {
@@ -344,21 +349,6 @@ class Product
         return $this->active;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param mixed $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
 
     /**
      * @return mixed

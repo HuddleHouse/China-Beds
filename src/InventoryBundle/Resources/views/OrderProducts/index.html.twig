@@ -17,6 +17,16 @@
         $(document).ready(function () {
             $('#part-table').DataTable({
             "iDisplayLength": 50});
+
+            $('#order-form').validator();
+            $('#order-form').validator().on('submit', function (e) {
+                if (e.isDefaultPrevented()) {
+                    // handle the invalid form...
+                } else {
+                    // everything looks good!
+                    e.preventDefault();
+                }
+            })
         });
 
         var $grid = $('.grid').isotope({
@@ -70,6 +80,7 @@
         var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
+            $scope.is_retailer = {{ app.user.isRetailer ? 1 : 0 }};
             $scope.po = '';
             $scope.pick_up_date = new Date();
             $scope.pick_up_agent_name = '';
@@ -85,23 +96,54 @@
             $scope.phone = '';
             $scope.email = '';
             $scope.products = {{ products | json_encode | raw}};
-
+            $scope.warehouses = {{ warehouses | json_encode | raw}};
+            $scope.warehouse = '';
+            $scope.cart_num_items = 0;
+            $scope.cart_total = 0.00;
+            $scope.product_variant_order_quan = [];
+            $scope.cart = [];
 
             $scope.submit = function () {
                 console.log($scope);
             };
 
+            $scope.updateCart = function (variantId, cost) {
+                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null)
+                    $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
+                else {
+                    $scope.cart[variantId] = {
+                        variant_id: variantId,
+                        quantity: $scope.product_variant_order_quan[variantId],
+                        cost: cost
+                    };
+                }
+                $scope.calculateCart();
+
+            };
+
+            $scope.calculateCart = function () {
+                $scope.cart_num_items = 0;
+                $scope.cart_total = 0.00;
+                angular.forEach($scope.cart, function(value, key) {
+                    $scope.cart_num_items += value.quantity;
+                    $scope.cart_total += value.quantity * value.cost;
+                });
+            }
+
             $scope.shipping = function () {
                 console.log($scope.ship);
-                if($scope.is_distributor == 0)
+                if($scope.is_retailer == 1)
                     $('#retailer-ship').show();
-
+                if($scope.is_distributor == 1)
+                    $('#distributor-ship').show();
             };
 
             $scope.pickUp = function () {
                 console.log($scope.pick_up);
-                if($scope.is_distributor == 0)
+                if($scope.is_retailer == 1)
                     $('#retailer-ship').hide();
+                if($scope.is_distributor == 1)
+                    $('#distributor-ship').hide();
             };
 
             console.log($scope.is_distributor);
@@ -201,6 +243,7 @@
         }
         .price_box {
              max-width: 15%;
+            width: 12%;
              display: inline-block;
          }
         #retailer-ship {
@@ -209,11 +252,24 @@
             margin-right: auto;
             margin-top: -15px;
         }
+
+        .form-control {
+            margin-bottom: 0px !important;
+        }
+        button.btn.btn-raised.review_cart_button.disabled {
+            color: antiquewhite;
+            background-color: lightcoral;
+        }
     </style>
 <div ng-app="myApp" ng-controller="myCtrl">
+    <form role="form" id="order-form" data-toggle="validator">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
-            {%  if (app.user.isRetailer ? 1 : 0) == 1 %}
+            {%  if (app.user.isDistributor ? 1 : 0) == 1 %}
+                <div class="col-md-6">
+                    {% include '@Inventory/OrderProducts/distributor-order-form.html.twig' %}
+                </div>
+            {%  elseif (app.user.isRetailer ? 1 : 0) == 1 %}
             <div class="col-md-6">
                {% include '@Inventory/OrderProducts/retailer-order-form.html.twig' %}
             </div>
@@ -242,20 +298,27 @@
                     <div class="row">
                         <div class="col-md-3">
                             <center>Item (s)</center>
-                            <input value="0" class="cart_info" style="width: 100%; height: 38px;" readonly>
+                            <input ng-model="cart_num_items" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
                         <div class="col-md-4">
                             <center>Total ($)</center>
-                            <input value="$0.00" class="cart_info" style="width: 100%; height: 38px;" readonly>
+                            {% verbatim %}
+                            <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
+                            {% endverbatim %}
                         </div>
                         <div class="col-md-4">
-                            <a class="btn btn-raised review_cart_button" ng-click="submit()">Review Order ></a>
+                            <button class="btn btn-raised review_cart_button" type="submit">Review Order ></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            {% verbatim %}
+                            <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart  }}</div>
+                            {% endverbatim %}
+        </div>
         <!--
 
 
@@ -292,14 +355,14 @@
         <div class="row">
             <div class="grid">
                 {% for product in products %}
-                    <div class="col-md-6 element-item {{ product.category_id }}">
+                    <div class="col-md-6 element-item {{ product.cat_ids }}">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
                                 <center>{{ product.name }}</center>
                             </div>
                         </div>
-                        <div class="price_box_row">
+                        <div class="price_box_row form-inline">
                             {% for variant in product.variants %}
 
                                 <div class="price_box" style="align">
@@ -307,7 +370,17 @@
                                         {{ variant.name }}
                                     </div>
                                     <div class="variant_quantity gray_box">
-                                        <input type="number" max="{{ variant.inventory}}" value="0" {% if variant.inventory <= 0 %}disabled{% endif %} style="text-align: center; width: 100%; border: 1px solid #EFEFEF;">
+                                        <input type="number"
+                                               max="{{ variant.inventory}}"
+                                               min="0"
+                                               {% if variant.inventory <= 0 %}disabled{% endif %}
+                                               onclick="this.select()"
+                                               class="form-control"
+                                               style="text-align: center; width: 100%; border: 1px solid #EFEFEF;"
+                                               ng-model="product_variant_order_quan[{{ variant.variant_id }}]"
+                                               ng-init="product_variant_order_quan[{{ variant.variant_id }}] = 0"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price | number_format(2, '.', ',')}})"
+                                        >
                                     </div>
                                     <div class="variant_price">
                                         ${{ variant.price | number_format(2, '.', ',')}}
@@ -322,9 +395,8 @@
                 {% endfor %}
             </div>
         </div>
-
-
     </div>
+        </form>
 </div>
 
 {% endblock %}
