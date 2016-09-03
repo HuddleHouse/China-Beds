@@ -26,6 +26,15 @@
                     // everything looks good!
                     e.preventDefault();
                 }
+
+                var scope = angular.element(
+                        document.getElementById("MainCtrl")).
+                scope();
+                scope.$apply(function () {
+                    $('#submit-button').prop('disabled', true);
+                    $(".overlay").show();
+                    scope.submit();
+                });
             })
         });
 
@@ -119,6 +128,13 @@
                 }
                 $scope.calculateCart();
 
+            };
+
+            $scope.submit = function () {
+                var target = document.getElementById('loading-img');
+                var spinner = new Spinner().spin(target);
+                target.appendChild(spinner.el);
+                console.log($scope.cart);
             };
 
             $scope.calculateCart = function () {
@@ -260,8 +276,25 @@
             color: antiquewhite;
             background-color: lightcoral;
         }
+        .spinner {
+            top: 28% !important;
+        }
+        .overlay {
+            background: #e9e9e9;  <- I left your 'gray' background
+            display: none;        <- Not displayed by default
+            position: absolute;   <- This and the following properties will
+            top: 0;                  make the overlay, the element will expand
+            right: 0;                so as to cover the whole body of the page
+            bottom: 0;
+            left: 0;
+            opacity: 0.5;
+        }
     </style>
-<div ng-app="myApp" ng-controller="myCtrl">
+
+    <div class="overlay">
+        <div id="loading-img"></div>
+    </div>
+<div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <form role="form" id="order-form" data-toggle="validator">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
@@ -307,50 +340,13 @@
                             {% endverbatim %}
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-raised review_cart_button" type="submit">Review Order ></button>
+                            <button class="btn btn-raised review_cart_button" id="submit-button" type="submit">Review Order ></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            {% verbatim %}
-                            <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart  }}</div>
-                            {% endverbatim %}
-        </div>
-        <!--
-
-
-        REDO THIS LOGIC. GO AHEAD AND FORMAT ALL THE DATA SO THAT IT IS
-
-        NOT LOOPING THROUGH PRODUCTS AND VAR
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        !-->
 
         <div class="row">
             <div class="grid">
