@@ -98,10 +98,37 @@
             $scope.products = {{ products | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
             $scope.warehouse = '';
+            $scope.cart_num_items = 0;
+            $scope.cart_total = 0.00;
+            $scope.product_variant_order_quan = [];
+            $scope.cart = [];
 
             $scope.submit = function () {
                 console.log($scope);
             };
+
+            $scope.updateCart = function (variantId, cost) {
+                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null)
+                    $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
+                else {
+                    $scope.cart[variantId] = {
+                        variant_id: variantId,
+                        quantity: $scope.product_variant_order_quan[variantId],
+                        cost: cost
+                    };
+                }
+                $scope.calculateCart();
+
+            };
+
+            $scope.calculateCart = function () {
+                $scope.cart_num_items = 0;
+                $scope.cart_total = 0.00;
+                angular.forEach($scope.cart, function(value, key) {
+                    $scope.cart_num_items += value.quantity;
+                    $scope.cart_total += value.quantity * value.cost;
+                });
+            }
 
             $scope.shipping = function () {
                 console.log($scope.ship);
@@ -271,11 +298,13 @@
                     <div class="row">
                         <div class="col-md-3">
                             <center>Item (s)</center>
-                            <input value="0" class="cart_info" style="width: 100%; height: 38px;" readonly>
+                            <input ng-model="cart_num_items" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
                         <div class="col-md-4">
                             <center>Total ($)</center>
-                            <input value="$0.00" class="cart_info" style="width: 100%; height: 38px;" readonly>
+                            {% verbatim %}
+                            <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
+                            {% endverbatim %}
                         </div>
                         <div class="col-md-4">
                             <button class="btn btn-raised review_cart_button" type="submit">Review Order ></button>
@@ -285,6 +314,11 @@
             </div>
         </div>
 
+        <div class="row">
+            {% verbatim %}
+                            <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart  }}</div>
+                            {% endverbatim %}
+        </div>
         <!--
 
 
@@ -339,10 +373,14 @@
                                         <input type="number"
                                                max="{{ variant.inventory}}"
                                                min="0"
-                                               value="0" {% if variant.inventory <= 0 %}disabled{% endif %}
+                                               {% if variant.inventory <= 0 %}disabled{% endif %}
                                                onclick="this.select()"
                                                class="form-control"
-                                               style="text-align: center; width: 100%; border: 1px solid #EFEFEF;" >
+                                               style="text-align: center; width: 100%; border: 1px solid #EFEFEF;"
+                                               ng-model="product_variant_order_quan[{{ variant.variant_id }}]"
+                                               ng-init="product_variant_order_quan[{{ variant.variant_id }}] = 0"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price | number_format(2, '.', ',')}})"
+                                        >
                                     </div>
                                     <div class="variant_price">
                                         ${{ variant.price | number_format(2, '.', ',')}}
