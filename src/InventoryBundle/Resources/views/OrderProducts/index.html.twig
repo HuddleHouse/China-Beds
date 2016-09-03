@@ -27,15 +27,7 @@
                     e.preventDefault();
                 }
 
-                var scope = angular.element(
-                        document.getElementById("MainCtrl")).
-                scope();
-                scope.$apply(function () {
-                    $('#submit-button').prop('disabled', true);
-                    $('#submit-button').addClass('disabled');
-                    $(".overlay").show();
-                    scope.submit();
-                });
+
             })
         });
 
@@ -113,9 +105,7 @@
             $scope.product_variant_order_quan = [];
             $scope.cart = [];
 
-            $scope.submit = function () {
-                console.log($scope);
-            };
+
 
             $scope.updateCart = function (variantId, cost, max) {
                 if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
@@ -143,10 +133,8 @@
                 $scope.calculateCart();
             };
 
-            $scope.submit = function () {
-                var target = document.getElementById('loading-img');
-                var spinner = new Spinner().spin(target);
-                target.appendChild(spinner.el);
+            $scope.submitCart = function () {
+
                 console.log($scope.cart);
             };
 
