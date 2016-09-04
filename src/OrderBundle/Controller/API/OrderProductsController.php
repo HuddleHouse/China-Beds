@@ -28,27 +28,29 @@ class OrderProductsController extends Controller
         $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
 
         $cart = $request->request->get('cart');
+        $total = $request->request->get('total');
+        $info = $request->request->get('form_info');
         $products = array();
 
         foreach($cart as $item) {
             if($item != '') {
                 $image_url = '/';
-                foreach($prod->getImages() as $image) {
-                    $image_url .= $image->getWebPath();
-                    break;
-                }
-
-                foreach($prod->getVariants() as $variant)
-                    $products[] = array(
-                        'name' => $prod->getName().": ".$variant->getName(),
-                        'id' => $variant->getId(),
-                        'image_url' => $image_url
-                    );
+//                foreach($prod->getImages() as $image) {
+//                    $image_url .= $image->getWebPath();
+//                    break;
+//                }
+//
+//                foreach($prod->getVariants() as $variant)
+//                    $products[] = array(
+//                        'name' => $prod->getName().": ".$variant->getName(),
+//                        'id' => $variant->getId(),
+//                        'image_url' => $image_url
+//                    );
             }
 
         }
 
-        return JsonResponse::create($products);
+        return JsonResponse::create(true);
     }
 
 }

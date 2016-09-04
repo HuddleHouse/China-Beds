@@ -50,21 +50,21 @@ class UserType extends AbstractType
                 ),
             ))
             ->add('warehouse_1', EntityType::class, array(
-                'class' => 'InventoryBundle\Entity\Warehouse',
+                'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Warehouse #1',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false
             ))
             ->add('warehouse_2', EntityType::class, array(
-                'class' => 'InventoryBundle\Entity\Warehouse',
+                'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Warehouse #2',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false
             ))
             ->add('warehouse_3', EntityType::class, array(
-                'class' => 'InventoryBundle\Entity\Warehouse',
+                'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Warehouse #3',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
