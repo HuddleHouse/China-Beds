@@ -151,7 +151,7 @@ class ImportController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         foreach($results as $result) {
-            $warehouse = $em->getRepository('InventoryBundle:Warehouse')->findOneBy(array('list_id' => $result->ListID));
+            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('list_id' => $result->ListID));
             if($warehouse == null) {
                 $newWarehouse = new Warehouse();
                 $newWarehouse->setName($result->Name);

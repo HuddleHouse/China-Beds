@@ -21,6 +21,8 @@ class AppKernel extends Kernel
             new InventoryBundle\InventoryBundle(),
             new QuickbooksBundle\QuickbooksBundle(),
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new OrderBundle\OrderBundle(),
+            new WarehouseBundle\WarehouseBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

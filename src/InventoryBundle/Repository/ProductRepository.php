@@ -2,7 +2,7 @@
 
 namespace InventoryBundle\Repository;
 
-use InventoryBundle\Entity\Warehouse;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * ProductRepository
@@ -68,7 +68,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 $total_quantity = $statement->fetch();
 
                 if(isset($warehouse)) {
-                    $warehouse_quantity = $em->getRepository('InventoryBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
+                    $warehouse_quantity = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
                 }
                 else {
                     $warehouse_quantity = 0;

@@ -57,17 +57,17 @@ class ProductVariant
     private $product;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PurchaseOrderProductVariant", mappedBy="product_variant")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\PurchaseOrderProductVariant", mappedBy="product_variant")
      */
     private $purchase_order_product_variant;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransferProductVariant", mappedBy="product_variant")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransferProductVariant", mappedBy="product_variant")
      */
     private $stock_transfer_product_variant;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockAdjustmentProductVariant", mappedBy="product_variant")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustmentProductVariant", mappedBy="product_variant")
      */
     private $stock_adjustment_product_variant;
 
@@ -77,7 +77,7 @@ class ProductVariant
     private $price_group_prices;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarehouseInventory", mappedBy="product_variant")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehouseInventory", mappedBy="product_variant")
      */
     private $warehouse;
 

@@ -1,0 +1,384 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Order Products{% endblock %}
+{% block page_title %}
+    Order {{ channel.name }} Products
+{% endblock page_title %}
+
+{% block page_name %}
+    Order
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+            "iDisplayLength": 50});
+        });
+
+        var $grid = $('.grid').isotope({
+            itemSelector: '.element-item',
+            layoutMode: 'fitRows'
+        });
+
+        // filter functions
+        var filterFns = {
+            // show if number is greater than 50
+            numberGreaterThan50: function() {
+                var number = $(this).find('.number').text();
+                return parseInt( number, 10 ) > 50;
+            },
+            // show if name ends with -ium
+            ium: function() {
+                var name = $(this).find('.name').text();
+                return name.match( /ium$/ );
+            }
+        };
+        // bind filter button click
+        $('.filters-button-group').on( 'click', 'button', function() {
+            var filterValue = $( this ).attr('data-filter');
+            // use filterFn if matches value
+            filterValue = filterFns[ filterValue ] || filterValue;
+            $grid.isotope({ filter: filterValue });
+        });
+        // change is-checked class on buttons
+        $('.button-group').each( function( i, buttonGroup ) {
+            var $buttonGroup = $( buttonGroup );
+            $buttonGroup.on( 'click', 'button', function() {
+                $buttonGroup.find('.is-checked').removeClass('is-checked');
+                $( this ).addClass('is-checked');
+            });
+        });
+
+
+//        $('.input_class_checkbox').each(function(){
+//            $(this).hide().after('<div class="class_checkbox" />');
+//
+//        });
+//
+//        $('.class_checkbox').on('click',function(){
+//            console.log('matt');
+//            $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
+//        });
+
+
+
+
+        var app = angular.module('myApp', ['ngMaterial']);
+        app.controller('myCtrl', ['$scope', function($scope) {
+            $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
+            $scope.is_retailer = {{ app.user.isRetailer ? 1 : 0 }};
+            $scope.po = '';
+            $scope.pick_up_date = new Date();
+            $scope.pick_up_agent_name = '';
+            $scope.ship = false;
+            $scope.pick_up = false;
+            $scope.comments = '';
+            $scope.ship_name = '';
+            $scope.address = '';
+            $scope.address2 = '';
+            $scope.city = '';
+            $scope.state = '';
+            $scope.zip = '';
+            $scope.phone = '';
+            $scope.email = '';
+            $scope.products = {{ products | json_encode | raw}};
+            $scope.warehouses = {{ warehouses | json_encode | raw}};
+            $scope.warehouse = '';
+            $scope.cart_num_items = 0;
+            $scope.cart_total = 0.00;
+            $scope.product_variant_order_quan = [];
+            $scope.cart = [];
+
+
+
+            $scope.updateCart = function (variantId, cost, max) {
+                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
+                    $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
+                }
+                else {
+                    $scope.cart[variantId] = {
+                        variant_id: variantId,
+                        quantity: $scope.product_variant_order_quan[variantId],
+                        cost: cost
+                    };
+                }
+                if($scope.product_variant_order_quan[variantId] > max) {
+                    $('#'+variantId).addClass('error');
+                    $('#submit-button').prop('disabled', true);
+                    $('#submit-button').addClass('button-error');
+                    console.log('error');
+                }
+                else {
+                    $('#'+variantId).removeClass('error', 500);
+                    $('#submit-button').prop('disabled', false);
+                    $('#submit-button').removeClass('button-error');
+                }
+
+                $scope.calculateCart();
+            };
+
+            $scope.submitCart = function () {
+                addSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_save_products_order_form') }}",
+                    dataType: 'json',
+                    data: {cart: $scope.cart, channel_id: {{ channel.id}} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+
+                        });
+                    }
+                });
+                console.log($scope.cart);
+            };
+
+            $scope.calculateCart = function () {
+                $scope.cart_num_items = 0;
+                $scope.cart_total = 0.00;
+                angular.forEach($scope.cart, function(value, key) {
+                    $scope.cart_num_items += value.quantity;
+                    $scope.cart_total += value.quantity * value.cost;
+                });
+            }
+
+            $scope.shipping = function () {
+                console.log($scope.ship);
+                if($scope.is_retailer == 1)
+                    $('#retailer-ship').show();
+                if($scope.is_distributor == 1)
+                    $('#distributor-ship').show();
+            };
+
+            $scope.pickUp = function () {
+                console.log($scope.pick_up);
+                if($scope.is_retailer == 1)
+                    $('#retailer-ship').hide();
+                if($scope.is_distributor == 1)
+                    $('#distributor-ship').hide();
+            };
+
+            console.log($scope.is_distributor);
+        }]);
+
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <style>
+        .form_field {
+            border: 1px solid rgba(149,152,154,.37);
+            display: block;
+            width: 100%;
+            border-radius: 8px;
+        }
+        .cart_info {
+            background-color: #fff !important;
+            text-align: center;
+            color: #078BB2;
+            font-size: large;
+        }
+        .review_cart_button {
+            padding-left: 6px;
+            padding-right: 6px;
+            margin-left: -13px;
+            margin-top: 20px;
+            -webkit-box-shadow: 0 0 0 0 !important;
+            height: 38px !important;
+        }
+        .button {
+            display: inline-block;
+            margin-bottom: 10px;
+            background: #EEE;
+            border: none;
+            border-radius: 7px;
+            color: #222;
+            font-family: sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .button:hover {
+            color: #02B1F2;
+        }
+        .button:active,
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button:active {
+            box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+        }
+        .price_box_row {
+            text-align: center;
+            /*display: table;*/
+            /*margin-left: auto;*/
+            /*margin-right: auto;*/
+        }
+        .gray_box {
+            border: 2px solid #EFEFEF;
+        }
+        .variant_price {
+            font-weight: 600;
+        }
+        .variant_name {
+            font-weight: 600;
+        }
+        .product_name {
+            font-weight: 800;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .element-item {
+            padding: 15px;
+            min-height: 285px;
+        }
+        .col-md-2 {
+            padding-left: 3px !important;
+            padding-right: 3px !important;
+        }
+
+        .class_checkbox {
+            width: 20px;
+            height: 20px;
+            background-image: url("/images/unchecked@2x.png");
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+        }
+        .class_checkbox.checked {
+            background-image: url("/images/checked@2x.png");
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+        }
+        .price_box {
+             max-width: 15%;
+            width: 12%;
+             display: inline-block;
+         }
+        #retailer-ship {
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -15px;
+        }
+
+        .form-control {
+            margin-bottom: 0px !important;
+        }
+        button.btn.btn-raised.review_cart_button.disabled, .button-error {
+            color: antiquewhite !important;
+            background-color: lightcoral !important;
+        }
+        .error {
+            border: 2px solid lightcoral;
+        }
+    </style>
+
+
+<div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+    <div class="table"  style="min-height: 100vh;">
+        <div class="row">
+            {%  if (app.user.isDistributor ? 1 : 0) == 1 %}
+                <div class="col-md-6">
+                    {% include '@Order/OrderProducts/distributor-order-form.html.twig' %}
+                </div>
+            {%  elseif (app.user.isRetailer ? 1 : 0) == 1 %}
+            <div class="col-md-6">
+               {% include '@Order/OrderProducts/retailer-order-form.html.twig' %}
+            </div>
+            {% endif %}
+            <div class="col-md-6">
+                <div class="table" style="background:rgba(2,177,242,.35); min-height: 250px;">
+                    <br>
+                    <center><h1 style="color: #fff;">Get More, Make More</h1></center>
+                    <center><h2>Specials</h2></center>
+                    <center><h4>Save up to 25% on closeout items!</h4></center>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-bottom: 40px;padding-top: 40px;">
+            <div class="col-md-7">
+                <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
+                    <button class="button is-checked" data-filter="*">ALL</button>
+                    {% for category in categories %}
+                        <button class="button" data-filter=".{{ category.id }}">{{ category.name }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="table" style="background-color: #02B1F2;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <center>Item (s)</center>
+                            <input ng-model="cart_num_items" class="cart_info" style="width: 100%; height: 38px;" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <center>Total ($)</center>
+                            {% verbatim %}
+                            <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
+                            {% endverbatim %}
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-raised review_cart_button" id="submit-button" ng-click="submitCart()" type="submit">Review Order ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="grid">
+                {% for product in products %}
+                    <div class="col-md-6 element-item {{ product.cat_ids }}">
+                        <div class="product_image" style="display: table; margin: 0 auto;">
+                            <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
+                            <div class="product_name">
+                                <center>{{ product.name }}</center>
+                            </div>
+                        </div>
+                        <div class="price_box_row form-inline">
+                            {% for variant in product.variants %}
+
+                                <div class="price_box" style="align">
+                                    <div class="variant_name gray_box">
+                                        {{ variant.name }}
+                                    </div>
+                                    <div id="{{ variant.variant_id }}" class="variant_quantity gray_box">
+                                        <input type="number"
+
+                                               min="0"
+                                               {% if variant.inventory <= 0 %}disabled{% endif %}
+                                               onclick="this.select()"
+
+                                               style="text-align: center; width: 100%;    border: none;"
+                                               ng-model="product_variant_order_quan[{{ variant.variant_id }}]"
+                                               ng-init="product_variant_order_quan[{{ variant.variant_id }}] = 0"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price | number_format(2, '.', ',')}}, {{ variant.inventory}})"
+                                        >
+                                    </div>
+                                    <div class="variant_price">
+                                        ${{ variant.price | number_format(2, '.', ',')}}
+                                    </div>
+                                    <div class="variant_inventory">
+                                        {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

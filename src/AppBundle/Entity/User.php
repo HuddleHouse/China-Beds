@@ -176,34 +176,34 @@ class User extends BaseUser
     private $warranty_claims;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PurchaseOrder", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\PurchaseOrder", mappedBy="user")
      */
     private $purchase_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockTransfer", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
      */
     private $stock_transfers;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\StockAdjustment", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustment", mappedBy="user")
      */
     private $stock_adjustments;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_1")
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="users_1")
      * @ORM\JoinColumn(name="warehouse_1", referencedColumnName="id")
      */
     private $warehouse_1;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_2")
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="users_2")
      * @ORM\JoinColumn(name="warehouse_2", referencedColumnName="id")
      */
     private $warehouse_2;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Warehouse", inversedBy="users_3")
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="users_3")
      * @ORM\JoinColumn(name="warehouse_3", referencedColumnName="id")
      */
     private $warehouse_3;

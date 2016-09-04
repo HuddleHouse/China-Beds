@@ -1,18 +1,11 @@
-inventory_purchase_order:
-    resource: "@InventoryBundle/Controller/PurchaseOrderController.php"
+warehouse:
+    resource: "@WarehouseBundle/Controller/"
     type:     annotation
 
-inventory_stock_transfer:
-    resource: "@InventoryBundle/Controller/StockTransferController.php"
+order:
+    resource: "@OrderBundle/Controller/"
     type:     annotation
 
-inventory_stock_adjustment:
-    resource: "@InventoryBundle/Controller/StockAdjustmentController.php"
-    type:     annotation
-
-inventory_status:
-    resource: "@InventoryBundle/Controller/StatusController.php"
-    type:     annotation
 
 inventory_rebate_submission:
     resource: "@InventoryBundle/Controller/RebateSubmissionController.php"
