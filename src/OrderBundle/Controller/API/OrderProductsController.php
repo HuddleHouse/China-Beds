@@ -36,14 +36,16 @@ class OrderProductsController extends Controller
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
-        $order->getUser($this->getUser());
+        $order->setUser($this->getUser());
+        $em->persist($order);
 
         foreach($cart as $item) {
             if($item != '') {
                 $product_variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['variant_id']);
                 $orders_product_variant = new OrdersProductVariant();
                 $orders_product_variant->setOrder($order);
-                $orders_product_variant->setPrice($order['cost']);
+                $orders_product_variant->setPrice($item['cost']);
+                $orders_product_variant->setQuantity($item['quantity']);
                 $orders_product_variant->setProductVariant($product_variant);
                 $em->persist($orders_product_variant);
             }
@@ -53,9 +55,9 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
-        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
+        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order->getId());
 
-        return JsonResponse::create(true);
+        return JsonResponse::create($order->getId());
     }
 
 }

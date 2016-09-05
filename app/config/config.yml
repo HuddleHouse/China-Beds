@@ -98,4 +98,4 @@ assetic:
         jsqueeze: ~
 
 fos_js_routing:
-    routes_to_expose: ['purchaseorder_show', 'purchaseorder_new', 'stockadjustment_show', 'stockadjustment_new']
+    routes_to_expose: ['purchaseorder_show', 'purchaseorder_new', 'stockadjustment_show', 'stockadjustment_new', 'order_products_review']

@@ -129,10 +129,8 @@
                             total: $scope.cart_total
                         },
                         success: function (data) {
-                            $scope.$apply(function () {
-                                hideSpinner();
-                            });
-                        }
+                                window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });
+                }
                     });
                 }
 
@@ -301,9 +299,7 @@
             border: 2px solid lightcoral;
         }
     </style>
-    <div id="error-message">
 
-    </div>
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
@@ -326,8 +322,10 @@
                 </div>
             </div>
         </div>
+        <div id="error-message" style="padding-top: 40px;">
 
-        <div class="row" style="padding-bottom: 40px;padding-top: 40px;">
+        </div>
+        <div class="row" style="padding-bottom: 40px;padding-top: 20px;">
             <div class="col-md-7">
                 <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
                     <button class="button is-checked" data-filter="*">ALL</button>
