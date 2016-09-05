@@ -35,7 +35,7 @@ class OrderProductsController extends Controller
             $this->redirectToRoute('404');
 
 
-        return $this->render('@Order/OrderProducts/index.html.twig', array(
+        return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
             'categories' => $categories,
             'channel' => $channel,
