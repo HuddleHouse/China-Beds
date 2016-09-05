@@ -138,6 +138,11 @@ class Warehouse
      */
     private $stock_adjustments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersWarehouseInfo", mappedBy="warehouse")
+     */
+    private $orders_warehouse_info;
+
     public function __construct() {
         $this->purchase_orders = new ArrayCollection();
         $this->stock_adjustments = new ArrayCollection();
@@ -147,6 +152,7 @@ class Warehouse
         $this->stock_transfer_departing = new ArrayCollection();
         $this->stock_transfer_receiving = new ArrayCollection();
         $this->inventory = new ArrayCollection();
+        $this->orders_warehouse_info = new ArrayCollection();
     }
 
     /**
@@ -517,6 +523,22 @@ class Warehouse
     public function setStockTransferDeparting($stock_transfer_departing)
     {
         $this->stock_transfer_departing = $stock_transfer_departing;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrdersWarehouseInfo()
+    {
+        return $this->orders_warehouse_info;
+    }
+
+    /**
+     * @param mixed $orders_warehouse_info
+     */
+    public function setOrdersWarehouseInfo($orders_warehouse_info)
+    {
+        $this->orders_warehouse_info = $orders_warehouse_info;
     }
     
     

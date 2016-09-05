@@ -27,6 +27,7 @@ class OrderProductsController extends Controller
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
         $categories = $em->getRepository('InventoryBundle:Category')->findAll();
+        $states = $em->getRepository('AppBundle:State')->findAll();
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])
@@ -39,7 +40,8 @@ class OrderProductsController extends Controller
             'products' => $product_data,
             'categories' => $categories,
             'channel' => $channel,
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'states' => $states
         ));
     }
 

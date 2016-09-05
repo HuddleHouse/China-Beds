@@ -74,6 +74,7 @@
             $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
             $scope.is_retailer = {{ app.user.isRetailer ? 1 : 0 }};
             $scope.products = {{ products | json_encode | raw}};
+            $scope.states = {{ states | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
             $scope.cart_num_items = 0;
             $scope.cart_total = 0.00;

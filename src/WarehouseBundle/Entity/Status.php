@@ -51,6 +51,8 @@ class Status
      */
     private $stock_adjustments;
 
+
+
     public function __construct() {
         $this->purchase_orders = new ArrayCollection();
         $this->stock_transfers = new ArrayCollection();

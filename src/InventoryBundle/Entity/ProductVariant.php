@@ -67,6 +67,11 @@ class ProductVariant
     private $stock_transfer_product_variant;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="product_variant")
+     */
+    private $orders_product_variant;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustmentProductVariant", mappedBy="product_variant")
      */
     private $stock_adjustment_product_variant;
@@ -273,6 +278,22 @@ class ProductVariant
     public function setStockAdjustmentProductVariant($stock_adjustment_product_variant)
     {
         $this->stock_adjustment_product_variant = $stock_adjustment_product_variant;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrdersProductVariant()
+    {
+        return $this->orders_product_variant;
+    }
+
+    /**
+     * @param mixed $orders_product_variant
+     */
+    public function setOrdersProductVariant($orders_product_variant)
+    {
+        $this->orders_product_variant = $orders_product_variant;
     }
 
 

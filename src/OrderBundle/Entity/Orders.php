@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,6 +28,19 @@ class Orders
      * @ORM\Column(name="order_number", type="string", length=255, nullable=true)
      */
     private $orderNumber;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Status", inversedBy="stock_adjustments")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     */
+    private $status;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="submit_date", type="datetime", nullable=true)
+     */
+    private $submitDate;
 
     /**
      * @var \DateTime
@@ -80,16 +94,16 @@ class Orders
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="ship_city", type="string", length=255, nullable=true)
      */
-    private $city;
+    private $ship_city;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="zip", type="integer", nullable=true)
+     * @ORM\Column(name="ship_zip", type="integer", nullable=true)
      */
-    private $zip;
+    private $ship_zip;
 
     /**
      * @var string
@@ -105,6 +119,16 @@ class Orders
      */
     private $shipEmail;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order")
+     */
+    private $product_variants;
+
+
+    public function __construct()
+    {
+        $this->product_variants = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -309,52 +333,37 @@ class Orders
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
-     * @return Orders
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
      * @return string
      */
-    public function getCity()
+    public function getShipCity()
     {
-        return $this->city;
+        return $this->ship_city;
     }
 
     /**
-     * Set zip
-     *
-     * @param integer $zip
-     *
-     * @return Orders
+     * @param string $ship_city
      */
-    public function setZip($zip)
+    public function setShipCity($ship_city)
     {
-        $this->zip = $zip;
-
-        return $this;
+        $this->ship_city = $ship_city;
     }
 
     /**
-     * Get zip
-     *
      * @return int
      */
-    public function getZip()
+    public function getShipZip()
     {
-        return $this->zip;
+        return $this->ship_zip;
     }
+
+    /**
+     * @param int $ship_zip
+     */
+    public function setShipZip($ship_zip)
+    {
+        $this->ship_zip = $ship_zip;
+    }
+
 
     /**
      * Set shipPhone
@@ -403,5 +412,55 @@ class Orders
     {
         return $this->shipEmail;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSubmitDate()
+    {
+        return $this->submitDate;
+    }
+
+    /**
+     * @param \DateTime $submitDate
+     */
+    public function setSubmitDate($submitDate)
+    {
+        $this->submitDate = $submitDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductVariants()
+    {
+        return $this->product_variants;
+    }
+
+    /**
+     * @param mixed $product_variants
+     */
+    public function setProductVariants($product_variants)
+    {
+        $this->product_variants = $product_variants;
+    }
+
+
 }
 
