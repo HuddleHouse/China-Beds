@@ -146,6 +146,22 @@ class OrdersWarehouseInfo
         $this->orders_product_variant = $orders_product_variant;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getWarehouse()
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param mixed $warehouse
+     */
+    public function setWarehouse($warehouse)
+    {
+        $this->warehouse = $warehouse;
+    }
+
 
 }
 

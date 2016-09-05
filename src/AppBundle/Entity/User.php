@@ -181,6 +181,11 @@ class User extends BaseUser
     private $purchase_orders;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="user")
+     */
+    private $orders;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
      */
     private $stock_transfers;
@@ -216,6 +221,7 @@ class User extends BaseUser
         $this->user_channels = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->purchase_orders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->stock_adjustments = new \Doctrine\Common\Collections\ArrayCollection();
@@ -300,6 +306,22 @@ class User extends BaseUser
     public function setFirstName($first_name)
     {
         $this->first_name = $first_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param mixed $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
     }
 
     /**

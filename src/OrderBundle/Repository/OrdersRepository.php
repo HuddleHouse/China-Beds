@@ -1,6 +1,7 @@
 <?php
 
 namespace OrderBundle\Repository;
+use OrderBundle\Entity\Orders;
 
 /**
  * OrdersRepository
@@ -10,4 +11,9 @@ namespace OrderBundle\Repository;
  */
 class OrdersRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function setWarehouseDataForOrder(Orders $order) {
+        foreach($order->getProductVariants() as $productVariant) {
+            $i = 1;
+        }
+    }
 }

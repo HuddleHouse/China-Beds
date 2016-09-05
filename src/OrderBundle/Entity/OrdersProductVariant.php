@@ -101,7 +101,7 @@ class OrdersProductVariant
      */
     public function setPrice($price)
     {
-        $this->price = $price;
+        $this->price = $price * 100;
 
         return $this;
     }
@@ -113,7 +113,7 @@ class OrdersProductVariant
      */
     public function getPrice()
     {
-        return $this->price;
+        return $this->price / 100;
     }
 
     /**

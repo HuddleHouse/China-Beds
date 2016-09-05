@@ -4,6 +4,8 @@ namespace OrderBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Orders
@@ -108,7 +110,7 @@ class Orders
     /**
      * @var string
      *
-     * @ORM\Column(name="ship_phone", type="string", length=255)
+     * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
      */
     private $shipPhone;
 
@@ -124,10 +126,46 @@ class Orders
      */
     private $product_variants;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="orders")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
-    public function __construct()
+
+    public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
+        $this->submitDate = new \DateTime();
+        if($info != null) {
+            if(isset($info['po']))
+                $this->orderNumber = $info['po'];
+            if(isset($info['pick_up_date']))
+                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+            if(isset($info['agent_name']))
+                $this->pickUpAgent = $info['agent_name'];
+            if(isset($info['pick_up']))
+                $this->isPickUp = $info['pick_up'];
+            else if(isset($info['ship']))
+                $this->isPickUp = !$info['ship'];
+            if(isset($info['comments']))
+                $this->comments = $info['comments'];
+            if(isset($info['ship_name']))
+                $this->shipName = $info['ship_name'];
+            if(isset($info['address']))
+                $this->shipAddress = $info['address'];
+            if(isset($info['address2']))
+                $this->shipAddress2 = $info['address2'];
+            if(isset($info['city']))
+                $this->ship_city = $info['city'];
+            if(isset($info['zip']))
+                $this->ship_zip = $info['zip'];
+            if(isset($info['phone']))
+                $this->shipPhone = $info['phone'];
+            if(isset($info['email']))
+                $this->shipEmail = $info['email'];
+
+        }
     }
 
     /**
@@ -459,6 +497,22 @@ class Orders
     public function setProductVariants($product_variants)
     {
         $this->product_variants = $product_variants;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
 

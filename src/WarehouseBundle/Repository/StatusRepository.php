@@ -10,4 +10,17 @@ namespace WarehouseBundle\Repository;
  */
 class StatusRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getStatusByName($name) {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");
+        $statement->bindValue('name', $name);
+        $statement->execute();
+        $status_id = $statement->fetch();
+        $status = $em->getRepository('WarehouseBundle:Status')->find($status_id['id']);
+
+        return $status;
+    }
+
+
 }

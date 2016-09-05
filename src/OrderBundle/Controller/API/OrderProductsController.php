@@ -2,8 +2,8 @@
 
 namespace OrderBundle\Controller\API;
 
-use InventoryBundle\Entity\PurchaseOrder;
-use InventoryBundle\Entity\PurchaseOrderProductVariant;
+use OrderBundle\Entity\Orders;
+use OrderBundle\Entity\OrdersProductVariant;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -32,23 +32,28 @@ class OrderProductsController extends Controller
         $info = $request->request->get('form_info');
         $products = array();
 
+        $order = new Orders($info);
+
+        $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
+        $order->setStatus($status);
+        $order->getUser($this->getUser());
+
         foreach($cart as $item) {
             if($item != '') {
-                $image_url = '/';
-//                foreach($prod->getImages() as $image) {
-//                    $image_url .= $image->getWebPath();
-//                    break;
-//                }
-//
-//                foreach($prod->getVariants() as $variant)
-//                    $products[] = array(
-//                        'name' => $prod->getName().": ".$variant->getName(),
-//                        'id' => $variant->getId(),
-//                        'image_url' => $image_url
-//                    );
+                $product_variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['variant_id']);
+                $orders_product_variant = new OrdersProductVariant();
+                $orders_product_variant->setOrder($order);
+                $orders_product_variant->setPrice($order['cost']);
+                $orders_product_variant->setProductVariant($product_variant);
+                $em->persist($orders_product_variant);
             }
 
         }
+
+        $em->persist($order);
+        $em->flush();
+
+        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
 
         return JsonResponse::create(true);
     }
