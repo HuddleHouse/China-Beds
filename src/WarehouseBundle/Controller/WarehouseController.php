@@ -79,10 +79,10 @@ class WarehouseController extends Controller
     public function showAction(\WarehouseBundle\Entity\Warehouse $warehouse)
     {
         $deleteForm = $this->createDeleteForm($warehouse);
-        $inventory_data = array();
 
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
+        $inventory_data = $em->getRepository('WarehouseBundle:WareHouse')->getWarehouseInventoryArray($warehouse);
         $active_po = $em->getRepository('WarehouseBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
         $all_po = $em->getRepository('WarehouseBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 

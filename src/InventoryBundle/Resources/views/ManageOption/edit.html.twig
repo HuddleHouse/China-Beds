@@ -16,8 +16,7 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-                paging: false
-            });
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
 
 
@@ -108,7 +107,7 @@
         <hr style="border-top: 1px solid #8aa4af;">
         <input class="btn btn-raised btn-success" type="submit" value="Update" form="manage_option"/>
         {{ form_start(delete_form) }}
-        <input style="margin-top: -56px; margin-left: 81px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
+        <input class="btn btn-raised btn-warning" type="submit" value="Delete">
         {{ form_end(delete_form) }}
 
 

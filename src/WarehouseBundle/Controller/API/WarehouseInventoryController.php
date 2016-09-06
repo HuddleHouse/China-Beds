@@ -69,6 +69,6 @@ class WarehouseInventoryController extends Controller
 
         if($inventory_data === true)
             return JsonResponse::create(true);
-        return JsonResponse::create($inventory_data);
+        return JsonResponse::create(array('inventory' => $inventory_data));
     }
 }
