@@ -16,25 +16,12 @@
     <script>
         $(document).ready(function () {
             $('#inventory-table').DataTable({
-                "iDisplayLength": 50, responsive: true});
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
 
         var app = angular.module('myApp', ['ngFileUpload']);
         app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
-            $scope.inventory_data = [];
-
-            $.ajax({
-                beforeSend: function () {
-                },
-                type: 'POST',
-                url: "{{ path('api_get_warehouse_inventory') }}",
-                data: {warehouse_id: {{ warehouse.id }}},
-                success: function (data) {
-                    $scope.$apply(function () {
-                        $scope.inventory_data = data;
-                    });
-                }
-            });
+            $scope.inventory_data = {{ inventory_data | json_encode | raw }};
 
             $scope.addInventory = function () {
                 var variant_id = $('#variant').val();
