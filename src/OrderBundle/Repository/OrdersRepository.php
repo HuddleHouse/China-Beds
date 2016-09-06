@@ -11,9 +11,8 @@ use OrderBundle\Entity\Orders;
  */
 class OrdersRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function setWarehouseDataForOrder($id) {
+    public function setWarehouseDataForOrder(Orders $order) {
         $em = $this->getEntityManager();
-        $order = $em->getRepository('OrderBundle:Orders')->find($id);
 
         foreach($order->getProductVariants() as $productVariant) {
             $i = 1;

@@ -4,6 +4,7 @@ namespace OrderBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\ProductVariant;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -106,6 +107,34 @@ class Orders
      * @ORM\Column(name="ship_zip", type="integer", nullable=true)
      */
     private $ship_zip;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="discount", type="integer", nullable=true)
+     */
+    private $discount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shipping", type="integer", nullable=true)
+     */
+    private $shipping;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="subtotal", type="integer", nullable=true)
+     */
+    private $subtotal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="total", type="integer", nullable=true)
+     */
+    private $total;
 
     /**
      * @var string
@@ -499,6 +528,13 @@ class Orders
         $this->product_variants = $product_variants;
     }
 
+    public function addProductVariants(OrdersProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
     /**
      * @return mixed
      */
@@ -513,6 +549,70 @@ class Orders
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscount()
+    {
+        return $this->discount / 100;
+    }
+
+    /**
+     * @param int $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount * 100;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShipping()
+    {
+        return $this->shipping / 100;
+    }
+
+    /**
+     * @param int $shipping
+     */
+    public function setShipping($shipping)
+    {
+        $this->shipping = $shipping * 100;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal / 100;
+    }
+
+    /**
+     * @param int $subtotal
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal * 100;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal()
+    {
+        return $this->total / 100;
+    }
+
+    /**
+     * @param int $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total * 100;
     }
 
 
