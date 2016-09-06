@@ -18,7 +18,6 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         foreach($order->getProductVariants() as $productVariant) {
             $warehouse1_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse1());
             $warehouse2_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse2());
-            $warehouse3_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse3());
             $ordered_quantity = $productVariant->getQuantity();
             $warehouse_info = $productVariant->getWarehouseInfo();
             $warehouse_info->clear();
