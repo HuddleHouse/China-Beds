@@ -37,7 +37,6 @@ class OrderProductsController extends Controller
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
         $order->setUser($this->getUser());
-        $em->persist($order);
 
         foreach($cart as $item) {
             if($item != '') {
@@ -48,14 +47,14 @@ class OrderProductsController extends Controller
                 $orders_product_variant->setQuantity($item['quantity']);
                 $orders_product_variant->setProductVariant($product_variant);
                 $em->persist($orders_product_variant);
+                $order->addProductVariants($orders_product_variant);
             }
-
         }
 
         $em->persist($order);
         $em->flush();
 
-        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order->getId());
+        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
 
         return JsonResponse::create($order->getId());
     }
