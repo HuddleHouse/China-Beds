@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Repository;
 use OrderBundle\Entity\Orders;
+use OrderBundle\Entity\OrdersWarehouseInfo;
 
 /**
  * OrdersRepository
@@ -15,7 +16,47 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
 
         foreach($order->getProductVariants() as $productVariant) {
-            $i = 1;
+            $warehouse1_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse1());
+            $warehouse2_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse2());
+            $warehouse3_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse3());
+            $ordered_quantity = $productVariant->getQuantity();
+            $warehouse_info = $productVariant->getWarehouseInfo();
+            $warehouse_info->clear();
+            $productVariant = $em->merge($productVariant);
+            $em->flush();
+
+            if($ordered_quantity <= $warehouse1_inventory) {
+                $order_warehouse_info = new OrdersWarehouseInfo($ordered_quantity, $productVariant, $order->getUser()->getWarehouse1());
+                $em->persist($order_warehouse_info);
+                $productVariant->addWarehouseInfo($order_warehouse_info);
+            }
+            else if($ordered_quantity <= ($warehouse1_inventory + $warehouse2_inventory)) {
+                $order_warehouse_info = new OrdersWarehouseInfo($warehouse1_inventory, $productVariant, $order->getUser()->getWarehouse1());
+                $em->persist($order_warehouse_info);
+                $productVariant->addWarehouseInfo($order_warehouse_info);
+
+                $ordered_quantity -= $warehouse1_inventory;
+                $order_warehouse_info = new OrdersWarehouseInfo($ordered_quantity, $productVariant, $order->getUser()->getWarehouse1());
+                $em->persist($order_warehouse_info);
+                $productVariant->addWarehouseInfo($order_warehouse_info);
+            }
+            else {
+                $order_warehouse_info = new OrdersWarehouseInfo($warehouse1_inventory, $productVariant, $order->getUser()->getWarehouse1());
+                $em->persist($order_warehouse_info);
+                $ordered_quantity -= $warehouse1_inventory;
+                $productVariant->addWarehouseInfo($order_warehouse_info);
+
+                $order_warehouse_info = new OrdersWarehouseInfo($warehouse2_inventory, $productVariant, $order->getUser()->getWarehouse1());
+                $em->persist($order_warehouse_info);
+                $ordered_quantity -= $warehouse2_inventory;
+                $productVariant->addWarehouseInfo($order_warehouse_info);
+
+                $order_warehouse_info = new OrdersWarehouseInfo($ordered_quantity, $productVariant, $order->getUser()->getWarehouse1());
+                $em->persist($order_warehouse_info);
+                $productVariant->addWarehouseInfo($order_warehouse_info);
+            }
         }
+        $em->persist($productVariant);
+        $em->flush();
     }
 }
