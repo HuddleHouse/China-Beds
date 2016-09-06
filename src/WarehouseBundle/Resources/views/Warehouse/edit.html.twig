@@ -23,9 +23,9 @@
 
 {% block content %}
     <div class="table">
-    {% include '@Inventory/Warehouse/form.html.twig' %}
+    {% include '@Warehouse/Warehouse/form.html.twig' %}
             {{ form_start(delete_form) }}
-            <input style="margin-top: -56px; margin-left: 71px;" class="btn btn-raised btn-warning" type="submit" value="Delete">
+            <input class="btn btn-raised btn-warning" type="submit" value="Delete">
             {{ form_end(delete_form) }}
     </div>
 {% endblock %}
