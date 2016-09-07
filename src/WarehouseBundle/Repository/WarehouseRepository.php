@@ -65,8 +65,9 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllWarehousesArray() {
         $warehouses = $this->findAll();
+        $data = array();
 
-        foreach($warehouses as $warehouse) {
+        foreach($warehouses as $warehouse)
             $data[] = array(
                 'id' => $warehouse->getId(),
                 'name' => $warehouse->getName(),
@@ -74,7 +75,24 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
                 'quantity' => $this->getWarehouseInventory($warehouse),
                 'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
             );
-        }
+
+        return $data;
+    }
+
+    public function getAllWarehousesInChannelArray($channelId) {
+        $warehouses = $this->findAll();
+        $data = array();
+
+        foreach($warehouses as $warehouse)
+            if(in_array($channelId, $warehouse->getChannelIdsArray()))
+                $data[] = array(
+                    'id' => $warehouse->getId(),
+                    'name' => $warehouse->getName(),
+                    'list_id' => $warehouse->getListId(),
+                    'quantity' => $this->getWarehouseInventory($warehouse),
+                    'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                );
+
         return $data;
     }
 

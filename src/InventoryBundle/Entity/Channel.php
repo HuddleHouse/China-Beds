@@ -3,6 +3,7 @@
 namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Channel
@@ -45,6 +46,7 @@ class Channel
      *
      */
     protected $users;
+
 
     public function __construct() {
         $this->product_channels = new ArrayCollection();

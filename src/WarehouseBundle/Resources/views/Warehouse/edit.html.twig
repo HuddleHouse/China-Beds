@@ -19,6 +19,15 @@
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
     </script>
+    <style>
+        #warehouse_channels {
+            overflow: auto;
+        }
+        #warehouse_channels input, #warehouse_channels label {
+            display: inline;
+            margin-right: 5px;
+        }
+    </style>
 {% endblock footer %}
 
 {% block content %}

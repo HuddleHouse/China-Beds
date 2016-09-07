@@ -26,6 +26,13 @@ class WarehouseType extends AbstractType
             ->add('address2', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('channels',  EntityType::class, array(
+                'class' => 'InventoryBundle:Channel',
+                'label' => 'Channels',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control'),
+                'expanded'  => true,
+                'multiple' => true))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
                 'label' => 'State',
