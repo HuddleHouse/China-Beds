@@ -3,6 +3,7 @@
 namespace WarehouseBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -143,9 +144,16 @@ class Warehouse
      */
     private $orders_warehouse_info;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\Channel")
+     * @ORM\JoinTable(name="warehouse_channels")
+     */
+    private $channels;
+
     public function __construct() {
         $this->purchase_orders = new ArrayCollection();
         $this->stock_adjustments = new ArrayCollection();
+        $this->channels = new ArrayCollection();
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
         $this->users_3 = new ArrayCollection();
@@ -153,6 +161,52 @@ class Warehouse
         $this->stock_transfer_receiving = new ArrayCollection();
         $this->inventory = new ArrayCollection();
         $this->orders_warehouse_info = new ArrayCollection();
+    }
+
+    public function getChannelIdsArray() {
+        $data = array();
+        foreach($this->channels as $channel)
+            $data[] = $channel->getId();
+        return $data;
+    }
+
+    public function getChannelsArray() {
+        $data = array();
+        foreach($this->channels as $channel)
+            $data[$channel->getId()] = array(
+                'id' => $channel->getId(),
+                'name' => $channel->getName(),
+                'url' => $channel->getUrl()
+            );
+        return $data;
+    }
+
+    public function addChannel($channel)
+    {
+        if(!$this->channels->contains($channel))
+            $this->channels[] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Remove channels
+     *
+     * @param \InventoryBundle\Entity\Channel $channel
+     */
+    public function removeChannel($channel)
+    {
+        $this->channels->removeElement($channel);
+    }
+
+    /**
+     * Get channels
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getChannels()
+    {
+        return $this->channels;
     }
 
     /**
@@ -540,7 +594,6 @@ class Warehouse
     {
         $this->orders_warehouse_info = $orders_warehouse_info;
     }
-    
     
 }
 

@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     <div class="wrapper">
     <header class="main-header">
 
@@ -47,12 +46,19 @@
         {% set sidebar_user_channels = app.session.get('user_channels') %}
 {#{{ dump(route_names) }}#}
         <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
+        {% set tmp = app.request.headers.get('referer')|split('/') %}
+        {% set referer_array = [] %}
+        {% for t in tmp %}
+            {% if t != "" %}
+                {% set referer_array = referer_array|merge([t]) %}
+            {% endif %}
+        {% endfor %}
         {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
         {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
         {% set sidebar_access_restriction = ['access_restriction'] %}
         {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
         {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show', 'admin_price_group_edit_prices'] %}
-        {% set sidebar_warehouse = ['warehouse_index', 'warehouse_new', 'warehouse_edit', 'warehouse_show', 'warehouse_new_purchase_order', 'warehouse_inventory_show', 'warehouse_new_stock_transfer', 'warehouse_new_stock_adjustment'] %}
+        {% set sidebar_warehouse = ['warehouse_index', 'warehouse_channelled', 'warehouse_new', 'warehouse_edit', 'warehouse_show', 'warehouse_new_purchase_order', 'warehouse_inventory_show', 'warehouse_new_stock_transfer', 'warehouse_new_stock_adjustment'] %}
         {% set sidebar_warehouse_inventory = ['warehouse_inventory_index', 'warehouse_inventory_show'] %}
         {% set sidebar_assortment = ['category_index', 'category_new', 'category_edit', 'category_show'] %}
         {% set sidebar_pop_item_edit = ['pop_item_index', 'pop_item_new', 'pop_item_edit', 'pop_item_show'] %}
@@ -247,10 +253,15 @@
                             </a>
                             <ul class="treeview-menu">
                                 {% if 'warehouse_index' in route_names %}
-                                    <li {% if (app.request.get('_route') in sidebar_warehouse) %} class="active"{% endif %}>
+                                    <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_channelled" and (app.request.get('_route_params') == [] or referer_array|last == "warehouse")) %} class="active"{% endif %}>
                                         <a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                     </li>
                                 {% endif %}
+                                {% for channel in sidebar_user_channels %}
+                                    <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_index" and (channel.id == app.request.get('_route_params').channelId ?? false or (referer_array|last matches '/^\\d+$/' and "channel" in referer_array))) %} class="active"{% endif %}>
+                                        <a href="{{ path('warehouse_channelled', {'channelId': channel.id}) }}"><i class="fa fa-circle-o"></i>{{ channel.name }} Warehouses</a>
+                                    </li>
+                                {%  endfor %}
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Purchase Orders</a>
                                 </li>

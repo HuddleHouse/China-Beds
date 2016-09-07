@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Controller;
 
+use InventoryBundle\Entity\Channel;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,6 +29,21 @@ class WarehouseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+
+        return $this->render('@Warehouse/Warehouse/index.html.twig', array(
+            'warehouses' => $warehouses,
+        ));
+    }
+
+    /**
+     * Shows Warehouses in a Channel
+     *
+     * @Route("/channel/{channelId}", name="warehouse_channelled")
+     */
+    public function channelledIndexAction($channelId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesInChannelArray($channelId);
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(
             'warehouses' => $warehouses,
