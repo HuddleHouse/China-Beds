@@ -93,11 +93,17 @@
 
         }]);
 
+        $('.stripe-button-el').addClass('btn btn-raised btn-success my-stripe-button');
+        $('.stripe-button-el').removeClass('stripe-button-el');
+
     </script>
 {% endblock footer %}
 
 {% block content %}
     <style>
+        .my-stripe-button {
+            height: 37px;
+        }
         .cart_info {
             background-color: #fff !important;
             text-align: center;
@@ -153,6 +159,7 @@
 
     </div>
 
+<form action="/your-charge-code" method="POST">
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
                 <div class="row">
@@ -274,15 +281,23 @@
                 <div class="row no-print">
                     <div class="col-xs-12">
                         <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
-                        <button type="button" class="btn btn-raised btn-success pull-right"><i class="fa fa-credit-card"></i> Pay With Card
+                        <button type="button" class="btn btn-raised" style="margin-right: 5px;">
+                            Pay With Ledger Balance
                         </button>
-                        <button type="button" class="btn btn-raised btn-primary pull-right" style="margin-right: 5px;">
-                            <i class="fa fa-download"></i> Use Ledger Balance
-                        </button>
+                        <script
+                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key="pk_test_4B0NjjCkg1JumywOlyymXv3K"
+                                data-amount="{{ order.subtotal*100 }}"
+                                data-name="Bed Boss"
+                                data-description="Payment"
+                                data-locale="auto">
+                        </script>
+
                     </div>
                 </div>
 
     </div>
 </div>
 
+</form>
 {% endblock %}
