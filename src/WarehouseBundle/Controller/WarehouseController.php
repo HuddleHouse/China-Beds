@@ -38,12 +38,12 @@ class WarehouseController extends Controller
     /**
      * Shows Warehouses in a Channel
      *
-     * @Route("/channel/{channelId}", name="warehouse_channelled")
+     * @Route("/channel/{channelName}", name="warehouse_channelled")
      */
-    public function channelledIndexAction($channelId)
+    public function channelledIndexAction($channelName)
     {
         $em = $this->getDoctrine()->getManager();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesInChannelArray($channelId);
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesInChannelArray($channelName);
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(
             'warehouses' => $warehouses,

@@ -163,10 +163,10 @@ class Warehouse
         $this->orders_warehouse_info = new ArrayCollection();
     }
 
-    public function getChannelIdsArray() {
+    public function getChannelNamesArray() {
         $data = array();
         foreach($this->channels as $channel)
-            $data[] = $channel->getId();
+            $data[] = $channel->getName();
         return $data;
     }
 
