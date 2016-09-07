@@ -75,11 +75,24 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
+            $scope.hasError = 0;
 
+            $scope.validate = function () {
+                if($scope.form_info['pick_up'] == true) {
+                    var is_error = 0;
+                    if(typeof($scope.form_info['po']) == "undefined" || $scope.form_info['po'] == null) {
+                        is_error += 1;
+                        $('#po').addClass('error');
+                    }
 
+                }
+            };
 
             $scope.updateCart = function (variantId, cost, max) {
+
                 if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
+
+
                     $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
                 }
                 else {
@@ -89,18 +102,23 @@
                         cost: cost
                     };
                 }
+
                 if($scope.product_variant_order_quan[variantId] > max) {
                     $('#'+variantId).addClass('error');
                     $('#submit-button').prop('disabled', true);
                     $('#submit-button').addClass('button-error');
-                    console.log('error');
+                    $scope.hasError += 1;
                 }
                 else {
                     $('#'+variantId).removeClass('error', 300);
-                    $('#submit-button').prop('disabled', false);
-                    $('#submit-button').removeClass('button-error');
                 }
 
+                if($scope.hasError == 0) {
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
+
+                console.log($scope.hasError);
                 $scope.calculateCart();
             };
 
@@ -109,7 +127,7 @@
                     $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please select to Ship the Items or to Pick them up.</div>");
                 else if($scope.cart_num_items == 0)
                     $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please add at least one item to your cart.</div>");
-                else{
+                else {
                     addSpinner();
                     $.ajax({
                         type: 'POST',
@@ -131,6 +149,10 @@
 
             $scope.warehouseChange = function () {
                 var warehouse = $scope.cart['pick_up_warehouse'];
+                $('#submit-button').prop('disabled', false);
+                $('#submit-button').removeClass('button-error');
+                console.log($scope.cart['pick_up_warehouse']);
+
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_update_products_for_channel') }}",
@@ -201,6 +223,11 @@
                     $('#pick_up_date').show();
                     $('#pick_up_agent').show();
                     $('#pick_up_warehouse').show();
+
+                    if($scope.cart['pick_up_warehouse'] == undefined || $scope.cart['pick_up_warehouse'] == null) {
+                        $('#submit-button').prop('disabled', true);
+                        $('#submit-button').addClass('button-error');
+                    }
                 }
                 else {
                     if($scope.is_retailer == 1)
@@ -329,7 +356,7 @@
             background-color: lightcoral !important;
         }
         .error {
-            border: 2px solid lightcoral;
+            border: 3px solid lightcoral;
         }
 
         @media (min-width: 992px) {
