@@ -42,6 +42,11 @@ class Channel
     private $product_channels;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="channel")
+     */
+    private $orders;
+
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="user_channels")
      *
      */
@@ -133,6 +138,23 @@ class Channel
     {
         $this->users = $users;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param mixed $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
+    }
+
 
 }
 

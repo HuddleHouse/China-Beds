@@ -56,19 +56,6 @@
         });
 
 
-//        $('.input_class_checkbox').each(function(){
-//            $(this).hide().after('<div class="class_checkbox" />');
-//
-//        });
-//
-//        $('.class_checkbox').on('click',function(){
-//            console.log('matt');
-//            $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
-//        });
-
-
-
-
         var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
@@ -76,6 +63,7 @@
             $scope.products = {{ products | json_encode | raw}};
             $scope.states = {{ states | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
+            $scope.user_warehouses = {{ user_warehouses | json_encode | raw}};
             $scope.cart_num_items = 0;
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
@@ -148,14 +136,15 @@
             }
 
             $scope.shipping = function () {
-                console.log($scope.form_info['ship']);
-
                 if($scope.form_info['ship'] == true) {
                     if($scope.is_retailer == 1)
                         $('#retailer-ship').show();
                     if($scope.is_distributor == 1)
                         $('#distributor-ship').show();
                     $scope.form_info['pick_up'] = false;
+                    $('#pick_up_date').hide();
+                    $('#pick_up_agent').hide();
+                    $('#pick_up_warehouse').hide();
                 }
                 else {
                     if($scope.is_retailer == 1)
@@ -173,12 +162,16 @@
                     if($scope.is_distributor == 1)
                         $('#distributor-ship').hide();
                     $scope.form_info['ship'] = false;
+                    $('#pick_up_date').show();
+                    $('#pick_up_agent').show();
+                    $('#pick_up_warehouse').show();
                 }
                 else {
                     if($scope.is_retailer == 1)
                         $('#retailer-ship').show();
                     if($scope.is_distributor == 1)
                         $('#distributor-ship').show();
+                    $scope.form_info['pick_up'] = false;
                 }
             };
 

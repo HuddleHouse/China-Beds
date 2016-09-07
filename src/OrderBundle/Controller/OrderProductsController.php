@@ -37,13 +37,17 @@ class OrderProductsController extends Controller
         else
             $this->redirectToRoute('404');
 
+        $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
+        $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
+        $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
             'categories' => $categories,
             'channel' => $channel,
             'warehouses' => $warehouses,
-            'states' => $states
+            'states' => $states,
+            'user_warehouses' => $user_warehouses
         ));
     }
 

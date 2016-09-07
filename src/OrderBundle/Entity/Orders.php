@@ -161,6 +161,12 @@ class Orders
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="orders")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     */
+    private $channel;
+
 
     public function __construct($info = null)
     {
@@ -615,6 +621,22 @@ class Orders
     public function setTotal($total)
     {
         $this->total = $total * 100;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 
 

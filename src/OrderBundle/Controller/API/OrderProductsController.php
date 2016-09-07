@@ -37,6 +37,7 @@ class OrderProductsController extends Controller
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
         $order->setSubtotal($total);
+        $order->setChannel($channel);
         $order->setUser($this->getUser());
 
         foreach($cart as $item) {
