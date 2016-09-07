@@ -47,6 +47,7 @@ class OrderProductsController extends Controller
             'channel' => $channel,
             'warehouses' => $warehouses,
             'states' => $states,
+            'user' => $user,
             'user_warehouses' => $user_warehouses
         ));
     }

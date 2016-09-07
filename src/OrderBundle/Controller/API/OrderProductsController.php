@@ -61,5 +61,30 @@ class OrderProductsController extends Controller
         return JsonResponse::create($order->getId());
     }
 
+    /**
+     * @Route("/api_update_products_for_channel", name="api_update_products_for_channel")
+     */
+    public function updateProductsForChannel(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $warehouse_id = $request->request->get('warehouse_id');
+        if($warehouse_id != null)
+            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+
+        $user_id = $request->request->get('user_id');
+        $channel_id = $request->request->get('channel_id');
+        $user = $em->getRepository('AppBundle:User')->find($user_id);
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
+
+        if($warehouse_id != null)
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse);
+        else
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
+
+
+        return JsonResponse::create($product_data);
+    }
+
+
 }
 
