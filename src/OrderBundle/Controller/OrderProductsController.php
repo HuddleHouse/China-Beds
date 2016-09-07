@@ -63,7 +63,7 @@ class OrderProductsController extends Controller
         $user_channels = $user->getUserChannelsArray();
 
         if($user_channels[$channel->getId()])
-            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
         else
             $this->redirectToRoute('404');
 
@@ -71,7 +71,8 @@ class OrderProductsController extends Controller
         return $this->render('@Order/OrderProducts/view-order.html.twig', array(
             'channel' => $channel,
             'order' => $order,
-            'user' => $user
+            'user' => $user,
+            'product_data' => $product_data
         ));
     }
 

@@ -173,10 +173,12 @@ class Orders
                 $this->pickUpDate = new \DateTime($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
-            if(isset($info['pick_up']))
-                $this->isPickUp = $info['pick_up'];
-            else if(isset($info['ship']))
-                $this->isPickUp = !$info['ship'];
+
+            if(isset($info['pick_up']) && $info['pick_up'] == true)
+                $this->isPickUp = true;
+            else if(isset($info['ship']) && $info['ship'] == true)
+                $this->isPickUp = false;
+
             if(isset($info['comments']))
                 $this->comments = $info['comments'];
             if(isset($info['ship_name']))

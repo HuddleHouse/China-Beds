@@ -25,9 +25,6 @@
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
             $scope.is_retailer = {{ app.user.isRetailer ? 1 : 0 }};
-            $scope.products = {{ products | json_encode | raw}};
-            $scope.states = {{ states | json_encode | raw}};
-            $scope.warehouses = {{ warehouses | json_encode | raw}};
             $scope.cart_num_items = 0;
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
@@ -147,6 +144,9 @@
         .error {
             border: 2px solid lightcoral;
         }
+        address {
+            line-height: 1.5 !important;
+        }
     </style>
 
     <div id="error-message">
@@ -180,9 +180,9 @@
                         </address>
                         {% else %}
                         <address>
-                            <strong>Pick Up</strong>
+                            <strong>Pick Up</strong><br>
                             <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
-                            <strong>Pick Up Date:</strong> {{ order.pickUpDate | date }}<br>
+                            <strong>Date:</strong> {{ order.pickUpDate | date }}<br>
 
                         </address>
                         {% endif %}
@@ -199,33 +199,35 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-
+<hr>
+        {% for prod in product_data %}
                 <!-- Table row -->
-                <div class="row" style="padding-top: 30px;">
+                <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header"><b>Warehouse Location: </b>{{ prod[0].warehouse_name }}</h4>
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Qty</th>
+                                <th style="width: 10%;">Qty</th>
                                 <th>Product</th>
-                                <th>Subtotal</th>
+                                <th style="width: 24%;">Subtotal</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for prod in order.productVariants %}
+                            {% for item in prod %}
                                 <tr>
-                                    <td>{{ prod.quantity }}</td>
-                                    <td>Call of Duty</td>
-                                    <td>$64.50</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.product_name }}</td>
+                                    <td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>
                                 </tr>
                             {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
                     <!-- /.col -->
                 </div>
-                <!-- /.row -->
+        <!-- /.row -->
+        {% endfor %}
 
                 <div class="row" style="padding-top: 40px;">
                     <!-- accepted payments column -->
@@ -236,24 +238,22 @@
                         <img src="/images/credit/american-express.png" alt="American Express">
                         <img src="/images/credit/paypal2.png" alt="Paypal">
 
+                        <h5>Comments</h5>
                         <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg
-                            dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                            {{ order.comments }}
                         </p>
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-6">
-                        <p class="lead">Amount Due 2/22/2014</p>
-
                         <div class="table-responsive">
                             <table class="table">
                                 <tbody><tr>
                                     <th style="width:50%">Subtotal:</th>
-                                    <td>$250.30</td>
+                                    <td><h6>${{ order.subtotal |number_format(2, '.', ',') }}</h6></td>
                                 </tr>
                                 <tr>
                                     <th>Tax (9.3%)</th>
-                                    <td>$10.34</td>
+                                    <td>?</td>
                                 </tr>
                                 <tr>
                                     <th>Shipping:</th>
