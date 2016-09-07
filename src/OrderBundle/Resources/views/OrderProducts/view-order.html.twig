@@ -159,7 +159,7 @@
                     <div class="col-xs-12">
                         <h2 class="page-header">
                             <i class="fa fa-globe"></i> AdminLTE, Inc.
-                            <div class="pull-right">Date: 2/10/2014</div>
+                            <div class="pull-right">Date: {{ order.submitDate | date }}</div>
                         </h2>
                     </div>
                     <!-- /.col -->
@@ -168,27 +168,33 @@
                 <div class="row invoice-info">
                     <!-- /.col -->
                     <div class="col-sm-4 invoice-col">
-                        To
+
+                        {% if order.isPickUp == 0%}
                         <address>
-                            <strong>John Doe</strong><br>
-                            795 Folsom Ave, Suite 600<br>
-                            San Francisco, CA 94107<br>
-                            Phone: (555) 539-1037<br>
-                            Email: john.doe@example.com
+                            <strong>Shipping To</strong>
+                            {{ order.shipName }}<br>
+                            {{ order.shipAddress }}, {{ order.shipAddress2 }}<br>
+                            {{ order.shipCity }},  {{ order.shipZip }}<br>
+                            Phone: {{ order.shipPhone }}<br>
+                            Email: {{ order.shipEmail }}
                         </address>
+                        {% else %}
+                        <address>
+                            <strong>Pick Up</strong>
+                            <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
+                            <strong>Pick Up Date:</strong> {{ order.pickUpDate | date }}<br>
+
+                        </address>
+                        {% endif %}
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-4 invoice-col">
-                        <b>Invoice #007612</b><br>
+                        <b>PO #{{ order.orderNumber }}</b><br>
                         <br>
-                        <b>Order ID:</b> 4F3S8J<br>
-                        <b>Account:</b> 968-34567
                     </div>
                     <div class="col-sm-4 invoice-col">
-                        <b>Invoice #007612</b><br>
-                        <b>Order ID:</b> 4F3S8J<br>
-                        <b>Payment Due:</b> 2/22/2014<br>
-                        <b>Account:</b> 968-34567
+                        {#<b>Payment Due:</b> 2/22/2014<br>#}
+                        {#<b>Account:</b> 968-34567#}
                     </div>
                     <!-- /.col -->
                 </div>
@@ -206,26 +212,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Call of Duty</td>
-                                <td>$64.50</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Need for Speed IV</td>
-                                <td>$50.00</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Monsters DVD</td>
-                                <td>$10.70</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Grown Ups Blue Ray</td>
-                                <td>$25.99</td>
-                            </tr>
+                            {% for prod in order.productVariants %}
+                                <tr>
+                                    <td>{{ prod.quantity }}</td>
+                                    <td>Call of Duty</td>
+                                    <td>$64.50</td>
+                                </tr>
+                            {% endfor %}
+
                             </tbody>
                         </table>
                     </div>

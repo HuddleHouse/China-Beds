@@ -61,9 +61,6 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
-        $categories = $em->getRepository('InventoryBundle:Category')->findAll();
-        $states = $em->getRepository('AppBundle:State')->findAll();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
@@ -72,11 +69,9 @@ class OrderProductsController extends Controller
 
 
         return $this->render('@Order/OrderProducts/view-order.html.twig', array(
-            'products' => $product_data,
-            'categories' => $categories,
             'channel' => $channel,
-            'warehouses' => $warehouses,
-            'states' => $states
+            'order' => $order,
+            'user' => $user
         ));
     }
 
