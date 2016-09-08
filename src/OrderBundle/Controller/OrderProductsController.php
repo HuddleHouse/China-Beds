@@ -41,6 +41,14 @@ class OrderProductsController extends Controller
         $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
 
+        $groups = $user->getGroupsArray();
+        $is_dis = $is_retail = 0;
+
+        if(isset($groups['Retailer']))
+            $is_retail = 1;
+        if(isset($groups['Distributor']))
+            $is_dis = 1;
+
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
             'categories' => $categories,
@@ -48,7 +56,9 @@ class OrderProductsController extends Controller
             'warehouses' => $warehouses,
             'states' => $states,
             'user' => $user,
-            'user_warehouses' => $user_warehouses
+            'user_warehouses' => $user_warehouses,
+            'is_retail' => $is_retail,
+            'is_dis' => $is_dis
         ));
     }
 
@@ -72,12 +82,21 @@ class OrderProductsController extends Controller
         else
             $this->redirectToRoute('404');
 
+        $groups = $user->getGroupsArray();
+        $is_dis = $is_retail = 0;
+
+        if(isset($groups['Retailer']))
+            $is_retail = 1;
+        if(isset($groups['Distributor']))
+            $is_dis = 1;
 
         return $this->render('@Order/OrderProducts/view-order.html.twig', array(
             'channel' => $channel,
             'order' => $order,
             'user' => $user,
-            'product_data' => $product_data
+            'product_data' => $product_data,
+            'is_retail' => $is_retail,
+            'is_dis' => $is_dis
         ));
     }
 

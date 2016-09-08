@@ -117,18 +117,6 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_distributor = false;
-
-    /**
-     *
-     * @ORM\Column(type="boolean")
-     */
-    protected $is_retailer = true;
-
-    /**
-     *
-     * @ORM\Column(type="boolean")
-     */
     protected $is_online_intentions = true;
 
     /**
@@ -256,6 +244,15 @@ class User extends BaseUser
 
         $user_price_groups = substr($user_price_groups, 0, -2);
         return $user_price_groups;
+    }
+
+    public function getGroupsArray() {
+        //get user price groups and format string for SQL query
+        $user_groups = array();
+        foreach($this->groups as $group)
+            $user_groups[$group->getName()] = $group->getId(). ", ";
+
+        return $user_groups;
     }
 
     public function setInvitation(Invitation $invitation)
@@ -767,38 +764,5 @@ class User extends BaseUser
     {
         $this->stock_adjustments = $stock_adjustments;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getIsDistributor()
-    {
-        return $this->is_distributor;
-    }
-
-    /**
-     * @param mixed $is_distributor
-     */
-    public function setIsDistributor($is_distributor)
-    {
-        $this->is_distributor = $is_distributor;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIsRetailer()
-    {
-        return $this->is_retailer;
-    }
-
-    /**
-     * @param mixed $is_retailer
-     */
-    public function setIsRetailer($is_retailer)
-    {
-        $this->is_retailer = $is_retailer;
-    }
-
 
 }
