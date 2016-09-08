@@ -35,6 +35,7 @@ class Role extends BaseGroup
      */
     private $permissions;
 
+
     /**
      * Constructor
      */
@@ -42,6 +43,7 @@ class Role extends BaseGroup
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
