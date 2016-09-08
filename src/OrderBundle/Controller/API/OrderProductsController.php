@@ -36,8 +36,9 @@ class OrderProductsController extends Controller
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
+        $order->setSubtotal($total);
+        $order->setChannel($channel);
         $order->setUser($this->getUser());
-        $em->persist($order);
 
         foreach($cart as $item) {
             if($item != '') {
@@ -48,17 +49,42 @@ class OrderProductsController extends Controller
                 $orders_product_variant->setQuantity($item['quantity']);
                 $orders_product_variant->setProductVariant($product_variant);
                 $em->persist($orders_product_variant);
+                $order->addProductVariants($orders_product_variant);
             }
-
         }
 
         $em->persist($order);
         $em->flush();
 
-        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order->getId());
+        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
 
         return JsonResponse::create($order->getId());
     }
+
+    /**
+     * @Route("/api_update_products_for_channel", name="api_update_products_for_channel")
+     */
+    public function updateProductsForChannel(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $warehouse_id = $request->request->get('warehouse_id');
+        if($warehouse_id != null)
+            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+
+        $user_id = $request->request->get('user_id');
+        $channel_id = $request->request->get('channel_id');
+        $user = $em->getRepository('AppBundle:User')->find($user_id);
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
+
+        if($warehouse_id != null)
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse);
+        else
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
+
+
+        return JsonResponse::create($product_data);
+    }
+
 
 }
 

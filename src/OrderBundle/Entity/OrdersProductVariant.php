@@ -165,6 +165,9 @@ class OrdersProductVariant
         $this->warehouse_info = $warehouse_info;
     }
 
-
+    public function addWarehouseInfo($warehouse_info)
+    {
+        $this->warehouse_info[] = $warehouse_info;
+    }
 }
 

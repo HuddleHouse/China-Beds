@@ -40,6 +40,13 @@ class OrdersWarehouseInfo
      */
     private $warehouse;
 
+    public function __construct($quantity, $orders_product_variant, $warehouse)
+    {
+        $this->quantity = $quantity;
+        $this->orders_product_variant = $orders_product_variant;
+        $this->warehouse = $warehouse;
+    }
+
     /**
      * Get id
      *

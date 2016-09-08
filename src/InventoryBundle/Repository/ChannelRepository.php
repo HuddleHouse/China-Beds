@@ -3,6 +3,7 @@
 namespace InventoryBundle\Repository;
 use InventoryBundle\Entity\Channel;
 use AppBundle\Entity\User;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * ChannelRepository
@@ -13,7 +14,7 @@ use AppBundle\Entity\User;
 class ChannelRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getProductArrayForChannel(Channel $channel,User $user)
+    public function getProductArrayForChannel(Channel $channel,User $user, Warehouse $warehouse = null)
     {
         // select all products that are in the channel
         // get all product variants for it.
@@ -50,7 +51,10 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             );
 
             // Fix this. Would error when a user doesn't have three warehouses.
-            $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
+            if($warehouse != null)
+                $warehouse_ids = "(".$warehouse->getId().')';
+            else
+                $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
 
             // get only the product variants the user has a price in their price group for
             $connection = $em->getConnection();

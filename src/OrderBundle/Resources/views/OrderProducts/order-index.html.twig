@@ -19,11 +19,27 @@
         $(document).ready(function () {
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
-        });
 
-        var $grid = $('.grid').isotope({
-            itemSelector: '.element-item',
-            layoutMode: 'fitRows'
+            var grid = $('.grid').isotope({
+                itemSelector: '.element-item',
+                layoutMode: 'fitRows'
+            });
+
+            // bind filter button click
+            $('.filters-button-group').on( 'click', 'button', function() {
+                var filterValue = $( this ).attr('data-filter');
+                // use filterFn if matches value
+                filterValue = filterFns[ filterValue ] || filterValue;
+                grid.isotope({ filter: filterValue });
+            });
+            // change is-checked class on buttons
+            $('.button-group').each( function( i, buttonGroup ) {
+                var buttonGroup = $( buttonGroup );
+                buttonGroup.on( 'click', 'button', function() {
+                    buttonGroup.find('.is-checked').removeClass('is-checked');
+                    $( this ).addClass('is-checked');
+                });
+            });
         });
 
         // filter functions
@@ -39,33 +55,6 @@
                 return name.match( /ium$/ );
             }
         };
-        // bind filter button click
-        $('.filters-button-group').on( 'click', 'button', function() {
-            var filterValue = $( this ).attr('data-filter');
-            // use filterFn if matches value
-            filterValue = filterFns[ filterValue ] || filterValue;
-            $grid.isotope({ filter: filterValue });
-        });
-        // change is-checked class on buttons
-        $('.button-group').each( function( i, buttonGroup ) {
-            var $buttonGroup = $( buttonGroup );
-            $buttonGroup.on( 'click', 'button', function() {
-                $buttonGroup.find('.is-checked').removeClass('is-checked');
-                $( this ).addClass('is-checked');
-            });
-        });
-
-
-//        $('.input_class_checkbox').each(function(){
-//            $(this).hide().after('<div class="class_checkbox" />');
-//
-//        });
-//
-//        $('.class_checkbox').on('click',function(){
-//            console.log('matt');
-//            $(this).toggleClass('checked').prev().prop('checked',$(this).is('.checked'))
-//        });
-
 
 
 
@@ -74,8 +63,10 @@
             $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
             $scope.is_retailer = {{ app.user.isRetailer ? 1 : 0 }};
             $scope.products = {{ products | json_encode | raw}};
+            console.log($scope.products);
             $scope.states = {{ states | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
+            $scope.user_warehouses = {{ user_warehouses | json_encode | raw}};
             $scope.cart_num_items = 0;
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
@@ -84,9 +75,21 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
+            $scope.hasError = [];
 
+            $scope.validate = function () {
+                if($scope.form_info['pick_up'] == true) {
+                    var is_error = 0;
+                    if(typeof($scope.form_info['po']) == "undefined" || $scope.form_info['po'] == null) {
+                        is_error += 1;
+                        $('#po').addClass('error');
+                    }
+
+                }
+            };
 
             $scope.updateCart = function (variantId, cost, max) {
+
                 if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
                     $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
                 }
@@ -97,18 +100,28 @@
                         cost: cost
                     };
                 }
+
                 if($scope.product_variant_order_quan[variantId] > max) {
-                    $('#'+variantId).addClass('error');
-                    $('#submit-button').prop('disabled', true);
-                    $('#submit-button').addClass('button-error');
-                    console.log('error');
+                    if(jQuery.inArray(variantId, $scope.hasError) == -1) {
+                        $('#'+variantId).addClass('error');
+                        $('#submit-button').prop('disabled', true);
+                        $('#submit-button').addClass('button-error');
+                        $scope.hasError.push(variantId);
+                    }
                 }
                 else {
-                    $('#'+variantId).removeClass('error', 300);
-                    $('#submit-button').prop('disabled', false);
-                    $('#submit-button').removeClass('button-error');
+                    if(jQuery.inArray(variantId, $scope.hasError) > -1) {
+                        $('#'+variantId).removeClass('error', 300);
+                        var index = $scope.hasError.indexOf(variantId);
+                        $scope.hasError.splice(index,1);
+                        if($scope.hasError.length == 0) {
+                            $('#submit-button').removeClass('button-error');
+                            $('#submit-button').prop('disabled', false);
+                        }
+                    }
                 }
 
+                console.log(jQuery.inArray(variantId, $scope.hasError));
                 $scope.calculateCart();
             };
 
@@ -117,7 +130,7 @@
                     $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please select to Ship the Items or to Pick them up.</div>");
                 else if($scope.cart_num_items == 0)
                     $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please add at least one item to your cart.</div>");
-                else{
+                else {
                     addSpinner();
                     $.ajax({
                         type: 'POST',
@@ -130,12 +143,62 @@
                         },
                         success: function (data) {
                                 window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });
-                }
+                        }
                     });
                 }
 
-
                 console.log($scope.form_info);
+            };
+
+            $scope.warehouseChange = function () {
+                var warehouse = $scope.cart['pick_up_warehouse'];
+//                $('#submit-button').prop('disabled', false);
+//                $('#submit-button').removeClass('button-error');
+                console.log($scope.cart['pick_up_warehouse']);
+                $scope.setAll($scope.product_variant_order_quan, 0);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_update_products_for_channel') }}",
+                    dataType: 'json',
+                    data: {warehouse_id: $scope.cart['pick_up_warehouse'].id, user_id: {{ user.id}}, channel_id: {{ channel.id }}  },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.cart = [];
+                            $scope.products = data;
+                            $scope.cart['pick_up_warehouse'] = warehouse;
+                        });
+                    }
+                });
+            };
+
+            $scope.setAll = function (a, v) {
+                var i, n = a.length;
+                for (i = 0; i < n; ++i) {
+                    a[i] = v;
+                }
+                $('.variant_quantity').removeClass('error');
+                $scope.cart_num_items = 0;
+                $scope.cart_total = 0.00;
+                $('#submit-button').removeClass('button-error');
+                $('#submit-button').prop('disabled', false);
+                $scope.hasError = [];
+            };
+            
+            $scope.getAllProducts = function () {
+                $scope.setAll($scope.product_variant_order_quan, 0);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_update_products_for_channel') }}",
+                    dataType: 'json',
+                    data: {user_id: {{ user.id}}, channel_id: {{ channel.id }}  },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.cart = [];
+                            $scope.products = data;
+                        });
+                    }
+                });
             };
 
             $scope.calculateCart = function () {
@@ -148,14 +211,16 @@
             }
 
             $scope.shipping = function () {
-                console.log($scope.form_info['ship']);
-
                 if($scope.form_info['ship'] == true) {
                     if($scope.is_retailer == 1)
                         $('#retailer-ship').show();
                     if($scope.is_distributor == 1)
                         $('#distributor-ship').show();
                     $scope.form_info['pick_up'] = false;
+                    $('#pick_up_date').hide();
+                    $('#pick_up_agent').hide();
+                    $('#pick_up_warehouse').hide();
+                    $scope.getAllProducts();
                 }
                 else {
                     if($scope.is_retailer == 1)
@@ -173,16 +238,27 @@
                     if($scope.is_distributor == 1)
                         $('#distributor-ship').hide();
                     $scope.form_info['ship'] = false;
+                    $('#pick_up_date').show();
+                    $('#pick_up_agent').show();
+                    $('#pick_up_warehouse').show();
+
+//                    if($scope.cart['pick_up_warehouse'] == undefined || $scope.cart['pick_up_warehouse'] == null) {
+//                        $('#submit-button').prop('disabled', true);
+//                        $('#submit-button').addClass('button-error');
+//                    }
                 }
                 else {
                     if($scope.is_retailer == 1)
                         $('#retailer-ship').show();
                     if($scope.is_distributor == 1)
                         $('#distributor-ship').show();
+                    $scope.form_info['pick_up'] = false;
                 }
             };
 
         }]);
+
+
 
     </script>
 {% endblock footer %}
@@ -256,7 +332,7 @@
             font-size: 18px;
         }
         .element-item {
-            padding: 15px;
+            padding: 0px;
             min-height: 285px;
         }
         .col-md-2 {
@@ -280,6 +356,8 @@
              max-width: 15%;
             width: 12%;
              display: inline-block;
+            margin-left: 3px;
+            margin-right: 3px;
          }
         #retailer-ship {
             width: 95%;
@@ -296,11 +374,17 @@
             background-color: lightcoral !important;
         }
         .error {
-            border: 2px solid lightcoral;
+            border: 3px solid lightcoral;
+        }
+
+        @media (min-width: 992px) {
+            .col-md-6 {
+                width: 47% !important;
+            }
         }
     </style>
 
-
+<form data-toggle="validator" role="form">
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
@@ -358,18 +442,19 @@
 
         <div class="row">
             <div class="grid">
-                {% for product in products %}
-                    <div class="col-md-6 element-item {{ product.cat_ids }}">
+                {#{% for product in products %}#}
+                {% verbatim %}
+                    <div ng-repeat="product in products track by product.id" class="col-md-6 element-item {{ product.cat_ids }}">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
                                 <center>{{ product.name }}</center>
                             </div>
                         </div>
-                        <div class="price_box_row form-inline">
-                            {% for variant in product.variants %}
 
-                                <div class="price_box" style="align">
+                        <div class="price_box_row form-inline">
+
+                                <div ng-repeat="variant in product.variants track by variant.variant_id" class="price_box" style="align">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
@@ -377,29 +462,27 @@
                                         <input type="number"
 
                                                min="0"
-                                               {% if variant.inventory <= 0 %}disabled{% endif %}
                                                onclick="this.select()"
-
                                                style="text-align: center; width: 100%;    border: none;"
-                                               ng-model="product_variant_order_quan[{{ variant.variant_id }}]"
-                                               ng-init="product_variant_order_quan[{{ variant.variant_id }}] = 0"
-                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price | number_format(2, '.', ',')}}, {{ variant.inventory}})"
+                                               ng-model="product_variant_order_quan[ variant.variant_id ]"
+                                               ng-init="product_variant_order_quan[ variant.variant_id ] = 0"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price }}, {{ variant.inventory}})"
                                         >
                                     </div>
                                     <div class="variant_price">
-                                        ${{ variant.price | number_format(2, '.', ',')}}
+                                        ${{ variant.price | number}}
                                     </div>
                                     <div class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
                                     </div>
                                 </div>
-                            {% endfor %}
                         </div>
                     </div>
-                {% endfor %}
+ {% endverbatim %}
+                {#{% endfor %}#}
             </div>
         </div>
     </div>
 </div>
-
+</form>
 {% endblock %}

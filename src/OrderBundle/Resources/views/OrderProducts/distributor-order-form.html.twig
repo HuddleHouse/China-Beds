@@ -15,8 +15,10 @@
 
                 </div>
                 <div class="col-md-6">
-                    <label class="control-label" for="pick_up_date">Pick Up Date</label>
-                    <md-datepicker ng-model="form_info['pick_up_date']"></md-datepicker>
+                    <div id="pick_up_date" style="display: none;">
+                        <label class="control-label" for="pick_up_date">Pick Up Date</label>
+                        <md-datepicker ng-model="form_info['pick_up_date']"></md-datepicker>
+                    </div>
                 </div>
             </div>
 
@@ -24,8 +26,10 @@
                 <div class="col-md-6">
                     <label class="control-label" for="po">PO#</label>
                     <input id="po" name="po" ng-model="form_info['po']" type="text" class="form_field input-md">
-                    <label class="control-label" for="agent_name">Pick Up Agent Name</label>
-                    <input id="agent_name" ng-model="form_info['agent_name']" name="agent_name" type="text" class="form_field input-md">
+                    <div id="pick_up_agent" style="display: none;">
+                        <label class="control-label" for="agent_name">Pick Up Agent Name</label>
+                        <input id="agent_name" ng-model="form_info['agent_name']" name="agent_name" type="text" class="form_field input-md">
+                    </div>
                 </div>
                 <div class="col-md-6" style="    margin-bottom: 25px;">
                     <label class="control-label" for="comments">Comments</label>

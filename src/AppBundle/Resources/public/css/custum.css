@@ -25,3 +25,6 @@ address, ul, ol {
     font-weight: 400;
     letter-spacing: 1px !important;
 }
+select.form-control {
+    background: #fff !important;
+}

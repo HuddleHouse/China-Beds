@@ -4,6 +4,7 @@ namespace OrderBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\ProductVariant;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -108,6 +109,34 @@ class Orders
     private $ship_zip;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="discount", type="integer", nullable=true)
+     */
+    private $discount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="shipping", type="integer", nullable=true)
+     */
+    private $shipping;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="subtotal", type="integer", nullable=true)
+     */
+    private $subtotal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="total", type="integer", nullable=true)
+     */
+    private $total;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -132,6 +161,12 @@ class Orders
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="orders")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     */
+    private $channel;
+
 
     public function __construct($info = null)
     {
@@ -144,10 +179,12 @@ class Orders
                 $this->pickUpDate = new \DateTime($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
-            if(isset($info['pick_up']))
-                $this->isPickUp = $info['pick_up'];
-            else if(isset($info['ship']))
-                $this->isPickUp = !$info['ship'];
+
+            if(isset($info['pick_up']) && $info['pick_up'] == true)
+                $this->isPickUp = true;
+            else if(isset($info['ship']) && $info['ship'] == true)
+                $this->isPickUp = false;
+
             if(isset($info['comments']))
                 $this->comments = $info['comments'];
             if(isset($info['ship_name']))
@@ -499,6 +536,13 @@ class Orders
         $this->product_variants = $product_variants;
     }
 
+    public function addProductVariants(OrdersProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
     /**
      * @return mixed
      */
@@ -513,6 +557,86 @@ class Orders
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscount()
+    {
+        return $this->discount / 100;
+    }
+
+    /**
+     * @param int $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount * 100;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShipping()
+    {
+        return $this->shipping / 100;
+    }
+
+    /**
+     * @param int $shipping
+     */
+    public function setShipping($shipping)
+    {
+        $this->shipping = $shipping * 100;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal / 100;
+    }
+
+    /**
+     * @param int $subtotal
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal * 100;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal()
+    {
+        return $this->total / 100;
+    }
+
+    /**
+     * @param int $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total * 100;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 
 
