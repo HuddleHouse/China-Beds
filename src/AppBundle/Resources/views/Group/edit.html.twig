@@ -10,7 +10,12 @@
 {% endblock page_name %}
 
 {% block content %}
-    <div class="row">
+    <style>
+        #fos_user_group_form_users label, #fos_user_group_form_children label{
+            padding-left: 15px;
+            padding-right: 15px;
+
+        }
+    </style>
         {% include "FOSUserBundle:Group:edit_content.html.twig" %}
-    </div>
 {% endblock content %}

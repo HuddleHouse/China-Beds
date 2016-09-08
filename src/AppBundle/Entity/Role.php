@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Office
@@ -37,13 +39,52 @@ class Role extends BaseGroup
 
 
     /**
-     * Constructor
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
+     * @ORM\JoinTable(name="role_children",
+     *     joinColumns={@JoinColumn(name="parent_role_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@JoinColumn(name="child_role_id", referencedColumnName="id")}
+     * )
+     */
+    protected $children;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @return array
+     */
+    public function getChildren()
+    {
+        return $this->children->toArray();
+    }
+
+    /**
+     * @param Role $role
+     * @return void
+     */
+    public function addChild(Role $role)
+    {
+        if (!$this->children->contains($role)) {
+            $this->children[] = $role;
+        }
+    }
+
+    /**
+     * @param Role $role
+     * @return void
+     */
+    public function removeChild(Role $role)
+    {
+        if ($this->children->contains($role)) {
+            $this->children->removeElement($role);
+        }
     }
 
     /**
