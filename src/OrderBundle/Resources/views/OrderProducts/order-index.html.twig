@@ -75,7 +75,7 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
-            $scope.hasError = 0;
+            $scope.hasError = [];
 
             $scope.validate = function () {
                 if($scope.form_info['pick_up'] == true) {
@@ -91,8 +91,6 @@
             $scope.updateCart = function (variantId, cost, max) {
 
                 if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
-
-
                     $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
                 }
                 else {
@@ -104,21 +102,26 @@
                 }
 
                 if($scope.product_variant_order_quan[variantId] > max) {
-                    $('#'+variantId).addClass('error');
-                    $('#submit-button').prop('disabled', true);
-                    $('#submit-button').addClass('button-error');
-                    $scope.hasError += 1;
+                    if(jQuery.inArray(variantId, $scope.hasError) == -1) {
+                        $('#'+variantId).addClass('error');
+                        $('#submit-button').prop('disabled', true);
+                        $('#submit-button').addClass('button-error');
+                        $scope.hasError.push(variantId);
+                    }
                 }
                 else {
-                    $('#'+variantId).removeClass('error', 300);
+                    if(jQuery.inArray(variantId, $scope.hasError) > -1) {
+                        $('#'+variantId).removeClass('error', 300);
+                        var index = $scope.hasError.indexOf(variantId);
+                        $scope.hasError.splice(index,1);
+                        if($scope.hasError.length == 0) {
+                            $('#submit-button').removeClass('button-error');
+                            $('#submit-button').prop('disabled', false);
+                        }
+                    }
                 }
 
-                if($scope.hasError == 0) {
-                    $('#submit-button').removeClass('button-error');
-                    $('#submit-button').prop('disabled', false);
-                }
-
-                console.log($scope.hasError);
+                console.log(jQuery.inArray(variantId, $scope.hasError));
                 $scope.calculateCart();
             };
 
@@ -149,9 +152,10 @@
 
             $scope.warehouseChange = function () {
                 var warehouse = $scope.cart['pick_up_warehouse'];
-                $('#submit-button').prop('disabled', false);
-                $('#submit-button').removeClass('button-error');
+//                $('#submit-button').prop('disabled', false);
+//                $('#submit-button').removeClass('button-error');
                 console.log($scope.cart['pick_up_warehouse']);
+                $scope.setAll($scope.product_variant_order_quan, 0);
 
                 $.ajax({
                     type: 'POST',
@@ -168,7 +172,21 @@
                 });
             };
 
+            $scope.setAll = function (a, v) {
+                var i, n = a.length;
+                for (i = 0; i < n; ++i) {
+                    a[i] = v;
+                }
+                $('.variant_quantity').removeClass('error');
+                $scope.cart_num_items = 0;
+                $scope.cart_total = 0.00;
+                $('#submit-button').removeClass('button-error');
+                $('#submit-button').prop('disabled', false);
+                $scope.hasError = [];
+            };
+            
             $scope.getAllProducts = function () {
+                $scope.setAll($scope.product_variant_order_quan, 0);
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_update_products_for_channel') }}",
@@ -224,10 +242,10 @@
                     $('#pick_up_agent').show();
                     $('#pick_up_warehouse').show();
 
-                    if($scope.cart['pick_up_warehouse'] == undefined || $scope.cart['pick_up_warehouse'] == null) {
-                        $('#submit-button').prop('disabled', true);
-                        $('#submit-button').addClass('button-error');
-                    }
+//                    if($scope.cart['pick_up_warehouse'] == undefined || $scope.cart['pick_up_warehouse'] == null) {
+//                        $('#submit-button').prop('disabled', true);
+//                        $('#submit-button').addClass('button-error');
+//                    }
                 }
                 else {
                     if($scope.is_retailer == 1)
@@ -366,7 +384,7 @@
         }
     </style>
 
-
+<form data-toggle="validator" role="form">
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
@@ -466,5 +484,5 @@
         </div>
     </div>
 </div>
-
+</form>
 {% endblock %}
