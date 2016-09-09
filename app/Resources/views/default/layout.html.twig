@@ -262,7 +262,7 @@
                                     </li>
                                 {%  endfor %}
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
-                                    <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Purchase Orders</a>
+                                    <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Receiving Stock</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_stock_transfer) %} class="active"{% endif %}>
                                     <a href="{{ path('stocktransfer_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
