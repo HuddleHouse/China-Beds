@@ -29,7 +29,7 @@ class RoleType extends AbstractType
                 'class' => 'AppBundle:Role',
                 'label' => 'Chidren Roles:',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'padding: 5px;margin-bottom: 50px;'),
+                'attr' => array('style' => 'padding: 5px;margin-bottom: 50px;'),
                 'expanded'  => true,
                 'multiple' => true))
         ;
