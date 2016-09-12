@@ -9,11 +9,8 @@
         </div>
     </div>
 {% endif %}
-
-<div class="container">
-    <div class="portlet-body form">
-        <div class="form-body">
-            {{ form_start(form, { 'action': path('fos_user_group_edit', {'groupName': group_name} ), 'attr': { 'class': 'form-group' } }) }}
+<div class="well bs-component">
+            {{ form_start(form, { 'action': path('fos_user_group_edit', {'groupName': group_name} ) }) }}
             <h3 class="form-section">Role Info</h3>
             <div class="row">
                 <div class="col-md-6">
@@ -23,11 +20,15 @@
                 <div class="col-md-6">
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_label(form.children) }}
+                    {{ form_widget(form.children) }}
+                </div>
+            </div>
             <div style="padding-top: 20px;">
                 <input class="btn btn-raised btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
                 <a class="btn btn-raised btn-warning" href="{{  path('fos_user_group_delete', {'groupName': group_name} ) }}">Delete</a>
             </div>
             {{ form_end(form) }}
-        </div>
-    </div>
 </div>
