@@ -94,6 +94,27 @@ class Warehouse
     private $zip;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="manager_name", type="string", length=255)
+     */
+    private $manager_name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="management_comp", type="string", length=255)
+     */
+    private $management_comp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_2", type="string", length=255)
+     */
+    private $email_2;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
@@ -595,5 +616,292 @@ class Warehouse
         $this->orders_warehouse_info = $orders_warehouse_info;
     }
     
-}
 
+    /**
+     * Set managerName
+     *
+     * @param string $managerName
+     *
+     * @return Warehouse
+     */
+    public function setManagerName($managerName)
+    {
+        $this->manager_name = $managerName;
+
+        return $this;
+    }
+
+    /**
+     * Get managerName
+     *
+     * @return string
+     */
+    public function getManagerName()
+    {
+        return $this->manager_name;
+    }
+
+    /**
+     * Set managementComp
+     *
+     * @param string $managementComp
+     *
+     * @return Warehouse
+     */
+    public function setManagementComp($managementComp)
+    {
+        $this->management_comp = $managementComp;
+
+        return $this;
+    }
+
+    /**
+     * Get managementComp
+     *
+     * @return string
+     */
+    public function getManagementComp()
+    {
+        return $this->management_comp;
+    }
+
+    /**
+     * Set email2
+     *
+     * @param string $email2
+     *
+     * @return Warehouse
+     */
+    public function setEmail2($email2)
+    {
+        $this->email_2 = $email2;
+
+        return $this;
+    }
+
+    /**
+     * Get email2
+     *
+     * @return string
+     */
+    public function getEmail2()
+    {
+        return $this->email_2;
+    }
+
+    /**
+     * Add users1
+     *
+     * @param \AppBundle\Entity\User $users1
+     *
+     * @return Warehouse
+     */
+    public function addUsers1(\AppBundle\Entity\User $users1)
+    {
+        $this->users_1[] = $users1;
+
+        return $this;
+    }
+
+    /**
+     * Remove users1
+     *
+     * @param \AppBundle\Entity\User $users1
+     */
+    public function removeUsers1(\AppBundle\Entity\User $users1)
+    {
+        $this->users_1->removeElement($users1);
+    }
+
+    /**
+     * Add users2
+     *
+     * @param \AppBundle\Entity\User $users2
+     *
+     * @return Warehouse
+     */
+    public function addUsers2(\AppBundle\Entity\User $users2)
+    {
+        $this->users_2[] = $users2;
+
+        return $this;
+    }
+
+    /**
+     * Remove users2
+     *
+     * @param \AppBundle\Entity\User $users2
+     */
+    public function removeUsers2(\AppBundle\Entity\User $users2)
+    {
+        $this->users_2->removeElement($users2);
+    }
+
+    /**
+     * Add users3
+     *
+     * @param \AppBundle\Entity\User $users3
+     *
+     * @return Warehouse
+     */
+    public function addUsers3(\AppBundle\Entity\User $users3)
+    {
+        $this->users_3[] = $users3;
+
+        return $this;
+    }
+
+    /**
+     * Remove users3
+     *
+     * @param \AppBundle\Entity\User $users3
+     */
+    public function removeUsers3(\AppBundle\Entity\User $users3)
+    {
+        $this->users_3->removeElement($users3);
+    }
+
+    /**
+     * Add inventory
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventory $inventory
+     *
+     * @return Warehouse
+     */
+    public function addInventory(\WarehouseBundle\Entity\WarehouseInventory $inventory)
+    {
+        $this->inventory[] = $inventory;
+
+        return $this;
+    }
+
+    /**
+     * Remove inventory
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventory $inventory
+     */
+    public function removeInventory(\WarehouseBundle\Entity\WarehouseInventory $inventory)
+    {
+        $this->inventory->removeElement($inventory);
+    }
+
+    /**
+     * Add purchaseOrder
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrder $purchaseOrder
+     *
+     * @return Warehouse
+     */
+    public function addPurchaseOrder(\WarehouseBundle\Entity\PurchaseOrder $purchaseOrder)
+    {
+        $this->purchase_orders[] = $purchaseOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrder
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrder $purchaseOrder
+     */
+    public function removePurchaseOrder(\WarehouseBundle\Entity\PurchaseOrder $purchaseOrder)
+    {
+        $this->purchase_orders->removeElement($purchaseOrder);
+    }
+
+    /**
+     * Add stockTransferReceiving
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransferReceiving
+     *
+     * @return Warehouse
+     */
+    public function addStockTransferReceiving(\WarehouseBundle\Entity\StockTransfer $stockTransferReceiving)
+    {
+        $this->stock_transfer_receiving[] = $stockTransferReceiving;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockTransferReceiving
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransferReceiving
+     */
+    public function removeStockTransferReceiving(\WarehouseBundle\Entity\StockTransfer $stockTransferReceiving)
+    {
+        $this->stock_transfer_receiving->removeElement($stockTransferReceiving);
+    }
+
+    /**
+     * Add stockTransferDeparting
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransferDeparting
+     *
+     * @return Warehouse
+     */
+    public function addStockTransferDeparting(\WarehouseBundle\Entity\StockTransfer $stockTransferDeparting)
+    {
+        $this->stock_transfer_departing[] = $stockTransferDeparting;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockTransferDeparting
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransferDeparting
+     */
+    public function removeStockTransferDeparting(\WarehouseBundle\Entity\StockTransfer $stockTransferDeparting)
+    {
+        $this->stock_transfer_departing->removeElement($stockTransferDeparting);
+    }
+
+    /**
+     * Add stockAdjustment
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustment $stockAdjustment
+     *
+     * @return Warehouse
+     */
+    public function addStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
+    {
+        $this->stock_adjustments[] = $stockAdjustment;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockAdjustment
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustment $stockAdjustment
+     */
+    public function removeStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
+    {
+        $this->stock_adjustments->removeElement($stockAdjustment);
+    }
+
+    /**
+     * Add ordersWarehouseInfo
+     *
+     * @param \OrderBundle\Entity\OrdersWarehouseInfo $ordersWarehouseInfo
+     *
+     * @return Warehouse
+     */
+    public function addOrdersWarehouseInfo(\OrderBundle\Entity\OrdersWarehouseInfo $ordersWarehouseInfo)
+    {
+        $this->orders_warehouse_info[] = $ordersWarehouseInfo;
+
+        return $this;
+    }
+
+    /**
+     * Remove ordersWarehouseInfo
+     *
+     * @param \OrderBundle\Entity\OrdersWarehouseInfo $ordersWarehouseInfo
+     */
+    public function removeOrdersWarehouseInfo(\OrderBundle\Entity\OrdersWarehouseInfo $ordersWarehouseInfo)
+    {
+        $this->orders_warehouse_info->removeElement($ordersWarehouseInfo);
+    }
+}
