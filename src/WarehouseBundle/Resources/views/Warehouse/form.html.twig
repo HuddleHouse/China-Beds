@@ -15,6 +15,8 @@
         {{ form_widget(form.email) }}
     </div>
     <div class="col-md-6">
+        {{ form_label(form.email_2) }}
+        {{ form_widget(form.email_2) }}
     </div>
 </div>
 <hr>
@@ -44,6 +46,14 @@
     <div class="col-md-2">
         {{ form_label(form.channels) }}
         {{ form_widget(form.channels) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_label(form.manager_name) }}
+        {{ form_widget(form.manager_name) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_label(form.management_comp, 'Management Company') }}
+        {{ form_widget(form.management_comp) }}
     </div>
 </div>
 {{ form_widget(form) }}
