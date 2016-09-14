@@ -182,10 +182,10 @@ class PurchaseOrderController extends Controller
      * @Route("/api_update_eta", name="api_update_eta")
      */
     public function apiUpdateEta(Request $request){
-        $date = $request->query->get('due_date');
-        $po_id = $request->query->get('purchase_order_id');
+        $date = new \DateTime($request->request->get('due_date'));
+        $poId = $request->request->get('purchase_order_id');
         $em = $this->getDoctrine()->getManager();
-        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find('5');
+        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
         $purchase->setOrderReceivedDate($date);
 
         $em->persist($purchase);

@@ -212,6 +212,7 @@
 
                 function updateETA(){
                     addSpinner();
+                    alert({{ purchaseOrder.id }});
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_update_eta') }}",
