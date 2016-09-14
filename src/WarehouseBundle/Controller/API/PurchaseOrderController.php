@@ -114,6 +114,8 @@ class PurchaseOrderController extends Controller
         $po_id = $request->request->get('purchase_order_id');
         $po = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($po_id);
         $warehouse = $po->getWarehouse();
+        $receive_date = new \DateTime();
+
 
         foreach($cart as $item) {
             $variant = $em->getRepository('WarehouseBundle:PurchaseOrderProductVariant')->find($item['purchase_order_product_variant_id']);
@@ -160,8 +162,11 @@ class PurchaseOrderController extends Controller
         $status_id = $statement->fetch();
         $status = $em->getRepository('WarehouseBundle:Status')->find($status_id['id']);
 
+        $po->setOrderReceivedDate($receive_date);
+
         $po->setStatus($status);
         $em->persist($po);
+
         try {
             $em->flush();
         }
@@ -171,6 +176,27 @@ class PurchaseOrderController extends Controller
 
 
         return JsonResponse::create($po->getId());
+    }
+
+    /**
+     * @Route("/api_update_eta", name="api_update_eta")
+     */
+    public function apiUpdateEta(Request $request){
+        $date = $request->query->get('due_date');
+        $po_id = $request->query->get('purchase_order_id');
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find('5');
+        $purchase->setOrderReceivedDate($date);
+
+        $em->persist($purchase);
+
+        try{
+            $em->flush();
+        }catch(\Exception $e){
+            return JsonResponse::create(false);
+        }
+
+        return JsonResponse::create($purchase->getId());
     }
 
 }
