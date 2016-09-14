@@ -2736,7 +2736,6 @@ h6,
 }
 .info-box-content {
   padding: 5px 10px;
-  margin-left: 90px;
 }
 .info-box-number {
   display: block;
@@ -5119,7 +5118,7 @@ table.text-center th {
   background-color: #001f3f !important;
 }
 .bg-teal {
-  background-color: #39cccc !important;
+  background-color: #42A5F5 !important;
 }
 .bg-olive {
   background-color: #3d9970 !important;

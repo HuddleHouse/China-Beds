@@ -85,6 +85,14 @@
 
 
 {% block content %}
+    <style>
+        .fa.fa-minus, .fa.fa-plus {
+            color: #42A5F5;
+        }
+        .white {
+            color: #fff !important;
+        }
+    </style>
     {% include "AppBundle:Profile:show_top_bar.html.twig" %}
     <div class="row">
         {% include "AppBundle:Profile:show_user_screens.html.twig" %}
