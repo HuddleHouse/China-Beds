@@ -2995,7 +2995,8 @@ fieldset[disabled] .navbar .btn-link:focus {
   margin-bottom: 16px;
 }
 .modal-content .modal-body + .modal-footer {
-  padding-top: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .modal-backdrop {
   background: rgba(0, 0, 0, 0.3);
