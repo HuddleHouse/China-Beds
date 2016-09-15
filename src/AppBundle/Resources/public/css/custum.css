@@ -28,3 +28,8 @@ address, ul, ol {
 select.form-control {
     background: #fff !important;
 }
+
+.form-group .form-control {
+    margin-bottom: 7px;
+    border-bottom: 1px solid #ccc !important;
+}

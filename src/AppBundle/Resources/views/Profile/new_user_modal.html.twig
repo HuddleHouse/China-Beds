@@ -1,0 +1,95 @@
+<!-- MODAL -->
+<div class="modal fade" id="create-person" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add {% verbatim %}{{new_user_type}}{% endverbatim %}</h4>
+            </div>
+            <div class="modal-body">
+                {{ form_start(new_user_form, { 'action': path('send_invitation') }) }}
+                <div class="row">
+                    <div class="col-md-4 form-group label-static">
+                        {{ form_label(new_user_form.first_name) }}
+                        {{ form_widget(new_user_form.first_name) }}
+                    </div>
+                    <div class="col-md-4 form-group label-static">
+                        {{ form_label(new_user_form.last_name) }}
+                        {{ form_widget(new_user_form.last_name) }}
+                    </div>
+                    <div class="col-md-4 form-group label-static">
+                        {{ form_label(new_user_form.company_name) }}
+                        {{ form_widget(new_user_form.company_name) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.is_current_retailer) }}
+                        {{ form_widget(new_user_form.is_current_retailer) }}
+                    </div>
+
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.username) }}
+                        {{ form_widget(new_user_form.username) }}
+                    </div>
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.email) }}
+                        {{ form_widget(new_user_form.email) }}
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.address_1) }}
+                        {{ form_widget(new_user_form.address_1) }}
+                    </div>
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.address_2) }}
+                        {{ form_widget(new_user_form.address_2) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.city) }}
+                        {{ form_widget(new_user_form.city) }}
+                    </div>
+                    <div class="col-md-2 form-group label-static">
+                        {{ form_label(new_user_form.state) }}
+                        {{ form_widget(new_user_form.state) }}
+                    </div>
+                    <div class="col-md-4 form-group label-static">
+                        {{ form_label(new_user_form.zip) }}
+                        {{ form_widget(new_user_form.zip) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 form-group label-static">
+                        {{ form_label(new_user_form.is_residential) }}
+                        {{ form_widget(new_user_form.is_residential) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.is_online_intentions) }}
+                        {{ form_widget(new_user_form.is_online_intentions) }}
+                    </div>
+                    <div class="col-md-6 form-group label-static">
+                        {{ form_label(new_user_form.online_web_url) }}
+                        {{ form_widget(new_user_form.online_web_url) }}
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-raised btn-primary" data-dismiss="modal">Save changes</button>
+                {{ form_end(new_user_form) }}
+            </div>
+        </div>
+    </div>
+</div>

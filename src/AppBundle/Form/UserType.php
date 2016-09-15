@@ -141,7 +141,7 @@ class UserType extends AbstractType
                     'No' => 0,
                 ),
             ))
-            ->add('is_current', ChoiceType::class, array(
+            ->add('is_current_retailer', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'label' => 'Current?',
                 'choices' => array(

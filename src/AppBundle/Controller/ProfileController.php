@@ -35,7 +35,6 @@ class ProfileController extends Controller
         $user_channels = $user->getUserChannelsArray();
 
         $session = new Session();
-
         $session->set('user_channels', $user_channels);
         $session->set('route_names', implode(',', $route_names));
 
@@ -47,7 +46,7 @@ class ProfileController extends Controller
 
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user,
-            'new_user_form' => $new_user_form
+            'new_user_form' => $new_user_form->createView()
         ));
     }
 
