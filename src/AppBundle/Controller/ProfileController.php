@@ -3,6 +3,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\NewUserType;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
@@ -38,8 +39,15 @@ class ProfileController extends Controller
         $session->set('user_channels', $user_channels);
         $session->set('route_names', implode(',', $route_names));
 
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $new_user_form = $this->createForm(NewUserType::class, $user);
+
         return $this->render('AppBundle:Profile:show.html.twig', array(
-            'user' => $user
+            'user' => $user,
+            'new_user_form' => $new_user_form
         ));
     }
 

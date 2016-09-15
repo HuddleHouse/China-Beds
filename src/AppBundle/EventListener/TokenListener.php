@@ -40,6 +40,7 @@ class TokenListener
             '_wdt',
             'fos_user_security_logout',
             'fos_user_security_login',
+            'fos_user_registration_register',
             'fos_user_security_check',
             'fos_user_resetting_request',
             'fos_user_resetting_send_email',

@@ -65,6 +65,12 @@ class User extends BaseUser
     protected $phone;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $company_name;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="zip", type="integer", nullable=true)
@@ -111,13 +117,19 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_current = false;
+    protected $is_current_retailer = false;
 
     /**
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_online_intentions = true;
+    protected $is_online_intentions = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $online_web_url;
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
@@ -516,22 +528,6 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getIsCurrent()
-    {
-        return $this->is_current;
-    }
-
-    /**
-     * @param mixed $is_current
-     */
-    public function setIsCurrent($is_current)
-    {
-        $this->is_current = $is_current;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getIsOnlineIntentions()
     {
         return $this->is_online_intentions;
@@ -763,6 +759,54 @@ class User extends BaseUser
     public function setStockAdjustments($stock_adjustments)
     {
         $this->stock_adjustments = $stock_adjustments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsCurrentRetailer()
+    {
+        return $this->is_current_retailer;
+    }
+
+    /**
+     * @param mixed $is_current_retailer
+     */
+    public function setIsCurrentRetailer($is_current_retailer)
+    {
+        $this->is_current_retailer = $is_current_retailer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnlineWebUrl()
+    {
+        return $this->online_web_url;
+    }
+
+    /**
+     * @param mixed $online_web_url
+     */
+    public function setOnlineWebUrl($online_web_url)
+    {
+        $this->online_web_url = $online_web_url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyName()
+    {
+        return $this->company_name;
+    }
+
+    /**
+     * @param mixed $company_name
+     */
+    public function setCompanyName($company_name)
+    {
+        $this->company_name = $company_name;
     }
 
 }
