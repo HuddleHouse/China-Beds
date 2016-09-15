@@ -15,6 +15,19 @@
             $('#my-retailers').DataTable({
                 "iDisplayLength": 10, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
+
+            var forms = [
+                '[ name="{{ new_user_form.vars.full_name }}"]'
+            ];
+
+            $( forms.join(',') ).submit( function( e ){
+                e.preventDefault();
+
+                postForm( $(this), function( response ){
+                });
+
+                return false;
+            });
         });
 
         $(function () {
@@ -89,16 +102,42 @@
             $scope.new_user_type_role = '';
 
             $scope.changeUserType = function(name, id, role) {
-                $scope.new_user_type_name = name;
-                $scope.new_user_type_id = id;
-                $scope.new_user_type_role = role;
+                    $scope.new_user_type_name = name;
+                    $scope.new_user_type_id = id;
+                    $scope.new_user_type_role = role;
                 console.log($scope.new_user_type_name);
                 console.log($scope.new_user_type_id);
                 console.log($scope.new_user_type_role);
             }
         }]);
 
+        function postForm( $form, callback ){
 
+            /*
+             * Get all form values
+             */
+            var values = {};
+            $.each( $form.serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+
+            var scope = angular.element(document.getElementById('MainCtrl')).scope();
+            var type_name = scope.new_user_type_name;
+            var type_id = scope.new_user_type_id;
+            var type_role = scope.new_user_type_role;
+            /*
+             * Throw the form values to the server!
+             */
+            $.ajax({
+                type        : $form.attr( 'method' ),
+                url         : $form.attr( 'action' ),
+                data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role},
+                success     : function(data) {
+                    callback( data );
+                }
+            });
+
+        }
     </script>
 {% endblock footer %}
 

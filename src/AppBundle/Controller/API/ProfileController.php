@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\API;
 
+use AppBundle\Form\NewUserType;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersProductVariant;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,47 +20,36 @@ class ProfileController extends Controller
 {
 
     /**
-     * @Route("/api_create_new_user", name="api_save_products_order_form")
+     * @Route("/api_create_new_user", name="api_create_new_user")
      */
-    public function saveProductsOrderForm(Request $request)
+    public function createNewUser(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $channel_id = $request->request->get('channel_id');
-        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
-
-        $cart = $request->request->get('cart');
-        $total = $request->request->get('total');
-        $info = $request->request->get('form_info');
-        $products = array();
-
-        $order = new Orders($info);
-
-        $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
-        $order->setStatus($status);
-        $order->setSubtotal($total);
-        $order->setChannel($channel);
-        $order->setUser($this->getUser());
-
-        foreach($cart as $item) {
-            if($item != '') {
-                $product_variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['variant_id']);
-                $orders_product_variant = new OrdersProductVariant();
-                $orders_product_variant->setOrder($order);
-                $orders_product_variant->setPrice($item['cost']);
-                $orders_product_variant->setQuantity($item['quantity']);
-                $orders_product_variant->setProductVariant($product_variant);
-                $em->persist($orders_product_variant);
-                $order->addProductVariants($orders_product_variant);
-            }
-        }
-
-        $em->persist($order);
-        $em->flush();
-
-        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
-
-        return JsonResponse::create($order->getId());
-    }
+//        $new_user_form = $this->createForm(NewUserType::class);
+//        if ( $request->isMethod( 'POST' ) ) {
+//
+//            $form->handleRequest($request);
+//
+//            if ($form->isSubmitted() && $form->isValid()) {
+//
+//                $userManager->updateUser($user);
+//                // ... perform some action, such as saving the task to the database
+//                // for example, if Task is a Doctrine entity, save it!
+//                // $em = $this->getDoctrine()->getManager();
+//                // $em->persist($task);
+//                // $em->flush();
+//
+//                return $this->redirectToRoute('task_success');
+//            }
+//
+//
+//            return new JsonResponse( $response );
+//        }
+//
+//        return array('postform' => $new_user_form->createView( ));
+//
+//        return JsonResponse::create($order->getId());
+//    }
 
 
 

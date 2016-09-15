@@ -7,7 +7,7 @@
                 <h4 class="modal-title" id="myModalLabel">Add {% verbatim %}{{new_user_type}}{% endverbatim %}</h4>
             </div>
             <div class="modal-body">
-                {{ form_start(new_user_form, { 'action': path('send_invitation') }) }}
+                {{ form_start(new_user_form, { 'action': path('api_create_new_user') }) }}
                 <div class="row">
                     <div class="col-md-4 form-group label-static">
                         {{ form_label(new_user_form.first_name) }}
@@ -87,7 +87,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-raised btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="submit" class="btn btn-raised btn-primary">Save changes</button>
                 {{ form_end(new_user_form) }}
             </div>
         </div>
