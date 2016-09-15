@@ -1378,7 +1378,7 @@ h6,
 }
 .control-sidebar-bg,
 .control-sidebar {
-  top: 0;
+  top: 10px;
   right: -230px;
   width: 230px;
   -webkit-transition: right 0.3s ease-in-out;

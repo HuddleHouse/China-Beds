@@ -1,7 +1,20 @@
 <div class="col-md-7 connectedSortable" >
+
     {% include "AppBundle:Profile:show_user_screen_my_order_history.html.twig" %}
-    {% include "AppBundle:Profile:show_user_screen_sales_managers.html.twig" %}
-    {% include "AppBundle:Profile:show_user_screen_sales_reps.html.twig" %}
-    {% include "AppBundle:Profile:show_user_screen_distributors.html.twig" %}
-    {% include "AppBundle:Profile:show_user_screen_retailers.html.twig" %}
+
+    {% if (is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        {% include "AppBundle:Profile:show_user_screen_sales_managers.html.twig" %}
+    {% endif %}
+
+    {% if (is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        {% include "AppBundle:Profile:show_user_screen_sales_reps.html.twig" %}
+    {% endif %}
+
+    {% if (is_granted('ROLE_SALES_REP') or is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        {% include "AppBundle:Profile:show_user_screen_distributors.html.twig" %}
+    {% endif %}
+
+    {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        {% include "AppBundle:Profile:show_user_screen_retailers.html.twig" %}
+    {% endif %}
 </div>

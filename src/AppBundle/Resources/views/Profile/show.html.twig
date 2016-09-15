@@ -93,7 +93,9 @@
             color: #fff !important;
         }
     </style>
-    {% include "AppBundle:Profile:show_top_bar.html.twig" %}
+    {% if is_granted('ROLE_ADMIN') == false %}
+        {% include "AppBundle:Profile:show_top_bar.html.twig" %}
+    {% endif %}
     <div class="row">
         {% include "AppBundle:Profile:show_user_screens.html.twig" %}
         {% include "AppBundle:Profile:show_side_bar.html.twig" %}
