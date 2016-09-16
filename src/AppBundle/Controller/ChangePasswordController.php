@@ -67,6 +67,7 @@ class ChangePasswordController extends Controller
             $userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {
+                $this->addFlash('notice', 'Password updated successfully.');
                 $url = $this->generateUrl('fos_user_profile_show');
                 $response = new RedirectResponse($url);
             }
