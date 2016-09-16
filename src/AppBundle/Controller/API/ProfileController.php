@@ -25,31 +25,30 @@ class ProfileController extends Controller
     public function createNewUser(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-//        $new_user_form = $this->createForm(NewUserType::class);
-//        if ( $request->isMethod( 'POST' ) ) {
-//
-//            $form->handleRequest($request);
-//
-//            if ($form->isSubmitted() && $form->isValid()) {
-//
-//                $userManager->updateUser($user);
-//                // ... perform some action, such as saving the task to the database
-//                // for example, if Task is a Doctrine entity, save it!
-//                // $em = $this->getDoctrine()->getManager();
-//                // $em->persist($task);
-//                // $em->flush();
-//
-//                return $this->redirectToRoute('task_success');
-//            }
-//
-//
-//            return new JsonResponse( $response );
-//        }
-//
-//        return array('postform' => $new_user_form->createView( ));
-//
-//        return JsonResponse::create($order->getId());
-//    }
+        $channel_name = $request->request->get('type_name');
+
+        $type_id = $request->request->get('type_id');
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($type_id);
+
+        $type_role = $request->request->get('type_role');
+        $role = $em->getRepository('AppBundle:Role')->findBy(array('name' => $type_role));
+
+
+        $values = $request->request->get('values');
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $data = array();
+        foreach($values as $key=>$value) {
+            $key = substr($key, 9);
+            $data[$key] = $value;
+        }
+        $new_user_form = $this->createForm(NewUserType::class, $user);
+
+        $warehouse_1 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_1'));
+        $warehouse_2 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_2'));
+        $warehouse_3 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_3'));
 
     }
 

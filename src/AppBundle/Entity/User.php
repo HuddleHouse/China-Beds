@@ -213,6 +213,39 @@ class User extends BaseUser
      */
     private $warehouse_3;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor")
+     */
+    private $retailers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers")
+     * @ORM\JoinColumn(name="my_distributor_id", referencedColumnName="id")
+     */
+    private $my_distributor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep")
+     */
+    private $distributors;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors")
+     * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
+     */
+    private $my_sales_rep;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager")
+     */
+    private $sales_reps;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps")
+     * @ORM\JoinColumn(name="my_sales_manager_id", referencedColumnName="id")
+     */
+    private $my_sales_manager;
+
     public function __construct()
     {
         parent::__construct();
@@ -225,6 +258,9 @@ class User extends BaseUser
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->purchase_orders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->stock_adjustments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->retailers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->distributors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sales_reps = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getRouteNames() {
@@ -808,5 +844,114 @@ class User extends BaseUser
     {
         $this->company_name = $company_name;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRetailers()
+    {
+        return $this->retailers;
+    }
+
+    /**
+     * @param mixed $my_retailers
+     */
+    public function setRetailers($retailers)
+    {
+        $this->retailers = $retailers;
+    }
+
+    public function addRetailer(User $retailer) {
+        $this->retailers[] = $retailer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMyDistributor()
+    {
+        return $this->my_distributor;
+    }
+
+    /**
+     * @param mixed $my_distributor
+     */
+    public function setMyDistributor($my_distributor)
+    {
+        $this->my_distributor = $my_distributor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDistributors()
+    {
+        return $this->distributors;
+    }
+
+    /**
+     * @param mixed $distributors
+     */
+    public function setDistributors($distributors)
+    {
+        $this->distributors = $distributors;
+    }
+
+    public function addDistributor(User $distributor) {
+        $this->distributors[] = $distributor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMySalesRep()
+    {
+        return $this->my_sales_rep;
+    }
+
+    /**
+     * @param mixed $my_sales_rep
+     */
+    public function setMySalesRep($my_sales_rep)
+    {
+        $this->my_sales_rep = $my_sales_rep;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSalesReps()
+    {
+        return $this->sales_reps;
+    }
+
+    /**
+     * @param mixed $sales_reps
+     */
+    public function setSalesReps($sales_reps)
+    {
+        $this->sales_reps = $sales_reps;
+    }
+
+    public function addSalesRep(User $sales_rep) {
+        $this->sales_reps[] = $sales_rep;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMySalesManager()
+    {
+        return $this->my_sales_manager;
+    }
+
+    /**
+     * @param mixed $my_sales_manager
+     */
+    public function setMySalesManager($my_sales_manager)
+    {
+        $this->my_sales_manager = $my_sales_manager;
+    }
+
 
 }

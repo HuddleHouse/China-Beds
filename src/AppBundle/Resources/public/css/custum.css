@@ -31,7 +31,7 @@ select.form-control {
 
 .form-group .form-control {
     margin-bottom: 7px;
-    /*border-bottom: 1px solid #ccc !important;*/
+    border-bottom: 1px solid #ccc !important;
 }
 .table {
     background-color: #fff;
