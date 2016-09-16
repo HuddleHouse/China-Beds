@@ -1,0 +1,16 @@
+{# app/Resources/views/Emails/registration.html.twig #}
+<h3>You have been registered!</h3>
+
+Hi {{ name }}! You're successfully registered.
+
+{# example, assuming you have a route named "login" #}
+Your username is: {{ username }}
+Your default password is: {{ password }}
+
+To login, go to: <a href="{{ url('fos_user_security_login') }}">...</a>.
+
+Thanks!
+
+{# Makes an absolute URL to the /images/logo.png file #}
+{#{% set logo_path = 'images/logo-'  %}#}
+{#<img src="{{ absolute_url(asset('images/logo.png')) }}">#}

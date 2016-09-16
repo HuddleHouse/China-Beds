@@ -6,15 +6,15 @@
         {#{% include "AppBundle:Profile:show_user_screen_sales_managers.html.twig" %}#}
     {#{% endif %}#}
 
-    {% if (is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+    {% if (is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
         {% include "AppBundle:Profile:show_user_screen_sales_reps.html.twig" %}
     {% endif %}
 
-    {% if (is_granted('ROLE_SALES_REP') or is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+    {% if (is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
         {% include "AppBundle:Profile:show_user_screen_distributors.html.twig" %}
     {% endif %}
 
-    {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+    {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
         {% include "AppBundle:Profile:show_user_screen_retailers.html.twig" %}
     {% endif %}
 </div>

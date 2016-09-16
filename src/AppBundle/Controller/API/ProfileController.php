@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\API;
 
+use AppBundle\Entity\User;
 use AppBundle\Form\NewUserType;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersProductVariant;
@@ -35,8 +36,7 @@ class ProfileController extends Controller
 
 
         $values = $request->request->get('values');
-        $userManager = $this->get('fos_user.user_manager');
-        $user = $userManager->createUser();
+        $user = new User();
         $user->setEnabled(true);
 
         $data = array();
@@ -49,6 +49,27 @@ class ProfileController extends Controller
         $warehouse_1 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_1'));
         $warehouse_2 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_2'));
         $warehouse_3 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_3'));
+        $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
+        $sales_rep = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_rep'));
+        $sales_manager = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_manager'));
+
+//        $email_service = $this->get('email_service');
+//        $email_service->sendEmail(array(
+//                'subject' => 'You have registered!',
+//                'from' => 'matt@245tech.com',
+//                'to' => 'mthuddleston@gmail.com',
+//                'body' => $this->renderView(
+//                    'AppBundle:Emails:new-user.html.twig',
+//                    array('name' => 'Matt',
+//                        'username' => 'huddlehouse',
+//                        'password' => 'XLdjn345kj'
+//                    )
+//                )
+//            )
+//        );
+
+        $user->setFirstName($data['first_name']);
+        $user->setLastName($data['last_name']);
 
     }
 
