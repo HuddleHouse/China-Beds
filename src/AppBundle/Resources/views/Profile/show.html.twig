@@ -100,11 +100,13 @@
             $scope.new_user_type_name = '';
             $scope.new_user_type_id = 0;
             $scope.new_user_type_role = '';
+            $scope.new_user_role = '';
 
-            $scope.changeUserType = function(name, id, role) {
+            $scope.changeUserType = function(name, id, role, user_role) {
                     $scope.new_user_type_name = name;
                     $scope.new_user_type_id = id;
                     $scope.new_user_type_role = role;
+                    $scope.new_user_role = user_role;
                 console.log($scope.new_user_type_name);
                 console.log($scope.new_user_type_id);
                 console.log($scope.new_user_type_role);
@@ -125,13 +127,14 @@
             var type_name = scope.new_user_type_name;
             var type_id = scope.new_user_type_id;
             var type_role = scope.new_user_type_role;
+            var user_role = scope.new_user_role;
             /*
              * Throw the form values to the server!
              */
             $.ajax({
                 type        : $form.attr( 'method' ),
                 url         : $form.attr( 'action' ),
-                data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role},
+                data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role, user_role: user_role},
                 success     : function(data) {
                     callback( data );
                     $('#create-person').hide();

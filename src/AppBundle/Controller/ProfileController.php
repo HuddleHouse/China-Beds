@@ -43,10 +43,13 @@ class ProfileController extends Controller
         $user->setEnabled(true);
 
         $new_user_form = $this->createForm(NewUserType::class, $user);
+        $retailers = $this->getUser()->getRetailers();
+
 
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user,
-            'new_user_form' => $new_user_form->createView()
+            'new_user_form' => $new_user_form->createView(),
+            'retailers' => $retailers
         ));
     }
 

@@ -32,15 +32,16 @@ class ProfileController extends Controller
         $channel = $em->getRepository('InventoryBundle:Channel')->find($type_id);
 
         $type_role = $request->request->get('type_role');
-        if($type_role === 'Retailer')
-            $role = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => $type_role));
-        else if ($type_role == 'Distributor')
-            $role = 'ROLE_DISTRIBUTOR';
-        else if ($type_role === 'Sales Rep')
-            $role = 'ROLE_SALES_REP';
+        $user_role = $request->request->get('user_role');
+        $role = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => $type_role));
+
+        if($user_role == 'D')
+            $distributor = $this->getUser();
+        else
+            $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
 
         $values = $request->request->get('values');
-//        $user = new User();
+
 
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->createUser();
@@ -56,7 +57,6 @@ class ProfileController extends Controller
         $warehouse_1 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_1'));
         $warehouse_2 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_2'));
         $warehouse_3 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_3'));
-        $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
         $sales_rep = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_rep'));
         $sales_manager = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_manager'));
 
@@ -108,6 +108,7 @@ class ProfileController extends Controller
             $user->addGroup($role);
 
             $userManager->updateUser($user);
+            $em->flush();
             return JsonResponse::create(true);
         }
         catch(\Exception $e) {
