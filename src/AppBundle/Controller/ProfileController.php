@@ -45,14 +45,16 @@ class ProfileController extends Controller
 
         $new_user_form = $this->createForm(NewUserType::class, $user);
 
+        //get the correct data to be shown.
         if($this->getUser()->hasRole('ROLE_ADMIN')) {
             $retailers_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Retailer'));
             $retailers = $retailers_data->getUsers();
-            foreach($retailers as $retailer) {
 
-            }
-            $sales_reps = $this->getUser()->getSalesReps();
-            $distributors = $this->getUser()->getDistributors();
+            $sales_reps_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Sales Rep'));
+            $sales_reps = $sales_reps_data->getUsers();
+
+            $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
+            $distributors = $distributors_data->getUsers();
         }
         else {
             $retailers = $this->getUser()->getRetailers();

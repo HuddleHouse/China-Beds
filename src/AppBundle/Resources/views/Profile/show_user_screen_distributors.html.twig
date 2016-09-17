@@ -5,7 +5,7 @@
 <div class="box box-info">
         <div class="box-header with-border" data-widget="collapse">
             <i class="fa fa-minus"></i>
-            <h4 style="font-family: 'Raleway', sans-serif; font-weight: 600;display: inline;"> Distributors (Sales Reps +)</h4>
+            <h4 style="font-family: 'Raleway', sans-serif; font-weight: 600;display: inline;"> Distributors (Only on Sale Reps up)</h4>
 
             <div class="pull-right">
                 <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">3</span>
@@ -16,12 +16,12 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <h8>This section shows a list of distributors. When you click on their name it will take you to a page that lists all of the distributors orders and the retailers under them. (Maybe 2.0 but for right now it takes you to edit them).
-                <br>Sales Rep - List of all of their Distributors
-                <br>Sales Manager - List of all of that Sales Reps Distributors
-                <br>Operations - List of All Retailers
-            </h8>
-            <hr>
+            {#<h8>This section shows a list of distributors. When you click on their name it will take you to a page that lists all of the distributors orders and the retailers under them. (Maybe 2.0 but for right now it takes you to edit them).#}
+                {#<br>Sales Rep - List of all of their Distributors#}
+                {#<br>Sales Manager - List of all of that Sales Reps Distributors#}
+                {#<br>Operations - List of All Retailers#}
+            {#</h8>#}
+            {#<hr>#}
             <div class="table" style="box-shadow: none;padding-left: 0; padding-right: 0;">
                 <table id="my-distributors" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
@@ -29,6 +29,7 @@
                         <th>Retailer Name</th>
                         <th>Location</th>
                         <th>Channel</th>
+                        <th>Sales Rep</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,6 +41,13 @@
                                 {% for channel in distributor.userChannels %}
                                     {{ channel.name }}
                                 {% endfor %}
+                            </td>
+                            <td>
+                                {% if distributor.myDistributor.firstName is defined %}
+                                    <a href="">{{ distributor.mySalesRep.firstName }} {{ distributor.mySalesRep.lastName }}</a>
+                                {% else %}
+                                    None
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
