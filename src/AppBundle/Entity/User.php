@@ -264,6 +264,10 @@ class User extends BaseUser
         $this->sales_reps = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function getFullName() {
+        return $this->first_name . " " . $this->last_name;
+    }
+
     public function getRouteNames() {
         $data = array();
         foreach($this->groups as $role) {

@@ -111,9 +111,11 @@ class ProfileController extends Controller
 
             $userManager->updateUser($user);
             $em->flush();
+            $this->addFlash('notice', $user->getFullName() . ' created successfully. An email has been sent to '. $user->getEmail() .' with the login information.');
             return JsonResponse::create(true);
         }
         catch(\Exception $e) {
+            $this->addFlash('error', "I'm sorry there was an error creating the user:" . $e->getMessage());
             return JsonResponse::create(false);
         }
 
