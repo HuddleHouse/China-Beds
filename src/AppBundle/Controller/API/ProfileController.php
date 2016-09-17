@@ -40,6 +40,16 @@ class ProfileController extends Controller
         else
             $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
 
+        if($this->getUser()->hasRole('ROLE_SALES_REP'))
+            $sales_rep = $this->getUser();
+        else
+            $sales_rep = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_rep'));
+
+        if($this->getUser()->hasRole('ROLE_SALES_MANAGER'))
+            $sales_manager = $this->getUser();
+        else
+            $sales_manager = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_manager'));
+
         $values = $request->request->get('values');
 
 
@@ -57,8 +67,6 @@ class ProfileController extends Controller
         $warehouse_1 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_1'));
         $warehouse_2 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_2'));
         $warehouse_3 = $em->getRepository('WarehouseBundle:Warehouse')->find($this->container->getParameter('warehouse_3'));
-        $sales_rep = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_rep'));
-        $sales_manager = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_manager'));
 
 //        $email_service = $this->get('email_service');
 //        $email_service->sendEmail(array(
@@ -103,6 +111,10 @@ class ProfileController extends Controller
             $user->setMySalesRep($sales_rep);
             $sales_rep->addRetailer($user);
             $em->persist($sales_rep);
+
+            $user->setMySalesManager($sales_manager);
+            $sales_manager->addRetailer($user);
+            $em->persist($sales_manager);
 
             $user->addUserChannel($channel);
             $user->addGroup($role);

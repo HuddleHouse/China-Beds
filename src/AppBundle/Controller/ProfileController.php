@@ -56,6 +56,28 @@ class ProfileController extends Controller
             $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
             $distributors = $distributors_data->getUsers();
         }
+        else if($this->getUser()->hasRole('ROLE_SALES_REP')) {
+            $distributors = $this->getUser()->getDistributors();
+            $retailers = array();
+            $sales_reps = $this->getUser()->getSalesReps();
+
+            foreach($distributors as $distributor)
+                foreach($distributor->getRetailers() as $retailer)
+                    $retailers[] = $retailer;
+        }
+        else if($this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
+            $sales_reps = $this->getUser()->getSalesReps();
+            $distributors = array();
+            $retailers = array();
+
+            foreach($sales_reps as $sales_rep)
+                foreach($sales_rep->getDistributors() as $distributor)
+                $distributors[] = $distributor;
+
+            foreach($distributors as $distributor)
+                foreach($distributor->getRetailers() as $retailer)
+                $retailers[] = $retailer;
+        }
         else {
             $retailers = $this->getUser()->getRetailers();
             $sales_reps = $this->getUser()->getSalesReps();

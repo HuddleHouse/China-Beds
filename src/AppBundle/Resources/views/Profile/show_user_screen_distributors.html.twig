@@ -43,7 +43,7 @@
                                 {% endfor %}
                             </td>
                             <td>
-                                {% if distributor.myDistributor.firstName is defined %}
+                                {% if distributor.mySalesRep.firstName is defined %}
                                     <a href="">{{ distributor.mySalesRep.firstName }} {{ distributor.mySalesRep.lastName }}</a>
                                 {% else %}
                                     None

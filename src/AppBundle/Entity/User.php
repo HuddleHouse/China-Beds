@@ -859,7 +859,11 @@ class User extends BaseUser
      */
     public function getRetailers()
     {
-        return $this->retailers;
+        $data = array();
+        foreach($this->retailers as $retailer)
+            if($retailer->hasRole('ROLE_RETAILER'))
+                $data[] = $retailer;
+        return $data;
     }
 
     /**
@@ -895,7 +899,11 @@ class User extends BaseUser
      */
     public function getDistributors()
     {
-        return $this->distributors;
+        $data = array();
+        foreach($this->distributors as $distributor)
+            if($distributor->hasRole('ROLE_DISTRIBUTOR'))
+                $data[] = $distributor;
+        return $data;
     }
 
     /**
@@ -931,7 +939,11 @@ class User extends BaseUser
      */
     public function getSalesReps()
     {
-        return $this->sales_reps;
+        $data = array();
+        foreach($this->sales_reps as $rep)
+            if($rep->hasRole('ROLE_SALES_REP'))
+                $data[] = $rep;
+        return $data;
     }
 
     /**
@@ -943,7 +955,7 @@ class User extends BaseUser
     }
 
     public function addSalesRep(User $sales_rep) {
-        $this->sa[] = $sales_rep;
+        $this->sales_reps[] = $sales_rep;
     }
 
     /**
