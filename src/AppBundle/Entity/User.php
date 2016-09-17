@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -583,6 +584,10 @@ class User extends BaseUser
     }
 
 
+    public function addGroup(GroupInterface $group)
+    {
+        return parent::addGroup($group);
+    }
 
 
     public function addRole($role)
@@ -934,7 +939,7 @@ class User extends BaseUser
     }
 
     public function addSalesRep(User $sales_rep) {
-        $this->sales_reps[] = $sales_rep;
+        $this->sa[] = $sales_rep;
     }
 
     /**

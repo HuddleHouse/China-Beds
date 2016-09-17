@@ -2,7 +2,7 @@
 <div class="modal fade" id="create-person" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" id="modal-spinner">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Add {% verbatim %}{{new_user_type_name}} {{new_user_type_role}}{% endverbatim %}</h4>
             </div>
@@ -87,7 +87,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-raised btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-raised btn-primary">Add User</button>
                 {{ form_end(new_user_form) }}
             </div>
         </div>

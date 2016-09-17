@@ -21,7 +21,6 @@
 
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.blue-deep_orange.min.css" />
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}"/>
-    <style>form { display: inline; }</style>
 
 </head>
 
@@ -117,6 +116,14 @@
         var target = document.getElementById('loading-img');
         var spinner = new Spinner(opts).spin(target);
         target.appendChild(spinner.el);
+    }
+
+    function addCustomSpinner(id) {
+        $('.overlay').show();
+        var target = document.getElementById(id);
+        var spinner = new Spinner(opts).spin(target);
+        target.appendChild(spinner.el);
+        console.log(id);
     }
 
     function hideSpinner() {

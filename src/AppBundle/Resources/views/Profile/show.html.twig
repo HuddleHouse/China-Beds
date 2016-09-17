@@ -112,7 +112,7 @@
         }]);
 
         function postForm( $form, callback ){
-
+            addSpinner();
             /*
              * Get all form values
              */
@@ -134,6 +134,9 @@
                 data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role},
                 success     : function(data) {
                     callback( data );
+                    $('#create-person').hide();
+                    document.location.reload();
+                    hideSpinner();
                 }
             });
 

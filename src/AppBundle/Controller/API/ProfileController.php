@@ -32,11 +32,18 @@ class ProfileController extends Controller
         $channel = $em->getRepository('InventoryBundle:Channel')->find($type_id);
 
         $type_role = $request->request->get('type_role');
-        $role = $em->getRepository('AppBundle:Role')->findBy(array('name' => $type_role));
-
+        if($type_role === 'Retailer')
+            $role = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => $type_role));
+        else if ($type_role == 'Distributor')
+            $role = 'ROLE_DISTRIBUTOR';
+        else if ($type_role === 'Sales Rep')
+            $role = 'ROLE_SALES_REP';
 
         $values = $request->request->get('values');
-        $user = new User();
+//        $user = new User();
+
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $userManager->createUser();
         $user->setEnabled(true);
 
         $data = array();
@@ -70,6 +77,44 @@ class ProfileController extends Controller
 
         $user->setFirstName($data['first_name']);
         $user->setLastName($data['last_name']);
+        $user->setCompanyName($data['company_name']);
+        $user->setIsCurrentRetailer($data['is_current_retailer']);
+        $user->setUsername($data['username']);
+        $user->setEmail($data['email']);
+        $user->setAddress1($data['address_1']);
+        $user->setAddress2($data['address_2']);
+        $user->setCity($data['city']);
+        $user->setState($em->getRepository('AppBundle:State')->find($data['state']));
+        $user->setZip($data['zip']);
+        $user->setIsResidential($data['is_residential']);
+        $user->setIsOnlineIntentions($data['is_online_intentions']);
+        $user->setOnlineWebUrl($data['online_web_url']);
+        $user->setPlainPassword('matt');
+
+        $user->setWarehouse1($warehouse_1);
+        $user->setWarehouse2($warehouse_2);
+        $user->setWarehouse3($warehouse_3);
+
+        try {
+            $user->setMyDistributor($distributor);
+            $distributor->addRetailer($user);
+            $em->persist($distributor);
+
+            $user->setMySalesRep($sales_rep);
+            $sales_rep->addRetailer($user);
+            $em->persist($sales_rep);
+
+            $user->addUserChannel($channel);
+            $user->addGroup($role);
+
+            $userManager->updateUser($user);
+            return JsonResponse::create(true);
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+
+
 
     }
 
