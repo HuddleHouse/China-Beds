@@ -13,7 +13,9 @@
             $('#latest-orders').DataTable({
                 "iDisplayLength": 10, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
             $('#my-retailers').DataTable({
-                "iDisplayLength": 10, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "iDisplayLength": 10, "language": {"emptyTable": "You have no Retailers assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#my-distributors').DataTable({
+                "iDisplayLength": 10, "language": {"emptyTable": "You have no Distributors assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
 
             var forms = [
@@ -100,16 +102,11 @@
             $scope.new_user_type_name = '';
             $scope.new_user_type_id = 0;
             $scope.new_user_type_role = '';
-            $scope.new_user_role = '';
 
             $scope.changeUserType = function(name, id, role, user_role) {
                     $scope.new_user_type_name = name;
                     $scope.new_user_type_id = id;
                     $scope.new_user_type_role = role;
-                    $scope.new_user_role = user_role;
-                console.log($scope.new_user_type_name);
-                console.log($scope.new_user_type_id);
-                console.log($scope.new_user_type_role);
             }
         }]);
 
@@ -127,14 +124,13 @@
             var type_name = scope.new_user_type_name;
             var type_id = scope.new_user_type_id;
             var type_role = scope.new_user_type_role;
-            var user_role = scope.new_user_role;
             /*
              * Throw the form values to the server!
              */
             $.ajax({
                 type        : $form.attr( 'method' ),
                 url         : $form.attr( 'action' ),
-                data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role, user_role: user_role},
+                data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role},
                 success     : function(data) {
                     callback( data );
                     $('#create-person').hide();

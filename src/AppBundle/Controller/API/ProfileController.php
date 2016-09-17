@@ -35,7 +35,7 @@ class ProfileController extends Controller
         $user_role = $request->request->get('user_role');
         $role = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => $type_role));
 
-        if($user_role == 'D')
+        if($this->getUser()->hasRole('ROLE_DISTRIBUTOR'))
             $distributor = $this->getUser();
         else
             $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
@@ -106,6 +106,8 @@ class ProfileController extends Controller
 
             $user->addUserChannel($channel);
             $user->addGroup($role);
+            $role->addUser($user);
+            $em->persist($role);
 
             $userManager->updateUser($user);
             $em->flush();

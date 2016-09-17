@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="users")
  */
 class User extends BaseUser

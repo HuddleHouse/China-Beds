@@ -27,6 +27,7 @@ class ProfileController extends Controller
      */
     public function showAction()
     {
+        $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -43,13 +44,33 @@ class ProfileController extends Controller
         $user->setEnabled(true);
 
         $new_user_form = $this->createForm(NewUserType::class, $user);
-        $retailers = $this->getUser()->getRetailers();
 
+        if($this->getUser()->hasRole('ROLE_ADMIN')) {
+            $retailers_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Retailer'));
+            $retailers = $retailers_data->getUsers();
+            foreach($retailers as $retailer) {
+
+            }
+            $sales_reps = $this->getUser()->getSalesReps();
+            $distributors = $this->getUser()->getDistributors();
+        }
+        else {
+            $retailers = $this->getUser()->getRetailers();
+            $sales_reps = $this->getUser()->getSalesReps();
+            $distributors = $this->getUser()->getDistributors();
+        }
+
+
+
+        foreach($retailers as $retailer)
+            $i = 1;
 
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user,
             'new_user_form' => $new_user_form->createView(),
-            'retailers' => $retailers
+            'retailers' => $retailers,
+            'sales_reps' => $sales_reps,
+            'distributors' => $distributors
         ));
     }
 
