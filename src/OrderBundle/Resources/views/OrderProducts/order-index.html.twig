@@ -382,6 +382,14 @@
                 width: 47% !important;
             }
         }
+
+        #product{
+            margin-top:60px;
+        }
+
+        .col-md-6 .table{
+            box-shadow: none;
+        }
     </style>
 
 <form data-toggle="validator" role="form">
@@ -398,7 +406,7 @@
             </div>
             {% endif %}
             <div class="col-md-6">
-                <div class="table" style="background:rgba(2,177,242,.35); min-height: 250px;">
+                <div class="table" git stt="background:rgba(2,177,242,.35); min-height: 250px;">
                     <br>
                     <center><h1 style="color: #fff;">Get More, Make More</h1></center>
                     <center><h2>Specials</h2></center>
@@ -444,7 +452,7 @@
             <div class="grid">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-6 element-item {{ product.cat_ids }}">
+                    <div ng-repeat="product in products track by product.id" class="col-md-6 element-item {{ product.cat_ids }}" id="product">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
