@@ -34,11 +34,11 @@
             <div class="row" id="pick_up_warehouse" style="display: none; margin-bottom: 10px;">
                 <div class="col-md-12">
                     {% verbatim %}
-                        <label class="control-label" for="warehouse_pick_up">Warehouse</label>
-                        <select class="form-control" id="warehouse_pick_up" style="width: 100%;"
+                        <select class="" id="warehouse_pick_up" style="width: 100%;height: 37px;margin-top:8px;"
                             ng-model="cart['pick_up_warehouse']"
                             ng-change="warehouseChange()"
                             ng-options="option.name for option in user_warehouses track by option.id" required>
+                            <option value="" >Warehouse</option>
                         </select>
                         {% endverbatim %}
                 </div>
@@ -90,6 +90,15 @@
         <div class="col-md-12">
             <label class="control-label" for="email">Email *</label>
             <input id="email"  ng-model="form_info['email']" type="text" class="form_field input-md">
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-12">
+            <p>Please confirm shipping to residential address.
+                <input type="checkbox" ng-model="form_info['confirm_residential']" name="confirm_residential" id="confirm_residential" class="input_class_checkbox" style="display: inline;margin-right: 8px;">
+            </p>
+            <p style="font-size: 10px; margin-top: -23px;">Shipping is based FedEx rates.</p>
+
         </div>
     </div>
 </div>
