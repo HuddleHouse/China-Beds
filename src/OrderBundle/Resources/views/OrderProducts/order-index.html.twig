@@ -30,6 +30,8 @@
                 // use filterFn if matches value
                 filterValue = filterFns[ filterValue ] || filterValue;
                 grid.isotope({ filter: filterValue });
+                console.log(filterValue);
+
             });
             // change is-checked class on buttons
             $('.button-group').each( function( i, buttonGroup ) {
@@ -37,6 +39,7 @@
                 buttonGroup.on( 'click', 'button', function() {
                     buttonGroup.find('.is-checked').removeClass('is-checked');
                     $( this ).addClass('is-checked');
+
                 });
             });
         });
@@ -373,7 +376,11 @@
         .error {
             border: 3px solid lightcoral;
         }
-
+        ul
+        {
+            list-style-type: none;
+            color: #AAAAAA;
+        }
 
     </style>
 
@@ -467,7 +474,7 @@
                                         ${{ variant.price | number}}
                                     </div>
 
-                                    <div ng-if="" class="variant_inventory">
+                                    <div ng-if="variant.inventory < 10" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
                                     </div>
                                 </div>
@@ -478,15 +485,16 @@
             </div>
         </div>
 
-            <div class="row">
-                <div id="floaty-box" class="col-md-2 hidden-sm">
+                <div id="floaty-box" class="col-md-2 visible-lg">
                     <ul>
-                    {% for category in categories %}
-                        <li><h6 style="margin: 0;">{{ category.name }}</h6></li>
-                    {% endfor %}
+                        <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
+                        {% for category in categories %}
+                            <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
+                        {% endfor %}
+                        <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-all" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
+
                     </ul>
                 </div>
-            </div>
         {% endif %}
     </div>
 </div>
