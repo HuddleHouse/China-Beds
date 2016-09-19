@@ -19,7 +19,6 @@
             $('#my-sales-reps').DataTable({
                 "iDisplayLength": 10, "language": {"emptyTable": "You have no Sales Reps assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
-
             var forms = [
                 '[ name="{{ new_user_form.vars.full_name }}"]'
             ];
@@ -135,9 +134,7 @@
                 data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role},
                 success     : function(data) {
                     callback( data );
-                    $('#create-person').hide();
                     document.location.reload();
-                    hideSpinner();
                 }
             });
 

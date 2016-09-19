@@ -2,8 +2,11 @@
 
 namespace AppBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
+use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -157,8 +160,111 @@ class UserType extends AbstractType
                     'No' => 0,
                 ),
             ))
-
+            ->add('my_distributor', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.groups', 'g')
+                        ->where('g.id = 3');
+                },
+                'label' => 'Distributor',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false
+            ))
+            ->add('my_sales_rep', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.groups', 'g')
+                        ->where('g.id = 6');
+                },
+                'label' => 'Sales Rep',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false
+            ))
+            ->add('my_sales_manager', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.groups', 'g')
+                        ->where('g.id = 4');
+                },
+                'label' => 'Sales Manager',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false
+            ))
+            ->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                array($this, 'onPreSetData')
+            )
+            ->addEventListener(
+                FormEvents::POST_SUBMIT,
+                array($this, 'onPostSubmitData')
+            )
         ;
+    }
+
+    public function onPostSubmitData($event) {
+        $user = $event->getData();
+        $form = $event->getForm();
+
+    }
+
+    public function onPreSetData($event)
+    {
+        $user = $event->getData();
+        $form = $event->getForm();
+
+        if($user->hasRole('ROLE_DISTRIBUTOR')) {
+            $form->add('retailers', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.groups', 'g')
+                        ->where('g.id = 5');
+                },
+                'label' => 'Retailers',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false,
+                'multiple' => true,
+            ));
+        }
+        if ($user->hasRole('ROLE_SALES_REP')) {
+            $form->add('distributors', EntityType::class, array(
+                'class' => 'AppBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.groups', 'g')
+                        ->where('g.id = 3');
+                },
+                'label' => 'Distributors',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; '),
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true
+            ));
+        }
+        if ($user->hasRole('ROLE_SALES_MANAGER')) {
+            $form->add('sales_reps', null, array(
+                'class' => 'AppBundle:User',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.groups', 'g')
+                        ->where('g.id = 6');
+                },
+                'label' => 'Sales Reps',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true
+            ));
+        }
     }
 
     /**

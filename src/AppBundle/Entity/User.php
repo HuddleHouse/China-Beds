@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
 class User extends BaseUser
@@ -875,7 +875,12 @@ class User extends BaseUser
     }
 
     public function addRetailer(User $retailer) {
-        $this->retailers[] = $retailer;
+        if(!$this->retailers->contains($retailer))
+            $this->retailers[] = $retailer;
+    }
+
+    public function removeRetailer($retailer) {
+        $this->retailers->removeElement($retailer);
     }
 
     /**
@@ -915,7 +920,13 @@ class User extends BaseUser
     }
 
     public function addDistributor(User $distributor) {
-        $this->distributors[] = $distributor;
+        if(!$this->distributors->contains($distributor))
+            $this->distributors[] = $distributor;
+    }
+
+    public function removeDistributor($distributor)
+    {
+        $this->distributors->removeElement($distributor);
     }
 
     /**
@@ -955,8 +966,15 @@ class User extends BaseUser
     }
 
     public function addSalesRep(User $sales_rep) {
-        $this->sales_reps[] = $sales_rep;
+        if(!$this->sales_reps->contains($sales_rep))
+            $this->sales_reps[] = $sales_rep;
     }
+
+    public function removeSalesRep($salesRep)
+    {
+        $this->sales_reps->removeElement($salesRep);
+    }
+
 
     /**
      * @return mixed

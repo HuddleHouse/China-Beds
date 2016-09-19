@@ -30,118 +30,148 @@
             <div class="row">
                 <div class="col-md-12">
                     <h2>Information</h2>
-                    <hr>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.first_name) }}
                     {{ form_widget(form.first_name) }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.last_name) }}
                     {{ form_widget(form.last_name) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.office) }}
                     {{ form_widget(form.office) }}
+
+                </div>
+                <div class="col-md-6 form-group">
                     {{ form_label(form.enabled) }}
                     {{ form_widget(form.enabled) }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.email) }}
                     {{ form_widget(form.email) }}
 
                 </div>
             </div>
-            <hr>
             <div class="row">
                 <div class="col-md-12">
                     <h2>Admin</h2>
-                    <hr>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.groups) }}
                     {{ form_widget(form.groups) }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.price_groups) }}
                     {{ form_widget(form.price_groups) }}
                 </div>
+                <div class="col-md-6 form-group">
+                    {{ form_label(form.my_distributor) }}
+                    {{ form_widget(form.my_distributor) }}
+                </div>
+                <div class="col-md-6 form-group">
+                    {{ form_label(form.my_sales_rep) }}
+                    {{ form_widget(form.my_sales_rep) }}
+                </div>
+                <div class="col-md-6 form-group">
+                    {{ form_label(form.my_sales_manager) }}
+                    {{ form_widget(form.my_sales_manager) }}
+                </div>
             </div>
-            <hr>
+            {% if user.hasRole('ROLE_DISTRIBUTOR') %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_label(form.retailers) }}
+                        {{ form_widget(form.retailers) }}
+                    </div>
+                </div>
+            {% endif %}
+            {% if user.hasRole('ROLE_SALES_REP') %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_label(form.distributors) }}
+                        {{ form_widget(form.distributors) }}
+                    </div>
+                </div>
+            {% endif %}
+            {% if user.hasRole('ROLE_SALES_MANAGER') %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ form_label(form.sales_reps) }}
+                        {{ form_widget(form.sales_reps) }}
+                    </div>
+                </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Address</h2>
-                    <hr>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.address_1) }}
                     {{ form_widget(form.address_1) }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.address_2) }}
                     {{ form_widget(form.address_2) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.city) }}
                     {{ form_widget(form.city) }}
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 form-group">
                     {{ form_label(form.state) }}
                     {{ form_widget(form.state) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.zip) }}
                     {{ form_widget(form.zip) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 form-group">
                     {{ form_label(form.is_residential) }}
                     {{ form_widget(form.is_residential) }}
                 </div>
             </div>
-            <hr>
             <div class="row">
                 <div class="col-md-12">
                     <h2>Retailer Info</h2>
-                    <hr>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.is_show_credit) }}
                     {{ form_widget(form.is_show_credit) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.is_volume_discount) }}
                     {{ form_widget(form.is_volume_discount) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.is_charge_shipping) }}
                     {{ form_widget(form.is_charge_shipping) }}
                 </div>
             </div>
-            <hr>
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.is_show_warranty) }}
                     {{ form_widget(form.is_show_warranty) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.sent_retail_kit) }}
                     {{ form_widget(form.sent_retail_kit) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.is_current_retailer) }}
                     {{ form_widget(form.is_current_retailer) }}
                 </div>
             </div>
-            <hr>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.is_online_intentions) }}
                     {{ form_widget(form.is_online_intentions) }}
                 </div>
@@ -150,36 +180,32 @@
                 <div class="col-md-4">
                 </div>
             </div>
-            <hr>
             <div class="row">
                 <div class="col-md-12">
                     <h1>Order Information</h1>
-                    <hr>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 form-group">
                     {{ form_label(form.user_channels) }}
                     {{ form_widget(form.user_channels) }}
                 </div>
                 <div class="col-md-6">
                 </div>
             </div>
-            <hr>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.warehouse_1) }}
                     {{ form_widget(form.warehouse_1) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.warehouse_2) }}
                     {{ form_widget(form.warehouse_2) }}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.warehouse_3) }}
                     {{ form_widget(form.warehouse_3) }}
                 </div>
             </div>
 
-            <hr>
             <div class="row">
                 <div class="col-md-8">
                 </div>

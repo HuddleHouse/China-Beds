@@ -10,5 +10,24 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getAllDistributorsArray() {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select *
+	from users u 
+		left join role_users ru
+			on ru.user_id = u.id
+		left join roles r 
+			on r.id = ru.role_id
+		where r.roles LIKE '%ROLE_DISTRIBUTOR%'");
+        $statement->execute();
+        $data = $statement->fetchAll();
 
+        $distributors = array();
+        foreach($data as $d) {
+            $dist = $em->getRepository('AppBundle:User')->find($d['id']);
+            $distributors[] = $dist;
+        }
+        return $distributors;
+    }
 }

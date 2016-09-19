@@ -53,21 +53,24 @@ class AdminController extends Controller
 
                 return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
                     'form' => $form->createView(),
-                    'user_id' => $user_id
+                    'user_id' => $user_id,
+                    'user' =>$user
                 ));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
                 return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
                     'form' => $form->createView(),
-                    'user_id' => $user_id
+                    'user_id' => $user_id,
+                    'user' =>$user
                 ));
             }
         }
 
         return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
             'form' => $form->createView(),
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'user' =>$user
         ));
     }
 
