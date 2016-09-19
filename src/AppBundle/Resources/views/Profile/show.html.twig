@@ -157,6 +157,14 @@
                 margin: 30px auto;
             }
         }
+        .box {
+            -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+        }
+        .table {
+            -webkit-box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0) !important;
+            box-shadow: 0 0px 0px 0 rgba(0,0,0,.14),0 0px 0px 0px rgba(0,0,0,.2),0 0px 0px 0 rgba(0,0,0,.12) !important;
+        }
     </style>
     <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}

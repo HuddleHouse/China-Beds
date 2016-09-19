@@ -47,3 +47,7 @@ input[type=checkbox], input[type=radio] {
     margin: 8px 5px 0 25px !important;
     display: inline !important;
 }
+input[type=text] {
+    padding-left: 10px;
+    padding-right: 10px;
+}
