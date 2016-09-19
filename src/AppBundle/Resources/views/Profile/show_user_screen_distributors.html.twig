@@ -35,7 +35,7 @@
                     <tbody>
                     {% for distributor in distributors %}
                         <tr role="row">
-                            <td><a href="">{{ distributor.firstName }} {{ distributor.lastName }}</a></td>
+                            <td><a href="{{ path('edit_child_user', { 'id': distributor.id }) }}">{{ distributor.firstName }} {{ distributor.lastName }}</a></td>
                             <td>{{ distributor.state.name }}</td>
                             <td>
                                 {% for channel in distributor.userChannels %}
@@ -44,7 +44,7 @@
                             </td>
                             <td>
                                 {% if distributor.mySalesRep.firstName is defined %}
-                                    <a href="">{{ distributor.mySalesRep.firstName }} {{ distributor.mySalesRep.lastName }}</a>
+                                    <a href="{{ path('edit_child_user', { 'id': distributor.mySalesRep.id }) }}">{{ distributor.mySalesRep.firstName }} {{ distributor.mySalesRep.lastName }}</a>
                                 {% else %}
                                     None
                                 {% endif %}
@@ -58,7 +58,7 @@
         <!-- /.box-body -->
         <div class="box-footer clearfix">
             {% for channel in sidebar_user_channels %}
-                <a ng-click="changeUserType('{{ channel.name }}', {{ channel.id }}, 'Distributor')" class="btn btn-raised btn-sm btn-info btn-flat pull-left" data-toggle="modal" data-target="#create-person">Create {{ channel.name }} Distributor</a>
+                <a ng-click="changeUserType('{{ channel.name }}', {{ channel.id }}, 'Distributor')" class="btn btn-raised btn-sm btn-default btn-flat pull-left" data-toggle="modal" data-target="#create-person"><i class="fa fa-plus"></i> Create {{ channel.name }} Distributor</a>
             {%  endfor %}
             <a href="javascript:void(0)" class="btn btn-raised btn-sm btn-default btn-flat pull-right">View All Orders</a>
         </div>
