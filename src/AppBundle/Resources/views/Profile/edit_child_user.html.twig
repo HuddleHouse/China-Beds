@@ -6,7 +6,7 @@
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('fos_user_profile_show') }}">< Back home</a>
+    <a href="{{ path("fos_user_profile_show") }}">< Back home</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -25,7 +25,7 @@
 
     <div class="table">
         <div class="form-body">
-            {{ form_start(form, { 'action': path('edit_child_user', {'id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
+            {{ form_start(form, { "action": path("edit_child_user", {"id": user_id}), "attr": { "class": "form-horizontal" } }) }}
 
             <div class="row">
                 <div class="col-md-12">
@@ -85,7 +85,7 @@
                     {{ form_widget(form.is_residential) }}
                 </div>
             </div>
-    {% if (user.hasRole('ROLE_DISTRIBUTOR') == false) and (user.hasRole('ROLE_RETAILER') == false) %}
+    {% if (user.hasRole("ROLE_DISTRIBUTOR") == false) and (user.hasRole("ROLE_RETAILER") == false) %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Retailer Info</h2>
