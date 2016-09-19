@@ -88,11 +88,6 @@ class ProfileController extends Controller
             $distributors = $this->getUser()->getDistributors();
         }
 
-
-
-        foreach($retailers as $retailer)
-            $i = 1;
-
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user,
             'new_user_form' => $new_user_form->createView(),

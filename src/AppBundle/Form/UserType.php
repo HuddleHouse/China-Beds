@@ -58,13 +58,6 @@ class UserType extends AbstractType
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false
             ))
-            ->add('office', EntityType::class, array(
-                'class' => 'InventoryBundle:Office',
-                'label' => 'Office',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
             ->add('groups', EntityType::class, array(
                 'class' => 'AppBundle:Role',
                 'label' => 'Roles',

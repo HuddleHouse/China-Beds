@@ -85,6 +85,50 @@
                     {{ form_widget(form.is_residential) }}
                 </div>
             </div>
+    {% if (user.hasRole('ROLE_DISTRIBUTOR') == false) and (user.hasRole('ROLE_RETAILER') == false) %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Retailer Info</h2>
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.is_show_credit) }}
+                    {{ form_widget(form.is_show_credit) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.is_volume_discount) }}
+                    {{ form_widget(form.is_volume_discount) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.is_charge_shipping) }}
+                    {{ form_widget(form.is_charge_shipping) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.is_show_warranty) }}
+                    {{ form_widget(form.is_show_warranty) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.sent_retail_kit) }}
+                    {{ form_widget(form.sent_retail_kit) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.is_current_retailer) }}
+                    {{ form_widget(form.is_current_retailer) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.is_online_intentions) }}
+                    {{ form_widget(form.is_online_intentions) }}
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+    {% endif %}
             <div style="padding-top: 20px;">
                 <input class="btn btn-raised btn-success" type="submit" value="Update"/>
             </div>
