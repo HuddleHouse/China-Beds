@@ -58,6 +58,7 @@
                 self.isEdit = 0;
                 self.warehouses = {{ warehouses | json_encode | raw}};
                 self.warehouse = {{ purchaseOrder.warehouse.id }};
+                self.updateETA = updateETA;
 
 
                 function setEdit(val){
@@ -208,6 +209,20 @@
                     });
 
                 }
+
+                function updateETA(){
+                    addSpinner();
+                    alert({{ purchaseOrder.id }});
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_eta') }}",
+                        daraType: 'json',
+                        data: { due_date: self.due_date, purchase_order_id: {{ purchaseOrder.id}} },
+                        success: function (data) {
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
+                        }
+                    })
+                }
             };
 
             function jqSpinner() {
@@ -237,7 +252,7 @@
         }
         .table-form input {
             text-align: center !important;
-            margin-bottom: -2px !important;
+            margin-bottom: -8px !important;
             height: 60px !important;
         }
         .table-name {
@@ -247,10 +262,10 @@
         span.ui-spinner.ui-state-default.ui-widget.ui-widget-content.ui-corner-all {
             display: flex;
         }
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            opacity: 0;
-        }
+        /*input[type=number]::-webkit-inner-spin-button,*/
+        /*input[type=number]::-webkit-outer-spin-button {*/
+            /*opacity: 0;*/
+        /*}*/
         .ui-spinner-button {
             height: 50%;
             position: absolute;
@@ -271,10 +286,15 @@
 
         <div class="table">
             <div class="row">
-
+                {% if purchaseOrder.status.name == 'Active' or purchaseOrder.status.name == 'Draft' %}
                 <div class="col-md-4">
                     <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
+                {% else %}
+                    <div class="col-md-4">
+                        <h5>Day are merchandise got here<md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
+                    </div>
+                {% endif %}
                 <div class="col-md-2">
                     <span class="mdl-chip mdl-chip--contact" style="margin-top: 27px;">
                             <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.nameFirstLetter }}</span>
@@ -290,6 +310,8 @@
                         <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
                     {% elseif purchaseOrder.status.name == 'Draft' %}
                         <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
+                    {% else %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updateETA()">Update Time</a>
                     {% endif %}
                     </div>
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
@@ -339,7 +361,7 @@
                                  <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.received_quantity" type="number" jq-spinner ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)" class="form-control number_select"  >
+                                <input ng-model="item.received_quantity" type="number" jq-spinner min="0" ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)" class="form-control number_select"  >
                             </td>
                             <td class="table-form" >
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>

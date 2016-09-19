@@ -37,6 +37,13 @@ class PurchaseOrder
     private $stockDueDate;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="order_received_date", type="datetime", nullable=true)
+     */
+    private $orderReceivedDate;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="order_number", type="string", length=255, nullable=true)
@@ -277,6 +284,22 @@ class PurchaseOrder
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getOrderReceivedDate()
+    {
+        return $this->orderReceivedDate;
+    }
+
+    /**
+     * @param \DateTime $orderReceivedDate
+     */
+    public function setOrderReceivedDate($orderReceivedDate)
+    {
+        $this->orderReceivedDate = $orderReceivedDate;
     }
 
 
