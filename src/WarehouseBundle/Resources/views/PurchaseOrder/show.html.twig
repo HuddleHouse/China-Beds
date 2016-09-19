@@ -252,7 +252,7 @@
         }
         .table-form input {
             text-align: center !important;
-            margin-bottom: -2px !important;
+            margin-bottom: -8px !important;
             height: 60px !important;
         }
         .table-name {
@@ -262,10 +262,10 @@
         span.ui-spinner.ui-state-default.ui-widget.ui-widget-content.ui-corner-all {
             display: flex;
         }
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            opacity: 0;
-        }
+        /*input[type=number]::-webkit-inner-spin-button,*/
+        /*input[type=number]::-webkit-outer-spin-button {*/
+            /*opacity: 0;*/
+        /*}*/
         .ui-spinner-button {
             height: 50%;
             position: absolute;
@@ -361,7 +361,7 @@
                                  <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.received_quantity" type="number" jq-spinner ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)" class="form-control number_select"  >
+                                <input ng-model="item.received_quantity" type="number" jq-spinner min="0" ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)" class="form-control number_select"  >
                             </td>
                             <td class="table-form" >
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
