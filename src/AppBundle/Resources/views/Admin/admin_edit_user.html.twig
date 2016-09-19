@@ -60,14 +60,8 @@
                 <div class="col-md-12">
                     <h2>Admin</h2>
                 </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.groups) }}
-                    {{ form_widget(form.groups) }}
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.price_groups) }}
-                    {{ form_widget(form.price_groups) }}
-                </div>
+            </div>
+            <div class="row" style="display: block;">
                 <div class="col-md-6 form-group">
                     {{ form_label(form.my_distributor) }}
                     {{ form_widget(form.my_distributor) }}
@@ -81,29 +75,48 @@
                     {{ form_widget(form.my_sales_manager) }}
                 </div>
             </div>
+            <div class="row" >
+                <div class="col-md-6" style="display: block;">
+                    {{ form_label(form.groups) }}
+                    {{ form_widget(form.groups) }}
+                </div>
+                <div class="col-md-6" style="display: block;">
+                    {{ form_label(form.price_groups) }}
+                    {{ form_widget(form.price_groups) }}
+                </div>
+            </div>
+            <br>
+            <br>
+
             {% if user.hasRole('ROLE_DISTRIBUTOR') %}
-                <div class="row">
+                <div class="row" style="display: block;">
                     <div class="col-md-12">
                         {{ form_label(form.retailers) }}
                         {{ form_widget(form.retailers) }}
                     </div>
                 </div>
+                <br>
+                <br>
             {% endif %}
             {% if user.hasRole('ROLE_SALES_REP') %}
-                <div class="row">
+                <div class="row" style="display: block;">
                     <div class="col-md-12">
                         {{ form_label(form.distributors) }}
                         {{ form_widget(form.distributors) }}
                     </div>
                 </div>
+                <br>
+                <br>
             {% endif %}
             {% if user.hasRole('ROLE_SALES_MANAGER') %}
-                <div class="row">
+                <div class="row" style="display: block;">
                     <div class="col-md-12">
                         {{ form_label(form.sales_reps) }}
                         {{ form_widget(form.sales_reps) }}
                     </div>
                 </div>
+                <br>
+                <br>
             {% endif %}
             <div class="row">
                 <div class="col-md-12">

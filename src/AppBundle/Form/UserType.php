@@ -70,7 +70,8 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'expanded' => true
             ))
             ->add('price_groups', EntityType::class, array(
                 'class' => 'AppBundle:PriceGroup',
@@ -78,7 +79,8 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'expanded' => true
             ))
             ->add('user_channels', EntityType::class, array(
                 'class' => 'InventoryBundle\Entity\Channel',
@@ -231,6 +233,7 @@ class UserType extends AbstractType
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false,
                 'multiple' => true,
+                'expanded' => true
             ));
         }
         if ($user->hasRole('ROLE_SALES_REP')) {

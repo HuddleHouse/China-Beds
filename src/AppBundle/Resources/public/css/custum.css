@@ -42,3 +42,8 @@ select.form-control {
     border-radius: 2px;
     border: 0;
 }
+
+input[type=checkbox], input[type=radio] {
+    margin: 8px 5px 0 25px !important;
+    display: inline !important;
+}
