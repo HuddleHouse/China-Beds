@@ -7,11 +7,13 @@
                     <label class="control-label" for="po">PO# *</label>
                     <input id="po" name="po" ng-model="form_info['po']" type="text" class="form_field input-md">
                 </div>
-                <div class="col-md-6">
-                    <div id="pick_up_date" style="display: none;">
-                        <label class="control-label" for="pick_up_date">Pick Up Date *</label>
-                        <md-datepicker ng-model="form_info['pick_up_date']"></md-datepicker>
-                    </div>
+                <div class="col-md-2" style="margin-top: 25px; display: inline-flex;">
+                    <input type="checkbox" ng-model="form_info['ship']" name="shipping" id="shipping" class="input_class_checkbox" style="display: inline;margin-right: 8px;" ng-click="shipping()">
+                    <label class="checkbox" for="shipping" style="margin-left: 8px; margin-top: -7px;">Ship</label>
+                </div>
+                <div class="col-md-4" style="margin-top: 25px; display: inline-flex;">
+                    <input type="checkbox" ng-model="form_info['pick_up']" name="pick_up" id="pick_up" class="input_class_checkbox" ng-click="pickUp()" style="display: inline;margin-right: 8px;">
+                    <label class="checkbox" for="pick_up" style="margin-left: 8px; margin-top: -7px;">Pick Up</label>
                 </div>
             </div>
 
@@ -22,13 +24,11 @@
                         <input id="agent_name" ng-model="form_info['agent_name']" name="agent_name" type="text" class="form_field input-md">
                     </div>
                 </div>
-                <div class="col-md-2" style="margin-top: 25px; display: inline-flex;">
-                    <input type="checkbox" ng-model="form_info['ship']" name="shipping" id="shipping" class="input_class_checkbox" style="display: inline;margin-right: 8px;" ng-click="shipping()">
-                    <label class="checkbox" for="shipping" style="margin-left: 8px; margin-top: -7px;">Ship</label>
-                </div>
-                <div class="col-md-4" style="margin-top: 25px; display: inline-flex;">
-                    <input type="checkbox" ng-model="form_info['pick_up']" name="pick_up" id="pick_up" class="input_class_checkbox" ng-click="pickUp()" style="display: inline;margin-right: 8px;">
-                    <label class="checkbox" for="pick_up" style="margin-left: 8px; margin-top: -7px;">Pick Up</label>
+                <div class="col-md-6">
+                    <div id="pick_up_date" style="display: none;">
+                        <label class="control-label" for="pick_up_date">Pick Up Date *</label>
+                        <md-datepicker ng-model="form_info['pick_up_date']"></md-datepicker>
+                    </div>
                 </div>
             </div>
             <div class="row" id="pick_up_warehouse" style="display: none; margin-bottom: 10px;">

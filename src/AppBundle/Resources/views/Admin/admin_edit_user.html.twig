@@ -13,6 +13,21 @@
 {% endblock actions %}
 
 {% block content %}
+    <style>
+        .toggler {
+            border-left: 1px solid #d5d5d5;
+            box-shadow: inset 1px 0 0 0 #fff;
+            width: 44px;
+            width: 2.75rem;
+            height: 38.4px;
+            height: 2.4rem;
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+        }
+    </style>
     {% if not form.vars.valid %}
         <div class="col-md-12">
             <div class="bs-callout bs-callout-danger ">
