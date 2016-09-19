@@ -58,6 +58,7 @@
                 self.isEdit = 0;
                 self.warehouses = {{ warehouses | json_encode | raw}};
                 self.warehouse = {{ purchaseOrder.warehouse.id }};
+                self.updateETA = updateETA;
 
 
                 function setEdit(val){
@@ -208,6 +209,20 @@
                     });
 
                 }
+
+                function updateETA(){
+                    addSpinner();
+                    alert({{ purchaseOrder.id }});
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_eta') }}",
+                        daraType: 'json',
+                        data: { due_date: self.due_date, purchase_order_id: {{ purchaseOrder.id}} },
+                        success: function (data) {
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
+                        }
+                    })
+                }
             };
 
             function jqSpinner() {
@@ -271,10 +286,15 @@
 
         <div class="table">
             <div class="row">
-
+                {% if purchaseOrder.status.name == 'Active' or purchaseOrder.status.name == 'Draft' %}
                 <div class="col-md-4">
                     <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
+                {% else %}
+                    <div class="col-md-4">
+                        <h5>Day are merchandise got here<md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
+                    </div>
+                {% endif %}
                 <div class="col-md-2">
                     <span class="mdl-chip mdl-chip--contact" style="margin-top: 27px;">
                             <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ purchaseOrder.status.color }};">{{ purchaseOrder.status.nameFirstLetter }}</span>
@@ -290,6 +310,8 @@
                         <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
                     {% elseif purchaseOrder.status.name == 'Draft' %}
                         <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
+                    {% else %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updateETA()">Update Time</a>
                     {% endif %}
                     </div>
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
