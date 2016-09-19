@@ -37,7 +37,6 @@ class Role extends BaseGroup
      */
     private $permissions;
 
-
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
      * @ORM\JoinTable(name="role_children",

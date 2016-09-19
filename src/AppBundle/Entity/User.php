@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
 class User extends BaseUser
@@ -65,6 +66,12 @@ class User extends BaseUser
     protected $phone;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $company_name;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="zip", type="integer", nullable=true)
@@ -111,13 +118,19 @@ class User extends BaseUser
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_current = false;
+    protected $is_current_retailer = false;
 
     /**
      *
      * @ORM\Column(type="boolean")
      */
-    protected $is_online_intentions = true;
+    protected $is_online_intentions = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $online_web_url;
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
@@ -201,10 +214,43 @@ class User extends BaseUser
      */
     private $warehouse_3;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor")
+     */
+    private $retailers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="my_distributor_id", referencedColumnName="id")
+     */
+    private $my_distributor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep")
+     */
+    private $distributors;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
+     */
+    private $my_sales_rep;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager")
+     */
+    private $sales_reps;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="my_sales_manager_id", referencedColumnName="id")
+     */
+    private $my_sales_manager;
+
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->warranty_claims = new \Doctrine\Common\Collections\ArrayCollection();
         $this->user_channels = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
@@ -213,6 +259,13 @@ class User extends BaseUser
         $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->purchase_orders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->stock_adjustments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->retailers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->distributors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sales_reps = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getFullName() {
+        return $this->first_name . " " . $this->last_name;
     }
 
     public function getRouteNames() {
@@ -516,22 +569,6 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getIsCurrent()
-    {
-        return $this->is_current;
-    }
-
-    /**
-     * @param mixed $is_current
-     */
-    public function setIsCurrent($is_current)
-    {
-        $this->is_current = $is_current;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getIsOnlineIntentions()
     {
         return $this->is_online_intentions;
@@ -551,6 +588,10 @@ class User extends BaseUser
     }
 
 
+    public function addGroup(GroupInterface $group)
+    {
+        return parent::addGroup($group);
+    }
 
 
     public function addRole($role)
@@ -764,5 +805,192 @@ class User extends BaseUser
     {
         $this->stock_adjustments = $stock_adjustments;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIsCurrentRetailer()
+    {
+        return $this->is_current_retailer;
+    }
+
+    /**
+     * @param mixed $is_current_retailer
+     */
+    public function setIsCurrentRetailer($is_current_retailer)
+    {
+        $this->is_current_retailer = $is_current_retailer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnlineWebUrl()
+    {
+        return $this->online_web_url;
+    }
+
+    /**
+     * @param mixed $online_web_url
+     */
+    public function setOnlineWebUrl($online_web_url)
+    {
+        $this->online_web_url = $online_web_url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyName()
+    {
+        return $this->company_name;
+    }
+
+    /**
+     * @param mixed $company_name
+     */
+    public function setCompanyName($company_name)
+    {
+        $this->company_name = $company_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRetailers()
+    {
+        $data = array();
+        foreach($this->retailers as $retailer)
+            if($retailer->hasRole('ROLE_RETAILER'))
+                $data[] = $retailer;
+        return $data;
+    }
+
+    /**
+     * @param mixed $my_retailers
+     */
+    public function setRetailers($retailers)
+    {
+        $this->retailers = $retailers;
+    }
+
+    public function addRetailer(User $retailer) {
+        if(!$this->retailers->contains($retailer))
+            $this->retailers[] = $retailer;
+    }
+
+    public function removeRetailer($retailer) {
+        $this->retailers->removeElement($retailer);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMyDistributor()
+    {
+        return $this->my_distributor;
+    }
+
+    /**
+     * @param mixed $my_distributor
+     */
+    public function setMyDistributor($my_distributor)
+    {
+        $this->my_distributor = $my_distributor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDistributors()
+    {
+        $data = array();
+        foreach($this->distributors as $distributor)
+            if($distributor->hasRole('ROLE_DISTRIBUTOR'))
+                $data[] = $distributor;
+        return $data;
+    }
+
+    /**
+     * @param mixed $distributors
+     */
+    public function setDistributors($distributors)
+    {
+        $this->distributors = $distributors;
+    }
+
+    public function addDistributor(User $distributor) {
+        if(!$this->distributors->contains($distributor))
+            $this->distributors[] = $distributor;
+    }
+
+    public function removeDistributor($distributor)
+    {
+        $this->distributors->removeElement($distributor);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMySalesRep()
+    {
+        return $this->my_sales_rep;
+    }
+
+    /**
+     * @param mixed $my_sales_rep
+     */
+    public function setMySalesRep($my_sales_rep)
+    {
+        $this->my_sales_rep = $my_sales_rep;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSalesReps()
+    {
+        $data = array();
+        foreach($this->sales_reps as $rep)
+            if($rep->hasRole('ROLE_SALES_REP'))
+                $data[] = $rep;
+        return $data;
+    }
+
+    /**
+     * @param mixed $sales_reps
+     */
+    public function setSalesReps($sales_reps)
+    {
+        $this->sales_reps = $sales_reps;
+    }
+
+    public function addSalesRep(User $sales_rep) {
+        if(!$this->sales_reps->contains($sales_rep))
+            $this->sales_reps[] = $sales_rep;
+    }
+
+    public function removeSalesRep($salesRep)
+    {
+        $this->sales_reps->removeElement($salesRep);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getMySalesManager()
+    {
+        return $this->my_sales_manager;
+    }
+
+    /**
+     * @param mixed $my_sales_manager
+     */
+    public function setMySalesManager($my_sales_manager)
+    {
+        $this->my_sales_manager = $my_sales_manager;
+    }
+
 
 }

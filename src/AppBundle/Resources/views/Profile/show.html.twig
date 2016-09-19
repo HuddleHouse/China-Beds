@@ -7,7 +7,165 @@
 {% block page_name  %}
     Profile Information
 {% endblock page_name %}
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#latest-orders').DataTable({
+                "iDisplayLength": 10, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#my-retailers').DataTable({
+                "iDisplayLength": 10, "language": {"emptyTable": "You have no Retailers assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#my-distributors').DataTable({
+                "iDisplayLength": 10, "language": {"emptyTable": "You have no Distributors assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#my-sales-reps').DataTable({
+                "iDisplayLength": 10, "language": {"emptyTable": "You have no Sales Reps assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+
+            var forms = [
+                '[ name="{{ new_user_form.vars.full_name }}"]'
+            ];
+
+            $( forms.join(',') ).submit( function( e ){
+                e.preventDefault();
+
+                postForm( $(this), function( response ){
+                });
+
+                return false;
+            });
+        });
+
+        $(function () {
+
+            "use strict";
+
+            //Make the dashboard widgets sortable Using jquery UI
+            $(".connectedSortable").sortable({
+                placeholder: "sort-highlight",
+                connectWith: ".connectedSortable",
+                handle: ".box-header",
+                forcePlaceholderSize: true,
+                zIndex: 999999
+            });
+            $(".connectedSortable .box-header, .connectedSortable .nav-tabs-custom").css("cursor", "move");
+
+            //bootstrap WYSIHTML5 - text editor
+            $(".textarea").wysihtml5();
+
+
+
+            //The Calender
+            $("#calendar").datepicker();
+
+
+            var line = new Morris.Line({
+                element: 'line-chart',
+                resize: true,
+                data: [
+                    {y: '2011 Q1', item1: 2666},
+                    {y: '2011 Q2', item1: 2778},
+                    {y: '2011 Q3', item1: 4912},
+                    {y: '2011 Q4', item1: 3767},
+                    {y: '2012 Q1', item1: 6810},
+                    {y: '2012 Q2', item1: 5670},
+                    {y: '2012 Q3', item1: 4820},
+                    {y: '2012 Q4', item1: 15073},
+                    {y: '2013 Q1', item1: 10687},
+                    {y: '2013 Q2', item1: 8432}
+                ],
+                xkey: 'y',
+                ykeys: ['item1'],
+                labels: ['Item 1'],
+                lineColors: ['#efefef'],
+                lineWidth: 2,
+                hideHover: 'auto',
+                gridTextColor: "#fff",
+                gridStrokeWidth: 0.4,
+                pointSize: 4,
+                pointStrokeColors: ["#efefef"],
+                gridLineColor: "#efefef",
+                gridTextFamily: "Open Sans",
+                gridTextSize: 10
+            });
+
+
+            //Fix for charts under tabs
+            $('.box ul.nav a').on('shown.bs.tab', function () {
+                area.redraw();
+                donut.redraw();
+                line.redraw();
+            });
+
+
+        });
+
+        var app = angular.module('myApp', ['ngMaterial']);
+        app.controller('myCtrl', ['$scope', function($scope) {
+            $scope.cart = [];
+            $scope.new_user_type_name = '';
+            $scope.new_user_type_id = 0;
+            $scope.new_user_type_role = '';
+
+            $scope.changeUserType = function(name, id, role, user_role) {
+                    $scope.new_user_type_name = name;
+                    $scope.new_user_type_id = id;
+                    $scope.new_user_type_role = role;
+            }
+        }]);
+
+        function postForm( $form, callback ){
+            addSpinner();
+            /*
+             * Get all form values
+             */
+            var values = {};
+            $.each( $form.serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+
+            var scope = angular.element(document.getElementById('MainCtrl')).scope();
+            var type_name = scope.new_user_type_name;
+            var type_id = scope.new_user_type_id;
+            var type_role = scope.new_user_type_role;
+            /*
+             * Throw the form values to the server!
+             */
+            $.ajax({
+                type        : $form.attr( 'method' ),
+                url         : $form.attr( 'action' ),
+                data        : {values: values, type_name: type_name, type_id: type_id, type_role: type_role},
+                success     : function(data) {
+                    callback( data );
+                    document.location.reload();
+                }
+            });
+
+        }
+    </script>
+{% endblock footer %}
+
 
 {% block content %}
-    {% include "FOSUserBundle:Profile:show_content.html.twig" %}
+    <style>
+        .fa.fa-minus, .fa.fa-plus {
+            color: #42A5F5;
+        }
+        .white {
+            color: #fff !important;
+        }
+        @media (min-width: 768px) {
+            .modal-dialog {
+                width: 70%;
+                margin: 30px auto;
+            }
+        }
+    </style>
+    <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+    {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        {% include "AppBundle:Profile:show_top_bar.html.twig" %}
+    {% endif %}
+    <div class="row">
+        {% include "AppBundle:Profile:show_user_screens.html.twig" %}
+        {% include "AppBundle:Profile:show_side_bar.html.twig" %}
+        {% include "AppBundle:Profile:new_user_modal.html.twig" %}
+    </div>
+    </div>
 {% endblock content %}
