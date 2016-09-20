@@ -366,10 +366,20 @@
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
                             </td>
                             <td class="table-form" >
-                                <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
+                                <!--<input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>-->
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-model="item.total_quantity" ng-click="getWarehouseInvs()" class="form-control">{{ item.total_quantity }}
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        {% endverbatim %}
+                                        {% for warehouse in warehouses %}
+                                            <li>{{ warehouse.name }}</li>
+                                        {% endfor %}
+                                        {% verbatim %}
+                                    </ul>
+                                </div>
                             </td>
                                   {% endverbatim %}
-
                             </div>
                         </tr>
                         <tr id="search" ng-if="ctrl.isEdit == 1">

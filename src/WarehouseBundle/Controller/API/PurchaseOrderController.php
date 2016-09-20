@@ -111,8 +111,7 @@ class PurchaseOrderController extends Controller
         $cart = $request->request->get('cart');
         $due_date = new \DateTime($request->request->get('due_date'));
         $message = $request->request->get('message');
-        $po_id = $request->request->get('purchase_order_id');
-        $po = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($po_id);
+        $po = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($request->request->get('purchase_order_id'));
         $warehouse = $po->getWarehouse();
         $receive_date = new \DateTime();
 

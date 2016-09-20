@@ -10,4 +10,14 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/web/js/appBundle_part_1_app_1.js" />
+    <file url="file://$PROJECT_DIR$/web/js/appBundle_part_1_bootstrap-colorpicker.min_2.js" />
+    <file url="file://$PROJECT_DIR$/web/js/appBundle_part_1_bootstrap3-wysihtml5.all.min_3.js" />
+    <file url="file://$PROJECT_DIR$/web/js/appBundle_part_1_material.min_6.js" />
+    <file url="file://$PROJECT_DIR$/web/js/appBundle_part_1_ng-file-upload-all.min_7.js" />
+    <file url="file://$PROJECT_DIR$/web/js/appBundle_part_1_ripples.min_8.js" />
+    <file url="file://$PROJECT_DIR$/web/js/quickbooksBundle.js" />
+    <file url="file://$PROJECT_DIR$/web/js/quickbooksBundle_part_1_style_1.js" />
+  </component>
 </project>

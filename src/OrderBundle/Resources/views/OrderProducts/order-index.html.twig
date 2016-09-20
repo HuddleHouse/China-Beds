@@ -60,10 +60,9 @@
 
         var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
-            $scope.is_distributor = {{ is_dis}};
-            $scope.is_retailer = {{ is_retail }};
+            $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
+            $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
             $scope.products = {{ products | json_encode | raw}};
-            console.log($scope.products);
             $scope.states = {{ states | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
             $scope.user_warehouses = {{ user_warehouses | json_encode | raw}};
@@ -365,7 +364,10 @@
             margin-right: auto;
             margin-top: -15px;
         }
-
+        select {
+            border: 3px solid #02B1F2 !important;
+            border-bottom: 3px solid #02B1F2 !important;
+        }
         .form-control {
             margin-bottom: 0px !important;
         }
@@ -376,11 +378,10 @@
         .error {
             border: 3px solid lightcoral;
         }
-
-        @media (min-width: 992px) {
-            .col-md-6 {
-                width: 47% !important;
-            }
+        ul
+        {
+            list-style-type: none;
+            color: #AAAAAA;
         }
 
         #product{
@@ -390,23 +391,27 @@
         .col-md-6 .table{
             box-shadow: none;
         }
+
+        .variant_price, .variant_inventory{
+            font-family:Museo Sans Cond;
+        }
     </style>
 
-<form data-toggle="validator" role="form">
+{#<form data-toggle="validator" role="form">#}
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
-            {%  if is_dis == 1 %}
-                <div class="col-md-6">
+            {%  if is_granted('ROLE_DISTRIBUTOR') %}
+                <div class="col-md-5">
                     {% include '@Order/OrderProducts/distributor-order-form.html.twig' %}
                 </div>
-            {%  elseif is_retail == 1 %}
-            <div class="col-md-6">
+            {%  elseif is_granted('ROLE_RETAILER') %}
+            <div class="col-md-5">
                {% include '@Order/OrderProducts/retailer-order-form.html.twig' %}
             </div>
             {% endif %}
-            <div class="col-md-6">
-                <div class="table" git stt="background:rgba(2,177,242,.35); min-height: 250px;">
+            <div class="col-md-5">
+                <div class="table" style="background:rgba(2,177,242,.35); min-height: 250px;">
                     <br>
                     <center><h1 style="color: #fff;">Get More, Make More</h1></center>
                     <center><h2>Specials</h2></center>
@@ -417,8 +422,10 @@
         <div id="error-message" style="padding-top: 40px;">
 
         </div>
+
+        {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
         <div class="row" style="padding-bottom: 40px;padding-top: 20px;">
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
                     <button class="button is-checked" data-filter="*">ALL</button>
                     {% for category in categories %}
@@ -426,33 +433,32 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="table" style="background-color: #02B1F2;">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-lg-3 col-md-4">
                             <center>Item (s)</center>
                             <input ng-model="cart_num_items" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-lg-4 col-md-4">
                             <center>Total ($)</center>
                             {% verbatim %}
                             <div class="cart_info" style="width: 100%; height: 38px;    padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
                             {% endverbatim %}
                         </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-raised review_cart_button" id="submit-button" ng-click="submitCart()" type="submit">Review Order ></button>
+                        <div class="col-lg-4 col-md-4">
+                            <button class="btn btn-raised review_cart_button" id="submit-button" ng-click="submitCart()" type="submit" style="width: 100%;">Review ></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-
         <div class="row">
             <div class="grid">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-6 element-item {{ product.cat_ids }}" id="product">
+                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
@@ -480,7 +486,8 @@
                                     <div class="variant_price">
                                         ${{ variant.price | number}}
                                     </div>
-                                    <div class="variant_inventory">
+
+                                    <div ng-if="variant.inventory < 10" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
                                     </div>
                                 </div>
@@ -490,7 +497,19 @@
                 {#{% endfor %}#}
             </div>
         </div>
+
+                <div id="floaty-box" class="col-md-2 visible-lg">
+                    <ul>
+                        <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
+                        {% for category in categories %}
+                            <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
+                        {% endfor %}
+                        <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-all" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
+
+                    </ul>
+                </div>
+        {% endif %}
     </div>
 </div>
-</form>
+{#</form>#}
 {% endblock %}
