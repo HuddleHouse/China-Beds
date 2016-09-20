@@ -167,6 +167,12 @@ class Orders
      */
     private $channel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     */
+    protected $state;
+
 
     public function __construct($info = null)
     {
@@ -637,6 +643,22 @@ class Orders
     public function setChannel($channel)
     {
         $this->channel = $channel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
 

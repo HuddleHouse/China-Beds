@@ -41,8 +41,12 @@ class OrderProductsController extends Controller
         $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
 
-        $groups = $user->getGroupsArray();
-        $is_dis = $is_retail = 0;
+        $states = $em->getRepository('AppBundle:State')->findAll();
+
+        if($user->hasRole('ROLE_DISTRIBUTOR'))
+            $user_retailers = $user->getRetailers();
+        else
+            $user_retailers = null;
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
@@ -52,6 +56,8 @@ class OrderProductsController extends Controller
             'states' => $states,
             'user' => $user,
             'user_warehouses' => $user_warehouses,
+            'user_retailers' => $user_retailers,
+            'states' => $states
         ));
     }
 
