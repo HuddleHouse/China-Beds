@@ -53,6 +53,7 @@ class User extends BaseUser
      */
     protected $city;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")

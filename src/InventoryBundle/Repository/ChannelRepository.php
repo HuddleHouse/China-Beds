@@ -14,7 +14,7 @@ use WarehouseBundle\Entity\Warehouse;
 class ChannelRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getProductArrayForChannel(Channel $channel,User $user, Warehouse $warehouse = null)
+    public function getProductArrayForChannel(Channel $channel, User $user, Warehouse $warehouse = null, $categories = null)
     {
         // select all products that are in the channel
         // get all product variants for it.
@@ -36,8 +36,8 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
 
             $cat_ids = '';
 
-            foreach($product->getCategories() as $category)
-                $cat_ids .= $category->getCategory()->getId() . ' ';
+            foreach($product->getCategories() as $cat)
+                $cat_ids .= $cat->getCategory()->getId() . ' ';
 
             // format needed data to array
             $product_array = array(
@@ -76,7 +76,13 @@ select *, v.id as variant_id, min(p.price/100) as price,
 
             $product_array['variants'] = $variants;
 
-            $product_data[] = $product_array;
+            if($categories == null)
+                $product_data[] = $product_array;
+            else {
+                foreach($product->getCategories() as $cat)
+                    if(in_array($cat->getName(), $categories))
+                        $product_data[] = $product_array;
+            }
         }
 
         return $product_data;
