@@ -341,7 +341,5 @@ class ProductVariant
     {
         $this->orders_product_variant = $orders_product_variant;
     }
-
-
 }
 

@@ -108,6 +108,7 @@ class ProductVariantController extends Controller
 
         $connection = $em->getConnection();
         $statement = $connection->prepare("update product_variant set name = :name, msrp = :msrp, sku = :sku, dimensions = :dimensions, fedex_dimensions = :fedex_dimensions where id = :id");
+
         $statement->bindValue('id', $id);
         $statement->bindValue('name', $name);
         $statement->bindValue('msrp', $msrp);
