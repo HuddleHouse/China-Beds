@@ -327,6 +327,7 @@
             };
 
             $scope.updateProductVariant = function (variant) {
+                console.log(JSON.stringify(variant, null, 4));
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_update_product_variant') }}",

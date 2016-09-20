@@ -25,7 +25,7 @@ class ProductVariantController extends Controller
         $id = $request->request->get('product_id');
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select *, round(i.msrp/100, 2) as price from product_variant i where i.product_id = :id");
+        $statement = $connection->prepare("select *, round(i.msrp/100, 2) as msrp from product_variant i where i.product_id = :id");
         $statement->bindValue('id', $id);
 
         try {
