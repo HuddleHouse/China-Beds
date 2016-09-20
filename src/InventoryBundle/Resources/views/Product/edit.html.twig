@@ -126,11 +126,25 @@
                     type: 'POST',
                     url: "{{ path('api_add_spec_value') }}",
                     dataType: 'json',
-                    data: {spec_id: spec_id, spec_value: spec_value, product_id: {{ product.id }} },
+                    data: {spec_id: spec_id, spec_value: spec_value, product_id: {{ product.id }}},
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.specifications = data;
                             $('#spec_value').val('');
+                        });
+                    }
+                });
+            };
+
+            $scope.updateSpecValue = function (spec) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_update_spec_value') }}",
+                    dataType: 'json',
+                    data: {id: spec.id, description: spec.description, product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.specifications = data;
                         });
                     }
                 });

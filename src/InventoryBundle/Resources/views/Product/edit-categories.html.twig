@@ -20,7 +20,7 @@
                     <tr ng-repeat="(i, cat) in categories track by $index">
                         <td>{{cat.name}}</td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="deleteCatValue(cat.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger rich-btn" ng-click="deleteCatValue(cat.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endverbatim %}
