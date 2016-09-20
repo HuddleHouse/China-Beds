@@ -279,12 +279,14 @@
                 var variant_msrp = $('#variant_msrp').val();
                 var variant_name = $('#variant_name').val();
                 var variant_sku = $('#variant_sku').val();
+                var variant_dimensions = $('#variant_dimensions').val();
+                var variant_fedex_dimensions = $('#variant_fedex_dimensions').val();
 
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_add_product_variant') }}",
                     dataType: 'json',
-                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp, sku: variant_sku},
+                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp, sku: variant_sku, dimensions: variant_dimensions, fedex_dimensions: variant_fedex_dimensions},
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.product_variants = data;
@@ -310,12 +312,25 @@
             };
 
             $scope.removeProductVariant = function (id) {
-                var id = id;
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_remove_product_variant') }}",
                     dataType: 'json',
                     data: {id: id, product_id: {{ product.id }}},
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.product_variants = data;
+                        });
+                    }
+                });
+            };
+
+            $scope.updateProductVariant = function (variant) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_update_product_variant') }}",
+                    dataType: 'json',
+                    data: {id: variant.id, product_id: {{ product.id }}, name: variant.name, msrp: variant.msrp, sku: variant.sku, dimensions: variant.dimensions, fedex_dimensions: variant.fedex_dimensions},
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.product_variants = data;

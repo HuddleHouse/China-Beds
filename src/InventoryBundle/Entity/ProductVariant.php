@@ -51,6 +51,20 @@ class ProductVariant
     private $sku;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="dimensions", type="string", length=255, nullable=true)
+     */
+    private $dimensions;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fedex_dimensions", type="string", length=255, nullable=true)
+     */
+    private $fedexDimensions;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Product", inversedBy="variants")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
@@ -198,6 +212,38 @@ class ProductVariant
     public function setSku($sku)
     {
         $this->sku = $sku;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDimensions()
+    {
+        return $this->dimensions;
+    }
+
+    /**
+     * @param mixed $dimensions
+     */
+    public function setDimensions($dimensions)
+    {
+        $this->dimensions = $dimensions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFedexDimensions()
+    {
+        return $this->fedexDimensions;
+    }
+
+    /**
+     * @param mixed $fedexDimensions
+     */
+    public function setFedexDimensions($fedexDimensions)
+    {
+        $this->fedexDimensions = $fedexDimensions;
     }
 
     /**

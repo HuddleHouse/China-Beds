@@ -49,14 +49,18 @@ class ProductVariantController extends Controller
         $msrp = $msrp*100;
         $sku = $request->request->get('sku');
         $product_id = $request->request->get('product_id');
+        $dimensions = $request->request->get('dimensions');
+        $fedex_dimensions = $request->request->get('fedex_dimensions');
 
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("insert into product_variant (product_id, name, msrp, sku) values (:product_id, :name, :msrp, :sku)");
+        $statement = $connection->prepare("insert into product_variant (product_id, name, msrp, sku, dimensions, fedex_dimensions) values (:product_id, :name, :msrp, :sku, :dimensions, :fedex_dimensions)");
         $statement->bindValue('product_id', $product_id);
         $statement->bindValue('name', $name);
         $statement->bindValue('msrp', $msrp);
         $statement->bindValue('sku', $sku);
+        $statement->bindValue('dimensions', $dimensions);
+        $statement->bindValue('fedex_dimensions', $fedex_dimensions);
 
         try {
             $statement->execute();
@@ -70,14 +74,46 @@ class ProductVariantController extends Controller
     /**
      * @Route("/api_remove_product_variant", name="api_remove_product_variant")
      */
-    public function removeProductvariant(Request $request)
+    public function removeProductVariant(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $id = $request->request->get('id');
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("delete from product_variant where :id = id");
+        $statement = $connection->prepare("delete from product_variant where id = :id");
         $statement->bindValue('id', $id);
+
+        try {
+            $statement->execute();
+            return $this->getVariantsAction($request);
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+    }
+
+    /**
+     * @Route("/api_update_product_variant", name="api_update_product_variant")
+     */
+    public function updateProductVariant(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->request->get('id');
+        $name = $request->request->get('name');
+        $msrp = $request->request->get('msrp');
+        $msrp = $msrp*100;
+        $sku = $request->request->get('sku');
+        $dimensions = $request->request->get('dimensions');
+        $fedex_dimensions = $request->request->get('fedex_dimensions');
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("update product_variant set name = :name, msrp = :msrp, sku = :sku, dimensions = :dimensions, fedex_dimensions = :fedex_dimensions where id = :id");
+        $statement->bindValue('id', $id);
+        $statement->bindValue('name', $name);
+        $statement->bindValue('msrp', $msrp);
+        $statement->bindValue('sku', $sku);
+        $statement->bindValue('dimensions', $dimensions);
+        $statement->bindValue('fedex_dimensions', $fedex_dimensions);
 
         try {
             $statement->execute();
