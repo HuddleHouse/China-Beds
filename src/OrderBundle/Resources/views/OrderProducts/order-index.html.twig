@@ -312,9 +312,6 @@
         }
         .price_box_row {
             text-align: center;
-            /*display: table;*/
-            /*margin-left: auto;*/
-            /*margin-right: auto;*/
         }
         .gray_box {
             border: 2px solid #EFEFEF;
@@ -456,7 +453,7 @@
                             </div>
                         </div>
 
-                        <div class="price_box_row form-inline">
+                        <div class="price_box_row ">
 
                                 <div ng-repeat="variant in product.variants track by variant.variant_id" class="price_box" style="align">
                                     <div class="variant_name gray_box">
@@ -479,6 +476,9 @@
 
                                     <div ng-if="variant.inventory < 10" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
+                                    </div>
+                                    <div ng-if="variant.inventory >= 10" class="variant_inventory">
+                                                &nbsp;
                                     </div>
                                 </div>
                         </div>
