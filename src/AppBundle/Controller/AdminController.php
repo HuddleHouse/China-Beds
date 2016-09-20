@@ -51,23 +51,22 @@ class AdminController extends Controller
                 $successMessage = "User information updated succesfully.";
                 $this->addFlash('notice', $successMessage);
 
-                return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
-                    'form' => $form->createView(),
-                    'user_id' => $user_id
-                ));
+                return $this->redirectToRoute('admin_edit_user', array('user_id' => $user_id));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
                 return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
                     'form' => $form->createView(),
-                    'user_id' => $user_id
+                    'user_id' => $user_id,
+                    'user' =>$user
                 ));
             }
         }
 
         return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
             'form' => $form->createView(),
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'user' =>$user
         ));
     }
 

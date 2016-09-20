@@ -1,0 +1,4 @@
+services:
+    email_service:
+        class: AppBundle\Services\EmailService
+        arguments: ["@swiftmailer.mailer"]

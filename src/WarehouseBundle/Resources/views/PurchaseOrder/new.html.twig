@@ -20,6 +20,12 @@
 
 {% block footer %}
     <script>
+        function numbersOnly(value) {
+            var m_strOut = new String(value);
+            m_strOut = m_strOut.replace(/[^0-9]/g, '');
+            return m_strOut;
+        }
+
         $(function() {
             {% if warehouse_id != 'none' %}
             $("#warehouse").val('{{ warehouse_id }}');
@@ -43,6 +49,7 @@
                 self.selectedItemChange = selectedItemChange;
                 self.searchTextChange   = searchTextChange;
                 self.updateCartItem   = updateCartItem;
+                self.removeCartItem   = removeCartItem;
                 self.save = save;
                 self.add = add;
                 self.warehouseChange = warehouseChange;
@@ -71,7 +78,7 @@
 
                 function updateCart() {
                     angular.forEach(self.cart, function(value, key) {
-                        $log.info(value);
+//                        $log.info(value);
 
                         $.ajax({
                             type: 'POST',
@@ -80,6 +87,7 @@
                             data: {product_variant_id: value.id, warehouse_id: $('#warehouse').val()},
                             success: function (data) {
                                 $scope.$apply(function () {
+                                    if(self.cart[key].ordered_quantity == null) self.cart[key].ordered_quantity = 0;
                                     self.cart[key].warehouse_quantity = parseInt(data, 10) + parseInt(self.cart[key].ordered_quantity, 10);
                                 });
                             }
@@ -144,7 +152,16 @@
                     };
                 }
 
-                function updateCartItem(newVal, oldVal, index) {
+                function updateCartItem(newVal, oldVal, index, id) {
+                    if(newVal == null) {
+                        $('#'+id).val('');
+                        return;
+                    }
+                    if(newVal < 0) {
+                        newVal = 0;
+                        self.cart[index].order_quantity = 0;
+                    }
+
                     var total = 0;
                     self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
@@ -152,6 +169,30 @@
 
                         total += value.ordered_quantity;
                     });
+                    self.cart_total = total;
+                }
+
+                function removeCartItem(index) {
+                    console.log(index);
+                    var total = 0;
+                    var tmp = [];
+                    var tmpItems = [];
+                    angular.forEach(self.cart, function(value, key) {
+                        if(key != index) {
+                            var tmpIndex = tmp.push(self.cart[key]) - 1;
+                            tmpItems[value.id] = tmpIndex;
+                            total += value.ordered_quantity;
+                        }
+                    });
+
+                    console.log('old cart: ');
+                    console.log(JSON.stringify(self.cart,null,4));
+                    console.log('tmp: ');
+                    console.log(JSON.stringify(tmp,null,4));
+                    self.cart = [];
+                    self.cart = tmp;
+                    self.cart_items = [];
+                    self.cart_items = tmpItems;
                     self.cart_total = total;
                 }
 
@@ -207,7 +248,7 @@
         }
         .table-form input {
             text-align: center !important;
-            margin-bottom: -2px !important;
+            margin-bottom: -8px !important;
             height: 60px !important;
         }
         .table-name {
@@ -217,10 +258,10 @@
         span.ui-spinner.ui-state-default.ui-widget.ui-widget-content.ui-corner-all {
             display: flex;
         }
-        input[type=number]::-webkit-inner-spin-button,
-        input[type=number]::-webkit-outer-spin-button {
-            opacity: 0;
-        }
+        /*input[type=number]::-webkit-inner-spin-button,*/
+        /*input[type=number]::-webkit-outer-spin-button {*/
+            /*opacity: 0;*/
+        /*}*/
         .ui-spinner-button {
             height: 50%;
             position: absolute;
@@ -277,6 +318,7 @@
                             <th class="table-name" style="width: 100px;">Quantity</th>
                             <th class="table-name" style="width: 175px;">Selected Warehouse Inv.</th>
                             <th class="table-name" style="width: 175px;">Total All Sites Inv.</th>
+                            <th class="table-name" style="width: 75px;">&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -288,13 +330,16 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" min="0" ng-model="item.ordered_quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.ordered_quantity, {{ item.ordered_quantity || 0 }}, $index, {{item.id}})" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
                             </td>
                             <td class="table-form" >
                                 <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
+                            </td>
+                            <td class="table-form" style="width:140px;text-align: center;" >
+                                <a class="btn btn-raised btn-danger" ng-click="ctrl.removeCartItem($index)">Remove</a>
                             </td>
                         {% endverbatim %}
                             </div>
@@ -341,6 +386,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                         </tr>
                         </tbody>
                     </table>
@@ -364,7 +410,7 @@
                             <tr>
                                 <th style="width:50%">Total Items:</th>
                                 <td>
-                                    {% verbatim %}
+                                {% verbatim %}
                                 <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
                                 {% endverbatim %}
                                 </td>

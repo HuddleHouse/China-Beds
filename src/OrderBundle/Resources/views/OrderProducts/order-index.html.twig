@@ -60,8 +60,8 @@
 
         var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
-            $scope.is_distributor = {{ app.user.isDistributor ? 1 : 0 }};
-            $scope.is_retailer = {{ app.user.isRetailer ? 1 : 0 }};
+            $scope.is_distributor = {{ is_dis}};
+            $scope.is_retailer = {{ is_retail }};
             $scope.products = {{ products | json_encode | raw}};
             console.log($scope.products);
             $scope.states = {{ states | json_encode | raw}};
@@ -396,11 +396,11 @@
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
-            {%  if (app.user.isDistributor ? 1 : 0) == 1 %}
+            {%  if is_dis == 1 %}
                 <div class="col-md-6">
                     {% include '@Order/OrderProducts/distributor-order-form.html.twig' %}
                 </div>
-            {%  elseif (app.user.isRetailer ? 1 : 0) == 1 %}
+            {%  elseif is_retail == 1 %}
             <div class="col-md-6">
                {% include '@Order/OrderProducts/retailer-order-form.html.twig' %}
             </div>

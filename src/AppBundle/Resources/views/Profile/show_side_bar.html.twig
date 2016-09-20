@@ -1,0 +1,206 @@
+<div class="col-md-5 connectedSortable" >
+    <!-- SALES GRAPH -->
+    {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_ACCOUNTING') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        <div class="box box-solid bg-teal-gradient">
+            <div class="box-header ui-sortable-handle" style="cursor: move;" data-widget="collapse">
+                <i class="fa fa-th"></i>
+
+                <h3 class="box-title">Sales Graph</h3>
+
+                <div class="pull-right">
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="collapse" ><i class="fa fa-minus white"></i>
+                    </button>
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body border-radius-none">
+                <div class="chart" id="line-chart" style="height: 250px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><svg height="250" version="1.1" width="512" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative; left: -0.328125px; top: -0.59375px;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.0</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><text x="40" y="212" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">0</tspan></text><path fill="none" stroke="#efefef" d="M52.5,212H487" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40" y="165.25" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">5,000</tspan></text><path fill="none" stroke="#efefef" d="M52.5,165.25H487" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40" y="118.5" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">10,000</tspan></text><path fill="none" stroke="#efefef" d="M52.5,118.5H487" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40" y="71.75" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">15,000</tspan></text><path fill="none" stroke="#efefef" d="M52.5,71.75H487" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="40" y="25" text-anchor="end" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">20,000</tspan></text><path fill="none" stroke="#efefef" d="M52.5,25H487" stroke-width="0.4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="407.2980355425042" y="224.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,6.5)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">2013</tspan></text><text x="214.0598197559617" y="224.5" text-anchor="middle" font="10px &quot;Arial&quot;" stroke="none" fill="#ffffff" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 10px; line-height: normal; font-family: &quot;Open Sans&quot;;" font-size="10px" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,6.5)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="3.5">2012</tspan></text><path fill="none" stroke="#efefef" d="M52.5,187.0729C64.63788542352286,186.8111,88.91365627056858,188.65011793318234,101.05154169409144,186.0257C113.19492683914739,183.40009293318232,137.48169712925926,167.23474554973822,149.62508227431522,166.0728C161.64197382411015,164.9229580497382,185.67575692370008,178.99734523346302,197.692648473495,176.77855C209.7040403017569,174.56077023346302,233.7268239582806,150.5389812798907,245.73821578654247,148.3265C257.8761012100653,146.0907187798907,282.151872057111,156.66021429784826,294.28975748063385,158.9855C306.4331426256898,161.31183929784825,330.71991291580173,177.9802942408377,342.8632980608577,166.933C354.8801896106526,156.00078174083768,378.91397271024255,77.96395996835442,390.9308642600375,71.06744999999998C402.8102627715052,64.24984746835442,426.5690597944408,104.39841649874054,438.44845830590856,112.07655C450.5863437294314,119.92175399874056,474.86211457647715,127.8897375,487,133.1608" stroke-width="2" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><circle cx="52.5" cy="187.0729" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="101.05154169409144" cy="186.0257" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="149.62508227431522" cy="166.0728" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="197.692648473495" cy="176.77855" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="245.73821578654247" cy="148.3265" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="294.28975748063385" cy="158.9855" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="342.8632980608577" cy="166.933" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="390.9308642600375" cy="71.06744999999998" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="438.44845830590856" cy="112.07655" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="487" cy="133.1608" r="4" fill="#efefef" stroke="#efefef" stroke-width="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle></svg><div class="morris-hover morris-default-style" style="left: 296.363px; top: 92px; display: none;"><div class="morris-hover-row-label">2012 Q3</div><div class="morris-hover-point" style="color: #efefef">
+                            Item 1:
+                            4,820
+                        </div></div></div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-border">
+                <div class="row">
+                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <div style="display:inline;width:60px;height:60px;"><canvas width="60" height="60"></canvas><input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px; font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 12px; line-height: normal; font-family: Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none; background: none;"></div>
+
+                        <div class="knob-label">Mail-Orders</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <div style="display:inline;width:60px;height:60px;"><canvas width="60" height="60"></canvas><input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px; font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 12px; line-height: normal; font-family: Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none; background: none;"></div>
+
+                        <div class="knob-label">Online</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center">
+                        <div style="display:inline;width:60px;height:60px;"><canvas width="60" height="60"></canvas><input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60" data-fgcolor="#39CCCC" readonly="readonly" style="width: 34px; height: 20px; position: absolute; vertical-align: middle; margin-top: 20px; margin-left: -47px; border: 0px; font-style: normal; font-variant: normal; font-weight: bold; font-stretch: normal; font-size: 12px; line-height: normal; font-family: Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none; background: none;"></div>
+
+                        <div class="knob-label">In-Store</div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    {% endif %}
+
+    <!-- TOP Retailers -->
+    {% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
+        <div class="box box-primary">
+            <div class="box-header with-border" data-widget="collapse">
+                <h2 class="box-title fa fa-minus"> <h4 style="font-family: 'Raleway', sans-serif; font-weight: 600;display: inline;"> Top Retailers</h4></h2>
+
+                <div class="pull-right">
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus white"></i>
+                    </button>
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="products-list product-list-in-box">
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="https://placehold.it/50x50" alt="Product Image">
+                        </div>
+                        <div class="product-info">
+                            <a href="javascript:void(0)" class="product-title">Matt Huddleston
+                                <span class="label label-warning pull-right">$1800</span></a>
+                            <span class="product-description">
+                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                        </span>
+                        </div>
+                    </li>
+                    <!-- /.item -->
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="https://placehold.it/50x50" alt="Product Image">
+                        </div>
+                        <div class="product-info">
+                            <a href="javascript:void(0)" class="product-title">Matt Huddleston
+                                <span class="label label-info pull-right">$700</span></a>
+                            <span class="product-description">
+                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                        </span>
+                        </div>
+                    </li>
+                    <!-- /.item -->
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="https://placehold.it/50x50" alt="Product Image">
+                        </div>
+                        <div class="product-info">
+                            <a href="javascript:void(0)" class="product-title">Matt Huddleston <span class="label label-danger pull-right">$350</span></a>
+                            <span class="product-description">
+                          Xbox One Console Bundle with Halo Master Chief Collection.
+                        </span>
+                        </div>
+                    </li>
+                    <!-- /.item -->
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="https://placehold.it/50x50" alt="Product Image">
+                        </div>
+                        <div class="product-info">
+                            <a href="javascript:void(0)" class="product-title">Matt Huddleston
+                                <span class="label label-success pull-right">$399</span></a>
+                            <span class="product-description">
+                          PlayStation 4 500GB Console (PS4)
+                        </span>
+                        </div>
+                    </li>
+                    <!-- /.item -->
+                </ul>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <a href="javascript:void(0)" class="uppercase">View All Products</a>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    {% endif %}
+    <!-- /.box -->
+
+
+    <!-- PRODUCT LIST --- SHOW THIS FOR EVERYONE -->
+    <div class="box box-primary">
+        <div class="box-header with-border" data-widget="collapse">
+            <i class="fa fa-minus"></i>
+            <h4 style="font-family: 'Raleway', sans-serif; font-weight: 600;display: inline;"> Recently Added Products</h4>
+
+            <div class="pull-right">
+                <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus white"></i>
+                </button>
+                <button type="button" class="btn bg-teal btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <ul class="products-list product-list-in-box">
+                <li class="item">
+                    <div class="product-img">
+                        <img src="https://placehold.it/50x50" alt="Product Image">
+                    </div>
+                    <div class="product-info">
+                        <a href="javascript:void(0)" class="product-title">Samsung TV
+                            <span class="label label-warning pull-right">$1800</span></a>
+                        <span class="product-description">
+                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                        </span>
+                    </div>
+                </li>
+                <!-- /.item -->
+                <li class="item">
+                    <div class="product-img">
+                        <img src="https://placehold.it/50x50" alt="Product Image">
+                    </div>
+                    <div class="product-info">
+                        <a href="javascript:void(0)" class="product-title">Bicycle
+                            <span class="label label-info pull-right">$700</span></a>
+                        <span class="product-description">
+                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                        </span>
+                    </div>
+                </li>
+                <!-- /.item -->
+                <li class="item">
+                    <div class="product-img">
+                        <img src="https://placehold.it/50x50" alt="Product Image">
+                    </div>
+                    <div class="product-info">
+                        <a href="javascript:void(0)" class="product-title">Xbox One <span class="label label-danger pull-right">$350</span></a>
+                        <span class="product-description">
+                          Xbox One Console Bundle with Halo Master Chief Collection.
+                        </span>
+                    </div>
+                </li>
+                <!-- /.item -->
+                <li class="item">
+                    <div class="product-img">
+                        <img src="https://placehold.it/50x50" alt="Product Image">
+                    </div>
+                    <div class="product-info">
+                        <a href="javascript:void(0)" class="product-title">PlayStation 4
+                            <span class="label label-success pull-right">$399</span></a>
+                        <span class="product-description">
+                          PlayStation 4 500GB Console (PS4)
+                        </span>
+                    </div>
+                </li>
+                <!-- /.item -->
+            </ul>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer text-center">
+            <a href="javascript:void(0)" class="uppercase">View All Products</a>
+        </div>
+        <!-- /.box-footer -->
+    </div>
+    <!-- /.box -->
+
+
+</div>
