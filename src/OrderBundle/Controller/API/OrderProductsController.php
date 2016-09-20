@@ -102,7 +102,7 @@ class OrderProductsController extends Controller
             'address' => $user->getAddress1(),
             'address2' => $user->getAddress2(),
             'city' => $user->getCity(),
-            'state' => $user->getState()->getId(),
+            'state' => (string)$user->getState()->getId(),
             'zip' => $user->getZip(),
             'phone' => $user->getPhone(),
             'email' => $user->getEmail()

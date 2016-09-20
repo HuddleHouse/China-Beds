@@ -150,7 +150,6 @@
                         success: function (data) {
                             $scope.$apply(function () {
                                 $scope.form_info = data;
-                                console.log(data['state']);
                                 $('#state').val(data['state']);
                             });
                         }
@@ -158,6 +157,8 @@
             };
 
             $scope.submitCart = function () {
+                var errors = $scope.validate();
+                console.log(errors);
                 $('.fa.fa-circle').addClass('fa-circle-thin');
                 $('.fa-circle').removeClass('fa-circle');
 
@@ -168,7 +169,7 @@
                     $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please select to Ship the Items or to Pick them up.</div>");
                 else if($scope.cart_num_items == 0)
                     $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please add at least one item to your cart.</div>");
-                else {
+                else if (errors <= 0) {
                     addSpinner();
                     $.ajax({
                         type: 'POST',
@@ -189,9 +190,6 @@
 
             $scope.warehouseChange = function () {
                 var warehouse = $scope.cart['pick_up_warehouse'];
-//                $('#submit-button').prop('disabled', false);
-//                $('#submit-button').removeClass('button-error');
-                console.log($scope.cart['pick_up_warehouse']);
                 $scope.setAll($scope.product_variant_order_quan, 0);
 
                 $.ajax({
@@ -261,6 +259,116 @@
 
                 }
 
+            };
+
+            $scope.validate = function() {
+                var count = 0;
+                var po = $('#po').val();
+                var ship_name = $('#ship_name').val();
+                var address = $('#address').val();
+                var city = $('#city').val();
+                var state = $('#state option:selected').val();
+                var zip = $('#zip').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var agent_name = $('#agent_name').val();
+                var pick_up_warehouse = $('#warehouse_pick_up').val();
+
+                if($scope.form_info['ship']) {
+                    if (ship_name == '') {
+                        count += 1;
+                        $('#ship_name').addClass('error');
+                    }
+                    else if (ship_name != '') {
+                        count -= 1;
+                        $('#ship_name').removeClass('error');
+                    }
+
+                    if (address == '') {
+                        count += 1;
+                        $('#address').addClass('error');
+                    }
+                    else if (address != '') {
+                        count -= 1;
+                        $('#address').removeClass('error');
+                    }
+
+                    if (city == '') {
+                        count += 1;
+                        $('#city').addClass('error');
+                    }
+                    else if (city != '') {
+                        count -= 1;
+                        $('#city').removeClass('error');
+                    }
+
+                    if (state == '') {
+                        count += 1;
+                        $('#state').addClass('error');
+                    }
+                    else if (state != '') {
+                        count -= 1;
+                        $('#state').removeClass('error');
+                    }
+
+                    if (zip == '? number:1 ?') {
+                        count += 1;
+                        $('#zip').addClass('error');
+                    }
+                    else if (zip != '') {
+                        count -= 1;
+                        $('#zip').removeClass('error');
+                    }
+
+                    if (phone == '') {
+                        count += 1;
+                        $('#phone').addClass('error');
+                    }
+                    else if (phone != '') {
+                        count -= 1;
+                        $('#phone').removeClass('error');
+                    }
+
+                    if (email == '') {
+                        count += 1;
+                        $('#email').addClass('error');
+                    }
+                    else if (email != '') {
+                        count -= 1;
+                        $('#email').removeClass('error');
+                    }
+                }
+//                if( == '') {count += 1;$('#').addClass('error');}
+//                else if( != '') {count -= 1;$('#').removeClass('error');}
+                console.log(pick_up_warehouse);
+                if($scope.form_info['pick_up']) {
+                    if(pick_up_warehouse == '') {
+                        count += 1;
+                        $('#warehouse_pick_up').addClass('error');
+                    }
+                    else if(pick_up_warehouse != '') {
+                        count -= 1;
+                        $('#warehouse_pick_up').removeClass('error');
+                    }
+                    if(agent_name == '') {
+                        count += 1;
+                        $('#agent_name').addClass('error');
+                    }
+                    else if(agent_name != '') {
+                        count -= 1;
+                        $('#agent_name').removeClass('error');
+                    }
+                }
+
+                if(po == '') {
+                    count += 1;
+                    $('#po').addClass('error');
+                }
+                else if(po != '') {
+                    count -= 1;
+                    $('#po').removeClass('error');
+                }
+                return count;
             };
 
             $scope.pickUp = function () {
@@ -405,14 +513,13 @@
             background-color: lightcoral !important;
         }
         .error {
-            border: 3px solid lightcoral;
+            border: 3px solid lightcoral !important;
         }
         ul
         {
             list-style-type: none;
             color: #AAAAAA;
         }
-
     </style>
 
 {#<form data-toggle="validator" role="form">#}
