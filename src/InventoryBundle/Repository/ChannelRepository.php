@@ -24,7 +24,7 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
         $product_data = array();
         $user_price_groups = $user->getPriceGroupsString();
 
-        foreach($product_channels as $product_channel) {
+            foreach($product_channels as $product_channel) {
             $product = $product_channel->getProduct();
 
             // get first image url
@@ -56,10 +56,11 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             else
                 $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
 
-            // get only the product variants the user has a price in their price group for
-            $connection = $em->getConnection();
-            $statement = $connection->prepare("
-select *, v.id as variant_id, min(p.price/100) as price, 
+                if($user_price_groups != false) {
+                    // get only the product variants the user has a price in their price group for
+                    $connection = $em->getConnection();
+                    $statement = $connection->prepare("
+select *, v.id as variant_id, min(p.price/100) as cost, 
 	(select coalesce(sum(i.quantity), 0) as quantity
 		from warehouse_inventory i
 			where i.warehouse_id in ".$warehouse_ids." 
@@ -70,19 +71,20 @@ select *, v.id as variant_id, min(p.price/100) as price,
 		where v.product_id = :product_id
 			and p.price_group_id in (".$user_price_groups.") 
 		group by variant_id;");
-            $statement->bindValue('product_id', $product->getId());
-            $statement->execute();
-            $variants = $statement->fetchAll();
+                    $statement->bindValue('product_id', $product->getId());
+                    $statement->execute();
+                    $variants = $statement->fetchAll();
 
-            $product_array['variants'] = $variants;
+                    $product_array['variants'] = $variants;
 
-            if($categories == null)
-                $product_data[] = $product_array;
-            else {
-                foreach($product->getCategories() as $cat)
-                    if(in_array($cat->getName(), $categories))
+                    if($categories == null)
                         $product_data[] = $product_array;
-            }
+                    else {
+                        foreach($product->getCategories() as $cat)
+                            if(in_array($cat->getName(), $categories))
+                                $product_data[] = $product_array;
+                    }
+                }
         }
 
         return $product_data;

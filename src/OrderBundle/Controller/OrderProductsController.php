@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Controller;
 
+use AppBundle\Entity\User;
 use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,8 +29,10 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
-        $categories = $em->getRepository('InventoryBundle:Category')->findAll();
-        $states = $em->getRepository('AppBundle:State')->findAll();
+        if(count($user->getPriceGroups()) != 0)
+            $categories = $em->getRepository('InventoryBundle:Category')->findAll();
+        else
+            $categories = $em->getRepository('InventoryBundle:Category')->findBy(array('name' => 'POP'));
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])

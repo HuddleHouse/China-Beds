@@ -599,11 +599,11 @@
                                                style="text-align: center; width: 100%;    border: none;"
                                                ng-model="product_variant_order_quan[ variant.variant_id ]"
                                                ng-init="product_variant_order_quan[ variant.variant_id ] = 0"
-                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.price }}, {{ variant.inventory}})"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.cost }}, {{ variant.inventory}})"
                                         >
                                     </div>
                                     <div class="variant_price">
-                                        ${{ variant.price | number}}
+                                        {{ variant.cost | currency}}
                                     </div>
 
                                     <div ng-if="variant.inventory < 10" class="variant_inventory">
