@@ -56,7 +56,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         foreach($warehouse->getPurchaseOrders() as $item)
             if($item->getStatus()->getName() == 'Active')
                 foreach($item->getProductvariants() as $variant)
-                    if($variant->getId() == $productVariant->getId())
+                    if($variant->getProductVariant()->getId() == $productVariant->getId())
                         $quantity += $variant->getOrderedQuantity();
 
 
