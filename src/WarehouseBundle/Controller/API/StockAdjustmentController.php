@@ -25,6 +25,7 @@ class StockAdjustmentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $status_name = $request->request->get('status');
+        $reason = $request->request->get('reason');
         $connection = $em->getConnection();
         $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");
         $statement->bindValue('name', $status_name);
@@ -48,6 +49,7 @@ class StockAdjustmentController extends Controller
         $stock_adjustment->setDate($date);
         $stock_adjustment->setMessage($message);
         $stock_adjustment->setStatus($status);
+        $stock_adjustment->setReason($reason);
 
         foreach($cart as $item) {
             $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
