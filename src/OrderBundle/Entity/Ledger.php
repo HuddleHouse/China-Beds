@@ -4,6 +4,8 @@ namespace OrderBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Doctrine\ORM\Mapping\ManyToOne;
+
 
 /**
  * Ledger
@@ -23,18 +25,20 @@ class Ledger
     private $id;
 
     /**
-     * @var int
+     * @var \AppBundle\Entity\User
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="ledgers", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    private $user;
 
     /**
-     * @var int
+     * @var \AppBundle\Entity\User
      *
-     * @ORM\Column(name="added_by_user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="added_ledgers", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="added_by_user_id", referencedColumnName="id")
      */
-    private $addedByUserId;
+    private $addedByUser;
 
     /**
      * @var int
@@ -72,12 +76,10 @@ class Ledger
     private $description;
 
 
-
     public function __construct()
     {
         $this->setCreatedOn(new \DateTime());
     }
-
 
     /**
      * Get id
@@ -90,51 +92,35 @@ class Ledger
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Ledger
+     * @return \AppBundle\Entity\User
      */
-    public function setUserId($userId)
+    public function getUser()
     {
-        $this->userId = $userId;
-
-        return $this;
+        return $this->user;
     }
 
     /**
-     * Get userId
-     *
-     * @return int
+     * @param \AppBundle\Entity\User $user
      */
-    public function getUserId()
+    public function setUser($user)
     {
-        return $this->userId;
+        $this->user = $user;
     }
 
     /**
-     * Set addedByUserId
-     *
-     * @param integer $addedByUserId
-     *
-     * @return Ledger
+     * @return \AppBundle\Entity\User
      */
-    public function setAddedByUserId($addedByUserId)
+    public function getAddedByUser()
     {
-        $this->addedByUserId = $addedByUserId;
-
-        return $this;
+        return $this->addedByUser;
     }
 
     /**
-     * Get addedByUserId
-     *
-     * @return int
+     * @param \AppBundle\Entity\User $addedByUser
      */
-    public function getAddedByUserId()
+    public function setAddedByUser($addedByUser)
     {
-        return $this->addedByUserId;
+        $this->addedByUser = $addedByUser;
     }
 
     /**

@@ -1,3 +1,7 @@
+order_ledger:
+    resource: "@OrderBundle/Controller/LedgerController.php"
+    type:     annotation
+
 warehouse:
     resource: "@WarehouseBundle/Controller/"
     type:     annotation
