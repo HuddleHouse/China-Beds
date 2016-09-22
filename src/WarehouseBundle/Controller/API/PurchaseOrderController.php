@@ -198,5 +198,24 @@ class PurchaseOrderController extends Controller
         return JsonResponse::create($purchase->getId());
     }
 
+    /**
+     * @Route("/api_update_inventory_for_sites", name="api_update_inventory_for_sites")
+     */
+    public function apiUpdlkasdjflkasdjflkUbv(Request $request){
+        $variant_id = $request->request->get('product_variant_id');
+        $em = $this->getDoctrine()->getManager();
+        $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant_id);
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findAll();
+        $data = array();
+
+        foreach($warehouses as $warehouse)
+            $data[] = array(
+                'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($variant, $warehouse),
+                'warehouse_id' => $warehouse->getId(),
+                'name' => $warehouse->getName()
+            );
+
+        return JsonResponse::create($data);
+    }
 }
 

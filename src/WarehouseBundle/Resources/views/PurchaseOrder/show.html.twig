@@ -30,7 +30,7 @@
                     .controller('myCtrl', MyCtrl)
                     .directive('jqSpinner', jqSpinner);
 
-            function MyCtrl ($timeout, $q, $log) {
+            function MyCtrl ($timeout, $q, $log, $scope) {
                 var self = this;
 
                 self.simulateQuery = false;
@@ -44,6 +44,7 @@
                 self.getCartTotal   = getCartTotal;
                 self.setActive   = setActive;
                 self.receiveAll   = receiveAll;
+                self.getWarehouseInv   = getWarehouseInv;
                 self.save = save;
                 self.warehouseChange = warehouseChange;
                 self.cart = {{ cart | json_encode | raw}};
@@ -59,6 +60,7 @@
                 self.warehouses = {{ warehouses | json_encode | raw}};
                 self.warehouse = {{ purchaseOrder.warehouse.id }};
                 self.updateETA = updateETA;
+                self.all_warehouse_inventory = {};
 
 
                 function setEdit(val){
@@ -86,6 +88,22 @@
                                 });
                             }
                         });
+                    });
+                }
+
+                function getWarehouseInv(id) {
+                    console.log('matkltjs');
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_inventory_for_sites') }}",
+                        dataType: 'json',
+                        data: {product_variant_id: id},
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                self.all_warehouse_inventory = data;
+                                console.log(self.all_warehouse_inventory);
+                            });
+                        }
                     });
                 }
 
@@ -367,15 +385,20 @@
                             </td>
                             <td class="table-form" >
                                 <!--<input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>-->
-                                <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-model="item.total_quantity" ng-click="getWarehouseInvs()" class="form-control">{{ item.total_quantity }}
+                                <div class="dropdown" style="text-align: center;">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-model="item.total_quantity" ng-click="ctrl.getWarehouseInv(item.id)" class="form-control">{{ item.total_quantity }}
                                     <span class="caret"></span></button>
-                                    <ul class="dropdown-menu">
-                                        {% endverbatim %}
-                                        {% for warehouse in warehouses %}
-                                            <li>{{ warehouse.name }}</li>
-                                        {% endfor %}
-                                        {% verbatim %}
+
+                                    <ul class="dropdown-menu" style="    height: auto;
+    max-height: 300px;
+    min-height: 100px;
+    overflow-x: scroll;
+    min-width: 340px;
+    margin-left: -221px;">
+                                        <li ng-model="ctrl.all_warehouse_inventory" ng-repeat="item in ctrl.all_warehouse_inventory track by $index">
+                                              {{item.quantity}} : {{ item.name }}
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
