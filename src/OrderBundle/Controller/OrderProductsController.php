@@ -33,6 +33,7 @@ class OrderProductsController extends Controller
             $categories = $em->getRepository('InventoryBundle:Category')->findAll();
         else
             $categories = $em->getRepository('InventoryBundle:Category')->findBy(array('name' => 'POP'));
+
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])

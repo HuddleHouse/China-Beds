@@ -127,11 +127,16 @@ class ProfileController extends Controller
                 ));
             }
         }
+    }
 
-        return $this->render('AppBundle:Profile:edit_child_user.html.twig', array(
-            'form' => $form->createView(),
-            'user_id' => $user_id,
-            'user' =>$user
+    /**
+     *
+     * @Route("/settings", name="show_settings")
+     */
+    public function showUserSettings(Request $request) {
+
+        return $this->render('@App/Profile/settings-index.html.twig', array(
+
         ));
     }
 

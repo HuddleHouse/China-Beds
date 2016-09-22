@@ -89,4 +89,80 @@ select *, v.id as variant_id, min(p.price/100) as cost,
 
         return $product_data;
     }
+
+    public function getProductArrayForChannel2(Channel $channel, User $user, Warehouse $warehouse = null, $categories = null)
+    {
+        // select all products that are in the channel
+        // get all product variants for it.
+
+        $em = $this->getEntityManager();
+        $product_channels = $em->getRepository('InventoryBundle:ProductChannel')->findBy(array('channel' => $channel));
+        $product_data = array();
+        $user_price_groups = $user->getPriceGroupsString();
+
+        foreach($product_channels as $product_channel) {
+            $product = $product_channel->getProduct();
+
+            // get first image url
+            $image_url = '/';
+            foreach($product->getImages() as $image) {
+                $image_url .= $image->getWebPath();
+                break;
+            }
+
+            $cat_ids = '';
+
+            foreach($product->getCategories() as $cat)
+                $cat_ids .= $cat->getCategory()->getId() . ' ';
+
+            // format needed data to array
+            $product_array = array(
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'description' => $product->getDescription(),
+                'sku' => $product->getSku(),
+                'cat_ids' => $cat_ids,
+                'path' => $image_url,
+                'quantity' => 0
+            );
+
+            // Fix this. Would error when a user doesn't have three warehouses.
+            if($warehouse != null)
+                $warehouse_ids = "(".$warehouse->getId().')';
+            else
+                $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
+
+            if($user_price_groups != false) {
+                // get only the product variants the user has a price in their price group for
+                $connection = $em->getConnection();
+                $statement = $connection->prepare("
+select *, v.id as variant_id, min(p.price/100) as cost, 
+	(select coalesce(sum(i.quantity), 0) as quantity
+		from warehouse_inventory i
+			where i.warehouse_id in ".$warehouse_ids." 
+			and i.product_variant_id = p.product_variant_id) as inventory
+	from product_variant v 
+		left join price_group_prices p 
+			on p.product_variant_id = v.id
+		where v.product_id = :product_id
+			and p.price_group_id in (".$user_price_groups.") 
+		group by variant_id;");
+                $statement->bindValue('product_id', $product->getId());
+                $statement->execute();
+                $variants = $statement->fetchAll();
+
+                $product_array['variants'] = $variants;
+
+                if($categories == null)
+                    $product_data[] = $product_array;
+                else {
+                    foreach($product->getCategories() as $cat)
+                        if(in_array($cat->getName(), $categories))
+                            $product_data[] = $product_array;
+                }
+            }
+        }
+
+        return $product_data;
+    }
 }
