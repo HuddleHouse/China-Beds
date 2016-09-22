@@ -13,6 +13,8 @@
                     <th>Name</th>
                     <th>Sku</th>
                     <th>MSRP</th>
+                    <th>Dimensions</th>
+                    <th>Fedex Dimensions</th>
                     <th style="width: 150px">Options</th>
                 </tr>
                 </thead>
@@ -20,11 +22,14 @@
                 <tbody>
                 {% verbatim %}
                     <tr ng-repeat="(i, variant) in product_variants track by $index">
-                        <td>{{variant.name}}</td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.name"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.sku"> </td>
-                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.price"> </td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.msrp"> </td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.dimensions"> </td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.fedex_dimensions"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="removeProductVariant(variant.id)">Delete</a>
+                            <a class="btn btn-raised btn-success rich-btn" ng-click="updateProductVariant(variant)"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                            <a class="btn btn-raised btn-danger rich-btn" ng-click="removeProductVariant(variant.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -40,7 +45,7 @@
 
 
 <div class="modal fade" id="product-variant-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog table">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -49,10 +54,14 @@
             <div class="modal-body">
                 <label for="variant_name" class="required">Name</label>
                 <input type="text" id="variant_name" name="" required="required" class="form-control" style="margin-bottom: 10px">
-                <label for="sku" class="required">SKU</label>
+                <label for="variant_sku" class="required">SKU</label>
                 <input type="text" id="variant_sku" name="" required="required" class="form-control" style="margin-bottom: 10px">
-                <label for="msrp" class="required">MSRP</label>
+                <label for="variant_msrp" class="required">MSRP</label>
                 <input type="text" id="variant_msrp" name="" required="required" class="form-control" style="margin-bottom: 10px">
+                <label for="variant_dimensions" class="required">Dimensions</label>
+                <input type="text" id="variant_dimensions" name="" required="required" class="form-control" style="margin-bottom: 10px">
+                <label for="variant_fedex_dimensions" class="required">Fedex Dimensions</label>
+                <input type="text" id="variant_fedex_dimensions" name="" required="required" class="form-control" style="margin-bottom: 10px">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>

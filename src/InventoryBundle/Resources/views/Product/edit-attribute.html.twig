@@ -1,6 +1,6 @@
 <a href="#" class="btn btn-raised btn-success btn-block" data-toggle="modal" data-target="#attributes-modal">
     <i class="fa fa-plus"></i>
-    Add Variant
+    Add Attribute
 </a>
 <hr>
 
@@ -23,7 +23,7 @@
                         <td>{{spec.name}}</td>
                         <td><img ng-src="/uploads/documents/{{spec.path}}" style="max-height: 90px;"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="deleteAttributeValue(spec.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger rich-btn" ng-click="deleteAttributeValue(spec.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endverbatim %}
