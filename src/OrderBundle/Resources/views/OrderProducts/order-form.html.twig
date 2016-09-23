@@ -1,5 +1,5 @@
 <div class="table" style="background-color: #EFEFEF;">
-    <center><h2>Retailer Order Form</h2></center>
+    <center><h2>{%  if is_granted('ROLE_DISTRIBUTOR') %}Distributor{% elseif is_granted('ROLE_RETAILER') %}Retailer{% endif %} Order Form</h2></center>
     <form class="form-horizontal">
         <fieldset>
             <div class="row">
@@ -9,11 +9,11 @@
                 </div>
                 <div class="col-md-3" style="margin-top: 25px; display: inline-flex;">
                     <input type="checkbox" ng-model="form_info['ship']" name="shipping" id="shipping" class="input_class_checkbox" style="display: inline;margin-right: 8px;" ng-click="shipping()">
-                    <label class="checkbox" for="shipping" style="margin-left: 8px; margin-top: -7px;">Ship</label>
+                    <label class="checkbox" for="shipping" style=" margin-top: -7px;">Ship</label>
                 </div>
                 <div class="col-md-3" style="margin-top: 25px; display: inline-flex;">
                     <input type="checkbox" ng-model="form_info['pick_up']" name="pick_up" id="pick_up" class="input_class_checkbox" ng-click="pickUp()" style="display: inline;margin-right: 8px;">
-                    <label class="checkbox" for="pick_up" style="margin-left: 8px; margin-top: -7px;">Pick Up</label>
+                    <label class="checkbox" for="pick_up" style="margin-top: -7px;">Pick Up</label>
                 </div>
             </div>
 
@@ -44,6 +44,7 @@
                 </div>
             </div>
 
+
             <div class="row">
                 <div class="col-md-12" style="    margin-bottom: 25px;">
                     <label class="control-label" for="comments">Comments</label>
@@ -53,7 +54,20 @@
         </fieldset>
     </form>
 </div>
-<div class="table" id='retailer-ship' style="background-color: #EFEFEF; display: none;">
+<div class="table" id='ship' style="background-color: #EFEFEF; display: none;    margin-top: -19px;">
+
+    {% if is_granted('ROLE_DISTRIBUTOR') %}
+    <div class="row" id="pick_up_warehouse" style="margin-bottom: 10px;">
+        <div class="col-md-12">
+            <select class="" id="dist_ship" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart['dist_ship']" ng-change="updateShipForm()" required>
+            <option value="">Ship to: {{ app.user.firstName }} {{ app.user.lastName }}</option>
+            {% for retailer in user_retailers %}
+                <option value="{{ retailer.id }}">{{ retailer.firstName }} {{ retailer.lastName }}</option>
+            {% endfor %}
+                        </select>
+        </div>
+    </div>
+{% endif %}
     <div class="row">
         <div class="col-md-12">
             <label class="control-label" for="ship_name">Name *</label>
@@ -75,7 +89,11 @@
         </div>
         <div class="col-md-3">
             <label class="control-label" for="state">ST *</label>
-            <input id="state"  ng-model="form_info['state']" ng-init="form_info['state'] = '{{ app.user.state.name }}'" type="text" class="form_field input-md">
+            <select id="state" ng-model="form_info['state']" ng-init="form_info['state'] = '{{ app.user.state.id }}'" class="form_field input-md">
+              {% for state in states %}
+              <option value="{{ state.id }}">{{ state.name }}</option>
+              {% endfor %}
+            </select>
         </div>
         <div class="col-md-3">
             <label class="control-label" for="zip">Zip *</label>

@@ -3,12 +3,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
+use AppBundle\Form\EditChildUserType;
 use AppBundle\Form\NewUserType;
+use AppBundle\Form\UserType;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Model\UserInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -84,11 +88,6 @@ class ProfileController extends Controller
             $distributors = $this->getUser()->getDistributors();
         }
 
-
-
-        foreach($retailers as $retailer)
-            $i = 1;
-
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user,
             'new_user_form' => $new_user_form->createView(),
@@ -97,6 +96,50 @@ class ProfileController extends Controller
             'distributors' => $distributors
         ));
     }
+
+    /**
+     *
+     * @Route("/user/edit/{id}", name="edit_child_user")
+     */
+    public function showUser(User $user, Request $request) {
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
+        $user_id = $user->getId();
+
+        $form = $this->createForm(EditChildUserType::class, $user);
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            try {
+                $event = new FormEvent($form, $request);
+                $userManager->updateUser($user);
+                $successMessage = "User information updated succesfully.";
+                $this->addFlash('notice', $successMessage);
+
+                return $this->redirectToRoute('edit_child_user', array('id' => $user->getId()));
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+                return $this->render('AppBundle:Profile:edit_child_user.html.twig', array(
+                    'form' => $form->createView(),
+                    'user_id' => $user_id,
+                    'user' =>$user
+                ));
+            }
+        }
+    }
+
+    /**
+     *
+     * @Route("/settings", name="show_settings")
+     */
+    public function showUserSettings(Request $request) {
+
+        return $this->render('@App/Profile/settings-index.html.twig', array(
+
+        ));
+    }
+
 
     /**
      * Edit the user

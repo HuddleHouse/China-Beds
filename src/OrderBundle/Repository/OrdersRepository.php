@@ -12,6 +12,9 @@ use OrderBundle\Entity\OrdersWarehouseInfo;
  */
 class OrdersRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * THIS IS OLD AND DOES NOT GET USED ANYMORE.
+     */
     public function setWarehouseDataForOrder(Orders $order) {
         $em = $this->getEntityManager();
 

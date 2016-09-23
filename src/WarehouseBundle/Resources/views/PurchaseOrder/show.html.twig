@@ -16,6 +16,7 @@
 {% block footer %}
     <script>
         $(function() {
+
             $("#warehouse").val('{{ purchaseOrder.warehouse.id }}');
             {% if purchaseOrder.status.name == 'Active' %}
             $(".ordered-quantity .ui-spinner-button").hide();
@@ -266,21 +267,21 @@
         /*input[type=number]::-webkit-outer-spin-button {*/
             /*opacity: 0;*/
         /*}*/
-        .ui-spinner-button {
-            height: 50%;
-            position: absolute;
-        }
-        .ui-spinner-up:hover, .ui-spinner-down:hover {
-            text-decoration: none;
-        }
-        .ui-spinner-up {
-            top: 12px;
-            right: 0;
-        }
-        .ui-spinner-down {
-            bottom: -5px;
-            right: 0;
-        }
+        /*.ui-spinner-button {*/
+            /*height: 50%;*/
+            /*position: absolute;*/
+        /*}*/
+        /*.ui-spinner-up:hover, .ui-spinner-down:hover {*/
+            /*text-decoration: none;*/
+        /*}*/
+        /*.ui-spinner-up {*/
+            /*top: 12px;*/
+            /*right: 0;*/
+        /*}*/
+        /*.ui-spinner-down {*/
+            /*bottom: -5px;*/
+            /*right: 0;*/
+        /*}*/
     </style>
     <div  ng-controller="myCtrl as ctrl" layout="column" ng-cloak="" class="autocompletedemoCustomTemplate" ng-app="myApp">
 
@@ -361,7 +362,7 @@
                                  <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.received_quantity" type="number" jq-spinner min="0" ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)" class="form-control number_select"  >
+                                <input class="form-control number_select" ng-model="item.received_quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)"   >
                             </td>
                             <td class="table-form" >
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>

@@ -28,6 +28,7 @@ class UserType extends AbstractType
             ->add('address_1', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('address_2', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('state', EntityType::class, array(
@@ -53,13 +54,6 @@ class UserType extends AbstractType
             ->add('warehouse_3', EntityType::class, array(
                 'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Warehouse #3',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('office', EntityType::class, array(
-                'class' => 'InventoryBundle:Office',
-                'label' => 'Office',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false

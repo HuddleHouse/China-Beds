@@ -141,6 +141,21 @@ class Warehouse
     private $inventory;
 
     /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehouseInventoryOnHold", mappedBy="warehouse")
+     */
+    private $inventory_on_hold;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventory", mappedBy="warehouse")
+     */
+    private $pop_inventory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventoryOnHold", mappedBy="warehouse")
+     */
+    private $pop_inventory_on_hold;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\PurchaseOrder", mappedBy="warehouse")
      */
     private $purchase_orders;
@@ -177,6 +192,9 @@ class Warehouse
         $this->channels = new ArrayCollection();
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
+        $this->pop_inventory = new ArrayCollection();
+        $this->pop_inventory_on_hold = new ArrayCollection();
+        $this->inventory_on_hold = new ArrayCollection();
         $this->users_3 = new ArrayCollection();
         $this->stock_transfer_departing = new ArrayCollection();
         $this->stock_transfer_receiving = new ArrayCollection();
@@ -904,4 +922,22 @@ class Warehouse
     {
         $this->orders_warehouse_info->removeElement($ordersWarehouseInfo);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getInventoryOnHold()
+    {
+        return $this->inventory_on_hold;
+    }
+
+    /**
+     * @param mixed $inventory_on_hold
+     */
+    public function setInventoryOnHold($inventory_on_hold)
+    {
+        $this->inventory_on_hold = $inventory_on_hold;
+    }
+
+
 }

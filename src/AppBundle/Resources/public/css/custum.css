@@ -44,8 +44,16 @@ select.form-control {
 }
 
 input[type=checkbox], input[type=radio] {
-    margin: 8px 5px 0 25px !important;
+    /*margin: 8px 5px 0 25px !important; This messes up the order page*/
     display: inline !important;
+}
+input[type=text] {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
+    margin-top: 10px;
 }
 
 .rich-btn {

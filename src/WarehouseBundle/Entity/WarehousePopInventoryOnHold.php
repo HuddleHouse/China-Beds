@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * WarehouseInventory
  *
- * @ORM\Table(name="warehouse_inventory_on_hold")
- * @ORM\Entity(repositoryClass="WarehouseBundle\Repository\WarehouseInventoryOnHoldRepository")
+ * @ORM\Table(name="warehouse_pop_nventory_on_hold")
+ * @ORM\Entity()
  */
-class WarehouseInventoryOnHold
+class WarehousePopInventoryOnHold
 {
     /**
      * @var int
@@ -29,13 +29,13 @@ class WarehouseInventoryOnHold
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse_inventory_on_hold")
-     * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PopItem", inversedBy="warehouse_pop_inventory_on_hold")
+     * @ORM\JoinColumn(name="pop_item_id", referencedColumnName="id")
      */
-    private $product_variant;
+    private $pop_item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="inventory_on_hold")
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="pop_inventory_on_hold")
      * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")
      */
     private $warehouse;
