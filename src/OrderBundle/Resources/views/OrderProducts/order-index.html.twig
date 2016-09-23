@@ -234,7 +234,8 @@
                             ship_to_user_id: $scope.ship_to_id,
                             products: $scope.products,
                             pop: $scope.pop,
-                            product_variant_order_quan: $scope.product_variant_order_quan
+                            product_variant_order_quan: $scope.product_variant_order_quan,
+                            pop_order_quan: $scope.pop_order_quan
                         },
                         success: function (data) {
                                 window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });
