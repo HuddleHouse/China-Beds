@@ -18,10 +18,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\GreaterThan;
-use Symfony\Component\Validator\Constraints\LessThan;
-use Symfony\Component\Validator\Context\ExecutionContextFactoryInterface;
 
-class LedgerType extends AbstractType
+class CreditApprovalType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -43,6 +41,7 @@ class LedgerType extends AbstractType
             )
             ->add('amountRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
+                    'label' => 'Amount',
                     'constraints' => array(
                         new GreaterThan(array(
                                 'value' => 0,
@@ -56,15 +55,14 @@ class LedgerType extends AbstractType
             ->add('achRequested', ChoiceType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                     'label' => 'ACH Requested',
-                    'placeholder' => 'Select Option',
                     'choices' => array(
                         'Yes' => 1,
-                        'No' => 0,
+                        'No' => 0
                     ),
                     'required' => true
                 )
             )
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false));
+            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false));
     }
 
     /**

@@ -1,21 +1,79 @@
-{% extends 'base.html.twig' %}
+{% extends ':default:layout.html.twig' %}
 
-{% block body %}
-    <h1>Ledger edit</h1>
+{% block title %}Edit Credit Request{% endblock %}
+{% block page_title %}
+    Edit Credit Request
+{% endblock page_title %}
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+{% block page_name %}
+    <a href="{{ path('ledger_index') }}">< Back to the list</a>
+{% endblock page_name %}
 
-    <ul>
-        <li>
-            <a href="{{ path('ledger_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#ledger_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    {% if not edit_form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(edit_form.user) }}
+                    {{ form_errors(edit_form.amount) }}
+                    {{ form_errors(edit_form.description) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                {% if app.user.hasRole('ROLE_ADMIN') %}
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.user) }}
+                    {{ form_widget(edit_form.user) }}
+                </div>
+                {% else %}
+                    {% do form.user.setRendered %}
+                {% endif %}
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.amountRequested) }}
+                    {{ form_widget(edit_form.amountRequested) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.achRequested) }}
+                    {{ form_widget(edit_form.achRequested) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_widget(edit_form.description) }}
+                </div>
+            </div>
+            {% if ledger.amountCredited is not null %}
+            <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            {% else %}
+                You may not edit a credit request that has been processed
+            {% endif %}
+            {{ form_end(edit_form) }}
+        </div>
+    </div>
 {% endblock %}

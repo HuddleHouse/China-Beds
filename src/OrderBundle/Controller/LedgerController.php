@@ -42,12 +42,15 @@ class LedgerController extends Controller
     public function newAction(Request $request)
     {
         $ledger = new Ledger();
-        $form = $this->createForm('OrderBundle\Form\LedgerType', $ledger);
+        $form = $this->createForm('OrderBundle\Form\CreditRequestType', $ledger);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                if(!$ledger->getUser())
+                    $ledger->setUser($this->getUser());
+                $ledger->setAddedByUser($this->getUser());
                 $em->persist($ledger);
                 $em->flush();
             }
@@ -73,15 +76,37 @@ class LedgerController extends Controller
      * Finds and displays a Ledger entity.
      *
      * @Route("/{id}", name="ledger_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(Ledger $ledger)
+    public function showAction(Request $request, Ledger $ledger)
     {
-        $deleteForm = $this->createDeleteForm($ledger);
+        $form = $this->createForm('OrderBundle\Form\CreditApprovalType', $ledger);
+        $form->handleRequest($request);
 
-        return $this->render('@Order/Ledger/show.html.twig', array(
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em = $this->getDoctrine()->getManager();
+                if(!$ledger->getUser())
+                    $ledger->setUser($this->getUser());
+                $ledger->setAddedByUser($this->getUser());
+                $em->persist($ledger);
+                $em->flush();
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating ledger entry: ' . $e->getMessage());
+                return $this->render('@Order/Ledger/new.html.twig', array(
+                    'ledger' => $ledger,
+                    'form' => $form->createView(),
+                ));
+            }
+
+            $this->addFlash('notice', 'Ledger entry created.');
+            return $this->redirectToRoute('ledger_show', array('id' => $ledger->getId()));
+        }
+
+        return $this->render('@Order/Ledger/new.html.twig', array(
             'ledger' => $ledger,
-            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView()
         ));
     }
 
@@ -94,7 +119,7 @@ class LedgerController extends Controller
     public function editAction(Request $request, Ledger $ledger)
     {
         $deleteForm = $this->createDeleteForm($ledger);
-        $editForm = $this->createForm('OrderBundle\Form\LedgerType', $ledger);
+        $editForm = $this->createForm('OrderBundle\Form\CreditRequestType', $ledger);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
