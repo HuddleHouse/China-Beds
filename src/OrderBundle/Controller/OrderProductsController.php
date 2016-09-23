@@ -41,6 +41,8 @@ class OrderProductsController extends Controller
         else
             $this->redirectToRoute('404');
 
+        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart();
+
         $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
@@ -61,7 +63,8 @@ class OrderProductsController extends Controller
             'user' => $user,
             'user_warehouses' => $user_warehouses,
             'user_retailers' => $user_retailers,
-            'states' => $states
+            'states' => $states,
+            'pop' => $pop
         ));
     }
 

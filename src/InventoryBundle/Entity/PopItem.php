@@ -173,7 +173,7 @@ class PopItem
      */
     public function setPricePer($pricePer)
     {
-        $this->pricePer = $pricePer;
+        $this->pricePer = $pricePer*100;
 
         return $this;
     }
@@ -185,7 +185,7 @@ class PopItem
      */
     public function getPricePer()
     {
-        return $this->pricePer;
+        return $this->pricePer/100;
     }
 
     /**
@@ -197,7 +197,7 @@ class PopItem
      */
     public function setShippingPer($shippingPer)
     {
-        $this->shippingPer = $shippingPer;
+        $this->shippingPer = $shippingPer*100;
 
         return $this;
     }
@@ -209,7 +209,7 @@ class PopItem
      */
     public function getShippingPer()
     {
-        return $this->shippingPer;
+        return $this->shippingPer/100;
     }
 
     /**

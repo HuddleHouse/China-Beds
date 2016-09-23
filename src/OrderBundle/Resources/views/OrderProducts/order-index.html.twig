@@ -31,7 +31,7 @@
                 filterValue = filterFns[ filterValue ] || filterValue;
                 grid.isotope({ filter: filterValue });
                 filterValue = filterValue.replace(/\./g,'');
-                console.log(filterValue);
+//                console.log(filterValue);
 
                 $('.fa.fa-circle').addClass('fa-circle-thin');
                 $('.fa-circle').removeClass('fa-circle');
@@ -42,7 +42,7 @@
                 }
                 else {
                     var tmp = '#side-'+filterValue;
-                    console.log(tmp);
+//                    console.log(tmp);
                     $(tmp).removeClass('fa-circle-thin');
                     $(tmp).addClass('fa-circle');
                 }
@@ -78,6 +78,7 @@
             $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
             $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
             $scope.products = {{ products | json_encode | raw}};
+            $scope.pop = {{ pop | json_encode | raw}};
             $scope.states = {{ states | json_encode | raw}};
             $scope.user_retailers = {{ user_retailers | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
@@ -85,7 +86,8 @@
             $scope.cart_num_items = 0;
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
-            $scope.cart = [];
+            $scope.pop_order_quan = [];
+            $scope.cart = {'variant': [], 'pop': []};
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
@@ -102,35 +104,70 @@
                 }
             };
 
-            $scope.updateCart = function (variantId, cost, max) {
-
-                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
-                    $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
+            $scope.updateCart = function (variantId, cost, max, type) {
+                console.log(type);
+                console.log($scope.cart);
+                if(typeof($scope.cart[type][variantId]) != "undefined" && $scope.cart[type][variantId] !== null) {
+                    if(type == 'variant')
+                        $scope.cart[type][variantId].quantity = $scope.product_variant_order_quan[variantId];
+                    if(type == 'pop')
+                        $scope.cart[type][variantId].quantity = $scope.pop_order_quan[variantId];
                 }
                 else {
-                    $scope.cart[variantId] = {
-                        variant_id: variantId,
-                        quantity: $scope.product_variant_order_quan[variantId],
-                        cost: cost
-                    };
+                    if(type == 'variant')
+                        $scope.cart[type][variantId] = {
+                            variant_id: variantId,
+                            quantity: $scope.product_variant_order_quan[variantId],
+                            cost: cost
+                        };
+
+                    if(type == 'pop')
+                        $scope.cart[type][variantId] = {
+                            variant_id: variantId,
+                            quantity: $scope.pop_order_quan[variantId],
+                            cost: cost
+                        };
                 }
 
-                if($scope.product_variant_order_quan[variantId] > max) {
-                    if(jQuery.inArray(variantId, $scope.hasError) == -1) {
-                        $('#'+variantId).addClass('error');
-                        $('#submit-button').prop('disabled', true);
-                        $('#submit-button').addClass('button-error');
-                        $scope.hasError.push(variantId);
+                if(type == 'variant') {
+                    if($scope.product_variant_order_quan[variantId] > max) {
+                        if(jQuery.inArray(variantId, $scope.hasError) == -1) {
+                            $('#variant-'+variantId).addClass('error');
+                            $('#submit-button').prop('disabled', true);
+                            $('#submit-button').addClass('button-error');
+                            $scope.hasError.push(variantId);
+                        }
+                    }
+                    else {
+                        if(jQuery.inArray(variantId, $scope.hasError) > -1) {
+                            $('#variant-'+variantId).removeClass('error', 300);
+                            var index = $scope.hasError.indexOf(variantId);
+                            $scope.hasError.splice(index,1);
+                            if($scope.hasError.length == 0) {
+                                $('#submit-button').removeClass('button-error');
+                                $('#submit-button').prop('disabled', false);
+                            }
+                        }
                     }
                 }
-                else {
-                    if(jQuery.inArray(variantId, $scope.hasError) > -1) {
-                        $('#'+variantId).removeClass('error', 300);
-                        var index = $scope.hasError.indexOf(variantId);
-                        $scope.hasError.splice(index,1);
-                        if($scope.hasError.length == 0) {
-                            $('#submit-button').removeClass('button-error');
-                            $('#submit-button').prop('disabled', false);
+                if(type == 'pop') {
+                    if($scope.pop_order_quan[variantId] > max) {
+                        if(jQuery.inArray(variantId, $scope.hasError) == -1) {
+                            $('#pop-'+variantId).addClass('error');
+                            $('#submit-button').prop('disabled', true);
+                            $('#submit-button').addClass('button-error');
+                            $scope.hasError.push(variantId);
+                        }
+                    }
+                    else {
+                        if(jQuery.inArray(variantId, $scope.hasError) > -1) {
+                            $('#pop-'+variantId).removeClass('error', 300);
+                            var index = $scope.hasError.indexOf(variantId);
+                            $scope.hasError.splice(index,1);
+                            if($scope.hasError.length == 0) {
+                                $('#submit-button').removeClass('button-error');
+                                $('#submit-button').prop('disabled', false);
+                            }
                         }
                     }
                 }
@@ -158,7 +195,7 @@
 
             $scope.submitCart = function () {
                 var errors = $scope.validate();
-                console.log(errors);
+//                console.log(errors);
                 $('.fa.fa-circle').addClass('fa-circle-thin');
                 $('.fa-circle').removeClass('fa-circle');
 
@@ -196,7 +233,7 @@
                     type: 'POST',
                     url: "{{ path('api_update_products_for_channel') }}",
                     dataType: 'json',
-                    data: {warehouse_id: $scope.cart['pick_up_warehouse'].id, user_id: {{ user.id}}, channel_id: {{ channel.id }}  },
+                    data: {warehouse_id: $scope.cart['pick_up_warehouse'].id, user_id: {{ user.id}}, channel_id: {{ channel.id }}, warehouses: $scope.warehouses  },
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.cart = [];
@@ -239,7 +276,11 @@
             $scope.calculateCart = function () {
                 $scope.cart_num_items = 0;
                 $scope.cart_total = 0.00;
-                angular.forEach($scope.cart, function(value, key) {
+                angular.forEach($scope.cart['variant'], function(value, key) {
+                    $scope.cart_num_items += value.quantity;
+                    $scope.cart_total += value.quantity * value.cost;
+                });
+                angular.forEach($scope.cart['pop'], function(value, key) {
                     $scope.cart_num_items += value.quantity;
                     $scope.cart_total += value.quantity * value.cost;
                 });
@@ -340,7 +381,7 @@
                 }
 //                if( == '') {count += 1;$('#').addClass('error');}
 //                else if( != '') {count -= 1;$('#').removeClass('error');}
-                console.log(pick_up_warehouse);
+//                console.log(pick_up_warehouse);
                 if($scope.form_info['pick_up']) {
                     if(pick_up_warehouse == '') {
                         count += 1;
@@ -454,6 +495,9 @@
         }
         .gray_box {
             border: 2px solid #EFEFEF;
+        }
+        .solid_gray_box {
+            background-color: #EFEFEF;
         }
         .variant_price {
             font-weight: 600;
@@ -574,7 +618,8 @@
         </div>
 
         <div class="row">
-            <div class="grid">
+            <div class="grid col-md-10">
+                <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
                     <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
@@ -587,19 +632,18 @@
 
                         <div class="price_box_row ">
 
-                                <div ng-repeat="variant in product.variants track by variant.variant_id" class="price_box" style="align">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box" style="align">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
-                                    <div id="{{ variant.variant_id }}" class="variant_quantity gray_box">
+                                    <div id="variant-{{ variant.variant_id }}" class="variant_quantity gray_box">
                                         <input type="number"
-
                                                min="0"
                                                onclick="this.select()"
                                                style="text-align: center; width: 100%;    border: none;"
                                                ng-model="product_variant_order_quan[ variant.variant_id ]"
                                                ng-init="product_variant_order_quan[ variant.variant_id ] = 0"
-                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.cost }}, {{ variant.inventory}})"
+                                               ng-change="updateCart({{ variant.variant_id }}, {{ variant.cost }}, {{ variant.inventory}}, '{{variant.type}}')"
                                         >
                                     </div>
                                     <div class="variant_price">
@@ -615,10 +659,36 @@
                                 </div>
                         </div>
                     </div>
+
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px;">
+                    <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
+                        <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
+                        <div class="product_name" style="min-height: 41px;">
+                            <center>{{item.name}}</center>
+                        </div>
+                        <div class="row solid_gray_box" style="margin-right: 0px; margin-left: 0px;">
+                            <div class="col-md-6">
+                                <div class="pop_name" style="padding-top: 13px;">{{item.description}}</div>
+                            </div>
+                            <div class="col-md-6" >
+                                <input id="pop-{{item.id}}" type="number" class="pop_amount form-control" style="margin-top: -20px; background-color: #fff; text-align: center; width: 100%;    border: none;"
+                                               min="0"
+                                               onclick="this.select()"
+                                               ng-model="pop_order_quan[ item.id ]"
+                                               ng-init="pop_order_quan[ item.id ] = 0"
+                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, {{item.inventory}}, '{{item.type}}')"
+                                        >
+                                <div class="pop_price" style="text-align: center;">{{item.cost | currency}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
  {% endverbatim %}
-                {#{% endfor %}#}
+
+            </div>
             </div>
         </div>
+
 
                 <div id="floaty-box" class="col-md-2 visible-lg">
                     <ul>
