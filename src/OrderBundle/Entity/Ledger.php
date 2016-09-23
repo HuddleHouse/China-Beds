@@ -49,10 +49,18 @@ class Ledger
     /**
      * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="added_ledgers", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="addedLedgers", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="added_by_user_id", referencedColumnName="id")
      */
     private $addedByUser;
+
+    /**
+     * @var \AppBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="creditedLedgers", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="credited_by_user_id", referencedColumnName="id")
+     */
+    private $creditedByUser;
 
     /**
      * @var int
@@ -163,6 +171,22 @@ class Ledger
     public function setAddedByUser($addedByUser)
     {
         $this->addedByUser = $addedByUser;
+    }
+
+    /**
+     * @return \AppBundle\Entity\User
+     */
+    public function getCreditedByUser()
+    {
+        return $this->creditedByUser;
+    }
+
+    /**
+     * @param \AppBundle\Entity\User $creditedByUser
+     */
+    public function setCreditedByUser($creditedByUser)
+    {
+        $this->creditedByUser = $creditedByUser;
     }
 
     /**

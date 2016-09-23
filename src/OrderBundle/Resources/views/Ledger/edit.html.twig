@@ -51,7 +51,7 @@
                     {{ form_widget(edit_form.user) }}
                 </div>
                 {% else %}
-                    {% do form.user.setRendered %}
+                    {% do edit_form.user.setRendered %}
                 {% endif %}
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.amountRequested) }}
@@ -68,10 +68,10 @@
                     {{ form_widget(edit_form.description) }}
                 </div>
             </div>
-            {% if ledger.amountCredited is not null %}
-            <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            {% if ledger.isArchived %}
+                <br>You may not edit a credit request that has been processed.
             {% else %}
-                You may not edit a credit request that has been processed
+                <input class="btn btn-raised btn-success" type="submit" value="Update" />
             {% endif %}
             {{ form_end(edit_form) }}
         </div>

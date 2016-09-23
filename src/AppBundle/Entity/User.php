@@ -250,8 +250,6 @@ class User extends BaseUser
     private $my_sales_manager;
 
     /**
-     * @var 
-     * 
      * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="user")
      */
     private $ledgers;
@@ -260,6 +258,11 @@ class User extends BaseUser
      * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="addedByUser")
      */
     private $addedLedgers;
+
+    /**
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="creditedByUser")
+     */
+    private $creditedLedgers;
 
     public function __construct()
     {
@@ -278,6 +281,7 @@ class User extends BaseUser
         $this->sales_reps = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
         $this->addedLedgers = new ArrayCollection();
+        $this->creditedLedgers = new ArrayCollection();
     }
 
     public function getFullName() {
@@ -1008,5 +1012,51 @@ class User extends BaseUser
         $this->my_sales_manager = $my_sales_manager;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
 
+    /**
+     * @param mixed $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddedLedgers()
+    {
+        return $this->addedLedgers;
+    }
+
+    /**
+     * @param mixed $addedLedgers
+     */
+    public function setAddedLedgers($addedLedgers)
+    {
+        $this->addedLedgers = $addedLedgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreditedLedgers()
+    {
+        return $this->creditedLedgers;
+    }
+
+    /**
+     * @param mixed $creditedLedgers
+     */
+    public function setCreditedLedgers($creditedLedgers)
+    {
+        $this->creditedLedgers = $creditedLedgers;
+    }
 }
