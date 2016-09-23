@@ -22,7 +22,8 @@
                         <td>{{spec.name}}</td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="spec.description"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="deleteSpecValue(spec.id)">Delete</a>
+                            <a class="btn btn-raised btn-success rich-btn" ng-click="updateSpecValue(spec)"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                            <a class="btn btn-raised btn-danger rich-btn" ng-click="deleteSpecValue(spec.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endverbatim %}

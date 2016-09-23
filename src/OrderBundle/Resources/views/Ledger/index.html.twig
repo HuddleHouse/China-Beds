@@ -1,0 +1,71 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}Roles{% endblock %}
+{% block page_title %}
+    Ledger
+{% endblock page_title %}
+
+{% block page_name %}
+    Listings
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    {{  dump(ledgers) }}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <h1>Ledger list</h1>
+
+                <table id="part-table">
+                    <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Date Created</th>
+                        <th>ACH Requested</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ledger in ledgers %}
+                        <tr>
+                            <td>{{ ledger.amount }}</td>
+                            <td>{% if ledger.createdOn %}{{ ledger.createdOn|date('m/d/y') }}{% endif %}</td>
+                            <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
+                            <td>{{ ledger.description }}</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('ledger_show', { 'id': ledger.id }) }}">show</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('ledger_edit', { 'id': ledger.id }) }}">edit</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <a id="new-button" href="{{ path('ledger_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">add</i>
+    </a>
+    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
+        Add a New Ledger
+    </div>
+{% endblock content %}

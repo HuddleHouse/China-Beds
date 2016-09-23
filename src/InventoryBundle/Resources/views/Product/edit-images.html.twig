@@ -21,7 +21,7 @@
                     <tr ng-repeat="(i, image) in product_images track by $index">
                         <td><img src="/uploads/products/{{image.path}}" alt="Product Image" style="max-height: 150px;"> </td>
                         <td>
-                            <a class="btn btn-raised btn-danger" ng-click="removeProductImage(image.id)">Delete</a>
+                            <a class="btn btn-raised btn-danger rich-btn" ng-click="removeProductImage(image.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endverbatim %}

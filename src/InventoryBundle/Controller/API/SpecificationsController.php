@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class SpecificationsController extends Controller
 {
     /**
-     * @Route("/add-spec-value", name="api_add_spec_value")
+     * @Route("/api_add_spec_value", name="api_add_spec_value")
      */
     public function addSpecValueAction(Request $request)
     {
@@ -73,6 +73,29 @@ class SpecificationsController extends Controller
         $connection = $em->getConnection();
         $statement = $connection->prepare("delete from product_specification where :spec_id = id");
         $statement->bindValue('spec_id', $spec_id);
+
+        try {
+            $statement->execute();
+            return $this->getAllSpecValuesAction($request);
+        }
+        catch(\Exception $e) {
+            return JsonResponse::create(false);
+        }
+    }
+
+    /**
+     * @Route("/api_update_spec_value", name="api_update_spec_value")
+     */
+    public function updateSpecValueAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->request->get('id');
+        $description = $request->request->get('description');
+
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("update product_specification set description = :description where id = :id");
+        $statement->bindValue('description', $description);
+        $statement->bindValue('id', $id);
 
         try {
             $statement->execute();

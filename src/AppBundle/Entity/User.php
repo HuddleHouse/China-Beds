@@ -3,13 +3,14 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -248,21 +249,35 @@ class User extends BaseUser
      */
     private $my_sales_manager;
 
+    /**
+     * @var 
+     * 
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="user")
+     */
+    private $ledgers;
+
+    /**
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="addedByUser")
+     */
+    private $addedLedgers;
+
     public function __construct()
     {
         parent::__construct();
 
-        $this->warranty_claims = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->user_channels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->purchase_orders = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->stock_adjustments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->retailers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->distributors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sales_reps = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->warranty_claims = new ArrayCollection();
+        $this->user_channels = new ArrayCollection();
+        $this->rebate_submissions = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->price_groups = new ArrayCollection();
+        $this->purchase_orders = new ArrayCollection();
+        $this->stock_adjustments = new ArrayCollection();
+        $this->retailers = new ArrayCollection();
+        $this->distributors = new ArrayCollection();
+        $this->sales_reps = new ArrayCollection();
+        $this->ledgers = new ArrayCollection();
+        $this->addedLedgers = new ArrayCollection();
     }
 
     public function getFullName() {
@@ -614,9 +629,9 @@ class User extends BaseUser
     /**
      * Remove payTypes
      *
-     * @param \AppBundle\Entity\User $user
+     * @param PriceGroup $priceGroup
      */
-    public function removePriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
+    public function removePriceGroup(PriceGroup $priceGroup)
     {
         $this->price_groups->removeElement($priceGroup);
     }
@@ -642,7 +657,7 @@ class User extends BaseUser
     /**
      * Remove payTypes
      *
-     * @param \AppBundle\Entity\User $user
+     * @param $userChannel
      */
     public function removeUserChannel($userChannel)
     {

@@ -24,12 +24,12 @@
                     <tr ng-repeat="(i, variant) in product_variants track by $index">
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.name"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.sku"> </td>
-                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.price"> </td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.msrp"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.dimensions"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.fedex_dimensions"> </td>
                         <td>
-                            <a class="btn btn-raised btn-success" ng-click="updateProductVariant(variant)" style="padding: 8px 16px;"><i class="fa fa-upload" aria-hidden="true"></i></a>
-                            <a class="btn btn-raised btn-danger" ng-click="removeProductVariant(variant.id)" style="padding: 8px 16px;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            <a class="btn btn-raised btn-success rich-btn" ng-click="updateProductVariant(variant)"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                            <a class="btn btn-raised btn-danger rich-btn" ng-click="removeProductVariant(variant.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 {% endverbatim %}
@@ -45,7 +45,7 @@
 
 
 <div class="modal fade" id="product-variant-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog table">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
