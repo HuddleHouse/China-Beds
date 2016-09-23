@@ -87,8 +87,20 @@ class PopItem
      */
     private $orders_pop_item;
 
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventory", mappedBy="pop_item")
+     */
+    private $warehouse_pop_inventory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventoryOnHold", mappedBy="pop_item")
+     */
+    private $warehouse_pop_inventory_on_hold;
+
     public function __construct()
     {
+        $this->warehouse_pop_inventory = new ArrayCollection();
+        $this->warehouse_pop_inventory_on_hold = new ArrayCollection();
         $this->orders_pop_item = new ArrayCollection();
     }
 
@@ -350,5 +362,55 @@ class PopItem
     {
         $this->path = $path;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrdersPopItem()
+    {
+        return $this->orders_pop_item;
+    }
+
+    /**
+     * @param mixed $orders_pop_item
+     */
+    public function setOrdersPopItem($orders_pop_item)
+    {
+        $this->orders_pop_item = $orders_pop_item;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehousePopInventory()
+    {
+        return $this->warehouse_pop_inventory;
+    }
+
+    /**
+     * @param mixed $warehouse_pop_inventory
+     */
+    public function setWarehousePopInventory($warehouse_pop_inventory)
+    {
+        $this->warehouse_pop_inventory = $warehouse_pop_inventory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehousePopInventoryOnHold()
+    {
+        return $this->warehouse_pop_inventory_on_hold;
+    }
+
+    /**
+     * @param mixed $warehouse_pop_inventory_on_hold
+     */
+    public function setWarehousePopInventoryOnHold($warehouse_pop_inventory_on_hold)
+    {
+        $this->warehouse_pop_inventory_on_hold = $warehouse_pop_inventory_on_hold;
+    }
+
+
 }
 

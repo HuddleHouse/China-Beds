@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * WarehouseInventory
  *
- * @ORM\Table(name="warehouse_inventory_on_hold")
- * @ORM\Entity(repositoryClass="WarehouseBundle\Repository\WarehouseInventoryOnHoldRepository")
+ * @ORM\Table(name="warehouse_pop_inventory")
+ * @ORM\Entity()
  */
-class WarehouseInventoryOnHold
+class WarehousePopInventory
 {
     /**
      * @var int
@@ -29,13 +29,13 @@ class WarehouseInventoryOnHold
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse_inventory_on_hold")
-     * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PopItem", inversedBy="warehouse_pop_inventory")
+     * @ORM\JoinColumn(name="pop_item_id", referencedColumnName="id")
      */
-    private $product_variant;
+    private $pop_item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="inventory_on_hold")
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="pop_inventory")
      * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")
      */
     private $warehouse;
@@ -77,18 +77,20 @@ class WarehouseInventoryOnHold
     /**
      * @return mixed
      */
-    public function getProductVariant()
+    public function getPopItem()
     {
-        return $this->product_variant;
+        return $this->pop_item;
     }
 
     /**
-     * @param mixed $product_variant
+     * @param mixed $pop_item
      */
-    public function setProductVariant($product_variant)
+    public function setPopItem($pop_item)
     {
-        $this->product_variant = $product_variant;
+        $this->pop_item = $pop_item;
     }
+
+
 
     /**
      * @return mixed

@@ -29,7 +29,7 @@ class WarehouseInventory
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse_inventory")
      * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
      */
     private $product_variant;

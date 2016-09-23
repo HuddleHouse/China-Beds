@@ -183,14 +183,14 @@ class User extends BaseUser
     private $purchase_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_for_user_id")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_for_user")
      */
     private $orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_by_user_id")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_by_user")
      */
-    private $submited_orders;
+    private $submitted_orders;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
@@ -1035,17 +1035,17 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getSubmitedOrders()
+    public function getSubmittedOrders()
     {
-        return $this->submited_orders;
+        return $this->submitted_orders;
     }
 
     /**
-     * @param mixed $submited_orders
+     * @param mixed $submitted_orders
      */
-    public function setSubmitedOrders($submited_orders)
+    public function setSubmittedOrders($submitted_orders)
     {
-        $this->submited_orders = $submited_orders;
+        $this->submitted_orders = $submitted_orders;
     }
 
     /**
