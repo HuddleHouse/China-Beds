@@ -19,6 +19,23 @@ use InventoryBundle\Form\ChannelType;
  */
 class OrderProductsController extends Controller
 {
+
+    /**
+     *
+     * @Route("/", name="my_orders_index")
+     * @Method("GET")
+     */
+    public function getOrdersIndex()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->getUser();
+        $orders = $user->getOrders();
+
+        return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
+            'orders' => $orders
+        ));
+    }
+
     /**
      *
      * @Route("/{id}/products", name="order_products_index", options={"expose"=true})
@@ -105,5 +122,7 @@ class OrderProductsController extends Controller
             'is_dis' => $is_dis
         ));
     }
+
+
 
 }

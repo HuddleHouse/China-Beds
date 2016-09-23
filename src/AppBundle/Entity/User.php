@@ -54,7 +54,6 @@ class User extends BaseUser
      */
     protected $city;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
@@ -184,9 +183,14 @@ class User extends BaseUser
     private $purchase_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_for_user")
      */
     private $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_by_user")
+     */
+    private $submitted_orders;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
@@ -282,6 +286,26 @@ class User extends BaseUser
 
     public function getFullName() {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function hasLedger() {
+        $count = 0;
+        foreach($this->ledgers as $ledger) {
+            $count++;
+            break;
+        }
+        if($count == 0)
+            return false;
+        else
+            return true;
+    }
+
+    public function getLedgerTotal($options = null) {
+        $total = 0;
+        foreach($this->ledgers as $ledger) {
+            $total += $ledger->getAmountCredited();
+        }
+        return $total;
     }
 
     public function getRouteNames() {
@@ -1006,6 +1030,54 @@ class User extends BaseUser
     public function setMySalesManager($my_sales_manager)
     {
         $this->my_sales_manager = $my_sales_manager;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedOrders()
+    {
+        return $this->submitted_orders;
+    }
+
+    /**
+     * @param mixed $submitted_orders
+     */
+    public function setSubmittedOrders($submitted_orders)
+    {
+        $this->submitted_orders = $submitted_orders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @param mixed $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddedLedgers()
+    {
+        return $this->addedLedgers;
+    }
+
+    /**
+     * @param mixed $addedLedgers
+     */
+    public function setAddedLedgers($addedLedgers)
+    {
+        $this->addedLedgers = $addedLedgers;
     }
 
 

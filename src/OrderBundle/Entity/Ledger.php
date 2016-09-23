@@ -20,14 +20,14 @@ class Ledger
      ************************************
      * when adding a type, be sure to   *
      * add it to the if statement in    *
-     * setType() or else it won't work! *update f
+     * setType() or else it won't work! *
      ************************************
      ************************************/
 
-    const TYPE_CLAIM    = 'claim'; //to clarify: warranty claims
-    const TYPE_CREDIT   = 'credit';//default
-    const TYPE_REBATE   = 'rebate';
-    const TYPE_TRANSFER = 'transfer';
+    const TYPE_CLAIM    = 'Claim'; //to clarify: warranty claims
+    const TYPE_CREDIT   = 'Credit';//default
+    const TYPE_REBATE   = 'Rebate';
+    const TYPE_TRANSFER = 'Transfer';
 
     /**
      * @var int
@@ -49,7 +49,7 @@ class Ledger
     /**
      * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="added_ledgers", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="addedLedgers", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="added_by_user_id", referencedColumnName="id")
      */
     private $addedByUser;
@@ -66,14 +66,21 @@ class Ledger
      *
      * @ORM\Column(name="amount_credited", type="integer", nullable=true)
      */
-    private $amountCredited; //is null if not just approved or denied, is 0 is denied
+    private $amountCredited; //is null if not approved or denied, is 0 if denied
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_on", type="datetime")
+     * @ORM\Column(name="created", type="datetime")
      */
-    private $createdOn;
+    private $created;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="posted", type="datetime", nullable=true)
+     */
+    private $posted;
 
     /**
      * @var bool
@@ -113,7 +120,7 @@ class Ledger
 
     public function __construct()
     {
-        $this->setCreatedOn(new \DateTime());
+        $this->setCreated(new \DateTime());
     }
 
     /**
@@ -165,7 +172,7 @@ class Ledger
      *
      * @return Ledger
      */
-    public function setAmount($amountRequested)
+    public function setAmountRequested($amountRequested)
     {
         $this->amountRequested = $amountRequested * 100;
 
@@ -199,27 +206,43 @@ class Ledger
     }
 
     /**
-     * Set createdOn
+     * Set created
      *
-     * @param \DateTime $createdOn
+     * @param \DateTime $created
      *
      * @return Ledger
      */
-    public function setCreatedOn($createdOn)
+    public function setCreated($created)
     {
-        $this->createdOn = $createdOn;
+        $this->created = $created;
 
         return $this;
     }
 
     /**
-     * Get createdOn
+     * Get created
      *
      * @return \DateTime
      */
-    public function getCreatedOn()
+    public function getCreated()
     {
-        return $this->createdOn;
+        return $this->created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPosted()
+    {
+        return $this->posted;
+    }
+
+    /**
+     * @param \DateTime $posted
+     */
+    public function setPosted($posted)
+    {
+        $this->posted = $posted;
     }
 
     /**

@@ -156,10 +156,16 @@ class Orders
     private $product_variants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="orders")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_orders")
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */
-    private $user;
+    private $submitted_by_user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="orders")
+     * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
+     */
+    private $submitted_for_user;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="orders")
@@ -659,6 +665,38 @@ class Orders
     public function setState($state)
     {
         $this->state = $state;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedByUser()
+    {
+        return $this->submitted_by_user;
+    }
+
+    /**
+     * @param mixed $submitted_by_user
+     */
+    public function setSubmittedByUser($submitted_by_user)
+    {
+        $this->submitted_by_user = $submitted_by_user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedForUser()
+    {
+        return $this->submitted_for_user;
+    }
+
+    /**
+     * @param mixed $submitted_for_user
+     */
+    public function setSubmittedForUser($submitted_for_user)
+    {
+        $this->submitted_for_user = $submitted_for_user;
     }
 
 
