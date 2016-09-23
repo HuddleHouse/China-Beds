@@ -20,7 +20,7 @@ class Ledger
      ************************************
      * when adding a type, be sure to   *
      * add it to the if statement in    *
-     * setType() or else it won't work! *update f
+     * setType() or else it won't work! *
      ************************************
      ************************************/
 
