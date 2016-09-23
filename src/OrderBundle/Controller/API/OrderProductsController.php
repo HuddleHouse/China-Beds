@@ -39,6 +39,8 @@ class OrderProductsController extends Controller
         $order->setSubtotal($total);
         $order->setChannel($channel);
         $order->setUser($this->getUser());
+        $state = $em->getRepository('AppBundle:State')->find($info['state']);
+        $order->setState($state);
 
         foreach($cart as $item) {
             if($item != '') {
@@ -86,5 +88,27 @@ class OrderProductsController extends Controller
     }
 
 
+    /**
+     * @Route("/api_get_user_info_for_order_form", name="api_get_user_info_for_order_form")
+     */
+    public function getUserInforForOrderForm(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user_id = $request->request->get('user_id');
+        $user = $em->getRepository('AppBundle:User')->find($user_id);
+
+        $data = array(
+            'ship_name' => $user->getFullName(),
+            'address' => $user->getAddress1(),
+            'address2' => $user->getAddress2(),
+            'city' => $user->getCity(),
+            'state' => (string)$user->getState()->getId(),
+            'zip' => $user->getZip(),
+            'phone' => $user->getPhone(),
+            'email' => $user->getEmail()
+            );
+
+        return JsonResponse::create($data);
+    }
 }
 

@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Controller;
 
+use AppBundle\Entity\User;
 use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,8 +29,11 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
-        $categories = $em->getRepository('InventoryBundle:Category')->findAll();
-        $states = $em->getRepository('AppBundle:State')->findAll();
+        if(count($user->getPriceGroups()) != 0)
+            $categories = $em->getRepository('InventoryBundle:Category')->findAll();
+        else
+            $categories = $em->getRepository('InventoryBundle:Category')->findBy(array('name' => 'POP'));
+
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])
@@ -37,12 +41,18 @@ class OrderProductsController extends Controller
         else
             $this->redirectToRoute('404');
 
+        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart();
+
         $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
 
-        $groups = $user->getGroupsArray();
-        $is_dis = $is_retail = 0;
+        $states = $em->getRepository('AppBundle:State')->findAll();
+
+        if($user->hasRole('ROLE_DISTRIBUTOR'))
+            $user_retailers = $user->getRetailers();
+        else
+            $user_retailers = null;
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
@@ -52,6 +62,9 @@ class OrderProductsController extends Controller
             'states' => $states,
             'user' => $user,
             'user_warehouses' => $user_warehouses,
+            'user_retailers' => $user_retailers,
+            'states' => $states,
+            'pop' => $pop
         ));
     }
 

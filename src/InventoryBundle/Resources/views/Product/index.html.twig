@@ -30,7 +30,7 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Sku</th>
+                        <th>Categories</th>
                         <th>Active</th>
                         <th>Actions</th>
                     </tr>
@@ -39,7 +39,7 @@
                     {% for product in products %}
                         <tr>
                             <td><a href="{{ path('admin_product_edit', { 'id': product.id }) }}">{{ product.name }}</a></td>
-                            <td>{{ product.sku }}</td>
+                            <td>{% for category in product.categories %}{{ category.category.name }}<br>{% endfor %}</td>
                             <td>{% if product.active %}Yes{% else %}No{% endif %}</td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('admin_product_edit', { 'id': product.id }) }}"><i class="fa fa-edit"></i> edit</a>
