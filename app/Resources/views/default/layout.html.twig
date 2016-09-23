@@ -1,6 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <style>
+        #ledger-total {
+            margin-right: 25px;
+            border: 1px solid;
+            margin-top: 9px;
+            background-color: rgb(231, 234, 236);
+        }
+    </style>
     <div class="wrapper">
     <header class="main-header">
 
@@ -20,10 +28,17 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <li id="ledger-total" class="">
+                       <div class="ledger-total-box">
+                           <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
+                               Ledger: $20,000.00
+                           </h6>
+                       </div>
+                    </li>
                     <li id="welcome-message" class="dropdown user-menu">
-                        <a class="welcome">
+                        <h6 style="margin-top: 17px;">
                             <span class="username">Logged in as {{ app.user }}</span>
-                        </a>
+                        </h6>
                     </li>
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li>
