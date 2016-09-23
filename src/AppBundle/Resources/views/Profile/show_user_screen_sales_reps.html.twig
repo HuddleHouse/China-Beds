@@ -30,7 +30,7 @@
                     <tbody>
                     {% for sales_rep in sales_reps %}
                         <tr role="row">
-                            <td><a href="">{{ sales_rep.firstName }} {{ sales_rep.lastName }}</a></td>
+                            <td><a href="{{ path('edit_child_user', { 'id': sales_rep.id }) }}">{{ sales_rep.firstName }} {{ sales_rep.lastName }}</a></td>
                             <td>{{ sales_rep.state.name }}</td>
                             <td>
                                 {% for channel in sales_rep.userChannels %}
@@ -47,7 +47,7 @@
         <!-- /.box-body -->
         <div class="box-footer clearfix">
             {% for channel in sidebar_user_channels %}
-                <a ng-click="changeUserType('{{ channel.name }}', {{ channel.id }}, 'Sales Rep')" class="btn btn-raised btn-sm btn-info btn-flat pull-left" data-toggle="modal" data-target="#create-person">Create {{ channel.name }} Sales Rep</a>
+                <a ng-click="changeUserType('{{ channel.name }}', {{ channel.id }}, 'Sales Rep')" class="btn btn-raised btn-sm btn-default btn-flat pull-left" data-toggle="modal" data-target="#create-person"><i class="fa fa-plus"></i> Create {{ channel.name }} Sales Rep</a>
             {%  endfor %}
             <a href="javascript:void(0)" class="btn btn-raised btn-sm btn-default btn-flat pull-right">View All Orders</a>
         </div>

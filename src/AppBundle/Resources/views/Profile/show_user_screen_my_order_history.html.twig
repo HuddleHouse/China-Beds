@@ -45,7 +45,7 @@
         <!-- /.box-body -->
         <div class="box-footer clearfix">
             {% for channel in sidebar_user_channels %}
-                <a href="{{ path('order_products_index', {'id': channel.id}) }}" class="btn btn-raised btn-sm btn-info btn-flat pull-left">
+                <a href="{{ path('order_products_index', {'id': channel.id}) }}" class="btn btn-raised btn-sm btn-default btn-flat pull-left">
                     <i class="fa fa-plus"></i> Order {{ channel.name }} Products</a>
             {%  endfor %}
 
