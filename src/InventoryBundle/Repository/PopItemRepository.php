@@ -10,4 +10,25 @@ namespace InventoryBundle\Repository;
  */
 class PopItemRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getAllPopItemsArrayForCart()
+    {
+        $em = $this->getEntityManager();
+        $pop = $em->getRepository('InventoryBundle:PopItem')->findAll();
+        $data = array();
+
+        foreach($pop as $popitem) {
+            $data[] = array(
+                'id' => $popitem->getId(),
+                'cost' => $popitem->getPricePer(),
+                'name' => $popitem->getName(),
+                'description' => $popitem->getDescription(),
+                'picture' => 'http://placehold.it/175x150',
+                'type' => 'pop',
+                'inventory' => 100 //get actually inventory one day
+            );
+        }
+        return $data;
+    }
+
 }

@@ -51,3 +51,7 @@ input[type=text] {
     padding-left: 10px !important;
     padding-right: 10px !important;
 }
+
+aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
+    margin-top: 10px;
+}
