@@ -15,6 +15,12 @@ use Doctrine\ORM\Mapping\ManyToOne;
  */
 class Ledger
 {
+    //types of possible transactions
+    const TYPE_CLAIM    = 'claim';//to clarify: warranty claims
+    const TYPE_CREDIT   = 'credit';
+    const TYPE_REBATE   = 'rebate';
+    const TYPE_TRANSFER = 'transfer';
+
     /**
      * @var int
      *
@@ -74,6 +80,20 @@ class Ledger
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=32)
+     */
+    private $type;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="type_id", type="integer")
+     */
+    private $typeId;
 
 
     public function __construct()
@@ -233,6 +253,41 @@ class Ledger
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        if (!in_array($type, array(self::TYPE_CLAIM, self::TYPE_CREDIT, self::TYPE_REBATE, self::TYPE_TRANSFER)))
+            throw new \InvalidArgumentException("Invalid type");
+
+        $this->type = $type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeId()
+    {
+        return $this->typeId;
+    }
+
+    /**
+     * @param int $typeId
+     */
+    public function setTypeId($typeId)
+    {
+        $this->typeId = $typeId;
     }
 }
 
