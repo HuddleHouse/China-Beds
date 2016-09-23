@@ -54,7 +54,6 @@ class User extends BaseUser
      */
     protected $city;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
@@ -282,6 +281,26 @@ class User extends BaseUser
 
     public function getFullName() {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function hasLedger() {
+        $count = 0;
+        foreach($this->ledgers as $ledger) {
+            $count++;
+            break;
+        }
+        if($count == 0)
+            return false;
+        else
+            return true;
+    }
+
+    public function getLedgerTotal($options = null) {
+        $total = 0;
+        foreach($this->ledgers as $ledger) {
+            $total += $ledger->getAmountCredited();
+        }
+        return $total;
     }
 
     public function getRouteNames() {

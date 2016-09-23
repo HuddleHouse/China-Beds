@@ -28,13 +28,15 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    {% if app.user.hasLedger %}
                     <li id="ledger-total" class="">
                        <div class="ledger-total-box">
                            <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
-                               Ledger: $20,000.00
+                               Ledger: ${{ app.user.getLedgerTotal | number_format(2, '.', ',')}}
                            </h6>
                        </div>
                     </li>
+                    {% endif %}
                     <li id="welcome-message" class="dropdown user-menu">
                         <h6 style="margin-top: 17px;">
                             <span class="username">Logged in as {{ app.user }}</span>
@@ -160,8 +162,10 @@
                         <!-- ORDERS SECTION -->
                         {% if 'product_category_index' in route_names
                             or 'order_products_index' in route_names
+                            or 'my_orders_index' in route_names
                         %}
                     <li class="treeview {% if (app.request.get('_route') in sidebar_order) %} active
+                    {% elseif (app.request.get('_route') in ['my_orders_index']) %} active
                         {% endif %}">
                             <a href="#">
                                 <i class="fa fa-shopping-cart"></i>
@@ -178,8 +182,8 @@
                                 {%  endfor %}
                             {% endif %}
 
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>My Orders</a>
+                                <li {% if (app.request.get('_route') in ['my_orders_index']) %} class="active"{% endif %}>
+                                    <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>My Orders</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Shipments</a>
