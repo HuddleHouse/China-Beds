@@ -4,6 +4,7 @@ namespace OrderBundle\Controller\API;
 
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersProductVariant;
+use OrderBundle\Entity\OrdersWarehouseInfo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -27,38 +28,73 @@ class OrderProductsController extends Controller
         $channel_id = $request->request->get('channel_id');
         $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
 
+        $products = $request->request->get('products');
+        $pop = $request->request->get('pop');
         $cart = $request->request->get('cart');
         $total = $request->request->get('total');
         $info = $request->request->get('form_info');
-        $products = array();
+        $ship_to_user_id = $request->request->get('ship_to_user_id');
+        //array indexed at prod variant id that tell you the ordered quantity
+        $product_variant_order_quan = $request->request->get('product_variant_order_quan');
 
         $order = new Orders($info);
+        $em->persist($order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
         $order->setSubtotal($total);
         $order->setChannel($channel);
-        $order->setUser($this->getUser());
+        $order->setSubmittedByUser($this->getUser());
+        if($this->getUser()->getId() == $ship_to_user_id)
+            $order->setSubmittedByUser($this->getUser());
+        else
+            $order->setSubmittedByUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
+
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
 
-        foreach($cart as $item) {
-            if($item != '') {
-                $product_variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['variant_id']);
-                $orders_product_variant = new OrdersProductVariant();
-                $orders_product_variant->setOrder($order);
-                $orders_product_variant->setPrice($item['cost']);
-                $orders_product_variant->setQuantity($item['quantity']);
-                $orders_product_variant->setProductVariant($product_variant);
-                $em->persist($orders_product_variant);
-                $order->addProductVariants($orders_product_variant);
+        foreach($products as $product) {
+            if(isset($product['variants'])) {
+                foreach($product['variants'] as $variant) {
+                    $quantity = $product_variant_order_quan[$variant['variant_id']];
+                    if($quantity > 0) {
+                        $product_variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
+                        $orders_product_variant = new OrdersProductVariant();
+                        $orders_product_variant->setOrder($order);
+                        $orders_product_variant->setPrice($variant['cost']);
+                        $orders_product_variant->setQuantity($quantity);
+                        $orders_product_variant->setProductVariant($product_variant);
+                        $em->persist($orders_product_variant);
+                        $em->flush();
+
+                        //we passed in the complete warehouse quantities at start so we know where to go ahead and pull the inventory from.
+                        foreach($variant['warehouse_data'] as $warehouse_data) {
+                            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_data['warehouse_id']);
+                            if($quantity <= $warehouse_data['quantity']) {
+                                $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouse);
+                                $em->persist($orders_warehouse_info);
+                                $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+                                break;
+                            }
+                            else if($quantity > $warehouse_data['quantity']) {
+                                $orders_warehouse_info = new OrdersWarehouseInfo($warehouse_data['quantity'], $orders_product_variant, $warehouse);
+                                $quantity -= $warehouse_data['quantity'];
+                            }
+                            $em->persist($orders_warehouse_info);
+                            $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+                        }
+                        $em->persist($orders_product_variant);
+
+                        $order->addProductVariants($orders_product_variant);
+                    }
+                }
             }
         }
 
         $em->persist($order);
         $em->flush();
 
-        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
+//        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
 
         return JsonResponse::create($order->getId());
     }

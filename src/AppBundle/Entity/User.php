@@ -183,9 +183,14 @@ class User extends BaseUser
     private $purchase_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_for_user_id")
      */
     private $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_by_user_id")
+     */
+    private $submited_orders;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
@@ -1025,6 +1030,54 @@ class User extends BaseUser
     public function setMySalesManager($my_sales_manager)
     {
         $this->my_sales_manager = $my_sales_manager;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmitedOrders()
+    {
+        return $this->submited_orders;
+    }
+
+    /**
+     * @param mixed $submited_orders
+     */
+    public function setSubmitedOrders($submited_orders)
+    {
+        $this->submited_orders = $submited_orders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @param mixed $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddedLedgers()
+    {
+        return $this->addedLedgers;
+    }
+
+    /**
+     * @param mixed $addedLedgers
+     */
+    public function setAddedLedgers($addedLedgers)
+    {
+        $this->addedLedgers = $addedLedgers;
     }
 
 

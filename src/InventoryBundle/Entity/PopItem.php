@@ -81,7 +81,17 @@ class PopItem
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="pop_item")
+     */
+    private $orders_pop_item;
+
+    public function __construct()
+    {
+        $this->orders_pop_item = new ArrayCollection();
+    }
+
     /**
      * Get id
      *

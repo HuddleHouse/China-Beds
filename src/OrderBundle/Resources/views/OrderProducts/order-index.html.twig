@@ -93,6 +93,7 @@
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
             $scope.hasError = [];
+            $scope.ship_to_id = {{ app.user.id }};
 
             $scope.validate = function () {
                 if($scope.form_info['pick_up'] == true) {
@@ -187,6 +188,7 @@
                 var user_id = $scope.cart['dist_ship'];
                 if(user_id == undefined)
                     user_id = {{ app.user.id }};
+                $scope.ship_to_id = user_id;
                 $.ajax({
                         type: 'POST',
                         url: "{{ path('api_get_user_info_for_order_form') }}",
@@ -194,8 +196,11 @@
                         data: {user_id: user_id},
                         success: function (data) {
                             $scope.$apply(function () {
+                                var po = $scope.form_info['po'];
                                 $scope.form_info = data;
                                 $('#state').val(data['state']);
+                                $scope.form_info['ship'] = true;
+                                $scope.form_info['po'] = po;
                             });
                         }
                     });
@@ -225,7 +230,11 @@
                         data: {cart: $scope.cart,
                             form_info: $scope.form_info,
                             channel_id: {{ channel.id}},
-                            total: $scope.cart_total
+                            total: $scope.cart_total,
+                            ship_to_user_id: $scope.ship_to_id,
+                            products: $scope.products,
+                            pop: $scope.pop,
+                            product_variant_order_quan: $scope.product_variant_order_quan
                         },
                         success: function (data) {
                                 window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });
@@ -237,7 +246,6 @@
 
             $scope.warehouseChange = function () {
                 var warehouse = $scope.cart['pick_up_warehouse'];
-//                $scope.setAll($scope.product_variant_order_quan, 0);
 
                 $.ajax({
                     type: 'POST',
@@ -246,7 +254,6 @@
                     data: {warehouse_id: $scope.cart['pick_up_warehouse'].id, user_id: {{ user.id}}, channel_id: {{ channel.id }}, warehouses: $scope.warehouses  },
                     success: function (data) {
                         $scope.$apply(function () {
-//                            $scope.cart = [];
                             $scope.products = data;
                             $scope.cart['pick_up_warehouse'] = warehouse;
                             $scope.validate();
