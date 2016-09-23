@@ -15,9 +15,17 @@ use Doctrine\ORM\Mapping\ManyToOne;
  */
 class Ledger
 {
-    //types of possible transactions
-    const TYPE_CLAIM    = 'claim';//to clarify: warranty claims
-    const TYPE_CREDIT   = 'credit';
+    /************************************
+     **** the ways to receive credit ****
+     ************************************
+     * when adding a type, be sure to   *
+     * add it to the if statement in    *
+     * setType() or else it won't work! *update f
+     ************************************
+     ************************************/
+
+    const TYPE_CLAIM    = 'claim'; //to clarify: warranty claims
+    const TYPE_CREDIT   = 'credit';//default
     const TYPE_REBATE   = 'rebate';
     const TYPE_TRANSFER = 'transfer';
 
@@ -49,9 +57,16 @@ class Ledger
     /**
      * @var int
      *
-     * @ORM\Column(name="amount", type="integer")
+     * @ORM\Column(name="amount_requested", type="integer")
      */
-    private $amount;
+    private $amountRequested;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="amount_credited", type="integer", nullable=true)
+     */
+    private $amountCredited; //is null if not just approved or denied, is 0 is denied
 
     /**
      * @var \DateTime
@@ -86,14 +101,14 @@ class Ledger
      *
      * @ORM\Column(name="type", type="string", length=32)
      */
-    private $type;
+    private $type = self::TYPE_CREDIT;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="type_id", type="integer")
+     * @ORM\Column(name="type_id", type="integer", nullable=true)
      */
-    private $typeId;
+    private $typeId; //is null if TYPE_CREDIT
 
 
     public function __construct()
@@ -144,27 +159,43 @@ class Ledger
     }
 
     /**
-     * Set amount
+     * Set amountRequested
      *
-     * @param integer $amount
+     * @param float $amountRequested
      *
      * @return Ledger
      */
-    public function setAmount($amount)
+    public function setAmount($amountRequested)
     {
-        $this->amount = $amount * 100;
+        $this->amountRequested = $amountRequested * 100;
 
         return $this;
     }
 
     /**
-     * Get amount
+     * Get amountRequested
      *
-     * @return int
+     * @return float
      */
-    public function getAmount()
+    public function getAmountRequested()
     {
-        return $this->amount / 100;
+        return $this->amountRequested / 100;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmountCredited()
+    {
+        return $this->amountCredited / 100;
+    }
+
+    /**
+     * @param float $amountCredited
+     */
+    public function setAmountCredited($amountCredited)
+    {
+        $this->amountCredited = $amountCredited * 100;
     }
 
     /**
@@ -268,7 +299,12 @@ class Ledger
      */
     public function setType($type)
     {
-        if (!in_array($type, array(self::TYPE_CLAIM, self::TYPE_CREDIT, self::TYPE_REBATE, self::TYPE_TRANSFER)))
+        if (!in_array($type, array(self::TYPE_CLAIM,
+                self::TYPE_CREDIT,
+                self::TYPE_REBATE,
+                self::TYPE_TRANSFER
+            )
+        ))
             throw new \InvalidArgumentException("Invalid type");
 
         $this->type = $type;

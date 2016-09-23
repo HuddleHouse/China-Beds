@@ -2,7 +2,7 @@
 
 {% block title %}Ledger{% endblock %}
 {% block page_title %}
-    New Ledger Entry
+    Credit Request
 {% endblock page_title %}
 
 {% block page_name %}
@@ -46,8 +46,8 @@
                     {{ form_widget(form.user) }}
                 </div>
                 <div class="col-md-4 form-group">
-                    {{ form_label(form.amount) }}
-                    {{ form_widget(form.amount) }}
+                    {{ form_label(form.amountRequested) }}
+                    {{ form_widget(form.amountRequested) }}
                 </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(form.achRequested) }}

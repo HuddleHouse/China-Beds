@@ -41,7 +41,7 @@ class LedgerType extends AbstractType
                     'required' => true
                 )
             )
-            ->add('amount', MoneyType::class, array(
+            ->add('amountRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
                     'constraints' => array(
                         new GreaterThan(array(
