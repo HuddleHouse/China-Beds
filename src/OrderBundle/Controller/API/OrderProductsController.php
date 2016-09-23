@@ -48,9 +48,9 @@ class OrderProductsController extends Controller
         $order->setChannel($channel);
         $order->setSubmittedByUser($this->getUser());
         if($this->getUser()->getId() == $ship_to_user_id)
-            $order->setSubmittedByUser($this->getUser());
+            $order->setSubmittedForUser($this->getUser());
         else
-            $order->setSubmittedByUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
+            $order->setSubmittedForUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
 
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
@@ -94,17 +94,17 @@ class OrderProductsController extends Controller
         }
 
         foreach($pop as $popitem) {
-                    $quantity = $pop_order_quan[$popitem['id']];
-                    if($quantity > 0) {
-                        $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
-                        $orders_pop_item = new OrdersPopItem();
-                        $orders_pop_item->setOrder($order);
-                        $orders_pop_item->setPrice($popitem['cost']);
-                        $orders_pop_item->setQuantity($quantity);
-                        $orders_pop_item->setPopItem($pop_item);
-                        $em->persist($orders_pop_item);
-                        $order->getPopItems()->add($orders_pop_item);
-                    }
+            $quantity = $pop_order_quan[$popitem['id']];
+            if($quantity > 0) {
+                $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
+                $orders_pop_item = new OrdersPopItem();
+                $orders_pop_item->setOrder($order);
+                $orders_pop_item->setPrice($popitem['cost']);
+                $orders_pop_item->setQuantity($quantity);
+                $orders_pop_item->setPopItem($pop_item);
+                $em->persist($orders_pop_item);
+                $order->getPopItems()->add($orders_pop_item);
+            }
         }
 
         $em->persist($order);

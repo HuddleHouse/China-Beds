@@ -236,6 +236,32 @@
         <!-- /.row -->
         {% endfor %}
 
+            <!-- Table row -->
+            <div class="row" style="">
+                <div class="col-xs-12 table-responsive">
+                    <h4 class="page-header">POP Items</h4>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">Qty</th>
+                            <th>Product</th>
+                            <th style="width: 24%;">Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in pop_items %}
+                            <tr>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.popItem.name }}: {{ item.popItem.description }}</td>
+                                <td><h6 style="margin: 0;">${{ (item.price*item.quantity) |number_format(2, '.', ',') }}</h6></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
                 <div class="row" style="padding-top: 40px;">
                     <!-- accepted payments column -->
                     <div class="col-xs-6">

@@ -112,6 +112,7 @@ class OrderProductsController extends Controller
             $is_retail = 1;
         if(isset($groups['Distributor']))
             $is_dis = 1;
+        $pop = $order->getPopItems();
 
         return $this->render('@Order/OrderProducts/view-order.html.twig', array(
             'channel' => $channel,
@@ -119,7 +120,8 @@ class OrderProductsController extends Controller
             'user' => $user,
             'product_data' => $product_data,
             'is_retail' => $is_retail,
-            'is_dis' => $is_dis
+            'is_dis' => $is_dis,
+            'pop_items' => $pop
         ));
     }
 

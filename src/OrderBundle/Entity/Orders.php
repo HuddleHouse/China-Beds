@@ -198,10 +198,10 @@ class Orders
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
-            if(isset($info['pick_up']) && $info['pick_up'] == true)
-                $this->isPickUp = true;
-            else if(isset($info['ship']) && $info['ship'] == true)
-                $this->isPickUp = false;
+            if(isset($info['pick_up']) && $info['pick_up'] == 'true')
+                $this->isPickUp = 1;
+            else if(isset($info['ship']) && $info['ship'] == 'true')
+                $this->isPickUp = 0;
 
             if(isset($info['comments']))
                 $this->comments = $info['comments'];
