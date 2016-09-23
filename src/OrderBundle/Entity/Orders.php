@@ -156,6 +156,11 @@ class Orders
     private $product_variants;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
+     */
+    private $pop_items;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_orders")
      * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */
@@ -183,6 +188,7 @@ class Orders
     public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -697,6 +703,22 @@ class Orders
     public function setSubmittedForUser($submitted_for_user)
     {
         $this->submitted_for_user = $submitted_for_user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPopItems()
+    {
+        return $this->pop_items;
+    }
+
+    /**
+     * @param mixed $pop_items
+     */
+    public function setPopItems($pop_items)
+    {
+        $this->pop_items = $pop_items;
     }
 
 
