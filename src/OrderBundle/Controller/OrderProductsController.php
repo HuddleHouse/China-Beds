@@ -182,8 +182,6 @@ class OrderProductsController extends Controller
                 'price' => $productVariant->getPrice()
             );
 
-
-
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
             'categories' => $categories,
@@ -198,7 +196,9 @@ class OrderProductsController extends Controller
             'order' => $order,
             'order_variants' => $order_variants,
             'order_pop' => $order_pop,
-            'is_edit' => 1
+            'is_edit' => 1,
+            'num_items' => $order->getNumItems(),
+            'total' => $order->getTotal()
         ));
     }
 

@@ -227,6 +227,17 @@ class Orders
         return $total;
     }
 
+    public function getNumItems() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total = $total + $productVariant->getQuantity();
+        foreach($this->getPopItems() as $popItem)
+            $total = $total + $popItem->getQuantity();
+
+        return $total;
+    }
+
     /**
      * Get id
      *
