@@ -83,6 +83,7 @@
             $scope.user_retailers = {{ user_retailers | json_encode | raw}};
             $scope.warehouses = {{ warehouses | json_encode | raw}};
             $scope.user_warehouses = {{ user_warehouses | json_encode | raw}};
+
             $scope.cart_num_items = 0;
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
@@ -95,56 +96,21 @@
             $scope.hasError = [];
             $scope.ship_to_id = {{ app.user.id }};
 
-            {% if is_edit == 1 %}
-                $scope.order_pop = {{ order_pop | json_encode | raw}};
-                $scope.order_variants = {{ order_variants | json_encode | raw}};
-                console.log($scope.order);
+            $scope.order_pop = {{ order_pop | json_encode | raw}};
+            $scope.order_variants = {{ order_variants | json_encode | raw}};
 
-
-
-                $( document ).ready(function() {
-                    $scope.form_info['po'] = '{{ order.orderNumber }}';
-                    $scope.form_info['comments'] = '{{ order.comments }}';
-                    $scope.form_info['address'] = '{{ order.shipAddress }}';
-                    $scope.form_info['address2'] = '{{ order.shipAddress2 }}';
-                    $scope.form_info['city'] = '{{ order.shipCity }}';
-                    $scope.form_info['zip'] = '{{ order.shipZip }}';
-                    $scope.form_info['phone'] = '{{ order.shipPhone }}';
-                    $scope.form_info['email'] = '{{ order.shipEmail }}';
-                    $scope.form_info['agent_name'] = '{{ order.pickUpAgent }}';
-                    $scope.form_info['ship_name'] = '{{ order.shipName }}';
-                    $('#dist_ship').val({{ order.submittedForUser.id }});
-                    var is_pickup = '{{ order.isPickUp }}';
-                    console.log(is_pickup);
-                    if(is_pickup == 1) {
-                        $('#ship').hide();
-                        $scope.form_info['ship'] = false;
-                        $('#pick_up_date').show();
-                        $('#pick_up_agent').show();
-                        $('#pick_up_warehouse').show();
-                        $('#pick_up').prop('checked', true);
-                    }
-                    else {
-                        $('#ship').show();
-                        $scope.form_info['pick_up'] = false;
-                        $('#pick_up_date').hide();
-                        $('#pick_up_agent').hide();
-                        $('#pick_up_warehouse').hide();
-                        $('#shipping').prop('checked', true);
-                    }
-
-                    angular.forEach($scope.order_pop, function(value, key) {
-                        $scope.$apply(function () {
-                            $scope.pop_order_quan[value['id']] = value['quantity'];
-                        });
-                    });
-                    angular.forEach($scope.order_variants, function(value, key) {
-                        $scope.$apply(function () {
-                            $scope.product_variant_order_quan[value['id']] = value['quantity'];
-                        });
+            $( document ).ready(function() {
+                angular.forEach($scope.order_pop, function(value, key) {
+                    $scope.$apply(function () {
+                        $scope.pop_order_quan[value['id']] = value['quantity'];
                     });
                 });
-            {% endif %}
+                angular.forEach($scope.order_variants, function(value, key) {
+                    $scope.$apply(function () {
+                        $scope.product_variant_order_quan[value['id']] = value['quantity'];
+                    });
+                });
+            });
 
             $scope.validate = function () {
                 if($scope.form_info['pick_up'] == true) {
@@ -328,7 +294,7 @@
                 $('#submit-button').prop('disabled', false);
                 $scope.hasError = [];
             };
-
+            
             $scope.getAllProducts = function () {
                 $scope.setAll($scope.product_variant_order_quan, 0);
                 $.ajax({
@@ -360,7 +326,7 @@
 
             $scope.shipping = function () {
                 if($scope.form_info['ship'] == true) {
-                    $('#ship').show();
+                        $('#ship').show();
                     $scope.form_info['pick_up'] = false;
                     $('#pick_up_date').hide();
                     $('#pick_up_agent').hide();

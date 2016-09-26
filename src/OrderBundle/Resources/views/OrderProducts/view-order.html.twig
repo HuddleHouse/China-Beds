@@ -322,9 +322,9 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
-                    <button type="button" class="btn btn-info btn-raised" style="margin-right: 5px;">
+                    <a href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;">
                         Edit Order
-                    </button>
+                    </a>
                     <button type="button" class="btn btn-success btn-raised" style="margin-right: 5px;">
                         Complete Order
                     </button>
