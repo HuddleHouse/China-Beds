@@ -247,12 +247,14 @@
 
             $scope.warehouseChange = function () {
                 var warehouse = $scope.cart['pick_up_warehouse'];
-
+                var warehouse_id = 0;
+                if(warehouse != undefined)
+                    warehouse_id = warehouse.id;
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_update_products_for_channel') }}",
                     dataType: 'json',
-                    data: {warehouse_id: $scope.cart['pick_up_warehouse'].id, user_id: {{ user.id}}, channel_id: {{ channel.id }}, warehouses: $scope.warehouses  },
+                    data: {warehouse_id: warehouse_id, user_id: {{ user.id}}, channel_id: {{ channel.id }}, warehouses: $scope.warehouses  },
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.products = data;

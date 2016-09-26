@@ -18,7 +18,7 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-            "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
 
         var app = angular.module('myApp', ['ngMaterial']);
@@ -31,6 +31,7 @@
             $scope.cart = [];
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
+            $scope.future_pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
 
@@ -159,24 +160,30 @@
 
     </div>
 
-<form action="/your-charge-code" method="POST">
-<div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
-    <div class="table"  style="min-height: 100vh;">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h2 class="page-header">
-                            <i class="fa fa-globe"></i> AdminLTE, Inc.
-                            <div class="pull-right">Date: {{ order.submitDate | date }}</div>
-                        </h2>
+    <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+        <div class="table"  style="min-height: 100vh;">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="color-block">
+                        Preview Only! Must confirm order to complete the process.
                     </div>
-                    <!-- /.col -->
                 </div>
-                <!-- info row -->
-                <div class="row invoice-info">
-                    <!-- /.col -->
-                    <div class="col-sm-4 invoice-col">
+                <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
 
-                        {% if order.isPickUp == 0%}
+                    {% if order.isPickUp == 0%}
                         <address>
                             <strong>Shipping To</strong>
                             {{ order.shipName }}<br>
@@ -185,29 +192,29 @@
                             Phone: {{ order.shipPhone }}<br>
                             Email: {{ order.shipEmail }}
                         </address>
-                        {% else %}
+                    {% else %}
                         <address>
                             <strong>Pick Up</strong><br>
                             <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
                             <strong>Date:</strong> {{ order.pickUpDate | date }}<br>
 
                         </address>
-                        {% endif %}
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-4 invoice-col">
-                        <b>PO #{{ order.orderNumber }}</b><br>
-                        <br>
-                    </div>
-                    <div class="col-sm-4 invoice-col">
-                        {#<b>Payment Due:</b> 2/22/2014<br>#}
-                        {#<b>Account:</b> 968-34567#}
-                    </div>
-                    <!-- /.col -->
+                    {% endif %}
                 </div>
-                <!-- /.row -->
-<hr>
-        {% for prod in product_data %}
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <b>PO #{{ order.orderNumber }}</b><br>
+                    <br>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    {#<b>Payment Due:</b> 2/22/2014<br>#}
+                    {#<b>Account:</b> 968-34567#}
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            {% for prod in product_data %}
                 <!-- Table row -->
                 <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
@@ -233,97 +240,107 @@
                     </div>
                     <!-- /.col -->
                 </div>
-        <!-- /.row -->
-        {% endfor %}
+                <!-- /.row -->
+            {% endfor %}
 
-            <!-- Table row -->
-            <div class="row" style="">
-                <div class="col-xs-12 table-responsive">
-                    <h4 class="page-header">POP Items</h4>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th style="width: 10%;">Qty</th>
-                            <th>Product</th>
-                            <th style="width: 24%;">Subtotal</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for item in pop_items %}
+            {% if pop_items is not empty %}
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header">POP Items</h4>
+                        <table class="table table-striped">
+                            <thead>
                             <tr>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.popItem.name }}: {{ item.popItem.description }}</td>
-                                <td><h6 style="margin: 0;">${{ (item.price*item.quantity) |number_format(2, '.', ',') }}</h6></td>
+                                <th style="width: 10%;">Qty</th>
+                                <th>Product</th>
+                                <th style="width: 24%;">Subtotal</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-                <div class="row" style="padding-top: 40px;">
-                    <!-- accepted payments column -->
-                    <div class="col-xs-6">
-                        <p class="lead">Payment Methods:</p>
-                        <img src="/images/credit/visa.png" alt="Visa">
-                        <img src="/images/credit/mastercard.png" alt="Mastercard">
-                        <img src="/images/credit/american-express.png" alt="American Express">
-                        <img src="/images/credit/paypal2.png" alt="Paypal">
-
-                        <h5>Comments</h5>
-                        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                            {{ order.comments }}
-                        </p>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-6">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody><tr>
-                                    <th style="width:50%">Subtotal:</th>
-                                    <td><h6>${{ order.subtotal |number_format(2, '.', ',') }}</h6></td>
-                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in pop_items %}
                                 <tr>
-                                    <th>Tax (9.3%)</th>
-                                    <td>?</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.popItem.name }}: {{ item.popItem.description }}</td>
+                                    <td><h6 style="margin: 0;">${{ (item.price*item.quantity) |number_format(2, '.', ',') }}</h6></td>
                                 </tr>
-                                <tr>
-                                    <th>Shipping:</th>
-                                    <td>$5.80</td>
-                                </tr>
-                                <tr>
-                                    <th>Total:</th>
-                                    <td>$265.24</td>
-                                </tr>
-                                </tbody></table>
-                        </div>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-
-                <!-- this row will not appear when printing -->
-                <div class="row no-print">
-                    <div class="col-xs-12">
-                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
-                        <button type="button" class="btn btn-raised" style="margin-right: 5px;">
-                            Pay With Ledger Balance
-                        </button>
-                        <script
-                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                data-key="pk_test_4B0NjjCkg1JumywOlyymXv3K"
-                                data-amount="{{ order.subtotal*100 }}"
-                                data-name="Bed Boss"
-                                data-description="Payment"
-                                data-locale="auto">
-                        </script>
-
+            {% endif %}
+            <div class="row" style="padding-top: 40px;">
+                <!-- accepted payments column -->
+                <div class="col-md-6">
+                    {#<p class="lead">Payment Methods:</p>#}
+                    {#<img src="/images/credit/visa.png" alt="Visa">#}
+                    {#<img src="/images/credit/mastercard.png" alt="Mastercard">#}
+                    {#<img src="/images/credit/american-express.png" alt="American Express">#}
+                    {#<img src="/images/credit/paypal2.png" alt="Paypal">#}
+                    <h5 style="margin: -14px 0 16px;">Comments</h5>
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 150px;">
+                        {{ order.comments }}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
+                        <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
+                    <div class="table-responsive" style="margin-top: 46px;">
+                        <table class="table">
+                            <tbody><tr>
+                                <th >Subtotal:</th>
+                                <td>${{ order.subtotal |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tax (9.3%)</th>
+                                <td>$0.00</td>
+                            </tr>
+                            <tr>
+                                <th>Shipping:</th>
+                                <td>$5.80</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>$265.24</td>
+                            </tr>
+                            </tbody></table>
                     </div>
                 </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
 
+
+
+            <!-- this row will not appear when printing -->
+            <div class="row no-print">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
+                    <button type="button" class="btn btn-info btn-raised" style="margin-right: 5px;">
+                        Edit Order
+                    </button>
+                    <button type="button" class="btn btn-success btn-raised" style="margin-right: 5px;">
+                        Complete Order
+                    </button>
+                    {#<script#}
+                    {#src="https://checkout.stripe.com/checkout.js" class="stripe-button"#}
+                    {#data-key="pk_test_4B0NjjCkg1JumywOlyymXv3K"#}
+                    {#data-amount="{{ order.subtotal*100 }}"#}
+                    {#data-name="Bed Boss"#}
+                    {#data-description="Payment"#}
+                    {#data-locale="auto">#}
+                    {#</script>#}
+
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 
-</form>
 {% endblock %}

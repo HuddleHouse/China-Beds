@@ -121,8 +121,8 @@ class OrderProductsController extends Controller
     public function updateProductsForChannel(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $warehouse_id = $request->request->get('warehouse_id');
-        if($warehouse_id != null)
+            $warehouse_id = $request->request->get('warehouse_id');
+        if($warehouse_id != null && $warehouse_id != 0)
             $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
 
         $user_id = $request->request->get('user_id');
@@ -130,8 +130,8 @@ class OrderProductsController extends Controller
         $user = $em->getRepository('AppBundle:User')->find($user_id);
         $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
 
-        if($warehouse_id != null)
-            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse);
+        if($warehouse_id != null && $warehouse_id != 0)
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse, null, null, 1);
         else
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
 

@@ -126,5 +126,44 @@ class OrderProductsController extends Controller
     }
 
 
+    /**
+     *
+     * @Route("/{id_channel}/products/{id_order}/edit", name="order_products_edit")
+     *
+     * @ParamConverter("channel", class="InventoryBundle:Channel", options={"id" = "id_channel"})
+     * @ParamConverter("order", class="OrderBundle:Orders", options={"id" = "id_order"})
+     *
+     * @Method("GET")
+     */
+    public function renderOrderEditAction(Channel $channel, Orders $order)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->getUser();
+        $user_channels = $user->getUserChannelsArray();
+
+        if($user_channels[$channel->getId()])
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
+        else
+            $this->redirectToRoute('404');
+
+        $groups = $user->getGroupsArray();
+        $is_dis = $is_retail = 0;
+
+        if(isset($groups['Retailer']))
+            $is_retail = 1;
+        if(isset($groups['Distributor']))
+            $is_dis = 1;
+        $pop = $order->getPopItems();
+
+        return $this->render('@Order/OrderProducts/view-order.html.twig', array(
+            'channel' => $channel,
+            'order' => $order,
+            'user' => $user,
+            'product_data' => $product_data,
+            'is_retail' => $is_retail,
+            'is_dis' => $is_dis,
+            'pop_items' => $pop
+        ));
+    }
 
 }
