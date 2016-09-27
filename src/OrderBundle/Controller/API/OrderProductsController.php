@@ -139,7 +139,7 @@ class OrderProductsController extends Controller
     public function updateProductsForChannel(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-            $warehouse_id = $request->request->get('warehouse_id');
+        $warehouse_id = $request->request->get('warehouse_id');
         if($warehouse_id != null && $warehouse_id != 0)
             $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
 
@@ -179,6 +179,26 @@ class OrderProductsController extends Controller
             );
 
         return JsonResponse::create($data);
+    }
+
+    /**
+     * @Route("/api_pay_for_order", name="api_pay_for_order")
+     *
+     */
+    public function payForOrder(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cc = $request->request->get('cc');
+        $payment_type = $request->request->get('payment_type');
+        $order_id = $request->request->get('order_id');
+        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+        $status = $em->getRepository('WarehousBundle:Status')->findOneBy(array('name' => 'Paid'));
+
+        $order->setStatus($status);
+        $order->setPaymentType($payment_type);
+        $em->persist($order);
+        $em->flush();
+
     }
 }
 

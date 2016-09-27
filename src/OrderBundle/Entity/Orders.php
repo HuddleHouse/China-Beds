@@ -177,6 +177,20 @@ class Orders
      */
     protected $state;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_type", type="string", length=255, nullable=true)
+     */
+    private $payment_type;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="amount_paid", type="integer", nullable=true)
+     */
+    private $amount_paid;
+
 
     public function __construct($info = null)
     {
@@ -758,6 +772,40 @@ class Orders
     {
         $this->pop_items = $pop_items;
     }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->payment_type;
+    }
+
+    /**
+     * @param string $payment_type
+     */
+    public function setPaymentType($payment_type)
+    {
+        $this->payment_type = $payment_type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountPaid()
+    {
+        return $this->amount_paid;
+    }
+
+    /**
+     * @param int $amount_paid
+     */
+    public function setAmountPaid($amount_paid)
+    {
+        $this->amount_paid = $amount_paid;
+    }
+
+
 
 
 }
