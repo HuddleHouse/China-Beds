@@ -33,13 +33,31 @@ class OrderProductsController extends Controller
         $pop = $request->request->get('pop');
         $cart = $request->request->get('cart');
         $total = $request->request->get('total');
+        $order_id = $request->request->get('order_id');
         $info = $request->request->get('form_info');
         $ship_to_user_id = $request->request->get('ship_to_user_id');
         //array indexed at prod variant id that tell you the ordered quantity
         $product_variant_order_quan = $request->request->get('product_variant_order_quan');
         $pop_order_quan = $request->request->get('pop_order_quan');
 
-        $order = new Orders($info);
+        if($order_id == 0)
+            $order = new Orders($info);
+        else {
+            $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+            foreach($order->getProductVariants() as $productVariant) {
+                foreach($productVariant->getWarehouseInfo() as $item)
+                    $em->remove($item);
+                $em->remove($productVariant);
+            }
+            foreach($order->getPopItems() as $productVariant)
+                $em->remove($productVariant);
+
+            $order->setData($info);
+
+        }
+
+
+
         $em->persist($order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');

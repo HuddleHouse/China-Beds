@@ -100,50 +100,59 @@
                 $scope.order_variants = {{ order_variants | json_encode | raw}};
                 console.log($scope.order);
 
-
-
                 $( document ).ready(function() {
-                    $scope.form_info['po'] = '{{ order.orderNumber }}';
-                    $scope.form_info['comments'] = '{{ order.comments }}';
-                    $scope.form_info['address'] = '{{ order.shipAddress }}';
-                    $scope.form_info['address2'] = '{{ order.shipAddress2 }}';
-                    $scope.form_info['city'] = '{{ order.shipCity }}';
-                    $scope.form_info['zip'] = '{{ order.shipZip }}';
-                    $scope.form_info['phone'] = '{{ order.shipPhone }}';
-                    $scope.form_info['email'] = '{{ order.shipEmail }}';
-                    $scope.form_info['agent_name'] = '{{ order.pickUpAgent }}';
-                    $scope.form_info['ship_name'] = '{{ order.shipName }}';
-                    $scope.cart_num_items = {{ order.total }};
-                    $scope.cart_total = '{{ order.numItems }}';
+                    $scope.$apply(function () {
+                        $scope.form_info['po'] = '{{ order.orderNumber }}';
+                        $scope.form_info['comments'] = '{{ order.comments }}';
+                        $scope.form_info['address'] = '{{ order.shipAddress }}';
+                        $scope.form_info['address2'] = '{{ order.shipAddress2 }}';
+                        $scope.form_info['city'] = '{{ order.shipCity }}';
+                        $scope.form_info['zip'] = '{{ order.shipZip }}';
+                        $scope.form_info['phone'] = '{{ order.shipPhone }}';
+                        $scope.form_info['email'] = '{{ order.shipEmail }}';
+                        $scope.form_info['agent_name'] = '{{ order.pickUpAgent }}';
+                        $scope.form_info['ship_name'] = '{{ order.shipName }}';
+                        $scope.cart_num_items = Number({{ order.numItems }});
+                        $scope.cart_total = Number({{ order.total }});
 
-                    $('#dist_ship').val({{ order.submittedForUser.id }});
-                    var is_pickup = '{{ order.isPickUp }}';
-                    console.log(is_pickup);
-                    if(is_pickup == 1) {
-                        $('#ship').hide();
-                        $scope.form_info['ship'] = false;
-                        $('#pick_up_date').show();
-                        $('#pick_up_agent').show();
-                        $('#pick_up_warehouse').show();
-                        $('#pick_up').prop('checked', true);
-                    }
-                    else {
-                        $('#ship').show();
-                        $scope.form_info['pick_up'] = false;
-                        $('#pick_up_date').hide();
-                        $('#pick_up_agent').hide();
-                        $('#pick_up_warehouse').hide();
-                        $('#shipping').prop('checked', true);
-                    }
-
+                        $('#dist_ship').val({{ order.submittedForUser.id }});
+                        var is_pickup = '{{ order.isPickUp }}';
+                        console.log(is_pickup);
+                        if (is_pickup == 1) {
+                            $('#ship').hide();
+                            $scope.form_info['ship'] = false;
+                            $('#pick_up_date').show();
+                            $('#pick_up_agent').show();
+                            $('#pick_up_warehouse').show();
+                            $('#pick_up').prop('checked', true);
+                        }
+                        else {
+                            $('#ship').show();
+                            $scope.form_info['pick_up'] = false;
+                            $('#pick_up_date').hide();
+                            $('#pick_up_agent').hide();
+                            $('#pick_up_warehouse').hide();
+                            $('#shipping').prop('checked', true);
+                        }
+                    });
                     angular.forEach($scope.order_pop, function(value, key) {
                         $scope.$apply(function () {
                             $scope.pop_order_quan[value['id']] = value['quantity'];
+                            $scope.cart['pop'][value['id']] = {
+                                variant_id: value['id'],
+                                quantity: value['quantity'],
+                                cost: value['price']
+                            };
                         });
                     });
                     angular.forEach($scope.order_variants, function(value, key) {
                         $scope.$apply(function () {
                             $scope.product_variant_order_quan[value['id']] = value['quantity'];
+                            $scope.cart['variant'][value['id']] = {
+                                variant_id: value['id'],
+                                quantity: value['quantity'],
+                                cost: value['price']
+                            };
                         });
                     });
                 });
@@ -289,7 +298,8 @@
                             products: $scope.products,
                             pop: $scope.pop,
                             product_variant_order_quan: $scope.product_variant_order_quan,
-                            pop_order_quan: $scope.pop_order_quan
+                            pop_order_quan: $scope.pop_order_quan,
+                            order_id: {% if order is defined %}{{ order.id }}{% else %}0{% endif %}
                         },
                         success: function (data) {
                                 window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });

@@ -216,6 +216,44 @@ class Orders
         }
     }
 
+    public function setData($info = null)
+    {
+        $this->product_variants = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
+        $this->submitDate = new \DateTime();
+        if($info != null) {
+            if(isset($info['po']))
+                $this->orderNumber = $info['po'];
+            if(isset($info['pick_up_date']))
+                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+            if(isset($info['agent_name']))
+                $this->pickUpAgent = $info['agent_name'];
+
+            if(isset($info['pick_up']) && $info['pick_up'] == 'true')
+                $this->isPickUp = 1;
+            else if(isset($info['ship']) && $info['ship'] == 'true')
+                $this->isPickUp = 0;
+
+            if(isset($info['comments']))
+                $this->comments = $info['comments'];
+            if(isset($info['ship_name']))
+                $this->shipName = $info['ship_name'];
+            if(isset($info['address']))
+                $this->shipAddress = $info['address'];
+            if(isset($info['address2']))
+                $this->shipAddress2 = $info['address2'];
+            if(isset($info['city']))
+                $this->ship_city = $info['city'];
+            if(isset($info['zip']))
+                $this->ship_zip = $info['zip'];
+            if(isset($info['phone']))
+                $this->shipPhone = $info['phone'];
+            if(isset($info['email']))
+                $this->shipEmail = $info['email'];
+
+        }
+    }
+
     public function getTotal() {
         $total = 0;
 
