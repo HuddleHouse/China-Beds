@@ -34,7 +34,7 @@
                 else {
                     expanded = true;
                     // Open this row (the format() function would return the data to be shown)
-                    row.child(format(tr.data('child-value'))).show();
+                    row.child(format(tr.data('child-value'), row.index(), row.row()), "child").show();
                     $(this).closest('td').find('span').html('Click to collapse');
                     tr.addClass('shown');
                 }
@@ -44,6 +44,9 @@
             table.on('responsive-display', function (e, datatable, row, showHide, update) {
 //                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
                 var info = $(row.node()).data('child-value');
+                //hide expanded descriptions if shown
+                if(row.child().isShown())
+                    row.child().hide();
                 if(showHide)
                     $(row.child()).find('span.dtr-data span').html(info);
                 else
@@ -51,8 +54,11 @@
             });
         });
 
-        function format(description) {
-            return '<div style="float: right">'+description+'</div>';
+        function format(description, index, row) {
+            return '<ul data-dtr-index="'+index+'">' +
+                    '<li data-dtr-index="'+index+'" data-dt-row="'+row[0][0]+'" data-dt-column="9">' +
+                    '<span class="dtr-title">Description</span>&nbsp;' +
+                    '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
         }
     </script>
 {% endblock footer %}
