@@ -13,8 +13,8 @@
                     <th>Name</th>
                     <th>Sku</th>
                     <th>MSRP</th>
-                    <th>Dimensions</th>
                     <th>Fedex Dimensions</th>
+                    <th>Weight (number only)</th>
                     <th style="width: 150px">Options</th>
                 </tr>
                 </thead>
@@ -25,8 +25,8 @@
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.name"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.sku"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.msrp"> </td>
-                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.dimensions"> </td>
                         <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.fedex_dimensions"> </td>
+                        <td><input class="form-control" type="text" style="width: 100%;" ng-model="variant.weight"> </td>
                         <td>
                             <a class="btn btn-raised btn-success rich-btn" ng-click="updateProductVariant(variant)"><i class="fa fa-upload" aria-hidden="true"></i></a>
                             <a class="btn btn-raised btn-danger rich-btn" ng-click="removeProductVariant(variant.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -58,10 +58,10 @@
                 <input type="text" id="variant_sku" name="" required="required" class="form-control" style="margin-bottom: 10px">
                 <label for="variant_msrp" class="required">MSRP</label>
                 <input type="text" id="variant_msrp" name="" required="required" class="form-control" style="margin-bottom: 10px">
-                <label for="variant_dimensions" class="required">Dimensions</label>
-                <input type="text" id="variant_dimensions" name="" required="required" class="form-control" style="margin-bottom: 10px">
                 <label for="variant_fedex_dimensions" class="required">Fedex Dimensions</label>
                 <input type="text" id="variant_fedex_dimensions" name="" required="required" class="form-control" style="margin-bottom: 10px">
+                <label for="variant_weight" class="required">Weight</label>
+                <input type="text" id="variant_weight" name="" required="required" class="form-control" style="margin-bottom: 10px">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>

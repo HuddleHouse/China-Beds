@@ -27,7 +27,8 @@
                 <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>PO Number</th>
+                        <th>Order Number</th>
+                        <th>Status</th>
                         <th style="width: 250px;">Actions</th>
                     </tr>
                     </thead>
@@ -36,6 +37,14 @@
                         <tr role="row" class="odd">
                             <td>
                                 <a href="">{{ order.orderNumber }}</a>
+                            </td>
+                            <td>
+                                <span class="mdl-chip mdl-chip--contact" >
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
+                                    <span class="mdl-chip__text">
+                                    {{ order.status.name }}
+                                    </span>
+                                </span>
                             </td>
                             <td>
                                 <a class="btn btn-raised btn-default btn-xs purple" href=""><i class="fa fa-edit"></i> View</a>

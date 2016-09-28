@@ -53,9 +53,9 @@ class ProductVariant
     /**
      * @var string
      *
-     * @ORM\Column(name="dimensions", type="string", length=255, nullable=true)
+     * @ORM\Column(name="weight", type="string", length=255, nullable=true)
      */
-    private $dimensions;
+    private $weight;
 
     /**
      * @var string
@@ -224,17 +224,17 @@ class ProductVariant
     /**
      * @return mixed
      */
-    public function getDimensions()
+    public function getWeight()
     {
-        return $this->dimensions;
+        return $this->weight;
     }
 
     /**
-     * @param mixed $dimensions
+     * @param mixed $weight
      */
-    public function setDimensions($dimensions)
+    public function setWeight($weight)
     {
-        $this->dimensions = $dimensions;
+        $this->weight = $weight;
     }
 
     /**

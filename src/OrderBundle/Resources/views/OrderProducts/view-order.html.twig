@@ -415,7 +415,7 @@
                                 {#<td>$0.00</td>#}
                             {#</tr>#}
                             <tr>
-                                <th>Shipping:</th>
+                                <th>Shipping: {{ order.getShipDescription }}</th>
                                 <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
                             </tr>
                             <tr>

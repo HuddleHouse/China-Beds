@@ -184,6 +184,19 @@ class Orders
      */
     private $amount_paid;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ship_description", type="string", length=255, nullable=true)
+     */
+    private $ship_description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ship_code", type="string", length=255, nullable=true)
+     */
+    private $ship_code;
 
     public function __construct($info = null)
     {
@@ -778,7 +791,37 @@ class Orders
         $this->amount_paid = $amount_paid;
     }
 
+    /**
+     * @return string
+     */
+    public function getShipDescription()
+    {
+        return $this->ship_description;
+    }
 
+    /**
+     * @param string $ship_description
+     */
+    public function setShipDescription($ship_description)
+    {
+        $this->ship_description = $ship_description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipCode()
+    {
+        return $this->ship_code;
+    }
+
+    /**
+     * @param string $ship_code
+     */
+    public function setShipCode($ship_code)
+    {
+        $this->ship_code = $ship_code;
+    }
 
 
 }

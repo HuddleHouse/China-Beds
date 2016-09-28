@@ -63,6 +63,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-success">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4">Success</h4>
+            </div>
+            <div class="modal-body">
+                <div id="success-message1" style="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% block javascripts %}
     {% javascripts '@AppBundle/Resources/public/js/*' filter="jsqueeze" output="js/appBundle.js"%}
     {% endjavascripts %}
@@ -138,7 +157,12 @@
         var spinner = new Spinner(opts).spin(target);
         target.appendChild(spinner.el);
     }
-
+    function showSpinner() {
+        $('.overlay').show();
+        var target = document.getElementById('loading-img');
+        var spinner = new Spinner(opts).spin(target);
+        target.appendChild(spinner.el);
+    }
     function addCustomSpinner(id) {
         $('.overlay').show();
         var target = document.getElementById(id);
@@ -149,7 +173,6 @@
 
     function hideSpinner() {
         $('.overlay').hide();
-        spinner.stop();
     }
 
     function printPage() {
@@ -160,6 +183,12 @@
         $('#error-modal').modal('show');
         $('#error-message1').empty();
         $('#error-message1').append(message);
+    }
+
+    function showSuccessModal(message) {
+        $('#success-modal').modal('show');
+        $('#success-message1').empty();
+        $('#success-message1').append(message);
     }
 </script>
 {% block footer %}{% endblock %}

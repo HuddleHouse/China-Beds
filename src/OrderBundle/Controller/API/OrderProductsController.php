@@ -120,32 +120,11 @@ class OrderProductsController extends Controller
                 $order->getPopItems()->add($orders_pop_item);
             }
         }
+        $shipping = $this->calculateShipping($order);
+        $order->setShipping($shipping['rate']);
+        $order->setShipCode($shipping['service_code']);
+        $order->setShipDescription($shipping['desc']);
 
-        $rate = new \RocketShipIt\Rate('fedex');
-        $rate->setParameter('toCode', '90210');
-        $rate->setParameter('residentialAddressIndicator','1');
-        $rate->setParameter('service', 'GROUND_HOME_DELIVERY');
-
-        $package = new \RocketShipIt\Package('fedex');
-        $package->setParameter('weight', '5');
-        $package->setParameter('length', '16');
-        $package->setParameter('width', '2');
-        $package->setParameter('height', '10');
-        $rate->addPackageToShipment($package);
-
-        $package = new \RocketShipIt\Package('fedex');
-        $package->setParameter('weight', '5');
-        $package->setParameter('length', '12');
-        $package->setParameter('width', '25');
-        $package->setParameter('height', '6');
-        $rate->addPackageToShipment($package);
-
-        $response = $rate->getSimpleRates();
-
-        foreach($response as $ship) {
-            if($ship['service_code'] == 'GROUND_HOME_DELIVERY')
-                $order->setShipping($ship['rate']);
-        }
         $em->persist($order);
         $em->flush();
 
@@ -153,6 +132,29 @@ class OrderProductsController extends Controller
 
         return JsonResponse::create($order->getId());
     }
+
+    private function calculateShipping(Orders $order) {
+        $rate = new \RocketShipIt\Rate('fedex');
+        $rate->setParameter('toCode', $order->getShipZip());
+        $rate->setParameter('residentialAddressIndicator','1');
+        $rate->setParameter('service', 'GROUND_HOME_DELIVERY');
+
+        foreach($order->getProductVariants() as $productVariant) {
+            $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+            $package = new \RocketShipIt\Package('fedex');
+            $package->setParameter('length', "$dimensions[0]");
+            $package->setParameter('width', "$dimensions[1]");
+            $package->setParameter('height', "$dimensions[2]");
+            $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
+            $rate->addPackageToShipment($package);
+        }
+
+        $response = $rate->getSimpleRates();
+        $data = array_pop($response);
+
+        return $data;
+    }
+
 
     /**
      * @Route("/api_update_products_for_channel", name="api_update_products_for_channel")
