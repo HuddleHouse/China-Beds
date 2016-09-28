@@ -15,31 +15,63 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
+            var expanded = false;
             var table = $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 2, "desc" ]] });
 
+            //hide the full description
             table.on('click', 'td#description', function () {
                 var tr = $(this).parents('tr');
                 var row = table.row( tr );
 
-                if ( row.child.isShown() ) {
+                if (expanded) {
+                    expanded = false;
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
                     $(this).closest('td').find('span').html('Click to expand');
                 }
                 else {
+                    expanded = true;
                     // Open this row (the format() function would return the data to be shown)
-                    row.child(format(tr.data('child-value'))).show();
+                    row.child(format(tr.data('child-value'), row.index(), row.row()), "child").show();
                     $(this).closest('td').find('span').html('Click to collapse');
                     tr.addClass('shown');
                 }
 
-            } );
+            });
+            //put the description info in the child if table is in responsive mode
+            table.on('responsive-display', function (e, datatable, row, showHide, update) {
+//                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
+                var info = $(row.node()).data('child-value');
+                //hide expanded descriptions if shown
+                if(row.child().isShown())
+                    row.child().hide();
+                if(showHide)
+                    $(row.child()).find('span.dtr-data span').html(info);
+                else
+                    $(row.child()).find('span.dtr-data span').html('Click to expand');
+            });
         });
 
-        function format(description) {
-            return '<div>'+description+'</div>';
+        function format(description, index, row) {
+            return '<ul data-dtr-index="'+index+'">' +
+                    '<li data-dtr-index="'+index+'" data-dt-row="'+row[0][0]+'" data-dt-column="9">' +
+                    '<span class="dtr-title">Description</span>&nbsp;' +
+                    '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
+        }
+
+
+        function createLedgerWithAPI(amount, submittedForUserId, achRequested, description, type, typeId) {
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_new_ledger') }}",
+                dataType: 'json',
+                data: {amount: amount, submittedForUserId: submittedForUserId, achRequested: achRequested, description: description, type: type, typeId: typeId},
+                success: function (data) {
+                    console.log(JSON.stringify(data,null,4));
+                }
+            });
         }
     </script>
 {% endblock footer %}
@@ -51,12 +83,13 @@
                 <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>Amount Requested</th>
-                        <th>Amount Credited</th>
+                        <th>Requested</th>
+                        <th>Credited</th>
                         <th>Date Created</th>
                         <th>Date Posted</th>
                         <th>User</th>
-                        <th>Added by User</th>
+                        <th>Added by</th>
+                        <th>Credited by</th>
                         <th>ACH</th>
                         <th>Type</th>
                         <th>Description</th>
@@ -69,10 +102,11 @@
                         <tr data-child-value="{{ ledger.description }}">
                             <td>{{ ledger.amountRequested | number_format(2) }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
-                            <td>{{ ledger.created | date('m/d/y') }}</td>
-                            <td>{% if ledger.posted %}{{ ledger.posted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.user.fullName }}</td>
-                            <td>{{ ledger.addedByUser.fullName }}</td>
+                            <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
+                            <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
+                            <td>{{ ledger.submittedForUser.fullName }}</td>
+                            <td>{{ ledger.submittedByUser.fullName }}</td>
+                            <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             <td>{{ ledger.type }}</td>
                             <td id="description"><span>Click to expand</span></td>
@@ -87,10 +121,11 @@
                         <tr>
                             <td>{{ ledger.amountRequested | number_format(2) }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
-                            <td>{{ ledger.created | date('m/d/y') }}</td>
-                            <td>{% if ledger.posted %}{{ ledger.posted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.user.fullName }}</td>
-                            <td>{{ ledger.addedByUser.fullName }}</td>
+                            <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
+                            <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
+                            <td>{{ ledger.submittedForUser.fullName }}</td>
+                            <td>{{ ledger.submittedByUser.fullName }}</td>
+                            <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             <td>{{ ledger.type }}</td>
                             <td>None</td>

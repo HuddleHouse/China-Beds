@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-danger">
-                    {{ form_errors(form.user) }}
+                    {{ form_errors(form.submittedForUser) }}
                     {{ form_errors(form.amount) }}
                     {{ form_errors(form.description) }}
                 </div>
@@ -47,8 +47,8 @@
             <div class="row">
                 {% if app.user.hasRole('ROLE_ADMIN') %}
                 <div class="col-md-4 form-group">
-                    {{ form_label(form.user) }}
-                    {{ form_widget(form.user) }}
+                    {{ form_label(form.submittedForUser) }}
+                    {{ form_widget(form.submittedForUser) }}
                 </div>
                 {% else %}
                     {% do form.user.setRendered %}

@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class CreditApprovalType extends AbstractType
 {
@@ -28,41 +29,19 @@ class CreditApprovalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', EntityType::class, array(
-                    'class' => 'AppBundle\Entity\User',
-                    'label' => 'User',
-                    'placeholder' => 'Select User',
-                    'choice_label' => function (User $user) {
-                        return $user->getFullName();
-                    },
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'required' => true
-                )
-            )
-            ->add('amountRequested', MoneyType::class, array(
+            ->add('amountCredited', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
-                    'label' => 'Amount',
+                    'label' => 'Amount to Credit',
                     'constraints' => array(
-                        new GreaterThan(array(
+                        new GreaterThanOrEqual(array(
                                 'value' => 0,
-                                'message' => 'You must enter an amount greater than zero.')
+                                'message' => 'You must enter an amount greater than or equal to 0.')
                         )
                     ),
                     'currency' => 'USD',
                     'required' => true
                 )
-            )
-            ->add('achRequested', ChoiceType::class, array(
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'label' => 'ACH Requested',
-                    'choices' => array(
-                        'Yes' => 1,
-                        'No' => 0
-                    ),
-                    'required' => true
-                )
-            )
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false));
+            );
     }
 
     /**

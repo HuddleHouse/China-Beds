@@ -2,12 +2,16 @@
 
 namespace OrderBundle\Controller;
 
+use Doctrine\DBAL\Types\DateType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use OrderBundle\Entity\Ledger;
-use OrderBundle\Form\LedgerType;
+use OrderBundle\Form\CreditRequestType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Ledger controller.
@@ -17,7 +21,7 @@ use OrderBundle\Form\LedgerType;
 class LedgerController extends Controller
 {
     /**
-     * Lists all Ledger entities.
+     * Lists all Ledger entities if admin. Other roles can only see applicable ledgers
      *
      * @Route("/", name="ledger_index")
      * @Method("GET")
@@ -26,7 +30,10 @@ class LedgerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $ledgers = $em->getRepository('OrderBundle:Ledger')->findAll();
+        if($this->getUser()->hasRole('ROLE_ADMIN'))
+            $ledgers = $em->getRepository('OrderBundle:Ledger')->findAll();
+        else
+            $ledgers = $em->getRepository('OrderBundle:Ledger')->findby(array('user' => $this->getUser()));
 
         return $this->render('@Order/Ledger/index.html.twig', array(
             'ledgers' => $ledgers,
@@ -34,7 +41,7 @@ class LedgerController extends Controller
     }
 
     /**
-     * Creates a new Ledger entity.
+     * Creates a new credit request.
      *
      * @Route("/new", name="ledger_new")
      * @Method({"GET", "POST"})
@@ -48,22 +55,22 @@ class LedgerController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                if(!$ledger->getUser())
-                    $ledger->setUser($this->getUser());
-                $ledger->setAddedByUser($this->getUser());
+                if(!$ledger->getSubmittedForUser())
+                    $ledger->setSubmittedForUser($this->getUser());
+                $ledger->setSubmittedByUser($this->getUser());
                 $em->persist($ledger);
                 $em->flush();
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error creating ledger entry: ' . $e->getMessage());
+                $this->addFlash('error', 'Error creating credit request entry: ' . $e->getMessage());
                 return $this->render('@Order/Ledger/new.html.twig', array(
                     'ledger' => $ledger,
                     'form' => $form->createView(),
                 ));
             }
 
-            $this->addFlash('notice', 'Ledger entry created.');
-            return $this->redirectToRoute('ledger_show', array('id' => $ledger->getId()));
+            $this->addFlash('notice', 'Credit request created.');
+            return $this->redirectToRoute('ledger_edit', array('id' => $ledger->getId()));
         }
 
         return $this->render('@Order/Ledger/new.html.twig', array(
@@ -73,7 +80,7 @@ class LedgerController extends Controller
     }
 
     /**
-     * Finds and displays a Ledger entity.
+     * Shows admins credit requests so they can approve or deny them.
      *
      * @Route("/{id}", name="ledger_show")
      * @Method({"GET", "POST"})
@@ -86,32 +93,32 @@ class LedgerController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                if(!$ledger->getUser())
-                    $ledger->setUser($this->getUser());
-                $ledger->setAddedByUser($this->getUser());
+                $ledger->setCreditedByUser($this->getUser());
+                $ledger->setDatePosted(new \DateTime());
+                $ledger->setIsArchived(true);
                 $em->persist($ledger);
                 $em->flush();
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error creating ledger entry: ' . $e->getMessage());
-                return $this->render('@Order/Ledger/new.html.twig', array(
+                $this->addFlash('error', 'Error updating credit request entry: ' . $e->getMessage());
+                return $this->render('@Order/Ledger/show.html.twig', array(
                     'ledger' => $ledger,
                     'form' => $form->createView(),
                 ));
             }
 
-            $this->addFlash('notice', 'Ledger entry created.');
-            return $this->redirectToRoute('ledger_show', array('id' => $ledger->getId()));
+            $this->addFlash('notice', 'Credit posted.');
+            return $this->redirectToRoute('ledger_index', array('id' => $ledger->getId()));
         }
 
-        return $this->render('@Order/Ledger/new.html.twig', array(
+        return $this->render('@Order/Ledger/show.html.twig', array(
             'ledger' => $ledger,
             'form' => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing Ledger entity.
+     * Displays a form to edit an existing credit request.
      *
      * @Route("/{id}/edit", name="ledger_edit")
      * @Method({"GET", "POST"})
@@ -129,15 +136,14 @@ class LedgerController extends Controller
                 $em->flush();
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error updating ledger entry: ' . $e->getMessage());
+                $this->addFlash('error', 'Error updating credit request entry: ' . $e->getMessage());
                 return $this->render('@Order/Ledger/edit.html.twig', array(
                     'ledger' => $ledger,
                     'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
                 ));
             }
 
-            $this->addFlash('notice', 'Ledger updated.');
+            $this->addFlash('notice', 'Credit request updated.');
             return $this->redirectToRoute('ledger_edit', array('id' => $ledger->getId()));
         }
 
