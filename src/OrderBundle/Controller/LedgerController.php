@@ -55,9 +55,9 @@ class LedgerController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                if(!$ledger->getUser())
-                    $ledger->setUser($this->getUser());
-                $ledger->setAddedByUser($this->getUser());
+                if(!$ledger->getSubmittedForUser())
+                    $ledger->setSubmittedForUser($this->getUser());
+                $ledger->setSubmittedByUser($this->getUser());
                 $em->persist($ledger);
                 $em->flush();
             }
@@ -94,7 +94,7 @@ class LedgerController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 $ledger->setCreditedByUser($this->getUser());
-                $ledger->setPosted(new \DateTime());
+                $ledger->setDatePosted(new \DateTime());
                 $ledger->setIsArchived(true);
                 $em->persist($ledger);
                 $em->flush();

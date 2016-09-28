@@ -5,6 +5,8 @@ namespace OrderBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
+use InventoryBundle\Entity\WarrantyClaim;
 
 
 /**
@@ -24,10 +26,10 @@ class Ledger
      ************************************
      ************************************/
 
-    const TYPE_CLAIM    = 'Claim'; //to clarify: warranty claims
-    const TYPE_CREDIT   = 'Credit';//default
+    const TYPE_CREDIT   = 'Credit';   //default
     const TYPE_REBATE   = 'Rebate';
     const TYPE_TRANSFER = 'Transfer';
+    const TYPE_CLAIM    = 'Warranty';
 
     /**
      * @var int
@@ -42,22 +44,22 @@ class Ledger
      * @var \AppBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="ledgers", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */
-    private $user;
+    private $submittedForUser;
 
     /**
      * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="addedLedgers", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="added_by_user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_ledgers", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */
-    private $addedByUser;
+    private $submittedByUser;
 
     /**
      * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="creditedLedgers", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="credited_ledgers", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="credited_by_user_id", referencedColumnName="id")
      */
     private $creditedByUser;
@@ -79,16 +81,16 @@ class Ledger
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created", type="datetime")
+     * @ORM\Column(name="date_created", type="datetime")
      */
-    private $created;
+    private $dateCreated;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="posted", type="datetime", nullable=true)
+     * @ORM\Column(name="date_posted", type="datetime", nullable=true)
      */
-    private $posted;
+    private $datePosted;
 
     /**
      * @var bool
@@ -125,10 +127,17 @@ class Ledger
      */
     private $typeId; //is null if TYPE_CREDIT
 
+    /**
+     * @OneToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="ledger")
+     */
+    private $warrantyClaim;
 
+    /**
+     * Ledger constructor.
+     */
     public function __construct()
     {
-        $this->setCreated(new \DateTime());
+        $this->setDateCreated(new \DateTime());
     }
 
     /**
@@ -144,33 +153,33 @@ class Ledger
     /**
      * @return \AppBundle\Entity\User
      */
-    public function getUser()
+    public function getSubmittedForUser()
     {
-        return $this->user;
+        return $this->submittedForUser;
     }
 
     /**
      * @param \AppBundle\Entity\User $user
      */
-    public function setUser($user)
+    public function setSubmittedForUser($user)
     {
-        $this->user = $user;
+        $this->submittedForUser = $user;
     }
 
     /**
      * @return \AppBundle\Entity\User
      */
-    public function getAddedByUser()
+    public function getSubmittedByUser()
     {
-        return $this->addedByUser;
+        return $this->submittedByUser;
     }
 
     /**
-     * @param \AppBundle\Entity\User $addedByUser
+     * @param \AppBundle\Entity\User $submittedByUser
      */
-    public function setAddedByUser($addedByUser)
+    public function setSubmittedByUser($submittedByUser)
     {
-        $this->addedByUser = $addedByUser;
+        $this->submittedByUser = $submittedByUser;
     }
 
     /**
@@ -230,43 +239,41 @@ class Ledger
     }
 
     /**
-     * Set created
+     * Set dateCreated
      *
-     * @param \DateTime $created
+     * @param \DateTime $dateCreated
      *
      * @return Ledger
      */
-    public function setCreated($created)
+    public function setDateCreated($dateCreated)
     {
-        $this->created = $created;
+        $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
     /**
-     * Get created
-     *
      * @return \DateTime
      */
-    public function getCreated()
+    public function getDateCreated()
     {
-        return $this->created;
+        return $this->dateCreated;
     }
 
     /**
      * @return \DateTime
      */
-    public function getPosted()
+    public function getDatePosted()
     {
-        return $this->posted;
+        return $this->datePosted;
     }
 
     /**
-     * @param \DateTime $posted
+     * @param \DateTime $datePosted
      */
-    public function setPosted($posted)
+    public function setDatePosted($datePosted)
     {
-        $this->posted = $posted;
+        $this->datePosted = $datePosted;
     }
 
     /**
@@ -346,13 +353,14 @@ class Ledger
      */
     public function setType($type)
     {
-        if (!in_array($type, array(self::TYPE_CLAIM,
-                self::TYPE_CREDIT,
-                self::TYPE_REBATE,
-                self::TYPE_TRANSFER
-            )
-        ))
-            throw new \InvalidArgumentException("Invalid type");
+        $types = array(
+            self::TYPE_CLAIM,
+            self::TYPE_CREDIT,
+            self::TYPE_REBATE,
+            self::TYPE_TRANSFER
+        );
+        if (!in_array($type, $types))
+            throw new \InvalidArgumentException("Invalid type. Values must be one of the following: " . implode(', ', $types));
 
         $this->type = $type;
     }
@@ -373,11 +381,27 @@ class Ledger
         $this->typeId = $typeId;
     }
 
+    /**
+     * @return WarrantyClaim
+     */
+    public function getWarrantyClaim()
+    {
+        return $this->warrantyClaim;
+    }
+
+    /**
+     * @param WarrantyClaim $warrantyClaim
+     */
+    public function setWarrantyClaim($warrantyClaim)
+    {
+        $this->warrantyClaim = $warrantyClaim;
+    }
+
     public function toArray() {
         return array(
             'id' => $this->getId(),
-            'userId' => $this->getUser()? $this->getUser()->getId() : null,
-            'addedByUserId' => $this->getAddedByUser()? $this->getAddedByUser()->getId() : null,
+            'submittedForUserId' => $this->getSubmittedForUser() ? $this->getSubmittedForUser()->getId() : null,
+            'submittedByUserId' => $this->getSubmittedByUser() ? $this->getSubmittedByUser()->getId() : null,
             'creditedByUserId' => $this->getCreditedByUser() ? $this->getCreditedByUser()->getId() : null,
             'amountRequested' => $this->getAmountRequested(),
             'amountCredited' => $this->getAmountCredited(),
@@ -386,8 +410,8 @@ class Ledger
             'description' => $this->getDescription(),
             'type' => $this->getType(),
             'typeId' => $this->getTypeId(),
-            'dateCreated' => $this->getCreated()->format('m/d/Y'),
-            'datePosted' => $this->getPosted() ? $this->getPosted()->format('m/d/Y') : null
+            'dateCreated' => $this->getDateCreated()->format('m/d/Y'),
+            'datePosted' => $this->getDatePosted() ? $this->getDatePosted()->format('m/d/Y') : null
         );
     }
 }

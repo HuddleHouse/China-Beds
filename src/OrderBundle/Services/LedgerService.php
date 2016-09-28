@@ -10,6 +10,7 @@ namespace OrderBundle\Services;
 
 use AppBundle\Entity\User;
 use OrderBundle\Entity\Ledger;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Class LedgerService
@@ -26,8 +27,8 @@ class LedgerService
 
     /**
      * @param $amount
-     * @param User $user
-     * @param User $addedByUser
+     * @param User $submittedForUser
+     * @param User $submittedByUser
      * @param bool|false $achRequested
      * @param null $description
      * @param string $type check \OrderBundle\Entity\Ledger for the constants that $type accepts, it will be 'Credit' if left null
@@ -36,11 +37,11 @@ class LedgerService
      * @return Ledger
      * @throws \Exception
      */
-    public function newEntry($amount, User $user, User $addedByUser, $achRequested = false, $description = null, $type = 'Credit', $typeId = null) {
+    public function newEntry($amount, User $submittedForUser, User $submittedByUser, $achRequested = false, $description = null, $type = 'Credit', $typeId = null) {
         $ledger = new Ledger();
         $ledger->setAmountRequested($amount);
-        $ledger->setUser($user);
-        $ledger->setAddedByUser($addedByUser);
+        $ledger->setSubmittedForUser($submittedForUser);
+        $ledger->setSubmittedByUser($submittedByUser);
         $ledger->setAchRequested($achRequested);
         $ledger->setDescription($description);
         $ledger->setType($type);
@@ -49,6 +50,7 @@ class LedgerService
         $em = $this->container->get('doctrine')->getManager();
         $em->persist($ledger);
         $em->flush();
+
 
         return $ledger->toArray();
     }

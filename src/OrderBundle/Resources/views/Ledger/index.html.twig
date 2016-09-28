@@ -62,12 +62,12 @@
         }
 
 
-        function createLedgerWithAPI(amount, userId, achRequested, description, type, typeId) {
+        function createLedgerWithAPI(amount, submittedForUserId, achRequested, description, type, typeId) {
             $.ajax({
                 type: 'POST',
                 url: "{{ path('api_new_ledger') }}",
                 dataType: 'json',
-                data: {amount: amount, userId: userId, achRequested: achRequested, description: description, type: type, typeId: typeId},
+                data: {amount: amount, submittedForUserId: submittedForUserId, achRequested: achRequested, description: description, type: type, typeId: typeId},
                 success: function (data) {
                     console.log(JSON.stringify(data,null,4));
                 }
@@ -102,10 +102,10 @@
                         <tr data-child-value="{{ ledger.description }}">
                             <td>{{ ledger.amountRequested | number_format(2) }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
-                            <td>{{ ledger.created | date('m/d/y') }}</td>
-                            <td>{% if ledger.posted %}{{ ledger.posted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.user.fullName }}</td>
-                            <td>{{ ledger.addedByUser.fullName }}</td>
+                            <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
+                            <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
+                            <td>{{ ledger.submittedForUser.fullName }}</td>
+                            <td>{{ ledger.submittedByUser.fullName }}</td>
                             <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             <td>{{ ledger.type }}</td>
@@ -121,10 +121,10 @@
                         <tr>
                             <td>{{ ledger.amountRequested | number_format(2) }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
-                            <td>{{ ledger.created | date('m/d/y') }}</td>
-                            <td>{% if ledger.posted %}{{ ledger.posted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.user.fullName }}</td>
-                            <td>{{ ledger.addedByUser.fullName }}</td>
+                            <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
+                            <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
+                            <td>{{ ledger.submittedForUser.fullName }}</td>
+                            <td>{{ ledger.submittedByUser.fullName }}</td>
                             <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             <td>{{ ledger.type }}</td>

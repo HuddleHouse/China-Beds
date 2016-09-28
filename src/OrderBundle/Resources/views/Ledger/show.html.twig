@@ -44,15 +44,15 @@
                     <tbody>
                     <tr>
                         <td>Credit for</td>
-                        <td>{{ ledger.user.fullName }}</td>
+                        <td>{{ ledger.submittedForUser.fullName }}</td>
                     </tr>
                     <tr>
                         <td>Added by</td>
-                        <td>{{ ledger.addedByUser.fullName }}</td>
+                        <td>{{ ledger.submittedByUser.fullName }}</td>
                     </tr>
                     <tr>
                         <td>Date Created</td>
-                        <td>{{ ledger.created | date('m/d/y') }}</td>
+                        <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
                     </tr>
                     <tr>
                         <td>Amount Requested</td>
@@ -81,7 +81,7 @@
                 </div>
             </div>
             {% if ledger.isArchived %}
-                <br>You may not edit a credit request that has been processed.
+                <br><strong>You may not edit a credit request that has been processed.</strong>
             {% else %}
                 <input class="btn btn-raised btn-success" type="submit" value="Submit" />
             {% endif %}

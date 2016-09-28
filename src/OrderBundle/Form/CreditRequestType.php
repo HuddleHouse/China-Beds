@@ -28,10 +28,10 @@ class CreditRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', EntityType::class, array(
+            ->add('submittedForUser', EntityType::class, array(
                     'class' => 'AppBundle\Entity\User',
                     'label' => 'User',
-                    'placeholder' => 'Select User',
+                    'placeholder' => 'Select User Requesting Credit',
                     'choice_label' => function (User $user) {
                         return $user->getFullName();
                     },

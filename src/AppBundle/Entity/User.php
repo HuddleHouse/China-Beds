@@ -173,9 +173,14 @@ class User extends BaseUser
     private $rebate_submissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="submittedForUser")
      */
     private $warranty_claims;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="submittedByUser")
+     */
+    private $submitted_warranty_claims;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\PurchaseOrder", mappedBy="user")
@@ -254,25 +259,26 @@ class User extends BaseUser
     private $my_sales_manager;
 
     /**
-     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="user")
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="submittedForUser")
      */
     private $ledgers;
 
     /**
-     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="addedByUser")
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="submittedByUser")
      */
-    private $addedLedgers;
+    private $submitted_ledgers;
 
     /**
      * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="creditedByUser")
      */
-    private $creditedLedgers;
+    private $credited_ledgers;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->warranty_claims = new ArrayCollection();
+        $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->groups = new ArrayCollection();
@@ -284,7 +290,7 @@ class User extends BaseUser
         $this->distributors = new ArrayCollection();
         $this->sales_reps = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
-        $this->addedLedgers = new ArrayCollection();
+        $this->submittedLedgers = new ArrayCollection();
         $this->creditedLedgers = new ArrayCollection();
     }
 
@@ -750,6 +756,22 @@ class User extends BaseUser
         $this->warranty_claims = $warranty_claims;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSubmittedWarrantyClaims()
+    {
+        return $this->submitted_warranty_claims;
+    }
+
+    /**
+     * @param mixed $submitted_warranty_claims
+     */
+    public function setSubmittedWarrantyClaims($submitted_warranty_claims)
+    {
+        $this->submitted_warranty_claims = $submitted_warranty_claims;
+    }
+
     public function getName() {
         return $this->getFirstName() . " " . $this->getLastName();
     }
@@ -1071,17 +1093,17 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getAddedLedgers()
+    public function getSubmittedLedgers()
     {
-        return $this->addedLedgers;
+        return $this->submitted_ledgers;
     }
 
     /**
-     * @param mixed $addedLedgers
+     * @param mixed $submittedLedgers
      */
-    public function setAddedLedgers($addedLedgers)
+    public function setSubmittedLedgers($submittedLedgers)
     {
-        $this->addedLedgers = $addedLedgers;
+        $this->submitted_ledgers = $submittedLedgers;
     }
 
     /**
@@ -1089,7 +1111,7 @@ class User extends BaseUser
      */
     public function getCreditedLedgers()
     {
-        return $this->creditedLedgers;
+        return $this->credited_ledgers;
     }
 
     /**
@@ -1097,6 +1119,6 @@ class User extends BaseUser
      */
     public function setCreditedLedgers($creditedLedgers)
     {
-        $this->creditedLedgers = $creditedLedgers;
+        $this->credited_ledgers = $creditedLedgers;
     }
 }

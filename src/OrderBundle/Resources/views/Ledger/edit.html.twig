@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-danger">
-                    {{ form_errors(edit_form.user) }}
+                    {{ form_errors(edit_form.submittedForUser) }}
                     {{ form_errors(edit_form.amount) }}
                     {{ form_errors(edit_form.description) }}
                 </div>
@@ -47,11 +47,11 @@
             <div class="row">
                 {% if app.user.hasRole('ROLE_ADMIN') %}
                 <div class="col-md-4 form-group">
-                    {{ form_label(edit_form.user) }}
-                    {{ form_widget(edit_form.user) }}
+                    {{ form_label(edit_form.submittedForUser) }}
+                    {{ form_widget(edit_form.submittedForUser) }}
                 </div>
                 {% else %}
-                    {% do edit_form.user.setRendered %}
+                    {% do edit_form.submittedForUser.setRendered %}
                 {% endif %}
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.amountRequested) }}
@@ -69,7 +69,7 @@
                 </div>
             </div>
             {% if ledger.isArchived %}
-                <br>You may not edit a credit request that has been processed.
+                <br><strong>You may not edit a credit request that has been processed.</strong>
             {% else %}
                 <input class="btn btn-raised btn-success" type="submit" value="Update" />
             {% endif %}
