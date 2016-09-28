@@ -226,7 +226,7 @@ class User extends BaseUser
     private $warehouse_3;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"all"})
      */
     private $retailers;
 
@@ -237,7 +237,7 @@ class User extends BaseUser
     private $my_distributor;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"all"})
      */
     private $distributors;
 
@@ -248,7 +248,7 @@ class User extends BaseUser
     private $my_sales_rep;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
      */
     private $sales_reps;
 

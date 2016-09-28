@@ -218,7 +218,7 @@ class OrderProductsController extends Controller
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger') {
             $ledger_service = $this->get('order.ledger');
-            $ledger_service->newEntry($order->getTotal(), $order->getSubmittedForUser(), $order->getSubmittedForUser(), false, "");
+            $ledger_service->newEntry($order->getTotal(), $order->getSubmittedForUser(), $order->getSubmittedForUser(), false, "Paid for order.");
         }
         else if($payment_type == 'cc') {
             $cc = $request->request->get('cc');
