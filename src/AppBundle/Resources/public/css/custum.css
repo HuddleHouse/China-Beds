@@ -58,3 +58,15 @@ aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
 .rich-btn {
     padding: 8px 16px !important;
 }
+.color-block {
+    background-color: #02B1F2;
+    height: 69px;
+    margin-top: -19px;
+    margin-left: -19px;
+    margin-right: -19px;
+    margin-bottom: -48px;
+    font-size: 28px;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+}
