@@ -31,7 +31,15 @@ class LedgerController extends Controller
     public function newLedgerAction(Request $request)
     {
         $service = new LedgerService($this->container);
-        $ledger = $service->newEntry(50, $this->getUser(), $this->getUser(), false, 'service test');
+
+        $ledger = $service->newEntry($request->get('amount'),
+                                     $request->get('userId'),
+                                     $this->getUser(),
+                                     $request->get('achRequested'),
+                                     $request->get('description'),
+                                     $request->get('type'),
+                                     $request->get('typeId'));
+
         return new JsonResponse($ledger);
     }
 }

@@ -11,6 +11,10 @@ namespace OrderBundle\Services;
 use AppBundle\Entity\User;
 use OrderBundle\Entity\Ledger;
 
+/**
+ * Class LedgerService
+ * @package OrderBundle\Services
+ */
 class LedgerService
 {
     protected $container;

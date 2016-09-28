@@ -61,12 +61,13 @@
                     '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
         }
 
-        function stest() {
+
+        function createLedgerWithAPI(amount, userId, achRequested, description, type, typeId) {
             $.ajax({
                 type: 'POST',
                 url: "{{ path('api_new_ledger') }}",
                 dataType: 'json',
-                data: {b:'itches'},
+                data: {amount: amount, userId: userId, achRequested: achRequested, description: description, type: type, typeId: typeId},
                 success: function (data) {
                     console.log(JSON.stringify(data,null,4));
                 }
