@@ -123,13 +123,6 @@ class Orders
     private $shipping;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="subtotal", type="integer", nullable=true)
-     */
-    private $subtotal;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -176,6 +169,20 @@ class Orders
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_type", type="string", length=255, nullable=true)
+     */
+    private $payment_type;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="amount_paid", type="integer", nullable=true)
+     */
+    private $amount_paid;
 
 
     public function __construct($info = null)
@@ -254,6 +261,17 @@ class Orders
         }
     }
 
+    public function getSubTotal() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total += $productVariant->getQuantity() * $productVariant->getPrice();
+        foreach($this->getPopItems() as $popItem)
+            $total += $popItem->getQuantity() * $popItem->getPrice();
+
+        return $total;
+    }
+
     public function getTotal() {
         $total = 0;
 
@@ -262,6 +280,7 @@ class Orders
         foreach($this->getPopItems() as $popItem)
             $total += $popItem->getQuantity() * $popItem->getPrice();
 
+        $total += $this->getShipping();
         return $total;
     }
 
@@ -615,22 +634,6 @@ class Orders
     }
 
     /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
      * @return int
      */
     public function getDiscount()
@@ -660,22 +663,6 @@ class Orders
     public function setShipping($shipping)
     {
         $this->shipping = $shipping * 100;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSubtotal()
-    {
-        return $this->subtotal / 100;
-    }
-
-    /**
-     * @param int $subtotal
-     */
-    public function setSubtotal($subtotal)
-    {
-        $this->subtotal = $subtotal * 100;
     }
 
 
@@ -758,6 +745,40 @@ class Orders
     {
         $this->pop_items = $pop_items;
     }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->payment_type;
+    }
+
+    /**
+     * @param string $payment_type
+     */
+    public function setPaymentType($payment_type)
+    {
+        $this->payment_type = $payment_type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountPaid()
+    {
+        return $this->amount_paid;
+    }
+
+    /**
+     * @param int $amount_paid
+     */
+    public function setAmountPaid($amount_paid)
+    {
+        $this->amount_paid = $amount_paid;
+    }
+
+
 
 
 }
