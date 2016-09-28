@@ -161,6 +161,8 @@ class OrderProductsController extends Controller
 
         $states = $em->getRepository('AppBundle:State')->findAll();
 
+
+
         if($user->hasRole('ROLE_DISTRIBUTOR'))
             $user_retailers = $user->getRetailers();
         else

@@ -123,13 +123,6 @@ class Orders
     private $shipping;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="subtotal", type="integer", nullable=true)
-     */
-    private $subtotal;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -268,6 +261,17 @@ class Orders
         }
     }
 
+    public function getSubTotal() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total += $productVariant->getQuantity() * $productVariant->getPrice();
+        foreach($this->getPopItems() as $popItem)
+            $total += $popItem->getQuantity() * $popItem->getPrice();
+
+        return $total;
+    }
+
     public function getTotal() {
         $total = 0;
 
@@ -276,6 +280,7 @@ class Orders
         foreach($this->getPopItems() as $popItem)
             $total += $popItem->getQuantity() * $popItem->getPrice();
 
+        $total += $this->getShipping();
         return $total;
     }
 
@@ -674,22 +679,6 @@ class Orders
     public function setShipping($shipping)
     {
         $this->shipping = $shipping * 100;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSubtotal()
-    {
-        return $this->subtotal / 100;
-    }
-
-    /**
-     * @param int $subtotal
-     */
-    public function setSubtotal($subtotal)
-    {
-        $this->subtotal = $subtotal * 100;
     }
 
 

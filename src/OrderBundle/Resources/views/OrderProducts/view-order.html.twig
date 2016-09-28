@@ -410,7 +410,7 @@
                         <table class="table">
                             <tbody><tr>
                                 <th >Subtotal:</th>
-                                <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                                <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
                             </tr>
                             <tr>
                                 <th>Tax (9.3%)</th>
@@ -418,7 +418,7 @@
                             </tr>
                             <tr>
                                 <th>Shipping:</th>
-                                <td>$0.00</td>
+                                <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
                             </tr>
                             <tr>
                                 <th>Total:</th>

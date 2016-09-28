@@ -125,6 +125,31 @@ class OrderProductsController extends Controller
             }
         }
 
+        $rate = new \RocketShipIt\Rate('fedex');
+        $rate->setParameter('toCode', '90210');
+        $rate->setParameter('residentialAddressIndicator','1');
+        $rate->setParameter('service', 'GROUND_HOME_DELIVERY');
+
+        $package = new \RocketShipIt\Package('fedex');
+        $package->setParameter('weight', '5');
+        $package->setParameter('length', '16');
+        $package->setParameter('width', '2');
+        $package->setParameter('height', '10');
+        $rate->addPackageToShipment($package);
+
+        $package = new \RocketShipIt\Package('fedex');
+        $package->setParameter('weight', '5');
+        $package->setParameter('length', '12');
+        $package->setParameter('width', '25');
+        $package->setParameter('height', '6');
+        $rate->addPackageToShipment($package);
+
+        $response = $rate->getSimpleRates();
+
+        foreach($response as $ship) {
+            if($ship['service_code'] == 'GROUND_HOME_DELIVERY')
+                $order->setShipping($ship['rate']);
+        }
         $em->persist($order);
         $em->flush();
 
