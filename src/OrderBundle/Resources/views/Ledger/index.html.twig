@@ -104,8 +104,8 @@
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
                             <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.submittedForUser.fullName }}</td>
-                            <td>{{ ledger.submittedByUser.fullName }}</td>
+                            <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
+                            <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
                             <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             <td>{{ ledger.type }}</td>
@@ -123,8 +123,8 @@
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
                             <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.submittedForUser.fullName }}</td>
-                            <td>{{ ledger.submittedByUser.fullName }}</td>
+                            <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
+                            <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
                             <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             <td>{{ ledger.type }}</td>

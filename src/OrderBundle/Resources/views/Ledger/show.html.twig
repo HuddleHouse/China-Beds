@@ -44,11 +44,11 @@
                     <tbody>
                     <tr>
                         <td>Credit for</td>
-                        <td>{{ ledger.submittedForUser.fullName }}</td>
+                        <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
                     </tr>
                     <tr>
                         <td>Added by</td>
-                        <td>{{ ledger.submittedByUser.fullName }}</td>
+                        <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
                     </tr>
                     <tr>
                         <td>Date Created</td>
