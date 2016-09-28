@@ -209,11 +209,23 @@ class OrderProductsController extends Controller
     public function payForOrder(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $cc = $request->request->get('cc');
-        $payment_type = $request->request->get('payment_type');
         $order_id = $request->request->get('order_id');
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
-        $status = $em->getRepository('WarehousBundle:Status')->findOneBy(array('name' => 'Paid'));
+
+
+        $payment_type = $request->request->get('payment_type');
+        if($payment_type == 'ledger') {
+            $ledger_service = $this->get('order.ledger');
+            $ledger_service->newEntry($order->getTotal(), $order->getSubmittedForUser(), $order->getSubmittedForUser(), false, "");
+        }
+        else if($payment_type == 'cc') {
+            $cc = $request->request->get('cc');
+            // Charge CC here
+        }
+
+
+
+        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
 
         $order->setStatus($status);
         $order->setPaymentType($payment_type);
