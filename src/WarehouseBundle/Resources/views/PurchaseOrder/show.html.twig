@@ -302,13 +302,14 @@
         <div class="table">
             <div class="row">
                 {% if purchaseOrder.status.name == 'Active' or purchaseOrder.status.name == 'Draft' %}
-                <div class="col-md-4">
-                    <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
-                </div>
+                    <div class="col-md-4">
+                        <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                    </div>
                 {% else %}
                     <div class="col-md-4">
                         <h5>Date Received<p><b>{{ purchaseOrder.orderReceivedDate | date("m/d/Y") }}</b></p><md-datepicker ng-model="ctrl.due_date" md-placeholder="Change Received Date" md-current-view=""></md-datepicker></h5>
                     </div>
+
                 {% endif %}
                 <div class="col-md-2">
                     <span class="mdl-chip mdl-chip--contact" style="margin-top: 27px;">
@@ -339,7 +340,13 @@
                 <div class="col-md-6">
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
-                        {% verbatim %}
+                        <div>
+                            <ul>
+                                <li style="color:lightslategray;list-style-type:none">Physical Container Number: 234234fSo34DOs3Ikop223</li>
+                                <li style="color:lightslategray;list-style-type:none">Factory Order Number: 30243</li>
+                            </ul>
+                        </div>
+                        {% verbatim %}git push
                         <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;"
                             ng-model="ctrl.warehouse"
                             ng-change="ctrl.warehouseChange()"

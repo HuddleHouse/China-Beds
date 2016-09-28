@@ -2,19 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="" />
-    <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="" />
     <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="UI-tweaks, drop down total sites inv">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WarehouseBundle/Controller/API/PurchaseOrderController.php" afterPath="$PROJECT_DIR$/src/WarehouseBundle/Controller/API/PurchaseOrderController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php" afterPath="$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig" afterPath="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <file path="$PROJECT_DIR$/.idea/workspace.xml" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,66 +29,42 @@
       <file leaf-file-name="show.html.twig" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="393" column="45" selection-start-line="393" selection-start-column="45" selection-end-line="393" selection-end-column="45" />
+            <state relative-caret-position="550">
+              <caret line="348" column="38" selection-start-line="348" selection-start-column="38" selection-end-line="348" selection-end-column="38" />
               <folding>
-                <marker date="1475009677000" expanded="false" signature="14151:14183" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="14184:14446" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="15710:15898" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="15781:15815" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="15967:16340" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="16234:16305" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="16400:16419" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="16420:16690" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="16742:16911" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="16847:16867" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="16963:18220" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17164:17183" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17184:18186" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17407:17439" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17440:17538" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17610:17712" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17610:17749" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17750:18059" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17750:18147" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17908:17926" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="17927:18054" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="18588:20654" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="18634:20612" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="19498:20373" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="19560:19769" ph="..." />
-                <marker date="1475009677000" expanded="false" signature="19639:19655" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="19834:20321" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="19903:20059" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="20128:20275" ph="..." />
-                <marker date="1475009677000" expanded="true" signature="20420:20565" ph="..." />
-                <marker date="1475009677000" expanded="false" signature="21966:22025" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PurchaseOrderProductVariantRepository.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Repository/PurchaseOrderProductVariantRepository.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PurchaseOrderRepository.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Repository/PurchaseOrderRepository.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1185">
-              <caret line="80" column="38" selection-start-line="80" selection-start-column="38" selection-end-line="80" selection-end-column="38" />
-              <folding>
-                <element signature="e#45#86#0#PHP" expanded="false" />
-                <marker date="1473185500000" expanded="true" signature="1148:1261" ph="SELECT COALE... warehouse_inventory" />
-                <marker date="1473185500000" expanded="true" signature="1645:1791" ph="SELECT COALE... warehouse_inventory" />
-                <marker date="1473185500000" expanded="true" signature="3169:3437" ph="select p.*, purchase_order" />
-                <marker date="1473185500000" expanded="true" signature="3782:4026" ph="select p.*, purchase_order" />
+                <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#form#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#1;n#ul#0;n#div#0;n#form#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <marker date="1475074910000" expanded="false" signature="14552:14584" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="14585:14847" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="16111:16299" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="16182:16216" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="16368:16741" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="16635:16706" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="16801:16820" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="16821:17091" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17143:17312" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17248:17268" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17364:18621" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17565:17584" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17585:18587" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17808:17840" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="17841:17939" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18011:18113" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18011:18150" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18151:18460" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18151:18548" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18309:18327" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18328:18455" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="18989:21055" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="19035:21013" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="19899:20774" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="19961:20170" ph="..." />
+                <marker date="1475074910000" expanded="false" signature="20040:20056" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="20235:20722" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="20304:20460" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="20529:20676" ph="..." />
+                <marker date="1475074910000" expanded="true" signature="20821:20966" ph="..." />
+                <marker date="1475074910000" expanded="false" signature="22367:22426" ph="..." />
               </folding>
             </state>
           </provider>
@@ -101,8 +73,8 @@
       <file leaf-file-name="composer.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/composer.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="35" column="40" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
+            <state relative-caret-position="313">
+              <caret line="34" column="37" selection-start-line="34" selection-start-column="37" selection-end-line="34" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -124,8 +96,30 @@
       <file leaf-file-name="PurchaseOrderController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Controller/PurchaseOrderController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="960">
+            <state relative-caret-position="415">
               <caret line="70" column="55" selection-start-line="70" selection-start-column="55" selection-end-line="70" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PurchaseOrder.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5325">
+              <caret line="355" column="21" selection-start-line="355" selection-start-column="21" selection-end-line="355" selection-end-column="21" />
+              <folding>
+                <element signature="e#42#90#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PurchaseOrderProductVariant.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrderProductVariant.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="495">
+              <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -237,15 +231,15 @@
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/Warehouse/new.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Form/WarehouseType.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/Warehouse/form.html.twig" />
-        <option value="$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/index.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Controller/WarehouseController.php" />
         <option value="$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/order-index.html.twig" />
         <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Repository/WarehouseRepository.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Controller/PurchaseOrderController.php" />
-        <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Controller/API/PurchaseOrderController.php" />
+        <option value="$PROJECT_DIR$/composer.json" />
+        <option value="$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig" />
       </list>
     </option>
@@ -348,6 +342,106 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="WarehouseBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarehouseBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarehouseBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PurchaseOrder" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarehouseBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarehouseBundle" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Entity" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -829,7 +923,7 @@
       <workItem from="1474725241481" duration="1138000" />
       <workItem from="1474893075740" duration="1425000" />
       <workItem from="1475003079572" duration="2392000" />
-      <workItem from="1475066628392" duration="340000" />
+      <workItem from="1475066628392" duration="3658000" />
     </task>
     <task id="LOCAL-00047" summary="Header preference changes">
       <created>1473364360230</created>
@@ -906,7 +1000,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="248735000" />
+    <option name="totallyTimeSpent" value="252053000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -919,7 +1013,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17625134" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
@@ -992,13 +1086,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/Profile/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Resources/config/services.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1262,6 +1349,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9630">
           <caret line="644" column="23" selection-start-line="644" selection-start-column="11" selection-end-line="644" selection-end-column="23" />
+          <folding>
+            <element signature="e#42#90#0#PHP" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1269,56 +1359,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7305">
           <caret line="487" column="42" selection-start-line="487" selection-start-column="42" selection-end-line="487" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1395">
-          <caret line="94" column="27" selection-start-line="94" selection-start-column="20" selection-end-line="94" selection-end-column="27" />
-          <folding>
-            <element signature="e#42#90#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="393" column="45" selection-start-line="393" selection-start-column="45" selection-end-line="393" selection-end-column="45" />
-          <folding>
-            <marker date="1475009677000" expanded="false" signature="14151:14183" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="14184:14446" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="15710:15898" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="15781:15815" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="15967:16340" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="16234:16305" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="16400:16419" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="16420:16690" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="16742:16911" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="16847:16867" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="16963:18220" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17164:17183" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17184:18186" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17407:17439" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17440:17538" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17610:17712" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17610:17749" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17750:18059" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17750:18147" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17908:17926" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="17927:18054" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="18588:20654" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="18634:20612" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="19498:20373" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="19560:19769" ph="..." />
-            <marker date="1475009677000" expanded="false" signature="19639:19655" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="19834:20321" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="19903:20059" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="20128:20275" ph="..." />
-            <marker date="1475009677000" expanded="true" signature="20420:20565" ph="..." />
-            <marker date="1475009677000" expanded="false" signature="21966:22025" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1344,14 +1384,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/composer.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="40" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Repository/WarehouseRepository.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2400">
@@ -1360,14 +1392,6 @@
             <element signature="e#45#80#0#PHP" expanded="false" />
             <marker date="1474386269000" expanded="true" signature="5514:5634" ph="SELECT quant... warehouse_inventory" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Controller/PurchaseOrderController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="70" column="55" selection-start-line="70" selection-start-column="55" selection-end-line="70" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1412,6 +1436,82 @@
         <state relative-caret-position="7050">
           <caret line="470" column="63" selection-start-line="470" selection-start-column="26" selection-end-line="470" selection-end-column="75" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="34" column="37" selection-start-line="34" selection-start-column="37" selection-end-line="34" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Controller/PurchaseOrderController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="70" column="55" selection-start-line="70" selection-start-column="55" selection-end-line="70" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrderProductVariant.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Entity/PurchaseOrder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5325">
+          <caret line="355" column="21" selection-start-line="355" selection-start-column="21" selection-end-line="355" selection-end-column="21" />
+          <folding>
+            <element signature="e#42#90#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="348" column="38" selection-start-line="348" selection-start-column="38" selection-end-line="348" selection-end-column="38" />
+          <folding>
+            <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#form#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#1;n#ul#0;n#div#0;n#form#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <marker date="1475074910000" expanded="false" signature="14552:14584" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="14585:14847" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="16111:16299" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="16182:16216" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="16368:16741" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="16635:16706" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="16801:16820" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="16821:17091" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17143:17312" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17248:17268" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17364:18621" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17565:17584" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17585:18587" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17808:17840" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="17841:17939" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18011:18113" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18011:18150" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18151:18460" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18151:18548" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18309:18327" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18328:18455" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="18989:21055" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="19035:21013" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="19899:20774" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="19961:20170" ph="..." />
+            <marker date="1475074910000" expanded="false" signature="20040:20056" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="20235:20722" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="20304:20460" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="20529:20676" ph="..." />
+            <marker date="1475074910000" expanded="true" signature="20821:20966" ph="..." />
+            <marker date="1475074910000" expanded="false" signature="22367:22426" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
