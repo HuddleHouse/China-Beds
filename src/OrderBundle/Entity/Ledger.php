@@ -296,7 +296,7 @@ class Ledger
     /**
      * @return boolean
      */
-    public function isIsArchived()
+    public function getIsArchived()
     {
         return $this->isArchived;
     }
@@ -371,6 +371,24 @@ class Ledger
     public function setTypeId($typeId)
     {
         $this->typeId = $typeId;
+    }
+
+    public function toArray() {
+        return array(
+            'id' => $this->getId(),
+            'userId' => $this->getUser()? $this->getUser()->getId() : null,
+            'addedByUserId' => $this->getAddedByUser()? $this->getAddedByUser()->getId() : null,
+            'creditedByUserId' => $this->getCreditedByUser() ? $this->getCreditedByUser()->getId() : null,
+            'amountRequested' => $this->getAmountRequested(),
+            'amountCredited' => $this->getAmountCredited(),
+            'achRequested' => $this->getAchRequested(),
+            'isArchived' => $this->getIsArchived(),
+            'description' => $this->getDescription(),
+            'type' => $this->getType(),
+            'typeId' => $this->getTypeId(),
+            'dateCreated' => $this->getCreated()->format('m/d/Y'),
+            'datePosted' => $this->getPosted() ? $this->getPosted()->format('m/d/Y') : null
+        );
     }
 }
 

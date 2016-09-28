@@ -60,6 +60,18 @@
                     '<span class="dtr-title">Description</span>&nbsp;' +
                     '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
         }
+
+        function stest() {
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_new_ledger') }}",
+                dataType: 'json',
+                data: {b:'itches'},
+                success: function (data) {
+                    console.log(JSON.stringify(data,null,4));
+                }
+            });
+        }
     </script>
 {% endblock footer %}
 
