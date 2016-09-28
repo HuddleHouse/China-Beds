@@ -44,7 +44,7 @@ class Ledger
      * @var \AppBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="ledgers", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
      */
     private $submittedForUser;
 
