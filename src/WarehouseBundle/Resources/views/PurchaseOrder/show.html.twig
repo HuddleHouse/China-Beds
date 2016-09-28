@@ -92,7 +92,6 @@
                 }
 
                 function getWarehouseInv(id) {
-                    console.log('matkltjs');
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_update_inventory_for_sites') }}",
@@ -101,7 +100,6 @@
                         success: function (data) {
                             $scope.$apply(function () {
                                 self.all_warehouse_inventory = data;
-                                console.log(self.all_warehouse_inventory);
                             });
                         }
                     });
@@ -386,16 +384,11 @@
                             <td class="table-form" >
                                 <!--<input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>-->
                                 <div class="dropdown" style="text-align: center;">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-model="item.total_quantity" ng-click="ctrl.getWarehouseInv(item.id)" class="form-control">{{ item.total_quantity }}
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-model="item.total_quantity" ng-click="ctrl.getWarehouseInv(item.id)" class="form-control" style="font-family:inherit; color:black">{{ item.total_quantity }}
                                     <span class="caret"></span></button>
 
-                                    <ul class="dropdown-menu" style="    height: auto;
-    max-height: 300px;
-    min-height: 100px;
-    overflow-x: scroll;
-    min-width: 340px;
-    margin-left: -221px;">
-                                        <li ng-model="ctrl.all_warehouse_inventory" ng-repeat="item in ctrl.all_warehouse_inventory track by $index">
+                                    <ul class="dropdown-menu" style="height:auto;max-height:300px;min-height: 100px;overflow-x: scroll;min-width: 340px;margin-left:-206px;box-shadow: black 0px 7px 40px -10px;">
+                                        <li ng-model="ctrl.all_warehouse_inventory" ng-repeat="item in ctrl.all_warehouse_inventory track by $index" style="padding-left:10px;">
                                               {{item.quantity}} : {{ item.name }}
                                             </ul>
                                         </li>
