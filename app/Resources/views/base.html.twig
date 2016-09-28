@@ -44,6 +44,24 @@
 
 {% block body %}{% endblock %}
 
+<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-danger">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4">Error</h4>
+            </div>
+            <div class="modal-body">
+                <div id="error-message1" style="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% block javascripts %}
     {% javascripts '@AppBundle/Resources/public/js/*' filter="jsqueeze" output="js/appBundle.js"%}
@@ -136,6 +154,12 @@
 
     function printPage() {
         window.print();
+    }
+
+    function showErrorModal(message) {
+        $('#error-modal').modal('show');
+        $('#error-message1').empty();
+        $('#error-message1').append(message);
     }
 </script>
 {% block footer %}{% endblock %}

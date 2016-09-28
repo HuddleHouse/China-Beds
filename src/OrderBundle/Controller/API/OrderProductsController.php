@@ -55,14 +55,10 @@ class OrderProductsController extends Controller
             $order->setData($info);
 
         }
-
-
-
         $em->persist($order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
-        $order->setSubtotal($total);
         $order->setChannel($channel);
         $order->setSubmittedByUser($this->getUser());
         if($this->getUser()->getId() == $ship_to_user_id)

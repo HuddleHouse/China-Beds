@@ -11,6 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Form\ChannelType;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Channel controller.
@@ -160,8 +164,6 @@ class OrderProductsController extends Controller
         $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
 
         $states = $em->getRepository('AppBundle:State')->findAll();
-
-
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
             $user_retailers = $user->getRetailers();
