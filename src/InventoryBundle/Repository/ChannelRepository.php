@@ -14,7 +14,7 @@ use WarehouseBundle\Entity\Warehouse;
 class ChannelRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getProductArrayForChannel(Channel $channel, User $user, Warehouse $warehouse = null, $categories = null)
+    public function getProductArrayForChannel(Channel $channel, User $user, Warehouse $warehouse = null, $categories = null, $include_closeouts = null)
     {
         // select all products that are in the channel
         // get all product variants for it.
@@ -38,11 +38,16 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             // check if Product is in closeout and make string to be used in query
             $cat_ids = '';
             $is_closeout = 0;
+            $cat_count = 0;
             foreach($product->getCategories() as $cat) {
                 $cat_ids .= $cat->getCategory()->getId() . ' ';
+                $cat_count++;
                 if(strtoupper($cat->getCategory()->getName()) == 'CLOSEOUT')
                     $is_closeout = 1;
             }
+
+            if($include_closeouts != null)
+                $is_closeout = 1;
 
             // format needed data to array
             $product_array = array(
@@ -120,6 +125,8 @@ select i.quantity, i.warehouse_id
 
                     $variants[$key]['inventory'] = $quantity;
                     $variants[$key]['warehouse_data'] = $warehouse_data;
+
+
                 }
 
                 $product_array['variants'] = $variants;

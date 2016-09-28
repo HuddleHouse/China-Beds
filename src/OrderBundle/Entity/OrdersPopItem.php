@@ -43,7 +43,7 @@ class OrdersPopItem
     private $pop_item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="product_variants")
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="pop_items")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
     private $order;

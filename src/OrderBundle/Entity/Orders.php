@@ -123,20 +123,6 @@ class Orders
     private $shipping;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="subtotal", type="integer", nullable=true)
-     */
-    private $subtotal;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="total", type="integer", nullable=true)
-     */
-    private $total;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -154,6 +140,11 @@ class Orders
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order")
      */
     private $product_variants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
+     */
+    private $pop_items;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_orders")
@@ -179,10 +170,25 @@ class Orders
      */
     protected $state;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_type", type="string", length=255, nullable=true)
+     */
+    private $payment_type;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="amount_paid", type="integer", nullable=true)
+     */
+    private $amount_paid;
+
 
     public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -192,10 +198,10 @@ class Orders
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
-            if(isset($info['pick_up']) && $info['pick_up'] == true)
-                $this->isPickUp = true;
-            else if(isset($info['ship']) && $info['ship'] == true)
-                $this->isPickUp = false;
+            if(isset($info['pick_up']) && $info['pick_up'] == 'true')
+                $this->isPickUp = 1;
+            else if(isset($info['ship']) && $info['ship'] == 'true')
+                $this->isPickUp = 0;
 
             if(isset($info['comments']))
                 $this->comments = $info['comments'];
@@ -215,6 +221,78 @@ class Orders
                 $this->shipEmail = $info['email'];
 
         }
+    }
+
+    public function setData($info = null)
+    {
+        $this->product_variants = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
+        $this->submitDate = new \DateTime();
+        if($info != null) {
+            if(isset($info['po']))
+                $this->orderNumber = $info['po'];
+            if(isset($info['pick_up_date']))
+                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+            if(isset($info['agent_name']))
+                $this->pickUpAgent = $info['agent_name'];
+
+            if(isset($info['pick_up']) && $info['pick_up'] == 'true')
+                $this->isPickUp = 1;
+            else if(isset($info['ship']) && $info['ship'] == 'true')
+                $this->isPickUp = 0;
+
+            if(isset($info['comments']))
+                $this->comments = $info['comments'];
+            if(isset($info['ship_name']))
+                $this->shipName = $info['ship_name'];
+            if(isset($info['address']))
+                $this->shipAddress = $info['address'];
+            if(isset($info['address2']))
+                $this->shipAddress2 = $info['address2'];
+            if(isset($info['city']))
+                $this->ship_city = $info['city'];
+            if(isset($info['zip']))
+                $this->ship_zip = $info['zip'];
+            if(isset($info['phone']))
+                $this->shipPhone = $info['phone'];
+            if(isset($info['email']))
+                $this->shipEmail = $info['email'];
+
+        }
+    }
+
+    public function getSubTotal() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total += $productVariant->getQuantity() * $productVariant->getPrice();
+        foreach($this->getPopItems() as $popItem)
+            $total += $popItem->getQuantity() * $popItem->getPrice();
+
+        return $total;
+    }
+
+    public function getTotal() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total += $productVariant->getQuantity() * $productVariant->getPrice();
+        foreach($this->getPopItems() as $popItem)
+            $total += $popItem->getQuantity() * $popItem->getPrice();
+
+        $total += $this->getShipping();
+        return $total;
+    }
+
+    public function getNumItems() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total = $total + $productVariant->getQuantity();
+        foreach($this->getPopItems() as $popItem)
+            $total = $total + $popItem->getQuantity();
+
+        return $total;
     }
 
     /**
@@ -556,22 +634,6 @@ class Orders
     }
 
     /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
      * @return int
      */
     public function getDiscount()
@@ -603,37 +665,6 @@ class Orders
         $this->shipping = $shipping * 100;
     }
 
-    /**
-     * @return int
-     */
-    public function getSubtotal()
-    {
-        return $this->subtotal / 100;
-    }
-
-    /**
-     * @param int $subtotal
-     */
-    public function setSubtotal($subtotal)
-    {
-        $this->subtotal = $subtotal * 100;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotal()
-    {
-        return $this->total / 100;
-    }
-
-    /**
-     * @param int $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total * 100;
-    }
 
     /**
      * @return mixed
@@ -698,6 +729,56 @@ class Orders
     {
         $this->submitted_for_user = $submitted_for_user;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPopItems()
+    {
+        return $this->pop_items;
+    }
+
+    /**
+     * @param mixed $pop_items
+     */
+    public function setPopItems($pop_items)
+    {
+        $this->pop_items = $pop_items;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->payment_type;
+    }
+
+    /**
+     * @param string $payment_type
+     */
+    public function setPaymentType($payment_type)
+    {
+        $this->payment_type = $payment_type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountPaid()
+    {
+        return $this->amount_paid;
+    }
+
+    /**
+     * @param int $amount_paid
+     */
+    public function setAmountPaid($amount_paid)
+    {
+        $this->amount_paid = $amount_paid;
+    }
+
+
 
 
 }

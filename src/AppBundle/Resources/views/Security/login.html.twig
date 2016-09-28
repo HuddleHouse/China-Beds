@@ -12,23 +12,28 @@
             </div>
         </div>
     {% endif %}
-<div class="hold-transition login-page">
+<div class="hold-transition login-page" style="background-color: #fff;">
     <div class="login-box" style="margin-top: 150px;">
-    <div class="login-box-body">
+    <div class="login-box-body" style="background-color: #E5E5E5; border-radius: 21px; color: #95989A;">
         {#<img class="logo" height="35" src="{{ asset('images/logo.png') }}" alt="logo">#}
         <form class="vertical-form" action="{{ path("fos_user_security_check") }}" method="post" style="display: block;">
-            <legend class="form-signin-heading">Log In</legend>
+            <legend class="form-signin-heading" style="color: #95989A;">Log In</legend>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
             <div class="form-group">
-                <label for="username" class="sr-only">{{ 'security.login.username'|trans }}</label>
-                <input type="text" style="padding-left: 15px; padding-right: 15px;" class="form-control" style="margin-bottom: 15px;" id="username" name="_username" value="{{ last_username }}" placeholder="Username" required="required" />
+                <label for="username" style="color: #95989A;">{{ 'security.login.username'|trans }}</label>
+                <input type="text" style="padding-left: 15px; padding-right: 15px; background-color: #fff;border-radius: 10px; font-size: 20px; height: 50px;" class="form-control" style="margin-bottom: 15px;" id="username" name="_username" value="{{ last_username }}" required="required" />
 
-                <label for="password" class="sr-only">{{ 'security.login.password'|trans }}</label>
-                <input type="password" style="padding-left: 15px; padding-right: 15px;" class="form-control" id="password" name="_password" required="required" placeholder="Password" />
+                <label for="password" style="color: #95989A;">{{ 'security.login.password'|trans }}</label>
+                <input type="password" style="padding-left: 13px; padding-right: 15px; background-color: #fff;border-radius: 10px; font-size: 20px; height: 50px;" class="form-control" id="password" name="_password" required="required"  />
             </div>
 
-            <input type="submit" class="btn btn-raised btn-lg btn-primary btn-block" id="_submit" name="_submit" value="Log In" />
+            <input type="submit" class="btn btn-raised btn-lg btn-primary btn-block" id="_submit" name="_submit" value="Login" style="background-color: #050200;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;
+    border-radius: 5px;"/>
 
             <h4 style="padding-top: 14px; margin-bottom: -10px;">
                 Retailer -<br> u: retailer pw: retailer <br><br>
@@ -38,11 +43,13 @@
 
                 Note: If you create a user from the dashboard, their default password is matt.
             </h4>
-            <p style="padding-top: 14px; margin-bottom: -10px;">
-                <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>
-            </p>
+
         </form>
+
     </div>
+        <p style="padding-top: 14px; margin-bottom: -10px;">
+            <a href="{{ path('fos_user_resetting_request') }}">Forgot password?</a>
+        </p>
     </div>
 </div>
 {% endblock body %}

@@ -3,6 +3,7 @@
 namespace OrderBundle\Controller\API;
 
 use OrderBundle\Entity\Orders;
+use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
 use OrderBundle\Entity\OrdersWarehouseInfo;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,23 +33,38 @@ class OrderProductsController extends Controller
         $pop = $request->request->get('pop');
         $cart = $request->request->get('cart');
         $total = $request->request->get('total');
+        $order_id = $request->request->get('order_id');
         $info = $request->request->get('form_info');
         $ship_to_user_id = $request->request->get('ship_to_user_id');
         //array indexed at prod variant id that tell you the ordered quantity
         $product_variant_order_quan = $request->request->get('product_variant_order_quan');
+        $pop_order_quan = $request->request->get('pop_order_quan');
 
-        $order = new Orders($info);
+        if($order_id == 0)
+            $order = new Orders($info);
+        else {
+            $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+            foreach($order->getProductVariants() as $productVariant) {
+                foreach($productVariant->getWarehouseInfo() as $item)
+                    $em->remove($item);
+                $em->remove($productVariant);
+            }
+            foreach($order->getPopItems() as $productVariant)
+                $em->remove($productVariant);
+
+            $order->setData($info);
+
+        }
         $em->persist($order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
-        $order->setSubtotal($total);
         $order->setChannel($channel);
         $order->setSubmittedByUser($this->getUser());
         if($this->getUser()->getId() == $ship_to_user_id)
-            $order->setSubmittedByUser($this->getUser());
+            $order->setSubmittedForUser($this->getUser());
         else
-            $order->setSubmittedByUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
+            $order->setSubmittedForUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
 
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
@@ -58,12 +74,12 @@ class OrderProductsController extends Controller
                 foreach($product['variants'] as $variant) {
                     $quantity = $product_variant_order_quan[$variant['variant_id']];
                     if($quantity > 0) {
-                        $product_variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
+                        $pop_item = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
                         $orders_product_variant = new OrdersProductVariant();
                         $orders_product_variant->setOrder($order);
                         $orders_product_variant->setPrice($variant['cost']);
                         $orders_product_variant->setQuantity($quantity);
-                        $orders_product_variant->setProductVariant($product_variant);
+                        $orders_product_variant->setProductVariant($pop_item);
                         $em->persist($orders_product_variant);
                         $em->flush();
 
@@ -91,6 +107,45 @@ class OrderProductsController extends Controller
             }
         }
 
+        foreach($pop as $popitem) {
+            $quantity = $pop_order_quan[$popitem['id']];
+            if($quantity > 0) {
+                $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
+                $orders_pop_item = new OrdersPopItem();
+                $orders_pop_item->setOrder($order);
+                $orders_pop_item->setPrice($popitem['cost']);
+                $orders_pop_item->setQuantity($quantity);
+                $orders_pop_item->setPopItem($pop_item);
+                $em->persist($orders_pop_item);
+                $order->getPopItems()->add($orders_pop_item);
+            }
+        }
+
+        $rate = new \RocketShipIt\Rate('fedex');
+        $rate->setParameter('toCode', '90210');
+        $rate->setParameter('residentialAddressIndicator','1');
+        $rate->setParameter('service', 'GROUND_HOME_DELIVERY');
+
+        $package = new \RocketShipIt\Package('fedex');
+        $package->setParameter('weight', '5');
+        $package->setParameter('length', '16');
+        $package->setParameter('width', '2');
+        $package->setParameter('height', '10');
+        $rate->addPackageToShipment($package);
+
+        $package = new \RocketShipIt\Package('fedex');
+        $package->setParameter('weight', '5');
+        $package->setParameter('length', '12');
+        $package->setParameter('width', '25');
+        $package->setParameter('height', '6');
+        $rate->addPackageToShipment($package);
+
+        $response = $rate->getSimpleRates();
+
+        foreach($response as $ship) {
+            if($ship['service_code'] == 'GROUND_HOME_DELIVERY')
+                $order->setShipping($ship['rate']);
+        }
         $em->persist($order);
         $em->flush();
 
@@ -106,7 +161,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $warehouse_id = $request->request->get('warehouse_id');
-        if($warehouse_id != null)
+        if($warehouse_id != null && $warehouse_id != 0)
             $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
 
         $user_id = $request->request->get('user_id');
@@ -114,8 +169,8 @@ class OrderProductsController extends Controller
         $user = $em->getRepository('AppBundle:User')->find($user_id);
         $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
 
-        if($warehouse_id != null)
-            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse);
+        if($warehouse_id != null && $warehouse_id != 0)
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse, null, null, 1);
         else
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
 
@@ -145,6 +200,26 @@ class OrderProductsController extends Controller
             );
 
         return JsonResponse::create($data);
+    }
+
+    /**
+     * @Route("/api_pay_for_order", name="api_pay_for_order")
+     *
+     */
+    public function payForOrder(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cc = $request->request->get('cc');
+        $payment_type = $request->request->get('payment_type');
+        $order_id = $request->request->get('order_id');
+        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+        $status = $em->getRepository('WarehousBundle:Status')->findOneBy(array('name' => 'Paid'));
+
+        $order->setStatus($status);
+        $order->setPaymentType($payment_type);
+        $em->persist($order);
+        $em->flush();
+
     }
 }
 
