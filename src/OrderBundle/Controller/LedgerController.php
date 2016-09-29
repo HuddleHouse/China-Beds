@@ -33,7 +33,7 @@ class LedgerController extends Controller
         if($this->getUser()->hasRole('ROLE_ADMIN'))
             $ledgers = $em->getRepository('OrderBundle:Ledger')->findAll();
         else
-            $ledgers = $em->getRepository('OrderBundle:Ledger')->findby(array('user' => $this->getUser()));
+            $ledgers = $em->getRepository('OrderBundle:Ledger')->findby(array('submittedForUser' => $this->getUser()));
 
         return $this->render('@Order/Ledger/index.html.twig', array(
             'ledgers' => $ledgers,

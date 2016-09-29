@@ -119,6 +119,7 @@ class OrderProductsController extends Controller
             $is_dis = 1;
         $pop = $order->getPopItems();
 
+
         return $this->render('@Order/OrderProducts/view-order.html.twig', array(
             'channel' => $channel,
             'order' => $order,
@@ -126,7 +127,8 @@ class OrderProductsController extends Controller
             'product_data' => $product_data,
             'is_retail' => $is_retail,
             'is_dis' => $is_dis,
-            'pop_items' => $pop
+            'pop_items' => $pop,
+            'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
         ));
     }
 

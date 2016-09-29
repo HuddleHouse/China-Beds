@@ -22,6 +22,9 @@ class OrderProductsController extends Controller
 
     /**
      * @Route("/api_save_products_order_form", name="api_save_products_order_form")
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|static
      */
     public function saveProductsOrderForm(Request $request)
     {
@@ -139,6 +142,8 @@ class OrderProductsController extends Controller
     /**
      * @param Orders $order
      * @return mixed
+     *
+     * calculates shipping
      */
     private function calculateShipping(Orders $order) {
         $rate = new \RocketShipIt\Rate('fedex');
@@ -181,6 +186,9 @@ class OrderProductsController extends Controller
 
     /**
      * @Route("/api_update_products_for_channel", name="api_update_products_for_channel")
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|static
      */
     public function updateProductsForChannel(Request $request)
     {
@@ -233,6 +241,7 @@ class OrderProductsController extends Controller
      */
     public function payForOrder(Request $request)
     {
+
         $em = $this->getDoctrine()->getManager();
         $order_id = $request->request->get('order_id');
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
@@ -241,7 +250,7 @@ class OrderProductsController extends Controller
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger') {
             $ledger_service = $this->get('order.ledger');
-            $ledger_service->newEntry($order->getTotal(), $order->getSubmittedForUser(), $order->getSubmittedForUser(), false, "Paid for order.");
+            $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), "Paid for order #".$order->getOrderNumber(), 'Order', $order);
         }
         else if($payment_type == 'cc') {
             $cc = $request->request->get('cc');
@@ -254,9 +263,10 @@ class OrderProductsController extends Controller
 
         $order->setStatus($status);
         $order->setPaymentType($payment_type);
+        $order->setAmountPaid($order->getTotal());
         $em->persist($order);
         $em->flush();
-
+        return JsonResponse::create(true);
     }
 }
 

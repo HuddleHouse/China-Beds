@@ -48,6 +48,14 @@
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
+            $scope.is_paid = {{ is_paid }};
+
+            $(document).ready(function () {
+                if ($scope.is_paid == 1) {
+                    $('#payment-type').val('{{ order.paymentType }}');
+                }
+                console.log("{{ is_paid }}");
+            });
 
             $scope.changePayment = function () {
                 console.log($scope.payment_type);
@@ -103,6 +111,7 @@
                         success: function (data) {
                             $scope.$apply(function () {
                                 hideSpinner();
+                                location.reload();
                             });
                         }
                     });
@@ -209,14 +218,25 @@
     </div>
     <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
         <div class="table"  style="min-height: 100vh;">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="color-block">
-                        Preview Only! Must confirm order to complete the process.
+            {% if order.status.name == 'Draft' %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="color-block">
+                            Preview Only! Must confirm order to complete the process.
+                        </div>
                     </div>
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
-            </div>
+            {% elseif order.status.name == 'Paid' %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="color-block-paid">
+                           Order Placed
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            {% endif %}
             <div class="row" style="margin-top: 20px;">
                 <div class="col-xs-12">
                     <h2 class="page-header">
@@ -331,7 +351,7 @@
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
-                            <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" required>
+                            <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" ng-disabled="is_paid == 1" required>
                                 <option value="cc">Pay with a Credit Card</option>
                                 {% if app.user.hasLedger %}
                                     <option value="ledger">Ledger</option>
@@ -444,10 +464,10 @@
                 <div class="col-xs-12 col-md-6">
                     <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
-                    <button type="button" ng-click="formValidate()" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                    <button type="button" ng-show="is_paid == 0" ng-click="formValidate()" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Complete Order
                     </button>
-                    <a href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
+                    <a ng-show="is_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
                         Edit Order
                     </a>
                 </div>
