@@ -93,7 +93,8 @@ class ProfileController extends Controller
             'new_user_form' => $new_user_form->createView(),
             'retailers' => $retailers,
             'sales_reps' => $sales_reps,
-            'distributors' => $distributors
+            'distributors' => $distributors,
+            'orders' => $user->getOrders()
         ));
     }
 

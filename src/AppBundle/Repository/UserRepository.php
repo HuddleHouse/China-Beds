@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * UserRepository
@@ -30,4 +31,10 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         }
         return $distributors;
     }
+
+    public function getLatestOrdersForUser(User $user) {
+        $em = $this->getEntityManager();
+
+    }
+
 }
