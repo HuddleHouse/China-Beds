@@ -33,7 +33,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $orders = $user->getOrders();
+        $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders
