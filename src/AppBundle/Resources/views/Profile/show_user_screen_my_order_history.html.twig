@@ -16,7 +16,7 @@
         <!-- /.box-header -->
         <div class="box-body">
             <div class="table" style="box-shadow: none;padding-left: 0; padding-right: 0;">
-                <table  class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                <table id="latest-orders" class="table table-hover table-compact table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
                         <th>Order Number</th>
@@ -34,7 +34,7 @@
                             <td>
                                 <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderNumber }}</a>
                             </td>
-                            <td>{{ order.submitDate|date("m/d/Y")}}</td>
+                            <td>{{ order.submitDate | date("m/d/Y")}}</td>
                             <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
                             <td>${{ order.shipping |number_format(2, '.', ',') }}</td>
                             <td>
@@ -49,7 +49,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> View</a>
+                                <a class="btn btn-raised btn-default btn-xs purple" style="margin: 0px;" href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> View</a>
                             </td>
                         </tr>
                     {% endfor %}

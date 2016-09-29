@@ -85,3 +85,6 @@ aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
     padding: 25px;
     text-align: center;
 }
+input.form-control.input-sm {
+    border-bottom: 1px solid black;
+}

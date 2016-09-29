@@ -43,6 +43,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $user_ids = array();
         $user_ids[$user->getId()] = $user->getId();
         $orders = array();
+//        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+
         $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $user));
         foreach($data as $item)
             $orders[] = $item;

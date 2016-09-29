@@ -114,7 +114,9 @@ class OrderProductsController extends Controller
 
 
         foreach($pop as $popitem) {
-            $quantity = $pop_order_quan[$popitem['id']];
+            $quantity = 0;
+            if(isset($pop_order_quan[$popitem['id']]))
+                $quantity = $pop_order_quan[$popitem['id']];
             if($quantity > 0) {
                 $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
                 $orders_pop_item = new OrdersPopItem();
