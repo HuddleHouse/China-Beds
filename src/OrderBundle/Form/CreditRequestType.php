@@ -52,16 +52,6 @@ class CreditRequestType extends AbstractType
                     'required' => true
                 )
             )
-            ->add('achRequested', ChoiceType::class, array(
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'label' => 'ACH Requested',
-                    'choices' => array(
-                        'Yes' => 1,
-                        'No' => 0
-                    ),
-                    'required' => true
-                )
-            )
             ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false));
     }
 
