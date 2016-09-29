@@ -2,7 +2,7 @@
 
 namespace RocketShipIt\Carrier;
 
-use RocketShipIt\Request;
+use RocketShipIt;
 
 class Royalmail extends \RocketShipIt\Carrier\Base
 {
