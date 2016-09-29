@@ -10,7 +10,6 @@ namespace OrderBundle\Services;
 
 use AppBundle\Entity\User;
 use OrderBundle\Entity\Ledger;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Class LedgerService
@@ -29,7 +28,6 @@ class LedgerService
      * @param $amount
      * @param User $submittedForUser
      * @param User $submittedByUser
-     * @param bool|false $achRequested
      * @param null $description
      * @param string $type check \OrderBundle\Entity\Ledger for the constants that $type accepts, it will be 'Credit' if left null
      * @param null $typeId if this is not a credit request, add the id of the entity that should count towards credit
@@ -37,17 +35,32 @@ class LedgerService
      * @return Ledger
      * @throws \Exception
      */
-    public function newEntry($amount, User $submittedForUser, User $submittedByUser, $achRequested = false, $description = null, $type = 'Credit', $typeId = null) {
+    public function newEntry($amount, User $submittedForUser, User $submittedByUser, $description = null, $type = 'Credit', $typeId = null) {
+        $em = $this->container->get('doctrine')->getManager();
+
         $ledger = new Ledger();
         $ledger->setAmountRequested($amount);
+        $ledger->setAmountCredited($amount);
+        $ledger->setDatePosted(new \DateTime());
         $ledger->setSubmittedForUser($submittedForUser);
         $ledger->setSubmittedByUser($submittedByUser);
-        $ledger->setAchRequested($achRequested);
+        if($type == 'Credit')
+            $ledger->setAchRequested(false);
         $ledger->setDescription($description);
         $ledger->setType($type);
-        $ledger->setTypeId($typeId);
 
-        $em = $this->container->get('doctrine')->getManager();
+        switch($type) {
+            case 'Order':
+                $ledger->setOrder($em->getRepository('OrderBundle\Repository\OrdersRepository')->find($typeId));
+                break;
+            case 'Rebate':
+                $ledger->setRebate($em->getRepository('InventoryBundle\Repository\RebateRepository')->find($typeId));
+                break;
+            case 'Warranty':
+                $ledger->setWarrantyClaim($em->getRepository('InventoryBundle\Repository\WarrantyClaimRepository')->find($typeId));
+                break;
+        }
+
         $em->persist($ledger);
         $em->flush();
 

@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -16,9 +17,24 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use AppBundle\Entity\User;
+use OrderBundle\Entity\Orders;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 
 class WarrantyClaimType extends AbstractType
 {
+
+    private $tokenStorage;
+
+    /**
+     * WarrantyClaimType constructor.
+     * @param $tokenStorage
+     */
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -28,7 +44,7 @@ class WarrantyClaimType extends AbstractType
         $builder
             ->add('submittedForUser', EntityType::class, array(
                     'class' => 'AppBundle\Entity\User',
-                    'label' => 'User',
+                    'label' => 'On Behalf of',
                     'placeholder' => 'Select User',
                     'choice_label' => function (User $user) {
                         return $user->getFullName();
@@ -37,7 +53,23 @@ class WarrantyClaimType extends AbstractType
                     'required' => true
                 )
             )
-            ->add('quantity', IntegerType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('order', EntityType::class, array(
+                    'class' => 'OrderBundle\Entity\Orders',
+                    'label' => 'Order Number',
+                    'placeholder' => 'Select Order Number',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('o')
+                            ->where('o.submitted_for_user = :user')
+                            ->orderBy('o.submitDate', 'DESC')
+                            ->setParameter('user', $this->tokenStorage->getToken()->getUser());
+                    },
+                    'choice_label' => function (Orders $order) {
+                        return $order->getOrderNumber();
+                    },
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'required' => true
+                )
+            )
             ->add('creditRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
                     'label' => 'Amount',

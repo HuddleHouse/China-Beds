@@ -42,14 +42,13 @@ class WarrantyClaimController extends Controller
     public function newAction(Request $request)
     {
         $warrantyClaim = new WarrantyClaim();
-        $form = $this->createForm('InventoryBundle\Form\WarrantyClaimType', $warrantyClaim);
+        $form = $this->createForm(WarrantyClaimType::class, $warrantyClaim);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-
-                $warrantyClaim->setUser($this->getUser());
+                $warrantyClaim->setSubmittedByUser($this->getUser());
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');

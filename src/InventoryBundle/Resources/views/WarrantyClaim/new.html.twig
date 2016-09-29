@@ -15,7 +15,7 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#ledger_description').keyup(function () {
+            $('#warranty_claim_description').keyup(function () {
                 var len = $(this).val().length;
                 if (len >= 255) {
                     $(this).val($(this).val().substring(0, 255));
@@ -34,8 +34,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-danger">
-                    {{ form_errors(form.retailer) }}
-                    {{ form_errors(form.quantity) }}
+                    {{ form_errors(form.order) }}
                     {{ form_errors(form.creditRequested) }}
                     {{ form_errors(form.description) }}
                 </div>
@@ -52,15 +51,15 @@
                         {{ form_widget(form.submittedForUser) }}
                     </div>
                 {% else %}
-                    {% do form.user.setRendered %}
+                    {% do form.submittedForUser.setRendered %}
                 {% endif %}
                 <div class="col-md-4 form-group">
                     {{ form_label(form.creditRequested) }}
                     {{ form_widget(form.creditRequested) }}
                 </div>
                 <div class="col-md-4 form-group">
-                    {{ form_label(form.quantity) }}
-                    {{ form_widget(form.quantity) }}
+                    {{ form_label(form.order) }}
+                    {{ form_widget(form.order) }}
                 </div>
             </div>
             <div class="row">

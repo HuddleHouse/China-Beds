@@ -168,9 +168,14 @@ class User extends BaseUser
     private $office;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedForUser")
      */
-    private $rebate_submissions;
+    private $rebates;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedByUser")
+     */
+    private $submitted_rebates;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="submittedForUser")
@@ -280,7 +285,8 @@ class User extends BaseUser
         $this->warranty_claims = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
-        $this->rebate_submissions = new ArrayCollection();
+        $this->rebates = new ArrayCollection();
+        $this->submitted_rebates = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->price_groups = new ArrayCollection();
@@ -290,8 +296,8 @@ class User extends BaseUser
         $this->distributors = new ArrayCollection();
         $this->sales_reps = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
-        $this->submittedLedgers = new ArrayCollection();
-        $this->creditedLedgers = new ArrayCollection();
+        $this->submitted_ledgers = new ArrayCollection();
+        $this->credited_ledgers = new ArrayCollection();
     }
 
     public function getFullName() {
@@ -727,22 +733,6 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getRebateSubmissions()
-    {
-        return $this->rebate_submissions;
-    }
-
-    /**
-     * @param mixed $rebate_submissions
-     */
-    public function setRebateSubmissions($rebate_submissions)
-    {
-        $this->rebate_submissions = $rebate_submissions;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getWarrantyClaims()
     {
         return $this->warranty_claims;
@@ -933,7 +923,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $my_retailers
+     * @param mixed $retailers
      */
     public function setRetailers($retailers)
     {
@@ -1120,5 +1110,37 @@ class User extends BaseUser
     public function setCreditedLedgers($creditedLedgers)
     {
         $this->credited_ledgers = $creditedLedgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRebates()
+    {
+        return $this->rebates;
+    }
+
+    /**
+     * @param mixed $rebates
+     */
+    public function setRebates($rebates)
+    {
+        $this->rebates = $rebates;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedRebates()
+    {
+        return $this->submitted_rebates;
+    }
+
+    /**
+     * @param mixed $submitted_rebates
+     */
+    public function setSubmittedRebates($submitted_rebates)
+    {
+        $this->submitted_rebates = $submitted_rebates;
     }
 }
