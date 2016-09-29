@@ -72,3 +72,19 @@ aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
     padding: 25px;
     text-align: center;
 }
+
+.color-block-paid {
+    background-color: #4caf50;
+    height: 69px;
+    margin-top: -19px;
+    margin-left: -19px;
+    margin-right: -19px;
+    margin-bottom: -48px;
+    font-size: 28px;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+}
+input.form-control.input-sm {
+    border-bottom: 1px solid black;
+}

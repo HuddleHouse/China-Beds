@@ -32,12 +32,22 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         return $distributors;
     }
 
+    /**
+     * @param User $user
+     * @return array|\OrderBundle\Entity\Orders[]
+     *
+     * This gets the lates orders for a user according to their Roles
+     */
     public function getLatestOrdersForUser(User $user) {
         $em = $this->getEntityManager();
         $user_ids = array();
         $user_ids[$user->getId()] = $user->getId();
         $orders = array();
+//        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+
         $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $user));
+        foreach($data as $item)
+            $orders[] = $item;
 
         if($user->hasRole('ROLE_ADMIN')) {
             $orders = $em->getRepository('OrderBundle:Orders')->findAll();

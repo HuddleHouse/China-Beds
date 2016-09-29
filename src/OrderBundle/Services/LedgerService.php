@@ -51,13 +51,13 @@ class LedgerService
 
         switch($type) {
             case 'Order':
-                $ledger->setOrder($em->getRepository('OrderBundle\Repository\OrdersRepository')->find($typeId));
+                $ledger->setOrder($em->getRepository('OrderBundle:Orders')->find($typeId));
                 break;
             case 'Rebate':
-                $ledger->setRebate($em->getRepository('InventoryBundle\Repository\RebateRepository')->find($typeId));
+                $ledger->setRebate($em->getRepository('InventoryBundle:Rebate')->find($typeId));
                 break;
             case 'Warranty':
-                $ledger->setWarrantyClaim($em->getRepository('InventoryBundle\Repository\WarrantyClaimRepository')->find($typeId));
+                $ledger->setWarrantyClaim($em->getRepository('InventoryBundle:WarrantyClaim')->find($typeId));
                 break;
         }
 
