@@ -88,13 +88,15 @@ class ProfileController extends Controller
             $distributors = $this->getUser()->getDistributors();
         }
 
+        $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
+
         return $this->render('AppBundle:Profile:show.html.twig', array(
             'user' => $user,
             'new_user_form' => $new_user_form->createView(),
             'retailers' => $retailers,
             'sales_reps' => $sales_reps,
             'distributors' => $distributors,
-            'orders' => $user->getOrders()
+            'orders' => $orders
         ));
     }
 
