@@ -58,6 +58,9 @@ class LedgerController extends Controller
                 if(!$ledger->getSubmittedForUser())
                     $ledger->setSubmittedForUser($this->getUser());
                 $ledger->setSubmittedByUser($this->getUser());
+                $ledger->setAchRequested(false);
+                $ledger->setAmountCredited($ledger->getAmountRequested());
+                $ledger->setDatePosted(new \DateTime());
                 $em->persist($ledger);
                 $em->flush();
             }

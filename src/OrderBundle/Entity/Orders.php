@@ -184,11 +184,27 @@ class Orders
      */
     private $amount_paid;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="order")
+     */
+    private $ledger;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="order")
+     */
+    private $warranty_claims;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="order")
+     */
+    private $rebates;
 
     public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
+        $this->warranty_claims = new ArrayCollection();
+        $this->rebates = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -778,8 +794,52 @@ class Orders
         $this->amount_paid = $amount_paid;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getWarrantyClaims()
+    {
+        return $this->warranty_claims;
+    }
 
+    /**
+     * @param mixed $warranty_claims
+     */
+    public function setWarrantyClaims($warranty_claims)
+    {
+        $this->warranty_claims = $warranty_claims;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getLedger()
+    {
+        return $this->ledger;
+    }
 
+    /**
+     * @param mixed $ledger
+     */
+    public function setLedger($ledger)
+    {
+        $this->ledger = $ledger;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRebates()
+    {
+        return $this->rebates;
+    }
+
+    /**
+     * @param mixed $rebates
+     */
+    public function setRebates($rebates)
+    {
+        $this->rebates = $rebates;
+    }
 }
 
