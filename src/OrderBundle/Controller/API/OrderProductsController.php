@@ -69,43 +69,46 @@ class OrderProductsController extends Controller
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
 
-        foreach($products as $product) {
-            if(isset($product['variants'])) {
-                foreach($product['variants'] as $variant) {
-                    $quantity = $product_variant_order_quan[$variant['variant_id']];
-                    if($quantity > 0) {
-                        $pop_item = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
-                        $orders_product_variant = new OrdersProductVariant();
-                        $orders_product_variant->setOrder($order);
-                        $orders_product_variant->setPrice($variant['cost']);
-                        $orders_product_variant->setQuantity($quantity);
-                        $orders_product_variant->setProductVariant($pop_item);
-                        $em->persist($orders_product_variant);
-                        $em->flush();
+        if($products != null) {
+            foreach($products as $product) {
+                if(isset($product['variants'])) {
+                    foreach($product['variants'] as $variant) {
+                        $quantity = $product_variant_order_quan[$variant['variant_id']];
+                        if($quantity > 0) {
+                            $pop_item = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
+                            $orders_product_variant = new OrdersProductVariant();
+                            $orders_product_variant->setOrder($order);
+                            $orders_product_variant->setPrice($variant['cost']);
+                            $orders_product_variant->setQuantity($quantity);
+                            $orders_product_variant->setProductVariant($pop_item);
+                            $em->persist($orders_product_variant);
+                            $em->flush();
 
-                        //we passed in the complete warehouse quantities at start so we know where to go ahead and pull the inventory from.
-                        foreach($variant['warehouse_data'] as $warehouse_data) {
-                            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_data['warehouse_id']);
-                            if($quantity <= $warehouse_data['quantity']) {
-                                $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouse);
+                            //we passed in the complete warehouse quantities at start so we know where to go ahead and pull the inventory from.
+                            foreach($variant['warehouse_data'] as $warehouse_data) {
+                                $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_data['warehouse_id']);
+                                if($quantity <= $warehouse_data['quantity']) {
+                                    $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouse);
+                                    $em->persist($orders_warehouse_info);
+                                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+                                    break;
+                                }
+                                else if($quantity > $warehouse_data['quantity']) {
+                                    $orders_warehouse_info = new OrdersWarehouseInfo($warehouse_data['quantity'], $orders_product_variant, $warehouse);
+                                    $quantity -= $warehouse_data['quantity'];
+                                }
                                 $em->persist($orders_warehouse_info);
                                 $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
-                                break;
                             }
-                            else if($quantity > $warehouse_data['quantity']) {
-                                $orders_warehouse_info = new OrdersWarehouseInfo($warehouse_data['quantity'], $orders_product_variant, $warehouse);
-                                $quantity -= $warehouse_data['quantity'];
-                            }
-                            $em->persist($orders_warehouse_info);
-                            $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
-                        }
-                        $em->persist($orders_product_variant);
+                            $em->persist($orders_product_variant);
 
-                        $order->addProductVariants($orders_product_variant);
+                            $order->addProductVariants($orders_product_variant);
+                        }
                     }
                 }
             }
         }
+
 
         foreach($pop as $popitem) {
             $quantity = $pop_order_quan[$popitem['id']];
@@ -133,6 +136,10 @@ class OrderProductsController extends Controller
         return JsonResponse::create($order->getId());
     }
 
+    /**
+     * @param Orders $order
+     * @return mixed
+     */
     private function calculateShipping(Orders $order) {
         $rate = new \RocketShipIt\Rate('fedex');
         $rate->setParameter('toCode', $order->getShipZip());
@@ -149,8 +156,24 @@ class OrderProductsController extends Controller
             $rate->addPackageToShipment($package);
         }
 
+
+
         $response = $rate->getSimpleRates();
         $data = array_pop($response);
+
+        //if $data['rate'] isn't there then they are only ordering pop items, which the shipping for them is on the entity.
+        if(!isset($data['rate'])) {
+            $data = array();
+            $data['rate'] = 0;
+            $data['service_code'] = 'FEDEX_GROUND';
+            $data['desc'] = 'FedEx Ground';
+        }
+        $pop_total = 0;
+        //Sum up pop items shipping and add it to the shipping amount
+        foreach($order->getPopItems() as $popItem)
+            $pop_total += $popItem->getPopItem()->getShippingPer();
+
+        $data['rate'] += $pop_total;
 
         return $data;
     }

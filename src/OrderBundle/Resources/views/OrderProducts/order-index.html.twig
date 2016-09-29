@@ -200,7 +200,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
-                            $scope.showError('Only '+max+' available.');
+                            showErrorModal('Only '+max+' available.');
                         }
                     }
                     else {
@@ -222,7 +222,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
-                            $scope.showError('Only '+max+' available.');
+                            showErrorModal('Only '+max+' available.');
                         }
                     }
                     else {
@@ -239,12 +239,6 @@
                 }
 
                 $scope.calculateCart();
-            };
-
-            $scope.showError = function (message) {
-                $('#error-modal').modal('show');
-                $('#error-message').empty();
-                $('#error-message').append(message);
             };
 
             $scope.updateShipForm = function () {
@@ -279,11 +273,11 @@
                 $('#side-review').addClass('fa-circle');
 
                 if($scope.form_info['pick_up'] == false && $scope.form_info['ship'] == false)
-                    $scope.showError('Please select to Ship the Items or to Pick them up.');
+                    showErrorModal('Please select to Ship the Items or to Pick them up.');
                 else if($scope.cart_num_items == 0)
-                    $scope.showError('Please add at least one item to your cart.');
+                    showErrorModal('Please add at least one item to your cart.');
                 else if(errors >= 1)
-                    $scope.showError('Form is missing information.');
+                    showErrorModal('Form is missing information.');
                 else if (errors <= 0) {
                     addSpinner();
                     $.ajax({
@@ -777,22 +771,5 @@
 </div>
 {#</form>#}
 
-    <div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel4">Error</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="error-message" style="padding-top: 40px;">
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
