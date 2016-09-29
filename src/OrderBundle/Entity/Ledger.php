@@ -4,8 +4,6 @@ namespace OrderBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToOne;
 use InventoryBundle\Entity\WarrantyClaim;
 
 
@@ -30,6 +28,7 @@ class Ledger
     const TYPE_REBATE   = 'Rebate';
     const TYPE_TRANSFER = 'Transfer';
     const TYPE_CLAIM    = 'Warranty';
+    const TYPE_ORDER    = 'Order';
 
     /**
      * @var int
@@ -95,9 +94,9 @@ class Ledger
     /**
      * @var bool
      *
-     * @ORM\Column(name="ach_requested", type="boolean")
+     * @ORM\Column(name="ach_requested", type="boolean", nullable=true)
      */
-    private $achRequested = false;
+    private $achRequested;
 
     /**
      * @var bool
@@ -121,16 +120,19 @@ class Ledger
     private $type = self::TYPE_CREDIT;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="type_id", type="integer", nullable=true)
-     */
-    private $typeId; //is null if TYPE_CREDIT
-
-    /**
-     * @OneToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", inversedBy="ledger")
      */
     private $warrantyClaim;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="ledger")
+     */
+    private $order;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="ledger")
+     */
+    private $rebate;
 
     /**
      * Ledger constructor.
@@ -357,28 +359,13 @@ class Ledger
             self::TYPE_CLAIM,
             self::TYPE_CREDIT,
             self::TYPE_REBATE,
-            self::TYPE_TRANSFER
+            self::TYPE_TRANSFER,
+            self::TYPE_ORDER
         );
         if (!in_array($type, $types))
             throw new \InvalidArgumentException("Invalid type. Values must be one of the following: " . implode(', ', $types));
 
         $this->type = $type;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTypeId()
-    {
-        return $this->typeId;
-    }
-
-    /**
-     * @param int $typeId
-     */
-    public function setTypeId($typeId)
-    {
-        $this->typeId = $typeId;
     }
 
     /**
@@ -394,11 +381,46 @@ class Ledger
      */
     public function setWarrantyClaim($warrantyClaim)
     {
+        $this->setType(self::TYPE_CLAIM);
         $this->warrantyClaim = $warrantyClaim;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->setType(self::TYPE_ORDER);
+        $this->order = $order;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRebate()
+    {
+        return $this->rebate;
+    }
+
+    /**
+     * @param mixed $rebate
+     */
+    public function setRebate($rebate)
+    {
+        $this->setType(self::TYPE_REBATE);
+        $this->rebate = $rebate;
+    }
+
     public function toArray() {
-        return array(
+        $rtn = array(
             'id' => $this->getId(),
             'submittedForUserId' => $this->getSubmittedForUser() ? $this->getSubmittedForUser()->getId() : null,
             'submittedByUserId' => $this->getSubmittedByUser() ? $this->getSubmittedByUser()->getId() : null,
@@ -409,10 +431,23 @@ class Ledger
             'isArchived' => $this->getIsArchived(),
             'description' => $this->getDescription(),
             'type' => $this->getType(),
-            'typeId' => $this->getTypeId(),
             'dateCreated' => $this->getDateCreated()->format('m/d/Y'),
             'datePosted' => $this->getDatePosted() ? $this->getDatePosted()->format('m/d/Y') : null
         );
+
+        switch($this->getType()) {
+            case self::TYPE_ORDER:
+                $rtn['order'] = $this->getOrder();
+                break;
+            case self::TYPE_REBATE:
+                $rtn['rebate'] = $this->getRebate();
+                break;
+            case self::TYPE_CLAIM:
+                $rtn['warrantyClaim'] = $this->getWarrantyClaim();
+                break;
+        }
+
+        return $rtn;
     }
 }
 

@@ -38,7 +38,6 @@ class LedgerController extends Controller
                 $request->get('amount'),
                 $request->get('submittedForUserId'),
                 $this->getUser(),
-                $request->get('achRequested'),
                 $request->get('description'),
                 $request->get('type'),
                 $request->get('typeId')

@@ -30,7 +30,7 @@ class CreditRequestType extends AbstractType
         $builder
             ->add('submittedForUser', EntityType::class, array(
                     'class' => 'AppBundle\Entity\User',
-                    'label' => 'User',
+                    'label' => 'On Behalf of',
                     'placeholder' => 'Select User Requesting Credit',
                     'choice_label' => function (User $user) {
                         return $user->getFullName();

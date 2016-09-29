@@ -34,7 +34,7 @@
                 else {
                     expanded = true;
                     // Open this row (the format() function would return the data to be shown)
-                    row.child(format(tr.data('child-value'), row.index(), row.row()), "child").show();
+                    row.child(format(tr.data('child-value'), row.index()), "child").show();
                     $(this).closest('td').find('span').html('Click to collapse');
                     tr.addClass('shown');
                 }
@@ -54,20 +54,20 @@
             });
         });
 
-        function format(description, index, row) {
+        function format(description, index) {
             return '<ul data-dtr-index="'+index+'">' +
-                    '<li data-dtr-index="'+index+'" data-dt-row="'+row[0][0]+'" data-dt-column="9">' +
+                    '<li data-dtr-index="'+index+'" data-dt-row="'+index+'" data-dt-column="9">' +
                     '<span class="dtr-title">Description</span>&nbsp;' +
                     '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
         }
 
 
-        function createLedgerWithAPI(amount, submittedForUserId, achRequested, description, type, typeId) {
+        function createLedgerWithAPI(amount, submittedForUserId, description, type, typeId) {
             $.ajax({
                 type: 'POST',
                 url: "{{ path('api_new_ledger') }}",
                 dataType: 'json',
-                data: {amount: amount, submittedForUserId: submittedForUserId, achRequested: achRequested, description: description, type: type, typeId: typeId},
+                data: {amount: amount, submittedForUserId: submittedForUserId, description: description, type: type, typeId: typeId},
                 success: function (data) {
                     console.log(JSON.stringify(data,null,4));
                 }
@@ -147,6 +147,6 @@
         <i class="material-icons">add</i>
     </a>
     <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Add a New Ledger
+        Submit new credit request
     </div>
 {% endblock content %}

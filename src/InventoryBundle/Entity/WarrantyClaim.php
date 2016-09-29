@@ -4,8 +4,6 @@ namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
 use OrderBundle\Entity\Ledger;
 
 /**
@@ -81,16 +79,21 @@ class WarrantyClaim
     private $submittedForUser;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="warranty_claims")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_warranty_claims")
      * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */
     private $submittedByUser;
 
     /**
-     * @OneToOne(targetEntity="OrderBundle\Entity\Ledger", inversedBy="warranty_claim")
-     * @JoinColumn(name="ledger_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="warrantyClaim")
      */
     private $ledger;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="warranty_claims")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     */
+    private $order;
 
     /**
      * WarrantyClaim constructor.
@@ -324,6 +327,22 @@ class WarrantyClaim
     public function setLedger($ledger)
     {
         $this->ledger = $ledger;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 }
 
