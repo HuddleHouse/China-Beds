@@ -77,7 +77,10 @@ class OrderProductsController extends Controller
             foreach($products as $product) {
                 if(isset($product['variants'])) {
                     foreach($product['variants'] as $variant) {
-                        $quantity = $product_variant_order_quan[$variant['variant_id']];
+                        if(isset($product_variant_order_quan[$variant['variant_id']]))
+                            $quantity = $product_variant_order_quan[$variant['variant_id']];
+                        else
+                            $quantity = 0;
                         if($quantity > 0) {
                             $pop_item = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
                             $orders_product_variant = new OrdersProductVariant();
