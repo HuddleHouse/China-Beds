@@ -33,6 +33,7 @@
         font-family: 'museo', sans-serif;
         font-weight: 500;
     }
+    @page{margin:0;size:auto}
 </style>
 
 
@@ -176,7 +177,9 @@
     }
 
     function printPage() {
+        $('body').addClass('sidebar-collapse');
         window.print();
+        $('body').removeClass('sidebar-collapse');
     }
 
     function showErrorModal(message) {
