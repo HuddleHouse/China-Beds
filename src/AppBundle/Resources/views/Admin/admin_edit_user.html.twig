@@ -36,11 +36,11 @@
         }
     </style>
     {% if not form.vars.valid %}
-        <div class="col-md-12">
-            <div class="bs-callout bs-callout-danger ">
-                {{ form_errors(form.username) }}
-                {{ form_errors(form.email) }}
-                {{ form_errors(form.current_password) }}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger ">
+                    {{ form_errors(form.user_channels) }}
+                </div>
             </div>
         </div>
     {% endif %}

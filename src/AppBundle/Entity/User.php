@@ -10,7 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -299,6 +301,24 @@ class User extends BaseUser
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
     }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if($this->hasRole('ROLE_RETAILER')) {
+            $count = 0;
+            foreach($this->getUserChannels() as $channel)
+                $count++;
+            if ($count > 1) {
+                $context->buildViolation('A retailer can only be on one Channel.')
+                    ->atPath('user_channels')
+                    ->addViolation();
+            }
+        }
+    }
+
 
     public function getFullName() {
         return $this->first_name . " " . $this->last_name;
@@ -1143,4 +1163,6 @@ class User extends BaseUser
     {
         $this->submitted_rebates = $submitted_rebates;
     }
+
+
 }
