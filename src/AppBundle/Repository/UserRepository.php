@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * UserRepository
@@ -30,4 +31,97 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         }
         return $distributors;
     }
+
+    /**
+     * @param User $user
+     * @return array|\OrderBundle\Entity\Orders[]
+     *
+     * This gets the lates orders for a user according to their Roles
+     */
+    public function getLatestOrdersForUser(User $user) {
+        $em = $this->getEntityManager();
+        $user_ids = array();
+        $user_ids[$user->getId()] = $user->getId();
+        $orders = array();
+//        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+
+        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $user));
+        foreach($data as $item)
+            $orders[] = $item;
+
+        if($user->hasRole('ROLE_ADMIN')) {
+            $orders = $em->getRepository('OrderBundle:Orders')->findAll();
+        }
+        else {
+
+            if($user->hasRole('ROLE_DISTRIBUTOR')) {
+                foreach($user->getRetailers() as $item) {
+                    if(!isset($user_ids[$item->getId()])) {
+                        $user_ids[$item->getId()] = $item->getId();
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item));
+                        foreach($data as $item)
+                            $orders[] = $item;
+                    }
+                }
+            }
+            if($user->hasRole('ROLE_SALES_REP')){
+                foreach($user->getDistributors() as $distributor) {
+                    if(!isset($user_ids[$distributor->getId()])) {
+                        $user_ids[$distributor->getId()] = $distributor->getId();
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
+                        foreach($data as $item)
+                            $orders[] = $item;
+                    }
+                    foreach($distributor->getRetailers() as $retailer) {
+                        if(!isset($user_ids[$retailer->getId()])) {
+                            $user_ids[$retailer->getId()] = $retailer->getId();
+                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
+                            foreach($data as $item)
+                                $orders[] = $item;
+                        }
+                    }
+                }
+            }
+            if($user->hasRole('ROLE_SALES_MANAGER')) {
+                foreach($user->getSalesReps() as $salesRep) {
+                    if(!isset($user_ids[$salesRep->getId()])) {
+                        $user_ids[$salesRep->getId()] = $salesRep->getId();
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $salesRep));
+                        foreach($data as $item)
+                            $orders[] = $item;
+                    }
+                    foreach($salesRep->getDistributors() as $distributor) {
+                        if(!isset($user_ids[$distributor->getId()])) {
+                            $user_ids[$distributor->getId()] = $distributor->getId();
+                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
+                            foreach($data as $item)
+                                $orders[] = $item;
+                        }
+                        foreach($distributor->getRetailers() as $retailer) {
+                            if(!isset($user_ids[$retailer->getId()])) {
+                                $user_ids[$retailer->getId()] = $retailer->getId();
+                                $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
+                                foreach($data as $item)
+                                    $orders[] = $item;
+                            }
+                        }
+                    }
+                }
+
+            }
+//            $user_ids .= $user->getId();
+//            $connection = $em->getConnection();
+//            $statement = $connection->prepare("select *, LEFT(name, 1) as name_first_letter
+//	from orders o
+//		where o.submitted_by_user_id in (".$user_ids.")
+//		    left join status s
+//			on o.status_id = s.id");
+//            $statement->execute();
+//            $orders = $statement->fetchAll();
+        }
+
+        return $orders;
+    }
+
+
 }

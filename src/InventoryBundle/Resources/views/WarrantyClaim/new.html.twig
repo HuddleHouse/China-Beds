@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Warranty Claim creation{% endblock %}
+{% block title %}New Warranty Claim{% endblock %}
 {% block page_title %}
-    Warranty Claim creation
+    New Warranty Claim
 {% endblock page_title %}
 
 {% block page_name %}
@@ -15,18 +15,61 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#warranty_claim_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
         });
     </script>
 {% endblock footer %}
 
 {% block content %}
-    <h1>Warranty Claim creation</h1>
-
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input class="btn btn-raised btn-success" type="submit" value="Create" />
-    {{ form_end(form) }}
-
+    {% if not form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(form.order) }}
+                    {{ form_errors(form.creditRequested) }}
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                {% if app.user.hasRole('ROLE_ADMIN') %}
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.submittedForUser) }}
+                        {{ form_widget(form.submittedForUser) }}
+                    </div>
+                {% else %}
+                    {% do form.submittedForUser.setRendered %}
+                {% endif %}
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.creditRequested) }}
+                    {{ form_widget(form.creditRequested) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.order) }}
+                    {{ form_widget(form.order) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_widget(form.description) }}
+                </div>
+            </div>
+            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

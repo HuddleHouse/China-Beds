@@ -49,17 +49,17 @@ class ProductVariantController extends Controller
         $msrp = $msrp*100;
         $sku = $request->request->get('sku');
         $product_id = $request->request->get('product_id');
-        $dimensions = $request->request->get('dimensions');
+        $weight = $request->request->get('weight');
         $fedex_dimensions = $request->request->get('fedex_dimensions');
 
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("insert into product_variant (product_id, name, msrp, sku, dimensions, fedex_dimensions) values (:product_id, :name, :msrp, :sku, :dimensions, :fedex_dimensions)");
+        $statement = $connection->prepare("insert into product_variant (product_id, name, msrp, sku, weight, fedex_dimensions) values (:product_id, :name, :msrp, :sku, :weight, :fedex_dimensions)");
         $statement->bindValue('product_id', $product_id);
         $statement->bindValue('name', $name);
         $statement->bindValue('msrp', $msrp);
         $statement->bindValue('sku', $sku);
-        $statement->bindValue('dimensions', $dimensions);
+        $statement->bindValue('weight', $weight);
         $statement->bindValue('fedex_dimensions', $fedex_dimensions);
 
         try {
@@ -103,17 +103,17 @@ class ProductVariantController extends Controller
         $msrp = $request->request->get('msrp');
         $msrp = $msrp*100;
         $sku = $request->request->get('sku');
-        $dimensions = $request->request->get('dimensions');
+        $weight = $request->request->get('weight');
         $fedex_dimensions = $request->request->get('fedex_dimensions');
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("update product_variant set name = :name, msrp = :msrp, sku = :sku, dimensions = :dimensions, fedex_dimensions = :fedex_dimensions where id = :id");
+        $statement = $connection->prepare("update product_variant set name = :name, msrp = :msrp, sku = :sku, weight = :weight, fedex_dimensions = :fedex_dimensions where id = :id");
 
         $statement->bindValue('id', $id);
         $statement->bindValue('name', $name);
         $statement->bindValue('msrp', $msrp);
         $statement->bindValue('sku', $sku);
-        $statement->bindValue('dimensions', $dimensions);
+        $statement->bindValue('weight', $weight);
         $statement->bindValue('fedex_dimensions', $fedex_dimensions);
 
         try {

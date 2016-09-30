@@ -23,17 +23,17 @@ class RebateSubmission
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="submissions")
-     * @ORM\JoinColumn(name="rebate_id", referencedColumnName="id")
-     */
-    private $rebate;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="rebate_submissions")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $user;
+//    /**
+//     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="submissions")
+//     * @ORM\JoinColumn(name="rebate_id", referencedColumnName="id")
+//     */
+//    private $rebate;
+//
+//    /**
+//     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="rebate_submissions")
+//     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+//     */
+//    private $user;
 
     /**
      * @var int
@@ -91,7 +91,7 @@ class RebateSubmission
     {
         $this->rebate = $rebate;
     }
-    
+
     /**
      * Set amountRequested
      *

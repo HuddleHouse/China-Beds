@@ -3,6 +3,10 @@
     "license": "proprietary",
     "type": "project",
     "autoload": {
+        "files": ["app/lib/Shipping/RocketShipIt/RocketShipIt.php"],
+        "psr-0": {
+            "RocketShipIt\\": "app/lib/Shipping"
+        },
         "psr-4": {
             "": "src/"
         },

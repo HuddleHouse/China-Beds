@@ -32,23 +32,15 @@
             </tr>
             <tr>
                 <th>Datemadeaware</th>
-                <td>{% if warrantyClaim.dateMadeAware %}{{ warrantyClaim.dateMadeAware|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if warrantyClaim.dateMadeAware %}{{ warrantyClaim.dateMadeAware|date('m/d/y') }}{% else %}--{% endif %}</td>
             </tr>
             <tr>
                 <th>Dateofclaim</th>
-                <td>{% if warrantyClaim.dateOfClaim %}{{ warrantyClaim.dateOfClaim|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if warrantyClaim.dateOfClaim %}{{ warrantyClaim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
             </tr>
             <tr>
-                <th>Ratailer</th>
-                <td>{{ warrantyClaim.ratailer }}</td>
-            </tr>
-            <tr>
-                <th>Mattressmodelid</th>
-                <td>{{ warrantyClaim.mattressModelId }}</td>
-            </tr>
-            <tr>
-                <th>Quantity</th>
-                <td>{{ warrantyClaim.quantity }}</td>
+                <th>Order Number</th>
+                <td>{{ warrantyClaim.order.orderNumber }}</td>
             </tr>
             <tr>
                 <th>Creditrequested</th>
@@ -60,7 +52,7 @@
             </tr>
             <tr>
                 <th>Resolution</th>
-                <td>{{ warrantyClaim.resolution }}</td>
+                <td>{{ warrantyClaim.resolution | default('--') }}</td>
             </tr>
         </tbody>
     </table>

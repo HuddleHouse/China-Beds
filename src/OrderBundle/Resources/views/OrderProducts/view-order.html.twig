@@ -18,7 +18,18 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-            "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+
+        $("#form").validate({
+            submitHandler: function(form) {
+                console.log($scope.payment_type);
+                var scope = angular.element(document.getElementById('MainCtrl')).scope();
+                var count = scope.formValidate();
+                if(count == 0)
+                    $(form).submit();
+                $(form).preventDefault;
+            }
         });
 
         var app = angular.module('myApp', ['ngMaterial']);
@@ -26,13 +37,87 @@
             $scope.is_distributor = {{ is_dis }};
             $scope.is_retailer = {{ is_retail }};
             $scope.cart_num_items = 0;
-            $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
             $scope.cart = [];
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
+            $scope.future_pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
+            $scope.payment_type = '';
+            $scope.cc = {};
+            $scope.ledgerTotal = {{ user.getLedgerTotal }};
+            $scope.cart_total = {{ order.getTotal  }};
+            $scope.is_paid = {{ is_paid }};
+
+            $(document).ready(function () {
+                if ($scope.is_paid == 1) {
+                    $('#payment-type').val('{{ order.paymentType }}');
+                }
+                console.log("{{ is_paid }}");
+            });
+
+            $scope.changePayment = function () {
+                console.log($scope.payment_type);
+                if($scope.payment_type == 'cc')
+                    $('#cc').show();
+                else
+                    $('#cc').hide();
+            };
+
+            $scope.formValidate = function () {
+                var count = 0;
+                if($scope.payment_type == '') {
+                    $('#payment').addClass('has-error');
+                    count++;
+                }
+                else
+                    $('#payment').removeClass('has-error');
+
+                console.log($scope.cc);
+
+                if($scope.payment_type == 'cc') {
+                    if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
+                    else
+                        $('#cc-name').removeClass('has-error');
+
+                    if($scope.cc['number'] == undefined) {$('#cc-number').addClass('has-error');count++;}
+                    else
+                        $('#cc-number').removeClass('has-error');
+
+                    if($scope.cc['expiry-month'] == undefined || $scope.cc['expiry-year'] == undefined) {$('#cc-date').addClass('has-error');count++;}
+                    else
+                        $('#cc-date').removeClass('has-error');
+
+                    if($scope.cc['cvv'] == undefined) {$('#cc-cvv').addClass('has-error');count++;}
+                    else
+                        $('#cc-cvv').removeClass('has-error');
+                }
+
+
+                if(count > 0)
+                    showErrorModal('Please fix the form errors.');
+                else if ($scope.cart_total > $scope.ledgerTotal)
+                    showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
+                else {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_pay_for_order') }}",
+                        dataType: 'json',
+                        data: {cc: $scope.cc,
+                            payment_type: $scope.payment_type,
+                            order_id: {{ order.id}}
+                        },
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                hideSpinner();
+                                location.reload();
+                            });
+                        }
+                    });
+                }
+
+            };
 
 
             //not
@@ -62,45 +147,18 @@
                 $scope.calculateCart();
             };
 
-            $scope.submitCart = function () {
-                if($scope.form_info['pick_up'] == false && $scope.form_info['ship'] == false)
-                    $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please select to Ship the Items or to Pick them up.</div>");
-                else if($scope.cart_num_items == 0)
-                    $('#error-message').append("<div class='alert alert-error alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Please add at least one item to your cart.</div>");
-                else{
-                    addSpinner();
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{ path('api_save_products_order_form') }}",
-                        dataType: 'json',
-                        data: {cart: $scope.cart,
-                            form_info: $scope.form_info,
-                            channel_id: {{ channel.id}},
-                            total: $scope.cart_total
-                        },
-                        success: function (data) {
-                            $scope.$apply(function () {
-                                hideSpinner();
-                            });
-                        }
-                    });
-                }
-
-
-                console.log($scope.form_info);
-            };
-
 
         }]);
 
-        $('.stripe-button-el').addClass('btn btn-raised btn-success my-stripe-button');
-        $('.stripe-button-el').removeClass('stripe-button-el');
 
     </script>
 {% endblock footer %}
 
 {% block content %}
     <style>
+        .form-group label.control-label {
+            font-size: 15px !important;
+        }
         .my-stripe-button {
             height: 37px;
         }
@@ -158,25 +216,47 @@
     <div id="error-message">
 
     </div>
-
-<form action="/your-charge-code" method="POST">
-<div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
-    <div class="table"  style="min-height: 100vh;">
+    <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+        <div class="table"  style="min-height: 100vh;">
+            {% if order.status.name == 'Draft' %}
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2 class="page-header">
-                            <i class="fa fa-globe"></i> AdminLTE, Inc.
-                            <div class="pull-right">Date: {{ order.submitDate | date }}</div>
-                        </h2>
+                        <div class="color-block">
+                            Preview Only! Must confirm order to complete the process.
+                        </div>
                     </div>
                     <!-- /.col -->
                 </div>
-                <!-- info row -->
-                <div class="row invoice-info">
+            {% elseif order.status.name == 'Paid' %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="color-block-paid">
+                           Order Placed
+                        </div>
+                    </div>
                     <!-- /.col -->
-                    <div class="col-sm-4 invoice-col">
+                </div>
+            {% endif %}
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
+                        <span class="mdl-chip mdl-chip--contact" >
+                            <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
+                            <span class="mdl-chip__text">
+                                {{ order.status.name }}
+                            </span>
+                        </span>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
 
-                        {% if order.isPickUp == 0%}
+                    {% if order.isPickUp == 0%}
                         <address>
                             <strong>Shipping To</strong>
                             {{ order.shipName }}<br>
@@ -185,29 +265,29 @@
                             Phone: {{ order.shipPhone }}<br>
                             Email: {{ order.shipEmail }}
                         </address>
-                        {% else %}
+                    {% else %}
                         <address>
                             <strong>Pick Up</strong><br>
                             <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
                             <strong>Date:</strong> {{ order.pickUpDate | date }}<br>
 
                         </address>
-                        {% endif %}
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-4 invoice-col">
-                        <b>PO #{{ order.orderNumber }}</b><br>
-                        <br>
-                    </div>
-                    <div class="col-sm-4 invoice-col">
-                        {#<b>Payment Due:</b> 2/22/2014<br>#}
-                        {#<b>Account:</b> 968-34567#}
-                    </div>
-                    <!-- /.col -->
+                    {% endif %}
                 </div>
-                <!-- /.row -->
-<hr>
-        {% for prod in product_data %}
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <b>PO #{{ order.orderNumber }}</b><br>
+                    <br>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    {#<b>Payment Due:</b> 2/22/2014<br>#}
+                    {#<b>Account:</b> 968-34567#}
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            {% for prod in product_data %}
                 <!-- Table row -->
                 <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
@@ -233,71 +313,168 @@
                     </div>
                     <!-- /.col -->
                 </div>
-        <!-- /.row -->
-        {% endfor %}
+                <!-- /.row -->
+            {% endfor %}
 
-                <div class="row" style="padding-top: 40px;">
-                    <!-- accepted payments column -->
-                    <div class="col-xs-6">
-                        <p class="lead">Payment Methods:</p>
-                        <img src="/images/credit/visa.png" alt="Visa">
-                        <img src="/images/credit/mastercard.png" alt="Mastercard">
-                        <img src="/images/credit/american-express.png" alt="American Express">
-                        <img src="/images/credit/paypal2.png" alt="Paypal">
-
-                        <h5>Comments</h5>
-                        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                            {{ order.comments }}
-                        </p>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-6">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody><tr>
-                                    <th style="width:50%">Subtotal:</th>
-                                    <td><h6>${{ order.subtotal |number_format(2, '.', ',') }}</h6></td>
-                                </tr>
+            {% if pop_items is not empty %}
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header">POP Items</h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%;">Qty</th>
+                                <th>Product</th>
+                                <th style="width: 24%;">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in pop_items %}
                                 <tr>
-                                    <th>Tax (9.3%)</th>
-                                    <td>?</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.popItem.name }}: {{ item.popItem.description }}</td>
+                                    <td><h6 style="margin: 0;">${{ (item.price*item.quantity) |number_format(2, '.', ',') }}</h6></td>
                                 </tr>
-                                <tr>
-                                    <th>Shipping:</th>
-                                    <td>$5.80</td>
-                                </tr>
-                                <tr>
-                                    <th>Total:</th>
-                                    <td>$265.24</td>
-                                </tr>
-                                </tbody></table>
-                        </div>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
+            {% endif %}
+            <div class="row" style="padding-top: 40px;">
+                <!-- accepted payments column -->
+                <div class="col-md-6">
+                    <fieldset style="margin-top: 20px;margin-bottom: 50px;">
+                        <legend>Payment</legend>
+                        <div id="payment" class="form-group" style="margin-top: 0px;">
+                            <label for="payment-type">Payment Type</label>
+                            <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" ng-disabled="is_paid == 1" required>
+                                <option value="cc">Pay with a Credit Card</option>
+                                {% if app.user.hasLedger %}
+                                    <option value="ledger">Ledger</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div id="cc" style="display: none;">
+                            <div id="cc-name" class="form-group">
+                                <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" ng-model="cc['name']" name="card-holder-name" id="card-holder-name" placeholder="Card Holder's Name">
+                                </div>
+                            </div>
+                            <div id="cc-number" class="form-group">
+                                <label class="col-sm-3 control-label" for="card-number">Card Number</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" ng-model="cc['number']" name="card-number" id="card-number" placeholder="Debit/Credit Card Number">
+                                </div>
+                            </div>
+                            <div id="cc-date" class="form-group">
+                                <label class="col-sm-3 control-label" for="expiry-month">Expiration Date</label>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <select class="form-control col-sm-2" ng-model="cc['expiry-month']" name="expiry-month" id="expiry-month">
+                                                <option selected value="">Month</option>
+                                                <option value="01">Jan (01)</option>
+                                                <option value="02">Feb (02)</option>
+                                                <option value="03">Mar (03)</option>
+                                                <option value="04">Apr (04)</option>
+                                                <option value="05">May (05)</option>
+                                                <option value="06">June (06)</option>
+                                                <option value="07">July (07)</option>
+                                                <option value="08">Aug (08)</option>
+                                                <option value="09">Sep (09)</option>
+                                                <option value="10">Oct (10)</option>
+                                                <option value="11">Nov (11)</option>
+                                                <option value="12">Dec (12)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <select class="form-control" name="expiry-year" ng-model="cc['expiry-year']">
+                                                <option selected value="">Year</option>
+                                                <option value="13">2013</option>
+                                                <option value="14">2014</option>
+                                                <option value="15">2015</option>
+                                                <option value="16">2016</option>
+                                                <option value="17">2017</option>
+                                                <option value="18">2018</option>
+                                                <option value="19">2019</option>
+                                                <option value="20">2020</option>
+                                                <option value="21">2021</option>
+                                                <option value="22">2022</option>
+                                                <option value="23">2023</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="cc-cvv" class="form-group">
+                                <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="cc['cvv']" name="cvv" id="cvv" placeholder="Security Code">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
 
-                <!-- this row will not appear when printing -->
-                <div class="row no-print">
-                    <div class="col-xs-12">
-                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
-                        <button type="button" class="btn btn-raised" style="margin-right: 5px;">
-                            Pay With Ledger Balance
-                        </button>
-                        <script
-                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                data-key="pk_test_4B0NjjCkg1JumywOlyymXv3K"
-                                data-amount="{{ order.subtotal*100 }}"
-                                data-name="Bed Boss"
-                                data-description="Payment"
-                                data-locale="auto">
-                        </script>
-
+                    <h5 style="margin: -14px 0 16px;">Comments</h5>
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 150px;">
+                        {{ order.comments }}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
+                        <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
+                    <div class="table-responsive" style="margin-top: 46px;">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th >Subtotal:</th>
+                                <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            {#<tr>#}
+                                {#<th>Tax (9.3%)</th>#}
+                                {#<td>$0.00</td>#}
+                            {#</tr>#}
+                            <tr>
+                                <th>Shipping: {{ order.getShipDescription }}</th>
+                                <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
 
+            <!-- this row will not appear when printing -->
+            <div class="row no-print">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
+
+                    <button type="button" ng-show="is_paid == 0" ng-click="formValidate()" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                        Complete Order
+                    </button>
+                    <a ng-show="is_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
+                        Edit Order
+                    </a>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 
-</form>
+
 {% endblock %}

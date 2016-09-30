@@ -81,7 +81,29 @@ class PopItem
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="pop_item")
+     */
+    private $orders_pop_item;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventory", mappedBy="pop_item")
+     */
+    private $warehouse_pop_inventory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventoryOnHold", mappedBy="pop_item")
+     */
+    private $warehouse_pop_inventory_on_hold;
+
+    public function __construct()
+    {
+        $this->warehouse_pop_inventory = new ArrayCollection();
+        $this->warehouse_pop_inventory_on_hold = new ArrayCollection();
+        $this->orders_pop_item = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -173,7 +195,7 @@ class PopItem
      */
     public function setPricePer($pricePer)
     {
-        $this->pricePer = $pricePer;
+        $this->pricePer = $pricePer*100;
 
         return $this;
     }
@@ -185,7 +207,7 @@ class PopItem
      */
     public function getPricePer()
     {
-        return $this->pricePer;
+        return $this->pricePer/100;
     }
 
     /**
@@ -197,7 +219,7 @@ class PopItem
      */
     public function setShippingPer($shippingPer)
     {
-        $this->shippingPer = $shippingPer;
+        $this->shippingPer = $shippingPer*100;
 
         return $this;
     }
@@ -209,7 +231,7 @@ class PopItem
      */
     public function getShippingPer()
     {
-        return $this->shippingPer;
+        return $this->shippingPer/100;
     }
 
     /**
@@ -340,5 +362,55 @@ class PopItem
     {
         $this->path = $path;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrdersPopItem()
+    {
+        return $this->orders_pop_item;
+    }
+
+    /**
+     * @param mixed $orders_pop_item
+     */
+    public function setOrdersPopItem($orders_pop_item)
+    {
+        $this->orders_pop_item = $orders_pop_item;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehousePopInventory()
+    {
+        return $this->warehouse_pop_inventory;
+    }
+
+    /**
+     * @param mixed $warehouse_pop_inventory
+     */
+    public function setWarehousePopInventory($warehouse_pop_inventory)
+    {
+        $this->warehouse_pop_inventory = $warehouse_pop_inventory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehousePopInventoryOnHold()
+    {
+        return $this->warehouse_pop_inventory_on_hold;
+    }
+
+    /**
+     * @param mixed $warehouse_pop_inventory_on_hold
+     */
+    public function setWarehousePopInventoryOnHold($warehouse_pop_inventory_on_hold)
+    {
+        $this->warehouse_pop_inventory_on_hold = $warehouse_pop_inventory_on_hold;
+    }
+
+
 }
 

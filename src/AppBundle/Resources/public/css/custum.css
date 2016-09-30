@@ -44,10 +44,47 @@ select.form-control {
 }
 
 input[type=checkbox], input[type=radio] {
-    margin: 8px 5px 0 25px !important;
+    /*margin: 8px 5px 0 25px !important; This messes up the order page*/
     display: inline !important;
+}
+input[type=text] {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
+    margin-top: 10px;
 }
 
 .rich-btn {
     padding: 8px 16px !important;
+}
+
+.color-block {
+    background-color: #02B1F2;
+    height: 69px;
+    margin-top: -19px;
+    margin-left: -19px;
+    margin-right: -19px;
+    margin-bottom: -48px;
+    font-size: 28px;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+}
+
+.color-block-paid {
+    background-color: #4caf50;
+    height: 69px;
+    margin-top: -19px;
+    margin-left: -19px;
+    margin-right: -19px;
+    margin-bottom: -48px;
+    font-size: 28px;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+}
+input.form-control.input-sm {
+    border-bottom: 1px solid black;
 }

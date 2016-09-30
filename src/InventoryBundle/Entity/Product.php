@@ -423,13 +423,11 @@ class Product
     }
 
     /**
-     * @param mixed $variant
+     * @param mixed $variants
      */
     public function setVariants($variants)
     {
         $this->variants = $variants;
     }
-
-
 }
 

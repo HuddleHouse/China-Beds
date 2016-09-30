@@ -28,6 +28,7 @@ class UserType extends AbstractType
             ->add('address_1', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('address_2', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('state', EntityType::class, array(
@@ -53,13 +54,6 @@ class UserType extends AbstractType
             ->add('warehouse_3', EntityType::class, array(
                 'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Warehouse #3',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('office', EntityType::class, array(
-                'class' => 'InventoryBundle:Office',
-                'label' => 'Office',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false
@@ -222,7 +216,7 @@ class UserType extends AbstractType
 
         if($user->hasRole('ROLE_DISTRIBUTOR')) {
             $form->add('retailers', EntityType::class, array(
-                'class' => 'AppBundle:User',
+                'class' => 'AppBundle\Entity\User',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.groups', 'g')
@@ -233,12 +227,12 @@ class UserType extends AbstractType
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false,
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
             ));
         }
         if ($user->hasRole('ROLE_SALES_REP')) {
             $form->add('distributors', EntityType::class, array(
-                'class' => 'AppBundle:User',
+                'class' => 'AppBundle\Entity\User',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.groups', 'g')
@@ -254,7 +248,7 @@ class UserType extends AbstractType
         }
         if ($user->hasRole('ROLE_SALES_MANAGER')) {
             $form->add('sales_reps', null, array(
-                'class' => 'AppBundle:User',
+                'class' => 'AppBundle\Entity\User',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.groups', 'g')

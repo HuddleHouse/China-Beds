@@ -25,13 +25,13 @@
 </head>
 
 <style>
-    body, h3, h4, h5, h6, .h3, .h4 {
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 600;
+    body, h3, h4, h5, h6, .h3, .h4, .button {
+        font-family: 'museo', sans-serif !important;
+        font-weight: 700;
     }
     h1, h2, .h1, .h2 {
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 400;
+        font-family: 'museo', sans-serif;
+        font-weight: 500;
     }
 </style>
 
@@ -40,9 +40,47 @@
 <div class="overlay">
     <div id="loading-img"></div>
 </div>
+<script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
 
 {% block body %}{% endblock %}
 
+<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-danger">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4">Error</h4>
+            </div>
+            <div class="modal-body">
+                <div id="error-message1" style="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-success">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel4">Success</h4>
+            </div>
+            <div class="modal-body">
+                <div id="success-message1" style="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% block javascripts %}
     {% javascripts '@AppBundle/Resources/public/js/*' filter="jsqueeze" output="js/appBundle.js"%}
@@ -50,7 +88,7 @@
     {% javascripts '@QuickbooksBundle/Resources/public/js/*' filter="?jsqueeze" output="js/quickbooksBundle.js"%}
     {% endjavascripts %}
 {% endblock %}
-<script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
+
 
 <script   src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"   integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="   crossorigin="anonymous"></script>
 
@@ -64,7 +102,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/responsive.bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="https://npmcdn.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
 <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.1.1/ui-bootstrap-tpls.min.js"></script>
@@ -78,6 +116,8 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
     })();
 </script>
+<script src="https://use.typekit.net/wph0osy.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://code.jquery.com/jquery-migrate-1.3.0.js"></script>
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -117,7 +157,12 @@
         var spinner = new Spinner(opts).spin(target);
         target.appendChild(spinner.el);
     }
-
+    function showSpinner() {
+        $('.overlay').show();
+        var target = document.getElementById('loading-img');
+        var spinner = new Spinner(opts).spin(target);
+        target.appendChild(spinner.el);
+    }
     function addCustomSpinner(id) {
         $('.overlay').show();
         var target = document.getElementById(id);
@@ -128,7 +173,22 @@
 
     function hideSpinner() {
         $('.overlay').hide();
-        spinner.stop();
+    }
+
+    function printPage() {
+        window.print();
+    }
+
+    function showErrorModal(message) {
+        $('#error-modal').modal('show');
+        $('#error-message1').empty();
+        $('#error-message1').append(message);
+    }
+
+    function showSuccessModal(message) {
+        $('#success-modal').modal('show');
+        $('#success-message1').empty();
+        $('#success-message1').append(message);
     }
 </script>
 {% block footer %}{% endblock %}

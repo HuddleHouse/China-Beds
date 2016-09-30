@@ -1,0 +1,69 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Price Group{% endblock %}
+{% block page_title %}
+    Settings
+{% endblock page_title %}
+
+{% block page_name %}
+    User
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable();
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Shipping</th>
+                        <th>Channel</th>
+                        <th>Status</th>
+                        <th style="width: 250px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                        <tr role="row" class="odd">
+                            <td>
+                                <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderNumber }}</a>
+                            </td>
+                            <td>{{ order.submitDate|date("m/d/Y")}}</td>
+                            <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                            <td>${{ order.shipping |number_format(2, '.', ',') }}</td>
+                            <td>
+                                {{ order.channel.name }}
+                            </td>
+                            <td>
+                                <span class="mdl-chip mdl-chip--contact" >
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
+                                    <span class="mdl-chip__text">
+                                    {{ order.status.name }}
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

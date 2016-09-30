@@ -3,13 +3,14 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -167,14 +168,24 @@ class User extends BaseUser
     private $office;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedForUser")
      */
-    private $rebate_submissions;
+    private $rebates;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedByUser")
+     */
+    private $submitted_rebates;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="submittedForUser")
      */
     private $warranty_claims;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="submittedByUser")
+     */
+    private $submitted_warranty_claims;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\PurchaseOrder", mappedBy="user")
@@ -182,9 +193,14 @@ class User extends BaseUser
     private $purchase_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_for_user")
      */
     private $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Orders", mappedBy="submitted_by_user")
+     */
+    private $submitted_orders;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
@@ -215,7 +231,7 @@ class User extends BaseUser
     private $warehouse_3;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"all"})
      */
     private $retailers;
 
@@ -226,7 +242,7 @@ class User extends BaseUser
     private $my_distributor;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"all"})
      */
     private $distributors;
 
@@ -237,7 +253,7 @@ class User extends BaseUser
     private $my_sales_rep;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
      */
     private $sales_reps;
 
@@ -247,25 +263,65 @@ class User extends BaseUser
      */
     private $my_sales_manager;
 
+    /**
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="submittedForUser")
+     */
+    private $ledgers;
+
+    /**
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="submittedByUser")
+     */
+    private $submitted_ledgers;
+
+    /**
+     * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="creditedByUser")
+     */
+    private $credited_ledgers;
+
     public function __construct()
     {
         parent::__construct();
 
-        $this->warranty_claims = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->user_channels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->rebate_submissions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->price_groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->purchase_orders = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->stock_adjustments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->retailers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->distributors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sales_reps = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->warranty_claims = new ArrayCollection();
+        $this->submitted_warranty_claims = new ArrayCollection();
+        $this->user_channels = new ArrayCollection();
+        $this->rebates = new ArrayCollection();
+        $this->submitted_rebates = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->price_groups = new ArrayCollection();
+        $this->purchase_orders = new ArrayCollection();
+        $this->stock_adjustments = new ArrayCollection();
+        $this->retailers = new ArrayCollection();
+        $this->distributors = new ArrayCollection();
+        $this->sales_reps = new ArrayCollection();
+        $this->ledgers = new ArrayCollection();
+        $this->submitted_ledgers = new ArrayCollection();
+        $this->credited_ledgers = new ArrayCollection();
     }
 
     public function getFullName() {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function hasLedger() {
+        $count = 0;
+        foreach($this->ledgers as $ledger) {
+            $count++;
+            break;
+        }
+        if($count == 0)
+            return false;
+        else
+            return true;
+    }
+
+    public function getLedgerTotal($options = null) {
+        $total = 0;
+        foreach($this->ledgers as $ledger) {
+            $total += $ledger->getAmountCredited();
+        }
+        return $total;
     }
 
     public function getRouteNames() {
@@ -613,9 +669,9 @@ class User extends BaseUser
     /**
      * Remove payTypes
      *
-     * @param \AppBundle\Entity\User $user
+     * @param PriceGroup $priceGroup
      */
-    public function removePriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
+    public function removePriceGroup(PriceGroup $priceGroup)
     {
         $this->price_groups->removeElement($priceGroup);
     }
@@ -641,7 +697,7 @@ class User extends BaseUser
     /**
      * Remove payTypes
      *
-     * @param \AppBundle\Entity\User $user
+     * @param $userChannel
      */
     public function removeUserChannel($userChannel)
     {
@@ -677,22 +733,6 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getRebateSubmissions()
-    {
-        return $this->rebate_submissions;
-    }
-
-    /**
-     * @param mixed $rebate_submissions
-     */
-    public function setRebateSubmissions($rebate_submissions)
-    {
-        $this->rebate_submissions = $rebate_submissions;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getWarrantyClaims()
     {
         return $this->warranty_claims;
@@ -704,6 +744,22 @@ class User extends BaseUser
     public function setWarrantyClaims($warranty_claims)
     {
         $this->warranty_claims = $warranty_claims;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedWarrantyClaims()
+    {
+        return $this->submitted_warranty_claims;
+    }
+
+    /**
+     * @param mixed $submitted_warranty_claims
+     */
+    public function setSubmittedWarrantyClaims($submitted_warranty_claims)
+    {
+        $this->submitted_warranty_claims = $submitted_warranty_claims;
     }
 
     public function getName() {
@@ -867,7 +923,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $my_retailers
+     * @param mixed $retailers
      */
     public function setRetailers($retailers)
     {
@@ -992,5 +1048,99 @@ class User extends BaseUser
         $this->my_sales_manager = $my_sales_manager;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSubmittedOrders()
+    {
+        return $this->submitted_orders;
+    }
 
+    /**
+     * @param mixed $submitted_orders
+     */
+    public function setSubmittedOrders($submitted_orders)
+    {
+        $this->submitted_orders = $submitted_orders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @param mixed $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedLedgers()
+    {
+        return $this->submitted_ledgers;
+    }
+
+    /**
+     * @param mixed $submittedLedgers
+     */
+    public function setSubmittedLedgers($submittedLedgers)
+    {
+        $this->submitted_ledgers = $submittedLedgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreditedLedgers()
+    {
+        return $this->credited_ledgers;
+    }
+
+    /**
+     * @param mixed $creditedLedgers
+     */
+    public function setCreditedLedgers($creditedLedgers)
+    {
+        $this->credited_ledgers = $creditedLedgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRebates()
+    {
+        return $this->rebates;
+    }
+
+    /**
+     * @param mixed $rebates
+     */
+    public function setRebates($rebates)
+    {
+        $this->rebates = $rebates;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedRebates()
+    {
+        return $this->submitted_rebates;
+    }
+
+    /**
+     * @param mixed $submitted_rebates
+     */
+    public function setSubmittedRebates($submitted_rebates)
+    {
+        $this->submitted_rebates = $submitted_rebates;
+    }
 }

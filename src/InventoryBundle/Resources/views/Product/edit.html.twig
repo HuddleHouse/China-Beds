@@ -294,14 +294,14 @@
                 var variant_msrp = $('#variant_msrp').val();
                 var variant_name = $('#variant_name').val();
                 var variant_sku = $('#variant_sku').val();
-                var variant_dimensions = $('#variant_dimensions').val();
+                var variant_weight = $('#variant_weight').val();
                 var variant_fedex_dimensions = $('#variant_fedex_dimensions').val();
 
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_add_product_variant') }}",
                     dataType: 'json',
-                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp, sku: variant_sku, dimensions: variant_dimensions, fedex_dimensions: variant_fedex_dimensions},
+                    data: {name: variant_name, product_id: {{ product.id }}, msrp: variant_msrp, sku: variant_sku, weight: variant_weight, fedex_dimensions: variant_fedex_dimensions},
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.product_variants = data;
@@ -341,15 +341,17 @@
             };
 
             $scope.updateProductVariant = function (variant) {
-                console.log(JSON.stringify(variant, null, 4));
+                showSpinner();
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_update_product_variant') }}",
                     dataType: 'json',
-                    data: {id: variant.id, product_id: {{ product.id }}, name: variant.name, msrp: variant.msrp, sku: variant.sku, dimensions: variant.dimensions, fedex_dimensions: variant.fedex_dimensions},
+                    data: {id: variant.id, product_id: {{ product.id }}, name: variant.name, msrp: variant.msrp, sku: variant.sku, weight: variant.weight, fedex_dimensions: variant.fedex_dimensions},
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.product_variants = data;
+                            hideSpinner();
+                            showSuccessModal('Variant updated Successfully.');
                         });
                     }
                 });
@@ -424,15 +426,15 @@
 
 {% block content %}
 <div ng-app="myApp" ng-controller="myCtrl">
-    <div class="nav-tabs-custom" style="    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);">
+    <div class="nav-tabs-custom" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#product" data-toggle="tab" aria-expanded="true">Product</a></li>
             <li class=""><a href="#variants" data-toggle="tab" aria-expanded="false">Variants</a></li>
             <li class=""><a href="#categories" data-toggle="tab" aria-expanded="false">Categories</a></li>
             <li class=""><a href="#specs" data-toggle="tab" aria-expanded="false">Specifications</a></li>
             <li class=""><a href="#attributes" data-toggle="tab" aria-expanded="false">Image Attributes</a></li>
-            <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
             <li class=""><a href="#channels" data-toggle="tab" aria-expanded="false">Channels</a></li>
+            <li class=""><a href="#images" data-toggle="tab" aria-expanded="false">Images</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="product">
@@ -460,15 +462,11 @@
             <div class="tab-pane" id="specs" style="padding-top: 25px;">
                 {% include '@Inventory/Product/edit-specification.html.twig' %}
             </div>
-
+            <div class="tab-pane" id="channels">
+                {% include '@Inventory/Product/edit-channels.html.twig' %}
+            </div>
             <div class="tab-pane" id="images">
                 {% include '@Inventory/Product/edit-images.html.twig' %}
-            </div>
-
-            <div class="tab-pane" id="channels">
-                <div class="tab-pane" id="specs" style="padding-top: 25px;">
-                    {% include '@Inventory/Product/edit-channels.html.twig' %}
-                </div>
             </div>
         </div>
         <!-- /.tab-content -->

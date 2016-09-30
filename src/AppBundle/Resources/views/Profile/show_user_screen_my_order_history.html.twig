@@ -15,28 +15,44 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <h8>This is the screen that will show 10 of the current users past orders. They will link to said order. This would include orders that a user has placed for himself or a Distributer placed for them.</h8>
-            <hr>
             <div class="table" style="box-shadow: none;padding-left: 0; padding-right: 0;">
-                <table  class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                <table id="latest-orders" class="table table-hover table-compact table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>Order ID</th>
-                        <th>Item</th>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Shipping</th>
+                        <th>Channel</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                        <td>Call of Duty IV</td>
-                        <td><span class="label label-success">Shipped</span></td>
-                    </tr>
-                    <tr>
-                        <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                        <td>Call of Duty IV</td>
-                        <td><span class="label label-success">Shipped</span></td>
-                    </tr>
+                    {% for order in orders %}
+                        <tr role="row" class="odd">
+                            <td>
+                                <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderNumber }}</a>
+                            </td>
+                            <td>{{ order.submitDate | date("m/d/Y")}}</td>
+                            <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                            <td>${{ order.shipping |number_format(2, '.', ',') }}</td>
+                            <td>
+                                {{ order.channel.name }}
+                            </td>
+                            <td>
+                                <span class="mdl-chip mdl-chip--contact" >
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
+                                    <span class="mdl-chip__text">
+                                    {{ order.status.name }}
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <a class="btn btn-raised btn-default btn-xs purple" style="margin: 0px;" href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -45,7 +61,7 @@
         <!-- /.box-body -->
         <div class="box-footer clearfix">
             {% for channel in sidebar_user_channels %}
-                <a href="{{ path('order_products_index', {'id': channel.id}) }}" class="btn btn-raised btn-sm btn-info btn-flat pull-left">
+                <a href="{{ path('order_products_index', {'id': channel.id}) }}" class="btn btn-raised btn-sm btn-default btn-flat pull-left">
                     <i class="fa fa-plus"></i> Order {{ channel.name }} Products</a>
             {%  endfor %}
 

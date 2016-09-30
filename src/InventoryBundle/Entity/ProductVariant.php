@@ -53,9 +53,9 @@ class ProductVariant
     /**
      * @var string
      *
-     * @ORM\Column(name="dimensions", type="string", length=255, nullable=true)
+     * @ORM\Column(name="weight", type="string", length=255, nullable=true)
      */
-    private $dimensions;
+    private $weight;
 
     /**
      * @var string
@@ -98,11 +98,18 @@ class ProductVariant
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehouseInventory", mappedBy="product_variant")
      */
-    private $warehouse;
+    private $warehouse_inventory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehouseInventoryOnHold", mappedBy="product_variant")
+     */
+    private $warehouse_inventory_on_hold;
+
 
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
-        $this->warehouse = new ArrayCollection();
+        $this->warehouse_inventory = new ArrayCollection();
+        $this->warehouse_inventory_on_hold = new ArrayCollection();
         $this->purchase_order_product_variant = new ArrayCollection();
         $this->stock_transfer_product_variant = new ArrayCollection();
         $this->stock_adjustment_product_variant = new ArrayCollection();
@@ -217,17 +224,17 @@ class ProductVariant
     /**
      * @return mixed
      */
-    public function getDimensions()
+    public function getWeight()
     {
-        return $this->dimensions;
+        return $this->weight;
     }
 
     /**
-     * @param mixed $dimensions
+     * @param mixed $weight
      */
-    public function setDimensions($dimensions)
+    public function setWeight($weight)
     {
-        $this->dimensions = $dimensions;
+        $this->weight = $weight;
     }
 
     /**
@@ -281,17 +288,17 @@ class ProductVariant
     /**
      * @return mixed
      */
-    public function getWarehouse()
+    public function getWarehouseInventory()
     {
         return $this->warehouse;
     }
 
     /**
-     * @param mixed $warehouse
+     * @param mixed $warehouse_inventory
      */
-    public function setWarehouse($warehouse)
+    public function setWarehouseInventory($warehouse_inventory)
     {
-        $this->warehouse = $warehouse;
+        $this->warehouse = $warehouse_inventory;
     }
 
     /**
@@ -341,5 +348,22 @@ class ProductVariant
     {
         $this->orders_product_variant = $orders_product_variant;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouseInventoryOnHold()
+    {
+        return $this->warehouse_inventory_on_hold;
+    }
+
+    /**
+     * @param mixed $warehouse_inventory_on_hold
+     */
+    public function setWarehouseInventoryOnHold($warehouse_inventory_on_hold)
+    {
+        $this->warehouse_inventory_on_hold = $warehouse_inventory_on_hold;
+    }
+
 }
 

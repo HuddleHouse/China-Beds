@@ -123,20 +123,6 @@ class Orders
     private $shipping;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="subtotal", type="integer", nullable=true)
-     */
-    private $subtotal;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="total", type="integer", nullable=true)
-     */
-    private $total;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -156,10 +142,21 @@ class Orders
     private $product_variants;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="orders")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
      */
-    private $user;
+    private $pop_items;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_orders")
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
+     */
+    private $submitted_by_user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="orders")
+     * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
+     */
+    private $submitted_for_user;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="orders")
@@ -167,10 +164,60 @@ class Orders
      */
     private $channel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     */
+    protected $state;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_type", type="string", length=255, nullable=true)
+     */
+    private $payment_type;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="amount_paid", type="integer", nullable=true)
+     */
+    private $amount_paid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ship_description", type="string", length=255, nullable=true)
+     */
+    private $ship_description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ship_code", type="string", length=255, nullable=true)
+     */
+    private $ship_code;
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="order")
+     */
+    private $ledger;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="order")
+     */
+    private $warranty_claims;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="order")
+     */
+    private $rebates;
 
     public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
+        $this->warranty_claims = new ArrayCollection();
+        $this->rebates = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -180,10 +227,10 @@ class Orders
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
-            if(isset($info['pick_up']) && $info['pick_up'] == true)
-                $this->isPickUp = true;
-            else if(isset($info['ship']) && $info['ship'] == true)
-                $this->isPickUp = false;
+            if(isset($info['pick_up']) && $info['pick_up'] == 'true')
+                $this->isPickUp = 1;
+            else if(isset($info['ship']) && $info['ship'] == 'true')
+                $this->isPickUp = 0;
 
             if(isset($info['comments']))
                 $this->comments = $info['comments'];
@@ -203,6 +250,78 @@ class Orders
                 $this->shipEmail = $info['email'];
 
         }
+    }
+
+    public function setData($info = null)
+    {
+        $this->product_variants = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
+        $this->submitDate = new \DateTime();
+        if($info != null) {
+            if(isset($info['po']))
+                $this->orderNumber = $info['po'];
+            if(isset($info['pick_up_date']))
+                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+            if(isset($info['agent_name']))
+                $this->pickUpAgent = $info['agent_name'];
+
+            if(isset($info['pick_up']) && $info['pick_up'] == 'true')
+                $this->isPickUp = 1;
+            else if(isset($info['ship']) && $info['ship'] == 'true')
+                $this->isPickUp = 0;
+
+            if(isset($info['comments']))
+                $this->comments = $info['comments'];
+            if(isset($info['ship_name']))
+                $this->shipName = $info['ship_name'];
+            if(isset($info['address']))
+                $this->shipAddress = $info['address'];
+            if(isset($info['address2']))
+                $this->shipAddress2 = $info['address2'];
+            if(isset($info['city']))
+                $this->ship_city = $info['city'];
+            if(isset($info['zip']))
+                $this->ship_zip = $info['zip'];
+            if(isset($info['phone']))
+                $this->shipPhone = $info['phone'];
+            if(isset($info['email']))
+                $this->shipEmail = $info['email'];
+
+        }
+    }
+
+    public function getSubTotal() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total += $productVariant->getQuantity() * $productVariant->getPrice();
+        foreach($this->getPopItems() as $popItem)
+            $total += $popItem->getQuantity() * $popItem->getPrice();
+
+        return $total;
+    }
+
+    public function getTotal() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total += $productVariant->getQuantity() * $productVariant->getPrice();
+        foreach($this->getPopItems() as $popItem)
+            $total += $popItem->getQuantity() * $popItem->getPrice();
+
+        $total += $this->getShipping();
+        return $total;
+    }
+
+    public function getNumItems() {
+        $total = 0;
+
+        foreach($this->getProductVariants() as $productVariant)
+            $total = $total + $productVariant->getQuantity();
+        foreach($this->getPopItems() as $popItem)
+            $total = $total + $popItem->getQuantity();
+
+        return $total;
     }
 
     /**
@@ -544,22 +663,6 @@ class Orders
     }
 
     /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
      * @return int
      */
     public function getDiscount()
@@ -591,37 +694,6 @@ class Orders
         $this->shipping = $shipping * 100;
     }
 
-    /**
-     * @return int
-     */
-    public function getSubtotal()
-    {
-        return $this->subtotal / 100;
-    }
-
-    /**
-     * @param int $subtotal
-     */
-    public function setSubtotal($subtotal)
-    {
-        $this->subtotal = $subtotal * 100;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotal()
-    {
-        return $this->total / 100;
-    }
-
-    /**
-     * @param int $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total * 100;
-    }
 
     /**
      * @return mixed
@@ -639,6 +711,178 @@ class Orders
         $this->channel = $channel;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedByUser()
+    {
+        return $this->submitted_by_user;
+    }
+
+    /**
+     * @param mixed $submitted_by_user
+     */
+    public function setSubmittedByUser($submitted_by_user)
+    {
+        $this->submitted_by_user = $submitted_by_user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedForUser()
+    {
+        return $this->submitted_for_user;
+    }
+
+    /**
+     * @param mixed $submitted_for_user
+     */
+    public function setSubmittedForUser($submitted_for_user)
+    {
+        $this->submitted_for_user = $submitted_for_user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPopItems()
+    {
+        return $this->pop_items;
+    }
+
+    /**
+     * @param mixed $pop_items
+     */
+    public function setPopItems($pop_items)
+    {
+        $this->pop_items = $pop_items;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->payment_type;
+    }
+
+    /**
+     * @param string $payment_type
+     */
+    public function setPaymentType($payment_type)
+    {
+        $this->payment_type = $payment_type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountPaid()
+    {
+        return $this->amount_paid;
+    }
+
+    /**
+     * @param int $amount_paid
+     */
+    public function setAmountPaid($amount_paid)
+    {
+        $this->amount_paid = $amount_paid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipDescription()
+    {
+        return $this->ship_description;
+    }
+    /**
+     * @return mixed
+     */
+    public function getWarrantyClaims()
+    {
+        return $this->warranty_claims;
+    }
+
+    /**
+     * @param string $ship_description
+     */
+    public function setShipDescription($ship_description)
+    {
+        $this->ship_description = $ship_description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipCode()
+    {
+        return $this->ship_code;
+    }
+
+    /**
+     * @param string $ship_code
+     */
+    public function setShipCode($ship_code)
+    {
+        $this->ship_code = $ship_code;
+    }
+    /**
+     * @param mixed $warranty_claims
+     */
+    public function setWarrantyClaims($warranty_claims)
+    {
+        $this->warranty_claims = $warranty_claims;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLedger()
+    {
+        return $this->ledger;
+    }
+
+    /**
+     * @param mixed $ledger
+     */
+    public function setLedger($ledger)
+    {
+        $this->ledger = $ledger;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRebates()
+    {
+        return $this->rebates;
+    }
+
+    /**
+     * @param mixed $rebates
+     */
+    public function setRebates($rebates)
+    {
+        $this->rebates = $rebates;
+    }
 }
 

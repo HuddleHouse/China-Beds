@@ -3,9 +3,11 @@
 namespace InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
+use OrderBundle\Entity\Ledger;
 
 /**
- * WarrantyCliam
+ * WarrantyClaim
  *
  * @ORM\Table(name="warranty_claim")
  * @ORM\Entity()
@@ -31,16 +33,9 @@ class WarrantyClaim
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_of_claim", type="datetime", nullable=true)
+     * @ORM\Column(name="date_of_claim", type="datetime")
      */
     private $dateOfClaim;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ratailer", type="string", length=255, nullable=true)
-     */
-    private $ratailer;
 
     /**
      * @var int
@@ -79,9 +74,34 @@ class WarrantyClaim
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="warranty_claims")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
      */
-    private $user;
+    private $submittedForUser;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_warranty_claims")
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
+     */
+    private $submittedByUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="warrantyClaim")
+     */
+    private $ledger;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="warranty_claims")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     */
+    private $order;
+
+    /**
+     * WarrantyClaim constructor.
+     */
+    public function __construct()
+    {
+        $this->setDateOfClaim(new \DateTime());
+    }
 
     /**
      * Get id
@@ -98,7 +118,7 @@ class WarrantyClaim
      *
      * @param \DateTime $dateMadeAware
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setDateMadeAware($dateMadeAware)
     {
@@ -122,7 +142,7 @@ class WarrantyClaim
      *
      * @param \DateTime $dateOfClaim
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setDateOfClaim($dateOfClaim)
     {
@@ -142,35 +162,11 @@ class WarrantyClaim
     }
 
     /**
-     * Set ratailer
-     *
-     * @param string $ratailer
-     *
-     * @return WarrantyCliam
-     */
-    public function setRatailer($ratailer)
-    {
-        $this->ratailer = $ratailer;
-
-        return $this;
-    }
-
-    /**
-     * Get ratailer
-     *
-     * @return string
-     */
-    public function getRatailer()
-    {
-        return $this->ratailer;
-    }
-
-    /**
      * Set mattressModelId
      *
      * @param integer $mattressModelId
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setMattressModelId($mattressModelId)
     {
@@ -194,7 +190,7 @@ class WarrantyClaim
      *
      * @param integer $quantity
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setQuantity($quantity)
     {
@@ -216,13 +212,13 @@ class WarrantyClaim
     /**
      * Set creditRequested
      *
-     * @param integer $creditRequested
+     * @param float $creditRequested
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setCreditRequested($creditRequested)
     {
-        $this->creditRequested = $creditRequested;
+        $this->creditRequested = $creditRequested * 100;
 
         return $this;
     }
@@ -230,11 +226,11 @@ class WarrantyClaim
     /**
      * Get creditRequested
      *
-     * @return int
+     * @return float
      */
     public function getCreditRequested()
     {
-        return $this->creditRequested;
+        return $this->creditRequested / 100;
     }
 
     /**
@@ -242,7 +238,7 @@ class WarrantyClaim
      *
      * @param string $description
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setDescription($description)
     {
@@ -266,7 +262,7 @@ class WarrantyClaim
      *
      * @param string $resolution
      *
-     * @return WarrantyCliam
+     * @return WarrantyClaim
      */
     public function setResolution($resolution)
     {
@@ -288,17 +284,65 @@ class WarrantyClaim
     /**
      * @return mixed
      */
-    public function getUser()
+    public function getSubmittedForUser()
     {
-        return $this->user;
+        return $this->submittedForUser;
     }
 
     /**
-     * @param mixed $user
+     * @param mixed $submittedForUser
      */
-    public function setUser($user)
+    public function setSubmittedForUser($submittedForUser)
     {
-        $this->user = $user;
+        $this->submittedForUser = $submittedForUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedByUser()
+    {
+        return $this->submittedByUser;
+    }
+
+    /**
+     * @param mixed $submittedByUser
+     */
+    public function setSubmittedByUser($submittedByUser)
+    {
+        $this->submittedByUser = $submittedByUser;
+    }
+
+    /**
+     * @return Ledger
+     */
+    public function getLedger()
+    {
+        return $this->ledger;
+    }
+
+    /**
+     * @param Ledger $ledger
+     */
+    public function setLedger($ledger)
+    {
+        $this->ledger = $ledger;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 }
 

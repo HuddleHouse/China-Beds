@@ -38,6 +38,13 @@ class StockAdjustment
     private $message;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="reason", type="text", nullable=true)
+     */
+    private $reason;
+
+    /**
      * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Status", inversedBy="stock_adjustments")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
@@ -194,6 +201,22 @@ class StockAdjustment
     public function setOrderNumber($orderNumber)
     {
         $this->orderNumber = $orderNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReason()
+    {
+        return $this->reason;
+    }
+
+    /**
+     * @param mixed $reason
+     */
+    public function setReason($reason)
+    {
+        $this->reason = $reason;
     }
 
 

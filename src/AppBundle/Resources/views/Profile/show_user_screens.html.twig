@@ -2,10 +2,6 @@
 
     {% include "AppBundle:Profile:show_user_screen_my_order_history.html.twig" %}
 
-    {#{% if (is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}#}
-        {#{% include "AppBundle:Profile:show_user_screen_sales_managers.html.twig" %}#}
-    {#{% endif %}#}
-
     {% if (is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') ) %}
         {% include "AppBundle:Profile:show_user_screen_sales_reps.html.twig" %}
     {% endif %}

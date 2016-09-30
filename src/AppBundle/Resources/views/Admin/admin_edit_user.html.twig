@@ -13,6 +13,28 @@
 {% endblock actions %}
 
 {% block content %}
+    <style>
+        .toggler {
+            border-left: 1px solid #d5d5d5;
+            box-shadow: inset 1px 0 0 0 #fff;
+            width: 44px;
+            width: 2.75rem;
+            height: 38.4px;
+            height: 2.4rem;
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+        }
+        input#user_groups_3 {
+        }
+        input[type=checkbox], input[type=radio] {
+            display: inline !important;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+    </style>
     {% if not form.vars.valid %}
         <div class="col-md-12">
             <div class="bs-callout bs-callout-danger ">
@@ -42,8 +64,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    {{ form_label(form.office) }}
-                    {{ form_widget(form.office) }}
+                    {{ form_label(form.company_name) }}
+                    {{ form_widget(form.company_name) }}
 
                 </div>
                 <div class="col-md-6 form-group">

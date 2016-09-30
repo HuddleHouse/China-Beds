@@ -1,0 +1,71 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}New Credit Request{% endblock %}
+{% block page_title %}
+    New Credit Request
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('ledger_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#ledger_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    {% if not form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(form.submittedForUser) }}
+                    {{ form_errors(form.amount) }}
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                {% if app.user.hasRole('ROLE_ADMIN') %}
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.submittedForUser) }}
+                    {{ form_widget(form.submittedForUser) }}
+                </div>
+                {% else %}
+                    {% do form.submittedForUser.setRendered %}
+                {% endif %}
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.amountRequested) }}
+                    {{ form_widget(form.amountRequested) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_widget(form.description) }}
+                </div>
+            </div>
+            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

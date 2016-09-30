@@ -11,7 +11,7 @@
     <script>
         $(document).ready(function () {
             $('#latest-orders').DataTable({
-                "iDisplayLength": 10, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "iDisplayLength": 10, "order": [[ 1, "desc" ]],  responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
             $('#my-retailers').DataTable({
                 "iDisplayLength": 10, "language": {"emptyTable": "You have no Retailers assigned to you yet. Create one now!"}, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
             $('#my-distributors').DataTable({
@@ -156,6 +156,14 @@
                 width: 70%;
                 margin: 30px auto;
             }
+        }
+        .box {
+            -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+        }
+        .table {
+            -webkit-box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0) !important;
+            box-shadow: 0 0px 0px 0 rgba(0,0,0,.14),0 0px 0px 0px rgba(0,0,0,.2),0 0px 0px 0 rgba(0,0,0,.12) !important;
         }
     </style>
     <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
