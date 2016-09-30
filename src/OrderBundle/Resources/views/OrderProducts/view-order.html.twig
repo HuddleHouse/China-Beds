@@ -99,6 +99,8 @@
                     showErrorModal('Please fix the form errors.');
                 else if ($scope.cart_total > $scope.ledgerTotal)
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
+//                else if ($('#confirm-shipping').checked == false)
+//                    showErrorModal('You do not have enough in your ledger..');
                 else {
                     $.ajax({
                         type: 'POST',
