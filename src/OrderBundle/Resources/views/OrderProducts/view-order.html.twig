@@ -242,7 +242,7 @@
             <div class="row" style="margin-top: 20px;">
                 <div class="col-xs-12">
                     <h2 class="page-header">
-                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
+                        <div class="pull-right">Date: {{ order.submitDate | date('M d, Y h:i A') }}</div>
                         <span class="mdl-chip mdl-chip--contact" >
                             <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
                             <span class="mdl-chip__text">

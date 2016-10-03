@@ -121,6 +121,7 @@
                         if (is_pickup == 1) {
                             $('#ship').hide();
                             $scope.form_info['ship'] = false;
+                            $scope.form_info['pick_up'] = true;
                             $('#pick_up_date').show();
                             $('#pick_up_agent').show();
                             $('#pick_up_warehouse').show();
@@ -129,6 +130,7 @@
                         else {
                             $('#ship').show();
                             $scope.form_info['pick_up'] = false;
+                            $scope.form_info['ship'] = true;
                             $('#pick_up_date').hide();
                             $('#pick_up_agent').hide();
                             $('#pick_up_warehouse').hide();
