@@ -160,15 +160,7 @@
                 });
             {% endif %}
 
-            $scope.validate = function () {
-                if($scope.form_info['pick_up'] == true) {
-                    var is_error = 0;
-                    if(typeof($scope.form_info['po']) == "undefined" || $scope.form_info['po'] == null) {
-                        is_error += 1;
-                        $('#po').addClass('error');
-                    }
-                }
-            };
+
 
             $scope.updateCart = function (variantId, cost, max, type) {
                 console.log(type);
@@ -473,13 +465,13 @@
                     }
                 }
 
-                if(po == '') {
-                    count += 1;
-                    $('#po').addClass('error');
-                }
-                else if(po != '') {
-                    $('#po').removeClass('error');
-                }
+//                if(po == '') {
+//                    count += 1;
+//                    $('#po').addClass('error');
+//                }
+//                else if(po != '') {
+//                    $('#po').removeClass('error');
+//                }
                 return count;
             };
 
