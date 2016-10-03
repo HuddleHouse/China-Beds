@@ -939,5 +939,37 @@ class Warehouse
         $this->inventory_on_hold = $inventory_on_hold;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPopInventory()
+    {
+        return $this->pop_inventory;
+    }
+
+    /**
+     * @param mixed $pop_inventory
+     */
+    public function setPopInventory($pop_inventory)
+    {
+        $this->pop_inventory = $pop_inventory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPopInventoryOnHold()
+    {
+        return $this->pop_inventory_on_hold;
+    }
+
+    /**
+     * @param mixed $pop_inventory_on_hold
+     */
+    public function setPopInventoryOnHold($pop_inventory_on_hold)
+    {
+        $this->pop_inventory_on_hold = $pop_inventory_on_hold;
+    }
+
 
 }

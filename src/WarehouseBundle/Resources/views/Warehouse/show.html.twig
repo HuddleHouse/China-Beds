@@ -17,11 +17,16 @@
         $(document).ready(function () {
             $('#inventory-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+             $('#pop-inventory-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+
         });
+
 
         var app = angular.module('myApp', ['ngFileUpload']);
         app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
             $scope.inventory_data = {{ inventory_data | json_encode | raw }};
+            $scope.pop_inventory_data = {{ pop_inventory | json_encode | raw }};
 
             $scope.addInventory = function () {
                 var variant_id = $('#variant').val();
@@ -34,8 +39,28 @@
                     data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
                     success: function (data) {
                         $scope.$apply(function () {
-                            $scope.inventory_data = data;
+                            $scope.inventory_data = data['inventory'];
                             $('#quantity').val('');
+                            $('#inventory-table').DataTable();
+                        });
+                    }
+                });
+            };
+
+            $scope.addPopInventory = function () {
+                var pop_id = $('#pop-select').val();
+                var quantity = $('#pop-quantity').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_add_warehouse_pop_inventory') }}",
+                    dataType: 'json',
+                    data: {pop_id: pop_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            $scope.pop_inventory_data = data['pop_inventory'];
+                            $('#pop-quantity').val('');
+                            $('#pop-inventory-table').DataTable();
                         });
                     }
                 });
@@ -80,6 +105,7 @@
                 <li class=""><a href="#stock_transfers" data-toggle="tab" aria-expanded="false">Stock Transfers</a></li>
                 <li class=""><a href="#stock_adjustments" data-toggle="tab" aria-expanded="false">Stock Adjustments</a></li>
                 <li class=""><a href="#inventory" data-toggle="tab" aria-expanded="false">Inventory</a></li>
+                <li class=""><a href="#pop_inventory" data-toggle="tab" aria-expanded="false">POP Inventory</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="all_active" style="padding-top: 25px;">
@@ -104,6 +130,9 @@
 
                 <div class="tab-pane" id="inventory">
                     {% include '@Warehouse/Warehouse/show-inventory.html.twig' %}
+                </div>
+                <div class="tab-pane" id="pop_inventory">
+                    {% include '@Warehouse/Warehouse/show-pop-inventory.html.twig' %}
                 </div>
             </div>
             <!-- /.tab-content -->

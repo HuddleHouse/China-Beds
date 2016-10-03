@@ -98,7 +98,9 @@ class WarehouseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
+        $pop = $em->getRepository('InventoryBundle:PopItem')->findAll();
         $inventory_data = $em->getRepository('WarehouseBundle:WareHouse')->getWarehouseInventoryArray($warehouse);
+        $pop_inventory_data = $em->getRepository('WarehouseBundle:WareHouse')->getWarehousePopInventoryArray($warehouse);
         $active_po = $em->getRepository('WarehouseBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
         $all_po = $em->getRepository('WarehouseBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 
@@ -121,7 +123,9 @@ class WarehouseController extends Controller
             'all_st' => $all_st,
             'all_adj' => $all_adj,
             'all' => $all,
-            'active' => $active
+            'active' => $active,
+            'pop_inventory' => $pop_inventory_data,
+            'pop' => $pop
         ));
     }
 
