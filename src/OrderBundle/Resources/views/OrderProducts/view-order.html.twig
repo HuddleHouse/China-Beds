@@ -428,9 +428,12 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                    {% if order.isPickUp == 0 %}
+                        <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                    {% elseif order.isPickUp == 1 %}
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                         <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
+                    {% endif %}
                     <div class="table-responsive" style="margin-top: 46px;">
                         <table class="table">
                             <tbody>

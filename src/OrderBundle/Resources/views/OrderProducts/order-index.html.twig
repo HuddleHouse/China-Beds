@@ -260,18 +260,29 @@
             $scope.submitCart = function () {
                 var errors = $scope.validate();
                 console.log(errors);
+                $('#submit-button').prop('disabled', true);
+                $('#submit-button').addClass('button-error');
                 $('.fa.fa-circle').addClass('fa-circle-thin');
                 $('.fa-circle').removeClass('fa-circle');
 
                 $('#side-review').removeClass('fa-circle-thin');
                 $('#side-review').addClass('fa-circle');
 
-                if($scope.form_info['pick_up'] == false && $scope.form_info['ship'] == false)
+                if($scope.form_info['pick_up'] == false && $scope.form_info['ship'] == false) {
                     showErrorModal('Please select to Ship the Items or to Pick them up.');
-                else if($scope.cart_num_items == 0)
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
+                else if($scope.cart_num_items == 0) {
                     showErrorModal('Please add at least one item to your cart.');
-                else if(errors >= 1)
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
+                else if(errors >= 1) {
                     showErrorModal('Form is missing information.');
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
                 else if (errors <= 0) {
                     addSpinner();
                     $.ajax({
