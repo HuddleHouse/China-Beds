@@ -195,13 +195,13 @@ class ProfileController extends Controller
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating information: ' . $e->getMessage());
-                return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
+                return $this->render('@App/Profile/edit.html.twig', array(
                     'form' => $form->createView()
                 ));
             }
         }
 
-        return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
+        return $this->render('@App/Profile/edit.html.twig', array(
             'form' => $form->createView()
         ));
     }

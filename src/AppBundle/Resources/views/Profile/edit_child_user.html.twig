@@ -16,9 +16,9 @@
     {% if not form.vars.valid %}
         <div class="col-md-12">
             <div class="bs-callout bs-callout-danger ">
-                {{ form_errors(form.username) }}
-                {{ form_errors(form.email) }}
-                {{ form_errors(form.current_password) }}
+                {#{{ form_errors(form.username) }}#}
+                {#{{ form_errors(form.email) }}#}
+                {#{{ form_errors(form.current_password) }}#}
             </div>
         </div>
     {% endif %}
@@ -44,7 +44,6 @@
                 <div class="col-md-6 form-group">
                     {{ form_label(form.company_name) }}
                     {{ form_widget(form.company_name) }}
-
                 </div>
                 <div class="col-md-6 form-group">
                     {{ form_label(form.email) }}
