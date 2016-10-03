@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 use AppBundle\Entity\User;
+use OrderBundle\Entity\Orders;
 
 /**
  * UserRepository
@@ -30,6 +31,81 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             $distributors[] = $dist;
         }
         return $distributors;
+    }
+
+    public function canViewOrder(Orders $order, User $user) {
+        $is_allowed = 0;
+        if($user->hasRole('ROLE_ADMIN'))
+            return 1;
+        else if($order->getSubmittedForUser()->getId() == $user->getId())
+            return 1;
+        else if($order->getSubmittedByUser()->getId() == $user->getId())
+            return 1;
+
+
+        if($user->hasRole('ROLE_DISTRIBUTOR')) {
+            foreach($user->getRetailers() as $item) {
+                if(!isset($user_ids[$item->getId()])) {
+                    $user_ids[$item->getId()] = $item->getId();
+                    $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item));
+                    foreach($data as $item)
+                        if($item->getId() == $user->getId())
+                            return 1;
+                }
+            }
+        }
+        if($user->hasRole('ROLE_SALES_REP')){
+            foreach($user->getDistributors() as $distributor) {
+                if(!isset($user_ids[$distributor->getId()])) {
+                    $user_ids[$distributor->getId()] = $distributor->getId();
+                    $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
+                    foreach($data as $item)
+                        if($item->getId() == $user->getId())
+                            return 1;
+                }
+                foreach($distributor->getRetailers() as $retailer) {
+                    if(!isset($user_ids[$retailer->getId()])) {
+                        $user_ids[$retailer->getId()] = $retailer->getId();
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
+                        foreach($data as $item)
+                            if($item->getId() == $user->getId())
+                                return 1;
+                    }
+                }
+            }
+        }
+        if($user->hasRole('ROLE_SALES_MANAGER')) {
+            foreach($user->getSalesReps() as $salesRep) {
+                if(!isset($user_ids[$salesRep->getId()])) {
+                    $user_ids[$salesRep->getId()] = $salesRep->getId();
+                    $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $salesRep));
+                    foreach($data as $item)
+                        if($item->getId() == $user->getId())
+                            return 1;
+                }
+                foreach($salesRep->getDistributors() as $distributor) {
+                    if(!isset($user_ids[$distributor->getId()])) {
+                        $user_ids[$distributor->getId()] = $distributor->getId();
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
+                        foreach($data as $item)
+                            if($item->getId() == $user->getId())
+                                return 1;
+                    }
+                    foreach($distributor->getRetailers() as $retailer) {
+                        if(!isset($user_ids[$retailer->getId()])) {
+                            $user_ids[$retailer->getId()] = $retailer->getId();
+                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
+                            foreach($data as $item)
+                                if($item->getId() == $user->getId())
+                                    return 1;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return $is_allowed;
     }
 
     /**

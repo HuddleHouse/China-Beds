@@ -102,34 +102,40 @@ class OrderProductsController extends Controller
     public function renderOrderReviewAction(Channel $channel, Orders $order)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->getUser();
-        $user_channels = $user->getUserChannelsArray();
 
-        if($user_channels[$channel->getId()])
-            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
+
+        if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
+            $user = $this->getUser();
+            $user_channels = $user->getUserChannelsArray();
+
+            if($user_channels[$channel->getId()])
+                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
+            else
+                $this->redirectToRoute('404');
+
+            $groups = $user->getGroupsArray();
+            $is_dis = $is_retail = 0;
+
+            if(isset($groups['Retailer']))
+                $is_retail = 1;
+            if(isset($groups['Distributor']))
+                $is_dis = 1;
+            $pop = $order->getPopItems();
+
+
+            return $this->render('@Order/OrderProducts/view-order.html.twig', array(
+                'channel' => $channel,
+                'order' => $order,
+                'user' => $user,
+                'product_data' => $product_data,
+                'is_retail' => $is_retail,
+                'is_dis' => $is_dis,
+                'pop_items' => $pop,
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
+            ));
+        }
         else
-            $this->redirectToRoute('404');
-
-        $groups = $user->getGroupsArray();
-        $is_dis = $is_retail = 0;
-
-        if(isset($groups['Retailer']))
-            $is_retail = 1;
-        if(isset($groups['Distributor']))
-            $is_dis = 1;
-        $pop = $order->getPopItems();
-
-
-        return $this->render('@Order/OrderProducts/view-order.html.twig', array(
-            'channel' => $channel,
-            'order' => $order,
-            'user' => $user,
-            'product_data' => $product_data,
-            'is_retail' => $is_retail,
-            'is_dis' => $is_dis,
-            'pop_items' => $pop,
-            'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
-        ));
+            return $this->redirectToRoute('404');
     }
 
 
