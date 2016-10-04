@@ -1,6 +1,7 @@
 <?php
 
 namespace OrderBundle\Repository;
+use AppBundle\Entity\User;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersWarehouseInfo;
 use WarehouseBundle\Entity\Warehouse;
@@ -140,5 +141,9 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();
+    }
+
+    public function getLatestOrdersForUser(User $user) {
+        return $this->getEntityManager()->getRepository('AppBundle:User')->getLatestOrdersForUser($user);
     }
 }

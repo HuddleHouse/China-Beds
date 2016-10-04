@@ -890,12 +890,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "cf2fa7dba1954645a8a28a4720d0dbb68b6fd6f1"
+                "reference": "7abb0ff366c404f2c2b34fd264693071148351a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/cf2fa7dba1954645a8a28a4720d0dbb68b6fd6f1",
-                "reference": "cf2fa7dba1954645a8a28a4720d0dbb68b6fd6f1",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7abb0ff366c404f2c2b34fd264693071148351a2",
+                "reference": "7abb0ff366c404f2c2b34fd264693071148351a2",
                 "shasum": ""
             },
             "require": {
@@ -957,7 +957,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-09-30 08:33:06"
+            "time": "2016-09-26 07:23:44"
         },
         {
             "name": "incenteev/composer-parameter-handler",

@@ -208,7 +208,7 @@ class Orders
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="order")
      */
-    private $ledger;
+    private $ledgers;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="order")
@@ -220,12 +220,17 @@ class Orders
      */
     private $rebates;
 
+    /**
+     * Orders constructor.
+     * @param null $info
+     */
     public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->rebates = new ArrayCollection();
+        $this->ledgers = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -648,7 +653,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getProductVariants()
     {
@@ -656,7 +661,7 @@ class Orders
     }
 
     /**
-     * @param mixed $product_variants
+     * @param ArrayCollection $product_variants
      */
     public function setProductVariants($product_variants)
     {
@@ -768,7 +773,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getPopItems()
     {
@@ -776,7 +781,7 @@ class Orders
     }
 
     /**
-     * @param mixed $pop_items
+     * @param ArrayCollection $pop_items
      */
     public function setPopItems($pop_items)
     {
@@ -823,7 +828,7 @@ class Orders
         return $this->ship_description;
     }
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getWarrantyClaims()
     {
@@ -854,7 +859,7 @@ class Orders
         $this->ship_code = $ship_code;
     }
     /**
-     * @param mixed $warranty_claims
+     * @param ArrayCollection $warranty_claims
      */
     public function setWarrantyClaims($warranty_claims)
     {
@@ -862,23 +867,23 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
-    public function getLedger()
+    public function getLedgers()
     {
-        return $this->ledger;
+        return $this->ledgers;
     }
 
     /**
-     * @param mixed $ledger
+     * @param ArrayCollection $ledgers
      */
-    public function setLedger($ledger)
+    public function setLedgers($ledgers)
     {
-        $this->ledger = $ledger;
+        $this->ledgers = $ledgers;
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getRebates()
     {
@@ -886,7 +891,7 @@ class Orders
     }
 
     /**
-     * @param mixed $rebates
+     * @param ArrayCollection $rebates
      */
     public function setRebates($rebates)
     {

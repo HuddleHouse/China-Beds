@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}New Warranty Claim{% endblock %}
+{% block title %}New {{ channel.name }} Warranty Claim{% endblock %}
 {% block page_title %}
-    New Warranty Claim
+    New {{ channel.name }} Warranty Claim
 {% endblock page_title %}
 
 {% block page_name %}
@@ -26,6 +26,24 @@
                 }
             });
         });
+
+        function getProductVariants() {
+            var el = $('#warranty_claim_productVariant');
+            $.ajax({
+                beforeSend: function() {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_product_variants_from_order') }}",
+                dataType: 'json',
+                data: {order_id: $('#warranty_claim_order').val()},
+                success: function (variants) {
+                    el.html(variants);
+                    el.prop('disabled', false);
+                }
+            });
+        }
     </script>
 {% endblock footer %}
 
@@ -36,6 +54,7 @@
                 <div class="alert alert-danger">
                     {{ form_errors(form.order) }}
                     {{ form_errors(form.creditRequested) }}
+                    {{ form_errors(form.productVariant) }}
                     {{ form_errors(form.description) }}
                 </div>
             </div>
@@ -45,14 +64,6 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {% if app.user.hasRole('ROLE_ADMIN') %}
-                    <div class="col-md-4 form-group">
-                        {{ form_label(form.submittedForUser) }}
-                        {{ form_widget(form.submittedForUser) }}
-                    </div>
-                {% else %}
-                    {% do form.submittedForUser.setRendered %}
-                {% endif %}
                 <div class="col-md-4 form-group">
                     {{ form_label(form.creditRequested) }}
                     {{ form_widget(form.creditRequested) }}
@@ -60,6 +71,10 @@
                 <div class="col-md-4 form-group">
                     {{ form_label(form.order) }}
                     {{ form_widget(form.order) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.productVariant) }}
+                    {{ form_widget(form.productVariant) }}
                 </div>
             </div>
             <div class="row">

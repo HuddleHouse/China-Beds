@@ -22,91 +22,84 @@
             table.on('click', 'td#description', function () {
                 var tr = $(this).parents('tr');
                 var row = table.row( tr );
-                var expanded_d = Boolean($(tr).attr('description-expanded'));
-                var expanded_r = Boolean($(tr).attr('resolution-expanded'));
+                var expanded_d = tr.attr('data-description-expanded');
+                var expanded_r = tr.attr('data-resolution-expanded');
 
-                console.log('expanded_d: ' + expanded_d);
-                console.log('expanded_r: ' + expanded_r);
-
-                if (expanded_d && expanded_r) {
-                    tr.data('description-expanded', '0');                    // This row is already open - close it
-                    $(this).find('li[data-dt-row="'+row.index()+'"][data-dt-column="5"]').remove();
+                if (expanded_d == 1 && expanded_r == 1) {
+                    tr.attr('data-description-expanded', 0);                    // This row is already open - close it
+                    $('li[data-dt-row="'+row.index()+'"][data-dt-column="5"]').remove();
                     $(this).closest('td#description').html('Click to expand');
                 }
-                else if(expanded_d && !expanded_r) {
-                    tr.attr('description-expanded', '0');
+                else if(expanded_d == 1 && expanded_r == 0) {
+                    tr.attr('data-description-expanded', 0);
                     row.child.hide();
                     $(this).closest('td#description').html('Click to expand');
                 }
-                else if(!expanded_d && expanded_r) {
-                    tr.attr('description-expanded', '1');
+                else if(expanded_d == 0 && expanded_r == 1) {
+                    tr.attr('data-description-expanded', 1);
                     // This row is already open - close it
-                    $(this).find('ul[data-dt-index="'+row.index()+'"]').prepend(format(false, 'R', tr.data('description-body'), row.index()));
+                    $('ul[data-dtr-index="'+row.index()+'"]').prepend(format(false, 'd', tr.attr('data-description-body'), row.index()));
                     $(this).closest('td#description').html('Click to collapse');
                 }
                 else {
-                    tr.attr('description-expanded', '1');
+                    tr.attr('data-description-expanded', 1);
                     // Open this row (the format() function would return the data to be shown)
-                    row.child(format(true, 'd', tr.data('description-body'), row.index()), "child").show();
+                    row.child(format(true, 'd', tr.attr('data-description-body'), row.index()), "child").show();
                     $(this).closest('td#description').html('Click to collapse');
                     tr.addClass('shown');
                 }
-
             });
             //hide the full resolution
             table.on('click', 'td#resolution', function () {
                 var tr = $(this).parents('tr');
                 var row = table.row( tr );
-                var expanded_d = Boolean($(tr).attr('description-expanded'));
-                var expanded_r = Boolean($(tr).attr('resolution-expanded'));
+                var expanded_d = tr.attr('data-description-expanded');
+                var expanded_r = tr.attr('data-resolution-expanded');
 
-                console.log('expanded_d: ' + expanded_d);
-                console.log('expanded_r: ' + expanded_r);
-
-                if (expanded_d && expanded_r) {
-                    tr.attr('resolution-expanded', '0');
+                if (expanded_d == 1 && expanded_r == 1) {
+                    tr.attr('data-resolution-expanded', 0);
                     // This row is already open - close it
-                    $(this).find('li[data-dt-row="'+row.index()+'"][data-dt-column="6"]').remove();
+                    $('li[data-dt-row="'+row.index()+'"][data-dt-column="6"]').remove();
                     $(this).closest('td#resolution').html('Click to expand');
                 }
-                if (expanded_r && !expanded_d) {
-                    tr.attr('resolution-expanded', '0');
+                else if (expanded_r == 1 && expanded_d == 0) {
+                    tr.attr('data-resolution-expanded', 0);
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
                     $(this).closest('td#resolution').html('Click to expand');
                 }
-                else if(!expanded_r && expanded_d) {
-                    tr.attr('resolution-expanded', '1');
+                else if(expanded_r == 0 && expanded_d == 1) {
+                    tr.attr('data-resolution-expanded', 1);
                     // This row is already open - close it
-                    $(this).find('ul[data-dt-index="'+row.index()+'"]').append(format(false, 'R', tr.data('resolution-body'), row.index()));
+                    $('ul[data-dtr-index="'+row.index()+'"]').append(format(false, 'R', tr.attr('data-resolution-body'), row.index()));
                     $(this).closest('td#resolution').html('Click to collapse');
                 }
                 else {
-                    tr.attr('resolution-expanded', '1');
+                    tr.attr('data-resolution-expanded', 1);
                     // Open this row (the format() function would return the data to be shown)
-                    row.child(format(true, 'R', tr.data('resolution-body'), row.index()), "child").show();
+                    row.child(format(true, 'R', tr.attr('data-resolution-body'), row.index()), "child").show();
                     $(this).closest('td#resolution').html('Click to collapse');
                     tr.addClass('shown');
                 }
-
             });
             //put the description info in the child if table is in responsive mode
             table.on('responsive-display', function (e, datatable, row, showHide, update) {
 //                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                var description = $(row.node()).data('description-body');
-                var resolution = $(row.node()).data('resolution-body');
+                var description = $(row.node()).attr('data-description-body');
+                var resolution = $(row.node()).attr('data-resolution-body');
                 //hide expanded descriptions if shown
-                if(row.child().isShown())
-//                    row.child().hide();
-                    if(showHide) {
-                        $(row.child()).find('span.dtr-data span.description').html(description);
-                        $(row.child()).find('span.dtr-data span.resolution').html(resolution);
-                    }
-                    else {
-                        $(row.child()).find('span.dtr-data span.description').html('Click to expand');
-                        $(row.child()).find('span.dtr-data span.resolution').html('Click to expand');
-                    }
+//                if(row.child())
+//                    if(row.child().isShown())
+//                        row.child().hide();
+                if(showHide) {
+                    $('li[data-dt-row="'+row.index()+'"][data-dt-column="5"]').find('span.dtr-data').html(description);
+                    $('li[data-dt-row="'+row.index()+'"][data-dt-column="6"]').find('span.dtr-data').html(resolution);
+                }
+                else {
+                    $('li[data-dt-row="'+row.index()+'"][data-dt-column="5"]').find('span.dtr-data').html('Click to expand');
+                    $('li[data-dt-row="'+row.index()+'"][data-dt-column="6"]').find('span.dtr-data').html('Click to expand');
+                }
             });
         });
 
@@ -151,6 +144,7 @@
                         <th>Credit Requested</th>
                         <th>Description</th>
                         <th>Resolution</th>
+                        {% if user.hasRole('ROLE_ADMIN') %}<th>Channel</th>{% endif %}
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -162,8 +156,11 @@
                             <td>{% if warrantyClaim.dateOfClaim %}{{ warrantyClaim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{{ warrantyClaim.submittedByUser }}</td>
                             <td>{{ warrantyClaim.creditRequested }}</td>
-                            <td id="description">Click to expand</td>
-                            <td id="resolution">Click to expand</td>
+                            {% if warrantyClaim.description is not null %}<td id="description">Click to expand</td>
+                            {% else %}<td>--</td>{% endif %}
+                            {% if warrantyClaim.resolution is not null %}<td id="resolution">Click to expand</td>
+                            {% else %}<td>--</td>{% endif %}
+                            {% if user.hasRole('ROLE_ADMIN') %}<td>{{ warrantyClaim.channel.name | default('--') }}</td>{% endif %}
                             <td>
                                 <ul>
                                     <li>
@@ -180,11 +177,5 @@
                 </table>
             </div>
         </div>
-    </div>
-    <a id="new-button" href="{{ path('warrantyclaim_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons">add</i>
-    </a>
-    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Submit a new warranty claim
     </div>
 {% endblock %}

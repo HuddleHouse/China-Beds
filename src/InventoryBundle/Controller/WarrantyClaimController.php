@@ -2,6 +2,8 @@
 
 namespace InventoryBundle\Controller;
 
+use InventoryBundle\Entity\Channel;
+use InventoryBundle\Form\WarrantyApprovalType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -26,20 +28,24 @@ class WarrantyClaimController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $warrantyClaims = $em->getRepository('InventoryBundle:WarrantyClaim')->findAll();
+        if($this->getUser()->hasRole('ROLE_ADMIN'))
+            $warrantyClaims = $em->getRepository('InventoryBundle:WarrantyClaim')->findAll();
+        else
+            $warrantyClaims = $em->getRepository('InventoryBundle:WarrantyClaim')->findby(array('submittedForUser' => $this->getUser()));
 
         return $this->render('@Inventory/WarrantyClaim/index.html.twig', array(
             'warrantyClaims' => $warrantyClaims,
+            'user' => $this->getUser()
         ));
     }
 
     /**
      * Creates a new WarrantyClaim entity.
      *
-     * @Route("/new", name="warrantyclaim_new")
+     * @Route("/{id}/new", name="warrantyclaim_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, Channel $channel)
     {
         $warrantyClaim = new WarrantyClaim();
         $form = $this->createForm(WarrantyClaimType::class, $warrantyClaim);
@@ -48,7 +54,14 @@ class WarrantyClaimController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                //set values that the form didn't
+                $warrantyClaim->setSubmittedForUser($warrantyClaim->getOrder()->getSubmittedForUser());
                 $warrantyClaim->setSubmittedByUser($this->getUser());
+                $warrantyClaim->setChannel($channel);
+                //set other side of relations
+                $channel->getWarrantyClaims()->add($warrantyClaim);
+                $this->getUser()->getSubmittedWarrantyClaims()->add($warrantyClaim);
+                $warrantyClaim->getSubmittedForUser()->getWarrantyClaims()->add($warrantyClaim);
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
@@ -58,6 +71,7 @@ class WarrantyClaimController extends Controller
                 $this->addFlash('error', 'Error creating Warranty Claim Item: ' . $e->getMessage());
                 return $this->render('@Inventory/WarrantyClaim/new.html.twig', array(
                     'warrantyClaim' => $warrantyClaim,
+                    'channel' => $channel,
                     'form' => $form->createView(),
                 ));
             }
@@ -65,23 +79,8 @@ class WarrantyClaimController extends Controller
 
         return $this->render('@Inventory/WarrantyClaim/new.html.twig', array(
             'warrantyClaim' => $warrantyClaim,
+            'channel' => $channel,
             'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a WarrantyClaim entity.
-     *
-     * @Route("/{id}", name="warrantyclaim_show")
-     * @Method("GET")
-     */
-    public function showAction(WarrantyClaim $warrantyClaim)
-    {
-        $deleteForm = $this->createDeleteForm($warrantyClaim);
-
-        return $this->render('@Inventory/WarrantyClaim/show.html.twig', array(
-            'warrantyClaim' => $warrantyClaim,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -121,6 +120,47 @@ class WarrantyClaimController extends Controller
             'warrantyClaim' => $warrantyClaim,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Shows admins warranty claims so they can approve or deny them.
+     *
+     * @Route("/{id}", name="warrantyclaim_show")
+     * @Method({"GET", "POST"})
+     */
+    public function showAction(Request $request, WarrantyClaim $warrantyClaim)
+    {
+        $form = $this->createForm(WarrantyApprovalType::class, $warrantyClaim);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $ledger->setCreditedByUser($this->getUser());
+                $this->getUser()->getCreditedLedgers()->add($ledger);
+                $ledger->setDatePosted(new \DateTime());
+                $ledger->setIsArchived(true);
+                $em->persist($ledger);
+                $em->flush();
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error updating credit request entry: ' . $e->getMessage());
+                return $this->render('@Inventory/WarrantyClaim/show.html.twig', array(
+                    'warranty_claim' => $warrantyClaim,
+                    'order' => $warrantyClaim->getOrder(),
+                    'form' => $form->createView(),
+                ));
+            }
+
+            $this->addFlash('notice', 'Credit posted.');
+            return $this->redirectToRoute('warrantyclaim_index');
+        }
+
+        return $this->render('@Inventory/WarrantyClaim/show.html.twig', array(
+            'warranty_claim' => $warrantyClaim,
+            'order' => $warrantyClaim->getOrder(),
+            'form' => $form->createView()
         ));
     }
 

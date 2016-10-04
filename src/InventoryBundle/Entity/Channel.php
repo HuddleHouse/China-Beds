@@ -52,9 +52,32 @@ class Channel
      */
     protected $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="channel")
+     *
+     */
+    protected $ledgers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="channel")
+     *
+     */
+    protected $warranty_claims;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="channel")
+     *
+     */
+    protected $rebates;
+
+    /**
+     * Channel constructor.
+     */
     public function __construct() {
         $this->product_channels = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->ledgers = new ArrayCollection();
+        $this->warranty_claims = new ArrayCollection();
     }
     
     /**
@@ -108,7 +131,7 @@ class Channel
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getProductChannels()
     {
@@ -116,7 +139,7 @@ class Channel
     }
 
     /**
-     * @param mixed $product_attributes
+     * @param ArrayCollection $product_attributes
      */
     public function setProductChannels($product_attributes)
     {
@@ -124,7 +147,7 @@ class Channel
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getUsers()
     {
@@ -132,7 +155,7 @@ class Channel
     }
 
     /**
-     * @param mixed $users
+     * @param ArrayCollection $users
      */
     public function setUsers($users)
     {
@@ -140,7 +163,7 @@ class Channel
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getOrders()
     {
@@ -148,13 +171,59 @@ class Channel
     }
 
     /**
-     * @param mixed $orders
+     * @param ArrayCollection $orders
      */
     public function setOrders($orders)
     {
         $this->orders = $orders;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
 
+    /**
+     * @param ArrayCollection $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getWarrantyClaims()
+    {
+        return $this->warranty_claims;
+    }
+
+    /**
+     * @param ArrayCollection $warranty_claims
+     */
+    public function setWarrantyClaims($warranty_claims)
+    {
+        $this->warranty_claims = $warranty_claims;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRebates()
+    {
+        return $this->rebates;
+    }
+
+    /**
+     * @param ArrayCollection $rebates
+     */
+    public function setRebates($rebates)
+    {
+        $this->rebates = $rebates;
+    }
 }
 
