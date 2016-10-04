@@ -113,8 +113,30 @@ class WarehouseController extends Controller
         $all_orders = $em->getRepository('OrderBundle:Orders')->getAllForWarehouseArray($warehouse);
         $active_orders = $em->getRepository('OrderBundle:Orders')->getActiveForWarehouseArray($warehouse);
 
-        $all = array_merge($all_po, $all_st, $all_adj);
-        $active = array_merge($active_po, $active_st, $active_adj);
+        $all = array_merge($all_po, $all_st, $all_adj, $all_orders);
+        $all_dates = array();
+        foreach($all as $item) {
+            if(isset($item['date']))
+                $all_dates[] = $item['date'];
+            else if(isset($item['stock_due_date']))
+                $all_dates[] = $item['stock_due_date'];
+
+        }
+
+//        array_multisort($all_dates, SORT_DESC, $all);
+
+        $active = array_merge($active_po, $active_st, $active_adj, $active_orders);
+        $active_dates = array();
+        foreach($active as $item) {
+            if(isset($item['date']))
+                $active_dates[] = $item['date'];
+            else if(isset($item['stock_due_date']))
+                $active_dates[] = $item['stock_due_date'];
+
+        }
+
+//        array_multisort($active_dates, SORT_DESC, $active);
+
 
         return $this->render('@Warehouse/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
@@ -128,7 +150,8 @@ class WarehouseController extends Controller
             'all' => $all,
             'active' => $active,
             'pop_inventory' => $pop_inventory_data,
-            'pop' => $pop
+            'pop' => $pop,
+            'orders' => $all_orders
         ));
     }
 

@@ -1,5 +1,5 @@
 <div id="display-variants">
-    <div class="box-body">
+    d<div class="box-body">
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
@@ -29,6 +29,12 @@
                         {% elseif item.type == "stock_adjustment" %}
                             <td><a href="{{ path('stockadjustment_show', { 'id': item.id }) }}">{{ item.order_number }}</a></td>
                             <td>Stock Adjustment</td>
+                            <td>{{ item.warehouse_name }}</td>
+                            <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
+                            <td>{{ item.date | date("m/d/Y")  }}</td>
+                        {% elseif item.type == "order" %}
+                            <td><a href="{{ path('order_products_warehouse_review', { 'id_order': item.order_id, 'id_warehouse': warehouse.id }) }}">{{ item.order_number }}</a></td>
+                            <td>Order</td>
                             <td>{{ item.warehouse_name }}</td>
                             <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
                             <td>{{ item.date | date("m/d/Y")  }}</td>

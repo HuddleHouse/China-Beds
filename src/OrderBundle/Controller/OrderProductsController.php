@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * Channel controller.
@@ -137,6 +138,54 @@ class OrderProductsController extends Controller
             return $this->redirectToRoute('404');
     }
 
+
+    /**
+     *
+     * @Route("/{id_order}/warehouse-review/{id_warehouse}/", name="order_products_warehouse_review")
+     *
+     * @ParamConverter("warehouse", class="WarehouseBundle:Warehouse", options={"id" = "id_warehouse"})
+     * @ParamConverter("order", class="OrderBundle:Orders", options={"id" = "id_order"})
+     *
+     * @Method("GET")
+     */
+    public function renderOrderWarehouseReviewAction(Orders $order, Warehouse $warehouse)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $channel = $order->getChannel();
+
+        if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
+            $user = $this->getUser();
+            $user_channels = $user->getUserChannelsArray();
+
+            if($user_channels[$channel->getId()])
+                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
+            else
+                $this->redirectToRoute('404');
+
+            $groups = $user->getGroupsArray();
+            $is_dis = $is_retail = 0;
+
+            if(isset($groups['Retailer']))
+                $is_retail = 1;
+            if(isset($groups['Distributor']))
+                $is_dis = 1;
+            $pop = $order->getPopItems();
+
+
+            return $this->render('@Order/OrderProducts/view-order.html.twig', array(
+                'channel' => $channel,
+                'order' => $order,
+                'user' => $user,
+                'product_data' => $product_data,
+                'is_retail' => $is_retail,
+                'is_dis' => $is_dis,
+                'pop_items' => $pop,
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
+            ));
+        }
+        else
+            return $this->redirectToRoute('404');
+    }
 
     /**
      *
