@@ -57,7 +57,6 @@ class OrderProductsController extends Controller
                 $em->remove($productVariant);
 
             $order->setData($info);
-
         }
         $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
         $em->persist($order);
