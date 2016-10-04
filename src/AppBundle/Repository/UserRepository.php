@@ -35,7 +35,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
     public function canViewOrder(Orders $order, User $user) {
         $is_allowed = 0;
-        if($user->hasRole('ROLE_ADMIN'))
+        if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE'))
             return 1;
         else if($order->getSubmittedForUser()->getId() == $user->getId())
             return 1;
@@ -125,7 +125,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         foreach($data as $item)
             $orders[] = $item;
 
-        if($user->hasRole('ROLE_ADMIN')) {
+        if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE')) {
             $orders = $em->getRepository('OrderBundle:Orders')->findAll();
         }
         else {
