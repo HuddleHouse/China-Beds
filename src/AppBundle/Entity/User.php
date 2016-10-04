@@ -768,7 +768,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedWarrantyClaims()
     {
@@ -776,7 +776,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $submitted_warranty_claims
+     * @param ArrayCollection $submitted_warranty_claims
      */
     public function setSubmittedWarrantyClaims($submitted_warranty_claims)
     {
@@ -1086,7 +1086,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getLedgers()
     {
@@ -1094,7 +1094,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $ledgers
+     * @param ArrayCollection $ledgers
      */
     public function setLedgers($ledgers)
     {
@@ -1102,7 +1102,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedLedgers()
     {
@@ -1110,7 +1110,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $submittedLedgers
+     * @param ArrayCollection $submittedLedgers
      */
     public function setSubmittedLedgers($submittedLedgers)
     {
@@ -1118,7 +1118,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getCreditedLedgers()
     {
@@ -1126,7 +1126,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $creditedLedgers
+     * @param ArrayCollection $creditedLedgers
      */
     public function setCreditedLedgers($creditedLedgers)
     {
@@ -1134,7 +1134,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getRebates()
     {
@@ -1142,7 +1142,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $rebates
+     * @param ArrayCollection $rebates
      */
     public function setRebates($rebates)
     {
@@ -1150,7 +1150,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedRebates()
     {
@@ -1158,7 +1158,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $submitted_rebates
+     * @param ArrayCollection $submitted_rebates
      */
     public function setSubmittedRebates($submitted_rebates)
     {

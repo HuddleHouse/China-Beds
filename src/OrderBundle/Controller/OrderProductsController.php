@@ -84,7 +84,6 @@ class OrderProductsController extends Controller
             'user' => $user,
             'user_warehouses' => $user_warehouses,
             'user_retailers' => $user_retailers,
-            'states' => $states,
             'pop' => $pop,
             'is_edit' => 0
       ));
@@ -203,7 +202,6 @@ class OrderProductsController extends Controller
             'user' => $user,
             'user_warehouses' => $user_warehouses,
             'user_retailers' => $user_retailers,
-            'states' => $states,
             'pop' => $pop,
             'order' => $order,
             'order_variants' => $order_variants,

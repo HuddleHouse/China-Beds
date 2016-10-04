@@ -62,12 +62,12 @@
         }
 
 
-        function createLedgerWithAPI(amount, submittedForUserId, description, type, typeId) {
+        function createLedgerWithAPI(amount, submittedForUserId, channelId, description, type, typeId) {
             $.ajax({
                 type: 'POST',
                 url: "{{ path('api_new_ledger') }}",
                 dataType: 'json',
-                data: {amount: amount, submittedForUserId: submittedForUserId, description: description, type: type, typeId: typeId},
+                data: {amount: amount, submittedForUserId: submittedForUserId, channelId: channelId, description: description, type: type, typeId: typeId},
                 success: function (data) {
                     console.log(JSON.stringify(data,null,4));
                 }
@@ -86,67 +86,39 @@
                         <th>Requested</th>
                         <th>Credited</th>
                         <th>Date Created</th>
-                        <th>Date Posted</th>
                         <th>User</th>
                         <th>Submitted by</th>
-                        <th>Credited by</th>
                         <th>ACH</th>
                         <th>Type</th>
                         <th>Description</th>
+                        {% if user.hasRole('ROLE_ADMIN') %}<th>Channel</th>{% endif %}
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for ledger in ledgers %}
-                        {% if ledger.description is not null %}
                         <tr data-child-value="{{ ledger.description }}">
+                            <td>{{ ledger.type }}</td>
                             <td>{{ ledger.amountRequested | number_format(2) }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
-                            <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
                             <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
-                            <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
-                            <td>{{ ledger.type }}</td>
-                            <td id="description"><span>Click to expand</span></td>
-                            <td>
-                                {% if app.user.hasRole('ROLE_ADMIN') %}
-                                    <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_show', { 'id': ledger.id }) }}">Show</a>
-                                {% endif %}
+                            {% if ledger.description is not null %}<td id="description"><span>Click to expand</span></td>
+                            {% else %} <td>--</td> {% endif %}
+                            {% if user.hasRole('ROLE_ADMIN') %}<td>{{ ledger.channel.name | default('--') }}</td>{% endif %}
+                        <td>
+                                {#{% if app.user.hasRole('ROLE_ADMIN') %}#}
+                                    {#<a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_show', { 'id': ledger.id }) }}">Show</a>#}
+                                {#{% endif %}#}
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
                             </td>
                         </tr>
-                        {% else %}
-                        <tr>
-                            <td>{{ ledger.amountRequested | number_format(2) }}</td>
-                            <td>{{ ledger.amountCredited | number_format(2) }}</td>
-                            <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
-                            <td>{% if ledger.datePosted %}{{ ledger.datePosted | date('m/d/y') }}{% else %}--{% endif %}</td>
-                            <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
-                            <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
-                            <td>{{ ledger.creditedByUser.fullName | default('--') }}</td>
-                            <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
-                            <td>{{ ledger.type }}</td>
-                            <td>None</td>
-                            <td>
-                                {% if app.user.hasRole('ROLE_ADMIN') %}
-                                    <a class="btn btn-raised btn-default btn-xs" href="{{ path('ledger_show', { 'id': ledger.id }) }}">Show</a>
-                                {% endif %}
-                                <a class="btn btn-raised btn-default btn-xs" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
-                            </td>
-                        </tr>
-                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
-    <a id="new-button" href="{{ path('ledger_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons">add</i>
-    </a>
-    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Submit new credit request
     </div>
 {% endblock content %}

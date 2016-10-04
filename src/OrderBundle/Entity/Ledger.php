@@ -120,19 +120,24 @@ class Ledger
     private $type = self::TYPE_CREDIT;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", inversedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", inversedBy="ledgers")
      */
     private $warrantyClaim;
 
     /**
-     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="ledgers")
      */
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="ledgers")
      */
     private $rebate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
+     */
+    private $channel;
 
     /**
      * Ledger constructor.
@@ -419,6 +424,22 @@ class Ledger
         $this->rebate = $rebate;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
+    }
+
     public function toArray() {
         $rtn = array(
             'id' => $this->getId(),
@@ -432,7 +453,8 @@ class Ledger
             'description' => $this->getDescription(),
             'type' => $this->getType(),
             'dateCreated' => $this->getDateCreated()->format('m/d/Y'),
-            'datePosted' => $this->getDatePosted() ? $this->getDatePosted()->format('m/d/Y') : null
+            'datePosted' => $this->getDatePosted() ? $this->getDatePosted()->format('m/d/Y') : null,
+            'channel' => $this->getChannel()
         );
 
         switch($this->getType()) {

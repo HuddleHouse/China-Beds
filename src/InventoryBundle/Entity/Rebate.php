@@ -91,13 +91,26 @@ class Rebate
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="rebate")
      */
-    private $ledger;
+    private $ledgers;
 
     /**
      * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="rebates")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
     private $order;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="rebates")
+     */
+    private $channel;
+
+    /**
+     * Rebate constructor.
+     */
+    public function __construct()
+    {
+        $this->ledgers = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -377,17 +390,17 @@ class Rebate
     /**
      * @return mixed
      */
-    public function getLedger()
+    public function getLedgers()
     {
-        return $this->ledger;
+        return $this->ledgers;
     }
 
     /**
-     * @param mixed $ledger
+     * @param mixed $ledgers
      */
-    public function setLedger($ledger)
+    public function setLedger($ledgers)
     {
-        $this->ledger = $ledger;
+        $this->ledgers = $ledgers;
     }
 
     /**
@@ -404,6 +417,22 @@ class Rebate
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param Channel $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 }
 

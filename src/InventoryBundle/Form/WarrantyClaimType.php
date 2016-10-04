@@ -2,9 +2,13 @@
 
 namespace InventoryBundle\Form;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use InventoryBundle\Entity\ProductVariant;
+use OrderBundle\Repository\OrdersRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -19,20 +23,24 @@ use Symfony\Component\Validator\Constraints\GreaterThan;
 use AppBundle\Entity\User;
 use OrderBundle\Entity\Orders;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use AppBundle\Repository\UserRepository;
 
 
 class WarrantyClaimType extends AbstractType
 {
 
     private $tokenStorage;
+    private $ordersRepository;
 
     /**
      * WarrantyClaimType constructor.
      * @param $tokenStorage
+     * @param $entityManager
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage, EntityManager $entityManager)
     {
         $this->tokenStorage = $tokenStorage;
+        $this->ordersRepository = $entityManager->getRepository('OrderBundle:Orders');
     }
 
     /**
@@ -42,32 +50,26 @@ class WarrantyClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('submittedForUser', EntityType::class, array(
-                    'class' => 'AppBundle\Entity\User',
-                    'label' => 'On Behalf of',
-                    'placeholder' => 'Select User',
-                    'choice_label' => function (User $user) {
-                        return $user->getFullName();
+            ->add('order', EntityType::class, array(
+                    'class' => 'OrderBundle\Entity\Orders',
+                    'label' => 'Order ID',
+                    'placeholder' => 'Select Order ID',
+                    'choices' => $this->ordersRepository->getLatestOrdersForUser($this->tokenStorage->getToken()->getUser()),
+                    'choice_label' => function (Orders $order) {
+                        return $order->getId();
                     },
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
                     'required' => true
                 )
             )
-            ->add('order', EntityType::class, array(
-                    'class' => 'OrderBundle\Entity\Orders',
-                    'label' => 'Order Number',
-                    'placeholder' => 'Select Order Number',
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('o')
-                            ->where('o.submitted_for_user = :user')
-                            ->orderBy('o.submitDate', 'DESC')
-                            ->setParameter('user', $this->tokenStorage->getToken()->getUser());
+            ->add('productVariant', EntityType::class, array(
+                    'class' => 'InventoryBundle\Entity\ProductVariant',
+                    'label' => 'Product',
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
+                    'placeholder' => 'Select Item',
+                    'choice_label' => function(ProductVariant $productVariant) {
+                        return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();
                     },
-                    'choice_label' => function (Orders $order) {
-                        return $order->getOrderNumber();
-                    },
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'required' => true
                 )
             )
             ->add('creditRequested', MoneyType::class, array(
