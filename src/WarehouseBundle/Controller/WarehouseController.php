@@ -110,6 +110,9 @@ class WarehouseController extends Controller
         $all_adj = $em->getRepository('WarehouseBundle:StockAdjustment')->getAllForWarehouseArray($warehouse);
         $active_adj = $em->getRepository('WarehouseBundle:StockAdjustment')->getActiveForWarehouseArray($warehouse);
 
+        $all_orders = $em->getRepository('OrderBundle:Orders')->getAllForWarehouseArray($warehouse);
+        $active_orders = $em->getRepository('OrderBundle:Orders')->getActiveForWarehouseArray($warehouse);
+
         $all = array_merge($all_po, $all_st, $all_adj);
         $active = array_merge($active_po, $active_st, $active_adj);
 

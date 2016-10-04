@@ -112,7 +112,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      * @param User $user
      * @return array|\OrderBundle\Entity\Orders[]
      *
-     * This gets the lates orders for a user according to their Roles
+     * This gets the latest orders for a user according to their Roles
      */
     public function getLatestOrdersForUser(User $user) {
         $em = $this->getEntityManager();
