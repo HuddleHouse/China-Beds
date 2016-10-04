@@ -33,6 +33,14 @@ class Orders
     private $orderNumber;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="order_id", type="string", length=255, nullable=true)
+     */
+    private $orderId;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Status", inversedBy="stock_adjustments")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
@@ -889,5 +897,22 @@ class Orders
     {
         $this->rebates = $rebates;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param mixed $orderId
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
+    }
+
 }
 

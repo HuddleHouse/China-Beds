@@ -59,6 +59,7 @@ class OrderProductsController extends Controller
             $order->setData($info);
 
         }
+        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
         $em->persist($order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');

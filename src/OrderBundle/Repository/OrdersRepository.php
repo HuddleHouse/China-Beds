@@ -4,6 +4,7 @@ namespace OrderBundle\Repository;
 use AppBundle\Entity\User;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersWarehouseInfo;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * OrdersRepository
@@ -113,6 +114,33 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $product_data;
+    }
+
+
+    public function getActiveForWarehouseArray(Warehouse $warehouse) {
+        $em = $this->getEntityManager();
+        $data = array();
+
+        foreach($warehouse->getOrdersWarehouseInfo() as $item) {
+            $i = 1;
+        }
+
+        return $statement->fetchAll();
+    }
+
+    public function getAllForWarehouseArray(Warehouse $warehouse) {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_adjustment' as type
+	from stock_adjustments p
+		left join warehouses w
+			on p.warehouse_id = w.id
+		left join status s
+			on s.id = p.status_id
+	where w.id = :warehouse_id");
+        $statement->bindValue('warehouse_id', $warehouse->getId());
+        $statement->execute();
+        return $statement->fetchAll();
     }
 
     public function getLatestOrdersForUser(User $user) {
