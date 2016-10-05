@@ -297,17 +297,25 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
+                                {% if app.request.get('_route') == 'order_products_warehouse_review' %}
+                                <th></th>
+                                <th>Status</th>
+                                {% endif %}
                                 <th style="width: 10%;">Qty</th>
                                 <th>Product</th>
-                                <th style="width: 24%;">Subtotal</th>
+                                {% if app.request.get('_route') != 'order_products_warehouse_review' %}<th style="width: 24%;">Subtotal</th>{% endif %}
                             </tr>
                             </thead>
                             <tbody>
                             {% for item in prod %}
                                 <tr>
+                                    {% if app.request.get('_route') == 'order_products_warehouse_review' %}
+                                        <td><a class="btn btn-raised btn-success">Ship</a> </td>
+                                        <td>Status</td>
+                                    {% endif %}
                                     <td>{{ item.quantity }}</td>
                                     <td>{{ item.product_name }}</td>
-                                    <td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>
+                                    {% if app.request.get('_route') != 'order_products_warehouse_review' %}<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>{% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -349,7 +357,8 @@
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
                 <div class="col-md-6">
-                    <fieldset style="margin-top: 20px;margin-bottom: 50px;">
+                    {% if app.request.get('_route') != 'order_products_warehouse_review' %}
+                        <fieldset style="margin-top: 20px;margin-bottom: 50px;">
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
@@ -421,7 +430,7 @@
                             </div>
                         </div>
                     </fieldset>
-
+                    {% endif %}
                     <h5 style="margin: -14px 0 16px;">Comments</h5>
                     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 150px;">
                         {{ order.comments }}
@@ -429,33 +438,36 @@
                 </div>
                 <div class="col-md-6">
                     {% if order.isPickUp == 0 %}
-                        <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        {% if app.request.get('_route') != 'order_products_warehouse_review' %}<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
                     {% elseif order.isPickUp == 1 %}
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                         <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
                     {% endif %}
-                    <div class="table-responsive" style="margin-top: 46px;">
-                        <table class="table">
-                            <tbody>
-                            <tr>
-                                <th >Subtotal:</th>
-                                <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
-                            </tr>
-                            {#<tr>#}
+
+                    {% if app.request.get('_route') != 'order_products_warehouse_review' %}
+                        <div class="table-responsive" style="margin-top: 46px;">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th >Subtotal:</th>
+                                    <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
+                                </tr>
+                                {#<tr>#}
                                 {#<th>Tax (9.3%)</th>#}
                                 {#<td>$0.00</td>#}
-                            {#</tr>#}
-                            <tr>
-                                <th>Shipping: {{ order.getShipDescription }}</th>
-                                <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <th>Total:</th>
-                                <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                {#</tr>#}
+                                <tr>
+                                    <th>Shipping: {{ order.getShipDescription }}</th>
+                                    <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
                 </div>
                 <!-- /.col -->
             </div>

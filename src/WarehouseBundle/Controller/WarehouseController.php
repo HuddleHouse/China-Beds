@@ -123,7 +123,7 @@ class WarehouseController extends Controller
 
         }
 
-//        array_multisort($all_dates, SORT_DESC, $all);
+        array_multisort($all_dates, SORT_DESC, $all);
 
         $active = array_merge($active_po, $active_st, $active_adj, $active_orders);
         $active_dates = array();
@@ -135,8 +135,7 @@ class WarehouseController extends Controller
 
         }
 
-//        array_multisort($active_dates, SORT_DESC, $active);
-
+        array_multisort($active_dates, SORT_DESC, $active);
 
         return $this->render('@Warehouse/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,

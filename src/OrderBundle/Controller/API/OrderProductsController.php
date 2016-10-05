@@ -58,8 +58,9 @@ class OrderProductsController extends Controller
 
             $order->setData($info);
         }
-        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
         $em->persist($order);
+        $em->flush();
+        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
@@ -256,7 +257,7 @@ class OrderProductsController extends Controller
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger') {
             $ledger_service = $this->get('order.ledger');
-            $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), "Paid for order #".$order->getOrderNumber(), 'Order', $order);
+            $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
         }
         else if($payment_type == 'cc') {
             $cc = $request->request->get('cc');

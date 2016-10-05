@@ -108,10 +108,7 @@ class OrderProductsController extends Controller
             $user = $this->getUser();
             $user_channels = $user->getUserChannelsArray();
 
-            if($user_channels[$channel->getId()])
-                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
-            else
-                $this->redirectToRoute('404');
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
 
             $groups = $user->getGroupsArray();
             $is_dis = $is_retail = 0;
@@ -155,12 +152,7 @@ class OrderProductsController extends Controller
 
         if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
             $user = $this->getUser();
-            $user_channels = $user->getUserChannelsArray();
-
-            if($user_channels[$channel->getId()])
-                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
-            else
-                $this->redirectToRoute('404');
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
 
             $groups = $user->getGroupsArray();
             $is_dis = $is_retail = 0;
