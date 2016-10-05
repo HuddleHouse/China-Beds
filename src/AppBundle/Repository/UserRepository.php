@@ -185,19 +185,72 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                 }
 
             }
-//            $user_ids .= $user->getId();
-//            $connection = $em->getConnection();
-//            $statement = $connection->prepare("select *, LEFT(name, 1) as name_first_letter
-//	from orders o
-//		where o.submitted_by_user_id in (".$user_ids.")
-//		    left join status s
-//			on o.status_id = s.id");
-//            $statement->execute();
-//            $orders = $statement->fetchAll();
         }
 
         return $orders;
     }
 
+    /**
+     * @param User $user
+     * @return array|\OrderBundle\Entity\Orders[]
+     *
+     * This gets the latest orders for a user according to their Roles
+     */
+    public function findByUser(User $user) {
+        $em = $this->getEntityManager();
+        $user_ids = array();
+        $user_ids[$user->getId()] = $user->getId();
+        $users = array();
+//        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
 
+        if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE')) {
+            return $em->getRepository('AppBundle:User')->findAll();
+        }
+        else {
+            if($user->hasRole('ROLE_DISTRIBUTOR')) {
+                foreach($user->getRetailers() as $item) {
+                    if(!isset($user_ids[$item->getId()])) {
+                        $user_ids[$item->getId()] = $item->getId();
+                        $users[] = $item;
+                    }
+                }
+            }
+            if($user->hasRole('ROLE_SALES_REP')){
+                foreach($user->getDistributors() as $distributor) {
+                    if(!isset($user_ids[$distributor->getId()])) {
+                        $user_ids[$distributor->getId()] = $distributor->getId();
+                        $users[] = $distributor;
+                    }
+                    foreach($distributor->getRetailers() as $retailer) {
+                        if(!isset($user_ids[$retailer->getId()])) {
+                            $user_ids[$retailer->getId()] = $retailer->getId();
+                            $users[] = $retailer;
+                        }
+                    }
+                }
+            }
+            if($user->hasRole('ROLE_SALES_MANAGER')) {
+                foreach($user->getSalesReps() as $salesRep) {
+                    if(!isset($user_ids[$salesRep->getId()])) {
+                        $user_ids[$salesRep->getId()] = $salesRep->getId();
+                        $users[] = $salesRep;
+                    }
+                    foreach($salesRep->getDistributors() as $distributor) {
+                        if(!isset($user_ids[$distributor->getId()])) {
+                            $user_ids[$distributor->getId()] = $distributor->getId();
+                            $users[] = $distributor;
+                        }
+                        foreach($distributor->getRetailers() as $retailer) {
+                            if(!isset($user_ids[$retailer->getId()])) {
+                                $user_ids[$retailer->getId()] = $retailer->getId();
+                                $users[] = $retailer;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return $users;
+    }
 }

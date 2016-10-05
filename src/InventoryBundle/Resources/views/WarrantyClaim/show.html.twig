@@ -15,7 +15,7 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#warrantyclaim_resolution').keyup(function () {
+            $('#warranty_approval_resolution').keyup(function () {
                 var len = $(this).val().length;
                 if (len >= 255) {
                     $(this).val($(this).val().substring(0, 255));
@@ -23,6 +23,17 @@
                 } else {
                     var l = 255 - len;
                     $('#charNum').text(l);
+                }
+            });
+
+            $('#submit_btn').on('click', function(event) {
+                if($('#warranty_approval_applyCredit').val() == 0 && $('#warranty_approval_amount').val() > 0) {
+                    event.preventDefault();
+                    showErrorModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit"');
+                }
+                else if($('#warranty_approval_applyCredit').val() == 1 && $('#warranty_approval_amount').val() <= 0) {
+                    event.preventDefault();
+                    showErrorModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit"');
                 }
             });
         });
@@ -34,6 +45,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-danger">
+                    {{ form_errors(form.applyCredit) }}
+                    {{ form_errors(form.amount) }}
                     {{ form_errors(form.resolution) }}
                 </div>
             </div>
@@ -51,6 +64,10 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>Amount Requested</td>
+                        <td>${{ warranty_claim.creditRequested | number_format(2) }}</td>
+                    </tr>
                     <tr>
                         <td>Credit for</td>
                         <td>{{ warranty_claim.submittedForUser.fullName | default('--') }}</td>
@@ -74,19 +91,15 @@
                     </tr>
                     <tr>
                         <td>Order #</td>
-                        <td>{{ order.orderNumber | default('--') }}</td>
+                        <td>{{ order.orderId | default('--') }}</td>
                     </tr>
                     <tr>
                         <td>Order Total</td>
-                        <td>{{ order.total | default('--') }}</td>
+                        <td>${{ order.total | number_format(2) | default('--') }}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td>{{ order. | default('--') }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>{{  | default('--') }}</td>
+                        <td>Product</td>
+                        <td>{{ warranty_claim.productVariant.product.name | default('--') }} {{ warranty_claim.productVariant.name | default('') }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -95,15 +108,25 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
+                <div class="col-md-2 form-group">
+                    {{ form_label(form.applyCredit) }}
+                    {{ form_widget(form.applyCredit) }}
+                </div>
+                <div class="col-md-2 form-group">
+                    {{ form_label(form.amount) }}
+                    {{ form_widget(form.amount, { value: warranty_claim.creditRequested | number_format(2, '.', '') }) }}
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-4 form-group">
-                    {{ form_label(form.resolution) }}
+                    {{ form_label(form.resolution) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.resolution) }}
                 </div>
             </div>
-            {% if ledger.isArchived %}
+            {% if warranty_claim.isArchived %}
                 <br><strong>You may not edit a warranty claim that has been processed.</strong>
             {% else %}
-                <input class="btn btn-raised btn-success" type="submit" value="Submit" />
+                <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Submit" />
             {% endif %}
             {{ form_end(form) }}
         </div>

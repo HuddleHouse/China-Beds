@@ -28,6 +28,9 @@ class WarrantyClaimController extends Controller
      */
     public function getProductVariantsFromOrderAction(Request $request)
     {
+        if($request->get('order_id') == '')
+            return new JsonResponse('<option>Select Order ID first</option>');
+
         $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
         $rtn = array();
 

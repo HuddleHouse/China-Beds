@@ -89,11 +89,13 @@ class LedgerService
             case 'Rebate':
                 $rebate = $em->getRepository('InventoryBundle:Rebate')->find($typeId);
                 $ledger->setRebate($rebate);
+                $ledger->setIsArchived(true);
                 $rebate->getLedgers()->add($ledger);
                 break;
             case 'Warranty':
                 $warrantyClaim = $em->getRepository('InventoryBundle:WarrantyClaim')->find($typeId);
                 $ledger->setWarrantyClaim($warrantyClaim);
+                $ledger->setIsArchived(true);
                 $warrantyClaim->getLedgers()->add($ledger);
                 break;
         }

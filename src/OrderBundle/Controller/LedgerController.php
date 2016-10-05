@@ -32,10 +32,7 @@ class LedgerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        if($this->getUser()->hasRole('ROLE_ADMIN'))
-            $ledgers = $em->getRepository('OrderBundle:Ledger')->findAll();
-        else
-            $ledgers = $em->getRepository('OrderBundle:Ledger')->findby(array('submittedForUser' => $this->getUser()));
+        $ledgers = $em->getRepository('OrderBundle:Ledger')->findByUser($this->getUser());;
 
         return $this->render('@Order/Ledger/index.html.twig', array(
             'ledgers' => $ledgers,
@@ -97,12 +94,12 @@ class LedgerController extends Controller
      * Displays a form to edit an existing credit request.
      *
      * @Route("/{id}/edit", name="ledger_edit")
-     * @Method({"GET", "POST"})
+     * @Method({"GET", "POST", "PATCH"})
      */
     public function editAction(Request $request, Ledger $ledger)
     {
         $deleteForm = $this->createDeleteForm($ledger);
-        $editForm = $this->createForm(CreditRequestType::class, $ledger);
+        $editForm = $this->createForm(CreditRequestType::class, $ledger, array('method' => 'PATCH'));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

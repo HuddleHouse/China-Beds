@@ -83,13 +83,12 @@
                 <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>Requested</th>
-                        <th>Credited</th>
-                        <th>Date Created</th>
-                        <th>User</th>
-                        <th>Submitted by</th>
-                        <th>ACH</th>
                         <th>Type</th>
+                        <th>Amount</th>
+                        <th>Date Created</th>
+                        <th>Submitted by</th>
+                        <th>On Behalf of</th>
+                        <th>ACH</th>
                         <th>Description</th>
                         {% if user.hasRole('ROLE_ADMIN') %}<th>Channel</th>{% endif %}
                         <th>Actions</th>
@@ -99,11 +98,10 @@
                     {% for ledger in ledgers %}
                         <tr data-child-value="{{ ledger.description }}">
                             <td>{{ ledger.type }}</td>
-                            <td>{{ ledger.amountRequested | number_format(2) }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
-                            <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
                             <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
+                            <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
                             <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
                             {% if ledger.description is not null %}<td id="description"><span>Click to expand</span></td>
                             {% else %} <td>--</td> {% endif %}
