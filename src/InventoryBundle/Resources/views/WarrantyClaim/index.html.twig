@@ -155,7 +155,7 @@
                             <td>{% if warranty_claim.dateMadeAware %}{{ warranty_claim.dateMadeAware|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{% if warranty_claim.dateOfClaim %}{{ warranty_claim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{{ warranty_claim.submittedByUser }}</td>
-                            <td>{{ warranty_claim.creditRequested }}</td>
+                            <td>{{ warranty_claim.creditRequested | number_format(2) }}</td>
                             {% if warranty_claim.description is not null %}<td id="description">Click to expand</td>
                             {% else %}<td>--</td>{% endif %}
                             {% if warranty_claim.resolution is not null %}<td id="resolution">Click to expand</td>
