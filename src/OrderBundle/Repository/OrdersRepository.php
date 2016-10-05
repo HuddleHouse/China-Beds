@@ -145,7 +145,6 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
                     );
             }
         }
-
         return $data;
     }
 
