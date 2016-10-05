@@ -12,7 +12,7 @@ use OrderBundle\Entity\Orders;
  * WarrantyClaim
  *
  * @ORM\Table(name="warranty_claim")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\WarrantyClaimRepository")
  */
 class WarrantyClaim
 {

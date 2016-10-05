@@ -40,7 +40,8 @@
                 data: {order_id: $('#warranty_claim_order').val()},
                 success: function (variants) {
                     el.html(variants);
-                    el.prop('disabled', false);
+                    if(variants != '<option>Select Order ID first</option>')
+                        el.prop('disabled', false);
                 }
             });
         }

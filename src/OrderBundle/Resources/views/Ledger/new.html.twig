@@ -45,13 +45,13 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {% if app.user.hasRole('ROLE_ADMIN') %}
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.submittedForUser) }}
-                    {{ form_widget(form.submittedForUser) }}
-                </div>
-                {% else %}
+                {% if app.user.hasRole('ROLE_RETAILER') %}
                     {% do form.submittedForUser.setRendered %}
+                {% else %}
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.submittedForUser) }}
+                        {{ form_widget(form.submittedForUser) }}
+                    </div>
                 {% endif %}
                 <div class="col-md-4 form-group">
                     {{ form_label(form.amountRequested) }}
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 form-group">
+                <div class="col-md-8 form-group">
                     {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.description) }}
                 </div>

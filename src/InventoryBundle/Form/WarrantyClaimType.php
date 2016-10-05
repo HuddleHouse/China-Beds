@@ -31,6 +31,7 @@ class WarrantyClaimType extends AbstractType
 
     private $tokenStorage;
     private $ordersRepository;
+    private $usersRepository;
 
     /**
      * WarrantyClaimType constructor.
@@ -41,6 +42,7 @@ class WarrantyClaimType extends AbstractType
     {
         $this->tokenStorage = $tokenStorage;
         $this->ordersRepository = $entityManager->getRepository('OrderBundle:Orders');
+        $this->usersRepository = $entityManager->getRepository('AppBundle:User');
     }
 
     /**
@@ -56,7 +58,7 @@ class WarrantyClaimType extends AbstractType
                     'placeholder' => 'Select Order ID',
                     'choices' => $this->ordersRepository->getLatestOrdersForUser($this->tokenStorage->getToken()->getUser()),
                     'choice_label' => function (Orders $order) {
-                        return $order->getId();
+                        return $order->getOrderId();
                     },
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
                     'required' => true
@@ -66,7 +68,7 @@ class WarrantyClaimType extends AbstractType
                     'class' => 'InventoryBundle\Entity\ProductVariant',
                     'label' => 'Product',
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
-                    'placeholder' => 'Select Item',
+                    'placeholder' => 'Select Order ID first',
                     'choice_label' => function(ProductVariant $productVariant) {
                         return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();
                     },

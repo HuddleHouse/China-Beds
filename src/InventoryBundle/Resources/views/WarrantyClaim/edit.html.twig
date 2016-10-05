@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Edit Warranty Claim{% endblock %}
+{% block title %}Edit {{ warranty_claim.channel.Name }} Warranty Claim{% endblock %}
 {% block page_title %}
-    Edit Warranty Claim
+    Edit {{ warranty_claim.channel.Name }} Warranty Claim
 {% endblock page_title %}
 
 {% block page_name %}
@@ -14,7 +14,29 @@
 
 {% block footer %}
     <script>
+
+        function getProductVariants() {
+            var el = $('#warranty_claim_productVariant');
+            $.ajax({
+                beforeSend: function() {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_product_variants_from_order') }}",
+                dataType: 'json',
+                data: {order_id: $('#warranty_claim_order').val()},
+                success: function (variants) {
+                    el.html(variants);
+                    el.prop('disabled', false);
+                    el.val({{ warranty_claim.productVariant.id }});
+                }
+            });
+        }
+
         $(document).ready(function () {
+            getProductVariants();
+
             $('#warranty_claim_description').keyup(function () {
                 var len = $(this).val().length;
                 if (len >= 255) {
@@ -36,6 +58,7 @@
                 <div class="alert alert-danger">
                     {{ form_errors(edit_form.order) }}
                     {{ form_errors(edit_form.creditRequested) }}
+                    {{ form_errors(edit_form.productVariant) }}
                     {{ form_errors(edit_form.description) }}
                 </div>
             </div>
@@ -45,7 +68,6 @@
         <div class="form-body">
             {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {% do edit_form.submittedForUser.setRendered %}
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.creditRequested) }}
                     {{ form_widget(edit_form.creditRequested) }}
@@ -54,6 +76,10 @@
                     {{ form_label(edit_form.order) }}
                     {{ form_widget(edit_form.order) }}
                 </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.productVariant) }}
+                    {{ form_widget(edit_form.productVariant) }}
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
@@ -61,7 +87,7 @@
                     {{ form_widget(edit_form.description) }}
                 </div>
             </div>
-            {% if warrantyClaim.isArchived %}
+            {% if warranty_claim.isArchived %}
                 <br><strong>You may not edit a credit request that has been processed.</strong>
             {% else %}
                 <input class="btn btn-raised btn-success" type="submit" value="Update" />
