@@ -50,15 +50,27 @@
             $scope.cart_total = {{ order.getTotal  }};
             $scope.is_paid = {{ is_paid }};
 
+//            $scope.checkAll = function () {
+//                if($('#check-all').is(':checked')) {
+//                    angular.forEach($scope.ids, function(value, key) {
+//                        $('#'+value).prop('checked', true);
+//                    });
+//                }
+//                else {
+//                    angular.forEach($scope.ids, function(value, key) {
+//                        $('#'+value).prop('checked', false);
+//                    });
+//                }
+//
+//            };
+
             $(document).ready(function () {
                 if ($scope.is_paid == 1) {
                     $('#payment-type').val('{{ order.paymentType }}');
                 }
-                console.log("{{ is_paid }}");
             });
 
             $scope.changePayment = function () {
-                console.log($scope.payment_type);
                 if($scope.payment_type == 'cc')
                     $('#cc').show();
                 else
@@ -74,7 +86,6 @@
                 else
                     $('#payment').removeClass('has-error');
 
-                console.log($scope.cc);
 
                 if($scope.payment_type == 'cc') {
                     if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
@@ -121,8 +132,25 @@
 
             };
 
+            $scope.markShipped = function (warehouse_id) {
+                showSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_mark_part_of_order_shipped') }}",
+                    dataType: 'json',
+                    data: {
+                        warehouse_id: warehouse_id,
+                        order_id: {{ order.id }}
+                    },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            hideSpinner();
+                            location.reload();
+                        });
+                    }
+                });
+            };
 
-            //not
             $scope.updateCart = function (variantId, cost, max) {
                 if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
                     $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
@@ -291,6 +319,25 @@
             <hr>
             {% for prod in product_data %}
                 <!-- Table row -->
+                {% if shipped_status is defined %}
+            <div class="row" style="">
+                <div class="col-md-4">
+                        <span class="mdl-chip mdl-chip--contact" >
+                            <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ shipped_status.color }};">{{ shipped_status.nameFirstLetter }}</span>
+                            <span class="mdl-chip__text">
+                                {{ shipped_status.name }}
+                            </span>
+                        </span>
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                    {% if shipped_status.name != 'Shipped' %}
+                    <a href="#" data-toggle="modal" data-target="#ship-modal" class="btn btn-raised btn-success" style="float: right;"><i class="fa fa-ship"></i> Mark as Shipped</a>
+                    {% endif %}
+                </div>
+            </div>
+                {% endif %}
                 <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
                         <h4 class="page-header"><b>Warehouse Location: </b>{{ prod[0].warehouse_name }}</h4>
@@ -298,10 +345,9 @@
                             <thead>
                             <tr>
                                 {% if app.request.get('_route') == 'order_products_warehouse_review' %}
-                                <th></th>
-                                <th>Status</th>
+
                                 {% endif %}
-                                <th style="width: 10%;">Qty</th>
+                                <th style="width: 10%;"><center>Qty</center></th>
                                 <th>Product</th>
                                 {% if app.request.get('_route') != 'order_products_warehouse_review' %}<th style="width: 24%;">Subtotal</th>{% endif %}
                             </tr>
@@ -309,11 +355,7 @@
                             <tbody>
                             {% for item in prod %}
                                 <tr>
-                                    {% if app.request.get('_route') == 'order_products_warehouse_review' %}
-                                        <td><a class="btn btn-raised btn-success">Ship</a> </td>
-                                        <td>Status</td>
-                                    {% endif %}
-                                    <td>{{ item.quantity }}</td>
+                                    <td style="text-align: center;">{{ item.quantity }}</td>
                                     <td>{{ item.product_name }}</td>
                                     {% if app.request.get('_route') != 'order_products_warehouse_review' %}<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>{% endif %}
                                 </tr>
@@ -324,6 +366,27 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
+
+                <!-- MODAL -->
+                <div class="modal fade" id="ship-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header btn-info">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel4">Are you sure?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="error-message1" style="">
+                                    Are you sure you want to mark the items as shipped? This action cannot be undone.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                                    <button ng-click="markShipped({{ prod[0].warehouse_id }})" type="button" class="btn btn-raised btn-success" data-dismiss="modal">Mark Shipped</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
 
             {% if pop_items is not empty %}

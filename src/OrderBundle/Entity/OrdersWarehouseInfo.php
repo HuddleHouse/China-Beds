@@ -33,7 +33,7 @@ class OrdersWarehouseInfo
      *
      * @ORM\Column(name="shipped", type="boolean", nullable=true)
      */
-    private $shipped;
+    private $shipped = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\OrdersProductVariant", inversedBy="warehouse_info")

@@ -621,7 +621,7 @@ class Warehouse
     }
 
     /**
-     * @return OrdersWarehouseInfo
+     * @return mixed
      */
     public function getOrdersWarehouseInfo()
     {

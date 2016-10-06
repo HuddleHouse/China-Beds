@@ -163,6 +163,18 @@ class OrderProductsController extends Controller
                 $is_dis = 1;
             $pop = $order->getPopItems();
 
+            $is_shipped = false;
+
+            foreach($product_data as $prod) {
+                foreach($prod as $item)
+                    if($item['shipped'] == true)
+                        $is_shipped = true;
+            }
+
+            if($is_shipped == true)
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
+            else
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
 
             return $this->render('@Order/OrderProducts/view-order.html.twig', array(
                 'channel' => $channel,
@@ -172,7 +184,8 @@ class OrderProductsController extends Controller
                 'is_retail' => $is_retail,
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
-                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+                'shipped_status' => $shipped_status
             ));
         }
         else

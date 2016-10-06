@@ -275,5 +275,55 @@ class OrderProductsController extends Controller
         $em->flush();
         return JsonResponse::create(true);
     }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|static
+     *
+     * @Route("/api_mark_part_of_order_shipped", name="api_mark_part_of_order_shipped")
+     */
+    public function markPartOfOrderShipped(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $order_id = $request->request->get('order_id');
+        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+
+        $warehouse_id = $request->request->get('warehouse_id');
+        $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+
+        //get the warehouse specific order data
+        $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
+
+        foreach($product_data as $prod) {
+            foreach($prod as $item) {
+                $order_warehouse_info = $em->getRepository('OrderBundle:OrdersWarehouseInfo')->find($item['id']);
+                $order_warehouse_info->setShipped(1);
+                $em->persist($order_warehouse_info);
+            }
+        }
+
+        //check to see if the whole order is shipped and change the status on the order to Shipped if so.
+        //get the order data for entire order
+        $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
+        $is_shipped = true;
+
+        foreach($product_data as $prod) {
+            foreach($prod as $item)
+                if($item['shipped'] == false) {
+                    $is_shipped = false;
+                    break;
+                }
+        }
+
+        if($is_shipped == true) {
+            $status = $em->getRepository("WarehouseBundle:Status")->findOneBy(array('name' => 'Shipped'));
+            $order->setStatus($status);
+            $em->persist($order);
+        }
+
+        $em->flush();
+
+
+        return JsonResponse::create(true);
+    }
 }
 
