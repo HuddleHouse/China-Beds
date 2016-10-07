@@ -169,7 +169,6 @@ class OrderProductsController extends Controller
         }
 
 
-
         $response = $rate->getSimpleRates();
         $data = array_pop($response);
 
@@ -189,6 +188,43 @@ class OrderProductsController extends Controller
 
         return $data;
     }
+
+    /**
+     * @Route("/api_create_shipping_label", name="api_create_shipping_label")
+     * @param Request $request
+     */
+    public function makeShippingLabel(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $order_id = $request->request->get('order_id');
+        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+
+        $shipment = new \RocketShipIt\Shipment('fedex');
+
+        $shipment->setParameter('toCompany', 'John Doe');
+        $shipment->setParameter('toName', 'John Doe');
+        $shipment->setParameter('toPhone', '1231231234');
+        $shipment->setParameter('toAddr1', '111 W Legion');
+        $shipment->setParameter('toCity', 'Whitehall');
+        $shipment->setParameter('toState', 'MT');
+        $shipment->setParameter('toCode', '59759');
+
+        $shipment->setParameter('length', '5');
+        $shipment->setParameter('width', '5');
+        $shipment->setParameter('height', '5');
+        $shipment->setParameter('weight','5');
+
+        $response = $shipment->submitShipment();
+
+        if (isset($response['error']) && $response['error'] != '') {
+            // Something went wrong, show debug information
+            echo $shipment->debug();
+        } else {
+            // Create label as a file
+            file_put_contents('label.pdf', base64_decode($response['pkgs'][0]['label_img']));
+            return JsonResponse::create($response); // display response
+        }
+    }
+
 
 
     /**

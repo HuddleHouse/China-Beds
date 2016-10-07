@@ -132,6 +132,28 @@
 
             };
 
+            $scope.printShippingLabel = function () {
+                showSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_create_shipping_label') }}",
+                    dataType: 'json',
+                    data: {
+                        order_id: {{ order.id }}
+                    },
+                    success: function (data) {
+                        $scope.$apply(function () {
+                            hideSpinner();
+                            var save = document.createElement('a');
+                            save.href = '/label.pdf';
+                            save.target = '_blank';
+                            save.download = 'shipping_label' || 'unknown';
+                            console.log(data);
+                        });
+                    }
+                });
+            }
+
             $scope.markShipped = function (warehouse_id) {
                 showSpinner();
                 $.ajax({
@@ -331,10 +353,14 @@
                 </div>
                 <div class="col-md-4">
                 </div>
-                <div class="col-md-4">
-                    {% if shipped_status.name != 'Shipped' %}
-                    <a href="#" data-toggle="modal" data-target="#ship-modal" class="btn btn-raised btn-success" style="float: right;"><i class="fa fa-ship"></i> Mark as Shipped</a>
-                    {% endif %}
+                <div class="col-md-4" >
+                    <div style="    display: inline;">
+                        <a href="#" class="btn btn-raised btn-info" ng-click="printShippingLabel()" style="float: right;"><i class="fa fa-ship"></i> Print Shipping Label</a>
+                        {% if shipped_status.name != 'Shipped' %}
+                            <a href="#" data-toggle="modal" data-target="#ship-modal" class="btn btn-raised btn-success" style="float: right;"><i class="fa fa-ship"></i> Mark as Shipped</a>
+                        {% endif %}
+                    </div>
+
                 </div>
             </div>
                 {% endif %}
@@ -344,12 +370,12 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                {% if app.request.get('_route') == 'order_products_warehouse_review' %}
+                                {% if is_granted('ROLE_WAREHOUSE') %}
 
                                 {% endif %}
                                 <th style="width: 10%;"><center>Qty</center></th>
                                 <th>Product</th>
-                                {% if app.request.get('_route') != 'order_products_warehouse_review' %}<th style="width: 24%;">Subtotal</th>{% endif %}
+                                {% if is_granted('ROLE_WAREHOUSE') == false %}<th style="width: 24%;">Subtotal</th>{% endif %}
                             </tr>
                             </thead>
                             <tbody>
@@ -357,7 +383,7 @@
                                 <tr>
                                     <td style="text-align: center;">{{ item.quantity }}</td>
                                     <td>{{ item.product_name }}</td>
-                                    {% if app.request.get('_route') != 'order_products_warehouse_review' %}<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>{% endif %}
+                                    {% if is_granted('ROLE_WAREHOUSE') == false %}<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>{% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -420,7 +446,7 @@
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
                 <div class="col-md-6">
-                    {% if app.request.get('_route') != 'order_products_warehouse_review' %}
+                    {% if is_granted('ROLE_WAREHOUSE') == false %}
                         <fieldset style="margin-top: 20px;margin-bottom: 50px;">
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
@@ -501,13 +527,13 @@
                 </div>
                 <div class="col-md-6">
                     {% if order.isPickUp == 0 %}
-                        {% if app.request.get('_route') != 'order_products_warehouse_review' %}<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
+                        {% if is_granted('ROLE_WAREHOUSE') == false %}<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
                     {% elseif order.isPickUp == 1 %}
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                         <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
                     {% endif %}
 
-                    {% if app.request.get('_route') != 'order_products_warehouse_review' %}
+                    {% if is_granted('ROLE_WAREHOUSE') == false %}
                         <div class="table-responsive" style="margin-top: 46px;">
                             <table class="table">
                                 <tbody>
