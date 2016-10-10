@@ -17,6 +17,14 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
+            $('html, body').scrollTop(0);
+
+            $(window).on('load', function() {
+                setTimeout(function(){
+                    $('html, body').scrollTop(0);
+                }, 0);
+            });
+
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
@@ -110,8 +118,8 @@
                     showErrorModal('Please fix the form errors.');
                 else if ($scope.cart_total > $scope.ledgerTotal)
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
-                else if ($('#confirm-shipping').checked == false)
-                    showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
+                else if (document.getElementById('confirm-shipping').checked == false)
+                    showErrorModal('You need to confirm immediate shipping.');
                 else {
                     $.ajax({
                         type: 'POST',
@@ -144,10 +152,7 @@
                     success: function (data) {
                         $scope.$apply(function () {
                             hideSpinner();
-                            var save = document.createElement('a');
-                            save.href = '/label.pdf';
-                            save.target = '_blank';
-                            save.download = 'shipping_label' || 'unknown';
+                            window.location.href = 'label.pdf';
                             console.log(data);
                         });
                     }
@@ -393,26 +398,6 @@
                 </div>
                 <!-- /.row -->
 
-                <!-- MODAL -->
-                <div class="modal fade" id="ship-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header btn-info">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel4">Are you sure?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div id="error-message1" style="">
-                                    Are you sure you want to mark the items as shipped? This action cannot be undone.
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
-                                    <button ng-click="markShipped({{ prod[0].warehouse_id }})" type="button" class="btn btn-raised btn-success" data-dismiss="modal">Mark Shipped</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             {% endfor %}
 
             {% if pop_items is not empty %}
@@ -527,7 +512,9 @@
                 </div>
                 <div class="col-md-6">
                     {% if order.isPickUp == 0 %}
-                        {% if is_granted('ROLE_WAREHOUSE') == false %}<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
+                        {% if order.status.name == 'Draft' %}
+                            {% if is_granted('ROLE_WAREHOUSE') == false %}<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
+                        {% endif %}
                     {% elseif order.isPickUp == 1 %}
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                         <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>

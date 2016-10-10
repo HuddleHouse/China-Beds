@@ -200,18 +200,28 @@ class OrderProductsController extends Controller
 
         $shipment = new \RocketShipIt\Shipment('fedex');
 
+
+
+        $shipment->setParameter('toCode', $order->getShipZip());
+//        $shipment->setParameter('residentialAddressIndicator','1');
+        $shipment->setParameter('service', 'GROUND_HOME_DELIVERY');
         $shipment->setParameter('toCompany', 'John Doe');
         $shipment->setParameter('toName', 'John Doe');
         $shipment->setParameter('toPhone', '1231231234');
         $shipment->setParameter('toAddr1', '111 W Legion');
-        $shipment->setParameter('toCity', 'Whitehall');
-        $shipment->setParameter('toState', 'MT');
-        $shipment->setParameter('toCode', '59759');
+        $shipment->setParameter('toCity', 'Knoxville');
+        $shipment->setParameter('toState', 'TN');
+        $shipment->setParameter('toCode', '37919');
 
-        $shipment->setParameter('length', '5');
-        $shipment->setParameter('width', '5');
-        $shipment->setParameter('height', '5');
-        $shipment->setParameter('weight','5');
+        foreach($order->getProductVariants() as $productVariant) {
+            $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+            $package = new \RocketShipIt\Package('fedex');
+            $package->setParameter('length', "$dimensions[0]");
+            $package->setParameter('width', "$dimensions[1]");
+            $package->setParameter('height', "$dimensions[2]");
+            $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
+            $shipment->addPackageToShipment($package);
+        }
 
         $response = $shipment->submitShipment();
 
@@ -220,7 +230,8 @@ class OrderProductsController extends Controller
             echo $shipment->debug();
         } else {
             // Create label as a file
-            file_put_contents('label.pdf', base64_decode($response['pkgs'][0]['label_img']));
+            $fole = base64_decode($response['pkgs'][0]['label_img']);
+            file_put_contents('label.png', base64_decode($response['pkgs'][0]['label_img']));
             return JsonResponse::create($response); // display response
         }
     }
