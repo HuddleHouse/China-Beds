@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\EditChildUserType;
+use AppBundle\Form\EditUserSettingsType;
 use AppBundle\Form\NewUserType;
 use AppBundle\Form\UserType;
 use FOS\UserBundle\FOSUserEvents;
@@ -152,7 +153,7 @@ class ProfileController extends Controller
         $user = $this->getUser();
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(EditUserSettingsType::class, $user);
         $form->handleRequest($request);
 
         if($form->isValid()) {
@@ -162,11 +163,11 @@ class ProfileController extends Controller
                 $successMessage = "User information updated succesfully.";
                 $this->addFlash('notice', $successMessage);
 
-                return $this->redirectToRoute('admin_edit_user', array('user_id' => $user_id));
+                return $this->redirectToRoute('fos_user_profile_edit', array('user_id' => $user_id));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
-                return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+                return $this->render('@App/Profile/edit.html.twig', array(
                     'form' => $form->createView(),
                     'user_id' => $user->getId(),
                     'user' => $user
@@ -174,7 +175,7 @@ class ProfileController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+        return $this->render('@App/Profile/edit.html.twig', array(
             'form' => $form->createView(),
             'user_id' => $user->getId(),
             'user' =>$user

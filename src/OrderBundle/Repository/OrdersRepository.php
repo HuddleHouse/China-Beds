@@ -81,7 +81,12 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         $em->flush();
     }
 
-    public function getProductsByWarehouseArray(Orders $order) {
+    /**
+     * @param Orders $order
+     * @param Warehouse|null $warehouse If the warehouse is specified it will only return the data for that warehouse.
+     * @return array
+     */
+    public function getProductsByWarehouseArray(Orders $order, Warehouse $warehouse = null) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select i.*, v.price,((v.price/100)*i.quantity) as subtotal , concat(p.name, ': ', pv.name) as product_name, w.name as warehouse_name
@@ -110,7 +115,12 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
 
             if($id != $product['warehouse_id'])
                 $id = $product['warehouse_id'];
-            $product_data[$id][] = $product;
+            if($warehouse != null) {
+                if($id == $warehouse->getId())
+                    $product_data[$id][] = $product;
+            }
+            else
+                $product_data[$id][] = $product;
         }
 
         return $product_data;
@@ -118,29 +128,59 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
 
 
     public function getActiveForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getEntityManager();
         $data = array();
 
         foreach($warehouse->getOrdersWarehouseInfo() as $item) {
-            $i = 1;
+            if($item->getShipped() == false) {
+                $order = $item->getOrdersProductVariant()->getOrder();
+                if(!isset($data[$order->getId()]))
+                    $data[$order->getId()] = array(
+                        'order_id' => $order->getId(),
+                        'order_number' => $order->getOrderId(),
+                        'type' => 'order',
+                        'warehouse_name' => $warehouse->getName(),
+                        'color' => '#4caf50',
+                        'status_name' => 'Ready to Ship',
+                        'date' => $order->getSubmitDate()
+                    );
+            }
         }
-
-        return $statement->fetchAll();
+        return $data;
     }
 
     public function getAllForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-        $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_adjustment' as type
-	from stock_adjustments p
-		left join warehouses w
-			on p.warehouse_id = w.id
-		left join status s
-			on s.id = p.status_id
-	where w.id = :warehouse_id");
-        $statement->bindValue('warehouse_id', $warehouse->getId());
-        $statement->execute();
-        return $statement->fetchAll();
+        $data = array();
+
+        foreach($warehouse->getOrdersWarehouseInfo() as $item) {
+            $order = $item->getOrdersProductVariant()->getOrder();
+            if($item->getShipped() == false) {
+                if(!isset($data[$order->getId()]))
+                    $data[$order->getId()] = array(
+                        'order_id' => $order->getId(),
+                        'order_number' => $order->getOrderId(),
+                        'type' => 'order',
+                        'warehouse_name' => $warehouse->getName(),
+                        'color' => '#4caf50',
+                        'status_name' => 'Ready to Ship',
+                        'date' => $order->getSubmitDate()
+                    );
+            }
+            else {
+                if(!isset($data[$order->getId()]))
+                    $data[$order->getId()] = array(
+                        'order_id' => $order->getId(),
+                        'order_number' => $order->getOrderId(),
+                        'type' => 'order',
+                        'warehouse_name' => $warehouse->getName(),
+                        'color' => '#42A5F5',
+                        'status_name' => 'Shipped',
+                        'date' => $order->getSubmitDate()
+                    );
+            }
+
+        }
+
+        return $data;
     }
 
     public function getLatestOrdersForUser(User $user) {

@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * Channel controller.
@@ -107,10 +108,7 @@ class OrderProductsController extends Controller
             $user = $this->getUser();
             $user_channels = $user->getUserChannelsArray();
 
-            if($user_channels[$channel->getId()])
-                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
-            else
-                $this->redirectToRoute('404');
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
 
             $groups = $user->getGroupsArray();
             $is_dis = $is_retail = 0;
@@ -137,6 +135,62 @@ class OrderProductsController extends Controller
             return $this->redirectToRoute('404');
     }
 
+
+    /**
+     *
+     * @Route("/{id_order}/warehouse-review/{id_warehouse}/", name="order_products_warehouse_review")
+     *
+     * @ParamConverter("warehouse", class="WarehouseBundle:Warehouse", options={"id" = "id_warehouse"})
+     * @ParamConverter("order", class="OrderBundle:Orders", options={"id" = "id_order"})
+     *
+     * @Method("GET")
+     */
+    public function renderOrderWarehouseReviewAction(Orders $order, Warehouse $warehouse)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $channel = $order->getChannel();
+
+        if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
+            $user = $this->getUser();
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
+
+            $groups = $user->getGroupsArray();
+            $is_dis = $is_retail = 0;
+
+            if(isset($groups['Retailer']))
+                $is_retail = 1;
+            if(isset($groups['Distributor']))
+                $is_dis = 1;
+            $pop = $order->getPopItems();
+
+            $is_shipped = false;
+
+            foreach($product_data as $prod) {
+                foreach($prod as $item)
+                    if($item['shipped'] == true)
+                        $is_shipped = true;
+            }
+
+            if($is_shipped == true)
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
+            else
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
+
+            return $this->render('@Order/OrderProducts/view-order.html.twig', array(
+                'channel' => $channel,
+                'order' => $order,
+                'user' => $user,
+                'product_data' => $product_data,
+                'is_retail' => $is_retail,
+                'is_dis' => $is_dis,
+                'pop_items' => $pop,
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+                'shipped_status' => $shipped_status
+            ));
+        }
+        else
+            return $this->redirectToRoute('404');
+    }
 
     /**
      *

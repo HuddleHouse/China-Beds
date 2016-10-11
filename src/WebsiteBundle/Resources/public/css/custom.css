@@ -1,0 +1,707 @@
+body {
+	padding:20px 0 0;
+	font-family:"museo",serif;
+	font-weight:300;
+}
+a {
+	color:#d5ad2e;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family:"museo",serif;
+	font-weight:300;
+}
+h1 {
+	font-size:38px;
+	text-align:center;
+	margin:20px 0 0;
+}
+h2 {
+	font-family:"museo-sans-condensed",sans-serif;
+	font-weight:700;
+	font-size:26px;
+}
+h3 {
+	font-family:"museo-sans-condensed",sans-serif;
+	font-weight:700;
+	font-size:20px;
+}
+h4 {
+	font-family:"museo-sans-condensed",sans-serif;
+	font-weight:700;
+	font-size:16px;
+}
+p {
+	font-family:"museo",serif;
+	font-size:16px;
+	color:#303b40;
+	text-align:center;
+	font-weight:300;
+}
+li {
+	font-family:"museo",serif;
+	font-size:16px;
+	color:#303b40;
+	text-align:center;
+	font-weight:300;
+}
+.social-links ul {
+	text-align:right;
+	margin:0;
+	padding:0;	
+}
+.social-links ul li {
+	list-style:none;
+	background-color:#c9c9c9;
+	text-align:right;
+	display:inline-block;
+	line-height:30px;
+	color:#fff;
+	width:30px;
+	text-align:center;
+	margin-left:4px;
+}
+.navbar-header {
+	float:none;
+}
+.navbar-header .navbar-brand {
+	background:url(../images/logo.png) no-repeat;
+	width:138px;
+	height:79px;
+	text-indent:-5555px;
+	padding:0;
+}
+nav.navbar {
+	margin:0;
+	border:none;
+}
+#navbar {
+	clear:both;
+	padding:0;
+	margin-top:20px;
+	background-color:#efefef;
+	position:relative;
+}
+#navbar ul li a {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#95989a;
+	padding:12px 30px;
+	text-transform:uppercase;
+}
+#navbar .regiter-head {
+	position:absolute;
+	right:2px;
+	top:-13px;
+}
+.navbar-header .login-btn {
+	float:right;
+}
+.navbar-header .login-btn ul {
+	margin:0;
+	padding:0;
+}
+.navbar-header .login-btn ul li {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#95989a;
+	text-transform:uppercase;
+	list-style:none;
+	padding-top:60px;
+}
+.content-section {
+	padding:15px 0;
+}
+.slider-section {
+	padding:0;
+	margin-bottom:15px;
+}
+.slider-section img {
+	width:100%;
+}
+.home-banners .box {
+	position:relative;
+}
+.home-banners .box img {
+	width:100%;
+}
+.home-banners .box .heading {
+	position:absolute;
+	top:10px;
+	left:10px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	text-align:left;
+	color:#3d3d3e;
+	text-transform:uppercase;
+}
+.mattresses-list {
+	margin:50px 0;
+}
+.mattresses-list ul {
+	padding:0;
+}
+.mattresses-list ul li {
+	list-style:none;
+}
+.mattresses-list ul li .box {
+	border:1px solid #bbbdbe;
+	margin-bottom:20px;
+}
+.mattresses-list ul li .box .img {
+	padding:20px 0;
+	width:100%;
+	height:170px;
+	text-align:center;
+}
+.mattresses-list ul li .box .img img {
+	width:auto;
+	max-width:100%;
+	height:auto;
+	max-height:170px;
+	position:relative;
+	top:50%;
+	transform:translateY(-50%);
+}
+.mattresses-list ul li .box h3 {
+	margin:0 0 7px 0;
+	color:#95989a;
+	text-align:center;
+	padding:0 10px;
+}
+.mattresses-list ul li .box p {
+	color:#95989a;
+	text-align:center;
+	line-height:20px;
+	padding:0 10px;
+	height:80px;
+	overflow:hidden;
+}
+.mattresses-list ul li .box .price {
+	background-color:#cccdcf;
+	font-family:"museo-sans-condensed",sans-serif;
+	color:#fff;
+	text-align:center;
+	padding:14px 0;
+	font-size:18px;
+	line-height:20px;
+	font-weight:700;
+}
+footer {
+	background-color:#e2e2e2;
+	padding:10px 0;
+}
+.copyright {
+	font-size:14px;
+	text-align:center;
+	color:#303b40;
+	padding:10px 0;
+}
+.product-description {
+	padding:10px 0;
+}
+.product-description .product-image {
+	margin-bottom:40px;
+	text-align:center;
+}
+.product-description .product-image img {
+	width:auto;
+	max-width:100%;
+	height:auto;
+	max-height:100%;
+}
+.product-description .product-types {
+	text-align:center;
+}
+.product-description .product-types ul {
+	margin:0;
+	padding:0;
+}
+.product-description .product-types ul li {
+	width:12%;
+	margin-right:9.2%;
+	list-style:none;
+	margin-bottom:20px;
+	vertical-align:top;
+	display:inline-block;
+}
+.product-description .product-types ul li:nth-child(5n) {
+	margin-right:0;
+}
+.product-description .product-types ul li .icon img {
+	width:100%;
+}
+.product-description .product-types ul li .title {
+	margin-top:5px;
+	font-family:"museo-sans-condensed",sans-serif;
+	font-size:11px;
+	text-align:center;
+	color:#303b40;
+	font-weight:300;
+	line-height:14px;
+	text-transform:uppercase;
+}
+.product-description .product-types ul li .title a {
+	color:#303b40;
+}
+.product-description h3 {
+	font-family:"museo",serif;
+	color:#303b40;
+	margin:0 0 10px 0;
+	font-weight:500;
+}
+.product-description p {
+	font-family:"museo-sans-condensed",sans-serif;
+	color:#303b40;
+	text-align:left;
+	line-height:22px;
+	font-size:16px;
+}
+.suggested-price {
+	background-color:#e3e3e3;
+	padding:30px;
+}
+.suggested-price h4 {
+	color:#303b40;
+	margin:0 0 10px 0;
+}
+.suggested-price .price-list ul {
+	margin:0;
+	padding:0;
+}
+.suggested-price .price-list ul li {
+	list-style:none;
+	border:1px solid #b0b2b4;
+	background-color:#fff;
+	margin:10px 4% 10px 0;
+	padding:5px 0;
+	text-align:center;
+	font-family:"museo-sans-condensed",sans-serif;
+	font-size:16px;
+	color:#343e43;
+	font-weight:700;
+	width:21.4%;
+	display:inline-block;
+}
+.suggested-price .price-list ul li:nth-child(4n) {
+	margin-right:0;
+}
+.suggested-price .contact-block p {
+	font-weight:500;
+	line-height:18px;
+	margin-top:10px;
+}
+.suggested-price .contact-block .contact-btn {
+	background-color:#d5a301;
+	border:1px solid #b0b2b4;
+	margin-top:10px;
+	font-family:"museo",serif;
+	font-weight:500;
+	text-transform:uppercase;
+	color:#fff;
+	width:100%;
+	text-align:center;
+	padding:20px 0;
+	display:block;
+	font-size:16px;
+	font-weight:500;
+}
+.product-description .product-struture {
+	padding:40px 0;
+	text-align:center;
+}
+.product-description .product-struture img {
+	width:auto;
+	height:auto;
+	max-width:100%;
+	max-height:100%;
+}
+.pillow-list {
+	width:80%;
+	margin:50px auto;
+}
+.pillow-list ul li .box p {
+	height:120px;
+	font-family:"museo-sans-condensed",sans-serif;
+	padding-left:15px;
+	padding-right:15px;
+}
+.adjustable-list {
+	width:80%;
+	margin:50px auto;
+}
+.adjustable-list .box {
+	border:1px solid #bbbdbe;
+	margin-bottom:30px;
+	padding:30px;
+}
+.adjustable-list .box .description {
+	position:relative;
+	padding-top:40px;
+}
+.adjustable-list .box .description h3 {
+	color:#95989a;
+	text-align:center;
+	margin:0 0 10px 0;
+}
+.adjustable-list .box .description p {
+	color:#95989a;
+	text-align:center;
+	font-family:"museo-sans-condensed",sans-serif;
+}
+.adjustable-list .box .img {
+	padding-left:50px;
+}
+.adjustable-list .box .img img {
+	width:auto;
+	height:auto;
+	max-width:100%;
+	max-height:100%;
+}
+.feature-outter .feature-img img {
+	width:auto;
+	height:auto;
+	max-width:100%;
+	max-height:100%;	
+}
+.feature-outter .feature-list {
+	margin-bottom:30px;
+	width:100%;
+	float:left;
+}
+.feature-outter .feature-list ul {
+	margin:0;
+	padding:0;
+}
+.feature-outter .feature-list ul li {
+	list-style:none;
+	margin-bottom:20px;
+	width:100%;
+	float:left;
+}
+.feature-outter .feature-list ul li i {
+	width:100px;
+	height:100px;
+	float:left;
+	margin-right:10px;
+}
+.feature-outter .feature-list ul li:nth-child(even) i {
+	float:right;
+	margin-right:0;
+	margin-left:10px;
+}
+.feature-outter {
+	margin:40px 0;
+}
+.feature-outter .feature-list ul li i img {
+	width:100%;
+}
+.feature-outter .feature-list ul li h4 {
+	font-family:"museo",serif;
+	color:#303b40;
+	text-align:left;
+	margin:0;
+	padding-top:15px;
+}
+.feature-outter .feature-list ul li:nth-child(even) h4 {
+	text-align:right;
+}
+.feature-outter .feature-list ul li p {
+	font-family:"museo-sans-condensed",sans-serif;
+	color:#9ea1a3;
+	text-align:left;
+}
+.feature-outter .feature-list ul li:nth-child(even) p {
+	text-align:right;
+}
+.feature-outter .safety-block {
+	background-color:#303b40;
+	padding:50px 40px;
+}
+.feature-outter .safety-block h4 {
+	font-family:"museo",serif;
+	color:#9ea1a3;
+	font-weight:700;
+	text-align:left;
+	padding:0;
+	margin:0;
+}
+.feature-outter .safety-block p {
+	color:#9ea1a3;
+	font-weight:300;
+	text-align:left;
+	padding:0;
+	margin:0 0 20px 0;
+}
+.feature-outter .safety-block ul li {
+	color:#9ea1a3;
+	font-weight:300;
+	text-align:left;
+}
+
+.feature-outter .tax-block {
+	padding:50px 30px;
+}
+.feature-outter .tax-block h4 {
+	font-family:"museo",serif;
+	color:#303b40;
+	font-weight:700;
+	text-align:left;
+	padding:0;
+	margin:0;
+}
+.feature-outter .tax-block p {
+	color:#303b40;
+	font-weight:300;
+	text-align:left;
+	padding:0;
+	margin:0 0 20px 0;
+}
+.feature-outter .tax-block ul li {
+	color:#303b40;
+	font-weight:300;
+	text-align:left;
+}
+.retailer-header {
+	position:relative;
+	margin-bottom:30px;
+}
+.retailer-header img {
+	width:100%;
+	height:auto;
+}
+.retailer-header .title {
+	position:absolute;
+	top:50%;
+	transform:translateY(-50%);
+	right:70px;
+	text-align:center;
+	font-size:53px;
+	font-family:"museo",serif;
+	font-weight:300;
+	color:#3d3d3e;
+	line-height:55px;
+}
+.retailer-form {
+	padding:20px;
+	background-color:#303b40;
+}
+.retailer-form .title {
+	text-align:center;
+	font-size:24px;
+	font-family:"museo",serif;
+	font-weight:700;
+	color:#fff;
+	padding-bottom:25px;
+}
+.retailer-form .title i {
+	background:url(../images/Yellow%20Round%20Icon@2x.png) no-repeat;
+	width:56px;
+	background-size:cover;
+	height:52px;
+	display:inline-block;
+	position:relative;
+	top:18px;
+}
+.retailer-form p {
+	color:#fff;
+	text-align:left;
+	margin-bottom:20px;
+}
+.current-retailer {
+	font-size:18px;
+	font-family:"museo",serif;
+	font-weight:300;
+	color:#fff;
+	text-align:left;
+	margin-bottom:30px;
+	margin-top:20px;
+}
+.current-retailer .button {
+	background-color:#95989a;
+	font-size:18px;
+	font-family:"museo",serif;
+	font-weight:300;
+	color:#fff;
+	text-align:center;
+	width:60px;
+	padding:4px 0;
+	display:inline-block;
+	margin-left:10px;
+}
+.current-retailer .button.active {
+	background-color:#d5a301;
+}
+.current-retailer .button:last-child {
+	margin-left:-4px;
+}
+.form-group label {
+	font-size:16px;
+	font-family:"museo",serif;
+	font-weight:300;
+	color:#fff;
+	text-align:left;
+	margin-top:0;
+}
+.form-group .form-control {
+	border:none;
+	border-radius:0;
+	-moz-border-radius:0;
+	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+	box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0);
+	-webkit-transition: border-color ease-in-out 0s, -webkit-box-shadow ease-in-out 0s;
+	-o-transition: border-color ease-in-out 0s, box-shadow ease-in-out 0s;
+	transition: border-color ease-in-out 0s, box-shadow ease-in-out 0s;
+}
+.retailer-form hr {
+	margin:20px auto;
+	border-color:#d5a301;
+	width:80%;
+}
+.retailer-form p a {
+	color:#d5a301;
+}
+.mlily-benifit {
+	padding:0 0 40px 0;
+}
+.mlily-benifit h2 {
+	font-size:32px;
+	color:#95989a;
+	font-family:"museo",serif;
+	text-align:center;
+	padding-bottom:30px;
+	font-weight:300;
+}
+.mlily-benifit .img {
+	text-align:center;
+}
+.mlily-benifit .img img {
+	width:80%;
+}
+.mlily-benifit p {
+	font-size:16px;
+	color:#95989a;
+	font-family:"museo",serif;
+	text-align:center;
+	padding-top:20px;
+}
+.faq .content-main {
+	padding:0 20px;
+}
+.faq h1 {
+	color:#95989a;
+	margin-bottom:50px;
+}
+.faq h2 {
+	color:#303b40;
+	text-align:left;
+	margin-bottom:20px;
+	font-family:"museo",serif;
+	font-weight:normal;
+}
+.faq h3 {
+	color:#303b40;
+	text-align:left;
+	margin-bottom:5px;
+	margin-top:20px;
+	font-family:"museo",serif;
+	font-weight:normal;
+}
+.faq p {
+	color:#303b40;
+	text-align:left;
+	margin-bottom:20px;
+	font-weight:normal;
+	font-family:"museo-sans-condensed",sans-serif;
+	line-height:20px;
+}
+.faq li {
+	color:#303b40;
+	text-align:left;
+	font-weight:normal;
+	font-family:"museo-sans-condensed",sans-serif;
+	line-height:20px;
+}
+.contact-form {
+	margin:40px 0;
+	background-color:#303b40;
+	padding:30px;
+}
+.contact-form h3 {
+	color:#d5a301;
+	margin:0;
+	font-family:"museo",serif;
+	font-weight:normal;
+	line-height:30px;
+}
+.contact-form h3 span {
+	color:#fff;
+	display:block;
+}
+.choose-file {
+	margin:0 auto 20px;
+	text-align:center;
+	width:50%;
+}
+.choose-file .button {
+	background-color:#fff;
+	font-size:16px;
+	font-family:"museo",serif;
+	font-weight:300;
+	color:#303b40;
+	text-align:center;
+	width:50%;
+	padding:6px 0;
+	display:inline-block;
+}
+.choose-file .button.active {
+	background-color:#d5a301;
+	color:#fff;
+}
+.choose-file .button:last-child {
+	margin-left:-4px;
+}
+.contact-form p {
+	color:#fff;
+}
+.char-box {
+	width:50%;
+	margin:auto;
+}
+.char-box .char-text {
+	background-color:#b0b2b4;
+	padding:10px;
+	margin-bottom:20px;
+}
+.contact-form .btn {
+	width:100%;
+	margin-top:20px;
+	padding:8px 0;
+	text-align:center;
+	border-radius:0;
+	-moz-border-radius:0;
+	border:none;
+	font-size:16px;
+}
+.contact-form .btn.btn-default {
+	background-color:#fff;
+	color:#d5a301;
+}
+.contact-form .btn.btn-primary {
+	background-color:#d5a301;
+	color:#fff;
+}
+.option-yn {
+	background-color:#95989a;
+	font-size:18px;
+	font-family:"museo",serif;
+	font-weight:300;
+	color:#fff;
+	text-align:center;
+	width:60px;
+	padding:4px 0;
+	display:inline-block;
+}
+.option-yn.active {
+	background-color:#d5a301;
+}
+.option-yn:last-child {
+	margin-left:-4px;
+}

@@ -57,10 +57,10 @@ class OrderProductsController extends Controller
                 $em->remove($productVariant);
 
             $order->setData($info);
-
         }
-        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
         $em->persist($order);
+        $em->flush();
+        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
@@ -169,7 +169,6 @@ class OrderProductsController extends Controller
         }
 
 
-
         $response = $rate->getSimpleRates();
         $data = array_pop($response);
 
@@ -189,6 +188,54 @@ class OrderProductsController extends Controller
 
         return $data;
     }
+
+    /**
+     * @Route("/api_create_shipping_label", name="api_create_shipping_label")
+     * @param Request $request
+     */
+    public function makeShippingLabel(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $order_id = $request->request->get('order_id');
+        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+
+        $shipment = new \RocketShipIt\Shipment('fedex');
+
+
+
+        $shipment->setParameter('toCode', $order->getShipZip());
+//        $shipment->setParameter('residentialAddressIndicator','1');
+        $shipment->setParameter('service', 'GROUND_HOME_DELIVERY');
+        $shipment->setParameter('toCompany', 'John Doe');
+        $shipment->setParameter('toName', 'John Doe');
+        $shipment->setParameter('toPhone', '1231231234');
+        $shipment->setParameter('toAddr1', '111 W Legion');
+        $shipment->setParameter('toCity', 'Knoxville');
+        $shipment->setParameter('toState', 'TN');
+        $shipment->setParameter('toCode', '37919');
+
+        foreach($order->getProductVariants() as $productVariant) {
+            $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+            $package = new \RocketShipIt\Package('fedex');
+            $package->setParameter('length', "$dimensions[0]");
+            $package->setParameter('width', "$dimensions[1]");
+            $package->setParameter('height', "$dimensions[2]");
+            $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
+            $shipment->addPackageToShipment($package);
+        }
+
+        $response = $shipment->submitShipment();
+
+        if (isset($response['error']) && $response['error'] != '') {
+            // Something went wrong, show debug information
+            echo $shipment->debug();
+        } else {
+            // Create label as a file
+            $fole = base64_decode($response['pkgs'][0]['label_img']);
+            file_put_contents('label.png', base64_decode($response['pkgs'][0]['label_img']));
+            return JsonResponse::create($response); // display response
+        }
+    }
+
 
 
     /**
@@ -257,7 +304,7 @@ class OrderProductsController extends Controller
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger') {
             $ledger_service = $this->get('order.ledger');
-            $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), "Paid for order #".$order->getOrderNumber(), 'Order', $order);
+            $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
         }
         else if($payment_type == 'cc') {
             $cc = $request->request->get('cc');
@@ -273,6 +320,56 @@ class OrderProductsController extends Controller
         $order->setAmountPaid($order->getTotal());
         $em->persist($order);
         $em->flush();
+        return JsonResponse::create(true);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|static
+     *
+     * @Route("/api_mark_part_of_order_shipped", name="api_mark_part_of_order_shipped")
+     */
+    public function markPartOfOrderShipped(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $order_id = $request->request->get('order_id');
+        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+
+        $warehouse_id = $request->request->get('warehouse_id');
+        $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+
+        //get the warehouse specific order data
+        $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
+
+        foreach($product_data as $prod) {
+            foreach($prod as $item) {
+                $order_warehouse_info = $em->getRepository('OrderBundle:OrdersWarehouseInfo')->find($item['id']);
+                $order_warehouse_info->setShipped(1);
+                $em->persist($order_warehouse_info);
+            }
+        }
+
+        //check to see if the whole order is shipped and change the status on the order to Shipped if so.
+        //get the order data for entire order
+        $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
+        $is_shipped = true;
+
+        foreach($product_data as $prod) {
+            foreach($prod as $item)
+                if($item['shipped'] == false) {
+                    $is_shipped = false;
+                    break;
+                }
+        }
+
+        if($is_shipped == true) {
+            $status = $em->getRepository("WarehouseBundle:Status")->findOneBy(array('name' => 'Shipped'));
+            $order->setStatus($status);
+            $em->persist($order);
+        }
+
+        $em->flush();
+
+
         return JsonResponse::create(true);
     }
 }
