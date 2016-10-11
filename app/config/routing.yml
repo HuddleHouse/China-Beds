@@ -1,3 +1,7 @@
+website:
+    resource: "@WebsiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
 order_ledger:
     resource: "@OrderBundle/Controller/LedgerController.php"
     type:     annotation
