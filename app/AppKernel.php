@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new OrderBundle\OrderBundle(),
             new WarehouseBundle\WarehouseBundle(),
+            new Spraed\PDFGeneratorBundle\SpraedPDFGeneratorBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
