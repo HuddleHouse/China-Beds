@@ -1,3 +1,5 @@
 website_homepage:
-    path:     /
-    defaults: { _controller: WebsiteBundle:Default:index }
+    path:     /{site}
+    defaults: { _controller: WebsiteBundle:Website:index }
+    requirements:
+        site: mlily|bedboss

@@ -4,10 +4,12 @@ namespace WebsiteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DefaultController extends Controller
+class WebsiteController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('WebsiteBundle:Default:index.html.twig');
+        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+
+        ));
     }
 }
