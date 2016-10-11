@@ -268,6 +268,11 @@
         address {
             line-height: 1.5 !important;
         }
+        @media print {
+            .page-header {
+                margin: 0px !important;
+            }
+        }
     </style>
 
     <div id="error-message">
@@ -276,7 +281,7 @@
     <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
         <div class="table"  style="min-height: 100vh;">
             {% if order.status.name == 'Draft' %}
-                <div class="row">
+                <div class="row no-print">
                     <div class="col-xs-12">
                         <div class="color-block">
                             Preview Only! Must confirm order to complete the process.
@@ -285,7 +290,7 @@
                     <!-- /.col -->
                 </div>
             {% elseif order.status.name == 'Paid' %}
-                <div class="row">
+                <div class="row no-print">
                     <div class="col-xs-12">
                         <div class="color-block-paid">
                            Order Placed
@@ -343,7 +348,7 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-            <hr>
+            <hr class="no-print">
             {% for prod in product_data %}
                 <!-- Table row -->
                 {% if shipped_status is defined %}
@@ -432,7 +437,7 @@
                 <!-- accepted payments column -->
                 <div class="col-md-6">
                     {% if is_granted('ROLE_WAREHOUSE') == false %}
-                        <fieldset style="margin-top: 20px;margin-bottom: 50px;">
+                        <fieldset style="margin-top: 20px;margin-bottom: 50px;" class="no-print">
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
@@ -513,7 +518,7 @@
                 <div class="col-md-6">
                     {% if order.isPickUp == 0 %}
                         {% if order.status.name == 'Draft' %}
-                            {% if is_granted('ROLE_WAREHOUSE') == false %}<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
+                            {% if is_granted('ROLE_WAREHOUSE') == false %}<label class="no-print"><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
                         {% endif %}
                     {% elseif order.isPickUp == 1 %}
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
