@@ -17,6 +17,10 @@
         $(document).ready(function () {
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 1, "desc" ]] });
+            $('#submissionModal').on('hidden.bs.modal', function (e) {
+                $('#submission-modal-content').addClass('expand');
+                $('#submission-modal-body').html('');
+            });
         });
 
         function spinModal(id) {
@@ -39,9 +43,11 @@
 
                     $('.spinner').hide();
                     if(!data[0]) {
+                        $('#submissionModal').modal('hide');
                         showErrorModal('Error: ' + data[1]);
                     }
                     else {
+                        $('#submission-modal-content').removeClass('expand');
                         $('#submission-modal-body').html(data[1]);
                     }
                 }
@@ -122,7 +128,7 @@
     <!-- Modal -->
     <div class="modal fade" id="submissionModal" tabindex="-1" role="dialog" aria-labelledby="submissionModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" id="submission-modal-content">
+            <div class="modal-content expand" id="submission-modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="submissionModalLabel">Approve/Deny Rebate Submission</h4>

@@ -25,7 +25,7 @@
                     $('#charNum').text(l);
                 }
             });
-
+            $('#charNum').text(255 - $('#warranty_approval_resolution').val().length);
             $('#submit_btn').on('click', function(event) {
                 var applyCredit = $('#warranty_approval_applyCredit').val();
                 var approvalAmount = $('#warranty_approval_amount').val();

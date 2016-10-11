@@ -154,22 +154,6 @@ class Rebate
     /**
      * @return mixed
      */
-    public function getSubmittedForUser()
-    {
-        return $this->submittedForUser;
-    }
-
-    /**
-     * @param mixed $submittedForUser
-     */
-    public function setSubmittedForUser($submittedForUser)
-    {
-        $this->submittedForUser = $submittedForUser;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getSubmittedByUser()
     {
         return $this->submittedByUser;

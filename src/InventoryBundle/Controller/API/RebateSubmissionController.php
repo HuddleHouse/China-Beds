@@ -58,7 +58,7 @@ class RebateSubmissionController extends Controller
     }
 
     /**
-     * Approve/Deny Rebate Submission
+     * Show a Rebate Submission
      *
      * @Route("/api_show_rebate_submission", name="api_show_rebate_submission")
      * @Method({"GET", "POST"})

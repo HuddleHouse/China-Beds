@@ -136,6 +136,8 @@ class WarrantyClaimController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                if($warrantyClaim->getDateMadeAware() == null)
+                    $warrantyClaim->setDateMadeAware(new \DateTime());
                 $applyCredit = $form->get('applyCredit')->getNormData();
                 $amount = $form->get('amount')->getNormData();
                 if($applyCredit) {
@@ -150,7 +152,6 @@ class WarrantyClaimController extends Controller
                         $warrantyClaim->getId()
                     );
                 }
-
                 $warrantyClaim->setIsArchived(true);
                 $em->persist($warrantyClaim);
                 $em->flush();
@@ -163,7 +164,6 @@ class WarrantyClaimController extends Controller
                     'form' => $form->createView(),
                 ));
             }
-
             $this->addFlash('notice', 'Credit posted.');
             return $this->redirectToRoute('warrantyclaim_index');
         }

@@ -227,6 +227,19 @@ class Channel
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getActiveRebates()
+    {
+        $rtn = new ArrayCollection();
+        foreach($this->rebates as $rebate)
+            if($rebate->getActive())
+                $rtn->add($rebate);
+
+        return $rtn;
+    }
+
+    /**
      * @param ArrayCollection $rebates
      */
     public function setRebates($rebates)

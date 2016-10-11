@@ -55,7 +55,7 @@ class RebateSubmissionType extends AbstractType
                     'class' => 'InventoryBundle\Entity\Rebate',
                     'label' => 'Rebate',
                     'choice_label' => 'name',
-                    'choices' => $builder->getData()->getChannel()->getRebates(),
+                    'choices' => $builder->getData()->getChannel()->getActiveRebates(),
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                     'required' => true,
                 )

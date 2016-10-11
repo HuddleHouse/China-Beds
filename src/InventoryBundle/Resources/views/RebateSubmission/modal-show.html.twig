@@ -5,6 +5,13 @@
         $('#submission_id').val({{ rebateSubmission.id | default(0) }});
     });
 
+    function spinModal(id) {
+        var target = document.getElementById(id);
+        var spinner = new Spinner(opts).spin(target);
+        target.appendChild(spinner.el);
+        console.log(id);
+    }
+
     function showErrorInModal(message) {
         $('#error-in-modal').append(
                 '<div class="col-lg-12 alert alert-danger alert-dismissable"> ' +
@@ -20,29 +27,38 @@
         spinModal('submission-modal-content');
         var creditIssued = $('#rebate_approval_creditIssued').val();
         var amountIssued = $('#rebate_approval_amountIssued').val();
-        if(creditIssued == 0 && amountIssued > 0)
-            showErrorInModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit."');
+        if(amountIssued == null || amountIssued == '')
+            showErrorInModal('You must fill declare an amount to issue, even if it is 0.');
         else {
-            if(creditIssued == 1 && amountIssued <= 0)
-                showErrorInModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit."');
-            else
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ path('api_approve_deny_rebate_submission') }}",
-                    dataType: 'json',
-                    data: { submission_id: $('#submission_id').val(), credit_issued: $('#rebate_approval_creditIssued').val(), amount_issued: moneyFormat($('#rebate_approval_amountIssued').val()) },
-                    success: function (data) {
-//                console.log(JSON.stringify(data,null,4));
-                        $('.spinner').hide();
-                        if(!data[0]) {
-                            showErrorInModal('Error: ' + data[1]);
+            if (creditIssued == 0 && amountIssued > 0)
+                showErrorInModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit."');
+            else {
+                if (creditIssued == 1 && amountIssued <= 0)
+                    showErrorInModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit."');
+                else {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_approve_deny_rebate_submission') }}",
+                        dataType: 'json',
+                        data: {
+                            submission_id: $('#submission_id').val(),
+                            credit_issued: $('#rebate_approval_creditIssued').val(),
+                            amount_issued: moneyFormat($('#rebate_approval_amountIssued').val())
+                        },
+                        success: function (data) {
+//                            console.log(JSON.stringify(data,null,4));
+                            $('.spinner').hide();
+                            if (!data[0]) {
+                                showErrorInModal('Error: ' + data[1]);
+                            }
+                            else {
+                                $('#submissionModal').modal('hide');
+                                location.reload();
+                            }
                         }
-                        else {
-                            $('#submissionModal').modal('hide');
-                            location.reload();
-                        }
-                    }
-                });
+                    });
+                }
+            }
         }
     }
 </script>
@@ -109,6 +125,6 @@
     {% if rebateSubmission.creditIssued is not null %}
         <br><strong>You may not edit a rebate request that has been processed.</strong>
     {% else %}
-        <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Submit" />
+        <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Submit" onclick="updateSubmission()" />
     {% endif %}
 </div>
