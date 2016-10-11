@@ -170,12 +170,12 @@ class User extends BaseUser
     private $office;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedForUser")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="submittedForUser")
      */
-    private $rebates;
+    private $rebate_submissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedByUser")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="submittedByUser")
      */
     private $submitted_rebates;
 
@@ -287,7 +287,7 @@ class User extends BaseUser
         $this->warranty_claims = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
-        $this->rebates = new ArrayCollection();
+        $this->rebate_submissions = new ArrayCollection();
         $this->submitted_rebates = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->orders = new ArrayCollection();
@@ -1136,17 +1136,17 @@ class User extends BaseUser
     /**
      * @return ArrayCollection
      */
-    public function getRebates()
+    public function getRebateSubmissions()
     {
-        return $this->rebates;
+        return $this->rebate_submissions;
     }
 
     /**
-     * @param ArrayCollection $rebates
+     * @param ArrayCollection $rebate_submissions
      */
-    public function setRebates($rebates)
+    public function setRebateSubmissions($rebate_submissions)
     {
-        $this->rebates = $rebates;
+        $this->rebate_submissions = $rebate_submissions;
     }
 
     /**

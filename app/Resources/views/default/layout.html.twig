@@ -8,6 +8,10 @@
             margin-top: 9px;
             background-color: rgb(231, 234, 236);
         }
+
+        .expand {
+            height: 70vh;
+        }
     </style>
     <div class="wrapper">
     <header class="main-header no-print">
@@ -95,7 +99,8 @@
         {% set sidebar_rebate_submit = ['rebate_submit_index', 'rebate_submit_edit', 'rebate_submit_show'] %}
         {% set sidebar_rebate_submit_new = ['rebate_submit_new'] %}
         {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit'] %}
-        {% set sidebar_rebate_submit_user_claims = ['rebate_submit_user_claims'] %}
+        {% set sidebar_credit_index = ['ledger_index', 'ledger_edit'] %}
+        {% set sidebar_credit_request = ['ledger_new'] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar no-print" style="margin-top: 10px;">
@@ -176,7 +181,7 @@
 
                             {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
                                 {% for channel in sidebar_user_channels %}
-                                <li {% if (app.request.get('_route') in sidebar_order) %} class="active"{% endif %}>
+                                <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == channel.id) %} class="active"{% endif %}>
                                     <a href="{{ path('order_products_index', {'id': channel.id}) }}"><i class="fa fa-circle-o"></i>Order {{ channel.name }} Products</a>
                                 </li>
                                 {%  endfor %}
@@ -325,26 +330,22 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
-                                    {% for channel in sidebar_user_channels %}
-                                        <li {% if (app.request.get('_route') in sidebar_warranty) %} class="active"{% endif %}>
-                                            <a href="{{ path('warrantyclaim_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>Warranty {{ channel.name }} Claim</a>
-                                        </li>
-                                    {%  endfor %}
-                                {% endif %}
                                 <li {% if (app.request.get('_route') in sidebar_warranty_claims) %} class="active"{% endif %}>
-                                    <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>All Warranty Claims</a>
+                                    <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>Warranty Claims</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>My Warranty Claims</a>
-                                </li>
+                                {% for channel in sidebar_user_channels %}
+                                    <li {% if (app.request.get('_route') in sidebar_warranty and app.request.get('id') == channel.id) %} class="active"{% endif %}>
+                                        <a href="{{ path('warrantyclaim_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>{{ channel.name }} Warranty Claim</a>
+                                    </li>
+                                {%  endfor %}
                             </ul>
                         </li>
 
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
-                            {% elseif (app.request.get('_route') in sidebar_rebate_submit_user_claims) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -353,27 +354,29 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_new) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_new') }}"><i class="fa fa-circle-o"></i>Rebate Claim</a>
-                                </li>
                                 <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
+                                    {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                        <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates</a>
+                                    {% else %}
+                                        <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
+                                    {% endif %}
                                 </li>
+                                {% for channel in sidebar_user_channels %}
+                                    <li {% if (app.request.get('_route') in sidebar_rebate_submit_new and app.request.get('id') == channel.id) %} class="active"{% endif %}>
+                                        <a href="{{ path('rebate_submit_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>Submit {{ channel.name }} Rebate</a>
+                                    </li>
+                                {% endfor %}
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebates Submitted</a>
+                                    <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_user_claims) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_user_claims') }}"><i class="fa fa-circle-o"></i>My Rebate Claims</a>
+                                <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
+                                    <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Credit Requests</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Credit Status</a>
-                                </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Request Credit</a>
-                                </li>
-                                <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                    <a href=""><i class="fa fa-circle-o"></i>Credit Requests</a>
-                                </li>
+                                {% for channel in sidebar_user_channels %}
+                                    <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == channel.id) %} class="active"{% endif %}>
+                                        <a href="{{ path('ledger_new', {'id': channel.id}) }}"><i class="fa fa-circle-o"></i>Request {{ channel.name }} Credit</a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </li>
 
@@ -408,12 +411,20 @@
             <div class="row hidden-print" style="margin-top: 10px;">
                 <div class="col-xs-12">
                     {% for flash_message in app.session.flashbag.get('notice') %}
-                        <div class="alert alert-success">
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
                             {{ flash_message }}
                         </div>
                     {% endfor %}
                     {% for flash_message in app.session.flashbag.get('error') %}
-                        <div class="alert alert-error">
+                        <div class="alert alert-error alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
                             {{ flash_message }}
                         </div>
                     {% endfor %}

@@ -25,13 +25,15 @@
                     $('#charNum').text(l);
                 }
             });
-
+            $('#charNum').text(255 - $('#warranty_approval_resolution').val().length);
             $('#submit_btn').on('click', function(event) {
-                if($('#warranty_approval_applyCredit').val() == 0 && $('#warranty_approval_amount').val() > 0) {
+                var applyCredit = $('#warranty_approval_applyCredit').val();
+                var approvalAmount = $('#warranty_approval_amount').val();
+                if(applyCredit == 0 && approvalAmount > 0) {
                     event.preventDefault();
                     showErrorModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit"');
                 }
-                else if($('#warranty_approval_applyCredit').val() == 1 && $('#warranty_approval_amount').val() <= 0) {
+                else if(applyCredit == 1 && approvalAmount <= 0) {
                     event.preventDefault();
                     showErrorModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit"');
                 }
@@ -54,7 +56,7 @@
     {% endif %}
     <div class="table">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <table class="table table-striped table-bordered no-footer">
                     <thead>
                     <tr>
@@ -108,7 +110,7 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                <div class="col-md-2 form-group">
+                <div class="col-lg-2 form-group">
                     {{ form_label(form.applyCredit) }}
                     {{ form_widget(form.applyCredit) }}
                 </div>
@@ -118,7 +120,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 form-group">
+                <div class="col-lg-4 form-group">
                     {{ form_label(form.resolution) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.resolution) }}
                 </div>

@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Rebate edit{% endblock %}
+{% block title %}Edit Rebate{% endblock %}
 {% block page_title %}
-    Rebate edit
+    Edit Rebate
 {% endblock page_title %}
 
 {% block page_name %}
@@ -15,38 +15,54 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#charNum').text(255 - $('#rebate_description').val().length);
+            $('#rebate_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
         });
     </script>
 {% endblock footer %}
 
 {% block content %}
-    {{ form_start(edit_form) }}
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_label(edit_form.name) }}
-            {{ form_widget(edit_form.name) }}
+    {% if not edit_form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(edit_form.name) }}
+                    {{ form_errors(edit_form.channel) }}
+                    {{ form_errors(edit_form.description) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.name) }}
+                    {{ form_widget(edit_form.name) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.channel) }}
+                    {{ form_widget(edit_form.channel) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 form-group">
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
+                    {{ form_widget(edit_form.description) }}
+                </div>
+            </div>
+            <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            {{ form_end(edit_form) }}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            {{ form_label(edit_form.description) }}
-            {{ form_widget(edit_form.description) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            {{ form_label(edit_form.active) }}
-            {{ form_widget(edit_form.active) }}
-        </div>
-    </div>
-
-        {{ form_widget(edit_form) }}
-        <input class="btn btn-raised btn-success" type="submit" value="Update" />
-    {{ form_end(edit_form) }}
-
-    {{ form_start(delete_form) }}
-    <input class="btn btn-raised btn-danger" type="submit" value="Delete">
-    {{ form_end(delete_form) }}
 {% endblock %}

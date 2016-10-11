@@ -1,0 +1,157 @@
+<script>
+    $(document).ready(function () {
+        $('#warranty_approval_applyCredit').val(0);
+        $('#warranty_approval_amount').val('0.00');
+        $('#warranty_approval_resolution').val('{{ warranty_claim.resolution | default('') }}');
+        $('#claim_id').val({{ warranty_claim.id | default(0) }});
+        $('#warranty_approval_resolution').keyup(function () {
+            var len = $(this).val().length;
+            if (len >= 255) {
+                $(this).val($(this).val().substring(0, 255));
+                $('#charNum').text(0);
+            } else {
+                var l = 255 - len;
+                $('#charNum').text(l);
+            }
+        });
+        $('#charNum').text(255 - $('#warranty_approval_resolution').val().length);
+    });
+
+    function showErrorInModal(message) {
+        $('#error-in-modal').append(
+                '<div class="col-lg-12 alert alert-danger alert-dismissable"> ' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"> ' +
+                '<span aria-hidden="true">&times;</span> ' +
+                '</button> ' +
+                message +
+                '</div>'
+        );
+    }
+
+    function updateClaim() {
+        spinModal('claim-modal-content');
+        var applyCredit = $('#warranty_approval_applyCredit').val();
+        var approvalAmount = $('#warranty_approval_amount').val();
+        var resolution = $('#warranty_approval_resolution').val();
+        if(approvalAmount == null || approvalAmount == '')
+            showErrorInModal('You must fill declare an amount to issue, even if it is 0.');
+        else {
+            if (resolution == null || resolution == '')
+                showErrorInModal('You must provide a resolution.');
+            else {
+                if (applyCredit == 0 && approvalAmount > 0)
+                    showErrorInModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit."');
+                else {
+                    if (applyCredit == 1 && approvalAmount <= 0)
+                        showErrorInModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit."');
+                    else {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ path('api_approve_deny_warranty_claim') }}",
+                            dataType: 'json',
+                            data: {
+                                claim_id: $('#claim_id').val(),
+                                apply_credit: $('#warranty_approval_applyCredit').val(),
+                                amount: moneyFormat($('#warranty_approval_amount').val()),
+                                resolution: $('#warranty_approval_resolution').val()
+                            },
+                            success: function (data) {
+//                                console.log(JSON.stringify(data,null,4));
+                                if (!data[0]) {
+                                    showErrorInModal('Error: ' + data[1]);
+                                }
+                                else {
+                                    $('#claimModal').modal('hide');
+                                    location.reload();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        $('.spinner').hide();
+    }
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped table-bordered no-footer">
+            <thead>
+            <tr>
+                <th colspan="2" style="text-align: center">
+                    Claim Info
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Amount Requested</td>
+                <td>${{ warranty_claim.creditRequested | number_format(2) }}</td>
+            </tr>
+            <tr>
+                <td>Credit for</td>
+                <td>{{ warranty_claim.submittedForUser.fullName | default('--') }}</td>
+            </tr>
+            <tr>
+                <td>Added by</td>
+                <td>{{ warranty_claim.submittedByUser.fullName | default('--') }}</td>
+            </tr>
+            <tr>
+                <td>Date of Claim</td>
+                <td>{{ warranty_claim.dateOfClaim | date('m/d/y') }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">Description</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{ warranty_claim.description }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">Order Info</td>
+            </tr>
+            <tr>
+                <td>Order #</td>
+                <td>{{ order.orderId | default('--') }}</td>
+            </tr>
+            <tr>
+                <td>Order Total</td>
+                <td>${{ order.total | number_format(2) | default('--') }}</td>
+            </tr>
+            <tr>
+                <td>Product</td>
+                <td>{{ warranty_claim.productVariant.product.name | default('--') }} {{ warranty_claim.productVariant.name | default('') }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="form-body">
+    <div id="error-in-modal" class="row">
+    </div>
+    <div class="row">
+        <div class="col-lg-6 form-group">
+            <label for="warranty_approval_applyCredit" class="required">Apply credit</label>
+            <select id="warranty_approval_applyCredit" name="warranty_approval[applyCredit]" class="form-control" style="margin-bottom: 10px">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+        <div class="col-md-6 form-group">
+            <label for="warranty_approval_amount">Amount</label>
+            $ <input type="text" id="warranty_approval_amount" name="warranty_approval[amount]" class="form-control" style="margin-bottom: 10px" onclick="this.select()">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 form-group">
+            <label for="warranty_approval_resolution" class="required">Resolution</label> <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+            <textarea id="warranty_approval_resolution" name="warranty_approval[resolution]" required="required" class="form-control" style="margin-bottom: 10px"></textarea>
+        </div>
+    </div>
+    <input type="hidden" id="claim_id" value="" />
+    {% if warranty_claim.isArchived %}
+        <br><strong>You may not edit a warranty claim that has been processed.</strong>
+    {% else %}
+        <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Submit" onclick="updateClaim()" />
+    {% endif %}
+</div>
+

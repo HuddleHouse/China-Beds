@@ -216,9 +216,9 @@ class Orders
     private $warranty_claims;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="order")
      */
-    private $rebates;
+    private $rebate_submissions;
 
     /**
      * Orders constructor.
@@ -229,7 +229,7 @@ class Orders
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
-        $this->rebates = new ArrayCollection();
+        $this->rebate_submissions = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
@@ -885,17 +885,17 @@ class Orders
     /**
      * @return ArrayCollection
      */
-    public function getRebates()
+    public function getRebateSubmissions()
     {
-        return $this->rebates;
+        return $this->rebate_submissions;
     }
 
     /**
-     * @param ArrayCollection $rebates
+     * @param ArrayCollection $rebate_submissions
      */
-    public function setRebates($rebates)
+    public function setRebateSubmissions($rebate_submissions)
     {
-        $this->rebates = $rebates;
+        $this->rebate_submissions = $rebate_submissions;
     }
 
     /**

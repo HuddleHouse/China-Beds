@@ -45,6 +45,12 @@
                 }
             });
         }
+
+        function moneyFormat(value) {
+            var m_strOut = String(value);
+            m_strOut = m_strOut.replace(/[^0-9.]/g, '');
+            return m_strOut;
+        }
     </script>
 {% endblock footer %}
 

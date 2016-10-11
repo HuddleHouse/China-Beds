@@ -15,6 +15,7 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
+            $('#charNum').text(255 - $('#ledger_description').val().length);
             $('#ledger_description').keyup(function () {
                 var len = $(this).val().length;
                 if (len >= 255) {

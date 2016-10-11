@@ -130,9 +130,9 @@ class Ledger
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="ledgers")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\RebateSubmission", inversedBy="ledgers")
      */
-    private $rebate;
+    private $rebateSubmission;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
@@ -410,18 +410,18 @@ class Ledger
     /**
      * @return mixed
      */
-    public function getRebate()
+    public function getRebateSubmission()
     {
-        return $this->rebate;
+        return $this->rebateSubmission;
     }
 
     /**
-     * @param mixed $rebate
+     * @param mixed $rebateSubmission
      */
-    public function setRebate($rebate)
+    public function setRebateSubmission($rebateSubmission)
     {
         $this->setType(self::TYPE_REBATE);
-        $this->rebate = $rebate;
+        $this->rebateSubmission = $rebateSubmission;
     }
 
     /**
@@ -462,7 +462,7 @@ class Ledger
                 $rtn['order'] = $this->getOrder();
                 break;
             case self::TYPE_REBATE:
-                $rtn['rebate'] = $this->getRebate();
+                $rtn['rebate'] = $this->getRebateSubmission();
                 break;
             case self::TYPE_CLAIM:
                 $rtn['warrantyClaim'] = $this->getWarrantyClaim();

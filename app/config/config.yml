@@ -14,6 +14,7 @@ imports:
 parameters:
     locale: en
     product_images_directory: '%kernel.root_dir%/../web/uploads/products'
+    rebate_submissions_directory: '%kernel.root_dir%/../web/uploads/rebate_submissions'
 
 framework:
     #esi:             ~

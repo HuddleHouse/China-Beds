@@ -1,6 +1,7 @@
 <?php
 
 namespace InventoryBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * RebateSubmissionRepository
@@ -10,4 +11,74 @@ namespace InventoryBundle\Repository;
  */
 class RebateSubmissionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByUser(User $user) {
+        $user_ids = array();
+        $user_ids[$user->getId()] = $user->getId();
+        $submissions = array();
+
+        $data = $this->findBy(array('submittedForUser' => $user));
+        foreach($data as $item)
+            $submissions[] = $item;
+
+        if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE'))
+            $submissions = $this->findAll();
+
+        else {
+            if($user->hasRole('ROLE_DISTRIBUTOR')) {
+                foreach($user->getRetailers() as $retailer) {
+                    if(!isset($user_ids[$retailer->getId()])) {
+                        $user_ids[$retailer->getId()] = $retailer->getId();
+                        $data = $this->findBy(array('submittedForUser' => $retailer));
+                        foreach($data as $item)
+                            $submissions[] = $item;
+                    }
+                }
+            }
+            if($user->hasRole('ROLE_SALES_REP')){
+                foreach($user->getDistributors() as $distributor) {
+                    if(!isset($user_ids[$distributor->getId()])) {
+                        $user_ids[$distributor->getId()] = $distributor->getId();
+                        $data = $this->findBy(array('submittedForUser' => $distributor));
+                        foreach($data as $item)
+                            $submissions[] = $item;
+                    }
+                    foreach($distributor->getRetailers() as $retailer) {
+                        if(!isset($user_ids[$retailer->getId()])) {
+                            $user_ids[$retailer->getId()] = $retailer->getId();
+                            $data = $this->findBy(array('submittedForUser' => $retailer));
+                            foreach($data as $item)
+                                $submissions[] = $item;
+                        }
+                    }
+                }
+            }
+            if($user->hasRole('ROLE_SALES_MANAGER')) {
+                foreach($user->getSalesReps() as $salesRep) {
+                    if(!isset($user_ids[$salesRep->getId()])) {
+                        $user_ids[$salesRep->getId()] = $salesRep->getId();
+                        $data = $this->findBy(array('submittedForUser' => $salesRep));
+                        foreach($data as $item)
+                            $submissions[] = $item;
+                    }
+                    foreach($salesRep->getDistributors() as $distributor) {
+                        if(!isset($user_ids[$distributor->getId()])) {
+                            $user_ids[$distributor->getId()] = $distributor->getId();
+                            $data = $this->findBy(array('submittedForUser' => $distributor));
+                            foreach($data as $item)
+                                $submissions[] = $item;
+                        }
+                        foreach($distributor->getRetailers() as $retailer) {
+                            if(!isset($user_ids[$retailer->getId()])) {
+                                $user_ids[$retailer->getId()] = $retailer->getId();
+                                $data = $this->findBy(array('submittedForUser' => $retailer));
+                                foreach($data as $item)
+                                    $submissions[] = $item;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $submissions;
+    }
 }

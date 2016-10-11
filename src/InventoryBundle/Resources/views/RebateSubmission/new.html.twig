@@ -1,12 +1,12 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Rebate creation{% endblock %}
+{% block title %}New {{ channel.name }} Rebate Submission{% endblock %}
 {% block page_title %}
-    Rebate creation
+    New {{ channel.name }} Rebate Submission
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('rebate_submit_index') }}">< View My Submitted Rebates</a>
+    <a href="{{ path('rebate_submit_index') }}">< Back to the list</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -14,17 +14,57 @@
 
 {% block footer %}
     <script>
-        $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
-        });
+        function openFileBrowser() {
+            $('#rebate_submission_file').click();
+        }
     </script>
 {% endblock footer %}
 
 {% block content %}
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input class="btn btn-raised btn-success" type="submit" value="Create" />
-    {{ form_end(form) }}
-
+    {% if not form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(form.rebate) }}
+                    {{ form_errors(form.amountRequested) }}
+                    {{ form_errors(form.file) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.rebate) }}
+                    {{ form_widget(form.rebate) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.amountRequested) }}
+                    {{ form_widget(form.amountRequested) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.order) }}
+                    {{ form_widget(form.order) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.file) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="rebate_submission_file" name="rebate_submission[file]" required="required" accept="application/pdf,application/x-pdf">
+                    </span>
+                        </label>
+                        {{ form_widget(form.path) }}
+                    </div>
+                </div>
+            </div>
+            <input class="btn btn-raised btn-success" type="submit" value="Submit" />
+            {% do form.file.setRendered %}
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
