@@ -17,17 +17,16 @@ class LedgerRepository extends EntityRepository
      * @return array|\OrderBundle\Entity\Ledger[]
      */
     public function findByUser(User $user) {
-        $em = $this->getEntityManager();
         $user_ids = array();
         $user_ids[$user->getId()] = $user->getId();
         $ledgers = array();
 
-        $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $user));
+        $data = $this->findBy(array('submittedForUser' => $user));
         foreach($data as $item)
             $ledgers[] = $item;
 
         if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE')) {
-            $ledgers = $em->getRepository('OrderBundle:Ledger')->findAll();
+            $ledgers = $this->findAll();
         }
         else {
 
@@ -35,7 +34,7 @@ class LedgerRepository extends EntityRepository
                 foreach($user->getRetailers() as $retailer) {
                     if(!isset($user_ids[$retailer->getId()])) {
                         $user_ids[$retailer->getId()] = $retailer->getId();
-                        $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $retailer));
+                        $data = $this->findBy(array('submittedForUser' => $retailer));
                         foreach($data as $item)
                             $ledgers[] = $item;
                     }
@@ -45,14 +44,14 @@ class LedgerRepository extends EntityRepository
                 foreach($user->getDistributors() as $distributor) {
                     if(!isset($user_ids[$distributor->getId()])) {
                         $user_ids[$distributor->getId()] = $distributor->getId();
-                        $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $distributor));
+                        $data = $this->findBy(array('submittedForUser' => $distributor));
                         foreach($data as $item)
                             $ledgers[] = $item;
                     }
                     foreach($distributor->getRetailers() as $retailer) {
                         if(!isset($user_ids[$retailer->getId()])) {
                             $user_ids[$retailer->getId()] = $retailer->getId();
-                            $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $retailer));
+                            $data = $this->findBy(array('submittedForUser' => $retailer));
                             foreach($data as $item)
                                 $ledgers[] = $item;
                         }
@@ -63,21 +62,21 @@ class LedgerRepository extends EntityRepository
                 foreach($user->getSalesReps() as $salesRep) {
                     if(!isset($user_ids[$salesRep->getId()])) {
                         $user_ids[$salesRep->getId()] = $salesRep->getId();
-                        $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $salesRep));
+                        $data = $this->findBy(array('submittedForUser' => $salesRep));
                         foreach($data as $item)
                             $ledgers[] = $item;
                     }
                     foreach($salesRep->getDistributors() as $distributor) {
                         if(!isset($user_ids[$distributor->getId()])) {
                             $user_ids[$distributor->getId()] = $distributor->getId();
-                            $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $distributor));
+                            $data = $this->findBy(array('submittedForUser' => $distributor));
                             foreach($data as $item)
                                 $ledgers[] = $item;
                         }
                         foreach($distributor->getRetailers() as $retailer) {
                             if(!isset($user_ids[$retailer->getId()])) {
                                 $user_ids[$retailer->getId()] = $retailer->getId();
-                                $data = $em->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $retailer));
+                                $data = $this->findBy(array('submittedForUser' => $retailer));
                                 foreach($data as $item)
                                     $ledgers[] = $item;
                             }

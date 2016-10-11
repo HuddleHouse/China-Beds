@@ -71,6 +71,12 @@ class Channel
     protected $rebates;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="channel")
+     *
+     */
+    protected $rebate_submissions;
+
+    /**
      * Channel constructor.
      */
     public function __construct() {
@@ -78,6 +84,8 @@ class Channel
         $this->users = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
+        $this->rebates = new ArrayCollection();
+        $this->rebate_submissions = new ArrayCollection();
     }
     
     /**
@@ -224,6 +232,22 @@ class Channel
     public function setRebates($rebates)
     {
         $this->rebates = $rebates;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRebateSubmissions()
+    {
+        return $this->rebate_submissions;
+    }
+
+    /**
+     * @param ArrayCollection $rebate_submissions
+     */
+    public function setRebateSubmissions($rebate_submissions)
+    {
+        $this->rebate_submissions = $rebate_submissions;
     }
 }
 

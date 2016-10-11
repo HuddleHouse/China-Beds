@@ -353,18 +353,24 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_new) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_new') }}"><i class="fa fa-circle-o"></i>Rebate Claim</a>
-                                </li>
+                                {% for channel in sidebar_user_channels %}
+                                    <li {% if (app.request.get('_route') in sidebar_rebate_submit_new) %} class="active"{% endif %}>
+                                        <a href="{{ path('rebate_submit_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>Submit {{ channel.name }} Rebate</a>
+                                    </li>
+                                {% endfor %}
                                 <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
+                                    {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                        <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates</a>
+                                    {% else %}
+                                        <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
+                                    {% endif %}
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebates Submitted</a>
+                                    <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
-                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_user_claims) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_user_claims') }}"><i class="fa fa-circle-o"></i>My Rebate Claims</a>
-                                </li>
+                                {#<li {% if (app.request.get('_route') in sidebar_rebate_submit_user_claims) %} class="active"{% endif %}>#}
+                                    {#<a href="{{ path('rebate_submit_user_claims') }}"><i class="fa fa-circle-o"></i>My Rebate Claims</a>#}
+                                {#</li>#}
                                 <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
                                     <a href=""><i class="fa fa-circle-o"></i>Credit Status</a>
                                 </li>
@@ -408,12 +414,20 @@
             <div class="row hidden-print" style="margin-top: 10px;">
                 <div class="col-xs-12">
                     {% for flash_message in app.session.flashbag.get('notice') %}
-                        <div class="alert alert-success">
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
                             {{ flash_message }}
                         </div>
                     {% endfor %}
                     {% for flash_message in app.session.flashbag.get('error') %}
-                        <div class="alert alert-error">
+                        <div class="alert alert-error alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
                             {{ flash_message }}
                         </div>
                     {% endfor %}

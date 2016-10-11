@@ -40,7 +40,7 @@
 
 
 <body class="skin-blue sidebar-mini" id="body">
-<div class="overlay">
+<div class="overlay" style="display: none">
     <div id="loading-img"></div>
 </div>
 <script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
@@ -152,6 +152,12 @@
         , shadow: true // Whether to render a shadow
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
+    };
+
+    function moneyFormat(value) {
+        var m_strOut = String(value);
+        m_strOut = m_strOut.replace(/[^0-9.]/g, '');
+        return m_strOut;
     }
 
     function addSpinner() {

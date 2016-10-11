@@ -36,7 +36,7 @@
 
         $(document).ready(function () {
             getProductVariants();
-
+            $('#charNum').text(255 - $('#warranty_claim_description').val().length);
             $('#warranty_claim_description').keyup(function () {
                 var len = $(this).val().length;
                 if (len >= 255) {
@@ -83,7 +83,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
                     {{ form_widget(edit_form.description) }}
                 </div>
             </div>

@@ -16,38 +16,120 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 1, "desc" ]] });
         });
+
+        function spinModal(id) {
+            var target = document.getElementById(id);
+            var spinner = new Spinner(opts).spin(target);
+            target.appendChild(spinner.el);
+            console.log(id);
+        }
+
+        function showSubmission(id) {
+            $('#submissionModal').modal('show');
+            spinModal('submission-modal-content');
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_show_rebate_submission') }}",
+                dataType: 'json',
+                data: {submission_id: id},
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+
+                    $('.spinner').hide();
+                    if(!data[0]) {
+                        showErrorModal('Error: ' + data[1]);
+                    }
+                    else {
+                        $('#submission-modal-body').html(data[1]);
+                    }
+                }
+            });
+        }
+
+        function deleteSubmission(id) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('api_rebate_submit_delete') }}',
+                dataType: 'json',
+                data: { submission_id: id },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
     </script>
 {% endblock footer %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="table">
-            <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Amount Requested</th>
-                <th>Amount Issued</th>
-                <th>Credit Issued</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for rebateSubmission in rebateSubmissions %}
-            <tr>
-                <td><center>$ {{ rebateSubmission.amountRequested |number_format(2, '.', ',') }}</center></td>
-                <td><center>$ {{ rebateSubmission.amountIssued |number_format(2, '.', ',') }}</center></td>
-                <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
-                <td>
-                    <a class="btn btn-raised btn-xs btn-" href="{{ path('rebate_submit_show', { 'id': rebateSubmission.id }) }}">show</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-</div>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Rebate</th>
+                        <th>Submission Date</th>
+                        <th>Amount Requested</th>
+                        <th>Date Posted</th>
+                        <th>Amount Issued</th>
+                        <th>Approved</th>
+                        <th>Invoice PDF</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rebateSubmission in rebateSubmissions %}
+                        <tr>
+                            <td>{{ rebateSubmission.rebate.name | default('No Longer Available') }}</td>
+                            <td>{{ rebateSubmission.dateCreated | date('m/d/y') }}</td>
+                            <td>${{ rebateSubmission.amountRequested | number_format(2) }}</td>
+                            {% if(rebateSubmission.datePosted is not null) %}
+                                <td>{{ rebateSubmission.datePosted | date('m/d/y') }}</td>
+                            {% else %}
+                                <td>--</td>
+                            {% endif %}
+                            {% if(rebateSubmission.amountIssued is not null) %}
+                                <td>${{ rebateSubmission.amountIssued | number_format(2) }}</td>
+                            {% else %}
+                                <td>--</td>
+                            {% endif %}
+                            {% if(rebateSubmission.creditIssued is null) %}
+                                <td>Pending</td>
+                            {% else %}
+                                {% if(rebateSubmission.creditIssued == 1) %}
+                                    <td>Yes</td>
+                                {% else %}
+                                    <td>No</td>
+                                {% endif %}
+                            {% endif %}
+                            <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a> Submission (PDF)</td>
+                            <td>
+                                <a class="btn btn-raised btn-xs" href="{{ path('rebate_submit_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
+                                <button class="btn btn-raised btn-xs" onclick="deleteSubmission({{ rebateSubmission.id }})">Delete</button>
+                                {% if(is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                    <button class="btn btn-raised btn-xs" onclick="showSubmission({{ rebateSubmission.id }})">Show</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="submissionModal" tabindex="-1" role="dialog" aria-labelledby="submissionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="submission-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="submissionModalLabel">Approve/Deny Rebate Submission</h4>
+                </div>
+                <div id="submission-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

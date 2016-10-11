@@ -15,7 +15,6 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            var expanded = false;
             var table = $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 2, "desc" ]] });
 
@@ -23,16 +22,17 @@
             table.on('click', 'td#description', function () {
                 var tr = $(this).parents('tr');
                 var row = table.row( tr );
+                var expanded = tr.attr('data-description-expanded');
 
-                if (expanded) {
-                    expanded = false;
+                if (expanded == 1) {
+                    tr.attr('data-description-expanded', 0);
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
                     $(this).closest('td').find('span').html('Click to expand');
                 }
                 else {
-                    expanded = true;
+                    tr.attr('data-description-expanded', 1);
                     // Open this row (the format() function would return the data to be shown)
                     row.child(format(tr.data('child-value'), row.index()), "child").show();
                     $(this).closest('td').find('span').html('Click to collapse');
@@ -61,7 +61,6 @@
                     '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
         }
 
-
         function createLedgerWithAPI(amount, submittedForUserId, channelId, description, type, typeId) {
             $.ajax({
                 type: 'POST',
@@ -69,7 +68,7 @@
                 dataType: 'json',
                 data: {amount: amount, submittedForUserId: submittedForUserId, channelId: channelId, description: description, type: type, typeId: typeId},
                 success: function (data) {
-                    console.log(JSON.stringify(data,null,4));
+//                    console.log(JSON.stringify(data,null,4));
                 }
             });
         }
@@ -96,7 +95,7 @@
                     </thead>
                     <tbody>
                     {% for ledger in ledgers %}
-                        <tr data-child-value="{{ ledger.description }}">
+                        <tr data-child-value="{{ ledger.description }}" data-description-expanded="0">
                             <td>{{ ledger.type }}</td>
                             <td>{{ ledger.amountCredited | number_format(2) }}</td>
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>

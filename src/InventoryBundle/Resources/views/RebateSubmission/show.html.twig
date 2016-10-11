@@ -1,12 +1,12 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Rebate{% endblock %}
+{% block title %}Approve/Deny Rebate Submission{% endblock %}
 {% block page_title %}
-    Rebate
+    Approve/Deny Rebate Submission
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('rebate_index') }}">< Back to the list</a>
+    <a href="{{ path('rebate_submit_index') }}">< Back to the list</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -15,47 +15,97 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#submit_btn').on('click', function(event) {
+                var creditIssued = $('#rebate_approval_creditIssued').val();
+                var amountIssued = $('#rebate_approval_amountIssued').val();
+                if(creditIssued == 0 && amountIssued > 0) {
+                    event.preventDefault();
+                    showErrorModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit"');
+                }
+                else if(creditIssued == 1 && amountIssued <= 0) {
+                    event.preventDefault();
+                    showErrorModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit"');
+                }
+            });
         });
     </script>
 {% endblock footer %}
 
 {% block content %}
-    <h1>RebateSubmission</h1>
-
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ rebateSubmission.id }}</td>
-            </tr>
-            <tr>
-                <th>Amountrequested</th>
-                <td>{{ rebateSubmission.amountRequested }}</td>
-            </tr>
-            <tr>
-                <th>Amountissued</th>
-                <td>{{ rebateSubmission.amountIssued }}</td>
-            </tr>
-            <tr>
-                <th>Creditissued</th>
-                <td>{% if rebateSubmission.creditIssued %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('rebate_submit_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('rebate_submit_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    {% if not form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(form.amountIssued) }}
+                    {{ form_errors(form.creditIssued) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="row">
+            <div class="col-lg-4">
+                <table class="table table-striped table-bordered no-footer">
+                    <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: center">
+                            Submission Info
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Amount Requested</td>
+                        <td>${{ rebateSubmission.amountRequested | number_format(2) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Credit for</td>
+                        <td>{{ rebateSubmission.submittedForUser.fullName | default('--') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Added by</td>
+                        <td>{{ rebateSubmission.submittedByUser.fullName | default('--') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Claim</td>
+                        <td>{{ rebateSubmission.dateCreated | date('m/d/y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Order #</td>
+                        <td>{{ order.orderId | default('--') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Channel</td>
+                        <td>{{ rebateSubmission.channel.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Invoice PDF</td>
+                        <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a> Submission (PDF)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-body">
+            {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                <div class="col-lg-4 form-group">
+                    {{ form_label(form.creditIssued) }}
+                    {{ form_widget(form.creditIssued) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 form-group">
+                    {{ form_label(form.amountIssued) }}
+                    {{ form_widget(form.amountIssued) }}
+                </div>
+            </div>
+            {% if rebateSubmission.creditIssued is not null %}
+                <br><strong>You may not edit a rebate request that has been processed.</strong>
+            {% else %}
+                <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Submit" />
+            {% endif %}
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
