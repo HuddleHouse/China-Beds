@@ -29,7 +29,7 @@
     }
 
     function updateClaim() {
-        spinModal('submission-modal-content');
+        spinModal('claim-modal-content');
         var applyCredit = $('#warranty_approval_applyCredit').val();
         var approvalAmount = $('#warranty_approval_amount').val();
         var resolution = $('#warranty_approval_resolution').val();
@@ -57,7 +57,6 @@
                             },
                             success: function (data) {
 //                                console.log(JSON.stringify(data,null,4));
-                                $('.spinner').hide();
                                 if (!data[0]) {
                                     showErrorInModal('Error: ' + data[1]);
                                 }
@@ -71,6 +70,7 @@
                 }
             }
         }
+        $('.spinner').hide();
     }
 </script>
 <div class="row">
@@ -126,6 +126,8 @@
     </div>
 </div>
 <div class="form-body">
+    <div id="error-in-modal" class="row">
+    </div>
     <div class="row">
         <div class="col-lg-6 form-group">
             <label for="warranty_approval_applyCredit" class="required">Apply credit</label>

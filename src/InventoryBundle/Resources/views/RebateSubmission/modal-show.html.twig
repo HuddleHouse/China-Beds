@@ -47,7 +47,6 @@
                         },
                         success: function (data) {
 //                            console.log(JSON.stringify(data,null,4));
-                            $('.spinner').hide();
                             if (!data[0]) {
                                 showErrorInModal('Error: ' + data[1]);
                             }
@@ -60,6 +59,7 @@
                 }
             }
         }
+        $('.spinner').hide();
     }
 </script>
 <div class="row">
