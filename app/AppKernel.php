@@ -23,7 +23,6 @@ class AppKernel extends Kernel
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new OrderBundle\OrderBundle(),
             new WarehouseBundle\WarehouseBundle(),
-            new Spraed\PDFGeneratorBundle\SpraedPDFGeneratorBundle(),
             new WebsiteBundle\WebsiteBundle(),
         ];
 
