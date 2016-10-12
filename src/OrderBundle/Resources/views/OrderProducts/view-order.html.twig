@@ -414,7 +414,7 @@
                             <div id="cc-cvv" class="form-group">
                                 <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" ng-model="cc['cvv']" name="cvv" id="cvv" placeholder="Security Code">
+                                    <input type="text" class="form-control pull-right" ng-model="cc['cvv']" name="cvv" id="cvv" placeholder="Security Code">
                                 </div>
                             </div>
                         </div>
@@ -426,7 +426,7 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                         <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
                     <div class="table-responsive" style="margin-top: 46px;">
@@ -453,9 +453,13 @@
                     </div>
                 </div>
                 <!-- /.col -->
+
             </div>
             <!-- /.row -->
-
+            <div class="row">
+                <div class="col-md-8"></div>
+                <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label>
+            </div>
             <!-- this row will not appear when printing -->
             <div class="row no-print">
                 <div class="col-md-6">
