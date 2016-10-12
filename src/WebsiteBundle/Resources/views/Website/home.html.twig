@@ -5,6 +5,14 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
+            $('.home-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+            });
+
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
@@ -12,65 +20,37 @@
 {% endblock footer %}
 
 {% block body %}
-    <div class="container">
-        <nav class="navbar">
-            <div class="social-links">
-                <ul>
-                    <li><i class="fa fa-facebook" aria-hidden="true"></i></li>
-                    <li><i class="fa fa-twitter" aria-hidden="true"></i></li>
-                    <li><i class="fa fa-instagram" aria-hidden="true"></i></li>
-                </ul>
-            </div>
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Mlily</a>
-                <div class="login-btn">
-                    <ul>
-                        <li>Login</li>
-                    </ul>
-                </div>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">MATTRESSES</a></li>
-                    <li><a href="#">PILLOWS</a></li>
-                    <li><a href="#">ADJUSTABLE BEDS</a></li>
-                </ul>
-                <div class="regiter-head"><img src="images/register-button.png" /></div>
-            </div><!--/.nav-collapse -->
-        </nav>
+
         <div class="content-section">
             <div class="slider-section">
-                <img src="images/slider-image.jpg" />
+                <div class="home-slider">
+                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+                </div>
             </div>
+
             <div class="home-banners">
                 <div class="row">
                     <div class="col-md-4 col-sm-4 col-xs-12">
                         <div class="box">
                             <div class="heading">FOR RETAILERS</div>
-                            <img src="images/retailer-img.jpg" />
+                            <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
                         <div class="box">
                             <div class="heading">PRODUCT FEATURES</div>
-                            <img src="images/product-feature-img.jpg" />
+                            <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
                         <div class="box">
                             <div class="heading">WARRANTY/QUESTIONS?</div>
-                            <img src="images/warrenty-qus.jpg" />
+                            <img src="{{ asset('images/web/Warranty@2x.png') }}" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 {% endblock body %}
