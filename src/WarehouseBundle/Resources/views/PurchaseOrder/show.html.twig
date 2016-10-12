@@ -63,6 +63,11 @@
                 self.updateETA = updateETA;
                 self.all_warehouse_inventory = {};
 
+                self.date = (self.due_date.getTime() + 432000000);
+                self.wheta = new Date(self.date);
+
+
+
 
                 function setEdit(val){
                     self.isEdit = val;
@@ -338,6 +343,11 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Warehouse Eta<md-datepicker ng-model="ctrl.wheta" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-6">
@@ -349,7 +359,7 @@
                                 <li style="color:lightslategray;list-style-type:none">Factory Order Number: 30243</li>
                             </ul>
                         </div>
-                        {% verbatim %}git push
+                        {% verbatim %}
                         <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;"
                             ng-model="ctrl.warehouse"
                             ng-change="ctrl.warehouseChange()"
