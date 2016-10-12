@@ -111,7 +111,7 @@
             </tr>
             <tr>
                 <td>Order #</td>
-                <td>{{ order.orderId | default('--') }}</td>
+                <td><a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderId | default('--') }}</a></td>
             </tr>
             <tr>
                 <td>Order Total</td>
