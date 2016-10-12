@@ -61,8 +61,10 @@ class TokenListener
                 $route_names = explode(',', $this->session->get('route_names'));
             }
             else {
-                if(!($user = $this->token_storage->getToken()->getUser())) {
+                $user = $this->token_storage->getToken()->getUser();
+                if (!$user || $user === 'anon.') {
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
+                    return;
                 }
                 $route_names = $user->getRouteNames();
                 $user_channels = $user->getUserChannelsArray();
