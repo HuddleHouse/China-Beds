@@ -1,0 +1,46 @@
+{% extends 'website-index.html.twig' %}
+
+{% block title %}MLILY{% endblock %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('.home-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+            });
+
+            $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+    </script>
+{% endblock footer %}
+
+{% block body %}
+    <div class="content-section">
+        <h1>MLILY Memory Foam Mattresses</h1>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <p>Explore our full lineup of premium memory foam mattresses! Mlily USA is proud to offer the latest in sleep technology, including cool gel-infused memory foam, naturally renewing bamboo fibers and foams, and hybrid sleep systems. </p>
+            </div>
+        </div>
+        <div class="mattresses-list">
+            <ul class="row">
+                {% for mattress in mattresses %}
+                <li class="col-md-3 col-sm-4 col-xs-12">
+                    <div class="box">
+                        <div class="img"><img src="{{ mattress.image_url }}" /></div>
+                        <h3>{{ mattress.name| upper }}</h3>
+                        <p>{{ mattress.description }}</p>
+                        <div class="price">FROM ${{ mattress.lowest_price }}</div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock body %}

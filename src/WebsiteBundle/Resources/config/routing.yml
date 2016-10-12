@@ -3,3 +3,21 @@ website_homepage:
     defaults: { _controller: WebsiteBundle:Website:index }
     requirements:
         site: mlily|bedboss
+
+mattresses:
+    path:     /{site}/mattresses
+    defaults: { _controller: WebsiteBundle:Website:mattressIndex }
+    requirements:
+        site: mlily|bedboss
+
+pillows:
+    path:     /{site}/pillows
+    defaults: { _controller: WebsiteBundle:Website:pillowsIndex }
+    requirements:
+        site: mlily|bedboss
+
+adjustables:
+    path:     /{site}/adjustables
+    defaults: { _controller: WebsiteBundle:Website:adjustablesIndex }
+    requirements:
+        site: mlily|bedboss

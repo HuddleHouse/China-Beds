@@ -62,16 +62,20 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">MATTRESSES</a></li>
-                <li><a href="#">PILLOWS</a></li>
-                <li><a href="#">ADJUSTABLE BEDS</a></li>
+                <li class="active"><a href="{{ path('website_homepage', {site: site}) }}">Home</a></li>
+                <li><a href="{{ path('mattresses', {site: site}) }}">MATTRESSES</a></li>
+                <li><a href="{{ path('pillows', {site: site}) }}">PILLOWS</a></li>
+                <li><a href="{{ path('adjustables', {site: site}) }}">ADJUSTABLE BEDS</a></li>
             </ul>
             <div class="regiter-head"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></div>
         </div><!--/.nav-collapse -->
     </nav>
     {% block body %}{% endblock %}
 </div>
+
+<footer>
+    <div class="copyright">&copy; 2016 {{ site|upper }}USA | ALL RIGHTS RESERVED</div>
+</footer>
 
 {% block javascripts %}
     {% javascripts '@WebsiteBundle/Resources/public/js/*' filter="jsqueeze" output="js/websiteBundle.js"%}
