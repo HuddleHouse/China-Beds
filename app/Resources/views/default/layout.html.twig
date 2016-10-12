@@ -370,7 +370,7 @@
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
-                                    <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Credit Requests</a>
+                                    <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Ledger</a>
                                 </li>
                                 {% for channel in sidebar_user_channels %}
                                     <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == channel.id) %} class="active"{% endif %}>
