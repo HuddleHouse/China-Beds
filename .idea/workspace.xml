@@ -29,10 +29,9 @@
       <file leaf-file-name="OrderProductsController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/OrderBundle/Controller/OrderProductsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
+            <state relative-caret-position="375">
               <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
               <folding>
-                <element signature="e#42#68#0#PHP" expanded="true" />
                 <marker date="1476305962000" expanded="true" signature="9955:10232" ph="..." />
               </folding>
             </state>
@@ -42,11 +41,9 @@
       <file leaf-file-name="my-orders.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/my-orders.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="508">
+            <state relative-caret-position="675">
               <caret line="45" column="53" selection-start-line="45" selection-start-column="53" selection-end-line="45" selection-end-column="53" />
-              <folding>
-                <element signature="e#12#37#0#Twig" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -64,8 +61,8 @@
       <file leaf-file-name="AdminController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/AdminController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="41" column="61" selection-start-line="41" selection-start-column="61" selection-end-line="41" selection-end-column="61" />
+            <state relative-caret-position="495">
+              <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
               <folding>
                 <marker date="1476305962000" expanded="true" signature="5528:5552" ph="SELECT * FRO... invitation" />
                 <marker date="1476305962000" expanded="true" signature="7192:7256" ph="select conca... role_permissions" />
@@ -77,14 +74,22 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="UserType.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Form/UserType.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3285">
+              <caret line="229" column="35" selection-start-line="229" selection-start-column="35" selection-end-line="229" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="admin_edit_user.html.twig" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="571">
-              <caret line="148" column="71" selection-start-line="148" selection-start-column="71" selection-end-line="148" selection-end-column="71" />
-              <folding>
-                <element signature="e#12#37#0#Twig" expanded="true" />
-              </folding>
+            <state relative-caret-position="808">
+              <caret line="155" column="23" selection-start-line="155" selection-start-column="23" selection-end-line="155" selection-end-column="23" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -92,7 +97,7 @@
       <file leaf-file-name="UserRepository.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Repository/UserRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-78">
+            <state relative-caret-position="1725">
               <caret line="116" column="20" selection-start-line="116" selection-start-column="20" selection-end-line="116" selection-end-column="20" />
               <folding>
                 <marker date="1476305962000" expanded="true" signature="463:623" ph="select * fro... users" />
@@ -106,9 +111,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="6510">
               <caret line="434" column="32" selection-start-line="434" selection-start-column="32" selection-end-line="434" selection-end-column="32" />
-              <folding>
-                <element signature="n#style#0;n#p#0;n#div#0;n#div#6;n#div#0;n#div#2;n#!!top" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,9 +131,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1410">
               <caret line="97" column="35" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
-              <folding>
-                <element signature="e#41#67#0#PHP" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -255,6 +256,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -366,7 +368,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -548,13 +549,6 @@
       <workItem from="1472244730629" duration="2044000" />
       <workItem from="1472485546631" duration="594000" />
       <workItem from="1472486231215" duration="3175000" />
-    </task>
-    <task id="LOCAL-00013" summary="Fixing Entity relationshiops&#10;">
-      <created>1465562878854</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1465562878854</updated>
     </task>
     <task id="LOCAL-00014" summary="Fixing Entity relationshiops&#10;">
       <created>1465562987369</created>
@@ -812,7 +806,9 @@
       <workItem from="1476275828555" duration="11308000" />
       <workItem from="1476305976222" duration="161000" />
       <workItem from="1476367880578" duration="676000" />
-      <workItem from="1476369031954" duration="4210000" />
+      <workItem from="1476369031954" duration="6187000" />
+      <workItem from="1476379096117" duration="6565000" />
+      <workItem from="1476386555283" duration="449000" />
     </task>
     <task id="LOCAL-00047" summary="Header preference changes">
       <created>1473364360230</created>
@@ -919,12 +915,19 @@
       <option name="project" value="LOCAL" />
       <updated>1476373344357</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="assign retailers module added for easier functionality to add all, delete all and manually pic.">
+      <created>1476373817692</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1476373817692</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <option name="trackContextForNewChangelist" value="true" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="273675000" />
+    <option name="totallyTimeSpent" value="282666000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -940,7 +943,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18423855" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18743344" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.5022753" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1039,20 +1042,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/friendsofsymfony/user-bundle/Controller/ChangePasswordController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="64" column="38" selection-start-line="64" selection-start-column="38" selection-end-line="64" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="823">
-          <caret line="443" column="10" selection-start-line="443" selection-start-column="10" selection-end-line="443" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/autoload.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1270,7 +1259,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
           <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1295,9 +1283,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="53" column="29" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="29" />
-          <folding>
-            <element signature="e#36#68#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1305,9 +1290,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="14" column="13" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="13" />
-          <folding>
-            <element signature="e#42#74#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1315,7 +1297,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="9" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1323,19 +1304,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="960">
           <caret line="70" column="39" selection-start-line="70" selection-start-column="39" selection-end-line="70" selection-end-column="39" />
-          <folding>
-            <element signature="e#46#83#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Repository/OrdersRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1410">
-          <caret line="97" column="35" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
-          <folding>
-            <element signature="e#41#67#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1343,45 +1311,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="370" column="83" selection-start-line="370" selection-start-column="83" selection-end-line="370" selection-end-column="83" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Repository/UserRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-78">
-          <caret line="116" column="20" selection-start-line="116" selection-start-column="20" selection-end-line="116" selection-end-column="20" />
-          <folding>
-            <marker date="1476305962000" expanded="true" signature="463:623" ph="select * fro... users" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/OrderBundle/Controller/OrderProductsController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
+        <state relative-caret-position="375">
           <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
           <folding>
-            <element signature="e#42#68#0#PHP" expanded="true" />
             <marker date="1476305962000" expanded="true" signature="9955:10232" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/view-order.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6510">
-          <caret line="434" column="32" selection-start-line="434" selection-start-column="32" selection-end-line="434" selection-end-column="32" />
-          <folding>
-            <element signature="n#style#0;n#p#0;n#div#0;n#div#6;n#div#0;n#div#2;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1390,37 +1328,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2897">
           <caret line="88" column="45" selection-start-line="88" selection-start-column="45" selection-end-line="88" selection-end-column="45" />
-          <folding>
-            <marker date="1476298657000" expanded="false" signature="15192:15224" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="15225:15487" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="16751:16939" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="16822:16856" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="17008:17381" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="17275:17346" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="17441:17460" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="17461:17721" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="17773:17942" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="17878:17898" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="17994:19251" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="18195:18214" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="18215:19217" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="18438:18470" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="18471:18569" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="18641:18780" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="18781:19090" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="18939:18957" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="18958:19085" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="19619:21685" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="19665:21643" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="20529:21404" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="20591:20800" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="20670:20686" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="20865:21352" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="20934:21090" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="21159:21306" ph="..." />
-            <marker date="1476298657000" expanded="true" signature="21451:21596" ph="..." />
-            <marker date="1476298657000" expanded="false" signature="22997:23056" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1436,14 +1343,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-392">
           <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/my-orders.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" column="53" selection-start-line="45" selection-start-column="53" selection-end-line="45" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/src/Symfony/Component/Form/FormView.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="18" column="6" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/AdminController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="41" column="61" selection-start-line="41" selection-start-column="61" selection-end-line="41" selection-end-column="61" />
+        <state relative-caret-position="495">
+          <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
           <folding>
             <marker date="1476305962000" expanded="true" signature="5528:5552" ph="SELECT * FRO... invitation" />
             <marker date="1476305962000" expanded="true" signature="7192:7256" ph="select conca... role_permissions" />
@@ -1454,23 +1376,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/my-orders.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Form/UserType.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="45" column="53" selection-start-line="45" selection-start-column="53" selection-end-line="45" selection-end-column="53" />
-          <folding>
-            <element signature="e#12#37#0#Twig" expanded="true" />
-          </folding>
+        <state relative-caret-position="3285">
+          <caret line="229" column="35" selection-start-line="229" selection-start-column="35" selection-end-line="229" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="571">
-          <caret line="148" column="71" selection-start-line="148" selection-start-column="71" selection-end-line="148" selection-end-column="71" />
+        <state relative-caret-position="808">
+          <caret line="155" column="23" selection-start-line="155" selection-start-column="23" selection-end-line="155" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Repository/UserRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1725">
+          <caret line="116" column="20" selection-start-line="116" selection-start-column="20" selection-end-line="116" selection-end-column="20" />
           <folding>
-            <element signature="e#12#37#0#Twig" expanded="true" />
+            <marker date="1476305962000" expanded="true" signature="463:623" ph="select * fro... users" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/view-order.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6510">
+          <caret line="434" column="32" selection-start-line="434" selection-start-column="32" selection-end-line="434" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Repository/OrdersRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1410">
+          <caret line="97" column="35" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
