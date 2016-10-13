@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Repository;
 
+use InventoryBundle\Entity\Channel;
 use WarehouseBundle\Entity\Warehouse;
 
 /**
@@ -38,6 +39,154 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 );
         }
 
+        return $products;
+    }
+
+    public function getAllMattressVariantsForChannelArray(Channel $channel)
+    {
+        $em = $this->getEntityManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            $is_channel = $is_mattress = 0;
+
+            foreach($prod->getChannels() as $chan)
+                if($chan->getId() == $channel->getId())
+                    $is_channel = 1;
+            foreach($prod->getCategories() as $category)
+                if($category->getname() == "Mattresses")
+                    $is_mattress = 1;
+
+            if($is_mattress == 1 && $is_channel == 1) {
+                $image_url = '/';
+                foreach($prod->getImages() as $image) {
+                    $image_url .= $image->getWebPath();
+                    break;
+                }
+
+                foreach($prod->getVariants() as $variant)
+                    $products[] = array(
+                        'name' => $prod->getName() . ": " . $variant->getName(),
+                        'id' => $variant->getId(),
+                        'image_url' => $image_url
+                    );
+            }
+        }
+        return $products;
+    }
+
+
+    public function getAllMattressesForChannelArray(Channel $channel)
+    {
+        $em = $this->getEntityManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            $is_channel = $is_mattress = 0;
+
+            foreach($prod->getChannels() as $chan)
+                if($chan->getChannel()->getId() == $channel->getId())
+                    $is_channel = 1;
+            foreach($prod->getCategories() as $category)
+                if($category->getCategory()->getName() == "Mattresses")
+                    $is_mattress = 1;
+
+            if($is_mattress == 1 && $is_channel == 1 && $prod->getActive() == true) {
+                $image_url = '/';
+                foreach($prod->getImages() as $image) {
+                    $image_url .= $image->getWebPath();
+                    break;
+                }
+                $lowest_price = 9999999;
+
+                foreach($prod->getVariants() as $variant)
+                    if($variant->getMsrp() < $lowest_price)
+                        $lowest_price = $variant->getMsrp();
+                $products[] = array(
+                    'name' => $prod->getName(),
+                    'description' => $prod->getDescription(),
+                    'id' => $prod->getId(),
+                    'image_url' => $image_url,
+                    'lowest_price' => $lowest_price
+                );
+            }
+        }
+        return $products;
+    }
+
+    public function getAllPillowsForChannelArray(Channel $channel)
+    {
+        $em = $this->getEntityManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            $is_channel = $is_mattress = 0;
+
+            foreach($prod->getChannels() as $chan)
+                if($chan->getChannel()->getId() == $channel->getId())
+                    $is_channel = 1;
+            foreach($prod->getCategories() as $category)
+                if($category->getCategory()->getName() == "Pillows")
+                    $is_mattress = 1;
+
+            if($is_mattress == 1 && $is_channel == 1 && $prod->getActive() == true) {
+                $image_url = '/';
+                foreach($prod->getImages() as $image) {
+                    $image_url .= $image->getWebPath();
+                    break;
+                }
+                $lowest_price = 9999999;
+
+
+                $products[] = array(
+                    'name' => $prod->getName(),
+                    'description' => $prod->getDescription(),
+                    'id' => $prod->getId(),
+                    'image_url' => $image_url,
+                    'lowest_price' => $lowest_price
+                );
+            }
+        }
+        return $products;
+    }
+
+    public function getAllAdjustablesForChannelArray(Channel $channel)
+    {
+        $em = $this->getEntityManager();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products = array();
+
+        foreach($products_all as $prod) {
+            $is_channel = $is_mattress = 0;
+
+            foreach($prod->getChannels() as $chan)
+                if($chan->getChannel()->getId() == $channel->getId())
+                    $is_channel = 1;
+            foreach($prod->getCategories() as $category)
+                if($category->getCategory()->getName() == "Adjustables")
+                    $is_mattress = 1;
+
+            if($is_mattress == 1 && $is_channel == 1 && $prod->getActive() == true) {
+                $image_url = '/';
+                foreach($prod->getImages() as $image) {
+                    $image_url .= $image->getWebPath();
+                    break;
+                }
+                $lowest_price = 9999999;
+
+
+                $products[] = array(
+                    'name' => $prod->getName(),
+                    'description' => $prod->getDescription(),
+                    'id' => $prod->getId(),
+                    'image_url' => $image_url,
+                    'lowest_price' => $lowest_price
+                );
+            }
+        }
         return $products;
     }
 

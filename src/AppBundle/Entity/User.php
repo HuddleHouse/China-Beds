@@ -347,11 +347,14 @@ class User extends BaseUser
 
     public function getRouteNames() {
         $data = array();
-        foreach($this->groups as $role) {
-            foreach($role->getPermissions() as $permission) {
-                $data[$permission->getRouteName()] = $permission->getRouteName();
+        if(isset($this->groups)) {
+            foreach($this->groups as $role) {
+                foreach($role->getPermissions() as $permission) {
+                    $data[$permission->getRouteName()] = $permission->getRouteName();
+                }
             }
         }
+
         return $data;
     }
 

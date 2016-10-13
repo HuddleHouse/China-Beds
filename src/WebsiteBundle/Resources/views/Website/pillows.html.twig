@@ -1,0 +1,48 @@
+{% extends 'website-index.html.twig' %}
+
+{% block title %}MLILY{% endblock %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('.home-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+            });
+
+            $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+    </script>
+{% endblock footer %}
+
+{% block body %}
+
+    <div class="content-section">
+        <h1>MLILY Memory Foam pillows</h1>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <p>Discover the perfect compliment to your mattress, and a coveted partner in the best sleep of your life.
+                    Each model boasts a unique look and feel to satisfy even the most discriminating sleeper.</p>
+            </div>
+        </div>
+
+        <div class="mattresses-list pillow-list">
+            <ul class="row">
+                {% for pillow in pillows %}
+                    <li class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box">
+                            <div class="img"><img src="{{ pillow.image_url }}" /></div>
+                            <h3>{{ pillow.name| upper }}</h3>
+                            <p>{{ pillow.description }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock body %}
