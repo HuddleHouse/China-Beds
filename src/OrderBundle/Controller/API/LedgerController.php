@@ -36,11 +36,17 @@ class LedgerController extends Controller
         try {
             $ledger = $service->newEntry(
                 $request->get('amount'),
-                $request->get('submittedForUserId'),
+                $this->getDoctrine()
+                    ->getRepository('AppBundle:User')
+                    ->find($request->get('submittedForUserId')),
                 $this->getUser(),
+                $this->getDoctrine()
+                    ->getRepository('InventoryBundle:Channel')
+                    ->find($request->get('channelId')),
                 $request->get('description'),
                 $request->get('type'),
-                $request->get('typeId')
+                $request->get('typeId'),
+                true
             );
         } catch (\Exception $e) {
             return new JsonResponse("Error creating ledger entry: " . $e->getMessage(), 500);

@@ -1,3 +1,74 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% include "AppBundle:Profile:edit_content_shared.html.twig" %}
+{% if not form.vars.valid %}
+    <div class="col-md-12">
+        <div class="bs-callout bs-callout-danger ">
+            {{ form_errors(form.username) }}
+            {{ form_errors(form.email) }}
+            {{ form_errors(form.current_password) }}
+        </div>
+    </div>
+{% endif %}
+
+<div class="table">
+    <div class="form-body">
+        {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'form-horizontal' } }) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.first_name) }}
+                {{ form_widget(form.first_name) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.last_name) }}
+                {{ form_widget(form.last_name) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.company_name) }}
+                {{ form_widget(form.company_name) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.address_1) }}
+                {{ form_widget(form.address_1) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.address_2) }}
+                {{ form_widget(form.address_2) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.city) }}
+                {{ form_widget(form.city) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_label(form.state) }}
+                {{ form_widget(form.state) }}
+            </div>
+            <div class="col-md-4">
+                {{ form_label(form.zip) }}
+                {{ form_widget(form.zip) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+            </div>
+        </div>
+        <div style="padding-top: 20px;">
+            <input class="btn btn-raised btn-success" type="submit" value="Update"/>
+        </div>
+    </div>
+
+</div>
+
+{{ form_end(form) }}
+

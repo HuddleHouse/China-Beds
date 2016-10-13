@@ -1,0 +1,130 @@
+<script>
+    $(document).ready(function () {
+        $('#rebate_approval_creditIssued').val({{ rebateSubmission.creditIssued | default(0) }});
+        $('#rebate_approval_amountIssued').val('{{ rebateSubmission.amountRequested | number_format(2) | default(0.00) }}');
+        $('#submission_id').val({{ rebateSubmission.id | default(0) }});
+    });
+
+    function spinModal(id) {
+        var target = document.getElementById(id);
+        var spinner = new Spinner(opts).spin(target);
+        target.appendChild(spinner.el);
+        console.log(id);
+    }
+
+    function showErrorInModal(message) {
+        $('#error-in-modal').append(
+                '<div class="col-lg-12 alert alert-danger alert-dismissable"> ' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"> ' +
+                '<span aria-hidden="true">&times;</span> ' +
+                '</button> ' +
+                message +
+                '</div>'
+        );
+    }
+
+    function updateSubmission() {
+        spinModal('submission-modal-content');
+        var creditIssued = $('#rebate_approval_creditIssued').val();
+        var amountIssued = $('#rebate_approval_amountIssued').val();
+        if(amountIssued == null || amountIssued == '')
+            showErrorInModal('You must fill declare an amount to issue, even if it is 0.');
+        else {
+            if (creditIssued == 0 && amountIssued > 0)
+                showErrorInModal('You have selected not to credit the warranty claim, but have an amount entered. Please either remove the amount or select "No" under "Apply Credit."');
+            else {
+                if (creditIssued == 1 && amountIssued <= 0)
+                    showErrorInModal('You have selected to credit the warranty claim, but don\'t have an amount entered. Please either add the amount or select "No" under "Apply Credit."');
+                else {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_approve_deny_rebate_submission') }}",
+                        dataType: 'json',
+                        data: {
+                            submission_id: $('#submission_id').val(),
+                            credit_issued: $('#rebate_approval_creditIssued').val(),
+                            amount_issued: moneyFormat($('#rebate_approval_amountIssued').val())
+                        },
+                        success: function (data) {
+//                            console.log(JSON.stringify(data,null,4));
+                            if (!data[0]) {
+                                showErrorInModal('Error: ' + data[1]);
+                            }
+                            else {
+                                $('#submissionModal').modal('hide');
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        $('.spinner').hide();
+    }
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped table-bordered no-footer">
+            <thead>
+            <tr>
+                <th colspan="2" style="text-align: center">
+                    Submission Info
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Amount Requested</td>
+                <td>${{ rebateSubmission.amountRequested | number_format(2) }}</td>
+            </tr>
+            <tr>
+                <td>Credit for</td>
+                <td>{{ rebateSubmission.submittedForUser.fullName | default('--') }}</td>
+            </tr>
+            <tr>
+                <td>Added by</td>
+                <td>{{ rebateSubmission.submittedByUser.fullName | default('--') }}</td>
+            </tr>
+            <tr>
+                <td>Date of Claim</td>
+                <td>{{ rebateSubmission.dateCreated | date('m/d/y') }}</td>
+            </tr>
+            <tr>
+                <td>Order #</td>
+                <td><a href="{{ path('order_products_review', {'id_channel': rebateSubmission.channel.id, 'id_order': order.id}) }}">{{ order.orderId | default('--') }}</a></td>
+            </tr>
+            <tr>
+                <td>Channel</td>
+                <td>{{ rebateSubmission.channel.name }}</td>
+            </tr>
+            <tr>
+                <td>Invoice PDF</td>
+                <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a> Submission (PDF)</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="form-body">
+    <div id="error-in-modal" class="row">
+    </div>
+    <div class="row">
+        <div class="col-lg-6 form-group">
+            <label for="rebate_approval_creditIssued" class="required">Issue Credit?</label>
+            <select id="rebate_approval_creditIssued" name="rebate_approval[creditIssued]" class="form-control" style="margin-bottom: 10px">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+        </div>
+        <div class="col-lg-6 form-group">
+            <label for="rebate_approval_amountIssued" class="required">Amount to Issue</label>
+            $ <input type="text" id="rebate_approval_amountIssued" name="rebate_approval[amountIssued]" required="required" class="form-control" style="margin-bottom: 10px" onclick="this.select()">
+        </div>
+    </div>
+    <input type="hidden" id="submission_id" value="" />
+    {% if rebateSubmission.creditIssued is not null %}
+        <br><strong>You may not edit a rebate request that has been processed.</strong>
+    {% else %}
+        <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Submit" onclick="updateSubmission()" />
+    {% endif %}
+</div>

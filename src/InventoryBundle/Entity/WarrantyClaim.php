@@ -2,15 +2,17 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
 use OrderBundle\Entity\Ledger;
+use OrderBundle\Entity\Orders;
 
 /**
  * WarrantyClaim
  *
  * @ORM\Table(name="warranty_claim")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\WarrantyClaimRepository")
  */
 class WarrantyClaim
 {
@@ -73,6 +75,13 @@ class WarrantyClaim
     private $resolution;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_archived", type="boolean")
+     */
+    private $isArchived = false;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="warranty_claims")
      * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
      */
@@ -87,7 +96,7 @@ class WarrantyClaim
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="warrantyClaim")
      */
-    private $ledger;
+    private $ledgers;
 
     /**
      * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="warranty_claims")
@@ -96,11 +105,23 @@ class WarrantyClaim
     private $order;
 
     /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warranty_claims")
+     * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
+     */
+    private $productVariant;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="warranty_claims")
+     */
+    private $channel;
+
+    /**
      * WarrantyClaim constructor.
      */
     public function __construct()
     {
         $this->setDateOfClaim(new \DateTime());
+        $this->ledgers = new ArrayCollection();
     }
 
     /**
@@ -284,6 +305,22 @@ class WarrantyClaim
     /**
      * @return mixed
      */
+    public function getIsArchived()
+    {
+        return $this->isArchived;
+    }
+
+    /**
+     * @param mixed $isArchived
+     */
+    public function setIsArchived($isArchived)
+    {
+        $this->isArchived = $isArchived;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getSubmittedForUser()
     {
         return $this->submittedForUser;
@@ -314,23 +351,23 @@ class WarrantyClaim
     }
 
     /**
-     * @return Ledger
+     * @return ArrayCollection
      */
-    public function getLedger()
+    public function getLedgers()
     {
-        return $this->ledger;
+        return $this->ledgers;
     }
 
     /**
-     * @param Ledger $ledger
+     * @param Ledger $ledgers
      */
-    public function setLedger($ledger)
+    public function setLedger($ledgers)
     {
-        $this->ledger = $ledger;
+        $this->ledgers = $ledgers;
     }
 
     /**
-     * @return mixed
+     * @return Orders
      */
     public function getOrder()
     {
@@ -338,11 +375,43 @@ class WarrantyClaim
     }
 
     /**
-     * @param mixed $order
+     * @param Orders $order
      */
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductVariant()
+    {
+        return $this->productVariant;
+    }
+
+    /**
+     * @param mixed $productVariant
+     */
+    public function setProductVariant($productVariant)
+    {
+        $this->productVariant = $productVariant;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 }
 

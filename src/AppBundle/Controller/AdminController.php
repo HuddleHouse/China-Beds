@@ -179,7 +179,8 @@ class AdminController extends Controller
             '',
             'register',
             'profile',
-            'resetting'
+            'resetting',
+            '{site}',
         );
 
         foreach ($allRoutes as $route => $params)

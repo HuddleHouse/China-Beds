@@ -16,16 +16,16 @@
     {% if not form.vars.valid %}
         <div class="col-md-12">
             <div class="bs-callout bs-callout-danger ">
-                {{ form_errors(form.username) }}
-                {{ form_errors(form.email) }}
-                {{ form_errors(form.current_password) }}
+                {#{{ form_errors(form.username) }}#}
+                {#{{ form_errors(form.email) }}#}
+                {#{{ form_errors(form.current_password) }}#}
             </div>
         </div>
     {% endif %}
 
     <div class="table">
         <div class="form-body">
-            {{ form_start(form, { "action": path("edit_child_user", {"id": user_id}), "attr": { "class": "form-horizontal" } }) }}
+            {{ form_start(form, { "action": path("fos_user_profile_edit", {"id": user.id }), "attr": { "class": "form-horizontal" } }) }}
 
             <div class="row">
                 <div class="col-md-12">
@@ -44,7 +44,6 @@
                 <div class="col-md-6 form-group">
                     {{ form_label(form.company_name) }}
                     {{ form_widget(form.company_name) }}
-
                 </div>
                 <div class="col-md-6 form-group">
                     {{ form_label(form.email) }}

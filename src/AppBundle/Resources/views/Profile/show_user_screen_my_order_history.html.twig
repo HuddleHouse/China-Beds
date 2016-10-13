@@ -32,7 +32,7 @@
                     {% for order in orders %}
                         <tr role="row" class="odd">
                             <td>
-                                <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderNumber }}</a>
+                                <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderId }}: {{ order.orderNumber }}</a>
                             </td>
                             <td>{{ order.submitDate | date("m/d/Y")}}</td>
                             <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>

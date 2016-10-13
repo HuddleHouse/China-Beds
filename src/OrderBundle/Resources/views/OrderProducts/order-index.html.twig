@@ -121,6 +121,7 @@
                         if (is_pickup == 1) {
                             $('#ship').hide();
                             $scope.form_info['ship'] = false;
+                            $scope.form_info['pick_up'] = true;
                             $('#pick_up_date').show();
                             $('#pick_up_agent').show();
                             $('#pick_up_warehouse').show();
@@ -129,6 +130,7 @@
                         else {
                             $('#ship').show();
                             $scope.form_info['pick_up'] = false;
+                            $scope.form_info['ship'] = true;
                             $('#pick_up_date').hide();
                             $('#pick_up_agent').hide();
                             $('#pick_up_warehouse').hide();
@@ -158,15 +160,7 @@
                 });
             {% endif %}
 
-            $scope.validate = function () {
-                if($scope.form_info['pick_up'] == true) {
-                    var is_error = 0;
-                    if(typeof($scope.form_info['po']) == "undefined" || $scope.form_info['po'] == null) {
-                        is_error += 1;
-                        $('#po').addClass('error');
-                    }
-                }
-            };
+
 
             $scope.updateCart = function (variantId, cost, max, type) {
                 console.log(type);
@@ -266,18 +260,29 @@
             $scope.submitCart = function () {
                 var errors = $scope.validate();
                 console.log(errors);
+                $('#submit-button').prop('disabled', true);
+                $('#submit-button').addClass('button-error');
                 $('.fa.fa-circle').addClass('fa-circle-thin');
                 $('.fa-circle').removeClass('fa-circle');
 
                 $('#side-review').removeClass('fa-circle-thin');
                 $('#side-review').addClass('fa-circle');
 
-                if($scope.form_info['pick_up'] == false && $scope.form_info['ship'] == false)
+                if($scope.form_info['pick_up'] == false && $scope.form_info['ship'] == false) {
                     showErrorModal('Please select to Ship the Items or to Pick them up.');
-                else if($scope.cart_num_items == 0)
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
+                else if($scope.cart_num_items == 0) {
                     showErrorModal('Please add at least one item to your cart.');
-                else if(errors >= 1)
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
+                else if(errors >= 1) {
                     showErrorModal('Form is missing information.');
+                    $('#submit-button').removeClass('button-error');
+                    $('#submit-button').prop('disabled', false);
+                }
                 else if (errors <= 0) {
                     addSpinner();
                     $.ajax({
@@ -471,13 +476,13 @@
                     }
                 }
 
-                if(po == '') {
-                    count += 1;
-                    $('#po').addClass('error');
-                }
-                else if(po != '') {
-                    $('#po').removeClass('error');
-                }
+//                if(po == '') {
+//                    count += 1;
+//                    $('#po').addClass('error');
+//                }
+//                else if(po != '') {
+//                    $('#po').removeClass('error');
+//                }
                 return count;
             };
 

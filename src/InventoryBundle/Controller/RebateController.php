@@ -26,7 +26,10 @@ class RebateController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $rebates = $em->getRepository('InventoryBundle:Rebate')->findAll();
+        if($this->getUser()->hasRole('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SALES_MANAGER'))
+            $rebates = $em->getRepository('InventoryBundle:Rebate')->findAll();
+        else
+            $rebates = $em->getRepository('InventoryBundle:Rebate')->findBy((array('active' => true)));
 
         return $this->render('@Inventory/Rebate/index.html.twig', array(
             'rebates' => $rebates,
@@ -77,11 +80,9 @@ class RebateController extends Controller
      */
     public function showAction(Rebate $rebate)
     {
-        $deleteForm = $this->createDeleteForm($rebate);
-
         return $this->render('@Inventory/Rebate/show.html.twig', array(
             'rebate' => $rebate,
-            'delete_form' => $deleteForm->createView(),
+            'rebateSubmissions' => $this->getDoctrine()->getRepository('InventoryBundle:RebateSubmission')->findBy(array('rebate' => $rebate))
         ));
     }
 
@@ -93,7 +94,6 @@ class RebateController extends Controller
      */
     public function editAction(Request $request, Rebate $rebate)
     {
-        $deleteForm = $this->createDeleteForm($rebate);
         $editForm = $this->createForm('InventoryBundle\Form\RebateType', $rebate);
         $editForm->handleRequest($request);
 
@@ -112,7 +112,6 @@ class RebateController extends Controller
                 return $this->render('@Inventory/Rebate/edit.html.twig', array(
                     'rebate' => $rebate,
                     'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
                 ));
             }
         }
@@ -120,52 +119,6 @@ class RebateController extends Controller
         return $this->render('@Inventory/Rebate/edit.html.twig', array(
             'rebate' => $rebate,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
-    }
-
-    /**
-     * Deletes a Rebate entity.
-     *
-     * @Route("/{id}", name="rebate_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Rebate $rebate)
-    {
-        $form = $this->createDeleteForm($rebate);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($rebate);
-                $em->flush();
-                $this->addFlash('notice', 'Rebate Deleted successfully.');
-
-            }
-            catch(\Exception $e) {
-                $this->addFlash('error', 'Error deleting Rebate ' . $e->getMessage());
-
-                return $this->redirectToRoute('rebate_index');
-            }
-        }
-
-        return $this->redirectToRoute('rebate_index');
-    }
-
-    /**
-     * Creates a form to delete a Rebate entity.
-     *
-     * @param Rebate $rebate The Rebate entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Rebate $rebate)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('rebate_delete', array('id' => $rebate->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

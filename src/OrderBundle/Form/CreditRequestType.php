@@ -18,9 +18,26 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use AppBundle\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
 
 class CreditRequestType extends AbstractType
 {
+    private $tokenStorage;
+    private $ordersRepository;
+
+    /**
+     * CreditRequestType constructor.
+     * @param TokenStorageInterface $tokenStorage
+     * @param EntityManager $entityManager
+     */
+    public function __construct(TokenStorageInterface $tokenStorage, EntityManager $entityManager)
+    {
+        $this->tokenStorage = $tokenStorage;
+        $this->usersRepository = $entityManager->getRepository('AppBundle:User');
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -35,6 +52,7 @@ class CreditRequestType extends AbstractType
                     'choice_label' => function (User $user) {
                         return $user->getFullName();
                     },
+                    'choices' => $this->usersRepository->findByUser($this->tokenStorage->getToken()->getUser()),
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                     'required' => true
                 )

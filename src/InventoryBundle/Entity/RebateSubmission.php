@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="rebate_submission")
  * @ORM\Entity(repositoryClass="InventoryBundle\Repository\RebateSubmissionRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class RebateSubmission
 {
@@ -23,17 +25,37 @@ class RebateSubmission
      */
     private $id;
 
-//    /**
-//     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="submissions")
-//     * @ORM\JoinColumn(name="rebate_id", referencedColumnName="id")
-//     */
-//    private $rebate;
-//
-//    /**
-//     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="rebate_submissions")
-//     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-//     */
-//    private $user;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_created", type="datetime")
+     */
+    private $dateCreated;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_posted", type="datetime", nullable=true)
+     */
+    private $datePosted;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="submissions")
+     * @ORM\JoinColumn(name="rebate_id", referencedColumnName="id")
+     */
+    private $rebate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="rebate_submissions")
+     * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
+     */
+    private $submittedForUser;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_rebates")
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
+     */
+    private $submittedByUser;
 
     /**
      * @var int
@@ -47,24 +69,53 @@ class RebateSubmission
      *
      * @ORM\Column(name="amount_issued", type="integer", nullable=true)
      */
-    private $amountIssued = 0;
+    private $amountIssued;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="credit_issued", type="boolean", nullable=true)
      */
-    private $creditIssued = 0;
+    private $creditIssued;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="rebateSubmission")
+     */
+    private $ledgers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="rebate_submissions")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     */
+    private $order;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="rebate_submissions")
+     */
+    private $channel;
+
+    /**
+     * @Assert\File(
+     *     maxSize="6M",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Please upload a valid PDF"
+     * )
      */
     private $file;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=510, nullable=true)
      */
     public $path;
+
+    /**
+     * RebateSubmission constructor.
+     */
+    public function __construct()
+    {
+        $this->setDateCreated(new \DateTime());
+        $this->ledgers = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -74,6 +125,38 @@ class RebateSubmission
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
+
+    /**
+     * @param mixed $dateCreated
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDatePosted()
+    {
+        return $this->datePosted;
+    }
+
+    /**
+     * @param mixed $datePosted
+     */
+    public function setDatePosted($datePosted)
+    {
+        $this->datePosted = $datePosted;
     }
 
     /**
@@ -117,27 +200,19 @@ class RebateSubmission
     }
 
     /**
-     * Set amountIssued
-     *
-     * @param integer $amountIssued
-     *
-     * @return RebateSubmission
-     */
-    public function setAmountIssued($amountIssued)
-    {
-        $this->amountIssued = $amountIssued*100;
-
-        return $this;
-    }
-
-    /**
-     * Get amountIssued
-     *
      * @return int
      */
     public function getAmountIssued()
     {
         return $this->amountIssued/100;
+    }
+
+    /**
+     * @param int $amountIssued
+     */
+    public function setAmountIssued($amountIssued)
+    {
+        $this->amountIssued = $amountIssued*100;
     }
 
     /**
@@ -164,22 +239,6 @@ class RebateSubmission
         return $this->creditIssued;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
     public function upload()
     {
         // the file property can be empty if the field is not required
@@ -192,13 +251,15 @@ class RebateSubmission
 
         // move takes the target directory and then the
         // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile()->getClientOriginalName()) . '-' . $this->getFile()->getClientOriginalName();
+
         $this->getFile()->move(
             $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+            $fname
         );
 
         // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
+        $this->path = $fname;
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
@@ -238,11 +299,11 @@ class RebateSubmission
             : $this->getUploadDir() . '/' . $this->path;
     }
 
-    protected function getUploadRootDir()
+    public function getUploadRootDir()
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        $tmp = __DIR__ . '/../../../../resume/web/' . $this->getUploadDir();
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
         return $tmp;
     }
 
@@ -250,7 +311,7 @@ class RebateSubmission
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'uploads/documents';
+        return 'uploads/rebate_submissions';
     }
 
     /**
@@ -267,6 +328,95 @@ class RebateSubmission
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function removeUpload()
+    {
+        $file_path = $this->getAbsolutePath();
+        if(file_exists($file_path)) unlink($file_path);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedForUser()
+    {
+        return $this->submittedForUser;
+    }
+
+    /**
+     * @param mixed $submittedForUser
+     */
+    public function setSubmittedForUser($submittedForUser)
+    {
+        $this->submittedForUser = $submittedForUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedByUser()
+    {
+        return $this->submittedByUser;
+    }
+
+    /**
+     * @param mixed $submittedByUser
+     */
+    public function setSubmittedByUser($submittedByUser)
+    {
+        $this->submittedByUser = $submittedByUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @param mixed $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 }
 
