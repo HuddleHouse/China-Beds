@@ -9,7 +9,41 @@ class WebsiteController extends Controller
 {
     public function indexAction($site)
     {
-        $ij =1;
+        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function faqIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function productFeaturesIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function retailerIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function warrantyIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function contactIndexAction($site)
+    {
         return $this->render('WebsiteBundle:Website:home.html.twig', array(
             'site' => $site
         ));
@@ -32,18 +66,8 @@ class WebsiteController extends Controller
     }
 
     public function  singleMattressIndexAction($site, Product $product) {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        if($site == 'mlily')
-            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'MLILY'));
-        else
-            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'BedBoss'));
-
-        $mattresses = $em->getRepository('InventoryBundle:Product')->getAllMattressesForChannelArray($channel);
-
         return $this->render('WebsiteBundle:Website:single-mattresses.html.twig', array(
             'site' => $site,
-            'mattresses' => $mattresses,
             'product' => $product
         ));
     }

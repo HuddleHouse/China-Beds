@@ -20,37 +20,106 @@
 {% endblock footer %}
 
 {% block body %}
-
-        <div class="content-section">
-            <div class="slider-section">
-                <div class="home-slider">
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+    <div class="content-section">
+        <div class="feature-outter">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="feature-list">
+                        <ul>
+                            <li>
+                                <i><img src="images/PF_Memory Foam Icon@2x.png" /></i>
+                                <h4>Memory foam</h4>
+                                <p>Memory foam molds to the body and conforms to the body's curves and then returns to its natural shape. </p>
+                            </li>
+                            <li>
+                                <i><img src="images/I_Renewable Resources Icon@2x.png" /></i>
+                                <h4>Renewable Resources</h4>
+                                <p>Every mattress by MLILY features a variety of naturally renewable resources, minimizing our environmental impact.</p>
+                            </li>
+                            <li>
+                                <i><img src="images/PF_SemiOpenCellStructure Icon@2x.png" /></i>
+                                <h4>Semi-Open Cell Structure</h4>
+                                <p>Formulated to maintain the perfect balance between airflow and recovery time, our semi-open cell memory foam uses fewer chemicals than traditional foam. </p>
+                            </li>
+                            <li>
+                                <i><img src="images/PF_PlantBasedOils Icon@2x.png" /></i>
+                                <h4>Plant Based Oils</h4>
+                                <p>Castor seeds are efficient to harvest, as they contain almost 50% oil and are healthier for the producer and consumer, emitting no volatile organic compounds.</p>
+                            </li>
+                            <li>
+                                <i><img src="images/PF_BambooCharcoal Icon@2x.png" /></i>
+                                <h4>Bamboo Charcoal</h4>
+                                <p>Naturally organic, and not requiring the use of pesticides, bamboo is an excellent choice for many consumer applications, including the production of high quality memory foam. </p>
+                            </li>
+                            <li>
+                                <i><img src="images/PF_BambooFiber Icon@2x.png" /></i>
+                                <h4>Bamboo Fibers</h4>
+                                <p>Many of our covers contain up to 40% blended bamboo fibers. This provides increased moisture wicking and greater airflow, for a cooler night's sleep.</p>
+                            </li>
+                            <li>
+                                <i><img src="images/I_Silk Icon@2x.png" /></i>
+                                <h4>Silk</h4>
+                                <p>Naturally hypoallergenic, highly absorbent, silk is a perfect companion in our most luxurious covers. Silk is a true all-climate fabric with remarkable temperature-regulating properties.</p>
+                            </li>
+                            <li>
+                                <i><img src="images/PF_AloeVera Icon@2x.png" /></i>
+                                <h4>Aloe Vera</h4>
+                                <p>Aloe vera is anti-bacterial and anti-fungal. These properties are well suited to the fabrics that our customers enjoy on MLILY mattresses and pillows.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 feature-img">
+                    <img src="images/PF_BambooFiber Ad @2x.png" />
                 </div>
             </div>
-
-            <div class="home-banners">
-                <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box">
-                            <div class="heading">FOR RETAILERS</div>
-                            <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
-                        </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="safety-block">
+                        <h4>CONSUMER SAFETY</h4>
+                        <p>At MLILY, consumer safety and satisfaction are paramount. You can feel confident that MLILY products have been tested to meet or exceed the most comprehensive safety and quality controls.</p>
+                        <h4>CERTI-PUR US</h4>
+                        <p>Certi-Pur Us is the standard for safety in the foam industry. Our manufacturer has submitted its foam products to the rigourous testing and is a qualified Certi-Pur foam supplier.</p>
+                        <p>Certi-Pur certifies that our foam is</p>
+                        <ul>
+                            <li>Emmissions tested</li>
+                            <li>Content tested</li>
+                            <li>Low emmission (VOCs) for indoor air quality</li>
+                            <li>Made without prohibited phthalates</li>
+                            <li>Made without ozone depleters (no CFCs)</li>
+                            <li>Made without mercury, lead or heavy metals</li>
+                            <li>Made without formaldehyde</li>
+                            <li>Made without methylene chloride</li>
+                            <li>Made without PBDEs</li>
+                            <li>Durability and performace tested</li>
+                        </ul>
+                        <div align="right"><img src="images/PF_CentiPur Logo@2x.png" width="100" /></div>
                     </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box">
-                            <div class="heading">PRODUCT FEATURES</div>
-                            <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box">
-                            <div class="heading">WARRANTY/QUESTIONS?</div>
-                            <img src="{{ asset('images/web/Warranty@2x.png') }}" />
-                        </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="tax-block">
+                        <h4>OEKO TEX STANDARD 100</h4>
+                        <p>The OEKO_TEX Standard 100 is a globally uniform testing and certification system for textile raw materials, intermediate and end products at all stages of production with the aim of completely epminating harmful substances. The test for harmful substances cover substances that are prohibited or regulated by law, chemicals which are harmful to health, and testing parameters that are included as a precautionary measure to safeguard health.</p>
+                        <p>The more than 100 substance criteria include:</p>
+                        <ul>
+                            <li>Banned MAK aminesin specific azo dyes</li>
+                            <li>Other carcinogenic and allerginic dyes</li>
+                            <li>Formaldehyde</li>
+                            <li>Pesticides</li>
+                            <li>Chlorinated phenols, phthalates, PFOS, PFOA</li>
+                            <li>Surfactant and wetting agent residues</li>
+                            <li>Chloroaromatic Compounds</li>
+                            <li>Extractable heavy metals and heavy metals in digested sample</li>
+                            <li>Polycyclic aromatic hydrocarbons PAH</li>
+                            <li>Solvent residues</li>
+                            <li>PH value, colorfastness, ordor</li>
+                            <li>Organic tin compounds</li>
+                            <li>Emmissions of volatile components</li>
+                        </ul>
+                        <div align="right"><img src="images/PF_Confidence In Textile Logo@2x.png" width="150" /></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 {% endblock body %}
