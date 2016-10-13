@@ -30,6 +30,22 @@ class WebsiteController extends Controller
         ));
     }
 
+    public function  singleMattressIndexAction($site) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if($site == 'mlily')
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'MLILY'));
+        else
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'BedBoss'));
+
+        $mattresses = $em->getRepository('InventoryBundle:Product')->getAllMattressesForChannelArray($channel);
+
+        return $this->render('WebsiteBundle:Website:single-mattresses.html.twig', array(
+            'site' => $site,
+            'mattresses' => $mattresses
+        ));
+    }
+
     public function  pillowsIndexAction($site) {
         $em = $this->getDoctrine()->getEntityManager();
 

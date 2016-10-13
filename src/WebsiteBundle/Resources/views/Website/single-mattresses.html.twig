@@ -1,0 +1,115 @@
+{% extends 'website-index.html.twig' %}
+
+{% block title %}MLILY{% endblock %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('.home-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+            });
+
+            $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+    </script>
+{% endblock footer %}
+
+{% block body %}
+    <div class="content-section">
+        <div class="product-description">
+            <div class="row">
+                <div class="col-md-6 col-sm-5 col-xs-12">
+                    <div class="product-image"><img src="images/MD_Ambiance@2x.png" /></div>
+                </div>
+                <div class="col-md-6 col-sm-7 col-xs-12">
+                    <h3>AMBIANCE</h3>
+                    <p>The feeling, mood, and aura associated with a particular place.<br>
+                        <br>
+                        Prepare to be transported to the ultimate sleep destination. The Ambiance by MLILY sets the mood with a combination of cool comfort and refined luxury. Gel-infused memory foam, called gelCore, is noticeatably cooler while retaining the properties of traditional memory foam. <br>
+                        <br>
+                        Our Dream Foam is breathable, flexible, and versatile. With the resilience of natural rubber, and supple softness of a cloud, Dream Foam is actually latex-free, temperature neutral, and venitalted for greater air flow. <br>
+                        <br>
+                        The Ambiance features a silk blended fabric accented with suede. As beautiful as
+                        it is comfortable. </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-5 col-xs-12">
+                    <div class="product-types">
+                        <ul>
+                            <li>
+                                <div class="icon"><img src="images/I_Silk Icon@2x.png" /></div>
+                                <div class="title">SILK</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/I_Removable Cover Icon@2x.png" /></div>
+                                <div class="title">REMOVABLE COVER</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/I_Coolconfort GF Icon@2x.png" /></div>
+                                <div class="title">COOL CONFORT GEL FOAM </div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/I_Renewable Resources Icon@2x.png" /></div>
+                                <div class="title">RENEWABLE RESOURCES</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/I_Compressed Sleep P Icon@2x.png" /></div>
+                                <div class="title">COMPRESSED SLEEP</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/PF_PlantBasedOils Icon@2x.png" /></div>
+                                <div class="title">PLANT BASED OILS</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/PF_Memory Foam Icon@2x.png" /></div>
+                                <div class="title">MEMORY FOAM</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/PF_AloeVera Icon@2x.png" /></div>
+                                <div class="title">ALOE VERA</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/PF_SemiOpenCellStructure Icon@2x.png" /></div>
+                                <div class="title">SEMI-OPEN CELL STRUCTURE</div>
+                            </li>
+                            <li>
+                                <div class="icon"><img src="images/I_Flow Ventilated Foam Icon@2x.png" /></div>
+                                <div class="title">FLOW VENTILATED FOAM</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-7 col-xs-12">
+                    <div class="suggested-price">
+                        <h4>MLILY Suggested Retail Prices:</h4>
+                        <div class="price-list">
+                            <ul>
+                                <li>Twin: $1,019</li>
+                                <li>Full: $1,289</li>
+                                <li>Queen: $1,519</li>
+                                <li>King: $1,829</li>
+                            </ul>
+                        </div>
+                        <div class="row contact-block">
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <p>Wondering where to find an MLILY USA retailer near you? Interested in becoming a retailer yourself? We are here to help.</p>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <a href="#" class="contact-btn">CONTACT US</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-struture">
+                <img src="images/MlilyMattressesDescription.png" />
+            </div>
+        </div>
+    </div>
+{% endblock body %}

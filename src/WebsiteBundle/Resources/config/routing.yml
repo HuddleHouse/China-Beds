@@ -10,6 +10,13 @@ mattresses:
     requirements:
         site: mlily|bedboss
 
+single_mattresses:
+    path:     /{site}/mattresses/{id}
+    defaults: { _controller: WebsiteBundle:Website:singleMattressIndex }
+    requirements:
+        site: mlily|bedboss
+        id: '\d+'
+
 pillows:
     path:     /{site}/pillows
     defaults: { _controller: WebsiteBundle:Website:pillowsIndex }
