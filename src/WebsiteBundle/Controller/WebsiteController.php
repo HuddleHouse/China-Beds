@@ -2,6 +2,7 @@
 
 namespace WebsiteBundle\Controller;
 
+use InventoryBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class WebsiteController extends Controller
@@ -30,7 +31,7 @@ class WebsiteController extends Controller
         ));
     }
 
-    public function  singleMattressIndexAction($site) {
+    public function  singleMattressIndexAction($site, Product $product) {
         $em = $this->getDoctrine()->getEntityManager();
 
         if($site == 'mlily')
@@ -42,7 +43,8 @@ class WebsiteController extends Controller
 
         return $this->render('WebsiteBundle:Website:single-mattresses.html.twig', array(
             'site' => $site,
-            'mattresses' => $mattresses
+            'mattresses' => $mattresses,
+            'product' => $product
         ));
     }
 
