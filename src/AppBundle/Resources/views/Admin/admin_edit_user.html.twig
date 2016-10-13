@@ -109,17 +109,44 @@
             </div>
             <br>
             <br>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Assign Retailers</button>
 
-            {% if user.hasRole('ROLE_DISTRIBUTOR') %}
-                <div class="row" style="display: block;">
-                    <div class="col-md-12">
-                        {{ form_label(form.retailers) }}
-                        {{ form_widget(form.retailers) }}
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Assign Retailers</h4>
+                        </div>
+                        <div class="modal-body">
+                            {% if user.hasRole('ROLE_DISTRIBUTOR') %}
+                                <div class="row" style="display: block;">
+                                    <div class="col-md-12">
+                                        {{ form_label(form.retailers) }}
+                                        {{ form_widget(form.retailers) }}
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Accept</button>
+                            <button type="button" class="btn btn-warning" data-dismiss="modal" id="clear-retailers">Clear</button>
+                        </div>
                     </div>
+
                 </div>
-                <br>
-                <br>
-            {% endif %}
+            </div>
+            <script>
+                $(document).ready(function(){
+                    $("#clear-retailers").click(function(){
+                        $(".modal-body input:checkbox").removeAttr('checked');
+                        });
+                    });
+            </script>
+
             {% if user.hasRole('ROLE_SALES_REP') %}
                 <div class="row" style="display: block;">
                     <div class="col-md-12">
