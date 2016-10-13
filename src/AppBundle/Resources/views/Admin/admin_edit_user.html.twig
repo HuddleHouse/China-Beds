@@ -132,8 +132,9 @@
                             {% endif %}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Accept</button>
-                            <button type="button" class="btn btn-warning" data-dismiss="modal" id="clear-retailers">Clear</button>
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Accept</button>
+                            <button type="button" class="btn btn-danger" id="clear-retailers">Clear All</button>
+                            <button type="button" class="btn btn-primary" id="check-retailers">Check All</button>
                         </div>
                     </div>
 
@@ -143,8 +144,11 @@
                 $(document).ready(function(){
                     $("#clear-retailers").click(function(){
                         $(".modal-body input:checkbox").removeAttr('checked');
-                        });
                     });
+                    $("#check-retailers").click(function(){
+                        $(".modal-body input:checkbox").attr('checked', true);
+                    });
+                });
             </script>
 
             {% if user.hasRole('ROLE_SALES_REP') %}

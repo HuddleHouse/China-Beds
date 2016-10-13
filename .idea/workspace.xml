@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="" />
     <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="" />
-    <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="change comment box size">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/resume.iml" afterPath="$PROJECT_DIR$/.idea/resume.iml" />
+    <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="assign retailers module added for easier functionality to add all, delete all and manually pic.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig" afterPath="$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig" />
     </list>
@@ -81,8 +80,8 @@
       <file leaf-file-name="admin_edit_user.html.twig" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1381">
-              <caret line="145" column="27" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
+            <state relative-caret-position="571">
+              <caret line="148" column="71" selection-start-line="148" selection-start-column="71" selection-end-line="148" selection-end-column="71" />
               <folding>
                 <element signature="e#12#37#0#Twig" expanded="true" />
               </folding>
@@ -550,13 +549,6 @@
       <workItem from="1472485546631" duration="594000" />
       <workItem from="1472486231215" duration="3175000" />
     </task>
-    <task id="LOCAL-00012" summary="Fixing Entity relationshiops&#10;">
-      <created>1465498537037</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1465498537037</updated>
-    </task>
     <task id="LOCAL-00013" summary="Fixing Entity relationshiops&#10;">
       <created>1465562878854</created>
       <option name="number" value="00013" />
@@ -820,7 +812,7 @@
       <workItem from="1476275828555" duration="11308000" />
       <workItem from="1476305976222" duration="161000" />
       <workItem from="1476367880578" duration="676000" />
-      <workItem from="1476369031954" duration="3692000" />
+      <workItem from="1476369031954" duration="4210000" />
     </task>
     <task id="LOCAL-00047" summary="Header preference changes">
       <created>1473364360230</created>
@@ -920,12 +912,19 @@
       <option name="project" value="LOCAL" />
       <updated>1476370344379</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="assign retailers module added for easier functionality to add all, delete all and manually pic.">
+      <created>1476373344357</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1476373344357</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <option name="trackContextForNewChangelist" value="true" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="273157000" />
+    <option name="totallyTimeSpent" value="273675000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1009,7 +1008,8 @@
     <MESSAGE value="fix confirm immediate shipping placement, added additional row for placement" />
     <MESSAGE value="add sku to products order review table" />
     <MESSAGE value="change comment box size" />
-    <option name="LAST_COMMIT_MESSAGE" value="change comment box size" />
+    <MESSAGE value="assign retailers module added for easier functionality to add all, delete all and manually pic." />
+    <option name="LAST_COMMIT_MESSAGE" value="assign retailers module added for easier functionality to add all, delete all and manually pic." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1466,8 +1466,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1381">
-          <caret line="145" column="27" selection-start-line="145" selection-start-column="27" selection-end-line="145" selection-end-column="27" />
+        <state relative-caret-position="571">
+          <caret line="148" column="71" selection-start-line="148" selection-start-column="71" selection-end-line="148" selection-end-column="71" />
           <folding>
             <element signature="e#12#37#0#Twig" expanded="true" />
           </folding>
