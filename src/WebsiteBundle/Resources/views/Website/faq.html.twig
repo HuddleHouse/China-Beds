@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="content-main">
-                        <div class="text-center"><img src="images/Warranty_badge@2x.png" height="200" /></div>
+                        <div class="text-center"><img src="{{ asset('images/web/Warranty_badge@2x.png') }}" height="200" /></div>
                         <h2>Warranty</h2>
                         <h3>How long is the warranty on my mattress?</h3>
                         <p>Your new memory foam mattress is covered by a 10 year prorated limited warranty. Please retain your receipt as your warranty record.
@@ -35,7 +35,7 @@
                         <p>This limited warranty covers workmanship, manufacturer's defects, and materials for a period of 10 years (prorated). Sorry, there is no comfort guarantee expressed or implied.
                         </p>
                         <h3>Experiencing an issue with your purchase?</h3>
-                        <p>You can begin a warranty claim <a href="#">HERE</a>. You will be required to provide proof of original purchase from an Authorized Retailer, Premier Retailer, Authorized E-tailer, or MLILY USA. You may also need to supply images of your mattress and a description of the issue you have encountered.</p>
+                        <p>You can begin a warranty claim <a href="{{ path('web_warranty', {site: site}) }}">HERE</a>. You will be required to provide proof of original purchase from an Authorized Retailer, Premier Retailer, Authorized E-tailer, or MLILY USA. You may also need to supply images of your mattress and a description of the issue you have encountered.</p>
                         <h3>Purchasing online?</h3>
                         <p>Protect your investment when you shop online. Look for the Authorized E-tailer logo to ensure that your mattress is covered by our warranty. Online purchases made through Authorized E-tailers guarantee that you are receiving genuine MLILY products and that your purchase is covered under our manufacturer's warranty. If you purchase an MLILY product from an unauthorized retailer, your warranty will not be valid.</p>
                         <h3>Buying from a reseller like Amazon, Craig's list, or E-bay?</h3>
@@ -43,7 +43,7 @@
                         <h3>Buying from a reseller like Amazon, Craig's list, or E-bay?</h3>
                         <p>Purchases from traditional retailers, 'brick and mortar' stores, and any Premier Retailer are ALWAYS covered under the MLILY Limited Warranty. You can feel confident in your purchase!</p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="images/Maintenence2_Mattress@2x.png" width="300" /></div>
+                        <div class="text-center"><img src="{{ asset('images/web/Maintenence2_Mattress@2x.png') }}" width="300" /></div>
                         <div class="clearfix">&nbsp;</div>
                         <h2>Maintenance</h2>
                         <h3>Do I need to flip my mattress?</h3>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="content-main">
-                        <div class="text-center"><img src="images/Unpacking2Gray@2x.png" height="200" /></div>
+                        <div class="text-center"><img src="{{ asset('images/web/Unpacking2Gray@2x.png') }}" height="200" /></div>
                         <h2>Unpacking</h2>
                         <h3>Where should I unpack the mattress?</h3>
                         <p>Unpack your mattress in a well ventilated area such as an open garage or porch, before moving it to your living space.</p>
@@ -65,7 +65,7 @@
                         <h3>When will my mattress be ready to sleep on?</h3>
                         <p>Your mattress should be fully decompressed in about 24 hours, returning to its normal shape and size. Walking on the surface of your mattress, while it is positioned on the floor can speed this process.</p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="images/bedframe@2x.png" width="300" /></div>
+                        <div class="text-center"><img src="{{ asset('images/web/bedframe.png') }}" width="300" /></div>
                         <div class="clearfix">&nbsp;</div>
                         <h2>Support</h2>
                         <h3>What kind of box spring should I use?</h3>
@@ -73,13 +73,13 @@
                         <h3>Do you sell boxsprings?</h3>
                         <p>No. Mlily does not provide foundations. However any local mattress or furniture retailer will carry a variety of box solutions in stock.</p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="images/Contact Icon@2x.png" width="150" /></div>
+                        <div class="text-center"><img src="{{ asset('images/web/Contact Icon@2x.png') }}" width="150" /></div>
                         <div class="clearfix">&nbsp;</div>
                         <h2>Contact</h2>
                         <h3>How can I get in touch with you?</h3>
                         <p>We would love to hear from you. Simply fill out a CONTACT FORM and you will receive a response with 1 business day. </p>
                         <h3>Do you have a phone number ?</h3>
-                        <p>We love to speak with our customers, but do not currently have a 'call-in' line. On our <a href="#">CONTACT FORM</a> be sure to include your phone number and a representative will be in touch within 1 business day.</p>
+                        <p>We love to speak with our customers, but do not currently have a 'call-in' line. On our <a href="{{ path('web_contact', {site: site}) }}">CONTACT FORM</a> be sure to include your phone number and a representative will be in touch within 1 business day.</p>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                         <h3>Shipping Policy?</h3>
                         <p>Orders are usually processed within 2 business, according to stock availability. Products purchased through mlilyusa.com will be shipped via FedEx Ground. Purchaser is responsible for all applicable shipping charges. Shipping times vary but average delivery time is 2-3 days. </p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="images/Security Icon@2x.png" width="250" /></div>
+                        <div class="text-center"><img src="{{ asset('images/web/Security Icon@2x.png') }}" width="250" /></div>
                     </div>
                 </div>
             </div>

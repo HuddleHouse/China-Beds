@@ -16,35 +16,35 @@ class WebsiteController extends Controller
 
     public function faqIndexAction($site)
     {
-        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+        return $this->render('WebsiteBundle:Website:faq.html.twig', array(
             'site' => $site
         ));
     }
 
     public function productFeaturesIndexAction($site)
     {
-        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+        return $this->render('WebsiteBundle:Website:product-features.html.twig', array(
             'site' => $site
         ));
     }
 
     public function retailerIndexAction($site)
     {
-        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+        return $this->render('WebsiteBundle:Website:retailer.html.twig', array(
             'site' => $site
         ));
     }
 
     public function warrantyIndexAction($site)
     {
-        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+        return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
             'site' => $site
         ));
     }
 
     public function contactIndexAction($site)
     {
-        return $this->render('WebsiteBundle:Website:home.html.twig', array(
+        return $this->render('WebsiteBundle:Website:contact.html.twig', array(
             'site' => $site
         ));
     }
