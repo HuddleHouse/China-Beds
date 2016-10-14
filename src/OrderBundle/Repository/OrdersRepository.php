@@ -89,7 +89,7 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
     public function getProductsByWarehouseArray(Orders $order, Warehouse $warehouse = null) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
-        $statement = $connection->prepare("select i.*, v.price,((v.price/100)*i.quantity) as subtotal , concat(p.name, ': ', pv.name) as product_name, w.name as warehouse_name
+        $statement = $connection->prepare("select i.*, v.price,((v.price/100)*i.quantity) as subtotal , concat(p.name, ': ', pv.name) as product_name, w.name as warehouse_name, pv.sku
 	from orders_warehouse_info i
 		left join orders_product_variant v
 			on v.id = i.orders_product_variant_id

@@ -47,6 +47,11 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
+//    public function name(product_variantd) {
+//        loop through warehouse
+//        get prod var
+//    }
+
     public function getWarehouseInventoryForItemOnPurchaseOrder(Warehouse $warehouse, ProductVariant $productVariant)
     {
         $quantity = 0;

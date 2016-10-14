@@ -17,14 +17,6 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('html, body').scrollTop(0);
-
-            $(window).on('load', function() {
-                setTimeout(function(){
-                    $('html, body').scrollTop(0);
-                }, 0);
-            });
-
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
@@ -58,27 +50,15 @@
             $scope.cart_total = {{ order.getTotal  }};
             $scope.is_paid = {{ is_paid }};
 
-//            $scope.checkAll = function () {
-//                if($('#check-all').is(':checked')) {
-//                    angular.forEach($scope.ids, function(value, key) {
-//                        $('#'+value).prop('checked', true);
-//                    });
-//                }
-//                else {
-//                    angular.forEach($scope.ids, function(value, key) {
-//                        $('#'+value).prop('checked', false);
-//                    });
-//                }
-//
-//            };
-
             $(document).ready(function () {
                 if ($scope.is_paid == 1) {
                     $('#payment-type').val('{{ order.paymentType }}');
                 }
+                console.log("{{ is_paid }}");
             });
 
             $scope.changePayment = function () {
+                console.log($scope.payment_type);
                 if($scope.payment_type == 'cc')
                     $('#cc').show();
                 else
@@ -94,6 +74,7 @@
                 else
                     $('#payment').removeClass('has-error');
 
+                console.log($scope.cc);
 
                 if($scope.payment_type == 'cc') {
                     if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
@@ -118,8 +99,6 @@
                     showErrorModal('Please fix the form errors.');
                 else if ($scope.cart_total > $scope.ledgerTotal)
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
-                else if (document.getElementById('confirm-shipping').checked == false)
-                    showErrorModal('You need to confirm immediate shipping.');
                 else {
                     $.ajax({
                         type: 'POST',
@@ -140,44 +119,8 @@
 
             };
 
-            $scope.printShippingLabel = function () {
-                showSpinner();
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ path('api_create_shipping_label') }}",
-                    dataType: 'json',
-                    data: {
-                        order_id: {{ order.id }}
-                    },
-                    success: function (data) {
-                        $scope.$apply(function () {
-                            hideSpinner();
-                            window.location.href = 'label.pdf';
-                            console.log(data);
-                        });
-                    }
-                });
-            }
 
-            $scope.markShipped = function (warehouse_id) {
-                showSpinner();
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ path('api_mark_part_of_order_shipped') }}",
-                    dataType: 'json',
-                    data: {
-                        warehouse_id: warehouse_id,
-                        order_id: {{ order.id }}
-                    },
-                    success: function (data) {
-                        $scope.$apply(function () {
-                            hideSpinner();
-                            location.reload();
-                        });
-                    }
-                });
-            };
-
+            //not
             $scope.updateCart = function (variantId, cost, max) {
                 if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
                     $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
@@ -268,11 +211,6 @@
         address {
             line-height: 1.5 !important;
         }
-        @media print {
-            .page-header {
-                margin: 0px !important;
-            }
-        }
     </style>
 
     <div id="error-message">
@@ -281,7 +219,7 @@
     <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
         <div class="table"  style="min-height: 100vh;">
             {% if order.status.name == 'Draft' %}
-                <div class="row no-print">
+                <div class="row">
                     <div class="col-xs-12">
                         <div class="color-block">
                             Preview Only! Must confirm order to complete the process.
@@ -290,7 +228,7 @@
                     <!-- /.col -->
                 </div>
             {% elseif order.status.name == 'Paid' %}
-                <div class="row no-print">
+                <div class="row">
                     <div class="col-xs-12">
                         <div class="color-block-paid">
                            Order Placed
@@ -302,7 +240,7 @@
             <div class="row" style="margin-top: 20px;">
                 <div class="col-xs-12">
                     <h2 class="page-header">
-                        <div class="pull-right">Date: {{ order.submitDate | date('M d, Y h:i A') }}</div>
+                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
                         <span class="mdl-chip mdl-chip--contact" >
                             <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
                             <span class="mdl-chip__text">
@@ -348,52 +286,26 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-            <hr class="no-print">
+            <hr>
             {% for prod in product_data %}
                 <!-- Table row -->
-                {% if shipped_status is defined %}
-            <div class="row" style="">
-                <div class="col-md-4">
-                        <span class="mdl-chip mdl-chip--contact" >
-                            <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ shipped_status.color }};">{{ shipped_status.nameFirstLetter }}</span>
-                            <span class="mdl-chip__text">
-                                {{ shipped_status.name }}
-                            </span>
-                        </span>
-                </div>
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-4" >
-                    <div style="    display: inline;">
-                        <a href="#" class="btn btn-raised btn-info" ng-click="printShippingLabel()" style="float: right;"><i class="fa fa-ship"></i> Print Shipping Label</a>
-                        {% if shipped_status.name != 'Shipped' %}
-                            <a href="#" data-toggle="modal" data-target="#ship-modal" class="btn btn-raised btn-success" style="float: right;"><i class="fa fa-ship"></i> Mark as Shipped</a>
-                        {% endif %}
-                    </div>
-
-                </div>
-            </div>
-                {% endif %}
                 <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
                         <h4 class="page-header"><b>Warehouse Location: </b>{{ prod[0].warehouse_name }}</h4>
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                {% if is_granted('ROLE_WAREHOUSE') %}
-
-                                {% endif %}
-                                <th style="width: 10%;"><center>Qty</center></th>
+                                <th style="width: 10%;">Qty</th>
                                 <th>Product</th>
-                                {% if is_granted('ROLE_WAREHOUSE') == false %}<th style="width: 24%;">Subtotal</th>{% endif %}
+                                <th style="width: 24%;">Subtotal</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for item in prod %}
                                 <tr>
-                                    <td style="text-align: center;">{{ item.quantity }}</td>
+                                    <td>{{ item.quantity }}</td>
                                     <td>{{ item.product_name }}</td>
-                                    {% if is_granted('ROLE_WAREHOUSE') == false %}<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>{% endif %}
+                                    <td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -402,7 +314,6 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-
             {% endfor %}
 
             {% if pop_items is not empty %}
@@ -436,8 +347,7 @@
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
                 <div class="col-md-6">
-                    {% if is_granted('ROLE_WAREHOUSE') == false %}
-                        <fieldset style="margin-top: 20px;margin-bottom: 50px;" class="no-print">
+                    <fieldset style="margin-top: 20px;margin-bottom: 50px;">
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
@@ -509,46 +419,38 @@
                             </div>
                         </div>
                     </fieldset>
-                    {% endif %}
+
                     <h5 style="margin: -14px 0 16px;">Comments</h5>
-                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 150px;">
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 50px;">
                         {{ order.comments }}
                     </p>
                 </div>
                 <div class="col-md-6">
-                    {% if order.isPickUp == 0 %}
-                        {% if order.status.name == 'Draft' %}
-                            {% if is_granted('ROLE_WAREHOUSE') == false %}<label class="no-print"><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>{% endif %}
-                        {% endif %}
-                    {% elseif order.isPickUp == 1 %}
+                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
                         <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                         <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
-                    {% endif %}
-
-                    {% if is_granted('ROLE_WAREHOUSE') == false %}
-                        <div class="table-responsive" style="margin-top: 46px;">
-                            <table class="table">
-                                <tbody>
-                                <tr>
-                                    <th >Subtotal:</th>
-                                    <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
-                                </tr>
-                                {#<tr>#}
+                    <div class="table-responsive" style="margin-top: 46px;">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th >Subtotal:</th>
+                                <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            {#<tr>#}
                                 {#<th>Tax (9.3%)</th>#}
                                 {#<td>$0.00</td>#}
-                                {#</tr>#}
-                                <tr>
-                                    <th>Shipping: {{ order.getShipDescription }}</th>
-                                    <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Total:</th>
-                                    <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    {% endif %}
+                            {#</tr>#}
+                            <tr>
+                                <th>Shipping: {{ order.getShipDescription }}</th>
+                                <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.col -->
             </div>

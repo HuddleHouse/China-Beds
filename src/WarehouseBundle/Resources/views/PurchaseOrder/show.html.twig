@@ -31,7 +31,7 @@
                     .controller('myCtrl', MyCtrl)
                     .directive('jqSpinner', jqSpinner);
 
-            function MyCtrl ($timeout, $q, $log) {
+            function MyCtrl ($timeout, $q, $log, $scope) {
                 var self = this;
 
                 self.simulateQuery = false;
@@ -45,6 +45,7 @@
                 self.getCartTotal   = getCartTotal;
                 self.setActive   = setActive;
                 self.receiveAll   = receiveAll;
+                self.getWarehouseInv   = getWarehouseInv;
                 self.save = save;
                 self.warehouseChange = warehouseChange;
                 self.cart = {{ cart | json_encode | raw}};
@@ -60,6 +61,12 @@
                 self.warehouses = {{ warehouses | json_encode | raw}};
                 self.warehouse = {{ purchaseOrder.warehouse.id }};
                 self.updateETA = updateETA;
+                self.all_warehouse_inventory = {};
+
+                self.date = (self.due_date.getTime() + 432000000);
+                self.wheta = new Date(self.date);
+
+
 
 
                 function setEdit(val){
@@ -87,6 +94,20 @@
                                 });
                             }
                         });
+                    });
+                }
+
+                function getWarehouseInv(id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_inventory_for_sites') }}",
+                        dataType: 'json',
+                        data: {product_variant_id: id},
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                self.all_warehouse_inventory = data;
+                            });
+                        }
                     });
                 }
 
@@ -288,13 +309,15 @@
         <div class="table">
             <div class="row">
                 {% if purchaseOrder.status.name == 'Active' or purchaseOrder.status.name == 'Draft' %}
-                <div class="col-md-4">
-                    <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
-                </div>
+                    <div class="col-md-4">
+                        <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                    </div>
                 {% else %}
                     <div class="col-md-4">
+                        <h5>Date Received<p><b>{{ purchaseOrder.orderReceivedDate | date("m/d/Y") }}</b></p><md-datepicker ng-model="ctrl.due_date" md-placeholder="Change Received Date" md-current-view=""></md-datepicker></h5>
                         <h5>Day merchandise got here<md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
                     </div>
+
                 {% endif %}
                 <div class="col-md-2">
                     <span class="mdl-chip mdl-chip--contact" style="margin-top: 27px;">
@@ -320,11 +343,22 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Warehouse Eta<md-datepicker ng-model="ctrl.wheta" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-6">
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
+                        <div>
+                            <ul>
+                                <li style="color:lightslategray;list-style-type:none">Physical Container Number: 234234fSo34DOs3Ikop223</li>
+                                <li style="color:lightslategray;list-style-type:none">Factory Order Number: 30243</li>
+                            </ul>
+                        </div>
                         {% verbatim %}
                         <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;"
                             ng-model="ctrl.warehouse"
@@ -368,10 +402,20 @@
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
                             </td>
                             <td class="table-form" >
-                                <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
+                                <!--<input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>-->
+                                <div class="dropdown" style="text-align: center;">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-model="item.total_quantity" ng-click="ctrl.getWarehouseInv(item.id)" class="form-control" style="font-family:inherit; color:black">{{ item.total_quantity }}
+                                    <span class="caret"></span></button>
+
+                                    <ul class="dropdown-menu" style="height:auto;max-height:300px;min-height: 100px;overflow-x: scroll;min-width: 340px;margin-left:-206px;box-shadow: black 0px 7px 40px -10px;">
+                                        <li ng-model="ctrl.all_warehouse_inventory" ng-repeat="item in ctrl.all_warehouse_inventory track by $index" style="padding-left:10px;">
+                                              {{item.quantity}} : {{ item.name }}
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </td>
                                   {% endverbatim %}
-
                             </div>
                         </tr>
                         <tr id="search" ng-if="ctrl.isEdit == 1">

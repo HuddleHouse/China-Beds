@@ -180,8 +180,9 @@ class WarehouseController extends Controller
                 ));
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());
-
+                //$this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());
+                $this->addFlash('error', 'Error deleting warehouse, the warehouse selected is being used currently for another purpose and deleting it would cause further issues' );
+                
                 return $this->render('@Warehouse/Warehouse/edit.html.twig', array(
                     'warehouse' => $warehouse,
                     'form' => $editForm->createView(),

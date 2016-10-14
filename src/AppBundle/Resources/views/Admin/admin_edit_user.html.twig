@@ -109,17 +109,75 @@
             </div>
             <br>
             <br>
-
             {% if user.hasRole('ROLE_DISTRIBUTOR') %}
-                <div class="row" style="display: block;">
-                    <div class="col-md-12">
-                        {{ form_label(form.retailers) }}
-                        {{ form_widget(form.retailers) }}
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Assign Retailers</button>
+
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Assign Retailers</h4>
+                        </div>
+                        <div class="modal-body">
+
+                                <div class="row" style="display: block;">
+                                    <div class="col-md-12">
+                                        {#{{ form_label(form.retailers) }}#}
+                                        {#{{ form_widget(form.retailers) }}#}
+
+                                        <table class="table table-hover table-condensed">
+                                            <tbody style="border:none">
+
+                                            {% for retailer in form.retailers.children %}
+                                                <tr>
+                                                   <td style="border:none">{{ form_label(retailer) }}</td><td style="padding-left:0px; border:none">{{ form_widget(retailer) }}</td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Accept</button>
+                            <button type="button" class="btn btn-danger" id="clear-retailers">Clear All</button>
+                            <button type="button" class="btn btn-primary" id="check-retailers">Check All</button>
+                        </div>
                     </div>
+
                 </div>
-                <br>
-                <br>
+            </div>
             {% endif %}
+            <script>
+                $(document).ready(function(){
+                    $("#clear-retailers").click(function()
+                    {
+                        $(".modal-body input:checkbox").removeAttr('checked');
+                    });
+                    $("#check-retailers").click(function()
+                    {
+                        $(".modal-body input:checkbox").attr('checked', true);
+                    });
+                    $(".modal-body tr").click(function()
+                    {
+
+                        if($(this).find('input:checkbox').attr('checked'))
+                        {
+                            $(this).find('input:checkbox').removeAttr('checked');
+                        }else
+                        {
+                            $(this).find('input:checkbox').attr('checked', true);
+                        }
+                    });
+                });
+            </script>
+
             {% if user.hasRole('ROLE_SALES_REP') %}
                 <div class="row" style="display: block;">
                     <div class="col-md-12">
