@@ -45,18 +45,29 @@ class CreditRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('submittedForUser', EntityType::class, array(
-                    'class' => 'AppBundle\Entity\User',
+//            ->add('submittedForUser', EntityType::class, array(
+//                    'class' => 'AppBundle\Entity\User',
+//                    'label' => 'On Behalf of',
+//                    'placeholder' => 'Select User Requesting Credit',
+//                    'choice_label' => function (User $user) {
+//                        return $user->getFullName();
+//                    },
+//                    'choices' => $this->usersRepository->findByUser($this->tokenStorage->getToken()->getUser()),
+//                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+//                    'required' => true
+//                )
+//            )
+
+            ->add('submittedForUser', TextType::class, array(
+//                    'class' => 'AppBundle\Entity\User',
                     'label' => 'On Behalf of',
-                    'placeholder' => 'Select User Requesting Credit',
-                    'choice_label' => function (User $user) {
-                        return $user->getFullName();
-                    },
-                    'choices' => $this->usersRepository->findByUser($this->tokenStorage->getToken()->getUser()),
+                    'data' => $this->tokenStorage->getToken()->getUser(),
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'required' => true
+                    'required' => true,
+                    'disabled' => true
                 )
             )
+
             ->add('amountRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
                     'label' => 'Amount',

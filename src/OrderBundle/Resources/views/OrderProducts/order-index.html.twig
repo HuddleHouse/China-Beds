@@ -95,6 +95,11 @@
             $scope.hasError = [];
             $scope.ship_to_id = {{ app.user.id }};
 
+            $scope.due_date = new Date();
+            $scope.date = ($scope.due_date.getTime() + 86400000);
+            $scope.min_date = new Date($scope.date);
+
+
             {% if is_edit == 1 %}
                 $scope.order_pop = {{ order_pop | json_encode | raw}};
                 $scope.order_variants = {{ order_variants | json_encode | raw}};
@@ -503,8 +508,6 @@
             };
 
         }]);
-
-
 
     </script>
 {% endblock footer %}
