@@ -32,6 +32,12 @@
                             <td>{{ item.warehouse_name }}</td>
                             <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
                             <td>{{ item.date | date("m/d/Y")  }}</td>
+                        {% elseif item.type == "order" %}
+                            <td><a href="{{ path('order_products_warehouse_review', { 'id_order': item.order_id, 'id_warehouse': warehouse.id }) }}">{{ item.order_number }}</a></td>
+                            <td>Order</td>
+                            <td>{{ item.warehouse_name }}</td>
+                            <td><span class="label" style="background-color: {{ item.color }}">{{ item.status_name }}</span></td>
+                            <td>{{ item.date | date("m/d/Y")  }}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}

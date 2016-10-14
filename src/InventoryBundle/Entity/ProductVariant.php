@@ -105,6 +105,11 @@ class ProductVariant
      */
     private $warehouse_inventory_on_hold;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="productVariant")
+     */
+    private $warranty_claims;
+
 
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
@@ -113,6 +118,7 @@ class ProductVariant
         $this->purchase_order_product_variant = new ArrayCollection();
         $this->stock_transfer_product_variant = new ArrayCollection();
         $this->stock_adjustment_product_variant = new ArrayCollection();
+        $this->warranty_claims = new ArrayCollection();
     }
 
     /**
@@ -363,6 +369,22 @@ class ProductVariant
     public function setWarehouseInventoryOnHold($warehouse_inventory_on_hold)
     {
         $this->warehouse_inventory_on_hold = $warehouse_inventory_on_hold;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarrantyClaims()
+    {
+        return $this->warranty_claims;
+    }
+
+    /**
+     * @param mixed $warranty_claims
+     */
+    public function setWarrantyClaims($warranty_claims)
+    {
+        $this->warranty_claims = $warranty_claims;
     }
 
 }

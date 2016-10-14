@@ -4,6 +4,11 @@ services:
 #        arguments: ["@service_id", "plain_value", %parameter%]
   form.type.warrantyclaim:
         class: InventoryBundle\Form\WarrantyClaimType
-        arguments: ["@security.token_storage"]
+        arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: warrantyclaim_type }
+  form.type.rebatesubmission:
+        class: InventoryBundle\Form\RebateSubmissionType
+        arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
+        tags:
+            - { name: form.type, alias: rebatesubmission_type }

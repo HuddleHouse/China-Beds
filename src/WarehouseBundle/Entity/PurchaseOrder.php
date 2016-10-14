@@ -58,6 +58,20 @@ class PurchaseOrder
     private $message;
 
     /**
+     * @var string
+     *
+     * @ORM\Column (name="physical_container", type="string", nullable=true)
+     */
+    private $physicalContainer;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="factory_order_number", type="string", nullable=true)
+     */
+    private $factoryOrderNumber;
+
+    /**
      * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Status", inversedBy="purchase_orders")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
@@ -303,5 +317,76 @@ class PurchaseOrder
     }
 
 
-}
 
+    /**
+     * Set physicalContainer
+     *
+     * @param string $physicalContainer
+     *
+     * @return PurchaseOrder
+     */
+    public function setPhysicalContainer($physicalContainer)
+    {
+        $this->physicalContainer = $physicalContainer;
+
+        return $this;
+    }
+
+    /**
+     * Get physicalContainer
+     *
+     * @return string
+     */
+    public function getPhysicalContainer()
+    {
+        return $this->physicalContainer;
+    }
+
+    /**
+     * Set factoryOrderNumber
+     *
+     * @param string $factoryOrderNumber
+     *
+     * @return PurchaseOrder
+     */
+    public function setFactoryOrderNumber($factoryOrderNumber)
+    {
+        $this->factoryOrderNumber = $factoryOrderNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get factoryOrderNumber
+     *
+     * @return string
+     */
+    public function getFactoryOrderNumber()
+    {
+        return $this->factoryOrderNumber;
+    }
+
+    /**
+     * Add productVariant
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrderProductVariant $productVariant
+     *
+     * @return PurchaseOrder
+     */
+    public function addProductVariant(\WarehouseBundle\Entity\PurchaseOrderProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove productVariant
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrderProductVariant $productVariant
+     */
+    public function removeProductVariant(\WarehouseBundle\Entity\PurchaseOrderProductVariant $productVariant)
+    {
+        $this->product_variants->removeElement($productVariant);
+    }
+}

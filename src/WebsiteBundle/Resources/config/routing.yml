@@ -1,0 +1,60 @@
+website_homepage:
+    path:     /{site}
+    defaults: { _controller: WebsiteBundle:Website:index }
+    requirements:
+        site: mlily|bedboss
+
+mattresses:
+    path:     /{site}/mattresses
+    defaults: { _controller: WebsiteBundle:Website:mattressIndex }
+    requirements:
+        site: mlily|bedboss
+
+single_mattresses:
+    path:     /{site}/mattresses/{id}
+    defaults: { _controller: WebsiteBundle:Website:singleMattressIndex }
+    requirements:
+        site: mlily|bedboss
+        id: '\d+'
+
+pillows:
+    path:     /{site}/pillows
+    defaults: { _controller: WebsiteBundle:Website:pillowsIndex }
+    requirements:
+        site: mlily|bedboss
+
+adjustables:
+    path:     /{site}/adjustables
+    defaults: { _controller: WebsiteBundle:Website:adjustablesIndex }
+    requirements:
+        site: mlily|bedboss
+
+web_faq:
+    path:     /{site}/faq
+    defaults: { _controller: WebsiteBundle:Website:faqIndex }
+    requirements:
+        site: mlily|bedboss
+
+web_contact:
+    path:     /{site}/contact
+    defaults: { _controller: WebsiteBundle:Website:contactIndex }
+    requirements:
+        site: mlily|bedboss
+
+web_product_features:
+    path:     /{site}/product-features
+    defaults: { _controller: WebsiteBundle:Website:productFeaturesIndex }
+    requirements:
+        site: mlily|bedboss
+
+web_retailers:
+    path:     /{site}/retailer
+    defaults: { _controller: WebsiteBundle:Website:retailerIndex }
+    requirements:
+        site: mlily|bedboss
+
+web_warranty:
+    path:     /{site}/contact
+    defaults: { _controller: WebsiteBundle:Website:warrantyIndex }
+    requirements:
+        site: mlily|bedboss

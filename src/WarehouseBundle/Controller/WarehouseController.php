@@ -98,7 +98,9 @@ class WarehouseController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
+        $pop = $em->getRepository('InventoryBundle:PopItem')->findAll();
         $inventory_data = $em->getRepository('WarehouseBundle:WareHouse')->getWarehouseInventoryArray($warehouse);
+        $pop_inventory_data = $em->getRepository('WarehouseBundle:WareHouse')->getWarehousePopInventoryArray($warehouse);
         $active_po = $em->getRepository('WarehouseBundle:PurchaseOrder')->getActiveForWarehouseArray($warehouse);
         $all_po = $em->getRepository('WarehouseBundle:PurchaseOrder')->getAllForWarehouseArray($warehouse);
 
@@ -108,8 +110,32 @@ class WarehouseController extends Controller
         $all_adj = $em->getRepository('WarehouseBundle:StockAdjustment')->getAllForWarehouseArray($warehouse);
         $active_adj = $em->getRepository('WarehouseBundle:StockAdjustment')->getActiveForWarehouseArray($warehouse);
 
-        $all = array_merge($all_po, $all_st, $all_adj);
-        $active = array_merge($active_po, $active_st, $active_adj);
+        $all_orders = $em->getRepository('OrderBundle:Orders')->getAllForWarehouseArray($warehouse);
+        $active_orders = $em->getRepository('OrderBundle:Orders')->getActiveForWarehouseArray($warehouse);
+
+        $all = array_merge($all_po, $all_st, $all_adj, $all_orders);
+        $all_dates = array();
+        foreach($all as $item) {
+            if(isset($item['date']))
+                $all_dates[] = $item['date'];
+            else if(isset($item['stock_due_date']))
+                $all_dates[] = $item['stock_due_date'];
+
+        }
+
+        array_multisort($all_dates, SORT_DESC, $all);
+
+        $active = array_merge($active_po, $active_st, $active_adj, $active_orders);
+        $active_dates = array();
+        foreach($active as $item) {
+            if(isset($item['date']))
+                $active_dates[] = $item['date'];
+            else if(isset($item['stock_due_date']))
+                $active_dates[] = $item['stock_due_date'];
+
+        }
+
+        array_multisort($active_dates, SORT_DESC, $active);
 
         return $this->render('@Warehouse/Warehouse/show.html.twig', array(
             'warehouse' => $warehouse,
@@ -121,7 +147,10 @@ class WarehouseController extends Controller
             'all_st' => $all_st,
             'all_adj' => $all_adj,
             'all' => $all,
-            'active' => $active
+            'active' => $active,
+            'pop_inventory' => $pop_inventory_data,
+            'pop' => $pop,
+            'orders' => $all_orders
         ));
     }
 
@@ -151,8 +180,9 @@ class WarehouseController extends Controller
                 ));
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());
-
+                //$this->addFlash('error', 'Error updating warehouse ' . $e->getMessage());
+                $this->addFlash('error', 'Error deleting warehouse, the warehouse selected is being used currently for another purpose and deleting it would cause further issues' );
+                
                 return $this->render('@Warehouse/Warehouse/edit.html.twig', array(
                     'warehouse' => $warehouse,
                     'form' => $editForm->createView(),

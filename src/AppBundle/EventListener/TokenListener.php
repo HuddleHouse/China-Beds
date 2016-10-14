@@ -49,7 +49,12 @@ class TokenListener
             'api_add_option_value',
             'api_get_values',
             'quickbooks_default_index',
-            'fos_user_profile_show'
+            'fos_user_profile_show',
+            'website_homepage',
+            'mattresses',
+            'single_mattresses',
+            'pillows',
+            'adjustables'
         ); //These are excluded routes. These are always allowed. Required for login page
 
 
@@ -59,8 +64,10 @@ class TokenListener
                 $route_names = explode(',', $this->session->get('route_names'));
             }
             else {
-                if(!($user = $this->token_storage->getToken()->getUser())) {
+                $user = $this->token_storage->getToken()->getUser();
+                if (!$user || $user === 'anon.') {
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
+                    return;
                 }
                 $route_names = $user->getRouteNames();
                 $user_channels = $user->getUserChannelsArray();

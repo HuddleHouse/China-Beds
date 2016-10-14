@@ -47,6 +47,11 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
+//    public function name(product_variantd) {
+//        loop through warehouse
+//        get prod var
+//    }
+
     public function getWarehouseInventoryForItemOnPurchaseOrder(Warehouse $warehouse, ProductVariant $productVariant)
     {
         $quantity = 0;
@@ -97,7 +102,6 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * THIS NEEDS TO BE FIXED
      *
      * @param Warehouse $warehouse
      * @return array|bool
@@ -110,6 +114,27 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
                 'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
                 'quantity' => $item->getQuantity(),
                 'po_quantity' => $this->getWarehouseInventoryForItemOnPurchaseOrder($warehouse, $item->getProductVariant())
+            );
+        }
+
+        if(!isset($inventory_data))
+            return true;
+
+        return $inventory_data;
+    }
+
+    /**
+     *
+     * @param Warehouse $warehouse
+     * @return array|bool
+     */
+    public function getWarehousePopInventoryArray(Warehouse $warehouse) {
+        $i = 1;
+        foreach($warehouse->getPopInventory() as $item) {
+            $inventory_data[] = array(
+                'id' => $item->getId(),
+                'name' => $item->getPopItem()->getName(),
+                'quantity' => $item->getQuantity(),
             );
         }
 

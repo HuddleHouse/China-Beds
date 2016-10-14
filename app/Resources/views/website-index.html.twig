@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    {#<link href="css/bootstrap.min.css" rel="stylesheet">#}
+    {% block stylesheets %}
+        {% stylesheets '@WebsiteBundle/Resources/public/css/*' filter="cssrewrite" output="css/websiteBundle.css" %}
+        {% endstylesheets %}
+    {% endblock %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/websiteBundle.css') }}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/fonts/slick.ttf"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/fonts/slick.woff"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}"/>
+
+    <![endif]-->
+    {#<link href="css/font-awesome.css" rel="stylesheet">#}
+    {#<link href="css/custom.css" rel="stylesheet">#}
+    {#<link href="css/responsive.css" rel="stylesheet">#}
+    <script src="https://use.typekit.net/wph0osy.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar">
+        <div class="social-links">
+            <ul>
+                <li><i class="fa fa-facebook" aria-hidden="true"></i></li>
+                <li><i class="fa fa-twitter" aria-hidden="true"></i></li>
+                <li><i class="fa fa-instagram" aria-hidden="true"></i></li>
+            </ul>
+        </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ path('website_homepage', {site: site}) }}">
+                <img style="max-width: 140px;" src="{{ asset('images/web/MlilylogoColor@2x.png') }}" />
+            </a>
+            <div class="login-btn">
+                <ul>
+                    <li>Login</li>
+                </ul>
+            </div>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ path('website_homepage', {site: site}) }}">Home</a></li>
+                <li><a href="{{ path('mattresses', {site: site}) }}">MATTRESSES</a></li>
+                <li><a href="{{ path('pillows', {site: site}) }}">PILLOWS</a></li>
+                <li><a href="{{ path('adjustables', {site: site}) }}">ADJUSTABLE BEDS</a></li>
+            </ul>
+            <div class="regiter-head"><a href="{{ path('web_retailers', {site: site}) }}"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></a></div>
+        </div><!--/.nav-collapse -->
+    </nav>
+    {% block body %}{% endblock %}
+</div>
+
+<footer>
+    <div class="copyright">&copy; 2016 {{ site|upper }}USA | ALL RIGHTS RESERVED</div>
+</footer>
+
+{% block javascripts %}
+    {% javascripts '@WebsiteBundle/Resources/public/js/*' filter="jsqueeze" output="js/websiteBundle.js"%}
+    {% endjavascripts %}
+{% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+
+<script src="{{ asset('js/websiteBundle.js') }}"></script>
+{% block footer %}{% endblock %}
+</body>
+</html>

@@ -23,8 +23,10 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}"/>
 
 </head>
-
+<script src="https://use.typekit.net/wph0osy.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>
 <style>
+
     body, h3, h4, h5, h6, .h3, .h4, .button {
         font-family: 'museo', sans-serif !important;
         font-weight: 700;
@@ -33,11 +35,12 @@
         font-family: 'museo', sans-serif;
         font-weight: 500;
     }
+    @page{margin:0;size:auto}
 </style>
 
 
 <body class="skin-blue sidebar-mini" id="body">
-<div class="overlay">
+<div class="overlay" style="display: none">
     <div id="loading-img"></div>
 </div>
 <script src="{{ asset('js/jquery-2.2.0.min.js') }}"></script>
@@ -102,7 +105,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/responsive.bootstrap.min.js"></script>
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="https://npmcdn.com/isotope-layout@3.0/dist/isotope.pkgd.min.js"></script>
 <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.1.1/ui-bootstrap-tpls.min.js"></script>
@@ -149,6 +152,12 @@
         , shadow: true // Whether to render a shadow
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
+    };
+
+    function moneyFormat(value) {
+        var m_strOut = String(value);
+        m_strOut = m_strOut.replace(/[^0-9.]/g, '');
+        return m_strOut;
     }
 
     function addSpinner() {
@@ -176,13 +185,16 @@
     }
 
     function printPage() {
+        $('body').addClass('sidebar-collapse');
         window.print();
+        $('body').removeClass('sidebar-collapse');
     }
 
     function showErrorModal(message) {
         $('#error-modal').modal('show');
         $('#error-message1').empty();
         $('#error-message1').append(message);
+        console.log(message);
     }
 
     function showSuccessModal(message) {

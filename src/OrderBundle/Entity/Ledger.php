@@ -120,19 +120,24 @@ class Ledger
     private $type = self::TYPE_CREDIT;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", inversedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", inversedBy="ledgers")
      */
     private $warrantyClaim;
 
     /**
-     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="ledgers")
      */
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Rebate", inversedBy="ledger")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\RebateSubmission", inversedBy="ledgers")
      */
-    private $rebate;
+    private $rebateSubmission;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
+     */
+    private $channel;
 
     /**
      * Ledger constructor.
@@ -405,18 +410,34 @@ class Ledger
     /**
      * @return mixed
      */
-    public function getRebate()
+    public function getRebateSubmission()
     {
-        return $this->rebate;
+        return $this->rebateSubmission;
     }
 
     /**
-     * @param mixed $rebate
+     * @param mixed $rebateSubmission
      */
-    public function setRebate($rebate)
+    public function setRebateSubmission($rebateSubmission)
     {
         $this->setType(self::TYPE_REBATE);
-        $this->rebate = $rebate;
+        $this->rebateSubmission = $rebateSubmission;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param mixed $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 
     public function toArray() {
@@ -432,7 +453,8 @@ class Ledger
             'description' => $this->getDescription(),
             'type' => $this->getType(),
             'dateCreated' => $this->getDateCreated()->format('m/d/Y'),
-            'datePosted' => $this->getDatePosted() ? $this->getDatePosted()->format('m/d/Y') : null
+            'datePosted' => $this->getDatePosted() ? $this->getDatePosted()->format('m/d/Y') : null,
+            'channel' => $this->getChannel()
         );
 
         switch($this->getType()) {
@@ -440,7 +462,7 @@ class Ledger
                 $rtn['order'] = $this->getOrder();
                 break;
             case self::TYPE_REBATE:
-                $rtn['rebate'] = $this->getRebate();
+                $rtn['rebate'] = $this->getRebateSubmission();
                 break;
             case self::TYPE_CLAIM:
                 $rtn['warrantyClaim'] = $this->getWarrantyClaim();

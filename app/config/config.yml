@@ -7,12 +7,14 @@ imports:
     - { resource: "@OrderBundle/Resources/config/services.yml" }
     - { resource: "@WarehouseBundle/Resources/config/services.yml" }
     - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: "@WebsiteBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
     product_images_directory: '%kernel.root_dir%/../web/uploads/products'
+    rebate_submissions_directory: '%kernel.root_dir%/../web/uploads/rebate_submissions'
 
 framework:
     #esi:             ~

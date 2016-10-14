@@ -16,7 +16,7 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "order": [[3, "desc"]],"iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
     </script>
 {% endblock footer %}
@@ -32,6 +32,7 @@
                         <th>Status</th>
                         <th>Warehouse</th>
                         <th>Due Date</th>
+                        <th>Received Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -49,6 +50,7 @@
                             </td>
                             <td><a href="{{ path('warehouse_show', { 'id': purchaseOrder.warehouse.id }) }}">{{ purchaseOrder.warehouse.name }}</a></td>
                             <td>{% if purchaseOrder.stockDueDate %}{{ purchaseOrder.stockDueDate|date('Y-m-d') }}{% endif %}</td>
+                            <td>{% if purchaseOrder.orderReceivedDate %}{{ purchaseOrder.orderReceivedDate | date("m/d/Y") }}{% endif %}</td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('purchaseorder_show', { 'id': purchaseOrder.id }) }}">show</a>
                             </td>

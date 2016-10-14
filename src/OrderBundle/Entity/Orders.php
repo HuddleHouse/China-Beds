@@ -33,6 +33,14 @@ class Orders
     private $orderNumber;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="order_id", type="string", length=255, nullable=true)
+     */
+    private $orderId;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Status", inversedBy="stock_adjustments")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
@@ -200,7 +208,7 @@ class Orders
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="order")
      */
-    private $ledger;
+    private $ledgers;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\WarrantyClaim", mappedBy="order")
@@ -208,16 +216,21 @@ class Orders
     private $warranty_claims;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="order")
      */
-    private $rebates;
+    private $rebate_submissions;
 
+    /**
+     * Orders constructor.
+     * @param null $info
+     */
     public function __construct($info = null)
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
-        $this->rebates = new ArrayCollection();
+        $this->rebate_submissions = new ArrayCollection();
+        $this->ledgers = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -640,7 +653,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getProductVariants()
     {
@@ -648,7 +661,7 @@ class Orders
     }
 
     /**
-     * @param mixed $product_variants
+     * @param ArrayCollection $product_variants
      */
     public function setProductVariants($product_variants)
     {
@@ -760,7 +773,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getPopItems()
     {
@@ -768,7 +781,7 @@ class Orders
     }
 
     /**
-     * @param mixed $pop_items
+     * @param ArrayCollection $pop_items
      */
     public function setPopItems($pop_items)
     {
@@ -815,7 +828,7 @@ class Orders
         return $this->ship_description;
     }
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getWarrantyClaims()
     {
@@ -846,7 +859,7 @@ class Orders
         $this->ship_code = $ship_code;
     }
     /**
-     * @param mixed $warranty_claims
+     * @param ArrayCollection $warranty_claims
      */
     public function setWarrantyClaims($warranty_claims)
     {
@@ -854,35 +867,52 @@ class Orders
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @param ArrayCollection $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRebateSubmissions()
+    {
+        return $this->rebate_submissions;
+    }
+
+    /**
+     * @param ArrayCollection $rebate_submissions
+     */
+    public function setRebateSubmissions($rebate_submissions)
+    {
+        $this->rebate_submissions = $rebate_submissions;
+    }
+
+    /**
      * @return mixed
      */
-    public function getLedger()
+    public function getOrderId()
     {
-        return $this->ledger;
+        return $this->orderId;
     }
 
     /**
-     * @param mixed $ledger
+     * @param mixed $orderId
      */
-    public function setLedger($ledger)
+    public function setOrderId($orderId)
     {
-        $this->ledger = $ledger;
+        $this->orderId = $orderId;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRebates()
-    {
-        return $this->rebates;
-    }
-
-    /**
-     * @param mixed $rebates
-     */
-    public function setRebates($rebates)
-    {
-        $this->rebates = $rebates;
-    }
 }
 

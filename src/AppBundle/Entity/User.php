@@ -10,7 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+
 use Doctrine\ORM\Mapping\OneToMany;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -168,12 +170,12 @@ class User extends BaseUser
     private $office;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedForUser")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="submittedForUser")
      */
-    private $rebates;
+    private $rebate_submissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="submittedByUser")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="submittedByUser")
      */
     private $submitted_rebates;
 
@@ -285,7 +287,7 @@ class User extends BaseUser
         $this->warranty_claims = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
-        $this->rebates = new ArrayCollection();
+        $this->rebate_submissions = new ArrayCollection();
         $this->submitted_rebates = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->orders = new ArrayCollection();
@@ -299,6 +301,25 @@ class User extends BaseUser
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
     }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if($this->hasRole('ROLE_RETAILER')) {
+            $count = 0;
+            foreach($this->getUserChannels() as $channel)
+                $count++;
+            if ($count > 1) {
+                $context->buildViolation('A retailer can only be on one Channel.')
+                    ->atPath('user_channels')
+                    ->addViolation();
+            }
+        }
+    }
+
+
 
     public function getFullName() {
         return $this->first_name . " " . $this->last_name;
@@ -326,11 +347,14 @@ class User extends BaseUser
 
     public function getRouteNames() {
         $data = array();
-        foreach($this->groups as $role) {
-            foreach($role->getPermissions() as $permission) {
-                $data[$permission->getRouteName()] = $permission->getRouteName();
+        if(isset($this->groups)) {
+            foreach($this->groups as $role) {
+                foreach($role->getPermissions() as $permission) {
+                    $data[$permission->getRouteName()] = $permission->getRouteName();
+                }
             }
         }
+
         return $data;
     }
 
@@ -747,7 +771,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedWarrantyClaims()
     {
@@ -755,7 +779,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $submitted_warranty_claims
+     * @param ArrayCollection $submitted_warranty_claims
      */
     public function setSubmittedWarrantyClaims($submitted_warranty_claims)
     {
@@ -1065,7 +1089,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getLedgers()
     {
@@ -1073,7 +1097,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $ledgers
+     * @param ArrayCollection $ledgers
      */
     public function setLedgers($ledgers)
     {
@@ -1081,7 +1105,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedLedgers()
     {
@@ -1089,7 +1113,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $submittedLedgers
+     * @param ArrayCollection $submittedLedgers
      */
     public function setSubmittedLedgers($submittedLedgers)
     {
@@ -1097,7 +1121,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getCreditedLedgers()
     {
@@ -1105,7 +1129,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $creditedLedgers
+     * @param ArrayCollection $creditedLedgers
      */
     public function setCreditedLedgers($creditedLedgers)
     {
@@ -1113,23 +1137,23 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
-    public function getRebates()
+    public function getRebateSubmissions()
     {
-        return $this->rebates;
+        return $this->rebate_submissions;
     }
 
     /**
-     * @param mixed $rebates
+     * @param ArrayCollection $rebate_submissions
      */
-    public function setRebates($rebates)
+    public function setRebateSubmissions($rebate_submissions)
     {
-        $this->rebates = $rebates;
+        $this->rebate_submissions = $rebate_submissions;
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedRebates()
     {
@@ -1137,10 +1161,12 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $submitted_rebates
+     * @param ArrayCollection $submitted_rebates
      */
     public function setSubmittedRebates($submitted_rebates)
     {
         $this->submitted_rebates = $submitted_rebates;
     }
+
+
 }

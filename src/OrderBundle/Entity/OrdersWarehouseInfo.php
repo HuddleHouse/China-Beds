@@ -29,6 +29,13 @@ class OrdersWarehouseInfo
     private $quantity;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="shipped", type="boolean", nullable=true)
+     */
+    private $shipped = false;
+
+    /**
      * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\OrdersProductVariant", inversedBy="warehouse_info")
      * @ORM\JoinColumn(name="orders_product_variant_id", referencedColumnName="id")
      */
@@ -167,6 +174,22 @@ class OrdersWarehouseInfo
     public function setWarehouse($warehouse)
     {
         $this->warehouse = $warehouse;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShipped()
+    {
+        return $this->shipped;
+    }
+
+    /**
+     * @param mixed $shipped
+     */
+    public function setShipped($shipped)
+    {
+        $this->shipped = $shipped;
     }
 
 
