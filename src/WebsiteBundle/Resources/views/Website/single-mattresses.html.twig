@@ -1,0 +1,79 @@
+{% extends 'website-index.html.twig' %}
+
+{% block title %}MLILY{% endblock %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('.prod-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+            });
+
+            $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+    </script>
+{% endblock footer %}
+
+{% block body %}
+    <div class="content-section">
+        <div class="product-description">
+            <div class="row">
+                <div class="col-md-6 col-sm-5 col-xs-12">
+                    <div class="slider-section">
+                        <div class="prod-slider">
+                            {% for image in product.images %}
+                            <div class="product-image"><img src="/{{ image.webPath }}" /></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-7 col-xs-12">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-5 col-xs-12">
+                    <div class="product-types">
+                        <ul>
+                            {% for attribute in product.attributes %}
+                                <li>
+                                    <div class="icon"><img src="/{{ attribute.attribute.webPath }}" /></div>
+                                    <div class="title">{{ attribute.attribute.name }}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-7 col-xs-12">
+                    <div class="suggested-price">
+                        <h4>MLILY Suggested Retail Prices:</h4>
+                        <div class="price-list">
+                            <ul>
+                                {% for variant in product.variants %}
+                                    <li>{{ variant.name }}: ${{ variant.msrp  }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="row contact-block">
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <p>Wondering where to find an MLILY USA retailer near you? Interested in becoming a retailer yourself? We are here to help.</p>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <a href="#" class="contact-btn">CONTACT US</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-struture">
+                <img src="{{ asset('images/web/AmbiancePancake@2x.png') }}" />
+            </div>
+        </div>
+    </div>
+{% endblock body %}

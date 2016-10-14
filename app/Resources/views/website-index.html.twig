@@ -51,7 +51,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ path('website_homepage', {site: site}) }}">
                 <img style="max-width: 140px;" src="{{ asset('images/web/MlilylogoColor@2x.png') }}" />
             </a>
             <div class="login-btn">
@@ -67,7 +67,7 @@
                 <li><a href="{{ path('pillows', {site: site}) }}">PILLOWS</a></li>
                 <li><a href="{{ path('adjustables', {site: site}) }}">ADJUSTABLE BEDS</a></li>
             </ul>
-            <div class="regiter-head"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></div>
+            <div class="regiter-head"><a href="{{ path('web_retailers', {site: site}) }}"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></a></div>
         </div><!--/.nav-collapse -->
     </nav>
     {% block body %}{% endblock %}

@@ -52,6 +52,7 @@ class TokenListener
             'fos_user_profile_show',
             'website_homepage',
             'mattresses',
+            'single_mattresses',
             'pillows',
             'adjustables'
         ); //These are excluded routes. These are always allowed. Required for login page

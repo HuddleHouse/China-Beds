@@ -2,14 +2,49 @@
 
 namespace WebsiteBundle\Controller;
 
+use InventoryBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class WebsiteController extends Controller
 {
     public function indexAction($site)
     {
-        $ij =1;
         return $this->render('WebsiteBundle:Website:home.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function faqIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:faq.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function productFeaturesIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:product-features.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function retailerIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:retailer.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function warrantyIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
+            'site' => $site
+        ));
+    }
+
+    public function contactIndexAction($site)
+    {
+        return $this->render('WebsiteBundle:Website:contact.html.twig', array(
             'site' => $site
         ));
     }
@@ -27,6 +62,13 @@ class WebsiteController extends Controller
         return $this->render('WebsiteBundle:Website:mattresses.html.twig', array(
             'site' => $site,
             'mattresses' => $mattresses
+        ));
+    }
+
+    public function  singleMattressIndexAction($site, Product $product) {
+        return $this->render('WebsiteBundle:Website:single-mattresses.html.twig', array(
+            'site' => $site,
+            'product' => $product
         ));
     }
 

@@ -33,22 +33,28 @@
             <div class="home-banners">
                 <div class="row">
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box">
-                            <div class="heading">FOR RETAILERS</div>
-                            <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
-                        </div>
+                        <a href="{{ path('web_retailers', {site: site}) }}">
+                            <div class="box">
+                                <div class="heading">FOR RETAILERS</div>
+                                <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
+                            </div>
+                        </a>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box">
-                            <div class="heading">PRODUCT FEATURES</div>
-                            <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
-                        </div>
+                        <a href="{{ path('web_product_features', {site: site}) }}">
+                            <div class="box">
+                                <div class="heading">PRODUCT FEATURES</div>
+                                <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
+                            </div>
+                        </a>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box">
-                            <div class="heading">WARRANTY/QUESTIONS?</div>
-                            <img src="{{ asset('images/web/Warranty@2x.png') }}" />
-                        </div>
+                        <a href="{{ path('web_faq', {site: site}) }}">
+                            <div class="box">
+                                <div class="heading">WARRANTY/QUESTIONS?</div>
+                                <img src="{{ asset('images/web/Warranty@2x.png') }}" />
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
