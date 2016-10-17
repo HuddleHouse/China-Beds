@@ -60,6 +60,7 @@ class ProfileController extends Controller
 
             $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
             $distributors = $distributors_data->getUsers();
+
         }
         else if($this->getUser()->hasRole('ROLE_SALES_REP')) {
             $distributors = $this->getUser()->getDistributors();

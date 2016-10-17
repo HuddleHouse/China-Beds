@@ -125,8 +125,12 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         foreach($data as $item)
             $orders[] = $item;
 
-        if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE')) {
+        if($user->hasRole('ROLE_ADMIN') ) {
             $orders = $em->getRepository('OrderBundle:Orders')->findAll();
+        }
+        else if($user->hasRole('ROLE_WAREHOUSE')) {
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+            $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status));
         }
         else {
 
