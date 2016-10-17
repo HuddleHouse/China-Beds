@@ -27,7 +27,8 @@
                 <div class="col-md-6">
                     <div id="pick_up_date" style="display: none;">
                         <label class="control-label" for="pick_up_date">Pick Up Date *</label>
-                        <md-datepicker ng-model="form_info['pick_up_date']"></md-datepicker>
+                        {#<md-datepicker ng-model="form_info['pick_up_date']" md-min-date="min_date()"></md-datepicker>#}
+                        <md-datepicker ng-model="min_date" md-min-date="min_date"></md-datepicker>
                     </div>
                 </div>
             </div>

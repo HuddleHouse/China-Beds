@@ -10,6 +10,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -44,19 +46,23 @@ class CreditRequestType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $user = $this->tokenStorage->getToken();
+
         $builder
-            ->add('submittedForUser', EntityType::class, array(
-                    'class' => 'AppBundle\Entity\User',
-                    'label' => 'On Behalf of',
-                    'placeholder' => 'Select User Requesting Credit',
-                    'choice_label' => function (User $user) {
-                        return $user->getFullName();
-                    },
-                    'choices' => $this->usersRepository->findByUser($this->tokenStorage->getToken()->getUser()),
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'required' => true
-                )
-            )
+//            ->add('submittedForUser', EntityType::class, array(
+//                    'class' => 'AppBundle\Entity\User',
+//                    'label' => 'On Behalf of',
+//                    'placeholder' => 'Select User Requesting Credit',
+//                    'choice_label' => function (User $user) {
+//                        return $user->getFullName();
+//                    },
+//                    'choices' => $this->usersRepository->findByUser($this->tokenStorage->getToken()->getUser()),
+//                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+//                    'required' => true
+//                )
+//            )
+
             ->add('amountRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
                     'label' => 'Amount',
@@ -70,6 +76,20 @@ class CreditRequestType extends AbstractType
                     'required' => true
                 )
             )
+
+            ->add('phone', NumberType::class, array(
+                'required' => false,
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Phone',
+            ))
+
+            ->add('email', EmailType::class, array(
+                'required' => false,
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Email (leave empty to use  '.$this->tokenStorage->getToken()->getUser()->getEmail().')',
+                'empty_data' => $this->tokenStorage->getToken()->getUser()->getEmail()
+            ))
+
             ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false));
     }
 

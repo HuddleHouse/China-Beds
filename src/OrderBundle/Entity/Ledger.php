@@ -120,6 +120,20 @@ class Ledger
     private $type = self::TYPE_CREDIT;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="phone", type="integer", nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="integer", length=255)
+     */
+    private $email;
+
+    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\WarrantyClaim", inversedBy="ledgers")
      */
     private $warrantyClaim;
@@ -471,5 +485,52 @@ class Ledger
 
         return $rtn;
     }
-}
 
+    /**
+     * Set phone
+     *
+     * @param integer $phone
+     *
+     * @return Ledger
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return integer
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set email
+     *
+     * @param integer $email
+     *
+     * @return Ledger
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return integer
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+}

@@ -56,8 +56,8 @@ class LedgerController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 //add info that the form doesn't have
-                if(!$ledger->getSubmittedForUser())
-                    $ledger->setSubmittedForUser($this->getUser());
+//                if(!$ledger->getSubmittedForUser())
+                $ledger->setSubmittedForUser($this->getUser());
                 $ledger->setSubmittedByUser($this->getUser());
                 $ledger->setAchRequested(false);
                 $ledger->setAmountCredited($ledger->getAmountRequested());
