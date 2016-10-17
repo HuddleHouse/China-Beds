@@ -337,10 +337,13 @@ class User extends BaseUser
             return true;
     }
 
-    public function getLedgerTotal($options = null) {
+    public function getLedgerTotal($channel_id = null) {
         $total = 0;
         foreach($this->ledgers as $ledger) {
-            $total += $ledger->getAmountCredited();
+            if($channel_id == null)
+                $total += $ledger->getAmountCredited();
+            else if($ledger->getChannel()->getI0d() == $channel_id)
+                $total += $ledger->getAmountCredited();
         }
         return $total;
     }

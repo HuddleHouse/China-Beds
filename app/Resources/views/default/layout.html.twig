@@ -14,7 +14,10 @@
         }
     </style>
     <div class="wrapper">
-    <header class="main-header no-print">
+
+        {% set sidebar_user_channels = app.session.get('user_channels') %}
+
+        <header class="main-header no-print">
 
         <a href="{{ path('fos_user_profile_show') }}" class="logo" style="min-height: 60px;">
             <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -33,13 +36,15 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     {% if app.user.hasLedger %}
-                    <li id="ledger-total" class="">
-                       <div class="ledger-total-box">
-                           <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
-                               Ledger: ${{ app.user.getLedgerTotal | number_format(2, '.', ',')}}
-                           </h6>
-                       </div>
-                    </li>
+                        {% for channel in sidebar_user_channels %}
+                            <li id="ledger-total" class="">
+                                <div class="ledger-total-box">
+                                    <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
+                                        {{ channel.name }} Ledger: ${{ app.user.getLedgerTotal(channel.id) | number_format(2, '.', ',')}}
+                                    </h6>
+                                </div>
+                            </li>
+                        {% endfor %}
                     {% endif %}
                     <li id="welcome-message" class="dropdown user-menu">
                         <h6 style="margin-top: 17px;color: #fff;">
@@ -64,7 +69,6 @@
 
         <!-- COOKIE TO HOLD ALL OF THE ROUTES THAT THE USER CAN ACCESS -->
         {% set route_names = app.session.get('route_names') %}
-        {% set sidebar_user_channels = app.session.get('user_channels') %}
         <!-- MENU VARIABLES TO HOLD ROUTES. USING ANGULAR WE SEE IF THE CURRENT ROUTE IS IN THE ARRAY TO ADD ACTIVE CLASSES TO THE MENU -->
         {% set tmp = app.request.headers.get('referer')|split('/') %}
         {% set referer_array = [] %}
