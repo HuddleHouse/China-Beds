@@ -41,7 +41,7 @@
             $scope.cart = [];
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
-            $scope.future_pick_up_date = new Date();
+            $scope.future_pick_up_date = new Date({{ order.pickUpDate | date('Y,m,d')}});
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
             $scope.payment_type = '';
@@ -426,9 +426,12 @@
                     </p>
                 </div>
                 <div class="col-md-6">
+                    {% if order.isPickUp == 0%}
                     <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
-                        <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
-                        <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
+                    {% else %}
+                    <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
+                    <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
+                    {% endif %}
                     <div class="table-responsive" style="margin-top: 46px;">
                         <table class="table">
                             <tbody>

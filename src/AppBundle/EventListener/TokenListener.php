@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Controller\TraceableControllerResolver;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Bundle\TwigBundle\TwigEngine;
@@ -19,7 +20,7 @@ class TokenListener
     protected $templating;
     protected $router;
     protected $resolver;
-    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, ControllerResolver $resolver, Session $session)
+    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, TraceableControllerResolver $resolver, Session $session)
     {
         $this->em = $em;
         $this->token_storage = $token_storage;

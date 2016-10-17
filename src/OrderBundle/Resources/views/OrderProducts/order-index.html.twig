@@ -114,6 +114,8 @@
                         $scope.form_info['ship_name'] = '{{ order.shipName }}';
                         $scope.cart_num_items = Number({{ order.numItems }});
                         $scope.cart_total = Number({{ order.subTotal }});
+                        $scope.form_info.pick_up_date = new Date({{ order.pickUpDate | date('Y,m,d') }});
+
 
                         $('#dist_ship').val({{ order.submittedForUser.id }});
                         var is_pickup = '{{ order.isPickUp }}';
