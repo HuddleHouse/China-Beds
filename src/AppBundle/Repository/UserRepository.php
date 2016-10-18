@@ -195,8 +195,26 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         return $orders;
     }
 
+    /**
+     * @param Channel $channel
+     * @return array
+     *
+     * Returns an array of all User Entities that are in the channel
+     */
     public function findUsersByChannel(Channel $channel) {
-        
+        $em = $this->getEntityManager();
+        $users = $em->getRepository('AppBundle:User')->findAll();
+        $correct_users = array();
+
+        foreach($users as $user) {
+            foreach($user->getUserChannels() as $chan) {
+                if($chan->getId() == $channel->getId()) {
+                    $correct_users[] = $user;
+                    break;
+                }
+            }
+        }
+        return $correct_users;
     }
 
     /**
