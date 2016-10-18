@@ -23,18 +23,90 @@
 {% endblock footer %}
 
 {% block content %}
+    {#<div class="row">#}
+        {#<div class="col-md-8" style="background:white">#}
+
+            {#{{ form_start(edit_form) }}#}
+            {#{{ form_widget(edit_form.frontLogo) }}#}
+            {#{{ form_widget(edit_form.name) }}#}
+            {#{{ form_widget(edit_form.url) }}#}
+            {#<br>#}
+            {#<input class="btn btn-raised btn-success" type="submit" value="Update" />#}
+            {#{{ form_end(edit_form) }}#}
+
+            {#{{ form_start(delete_form) }}#}
+            {#<input class="btn btn-raised btn-danger" type="submit" value="Delete">#}
+            {#{{ form_end(delete_form) }}#}
+        {#</div>#}
+    {#</div>#}
+
+    {{ form_start(edit_form) }}
     <div class="row">
-        <div class="col-md-8">
-
-            {{ form_start(edit_form) }}
-            {{ form_widget(edit_form) }}
-            <br>
-            <input class="btn btn-raised btn-success" type="submit" value="Update" />
-            {{ form_end(edit_form) }}
-
-            {{ form_start(delete_form) }}
-            <input class="btn btn-raised btn-danger" type="submit" value="Delete">
-            {{ form_end(delete_form) }}
+        <div class="col-md-1"></div>
+        <div class="col-md-10" style="padding:20px; background-color:white; border-radius:50px;">
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontLogo) }}
+            {{ form_widget(edit_form.frontLogo) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.name) }}
+            {{ form_widget(edit_form.name) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.url) }}
+            {{ form_widget(edit_form.url) }}
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_label(edit_form.fbLink) }}
+            {{ form_widget(edit_form.fbLink) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.twLink) }}
+            {{ form_widget(edit_form.twLink) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.instaLink) }}
+            {{ form_widget(edit_form.instaLink) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontSliderOne) }}
+            {{ form_widget(edit_form.frontSliderOne) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontSliderTwo) }}
+            {{ form_widget(edit_form.frontSliderTwo) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontSliderThree) }}
+            {{ form_widget(edit_form.frontSliderThree) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontFooterOne) }}
+            {{ form_widget(edit_form.frontFooterOne) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontFooterTwo) }}
+            {{ form_widget(edit_form.frontFooterTwo) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(edit_form.frontFooterThree) }}
+            {{ form_widget(edit_form.frontFooterThree) }}
+        </div>
+    </div>
+
+
+    <input class="btn btn-raised btn-success" type="submit" value="Update" />
+    {{ form_end(edit_form) }}
+    {{ form_start(delete_form) }}
+    <input class="btn btn-raised btn-danger" type="submit" value="Delete">
+    {{ form_end(delete_form) }}
+        </div>
+        </div>
 {% endblock %}

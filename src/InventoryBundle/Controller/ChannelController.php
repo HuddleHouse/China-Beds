@@ -102,6 +102,86 @@ class ChannelController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+
+
+                //start edit
+
+                //front logo upload
+                $frontLogo = $channel->getFrontLogo();
+                $frontLogoName = md5(uniqid()).'.'.$frontLogo->guessExtension();
+                $frontLogo->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $frontLogoName
+                );
+
+                //first slider upload
+                $firstSlider = $channel->getFrontSliderOne();
+                $firstSliderName = md5(uniqid()).'.'.$firstSlider->guessExtension();
+                $firstSlider->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $firstSliderName
+                );
+
+                //second slider upload
+                $secondSlider = $channel->getFrontSliderTwo();
+                $secondSliderName = md5(uniqid()).'.'.$secondSlider->guessExtension();
+                $secondSlider->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $secondSliderName
+                );
+
+                //third slider upload
+                $thirdSlider = $channel->getFrontSliderThree();
+                $thirdSliderName = md5(uniqid()).'.'.$thirdSlider->guessExtension();
+                $thirdSlider->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $thirdSliderName
+                );
+
+                //first footer box upload
+                $firstFooter = $channel->getFrontFooterOne();
+                $firstFooterName = md5(uniqid()).'.'.$firstFooter->guessExtension();
+                $firstFooter->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $firstFooterName
+                );
+
+                //second footer box upload
+                $secondFooter = $channel->getFrontFooterTwo();
+                $secondFooterName = md5(uniqid()).'.'.$secondFooter->guessExtension();
+                $secondFooter->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $secondFooterName
+                );
+
+                //third footer box upload
+                $thirdFooter = $channel->getFrontFooterThree();
+                $thirdFooterName = md5(uniqid()).'.'.$thirdFooter->guessExtension();
+                $thirdFooter->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $thirdFooterName
+                );
+
+
+
+
+
+
+
+
+
+
+
+
+
+                $channel->setFrontLogo($frontLogoName);
+                $channel->setFrontSliderOne($firstSliderName);
+                $channel->setFrontSliderTwo($secondSliderName);
+                $channel->setFrontSliderThree($thirdSliderName);
+
+
+                //end edit
+
                 $em->persist($channel);
                 $em->flush();
 
