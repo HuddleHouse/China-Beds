@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 use AppBundle\Entity\User;
+use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 
 /**
@@ -192,6 +193,10 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $orders;
+    }
+
+    public function findUsersByChannel(Channel $channel) {
+        
     }
 
     /**

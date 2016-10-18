@@ -172,7 +172,7 @@ class OrderProductsController extends Controller
         $response = $rate->getSimpleRates();
         $data = array_pop($response);
 
-        //if $data['rate'] isn't there then they are only ordering pop items, which the shipping for them is on the entity.
+        //if $data['rate'] isn't there then they are only ordering pop items, which the shipping for them is free.
         if(!isset($data['rate'])) {
             $data = array();
             $data['rate'] = 0;
@@ -299,25 +299,32 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $order_id = $request->request->get('order_id');
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+        $type = $request->request->get('type');
 
 
         $payment_type = $request->request->get('payment_type');
-        if($payment_type == 'ledger') {
+        if($payment_type == 'ledger' && $type == 'complete') {
             $ledger_service = $this->get('order.ledger');
             $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+            $order->setAmountPaid($order->getTotal());
         }
-        else if($payment_type == 'cc') {
+        else if($payment_type == 'cc' && $type == 'complete') {
             $cc = $request->request->get('cc');
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+            $order->setAmountPaid($order->getTotal());
             // Charge CC here
         }
+        else if($type == 'admin' && $payment_type == '') {
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+        }
 
 
 
-        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+
 
         $order->setStatus($status);
         $order->setPaymentType($payment_type);
-        $order->setAmountPaid($order->getTotal());
         $em->persist($order);
         $em->flush();
         return JsonResponse::create(true);

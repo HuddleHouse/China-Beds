@@ -73,6 +73,8 @@ class OrderProductsController extends Controller
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
             $user_retailers = $user->getRetailers();
+        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
+            $user_retailers = $em->getRepository('AppBundle:User')->findAll(array('user_channels' => $channel));
         else
             $user_retailers = null;
 
@@ -228,6 +230,8 @@ class OrderProductsController extends Controller
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
             $user_retailers = $user->getRetailers();
+        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
+            $user_retailers = $em->getRepository('AppBundle:User')->findAll();
         else
             $user_retailers = null;
 
