@@ -3,6 +3,7 @@
 namespace InventoryBundle\Repository;
 
 use InventoryBundle\Entity\Channel;
+use InventoryBundle\Entity\Product;
 use WarehouseBundle\Entity\Warehouse;
 
 /**
@@ -40,6 +41,27 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $products;
+    }
+
+    /**
+     * Returns single product based on variant
+     *
+     *
+     * @return Product
+     */
+    public function getProdImg($variantId){
+        $em = $this->getEntityManager();
+        $productVariant = $em->getRepository('InventoryBundle:ProductVariant')->find($variantId);
+        $product = $productVariant->getProduct();
+
+        $image_url = '/';
+
+        foreach($product->getImages() as $image) {
+            $image_url .= $image->getWebPath();
+            break;
+        }
+
+        return $image_url;
     }
 
     public function getAllMattressVariantsForChannelArray(Channel $channel)

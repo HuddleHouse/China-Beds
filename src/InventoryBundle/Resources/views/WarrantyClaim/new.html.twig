@@ -51,6 +51,17 @@
             m_strOut = m_strOut.replace(/[^0-9.]/g, '');
             return m_strOut;
         }
+
+        function fillImage(variantId)
+        {
+            $.ajax({
+                method: "GET",
+                url: Routing.generate('api_get_variant_image' , { variantId : variantId})
+            }).done(function(data){
+                $('#variant-img').empty().append("<img src='"+ data +"' width='100px' height='120px'/>");
+            });
+        }
+
     </script>
 {% endblock footer %}
 
@@ -83,6 +94,20 @@
                     {{ form_label(form.productVariant) }}
                     {{ form_widget(form.productVariant) }}
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.quantity) }}
+                    {{ form_widget(form.quantity) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.dateMadeAware) }}
+                    {{ form_widget(form.dateMadeAware) }}
+                </div>
+                <div class="col-md-4" id="variant-img">
+
+                </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">

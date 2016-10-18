@@ -67,7 +67,7 @@ class WarrantyClaimType extends AbstractType
             ->add('productVariant', EntityType::class, array(
                     'class' => 'InventoryBundle\Entity\ProductVariant',
                     'label' => 'Product',
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled', 'onchange' => 'fillImage(this.value)'),
                     'placeholder' => 'Select Order ID first',
                     'choice_label' => function(ProductVariant $productVariant) {
                         return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();
@@ -87,6 +87,20 @@ class WarrantyClaimType extends AbstractType
                     'required' => true
                 )
             )
+            ->add('quantity', IntegerType::class, array(
+                'label' => 'Quantity',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'empty_data' => 1,
+                'data' => 1,
+                'required' => true
+
+            ))
+            ->add('dateMadeAware', DateType::class, array(
+                'label' => 'Date Made Aware',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'widget' => 'single_text',
+                'input' => 'datetime'
+            ))
             ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')));
     }
     
