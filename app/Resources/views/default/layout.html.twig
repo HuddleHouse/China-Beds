@@ -52,7 +52,7 @@
                     {% if app.user.hasPendingOrders %}
                         {% for channel in sidebar_user_channels %}
                             <li id="ledger-total" class="" style="background-color: #ff5722;">
-                                <a href="{{ path('my_pending_orders_index') }}" >
+                                <a href="{{ path('my_pending_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
                                 <div class="ledger-total-box">
                                     <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
                                         Pending Orders: ${{ app.user.getPendingOrderTotal(channel.id) | number_format(2, '.', ',')}}
@@ -118,7 +118,7 @@
         {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_rebate_submit = ['rebate_submit_index', 'rebate_submit_edit', 'rebate_submit_show'] %}
         {% set sidebar_rebate_submit_new = ['rebate_submit_new'] %}
-        {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit'] %}
+        {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit', 'my_pending_orders_index'] %}
         {% set sidebar_credit_index = ['ledger_index', 'ledger_edit'] %}
         {% set sidebar_credit_request = ['ledger_new'] %}
 
