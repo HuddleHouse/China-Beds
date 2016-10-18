@@ -66,7 +66,7 @@ class WarrantyClaimController extends Controller
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
-                return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
+                return $this->redirectToRoute('warrantyclaim_new', array('id' => $warrantyClaim->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Warranty Claim Item: ' . $e->getMessage());

@@ -34,7 +34,7 @@ class WarrantyClaimController extends Controller
 
         $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
         $rtn = array();
-
+        $rtn[] = '<option disabled selected value>Select of the following options</option>';
         foreach($order->getProductVariants() as $pv)
             $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
 
