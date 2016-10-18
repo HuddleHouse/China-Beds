@@ -82,6 +82,20 @@ class WarrantyClaim
     private $isArchived = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="retail_res_attempt", type="text" )
+     */
+    private $retailerResAttempt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="other_comments", type="text" )
+     */
+    private $otherComments;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="warranty_claims")
      * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
      */
@@ -413,5 +427,76 @@ class WarrantyClaim
     {
         $this->channel = $channel;
     }
-}
 
+    /**
+     * Set retailerResAttempt
+     *
+     * @param string $retailerResAttempt
+     *
+     * @return WarrantyClaim
+     */
+    public function setRetailerResAttempt($retailerResAttempt)
+    {
+        $this->retailerResAttempt = $retailerResAttempt;
+
+        return $this;
+    }
+
+    /**
+     * Get retailerResAttempt
+     *
+     * @return string
+     */
+    public function getRetailerResAttempt()
+    {
+        return $this->retailerResAttempt;
+    }
+
+    /**
+     * Set otherComments
+     *
+     * @param string $otherComments
+     *
+     * @return WarrantyClaim
+     */
+    public function setOtherComments($otherComments)
+    {
+        $this->otherComments = $otherComments;
+
+        return $this;
+    }
+
+    /**
+     * Get otherComments
+     *
+     * @return string
+     */
+    public function getOtherComments()
+    {
+        return $this->otherComments;
+    }
+
+    /**
+     * Add ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return WarrantyClaim
+     */
+    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Remove ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     */
+    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers->removeElement($ledger);
+    }
+}

@@ -101,7 +101,9 @@ class WarrantyClaimType extends AbstractType
                 'widget' => 'single_text',
                 'input' => 'datetime'
             ))
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')));
+            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('retailerResAttempt', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('otherComments',  TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false));
     }
     
     /**
