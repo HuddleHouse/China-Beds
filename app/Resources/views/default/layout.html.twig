@@ -35,12 +35,25 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <!-- display the users ledger('s) -->
                     {% if app.user.hasLedger %}
                         {% for channel in sidebar_user_channels %}
                             <li id="ledger-total" class="">
                                 <div class="ledger-total-box">
                                     <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
                                         {{ channel.name }} Ledger: ${{ app.user.getLedgerTotal(channel.id) | number_format(2, '.', ',')}}
+                                    </h6>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    <!-- display the users Pending Orders('s) -->
+                    {% if app.user.hasPendingOrders %}
+                        {% for channel in sidebar_user_channels %}
+                            <li id="ledger-total" class="" style="background-color: #ff5722;">
+                                <div class="ledger-total-box">
+                                    <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
+                                        Pending Orders: ${{ app.user.getPendingOrderTotal(channel.id) | number_format(2, '.', ',')}}
                                     </h6>
                                 </div>
                             </li>

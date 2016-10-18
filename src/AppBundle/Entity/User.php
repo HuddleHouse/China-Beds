@@ -337,6 +337,33 @@ class User extends BaseUser
             return true;
     }
 
+    public function hasPendingOrders() {
+        $count = 0;
+        foreach($this->orders as $order) {
+            if($order->getStatus()->getName() == 'Pending') {
+                $count++;
+                break;
+            }
+        }
+        if($count == 0)
+            return false;
+        else
+            return true;
+    }
+
+    public function getPendingOrderTotal($channel_id = null) {
+        $total = 0;
+        foreach($this->orders as $order) {
+            if($order->getStatus()->getName() == 'Pending') {
+                if($channel_id == null)
+                    $total += $order->getTotal();
+                else if($order->getChannel()->getId() == $channel_id)
+                    $total += $order->getTotal();
+            }
+        }
+        return $total;
+    }
+
     public function getLedgerTotal($channel_id = null) {
         $total = 0;
         foreach($this->ledgers as $ledger) {
