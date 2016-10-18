@@ -183,13 +183,11 @@
                             </a>
                             <ul class="treeview-menu">
 
-                            {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
                                 {% for channel in sidebar_user_channels %}
                                 <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == channel.id) %} class="active"{% endif %}>
                                     <a href="{{ path('order_products_index', {'id': channel.id}) }}"><i class="fa fa-circle-o"></i>Order {{ channel.name }} Products</a>
                                 </li>
                                 {%  endfor %}
-                            {% endif %}
 
                                 <li {% if (app.request.get('_route') in ['my_orders_index']) %} class="active"{% endif %}>
                                     <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>My Orders</a>
