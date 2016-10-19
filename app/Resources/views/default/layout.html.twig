@@ -48,17 +48,15 @@
 
                     <!-- display the users Pending Orders('s) -->
                     {% if app.user.hasPendingOrders %}
-                        {% for channel in sidebar_user_channels %}
-                            <li id="ledger-total" class="" style="background-color: #ff5722;">
-                                <a href="{{ path('my_pending_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
-                                <div class="ledger-total-box">
-                                    <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
-                                        Pending Orders: ${{ app.user.getPendingOrderTotal(channel.id) | number_format(2, '.', ',')}}
-                                    </h6>
-                                </div>
-                                </a>
-                            </li>
-                        {% endfor %}
+                        <li id="ledger-total" class="" style="background-color: #ff5722;">
+                            <a href="{{ path('my_pending_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
+                            <div class="ledger-total-box">
+                                <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
+                                    Pending Orders: ${{ app.user.getPendingOrderTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                </h6>
+                            </div>
+                            </a>
+                        </li>
                     {% endif %}
                     <li id="welcome-message" class="dropdown user-menu">
                         <h6 style="margin-top: 17px;color: #fff;">
