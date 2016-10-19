@@ -36,17 +36,14 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
 
-                    <!-- display the users ledger('s) -->
                     {% if app.user.hasLedger %}
-                        {% for channel in sidebar_user_channels %}
-                            <li id="ledger-total" class="">
-                                <div class="ledger-total-box">
-                                    <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
-                                        {{ channel.name }} Ledger: ${{ app.user.getLedgerTotal(channel.id) | number_format(2, '.', ',')}}
-                                    </h6>
-                                </div>
-                            </li>
-                        {% endfor %}
+                        <li id="ledger-total" class="">
+                            <div class="ledger-total-box">
+                                <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
+                                    Ledger Balance: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                </h6>
+                            </div>
+                        </li>
                     {% endif %}
 
                     <!-- display the users Pending Orders('s) -->
@@ -65,7 +62,7 @@
                     {% endif %}
                     <li id="welcome-message" class="dropdown user-menu">
                         <h6 style="margin-top: 17px;color: #fff;">
-                            <span class="username">Logged in as {{ app.user }}</span>
+                            <span class="username">Logged in as {{ app.user }} to {{ app.user.activechannel.name }}</span>
                         </h6>
                     </li>
                     <!-- BEGIN USER LOGIN DROPDOWN -->
@@ -227,11 +224,11 @@
                             </a>
                             <ul class="treeview-menu">
 
-                                {% for channel in sidebar_user_channels %}
-                                <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == channel.id) %} class="active"{% endif %}>
-                                    <a href="{{ path('order_products_index', {'id': channel.id}) }}"><i class="fa fa-circle-o"></i>Order {{ channel.name }} Products</a>
-                                </li>
-                                {%  endfor %}
+                            {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
+                            <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Order Products</a>
+                            </li>
+                            {% endif %}
 
                                 <li {% if (app.request.get('_route') in ['my_orders_index']) %} class="active"{% endif %}>
                                     <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>My Orders</a>
@@ -321,16 +318,14 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                {% if 'warehouse_index' in route_names %}
-                                    <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_channelled" and (app.request.get('_route_params') == [] or referer_array|last == "warehouse")) %} class="active"{% endif %}>
-                                        <a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>
-                                    </li>
-                                {% endif %}
-                                {% for channel in sidebar_user_channels %}
-                                    <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_index" and ((channel.name == app.request.get('_route_params').channelName ?? false and channel.name != referer_array|last) or (channel.name == app.request.get('_route_params').channelName ?? false and channel.name == referer_array|last) or (channel.name == referer_array|last and app.request.get('_route_params').id ?? false))) %} class="active"{% endif %}>
-                                        <a href="{{ path('warehouse_channelled', {'channelName': channel.name}) }}"><i class="fa fa-circle-o"></i>{{ channel.name }} Warehouses</a>
-                                    </li>
-                                {%  endfor %}
+                                {#{% if 'warehouse_index' in route_names %}#}
+                                    {#<li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_channelled" and (app.request.get('_route_params') == [] or referer_array|last == "warehouse")) %} class="active"{% endif %}>#}
+                                        {#<a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>#}
+                                    {#</li>#}
+                                {#{% endif %}#}
+                                <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_index" and ((app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name != referer_array|last) or (app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name == referer_array|last) or (app.user.activechannel.name == referer_array|last and app.request.get('_route_params').id ?? false))) %} class="active"{% endif %}>
+                                    <a href="{{ path('warehouse_channelled', {'channelName': app.user.activechannel.name}) }}"><i class="fa fa-circle-o"></i>Warehouses</a>
+                                </li>
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Receiving Stock</a>
                                 </li>
@@ -380,11 +375,9 @@
                                 <li {% if (app.request.get('_route') in sidebar_warranty_claims) %} class="active"{% endif %}>
                                     <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>Warranty Claims</a>
                                 </li>
-                                {% for channel in sidebar_user_channels %}
-                                    <li {% if (app.request.get('_route') in sidebar_warranty and app.request.get('id') == channel.id) %} class="active"{% endif %}>
-                                        <a href="{{ path('warrantyclaim_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>{{ channel.name }} Warranty Claim</a>
-                                    </li>
-                                {%  endfor %}
+                                <li {% if (app.request.get('_route') in sidebar_warranty and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                    <a href="{{ path('warrantyclaim_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>Warranty Claim</a>
+                                </li>
                             </ul>
                         </li>
                         {% endif %}
@@ -392,6 +385,8 @@
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -407,41 +402,20 @@
                                         <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
                                     {% endif %}
                                 </li>
-                                {% for channel in sidebar_user_channels %}
-                                    <li {% if (app.request.get('_route') in sidebar_rebate_submit_new and app.request.get('id') == channel.id) %} class="active"{% endif %}>
-                                        <a href="{{ path('rebate_submit_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>Submit {{ channel.name }} Rebate</a>
-                                    </li>
-                                {% endfor %}
+                                <li {% if (app.request.get('_route') in sidebar_rebate_submit_new and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                    <a href="{{ path('rebate_submit_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>Submit Rebate</a>
+                                </li>
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
-                            </ul>
-                        </li>
-
-
-                        <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
-                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
-                            {% endif %}">
-
-                            <a href="#">
-                                <i class="fa fa-info-circle"></i>
-                                <span>Ledger</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                            <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
                                     <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Ledger</a>
                                 </li>
-                                {% for channel in sidebar_user_channels %}
-                                    <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == channel.id) %} class="active"{% endif %}>
-                                        <a href="{{ path('ledger_new', {'id': channel.id}) }}"><i class="fa fa-circle-o"></i>Request {{ channel.name }} Credit</a>
-                                    </li>
-                                {% endfor %}
+                                <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                    <a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Request Credit</a>
+                                </li>
                             </ul>
                         </li>
-
-
-
 
                         <li class="header">LINKS</li>
                         <li>
