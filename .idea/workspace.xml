@@ -3,17 +3,10 @@
   <component name="ChangeListManager">
     <list id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="" />
     <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="" />
-    <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="mlily channel form: finished homepage form, added banners with optional helper modals. styled inputes">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/uploads/documents/FAQsitemap1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/uploads/documents/FAQsitemap2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/uploads/documents/pf-sitemap1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/uploads/documents/pf-sitemap2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/uploads/documents/sitemapmlily.png" />
+    <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="added retailer page to channel edit, added ui functionality and tweaks">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/uploads/documents/pf-sitemap1.png" afterPath="$PROJECT_DIR$/web/uploads/documents/pf-sitemap1.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/uploads/documents/pf-sitemap2.png" afterPath="$PROJECT_DIR$/web/uploads/documents/pf-sitemap2.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,10 +30,35 @@
       <file leaf-file-name="ChannelController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2953">
-              <caret line="244" column="28" selection-start-line="244" selection-start-column="28" selection-end-line="244" selection-end-column="28" />
+            <state relative-caret-position="805">
+              <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
               <folding>
                 <element signature="e#46#91#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/new.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3568">
+              <caret line="285" column="32" selection-start-line="285" selection-start-column="32" selection-end-line="285" selection-end-column="32" />
+              <folding>
+                <element signature="e#1144#1169#0#Twig" expanded="true" />
+                <element signature="e#11423#11430#0#HTML" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
+                <element signature="e#12335#12342#0#HTML" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+                <element signature="e#13349#13356#0#HTML" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#3;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#3;n#!!top" expanded="true" />
+                <element signature="e#14383#14390#0#HTML" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
+                <marker date="1476909733000" expanded="true" signature="2106:2114" ph="..." />
+                <marker date="1476909733000" expanded="true" signature="2382:2390" ph="..." />
               </folding>
             </state>
           </provider>
@@ -49,7 +67,7 @@
       <file leaf-file-name="ChannelType.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="73">
+            <state relative-caret-position="270">
               <caret line="19" column="150" selection-start-line="19" selection-start-column="150" selection-end-line="19" selection-end-column="150" />
               <folding>
                 <element signature="e#40#80#0#PHP" expanded="true" />
@@ -58,11 +76,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="true">
+      <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="34" column="59" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="59" />
+            <state relative-caret-position="150">
+              <caret line="10" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="411" selection-end-column="0" />
               <folding>
                 <element signature="e#12#37#0#Twig" expanded="true" />
                 <element signature="e#10891#10898#0#HTML" expanded="true" />
@@ -76,8 +94,8 @@
                 <element signature="e#13851#13858#0#HTML" expanded="true" />
                 <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
-                <marker date="1476909221000" expanded="true" signature="974:982" ph="..." />
-                <marker date="1476909221000" expanded="true" signature="1252:1260" ph="..." />
+                <marker date="1476909384000" expanded="true" signature="974:982" ph="..." />
+                <marker date="1476909384000" expanded="true" signature="1252:1260" ph="..." />
               </folding>
             </state>
           </provider>
@@ -155,7 +173,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/show.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/new.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/StockAdjustment/new.html.twig" />
@@ -206,6 +223,7 @@
         <option value="$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/new.html.twig" />
       </list>
     </option>
   </component>
@@ -333,6 +351,46 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="documents" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="China-Beds" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
@@ -574,20 +632,6 @@
       <workItem from="1472485546631" duration="594000" />
       <workItem from="1472486231215" duration="3175000" />
     </task>
-    <task id="LOCAL-00023" summary="Fixing Entity relationshiops&#10;">
-      <created>1467917196550</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1467917196550</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Fixing Entity relationshiops&#10;">
-      <created>1467922646436</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1467922646436</updated>
-    </task>
     <task id="LOCAL-00025" summary="Fixing Entity relationshiops&#10;">
       <created>1467923279857</created>
       <option name="number" value="00025" />
@@ -774,7 +818,7 @@
       <workItem from="1476392016001" duration="372000" />
       <workItem from="1476458966748" duration="12928000" />
       <workItem from="1476795099776" duration="20827000" />
-      <workItem from="1476880597106" duration="20240000" />
+      <workItem from="1476880597106" duration="21592000" />
     </task>
     <task id="LOCAL-00047" summary="Header preference changes">
       <created>1473364360230</created>
@@ -951,12 +995,26 @@
       <option name="project" value="LOCAL" />
       <updated>1476888966186</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="added retailer page to channel edit, added ui functionality and tweaks">
+      <created>1476909292627</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1476909292627</updated>
+    </task>
+    <task id="LOCAL-00073" summary="added retailer page to channel edit, added ui functionality and tweaks">
+      <created>1476910143067</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1476910143067</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <option name="trackContextForNewChangelist" value="true" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="340021000" />
+    <option name="totallyTimeSpent" value="341373000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -969,10 +1027,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1970181" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1970181" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.5022753" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1042,7 +1100,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Adding new entities and syncing the data for the POP items over from qb&#10;" />
     <MESSAGE value="Adding the final few entities and thier places on the menu." />
     <MESSAGE value="updating some entitiies.&#10;" />
     <MESSAGE value="Fixing routing in Warehouse files in the redirects after ajax calls" />
@@ -1067,7 +1124,8 @@
     <MESSAGE value="warranty claims form/ edit form : routing issue fix, image display, addition of extra fields" />
     <MESSAGE value="add upload directory. started channel form" />
     <MESSAGE value="mlily channel form: finished homepage form, added banners with optional helper modals. styled inputes" />
-    <option name="LAST_COMMIT_MESSAGE" value="mlily channel form: finished homepage form, added banners with optional helper modals. styled inputes" />
+    <MESSAGE value="added retailer page to channel edit, added ui functionality and tweaks" />
+    <option name="LAST_COMMIT_MESSAGE" value="added retailer page to channel edit, added ui functionality and tweaks" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1097,13 +1155,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/order-form.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="30" column="80" selection-start-line="30" selection-start-column="80" selection-end-line="30" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/order-index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-360">
@@ -1438,16 +1489,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2953">
-          <caret line="244" column="28" selection-start-line="244" selection-start-column="28" selection-end-line="244" selection-end-column="28" />
-          <folding>
-            <element signature="e#46#91#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="780">
@@ -1466,9 +1507,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="805">
+          <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
+          <folding>
+            <element signature="e#46#91#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
+        <state relative-caret-position="270">
           <caret line="19" column="150" selection-start-line="19" selection-start-column="150" selection-end-line="19" selection-end-column="150" />
           <folding>
             <element signature="e#40#80#0#PHP" expanded="true" />
@@ -1478,8 +1529,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="59" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="59" />
+        <state relative-caret-position="150">
+          <caret line="10" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="411" selection-end-column="0" />
           <folding>
             <element signature="e#12#37#0#Twig" expanded="true" />
             <element signature="e#10891#10898#0#HTML" expanded="true" />
@@ -1493,8 +1544,31 @@
             <element signature="e#13851#13858#0#HTML" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
-            <marker date="1476909221000" expanded="true" signature="974:982" ph="..." />
-            <marker date="1476909221000" expanded="true" signature="1252:1260" ph="..." />
+            <marker date="1476909384000" expanded="true" signature="974:982" ph="..." />
+            <marker date="1476909384000" expanded="true" signature="1252:1260" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/new.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3568">
+          <caret line="285" column="32" selection-start-line="285" selection-start-column="32" selection-end-line="285" selection-end-column="32" />
+          <folding>
+            <element signature="e#1144#1169#0#Twig" expanded="true" />
+            <element signature="e#11423#11430#0#HTML" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="e#12335#12342#0#HTML" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
+            <element signature="e#13349#13356#0#HTML" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#3;n#!!top" expanded="true" />
+            <element signature="e#14383#14390#0#HTML" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#1;n#div#1;n#div#0;n#div#0;n#div#4;n#!!top" expanded="true" />
+            <marker date="1476909733000" expanded="true" signature="2106:2114" ph="..." />
+            <marker date="1476909733000" expanded="true" signature="2382:2390" ph="..." />
           </folding>
         </state>
       </provider>
