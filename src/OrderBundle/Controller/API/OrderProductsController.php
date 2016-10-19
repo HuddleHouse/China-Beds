@@ -5,6 +5,7 @@ namespace OrderBundle\Controller\API;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
+use OrderBundle\Entity\OrdersShippingLabel;
 use OrderBundle\Entity\OrdersWarehouseInfo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -322,6 +323,7 @@ class OrderProductsController extends Controller
     }
 
     private function generateShippingLabels(Orders $orders) {
+        $em = $this->getDoctrine()->getManager();
         $numProdVariants = count($orders->getProductVariants());
         $labels = array();
         $shipmentId = '';
@@ -369,12 +371,20 @@ class OrderProductsController extends Controller
             if($count == 1)
                 $shipmentId = $response['trk_main'];
 
-            file_put_contents('label.png', base64_decode($response['pkgs'][0]['label_img']));
+            $file = base64_decode($response['pkgs'][0]['label_img']);
+            $orderShippingLabel = new OrdersShippingLabel();
+            $orderShippingLabel->setFile($file);
+            $orderShippingLabel->upload();
+            $em->persist($orderShippingLabel);
 
+            $orders->getShippingLabels()->add($orderShippingLabel);
+            $em->persist($orders);
 
-//            $charges = $response['charges'];
+            if($count == $numProdVariants)
+                $charges = $response['charges'];
         }
 
+        $em->flush();
 
     }
 

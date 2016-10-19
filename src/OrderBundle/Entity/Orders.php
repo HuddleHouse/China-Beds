@@ -835,6 +835,14 @@ class Orders
     }
 
     /**
+     * @param mixed $shipping_labels
+     */
+    public function addShippingLabel($shipping_label)
+    {
+        $this->shipping_labels[] = $shipping_label;
+    }
+
+    /**
      * @param int $amount_paid
      */
     public function setAmountPaid($amount_paid)
