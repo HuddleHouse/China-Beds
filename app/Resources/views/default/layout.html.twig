@@ -383,8 +383,6 @@
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
-                            {% elseif (app.request.get('_route') in sidebar_credit_index) %} active
-                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -406,11 +404,25 @@
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
+                            {% endif %}">
+
+                            <a href="#">
+                                <i class="fa fa-usd"></i>
+                                <span>Ledger</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
-                                    <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Ledger</a>
+                                    <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Transactions</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
-                                    <a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Request Credit</a>
+                                    <a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Fund</a>
                                 </li>
                             </ul>
                         </li>
