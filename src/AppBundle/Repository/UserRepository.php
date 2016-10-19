@@ -121,16 +121,16 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $orders = array();
 //        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
 
-        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $user));
+        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $user, 'channel' => $user->getActiveChannel()));
         foreach($data as $item)
             $orders[] = $item;
 
         if($user->hasRole('ROLE_ADMIN') ) {
-            $orders = $em->getRepository('OrderBundle:Orders')->findAll();
+            $orders = $em->getRepository('OrderBundle:Orders')->findBy(['channel' => $user->getActiveChannel()]);
         }
         else if($user->hasRole('ROLE_WAREHOUSE')) {
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
-            $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status));
+            $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'channel' => $user->getActiveChannel()));
         }
         else {
 
@@ -138,7 +138,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                 foreach($user->getRetailers() as $item) {
                     if(!isset($user_ids[$item->getId()])) {
                         $user_ids[$item->getId()] = $item->getId();
-                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item));
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $orders[] = $item;
                     }
@@ -148,14 +148,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                 foreach($user->getDistributors() as $distributor) {
                     if(!isset($user_ids[$distributor->getId()])) {
                         $user_ids[$distributor->getId()] = $distributor->getId();
-                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $orders[] = $item;
                     }
                     foreach($distributor->getRetailers() as $retailer) {
                         if(!isset($user_ids[$retailer->getId()])) {
                             $user_ids[$retailer->getId()] = $retailer->getId();
-                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
+                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $orders[] = $item;
                         }
@@ -166,21 +166,21 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                 foreach($user->getSalesReps() as $salesRep) {
                     if(!isset($user_ids[$salesRep->getId()])) {
                         $user_ids[$salesRep->getId()] = $salesRep->getId();
-                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $salesRep));
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $salesRep, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $orders[] = $item;
                     }
                     foreach($salesRep->getDistributors() as $distributor) {
                         if(!isset($user_ids[$distributor->getId()])) {
                             $user_ids[$distributor->getId()] = $distributor->getId();
-                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
+                            $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $orders[] = $item;
                         }
                         foreach($distributor->getRetailers() as $retailer) {
                             if(!isset($user_ids[$retailer->getId()])) {
                                 $user_ids[$retailer->getId()] = $retailer->getId();
-                                $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
+                                $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer, 'channel' => $user->getActiveChannel()));
                                 foreach($data as $item)
                                     $orders[] = $item;
                             }

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -279,6 +280,8 @@ class User extends BaseUser
      * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="creditedByUser")
      */
     private $credited_ledgers;
+
+    private $active_channel = null;
 
     public function __construct()
     {
@@ -1170,6 +1173,23 @@ class User extends BaseUser
     {
         $this->submitted_rebates = $submitted_rebates;
     }
+
+    /**
+     * @return null
+     */
+    public function getActiveChannel()
+    {
+        return $this->active_channel;
+    }
+
+    /**
+     * @param null $active_channel
+     */
+    public function setActiveChannel(Channel $active_channel)
+    {
+        $this->active_channel = $active_channel;
+    }
+
 
 
 }
