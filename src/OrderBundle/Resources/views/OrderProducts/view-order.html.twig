@@ -99,6 +99,7 @@
                 else if ($scope.cart_total > $scope.ledgerTotal)
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
                 else {
+                    showSpinner();
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_pay_for_order') }}",
