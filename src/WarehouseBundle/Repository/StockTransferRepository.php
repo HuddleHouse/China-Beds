@@ -1,6 +1,7 @@
 <?php
 
 namespace WarehouseBundle\Repository;
+use InventoryBundle\Entity\Channel;
 use WarehouseBundle\Entity\PurchaseOrder;
 use WarehouseBundle\Entity\StockTransfer;
 use WarehouseBundle\Entity\Warehouse;
@@ -114,6 +115,31 @@ select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_tra
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();
+    }
+
+    public function findAllForChannel(Channel $channel) {
+        $transfers = $this->findAll();
+
+        $results = [];
+        foreach($transfers as $transfer) {
+            $show = false;
+            foreach($transfer->getReceivingWarehouse()->getChannels() as $warehouse_channel) {
+                if ( $warehouse_channel->getId() == $channel->getId() ) {
+                    $show = true;
+                }
+            }
+            foreach($transfer->getDepartingWarehouse()->getChannels() as $warehouse_channel) {
+                if ( $warehouse_channel->getId() == $channel->getId() ) {
+                    $show = true;
+                }
+            }
+
+            if ( $show ) {
+                $results[] = $transfer;
+            }
+
+            return $results;
+        }
     }
 
 }
