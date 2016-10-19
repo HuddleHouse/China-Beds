@@ -131,6 +131,13 @@ class Orders
     private $shipping;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="estimated_shipping", type="integer", nullable=true)
+     */
+    private $estimatedShipping;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -447,6 +454,22 @@ class Orders
     public function getIsPickUp()
     {
         return $this->isPickUp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEstimatedShipping()
+    {
+        return $this->estimatedShipping;
+    }
+
+    /**
+     * @param int $estimatedShipping
+     */
+    public function setEstimatedShipping($estimatedShipping)
+    {
+        $this->estimatedShipping = $estimatedShipping;
     }
 
     /**
