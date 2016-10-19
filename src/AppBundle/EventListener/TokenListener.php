@@ -58,6 +58,7 @@ class TokenListener
             'adjustables'
         ); //These are excluded routes. These are always allowed. Required for login page
 
+        $user = $this->token_storage->getToken()->getUser();
 
         if(!is_int(array_search($route, $routeArr)) && $route != null) //This is for excluding routes that you don't want to check for.
         {
@@ -65,7 +66,6 @@ class TokenListener
                 $route_names = explode(',', $this->session->get('route_names'));
             }
             else {
-                $user = $this->token_storage->getToken()->getUser();
                 if (!$user || $user === 'anon.') {
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
                     return;
@@ -88,6 +88,28 @@ class TokenListener
             {
                 //A matching role and route was not found so we do not give access to the user here and redirect to another page.
                 $event->setResponse(new RedirectResponse($this->router->generate('404')));
+            }
+        }
+
+        if ( $user && $user != 'anon.') {
+            $authorized = false;
+            if ( $current_channel = $this->session->get('active_channel') ) {
+                // make sure user has access to channel
+                foreach($user->getUserChannels() as $channel) {
+                    if ( !$authorized && ($channel->getId() == $current_channel->getId()) ) {
+                        $authorized = true;
+                        $user->setActiveChannel($current_channel);
+                    }
+                }
+            }
+
+            if ( !$authorized ) {
+                if ( $current_channel = $user->getUserChannels()->first() ) {
+                    $this->session->set('active_channel', $current_channel);
+                    $user->setActiveChannel($current_channel);
+                } else {
+                    $event->setResponse(new RedirectResponse($this->router->generate('401')));
+                }
             }
         }
     }

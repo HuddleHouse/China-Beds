@@ -1,6 +1,7 @@
 <?php
 
 namespace WarehouseBundle\Repository;
+use InventoryBundle\Entity\Channel;
 use InventoryBundle\Entity\Product;
 use InventoryBundle\Entity\ProductVariant;
 use WarehouseBundle\Entity\Warehouse;
@@ -68,11 +69,13 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
-    public function getAllWarehousesArray() {
+    public function getAllWarehousesArray(Channel $channel = null) {
         $warehouses = $this->findAll();
         $data = array();
 
         foreach($warehouses as $warehouse)
+            if ( $channel && !$warehouse->belongsToChannel($channel)) { continue; }
+
             $data[] = array(
                 'id' => $warehouse->getId(),
                 'name' => $warehouse->getName(),

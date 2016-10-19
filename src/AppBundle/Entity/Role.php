@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\JoinColumn;
+use InventoryBundle\Entity\Channel;
 
 /**
  * Office
@@ -122,6 +123,20 @@ class Role extends BaseGroup
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function getUsersForChannel(Channel $channel)
+    {
+        $users = [];
+
+        foreach ($this->users as $user) {
+            foreach ($user->getUserChannels() as $usr_channel) {
+                if ( $channel->getId() == $usr_channel->getId() ) {
+                    $users[] = $user;
+                }
+            }
+        }
+        return $users;
     }
 
     public function getName()

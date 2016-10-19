@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -279,6 +280,8 @@ class User extends BaseUser
      * @OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="creditedByUser")
      */
     private $credited_ledgers;
+
+    private $active_channel = null;
 
     public function __construct()
     {
@@ -972,7 +975,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->retailers as $retailer)
             if($retailer->hasRole('ROLE_RETAILER'))
-                $data[] = $retailer;
+                if ( in_array($this->getActiveChannel(), $retailer->getUserChannels()))
+                    $data[] = $retailer;
         return $data;
     }
 
@@ -1017,7 +1021,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->distributors as $distributor)
             if($distributor->hasRole('ROLE_DISTRIBUTOR'))
-                $data[] = $distributor;
+                if ( in_array($this->getActiveChannel(), $distributor->getUserChannels()))
+                    $data[] = $distributor;
         return $data;
     }
 
@@ -1063,7 +1068,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->sales_reps as $rep)
             if($rep->hasRole('ROLE_SALES_REP'))
-                $data[] = $rep;
+                if ( in_array($this->getActiveChannel(), $rep->getUserChannels()))
+                    $data[] = $rep;
         return $data;
     }
 
@@ -1197,6 +1203,23 @@ class User extends BaseUser
     {
         $this->submitted_rebates = $submitted_rebates;
     }
+
+    /**
+     * @return null
+     */
+    public function getActiveChannel()
+    {
+        return $this->active_channel;
+    }
+
+    /**
+     * @param null $active_channel
+     */
+    public function setActiveChannel(Channel $active_channel)
+    {
+        $this->active_channel = $active_channel;
+    }
+
 
 
 }

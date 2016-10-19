@@ -53,13 +53,13 @@ class ProfileController extends Controller
         //get the correct data to be shown.
         if($this->getUser()->hasRole('ROLE_ADMIN')) {
             $retailers_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Retailer'));
-            $retailers = $retailers_data->getUsers();
+            $retailers = $retailers_data->getUsersForChannel($this->getUser()->getActiveChannel());
 
             $sales_reps_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Sales Rep'));
-            $sales_reps = $sales_reps_data->getUsers();
+            $sales_reps = $sales_reps_data->getUsersForChannel($this->getUser()->getActiveChannel());
 
             $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
-            $distributors = $distributors_data->getUsers();
+            $distributors = $distributors_data->getUsersForChannel($this->getUser()->getActiveChannel());
 
         }
         else if($this->getUser()->hasRole('ROLE_SALES_REP')) {

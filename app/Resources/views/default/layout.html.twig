@@ -19,23 +19,23 @@
 
         <header class="main-header no-print">
 
-            <a href="{{ path('fos_user_profile_show') }}" class="logo" style="min-height: 60px;">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>M</b>H</span>
-                <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><img style="width: 190px;" src="/logo-final-nomal.png"></span>
+        <a href="{{ path('fos_user_profile_show') }}" class="logo" style="min-height: 60px;">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>M</b>H</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><img style="width: 190px;" src="/logo-final-nomal.png"></span>
+        </a>
+
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
             </a>
-
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
-
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+
                     <!-- display the users ledger('s) -->
                     {% if app.user.hasLedger %}
                         {% for channel in sidebar_user_channels %}
@@ -48,6 +48,7 @@
                             </li>
                         {% endfor %}
                     {% endif %}
+
                     <!-- display the users Pending Orders('s) -->
                     {% if app.user.hasPendingOrders %}
                         {% for channel in sidebar_user_channels %}
@@ -68,6 +69,33 @@
                         </h6>
                     </li>
                     <!-- BEGIN USER LOGIN DROPDOWN -->
+                    {% if app.user.userchannels|length > 1 %}
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-anchor"></i>
+                        </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+                                            {% for channel in app.user.userchannels %}
+                                                <li><!-- start message -->
+                                                    <a href="{{ path('admin_channel_switch', {id: channel.id }) }}">
+                                                        <h4>
+                                                            {{ channel.name }}
+                                                        </h4>
+                                                    </a>
+                                                </li>
+                                            {%  endfor %}
+                                            <!-- end message -->
+
+                                        </ul><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 131.148px;"></div><div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                                </li>
+                            </ul>
+
+                    </li>
+                    {% endif %}
                     <li>
                         <a href="#" data-toggle="control-sidebar">
                             <span class="username"><i class="fa fa-gears"></i></span>
@@ -118,7 +146,7 @@
         {% set sidebar_rebate_index = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_rebate_submit = ['rebate_submit_index', 'rebate_submit_edit', 'rebate_submit_show'] %}
         {% set sidebar_rebate_submit_new = ['rebate_submit_new'] %}
-        {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit', 'my_pending_orders_index'] %}
+        {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit'] %}
         {% set sidebar_credit_index = ['ledger_index', 'ledger_edit'] %}
         {% set sidebar_credit_request = ['ledger_new'] %}
 
@@ -364,8 +392,6 @@
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
-                            {% elseif (app.request.get('_route') in sidebar_credit_index) %} active
-                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
 
                             <a href="#">
@@ -389,6 +415,20 @@
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
+                            {% endif %}">
+
+                            <a href="#">
+                                <i class="fa fa-info-circle"></i>
+                                <span>Ledger</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
                                     <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Ledger</a>
                                 </li>
@@ -399,6 +439,9 @@
                                 {% endfor %}
                             </ul>
                         </li>
+
+
+
 
                         <li class="header">LINKS</li>
                         <li>
