@@ -150,6 +150,11 @@ class Orders
     private $product_variants;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order")
+     */
+    private $shipping_labels;
+
+    /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
      */
     private $pop_items;
@@ -228,6 +233,7 @@ class Orders
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
+        $this->shipping_labels = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
@@ -810,6 +816,22 @@ class Orders
     public function getAmountPaid()
     {
         return $this->amount_paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShippingLabels()
+    {
+        return $this->shipping_labels;
+    }
+
+    /**
+     * @param mixed $shipping_labels
+     */
+    public function setShippingLabels($shipping_labels)
+    {
+        $this->shipping_labels = $shipping_labels;
     }
 
     /**
