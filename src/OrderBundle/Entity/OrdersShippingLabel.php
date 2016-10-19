@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="orders_shipping_labels")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class OrdersShippingLabel
 {
@@ -21,7 +22,7 @@ class OrdersShippingLabel
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     */
+     */d
     private $id;
 
     /**
@@ -45,6 +46,7 @@ class OrdersShippingLabel
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
     private $order;
+
 
 
     /**
