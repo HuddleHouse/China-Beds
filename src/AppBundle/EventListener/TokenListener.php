@@ -58,7 +58,7 @@ class TokenListener
             'adjustables'
         ); //These are excluded routes. These are always allowed. Required for login page
 
-        $user = $this->token_storage->getToken()->getUser();
+        $user = $this->token_storage->getToken() ? $this->token_storage->getToken()->getUser() : null;
 
         if(!is_int(array_search($route, $routeArr)) && $route != null) //This is for excluding routes that you don't want to check for.
         {
