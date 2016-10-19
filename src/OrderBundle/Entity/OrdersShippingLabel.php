@@ -35,16 +35,17 @@ class OrdersShippingLabel
     public $path;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $tracking_number;
+
+    /**
      * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="shipping_labels")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
     private $order;
 
-
-    public function __construct()
-    {
-        $this->warehouse_info = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -143,6 +144,22 @@ class OrdersShippingLabel
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTrackingNumber()
+    {
+        return $this->tracking_number;
+    }
+
+    /**
+     * @param mixed $tracking_number
+     */
+    public function setTrackingNumber($tracking_number)
+    {
+        $this->tracking_number = $tracking_number;
     }
 
     /**

@@ -57,7 +57,6 @@ class ProductImageController extends Controller
             $fileName
         );
 
-
         $connection = $em->getConnection();
         $statement = $connection->prepare("insert into product_images (product_id, path) values (:product_id, :path)");
         $statement->bindValue('product_id', $product_id);
