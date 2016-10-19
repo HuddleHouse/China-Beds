@@ -222,11 +222,9 @@
                             </a>
                             <ul class="treeview-menu">
 
-                            {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
                             <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
                                 <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Order Products</a>
                             </li>
-                            {% endif %}
 
                                 <li {% if (app.request.get('_route') in ['my_orders_index']) %} class="active"{% endif %}>
                                     <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>My Orders</a>
