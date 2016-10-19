@@ -129,6 +129,12 @@ class Channel
      */
     private $frontFooterThree;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="front_footer_text", type="string")
+     */
+    private $frontFooterText;
 
 
 
@@ -768,5 +774,29 @@ class Channel
     public function getFrontFooterThree()
     {
         return $this->frontFooterThree;
+    }
+
+    /**
+     * Set frontFooterText
+     *
+     * @param string $frontFooterText
+     *
+     * @return Channel
+     */
+    public function setFrontFooterText($frontFooterText)
+    {
+        $this->frontFooterText = $frontFooterText;
+
+        return $this;
+    }
+
+    /**
+     * Get frontFooterText
+     *
+     * @return string
+     */
+    public function getFrontFooterText()
+    {
+        return $this->frontFooterText;
     }
 }

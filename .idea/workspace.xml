@@ -3,12 +3,12 @@
   <component name="ChangeListManager">
     <list id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="" />
     <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="" />
-    <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="warranty claims form: UI tweaks, routing fix between form and index display">
+    <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="warranty claims form/ edit form : routing issue fix, image display, addition of extra fields">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Entity/WarrantyClaim.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Entity/WarrantyClaim.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Form/WarrantyClaimType.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/WarrantyClaimType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/edit.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/edit.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/new.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/new.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,42 +29,85 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="WarrantyClaimController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/WarrantyClaimController.php">
+      <file leaf-file-name="ChannelController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-720">
-              <caret line="34" column="65" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
+            <state relative-caret-position="1200">
+              <caret line="94" column="7" selection-start-line="94" selection-start-column="7" selection-end-line="94" selection-end-column="7" />
               <folding>
-                <element signature="e#1079#1121#0#PHP" expanded="true" />
-                <element signature="e#2785#2825#0#PHP" expanded="true" />
+                <element signature="e#46#91#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/index.html.twig">
+      <file leaf-file-name="ChannelType.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="186" column="215" selection-start-line="186" selection-start-column="215" selection-end-line="186" selection-end-column="215" />
+            <state relative-caret-position="495">
+              <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
               <folding>
-                <element signature="e#12#37#0#Twig" expanded="true" />
-                <marker date="1476811059000" expanded="true" signature="6160:6166" ph=" " />
-                <marker date="1476811059000" expanded="true" signature="6493:6499" ph=" " />
-                <marker date="1476811059000" expanded="true" signature="6927:6933" ph=" " />
-                <marker date="1476811059000" expanded="true" signature="7258:7264" ph=" " />
+                <element signature="e#40#80#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="edit.html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/edit.html.twig">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="133" column="39" selection-start-line="133" selection-start-column="39" selection-end-line="133" selection-end-column="39" />
+            <state relative-caret-position="598">
+              <caret line="113" column="18" selection-start-line="113" selection-start-column="18" selection-end-line="113" selection-end-column="18" />
               <folding>
                 <element signature="e#12#37#0#Twig" expanded="true" />
+                <element signature="e#5067#5074#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="layout.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Channel.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="547">
+              <caret line="160" column="29" selection-start-line="160" selection-start-column="29" selection-end-line="160" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChannelRepository.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/ChannelRepository.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1080">
+              <caret line="74" column="38" selection-start-line="74" selection-start-column="38" selection-end-line="74" selection-end-column="38" />
+              <folding>
+                <element signature="e#45#80#0#PHP" expanded="false" />
+                <marker date="1476213003000" expanded="true" signature="2387:2679" ph="select *, v.... product_variant" />
+                <marker date="1476213003000" expanded="true" signature="3433:3605" ph="select coale... warehouse_inventory" />
+                <marker date="1476213003000" expanded="true" signature="3950:4108" ph="select i.qua... warehouse_inventory" />
+                <marker date="1476213003000" expanded="true" signature="4435:4563" ph="select coale... warehouse_inventory" />
+                <marker date="1476213003000" expanded="true" signature="4908:5022" ph="select i.qua... warehouse_inventory" />
               </folding>
             </state>
           </provider>
@@ -73,65 +116,8 @@
       <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/new.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
+            <state relative-caret-position="1755">
               <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="128" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WarrantyClaim.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/WarrantyClaim.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1560">
-              <caret line="167" column="24" selection-start-line="167" selection-start-column="24" selection-end-line="167" selection-end-column="24" />
-              <folding>
-                <element signature="e#42#90#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WarrantyClaimType.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/WarrantyClaimType.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="105" column="161" selection-start-line="105" selection-start-column="161" selection-end-line="105" selection-end-column="161" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WarrantyClaimController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/WarrantyClaimController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
-              <caret line="56" column="56" selection-start-line="56" selection-start-column="56" selection-end-line="56" selection-end-column="56" />
-              <folding>
-                <element signature="e#4539#4564#1#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProductRepository.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/ProductRepository.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-              <folding>
-                <element signature="e#1412#1444#1#PHP" expanded="true" />
-                <marker date="1476803590000" expanded="true" signature="7836:7949" ph="SELECT COALE... warehouse_inventory" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProductImage.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/ProductImage.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="62" column="21" selection-start-line="62" selection-start-column="21" selection-end-line="62" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -150,15 +136,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/StockAdjustmentController.php" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/StockTransferController.php" />
-        <option value="$PROJECT_DIR$/app/config/config.yml" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockAdjustment/new.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockAdjustment/show.html.twig" />
-        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/new.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/StockTransfer/show.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/DefaultController.php" />
-        <option value="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/new.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/StockAdjustment/new.html.twig" />
         <option value="$PROJECT_DIR$/vendor/friendsofsymfony/user-bundle/Resources/views/ChangePassword/changePassword_content.html.twig" />
@@ -172,7 +151,6 @@
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/Warehouse/form.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/index.html.twig" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Controller/WarehouseController.php" />
-        <option value="$PROJECT_DIR$/app/config/parameters.yml" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Repository/WarehouseRepository.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Controller/PurchaseOrderController.php" />
         <option value="$PROJECT_DIR$/src/WarehouseBundle/Controller/API/PurchaseOrderController.php" />
@@ -201,6 +179,14 @@
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/new.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/edit.html.twig" />
         <option value="$PROJECT_DIR$/src/InventoryBundle/Form/WarrantyClaimType.php" />
+        <option value="$PROJECT_DIR$/app/config/parameters.yml" />
+        <option value="$PROJECT_DIR$/app/config/config.yml" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php" />
+        <option value="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
+        <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig" />
+        <option value="$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php" />
       </list>
     </option>
   </component>
@@ -257,6 +243,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -329,32 +317,8 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="China-Beds" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="China-Beds" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="InventoryBundle" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controller" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -536,20 +500,6 @@
       <workItem from="1472244730629" duration="2044000" />
       <workItem from="1472485546631" duration="594000" />
       <workItem from="1472486231215" duration="3175000" />
-    </task>
-    <task id="LOCAL-00020" summary="Fixing Entity relationshiops&#10;">
-      <created>1467906853127</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1467906853127</updated>
-    </task>
-    <task id="LOCAL-00021" summary="Fixing Entity relationshiops&#10;">
-      <created>1467915362439</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1467915362439</updated>
     </task>
     <task id="LOCAL-00022" summary="Fixing Entity relationshiops&#10;">
       <created>1467915869373</created>
@@ -757,7 +707,8 @@
       <workItem from="1476391689168" duration="236000" />
       <workItem from="1476392016001" duration="372000" />
       <workItem from="1476458966748" duration="12928000" />
-      <workItem from="1476795099776" duration="11225000" />
+      <workItem from="1476795099776" duration="20827000" />
+      <workItem from="1476880597106" duration="7244000" />
     </task>
     <task id="LOCAL-00047" summary="Header preference changes">
       <created>1473364360230</created>
@@ -913,12 +864,26 @@
       <option name="project" value="LOCAL" />
       <updated>1476811140495</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="warranty claims form/ edit form : routing issue fix, image display, addition of extra fields">
+      <created>1476813041983</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1476813041983</updated>
+    </task>
+    <task id="LOCAL-00070" summary="add upload directory. started channel form">
+      <created>1476824489632</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1476824489632</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <option name="trackContextForNewChangelist" value="true" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="310179000" />
+    <option name="totallyTimeSpent" value="327025000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -934,23 +899,23 @@
     <editor active="true" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19488817" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1970181" sideWeight="0.49735048" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.5022753" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32871288" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22178218" sideWeight="0.49374288" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.24313408" sideWeight="0.5026495" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3237624" sideWeight="0.49772468" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32772276" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3237624" sideWeight="0.49772468" order="4" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329296" sideWeight="0.49626467" order="1" side_tool="false" content_ui="tabs" />
@@ -1004,7 +969,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Updating user restricing layer&#10;" />
     <MESSAGE value="Fixing Entity relationshiops&#10;" />
     <MESSAGE value="Adding new entities and syncing the data for the POP items over from qb&#10;" />
     <MESSAGE value="Adding the final few entities and thier places on the menu." />
@@ -1028,7 +992,9 @@
     <MESSAGE value="credit request: update" />
     <MESSAGE value="Warranty claims change: added image call on product pick, added quantity and date made aware fields" />
     <MESSAGE value="warranty claims form: UI tweaks, routing fix between form and index display" />
-    <option name="LAST_COMMIT_MESSAGE" value="warranty claims form: UI tweaks, routing fix between form and index display" />
+    <MESSAGE value="warranty claims form/ edit form : routing issue fix, image display, addition of extra fields" />
+    <MESSAGE value="add upload directory. started channel form" />
+    <option name="LAST_COMMIT_MESSAGE" value="add upload directory. started channel form" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1058,119 +1024,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Entity/Role.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="53" column="29" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/PopItem.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/var/cache/dev/appDevDebugProjectContainer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="370" column="83" selection-start-line="370" selection-start-column="83" selection-end-line="370" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/ChangePasswordController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/friendsofsymfony/user-bundle/Doctrine/UserManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-392">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/src/Symfony/Component/Form/FormView.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="18" column="6" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/AdminController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="43" column="38" selection-start-line="43" selection-start-column="38" selection-end-line="43" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Form/UserType.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3285">
-          <caret line="229" column="35" selection-start-line="229" selection-start-column="35" selection-end-line="229" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Resources/views/Admin/admin_edit_user.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="808">
-          <caret line="155" column="23" selection-start-line="155" selection-start-column="23" selection-end-line="155" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Controller/PurchaseOrderController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="70" column="42" selection-start-line="70" selection-start-column="42" selection-end-line="70" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WarehouseBundle/Resources/views/PurchaseOrder/show.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="65" column="11" selection-start-line="65" selection-start-column="11" selection-end-line="66" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="12" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/my-orders.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="45" column="53" selection-start-line="45" selection-start-column="53" selection-end-line="45" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/OrderBundle/Resources/views/OrderProducts/view-order.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6510">
-          <caret line="434" column="32" selection-start-line="434" selection-start-column="32" selection-end-line="434" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/OrderBundle/Repository/OrdersRepository.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1410">
           <caret line="97" column="35" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
-          <folding>
-            <element signature="e#41#67#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1209,7 +1066,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="34" column="59" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="59" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1231,7 +1087,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
           <caret line="235" column="28" selection-start-line="235" selection-start-column="20" selection-end-line="235" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1291,10 +1146,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
-          <folding>
-            <element signature="e#39#65#0#PHP" expanded="false" />
-            <marker date="1476305962000" expanded="true" signature="463:623" ph="select * fro... users" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1312,7 +1163,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1357,38 +1207,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="491">
           <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding>
-            <element signature="e#1412#1444#1#PHP" expanded="true" />
-            <marker date="1476803590000" expanded="true" signature="7836:7949" ph="SELECT COALE... warehouse_inventory" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/WarrantyClaim.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1560">
-          <caret line="167" column="24" selection-start-line="167" selection-start-column="24" selection-end-line="167" selection-end-column="24" />
-          <folding>
-            <element signature="e#42#90#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-720">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/WarrantyClaimController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="56" column="56" selection-start-line="56" selection-start-column="56" selection-end-line="56" selection-end-column="56" />
-          <folding>
-            <element signature="e#4539#4564#1#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1397,7 +1215,7 @@
         <state relative-caret-position="210">
           <caret line="186" column="215" selection-start-line="186" selection-start-column="215" selection-end-line="186" selection-end-column="215" />
           <folding>
-            <element signature="e#12#37#0#Twig" expanded="true" />
+            <element signature="e#12#37#0#Twig" expanded="false" />
             <marker date="1476811059000" expanded="true" signature="6160:6166" ph=" " />
             <marker date="1476811059000" expanded="true" signature="6493:6499" ph=" " />
             <marker date="1476811059000" expanded="true" signature="6927:6933" ph=" " />
@@ -1406,21 +1224,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/new.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="128" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/edit.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
           <caret line="133" column="39" selection-start-line="133" selection-start-column="39" selection-end-line="133" selection-end-column="39" />
           <folding>
-            <element signature="e#12#37#0#Twig" expanded="true" />
+            <element signature="e#12#37#0#Twig" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/home.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1428,17 +1252,166 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-720">
           <caret line="34" column="65" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
-          <folding>
-            <element signature="e#1079#1121#0#PHP" expanded="true" />
-            <element signature="e#2785#2825#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/WarrantyClaimType.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
-          <caret line="105" column="161" selection-start-line="105" selection-start-column="161" selection-end-line="105" selection-end-column="161" />
+          <caret line="105" column="77" selection-start-line="105" selection-start-column="77" selection-end-line="105" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/WarrantyClaim.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1560">
+          <caret line="167" column="24" selection-start-line="167" selection-start-column="24" selection-end-line="167" selection-end-column="24" />
+          <folding>
+            <element signature="e#42#90#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/API/WarrantyClaimController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="56" column="56" selection-start-line="56" selection-start-column="56" selection-end-line="56" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/parameters.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="29" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/config_dev.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Controller/WebsiteController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
+          <folding>
+            <element signature="e#44#79#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Repository/ChannelRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="74" column="38" selection-start-line="74" selection-start-column="38" selection-end-line="74" selection-end-column="38" />
+          <folding>
+            <element signature="e#45#80#0#PHP" expanded="false" />
+            <marker date="1476213003000" expanded="true" signature="2387:2679" ph="select *, v.... product_variant" />
+            <marker date="1476213003000" expanded="true" signature="3433:3605" ph="select coale... warehouse_inventory" />
+            <marker date="1476213003000" expanded="true" signature="3950:4108" ph="select i.qua... warehouse_inventory" />
+            <marker date="1476213003000" expanded="true" signature="4435:4563" ph="select coale... warehouse_inventory" />
+            <marker date="1476213003000" expanded="true" signature="4908:5022" ph="select i.qua... warehouse_inventory" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/WarrantyClaim/new.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1755">
+          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="128" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/base.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Resources/views/default/layout.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/src/Symfony/Component/Form/FormTypeInterface.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-272">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/src/Symfony/Component/Form/AbstractType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="19" column="46" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
+          <folding>
+            <element signature="e#273#316#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/src/Symfony/Component/Form/Extension/Core/Type/FileType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Channel/edit.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="598">
+          <caret line="113" column="18" selection-start-line="113" selection-start-column="18" selection-end-line="113" selection-end-column="18" />
+          <folding>
+            <element signature="e#12#37#0#Twig" expanded="true" />
+            <element signature="e#5067#5074#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Controller/ChannelController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="94" column="7" selection-start-line="94" selection-start-column="7" selection-end-line="94" selection-end-column="7" />
+          <folding>
+            <element signature="e#46#91#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Form/ChannelType.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+          <folding>
+            <element signature="e#40#80#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/Channel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="547">
+          <caret line="160" column="29" selection-start-line="160" selection-start-column="29" selection-end-line="160" selection-end-column="29" />
           <folding />
         </state>
       </provider>

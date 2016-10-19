@@ -44,62 +44,77 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10" style="padding:20px; background-color:white; border-radius:50px;">
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontLogo) }}
-            {{ form_widget(edit_form.frontLogo) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.name) }}
-            {{ form_widget(edit_form.name) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.url) }}
-            {{ form_widget(edit_form.url) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_label(edit_form.fbLink) }}
-            {{ form_widget(edit_form.fbLink) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.twLink) }}
-            {{ form_widget(edit_form.twLink) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.instaLink) }}
-            {{ form_widget(edit_form.instaLink) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontSliderOne) }}
-            {{ form_widget(edit_form.frontSliderOne) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontSliderTwo) }}
-            {{ form_widget(edit_form.frontSliderTwo) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontSliderThree) }}
-            {{ form_widget(edit_form.frontSliderThree) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontFooterOne) }}
-            {{ form_widget(edit_form.frontFooterOne) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontFooterTwo) }}
-            {{ form_widget(edit_form.frontFooterTwo) }}
-        </div>
-        <div class="col-md-4">
-            {{ form_label(edit_form.frontFooterThree) }}
-            {{ form_widget(edit_form.frontFooterThree) }}
-        </div>
-    </div>
+            <div class="row">
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#homepage-modal">Homepage</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontLogo) }}
+                    {{ form_widget(edit_form.frontLogo) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.name) }}
+                    {{ form_widget(edit_form.name) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.url) }}
+                    {{ form_widget(edit_form.url) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.fbLink) }}
+                    {{ form_widget(edit_form.fbLink) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.twLink) }}
+                    {{ form_widget(edit_form.twLink) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.instaLink) }}
+                    {{ form_widget(edit_form.instaLink) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontSliderOne) }}
+                    {{ form_widget(edit_form.frontSliderOne) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontSliderTwo) }}
+                    {{ form_widget(edit_form.frontSliderTwo) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontSliderThree) }}
+                    {{ form_widget(edit_form.frontSliderThree) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontFooterOne) }}
+                    {{ form_widget(edit_form.frontFooterOne) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontFooterTwo) }}
+                    {{ form_widget(edit_form.frontFooterTwo) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontFooterThree) }}
+                    {{ form_widget(edit_form.frontFooterThree) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_label(edit_form.frontFooterText) }}
+                    {{ form_widget(edit_form.frontFooterText) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 page-banner">FAQ Page</div>
+            </div>
+
+
+
 
 
     <input class="btn btn-raised btn-success" type="submit" value="Update" />
@@ -108,5 +123,87 @@
     <input class="btn btn-raised btn-danger" type="submit" value="Delete">
     {{ form_end(delete_form) }}
         </div>
+    </div>
+
+    <!--  BANNERS   -->
+
+    <div id="homepage-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Homepage Changes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>All changes made within the Homepage section will effect the homepage of your site</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
         </div>
+    </div>
+
+    <!-- end of banners -->
+
+
+    <style>
+
+      input[type=file]{
+          z-index:-1;
+      }
+
+        .form-group, .form-control{
+            border:none;
+
+        }
+
+        .file-input{
+            margin-top:40px;
+            font-size:1.25em;
+            font-weight:700;
+            color:black;
+            background-color: #42A5F5;
+            display:inline-block;
+            padding:5px 10px;
+            opacity:.3;
+            -webkit-transition: opacity .7s, background-color .7s;
+            -moz-transition: opacity .7s, background-color .7s;
+            -ms-transition: opacity .7s, background-color .7s;
+            -o-transition: opacity .7s, background-color .7s;
+            transition: opacity .7s, background-color .7s;
+        }
+
+        .file-input:focus, .file-input:hover{
+            background-color:deepskyblue;
+            /*outline: 1px dotted #000;*/
+            /*outline: -webkit-focus-ring-color auto 5px;*/
+            opacity:.7;
+        }
+
+        .file-input{
+            cursor:pointer;
+            Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+
+        .page-banner{
+            text-align: center;
+            background-color: #42A5F5;
+            height: 50px;
+            /*border-radius: 30px;*/
+            margin-bottom: 60px;
+            margin-top:40px;
+            padding-top:12px;
+            font-size: x-large;
+            margin-left:0;
+            margin-right:0;
+            padding-left:0;
+            padding-right:0;
+            cursor:help;
+        }
+
+    </style>
 {% endblock %}

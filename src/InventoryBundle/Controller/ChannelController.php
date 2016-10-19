@@ -164,16 +164,6 @@ class ChannelController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
                 $channel->setFrontLogo($frontLogoName);
                 $channel->setFrontSliderOne($firstSliderName);
                 $channel->setFrontSliderTwo($secondSliderName);
