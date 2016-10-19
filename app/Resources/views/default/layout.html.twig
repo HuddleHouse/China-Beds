@@ -35,32 +35,6 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fa fa-anchor"></i>
-                        </a>
-                        {% if app.user.userchannels|length > 1 %}
-                        <ul class="dropdown-menu">
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
-                                        {% for channel in app.user.userchannels %}
-                                        <li><!-- start message -->
-                                            <a href="{{ path('admin_channel_switch', {id: channel.id }) }}">
-                                                <h4>
-                                                    {{ channel.name }}
-                                                </h4>
-                                            </a>
-                                        </li>
-                                        {%  endfor %}
-                                        <!-- end message -->
-
-                                    </ul><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 131.148px;"></div><div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
-                            </li>
-                            <li class="footer"><a href="#">See All Channels</a></li>
-                        </ul>
-                        {% endif %}
-                    </li>
 
                     {% if app.user.hasLedger %}
                         <li id="ledger-total" class="">
@@ -71,12 +45,40 @@
                             </div>
                         </li>
                     {% endif %}
+
                     <li id="welcome-message" class="dropdown user-menu">
                         <h6 style="margin-top: 17px;color: #fff;">
                             <span class="username">Logged in as {{ app.user }} to {{ app.user.activechannel.name }}</span>
                         </h6>
                     </li>
                     <!-- BEGIN USER LOGIN DROPDOWN -->
+                    {% if app.user.userchannels|length > 1 %}
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-anchor"></i>
+                        </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+                                            {% for channel in app.user.userchannels %}
+                                                <li><!-- start message -->
+                                                    <a href="{{ path('admin_channel_switch', {id: channel.id }) }}">
+                                                        <h4>
+                                                            {{ channel.name }}
+                                                        </h4>
+                                                    </a>
+                                                </li>
+                                            {%  endfor %}
+                                            <!-- end message -->
+
+                                        </ul><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 131.148px;"></div><div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                                </li>
+                            </ul>
+
+                    </li>
+                    {% endif %}
                     <li>
                         <a href="#" data-toggle="control-sidebar">
                             <span class="username"><i class="fa fa-gears"></i></span>

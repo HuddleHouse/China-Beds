@@ -948,7 +948,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->retailers as $retailer)
             if($retailer->hasRole('ROLE_RETAILER'))
-                $data[] = $retailer;
+                if ( in_array($this->getActiveChannel(), $retailer->getUserChannels()))
+                    $data[] = $retailer;
         return $data;
     }
 
@@ -993,7 +994,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->distributors as $distributor)
             if($distributor->hasRole('ROLE_DISTRIBUTOR'))
-                $data[] = $distributor;
+                if ( in_array($this->getActiveChannel(), $distributor->getUserChannels()))
+                    $data[] = $distributor;
         return $data;
     }
 
@@ -1039,7 +1041,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->sales_reps as $rep)
             if($rep->hasRole('ROLE_SALES_REP'))
-                $data[] = $rep;
+                if ( in_array($this->getActiveChannel(), $rep->getUserChannels()))
+                    $data[] = $rep;
         return $data;
     }
 
