@@ -37,7 +37,8 @@ class OrderProductsController extends Controller
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
-            'orders' => $orders
+            'orders' => $orders,
+            'pending' => ''
         ));
     }
 
@@ -54,7 +55,8 @@ class OrderProductsController extends Controller
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
-            'orders' => $orders
+            'orders' => $orders,
+            'pending' => ' Pending'
         ));
     }
 
