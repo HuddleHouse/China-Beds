@@ -1,9 +1,7 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}New {{ channel.name }} Credit Request{% endblock %}
-{% block page_title %}
-    New {{ channel.name }} Credit Request
-{% endblock page_title %}
+{% block title %}New Ledger Fund Request{% endblock %}
+{% block page_title %}New Ledger Fund Request{% endblock page_title %}
 
 {% block page_name %}
     <a href="{{ path('ledger_index') }}">< Back to the list</a>
@@ -74,7 +72,7 @@
                     {{ form_widget(form.description) }}
                 </div>
             </div>
-            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            <input class="btn btn-raised btn-success" type="submit" value="Request" />
             {{ form_end(form) }}
         </div>
     </div>
