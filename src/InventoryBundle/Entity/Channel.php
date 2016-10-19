@@ -44,7 +44,7 @@ class Channel
      * @ORM\Column(name="front_logo", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontLogo;
 
@@ -75,7 +75,7 @@ class Channel
      * @ORM\Column(name="front_slider_one", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontSliderOne;
 
@@ -85,7 +85,7 @@ class Channel
      * @ORM\Column(name="front_slider_two", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontSliderTwo;
 
@@ -95,7 +95,7 @@ class Channel
      * @ORM\Column(name="front_slider_three", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontSliderThree;
 
@@ -105,7 +105,7 @@ class Channel
      * @ORM\Column(name="front_footer_one", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontFooterOne;
 
@@ -115,7 +115,7 @@ class Channel
      * @ORM\Column(name="front_footer_two", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontFooterTwo;
 
@@ -125,7 +125,7 @@ class Channel
      * @ORM\Column(name="front_footer_three", type="string")
      *
      * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "application/pdf" })
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
      */
     private $frontFooterThree;
 
@@ -135,6 +135,227 @@ class Channel
      * @ORM\Column(name="front_footer_text", type="string")
      */
     private $frontFooterText;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faq_warranty_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $faqWarrantyPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faq_unpacking_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $faqUnpackingPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faq_support_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $faqSupportPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faq_maintenance_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $faqMaintenancePic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faq_contact_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $faqContactPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="faq_tc_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $faqTCPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_memoryfoam_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFmemoryFoamPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_side_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFSidePic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_renewresource_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFRenewResourcewPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_socs_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFsocsPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_pbo_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFpboPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_bcharcoal_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFBCharcoalPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_bfibers_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFBFibersPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_silk_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFSilkPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_aloevera_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFAloeVeraPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_certified_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFCertifiedPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pf_texstand_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $pFTexStandPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retail_header_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $retailHeaderPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retail_first_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $retailFirstPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retail_second_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $retailSecondPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retail_third_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $retailThirdPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retail_fourth_pic", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
+     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     */
+    private $retailFourthPic;
+
 
 
 
@@ -798,5 +1019,533 @@ class Channel
     public function getFrontFooterText()
     {
         return $this->frontFooterText;
+    }
+
+    /**
+     * Set faqWarrantyPic
+     *
+     * @param string $faqWarrantyPic
+     *
+     * @return Channel
+     */
+    public function setFaqWarrantyPic($faqWarrantyPic)
+    {
+        $this->faqWarrantyPic = $faqWarrantyPic;
+
+        return $this;
+    }
+
+    /**
+     * Get faqWarrantyPic
+     *
+     * @return string
+     */
+    public function getFaqWarrantyPic()
+    {
+        return $this->faqWarrantyPic;
+    }
+
+    /**
+     * Set faqUnpackingPic
+     *
+     * @param string $faqUnpackingPic
+     *
+     * @return Channel
+     */
+    public function setFaqUnpackingPic($faqUnpackingPic)
+    {
+        $this->faqUnpackingPic = $faqUnpackingPic;
+
+        return $this;
+    }
+
+    /**
+     * Get faqUnpackingPic
+     *
+     * @return string
+     */
+    public function getFaqUnpackingPic()
+    {
+        return $this->faqUnpackingPic;
+    }
+
+    /**
+     * Set faqSupportPic
+     *
+     * @param string $faqSupportPic
+     *
+     * @return Channel
+     */
+    public function setFaqSupportPic($faqSupportPic)
+    {
+        $this->faqSupportPic = $faqSupportPic;
+
+        return $this;
+    }
+
+    /**
+     * Get faqSupportPic
+     *
+     * @return string
+     */
+    public function getFaqSupportPic()
+    {
+        return $this->faqSupportPic;
+    }
+
+    /**
+     * Set faqMaintenancePic
+     *
+     * @param string $faqMaintenancePic
+     *
+     * @return Channel
+     */
+    public function setFaqMaintenancePic($faqMaintenancePic)
+    {
+        $this->faqMaintenancePic = $faqMaintenancePic;
+
+        return $this;
+    }
+
+    /**
+     * Get faqMaintenancePic
+     *
+     * @return string
+     */
+    public function getFaqMaintenancePic()
+    {
+        return $this->faqMaintenancePic;
+    }
+
+    /**
+     * Set faqContactPic
+     *
+     * @param string $faqContactPic
+     *
+     * @return Channel
+     */
+    public function setFaqContactPic($faqContactPic)
+    {
+        $this->faqContactPic = $faqContactPic;
+
+        return $this;
+    }
+
+    /**
+     * Get faqContactPic
+     *
+     * @return string
+     */
+    public function getFaqContactPic()
+    {
+        return $this->faqContactPic;
+    }
+
+    /**
+     * Set faqTCPic
+     *
+     * @param string $faqTCPic
+     *
+     * @return Channel
+     */
+    public function setFaqTCPic($faqTCPic)
+    {
+        $this->faqTCPic = $faqTCPic;
+
+        return $this;
+    }
+
+    /**
+     * Get faqTCPic
+     *
+     * @return string
+     */
+    public function getFaqTCPic()
+    {
+        return $this->faqTCPic;
+    }
+
+    /**
+     * Set pFmemoryFoamPic
+     *
+     * @param string $pFmemoryFoamPic
+     *
+     * @return Channel
+     */
+    public function setPFmemoryFoamPic($pFmemoryFoamPic)
+    {
+        $this->pFmemoryFoamPic = $pFmemoryFoamPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFmemoryFoamPic
+     *
+     * @return string
+     */
+    public function getPFmemoryFoamPic()
+    {
+        return $this->pFmemoryFoamPic;
+    }
+
+    /**
+     * Set pFRenewResourcewPic
+     *
+     * @param string $pFRenewResourcewPic
+     *
+     * @return Channel
+     */
+    public function setPFRenewResourcewPic($pFRenewResourcewPic)
+    {
+        $this->pFRenewResourcewPic = $pFRenewResourcewPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFRenewResourcewPic
+     *
+     * @return string
+     */
+    public function getPFRenewResourcewPic()
+    {
+        return $this->pFRenewResourcewPic;
+    }
+
+    /**
+     * Set pFsocsPic
+     *
+     * @param string $pFsocsPic
+     *
+     * @return Channel
+     */
+    public function setPFsocsPic($pFsocsPic)
+    {
+        $this->pFsocsPic = $pFsocsPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFsocsPic
+     *
+     * @return string
+     */
+    public function getPFsocsPic()
+    {
+        return $this->pFsocsPic;
+    }
+
+    /**
+     * Set pFpboPic
+     *
+     * @param string $pFpboPic
+     *
+     * @return Channel
+     */
+    public function setPFpboPic($pFpboPic)
+    {
+        $this->pFpboPic = $pFpboPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFpboPic
+     *
+     * @return string
+     */
+    public function getPFpboPic()
+    {
+        return $this->pFpboPic;
+    }
+
+    /**
+     * Set pFBCharcoalPic
+     *
+     * @param string $pFBCharcoalPic
+     *
+     * @return Channel
+     */
+    public function setPFBCharcoalPic($pFBCharcoalPic)
+    {
+        $this->pFBCharcoalPic = $pFBCharcoalPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFBCharcoalPic
+     *
+     * @return string
+     */
+    public function getPFBCharcoalPic()
+    {
+        return $this->pFBCharcoalPic;
+    }
+
+    /**
+     * Set pFBFibersPic
+     *
+     * @param string $pFBFibersPic
+     *
+     * @return Channel
+     */
+    public function setPFBFibersPic($pFBFibersPic)
+    {
+        $this->pFBFibersPic = $pFBFibersPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFBFibersPic
+     *
+     * @return string
+     */
+    public function getPFBFibersPic()
+    {
+        return $this->pFBFibersPic;
+    }
+
+    /**
+     * Set pFSilkPic
+     *
+     * @param string $pFSilkPic
+     *
+     * @return Channel
+     */
+    public function setPFSilkPic($pFSilkPic)
+    {
+        $this->pFSilkPic = $pFSilkPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFSilkPic
+     *
+     * @return string
+     */
+    public function getPFSilkPic()
+    {
+        return $this->pFSilkPic;
+    }
+
+    /**
+     * Set pFAloeVeraPic
+     *
+     * @param string $pFAloeVeraPic
+     *
+     * @return Channel
+     */
+    public function setPFAloeVeraPic($pFAloeVeraPic)
+    {
+        $this->pFAloeVeraPic = $pFAloeVeraPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFAloeVeraPic
+     *
+     * @return string
+     */
+    public function getPFAloeVeraPic()
+    {
+        return $this->pFAloeVeraPic;
+    }
+
+    /**
+     * Set pFCertifiedPic
+     *
+     * @param string $pFCertifiedPic
+     *
+     * @return Channel
+     */
+    public function setPFCertifiedPic($pFCertifiedPic)
+    {
+        $this->pFCertifiedPic = $pFCertifiedPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFCertifiedPic
+     *
+     * @return string
+     */
+    public function getPFCertifiedPic()
+    {
+        return $this->pFCertifiedPic;
+    }
+
+    /**
+     * Set pFTexStandPic
+     *
+     * @param string $pFTexStandPic
+     *
+     * @return Channel
+     */
+    public function setPFTexStandPic($pFTexStandPic)
+    {
+        $this->pFTexStandPic = $pFTexStandPic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFTexStandPic
+     *
+     * @return string
+     */
+    public function getPFTexStandPic()
+    {
+        return $this->pFTexStandPic;
+    }
+
+    /**
+     * Set pFSidePic
+     *
+     * @param string $pFSidePic
+     *
+     * @return Channel
+     */
+    public function setPFSidePic($pFSidePic)
+    {
+        $this->pFSidePic = $pFSidePic;
+
+        return $this;
+    }
+
+    /**
+     * Get pFSidePic
+     *
+     * @return string
+     */
+    public function getPFSidePic()
+    {
+        return $this->pFSidePic;
+    }
+
+    /**
+     * Set retailHeaderPic
+     *
+     * @param string $retailHeaderPic
+     *
+     * @return Channel
+     */
+    public function setRetailHeaderPic($retailHeaderPic)
+    {
+        $this->retailHeaderPic = $retailHeaderPic;
+
+        return $this;
+    }
+
+    /**
+     * Get retailHeaderPic
+     *
+     * @return string
+     */
+    public function getRetailHeaderPic()
+    {
+        return $this->retailHeaderPic;
+    }
+
+    /**
+     * Set retailFirstPic
+     *
+     * @param string $retailFirstPic
+     *
+     * @return Channel
+     */
+    public function setRetailFirstPic($retailFirstPic)
+    {
+        $this->retailFirstPic = $retailFirstPic;
+
+        return $this;
+    }
+
+    /**
+     * Get retailFirstPic
+     *
+     * @return string
+     */
+    public function getRetailFirstPic()
+    {
+        return $this->retailFirstPic;
+    }
+
+    /**
+     * Set retailSecondPic
+     *
+     * @param string $retailSecondPic
+     *
+     * @return Channel
+     */
+    public function setRetailSecondPic($retailSecondPic)
+    {
+        $this->retailSecondPic = $retailSecondPic;
+
+        return $this;
+    }
+
+    /**
+     * Get retailSecondPic
+     *
+     * @return string
+     */
+    public function getRetailSecondPic()
+    {
+        return $this->retailSecondPic;
+    }
+
+    /**
+     * Set retailThirdPic
+     *
+     * @param string $retailThirdPic
+     *
+     * @return Channel
+     */
+    public function setRetailThirdPic($retailThirdPic)
+    {
+        $this->retailThirdPic = $retailThirdPic;
+
+        return $this;
+    }
+
+    /**
+     * Get retailThirdPic
+     *
+     * @return string
+     */
+    public function getRetailThirdPic()
+    {
+        return $this->retailThirdPic;
+    }
+
+    /**
+     * Set retailFourthPic
+     *
+     * @param string $retailFourthPic
+     *
+     * @return Channel
+     */
+    public function setRetailFourthPic($retailFourthPic)
+    {
+        $this->retailFourthPic = $retailFourthPic;
+
+        return $this;
+    }
+
+    /**
+     * Get retailFourthPic
+     *
+     * @return string
+     */
+    public function getRetailFourthPic()
+    {
+        return $this->retailFourthPic;
     }
 }

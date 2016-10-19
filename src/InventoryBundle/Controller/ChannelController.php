@@ -103,8 +103,9 @@ class ChannelController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
 
-
-                //start edit
+                ///////////////////////////
+                //logo uploads for Homepage
+                //////////////////////////
 
                 //front logo upload
                 $frontLogo = $channel->getFrontLogo();
@@ -168,9 +169,160 @@ class ChannelController extends Controller
                 $channel->setFrontSliderOne($firstSliderName);
                 $channel->setFrontSliderTwo($secondSliderName);
                 $channel->setFrontSliderThree($thirdSliderName);
+                $channel->setFrontFooterOne($firstFooterName);
+                $channel->setFrontFooterTwo($secondFooterName);
+                $channel->setFrontFooterThree($thirdFooterName);
+
+                /////////////////////////
+                //FAQ page image uploads
+                /////////////////////////
+
+                //warranty upload
+                $warrantyPic = $channel->getFaqWarrantyPic();
+                $warrantyPicName = md5(uniqueid()).'.'.$warrantyPic->guessExtension();
+                $warrantyPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $warrantyPicName
+                );
+
+                //unpacking upload
+                $unpackingPic = $channel->getFaqUnpackingPic();
+                $unpackingPicName = md5(uniqueid()).'.'.$unpackingPic->guessExtension();
+                $unpackingPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $unpackingPicName
+                );
+
+                //support upload
+                $supportPic = $channel->getFaqSupportPic();
+                $supportPicName = md5(uniqueid()).'.'.$supportPic->guessExtension();
+                $supportPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $supportPicName
+                );
+
+                //maintenance upload
+                $maintenancePic = $channel->getFaqMaintenancePic();
+                $maintenancePicName = md5(uniqueid()).'.'.$maintenancePic->guessExtension();
+                $warrantyPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $maintenancePicName
+                );
+
+                //contact upload
+                $contactPic = $channel->getFaqContactPic();
+                $contactPicName = md5(uniqueid()).'.'.$contactPic->guessExtension();
+                $contactPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $contactPicName
+                );
+
+                //terms & conditions upload
+                $tandcPic = $channel->getFaqTCPic();
+                $tandcPicName = md5(uniqueid()).'.'.$tandcPic->guessExtension();
+                $tandcPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $tandcPicName
+                );
+
+                /////////////////////////////
+                // Product Features Uploads
+                ////////////////////////////
+
+                //memory foam upload
+                $memoryFoamPic = $channel->getPFmemoryFoamPic();
+                $memoryFoamPicName = md5(uniqueid()).'.'.$memoryFoamPic->guessExtension();
+                $memoryFoamPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $memoryFoamPicName
+                );
+
+                //side picture upload
+                $sidePic = $channel->getPFSidePic();
+                $sidePicName = md5(uniqueid()).'.'.$sidePic->guessExtension();
+                $sidePic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $sidePicName
+                );
+
+                //renewable ersource upload
+                $renewableResourcePic = $channel->getPFRenewResourcewPic();
+                $renewableResourcePicName = md5(uniqueid()).'.'.$renewableResourcePic->guessExtension();
+                $renewableResourcePic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $renewableResourcePicName
+                );
+
+                //semi-open cell structure upload
+                $socsPic = $channel->getPFsocsPic();
+                $socsPicName = md5(uniqueid()).'.'.$socsPic->guessExtension();
+                $socsPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $socsPicName
+                );
+
+                //plant based oils picture
+                $pboPic = $channel->getPFpboPic();
+                $pboPicName = md5(uniqueid()).'.'.$pboPic->guessExtension();
+                $memoryFoamPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $pboPicName
+                );
+
+                //bamboo charcoal upload
+                $bCharcoalPic = $channel->getPFBCharcoalPic();
+                $bCharcoalPicName = md5(uniqueid()).'.'.$bCharcoalPic->guessExtension();
+                $bCharcoalPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $bCharcoalPicName
+                );
+
+                //bamboo fibers upload
+                $bFiberPic = $channel->getPFBFibersPic();
+                $bFiberPicName = md5(uniqueid()).'.'.$bFiberPic->guessExtension();
+                $bFiberPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $bFiberPicName
+                );
+
+                //silk upload
+                $silkPic = $channel->getPFSilkPic();
+                $silkPicName = md5(uniqueid()).'.'.$silkPic->guessExtension();
+                $silkPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $silkPicName
+                );
+
+                //aloe vera picture
+                $aloeVeraPic = $channel->getPFAloeVeraPic();
+                $aloeVeraPicName = md5(uniqueid()).'.'.$aloeVeraPic->guessExtension();
+                $aloeVeraPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $aloeVeraPicName
+                );
 
 
-                //end edit
+                //certified foam picture
+                $certFoamPic = $channel->getPFCertifiedPic();
+                $certFoamPicName = md5(uniqueid()).'.'.$certFoamPic->guessExtension();
+                $certFoamPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $certFoamPicName
+                );
+
+                //OEKO TEX standard upload
+                $oekotexPic = $channel->getPFTexStandPic();
+                $oekotexPicName = md5(uniqueid()).'.'.$oekotexPic->guessExtension();
+                $oekotexPic->move(
+                    $this->getParameter('channel_upload_directory'),
+                    $oekotexPicName
+                );
+
+
+
+
+
+
 
                 $em->persist($channel);
                 $em->flush();

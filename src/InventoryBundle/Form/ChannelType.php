@@ -31,7 +31,32 @@ class ChannelType extends AbstractType
             ->add('frontFooterThree', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Third Footer Box', 'label_attr' => array('class' => 'file-input')))
             ->add('frontFooterText', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Footer Text'))
 
-            ->add('')
+            ->add('faqWarrantyPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Warranty Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('faqUnpackingPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Unpacking Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('faqSupportPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Support Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('faqMaintenancePic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Maintenance Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('faqContactPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Contact Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('faqTCPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Terms & Conditions Picture', 'label_attr' => array('class' => 'file-input')))
+
+            ->add('pFMemoryFoamPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Memory Foam Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFSidePic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Side Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFRenewResourcewPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Renewable Resource Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFsocsPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Semi-Open Cell Structure Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFpboPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Plant Based Oils Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFBCharcoalPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Bamboo Charcoal Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFBFibersPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Bamboo Fibers Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFSilkPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Silk Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFAloeVeraPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Aloe Vera Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFCertifiedPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Certified Foam Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('pFTexStandPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'OEKO TEX STANDARD Picture', 'label_attr' => array('class' => 'file-input')))
+
+            ->add('retailHeaderPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Header Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('retailFirstPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'First Row Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('retailSecondPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Second Row Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('retailThirdPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Third Row Picture', 'label_attr' => array('class' => 'file-input')))
+            ->add('retailFourthPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Fourth Row Picture', 'label_attr' => array('class' => 'file-input')))
+
+
         ;
     }
     
