@@ -124,6 +124,11 @@ class Warehouse
     protected $state;
 
     /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="managed_warehouses")
+     */
+    protected $managers;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouse_1")
      */
     protected $users_1;
@@ -683,6 +688,22 @@ class Warehouse
         $this->management_comp = $managementComp;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getManagers()
+    {
+        return $this->managers;
+    }
+
+    /**
+     * @param mixed $managers
+     */
+    public function setManagers($managers)
+    {
+        $this->managers = $managers;
     }
 
     /**

@@ -76,6 +76,12 @@ class User extends BaseUser
     protected $company_name;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $distributor_fedex_number;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="zip", type="integer", nullable=true)
@@ -211,6 +217,15 @@ class User extends BaseUser
     private $stock_transfers;
 
     /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="managers")
+     * @ORM\JoinTable(name="user_managed_warehouses",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")}
+     * )
+     */
+    protected $managed_warehouses;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustment", mappedBy="user")
      */
     private $stock_adjustments;
@@ -288,6 +303,7 @@ class User extends BaseUser
         parent::__construct();
 
         $this->warranty_claims = new ArrayCollection();
+        $this->managed_warehouses = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
@@ -590,6 +606,24 @@ class User extends BaseUser
     {
         return $this->is_residential;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getManagedWarehouses()
+    {
+        return $this->managed_warehouses;
+    }
+
+    /**
+     * @param mixed $managed_warehouses
+     */
+    public function setManagedWarehouses($managed_warehouses)
+    {
+        $this->managed_warehouses = $managed_warehouses;
+    }
+
+
 
     /**
      * @param mixed $is_residential
@@ -1229,6 +1263,20 @@ class User extends BaseUser
         $this->active_channel = $active_channel;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDistributorFedexNumber()
+    {
+        return $this->distributor_fedex_number;
+    }
 
+    /**
+     * @param mixed $distributor_fedex_number
+     */
+    public function setDistributorFedexNumber($distributor_fedex_number)
+    {
+        $this->distributor_fedex_number = $distributor_fedex_number;
+    }
 
 }

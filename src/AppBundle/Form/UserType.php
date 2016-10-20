@@ -230,6 +230,17 @@ class UserType extends AbstractType
                 'expanded' => true,
             ));
         }
+        if($user->hasRole('ROLE_WAREHOUSE')) {
+            $form->add('managed_warehouses', EntityType::class, array(
+                'class' => 'WarehouseBundle\Entity\Warehouse',
+                'label' => 'Managed Warehouses',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 150px; '),
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+            ));
+        }
         if ($user->hasRole('ROLE_SALES_REP')) {
             $form->add('distributors', EntityType::class, array(
                 'class' => 'AppBundle\Entity\User',
