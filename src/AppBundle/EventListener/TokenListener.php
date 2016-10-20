@@ -33,6 +33,7 @@ class TokenListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
+
         $request = $event->getRequest();
         $route  = $request->attributes->get('_route');
 
@@ -40,6 +41,8 @@ class TokenListener
             '404',
             '_wdt',
             'fos_user_security_logout',
+            'retailer_affiliates_get_users',
+            'retailer_affiliates',
             'fos_user_security_login',
             'fos_user_registration_register',
             'fos_user_security_check',
