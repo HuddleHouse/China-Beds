@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 /**
  * OrderProductVariant
@@ -13,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="orders_shipping_labels")
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
+ * @Assert\Callback(methods={"isFileUploadedOrExists"})
  */
 class OrdersShippingLabel
 {
@@ -114,7 +117,7 @@ class OrdersShippingLabel
     {
         return null === $this->path
             ? null
-            : $this->getUploadDir() . '/' . $this->path;
+            : $this->path;
     }
 
     protected function getUploadRootDir()
