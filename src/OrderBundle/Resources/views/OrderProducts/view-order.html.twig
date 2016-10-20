@@ -432,7 +432,9 @@
                                 <li>Tracking:
                                     <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
                                         {{ label.trackingNumber }}
-                                    </a> -
+                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') ==1  %}
+                                    -
                                     <a class="btn btn-raised btn-default btn-sm" href="/{{ label.webPath }}" download>
                                         <i class="fa fa-download" aria-hidden="true"></i>
                                         Download Label

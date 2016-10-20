@@ -211,6 +211,11 @@ class User extends BaseUser
     private $stock_transfers;
 
     /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\Warehouse", mappedBy="managers")
+     */
+    private $managed_warehouses;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustment", mappedBy="user")
      */
     private $stock_adjustments;
@@ -256,6 +261,12 @@ class User extends BaseUser
     private $my_sales_rep;
 
     /**
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="dis", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
+     */
+    private $my_sales_rep;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
      */
     private $sales_reps;
@@ -288,6 +299,7 @@ class User extends BaseUser
         parent::__construct();
 
         $this->warranty_claims = new ArrayCollection();
+        $this->managed_warehouses = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
@@ -590,6 +602,24 @@ class User extends BaseUser
     {
         return $this->is_residential;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getManagedWarehouses()
+    {
+        return $this->managed_warehouses;
+    }
+
+    /**
+     * @param mixed $managed_warehouses
+     */
+    public function setManagedWarehouses($managed_warehouses)
+    {
+        $this->managed_warehouses = $managed_warehouses;
+    }
+
+
 
     /**
      * @param mixed $is_residential
