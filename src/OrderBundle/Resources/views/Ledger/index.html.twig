@@ -107,7 +107,7 @@
                             <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
                             {#<td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>#}
                             <td id="description">{% if ledger.description is not null %}<span>Click to expand</span>{% endif %}</td>
-                            {% if user.hasRole('ROLE_ADMIN') %}<td>{{ ledger.achRequested ? "SENT" : "PENDING" }}</td>{% endif %}
+                            {% if user.hasRole('ROLE_ADMIN') %}<td>{% if ledger.type|upper == 'CREDIT"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% endif %}</td>{% endif %}
                             <td>
                         {% if app.user.hasRole('ROLE_ADMIN') and ledger.type|upper == 'CREDIT' and not ledger.achRequested %}
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
