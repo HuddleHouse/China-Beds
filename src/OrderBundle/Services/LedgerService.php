@@ -10,6 +10,9 @@ namespace OrderBundle\Services;
 
 use AppBundle\Entity\User;
 use InventoryBundle\Entity\Channel;
+use Nacha\Batch;
+use Nacha\File;
+use Nacha\Record\DebitEntry;
 use OrderBundle\Entity\Ledger;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
@@ -107,5 +110,55 @@ class LedgerService
             return $ledger->toArray();
 
         return $ledger;
+    }
+
+    public function generatePendingNACHAFile() {
+
+
+        $file = new File();
+        $file->getHeader()->setPriorityCode(1)
+            ->setImmediateDestination('051000017')
+            ->setImmediateOrigin('1275135100')
+            ->setFileCreationDate(date("ymd"))
+            ->setFileCreationTime(date("Hi"))
+            ->setFormatCode('1')
+            ->setImmediateDestinationName('BANK OF AMERICA')
+            ->setImmediateOriginName('CHINA BEDS DIRECT LLC')
+            ->setReferenceCode(date("YmdHis"));
+
+        foreach($this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->findAll() as $channel) {
+            // Create a batch and add some entries
+            $batch = new Batch();
+            $batch->getHeader()
+                ->setCompanyId($channel->getAchCompanyId())
+                ->setCompanyName($channel->getAchCompanyName())
+                ->setCompanyEntryDescription('ECHECKPAY')
+                ->setEffectiveEntryDate(date('ymd'))
+                ->setOriginatingDFiId($channel->getAchOriginatingDfi());
+
+            foreach($this->getDoctrine()->getManager()->getRepository('OrderBundle:Ledger')->findBy(['type' => Ledger::TYPE_CREDIT, 'achRequested' => false, 'channel' => $channel]) as $entry) {
+                $receiving_dfi = substr($entry->getSubmittedForUser()->getAchRoutingNumber(), 0, 8);
+                $check_digit = substr($entry->getSubmittedForUser()->getAchRoutingNumber(), 8, 1);
+                $batch->addDebitEntry(
+                    (new DebitEntry())
+                        ->setTransactionCode(27)
+                        ->setReceivingDfiId($receiving_dfi)
+                        ->setCheckDigit($check_digit)
+                        ->setDFiAccountNumber($entry->getSubmittedForUser()->getAchAccountNumber())
+                        ->setAmount($entry->getAmountRequested())
+                        ->setIndividualId(str_pad($entry->getSubmittedForUser()->getId(), 10, 0, STR_PAD_LEFT))
+                        ->setIdividualName($entry->getSubmittedForUser()->getCompanyName() ? $entry->getSubmittedForUser()->getCompanyName() : $entry->getSubmittedForUser()->getName())
+                        ->setDiscretionaryData('S')
+                        ->setAddendaRecordIndicator(0)
+                        ->setTraceNumber(substr(time(), -8), 15)
+                );
+            }
+
+            $file->addBatch($batch);
+        }
+
+        $output = (string)$file;
+        echo $output;
+
     }
 }
