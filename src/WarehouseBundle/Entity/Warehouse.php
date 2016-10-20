@@ -124,8 +124,7 @@ class Warehouse
     protected $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="managed_warehouses")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="managed_warehouses")
      */
     protected $managers;
 

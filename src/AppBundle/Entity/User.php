@@ -211,9 +211,13 @@ class User extends BaseUser
     private $stock_transfers;
 
     /**
-     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\Warehouse", mappedBy="managers")
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="managers")
+     * @ORM\JoinTable(name="user_managed_warehouses",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")}
+     * )
      */
-    private $managed_warehouses;
+    protected $managed_warehouses;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustment", mappedBy="user")
