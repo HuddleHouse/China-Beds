@@ -129,7 +129,7 @@ class Ledger
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="integer", length=255)
+     * @ORM\Column(name="email", type="integer", length=255, nullable=true)
      */
     private $email;
 
