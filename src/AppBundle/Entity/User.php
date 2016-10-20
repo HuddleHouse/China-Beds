@@ -261,12 +261,6 @@ class User extends BaseUser
     private $my_sales_rep;
 
     /**
-     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="dis", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
-     */
-    private $my_sales_rep;
-
-    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
      */
     private $sales_reps;
