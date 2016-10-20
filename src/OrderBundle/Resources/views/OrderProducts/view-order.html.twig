@@ -281,8 +281,7 @@
                     <br>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    {#<b>Payment Due:</b> 2/22/2014<br>#}
-                    {#<b>Account:</b> 968-34567#}
+
                 </div>
                 <!-- /.col -->
             </div>
@@ -426,8 +425,28 @@
                     </p>
                 </div>
                 <div class="col-md-6">
+                    {% if order.status.name == 'Paid' or order.status.name == 'Shipped' %}
+                        <h4>Shipping Info/ Tracking Numbers</h4>
+                        <ul>
+                            {% for label in order.shippingLabels %}
+                                <li>Tracking:
+                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
+                                        {{ label.trackingNumber }}
+                                    </a> -
+                                    <a class="btn btn-raised btn-default btn-sm" href="/{{ label.webPath }}" download>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                        Download Label
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+
                     {% if order.isPickUp == 0 and is_granted('ROLE_ADMIN') == 0 and is_granted('ROLE_SALES_MANAGER') == 0 and is_granted('ROLE_SALES_REP') == 0 %}
-                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        {% if order.status.name != 'Paid' %}
+                            <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        {% endif %}
                     {% elseif order.isPickUp == 1 %}
                     <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                     <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>

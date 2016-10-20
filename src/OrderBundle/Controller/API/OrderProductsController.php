@@ -303,7 +303,7 @@ class OrderProductsController extends Controller
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
         $type = $request->request->get('type');
 
-        $this->generateShippingLabels($order);
+        $order = $this->generateShippingLabels($order);
 
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
@@ -331,15 +331,20 @@ class OrderProductsController extends Controller
 
     private function generateShippingLabels(Orders $orders) {
         $em = $this->getDoctrine()->getManager();
-        $numProdVariants = count($orders->getProductVariants());
+        $numProdVariants = 0; //count($orders->getProductVariants());
         foreach($orders->getProductVariants() as $variant)
             $numProdVariants += $variant->getQuantity();
+
+        foreach($orders->getShippingLabels() as $label)
+            $em->remove($label);
+
+        $em->persist($orders);
 
         $shipmentId = '';
         $count = 0;
 
         foreach($orders->getProductVariants() as $variant) {
-            for ($x = 0; $x <= $variant->getQuantity(); $x++) {
+            for ($x = 0; $x < $variant->getQuantity(); $x++) {
                 $count++;
                 $shipment = new \RocketShipIt\Shipment('fedex');
 
@@ -374,7 +379,7 @@ class OrderProductsController extends Controller
                     $response = $shipment->submitShipment();
                 }
                 catch(\Exception $e) {
-                    return $e;
+                    return JsonResponse::create(false);
                 }
 
                 if($count == 1)
@@ -392,13 +397,17 @@ class OrderProductsController extends Controller
                 $orders->getShippingLabels()->add($orderShippingLabel);
                 $em->persist($orders);
 
-                if($count == $numProdVariants)
+                if($count == $numProdVariants) {
                     $charges = $response['charges'];
+                    $orders->setEstimatedShipping($orders->getShipping());
+                    $orders->setShipping($charges);
+                }
+
             }
         }
 
         $em->flush();
-
+        return $orders;
     }
 
     /**
