@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -435,6 +436,14 @@ class User extends BaseUser
             $user_groups[$group->getName()] = $group->getId(). ", ";
 
         return $user_groups;
+    }
+
+    public function canManageWarehouse(Warehouse $warehouse){
+        foreach($this->managed_warehouses as $ware) {
+            if($ware->getName() == $warehouse->getName())
+                return true;
+        }
+        return false;
     }
 
     public function setInvitation(Invitation $invitation)
