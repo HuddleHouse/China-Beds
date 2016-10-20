@@ -76,6 +76,12 @@ class User extends BaseUser
     protected $company_name;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $distributor_fedex_number;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="zip", type="integer", nullable=true)
@@ -1257,6 +1263,20 @@ class User extends BaseUser
         $this->active_channel = $active_channel;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDistributorFedexNumber()
+    {
+        return $this->distributor_fedex_number;
+    }
 
+    /**
+     * @param mixed $distributor_fedex_number
+     */
+    public function setDistributorFedexNumber($distributor_fedex_number)
+    {
+        $this->distributor_fedex_number = $distributor_fedex_number;
+    }
 
 }
