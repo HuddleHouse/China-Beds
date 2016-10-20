@@ -253,4 +253,26 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         }
         return $users;
     }
+
+    /**
+     * @param User $admin
+     * @return array
+     */
+    public function findDR(User $admin) {
+        $em = $this->getEntityManager();
+
+        if($admin->hasRole('ROLE_ADMIN') || $admin->hasRole('ROLE_WAREHOUSE')) {
+            $users = $em->getRepository('AppBundle:User')->findAll();
+            $usersToShow = array();
+            foreach($users as $user){
+                if($user->hasRole('ROLE_DISTRIBUTOR') || $user->hasRole('RETAILER')){
+                    $usersToShow[] = $user;
+                }
+            }
+            return $usersToShow;
+        }
+
+    }
+
+
 }
