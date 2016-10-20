@@ -303,7 +303,6 @@ class OrderProductsController extends Controller
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
         $type = $request->request->get('type');
 
-        $order = $this->generateShippingLabels($order);
 
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
@@ -311,12 +310,18 @@ class OrderProductsController extends Controller
             $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
+            $order = $this->generateShippingLabels($order);
         }
         else if($payment_type == 'cc' && $type == 'complete') {
             $cc = $request->request->get('cc');
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
             // Charge CC here
+
+
+
+
+            $order = $this->generateShippingLabels($order);
         }
         else if($type == 'admin' && $payment_type == '') {
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
@@ -344,18 +349,25 @@ class OrderProductsController extends Controller
         $count = 0;
 
         foreach($orders->getProductVariants() as $variant) {
-            for ($x = 0; $x < $variant->getQuantity(); $x++) {
+            foreach($variant->getWarehouseInfo() as $info) {
                 $count++;
                 $shipment = new \RocketShipIt\Shipment('fedex');
 
-                $shipment->setParameter('toCompany', 'John Doe');
-                $shipment->setParameter('toName', 'John Doe');
-                $shipment->setParameter('toPhone', '1231231234');
-                $shipment->setParameter('toAddr1', '111 W Legion');
-                $shipment->setParameter('toCity', 'Whitehall');
-                $shipment->setParameter('toState', 'MT');
-                $shipment->setParameter('toCode', '59759');
+                $shipment->setParameter('toCompany', $orders->getShipName());
+                $shipment->setParameter('toName', $orders->getShipName());
+                $shipment->setParameter('toPhone', $orders->getShipPhone());
+                $shipment->setParameter('toAddr1', $orders->getShipAddress());
+                if($orders->getShipAddress2() != '')
+                    $shipment->setParameter('toAddr2', $orders->getShipAddress());
+                $shipment->setParameter('toCity', $orders->getShipCity());
+                $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
+                $shipment->setParameter('toCode', $orders->getShipZip());
 
+                /*
+                 * THis needs to change once warehouses have addresses.
+                 *
+                 * They also need to add the fedex numbers of Distributors when applicable..
+                 */
                 $shipment->setParameter('shipAddr1', '7505 Lawford Rd.');
                 $shipment->setParameter('shipCity', 'Knoxville');
                 $shipment->setParameter('shipState', 'TN');
