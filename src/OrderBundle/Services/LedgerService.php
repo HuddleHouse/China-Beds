@@ -15,6 +15,7 @@ use Nacha\File;
 use Nacha\Record\DebitEntry;
 use OrderBundle\Entity\Ledger;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use phpseclib\Net\SFTP;
 
 /**
  * Class LedgerService
@@ -112,7 +113,7 @@ class LedgerService
         return $ledger;
     }
 
-    public function generatePendingNACHAFile() {
+    public function generatePendingNACHAFile($filename) {
 
 
         $file = new File();
@@ -158,7 +159,27 @@ class LedgerService
         }
 
         $output = (string)$file;
-        echo $output;
+        file_put_contents($filename, $output);
+    }
+
+    public function uploadNACHAFile($filename) {
+        switch($this->container->get('kernel')->getEnvironment()) {
+            default:
+            case 'dev':
+                $host = $this->container->getParameter('nacha.uat.host');
+                $user = $this->container->getParameter('nacha.uat.user');
+                $pass = $this->container->getParameter('nacha.uat.pass');
+
+        }
+
+        $sftp = new SFTP($host);
+        if ( !$sftp->login($user, $pass) ) {
+            die('Login Failed');
+        }
+
+        $sftp->put('/' . basename($filename), $filename);
+
+        return true;
 
     }
 }
