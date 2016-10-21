@@ -20,11 +20,8 @@ class RetailerController extends Controller
     public function affiliatesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:User')->findAll();
 
-        return $this->render('AppBundle:Retailer:affiliates.html.twig', array(
-            'users' => $users
-        ));
+        return $this->render('AppBundle:Retailer:affiliates.html.twig');
     }
 
           /**
@@ -35,9 +32,14 @@ class RetailerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $users = $em->getRepository('AppBundle:User')->findAll();
 
-
+        $userObjects = array();
+        foreach ($users as $user) {
+          if($user->hasRole('ROLE_RETAILER')) {
+            $userObjects[]  = $user;
+          }
+        }
         return $this->render('AppBundle:Retailer:users.html.twig', array(
-            'users' => $users
+            'users' => $userObjects
         ));
     }
 }
