@@ -5,6 +5,7 @@ namespace WarehouseBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\OrdersProductVariant;
 use OrderBundle\Entity\OrdersWarehouseInfo;
 
@@ -49,7 +50,7 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="address_1", type="string", length=255)
+     * @ORM\Column(name="address_1", type="string", length=255, nullable=true)
      */
     private $address1;
 
@@ -63,28 +64,28 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="list_id", type="string", length=255)
+     * @ORM\Column(name="list_id", type="string", length=255, nullable=true)
      */
     private $list_id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="contact", type="string", length=255)
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
      */
     private $contact;
     
@@ -98,21 +99,21 @@ class Warehouse
     /**
      * @var string
      *
-     * @ORM\Column(name="manager_name", type="string", length=255)
+     * @ORM\Column(name="manager_name", type="string", length=255, nullable=true)
      */
     private $manager_name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="management_comp", type="string", length=255)
+     * @ORM\Column(name="management_comp", type="string", length=255, nullable=true)
      */
     private $management_comp;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email_2", type="string", length=255)
+     * @ORM\Column(name="email_2", type="string", length=255, nullable=true)
      */
     private $email_2;
 
@@ -121,6 +122,11 @@ class Warehouse
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="managed_warehouses")
+     */
+    protected $managers;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouse_1")
@@ -248,6 +254,15 @@ class Warehouse
     public function getChannels()
     {
         return $this->channels;
+    }
+
+    public function belongsToChannel(Channel $channel) {
+        foreach($this->getChannels() as $chan) {
+            if ( $channel->getId() == $chan->getId() ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -673,6 +688,22 @@ class Warehouse
         $this->management_comp = $managementComp;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getManagers()
+    {
+        return $this->managers;
+    }
+
+    /**
+     * @param mixed $managers
+     */
+    public function setManagers($managers)
+    {
+        $this->managers = $managers;
     }
 
     /**

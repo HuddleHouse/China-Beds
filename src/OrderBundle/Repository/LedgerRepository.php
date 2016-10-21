@@ -26,7 +26,7 @@ class LedgerRepository extends EntityRepository
             $ledgers[] = $item;
 
         if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE')) {
-            $ledgers = $this->findAll();
+            $ledgers = $this->findBy(['channel' => $user->getActiveChannel()]);
         }
         else {
 
@@ -34,7 +34,7 @@ class LedgerRepository extends EntityRepository
                 foreach($user->getRetailers() as $retailer) {
                     if(!isset($user_ids[$retailer->getId()])) {
                         $user_ids[$retailer->getId()] = $retailer->getId();
-                        $data = $this->findBy(array('submittedForUser' => $retailer));
+                        $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $ledgers[] = $item;
                     }
@@ -44,14 +44,14 @@ class LedgerRepository extends EntityRepository
                 foreach($user->getDistributors() as $distributor) {
                     if(!isset($user_ids[$distributor->getId()])) {
                         $user_ids[$distributor->getId()] = $distributor->getId();
-                        $data = $this->findBy(array('submittedForUser' => $distributor));
+                        $data = $this->findBy(array('submittedForUser' => $distributor, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $ledgers[] = $item;
                     }
                     foreach($distributor->getRetailers() as $retailer) {
                         if(!isset($user_ids[$retailer->getId()])) {
                             $user_ids[$retailer->getId()] = $retailer->getId();
-                            $data = $this->findBy(array('submittedForUser' => $retailer));
+                            $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $ledgers[] = $item;
                         }
@@ -62,21 +62,21 @@ class LedgerRepository extends EntityRepository
                 foreach($user->getSalesReps() as $salesRep) {
                     if(!isset($user_ids[$salesRep->getId()])) {
                         $user_ids[$salesRep->getId()] = $salesRep->getId();
-                        $data = $this->findBy(array('submittedForUser' => $salesRep));
+                        $data = $this->findBy(array('submittedForUser' => $salesRep, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $ledgers[] = $item;
                     }
                     foreach($salesRep->getDistributors() as $distributor) {
                         if(!isset($user_ids[$distributor->getId()])) {
                             $user_ids[$distributor->getId()] = $distributor->getId();
-                            $data = $this->findBy(array('submittedForUser' => $distributor));
+                            $data = $this->findBy(array('submittedForUser' => $distributor, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $ledgers[] = $item;
                         }
                         foreach($distributor->getRetailers() as $retailer) {
                             if(!isset($user_ids[$retailer->getId()])) {
                                 $user_ids[$retailer->getId()] = $retailer->getId();
-                                $data = $this->findBy(array('submittedForUser' => $retailer));
+                                $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                                 foreach($data as $item)
                                     $ledgers[] = $item;
                             }

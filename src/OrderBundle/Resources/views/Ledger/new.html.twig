@@ -1,9 +1,7 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}New {{ channel.name }} Credit Request{% endblock %}
-{% block page_title %}
-    New {{ channel.name }} Credit Request
-{% endblock page_title %}
+{% block title %}New Ledger Fund Request{% endblock %}
+{% block page_title %}New Ledger Fund Request{% endblock page_title %}
 
 {% block page_name %}
     <a href="{{ path('ledger_index') }}">< Back to the list</a>
@@ -70,11 +68,12 @@
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_label(form.description) }} <span id="charNum"
+                                                             style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.description) }}
                 </div>
             </div>
-            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            <input class="btn btn-raised btn-success" type="submit" value="Request"/>
             {{ form_end(form) }}
         </div>
     </div>

@@ -10,3 +10,8 @@ services:
         arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: creditrequest_type }
+    form.type.addcredit:
+        class: OrderBundle\Form\NewCreditType
+        arguments: ["@security.token_storage","@doctrine.orm.default_entity_manager"]
+        tags:
+            - { name: form.type, alias: newcredit_type }

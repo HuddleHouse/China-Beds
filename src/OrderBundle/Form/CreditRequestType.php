@@ -46,7 +46,6 @@ class CreditRequestType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $user = $this->tokenStorage->getToken();
 
         $builder

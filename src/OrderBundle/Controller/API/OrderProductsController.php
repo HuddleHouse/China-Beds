@@ -5,7 +5,9 @@ namespace OrderBundle\Controller\API;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
+use OrderBundle\Entity\OrdersShippingLabel;
 use OrderBundle\Entity\OrdersWarehouseInfo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -154,25 +156,31 @@ class OrderProductsController extends Controller
      */
     private function calculateShipping(Orders $order) {
         $rate = new \RocketShipIt\Rate('fedex');
-        $rate->setParameter('toCode', $order->getShipZip());
+        $rate->setParameter('toCode', '59759');
+        $rate->setParameter('shipCode', '37919');
+//        $shipment->setParameter('toCode', '59759');
         $rate->setParameter('residentialAddressIndicator','1');
         $rate->setParameter('service', 'GROUND_HOME_DELIVERY');
 
         foreach($order->getProductVariants() as $productVariant) {
-            $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
-            $package = new \RocketShipIt\Package('fedex');
-            $package->setParameter('length', "$dimensions[0]");
-            $package->setParameter('width', "$dimensions[1]");
-            $package->setParameter('height', "$dimensions[2]");
-            $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
-            $rate->addPackageToShipment($package);
+            for ($x = 0; $x <= $productVariant->getQuantity(); $x++) {
+                $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+                $package = new \RocketShipIt\Package('fedex');
+
+
+                $package->setParameter('length', "$dimensions[0]");
+                $package->setParameter('width', "$dimensions[1]");
+                $package->setParameter('height', "$dimensions[2]");
+                $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
+                $rate->addPackageToShipment($package);
+            }
         }
 
 
         $response = $rate->getSimpleRates();
         $data = array_pop($response);
 
-        //if $data['rate'] isn't there then they are only ordering pop items, which the shipping for them is on the entity.
+        //if $data['rate'] isn't there then they are only ordering pop items, which the shipping for them is free.
         if(!isset($data['rate'])) {
             $data = array();
             $data['rate'] = 0;
@@ -189,52 +197,46 @@ class OrderProductsController extends Controller
         return $data;
     }
 
-    /**
-     * @Route("/api_create_shipping_label", name="api_create_shipping_label")
-     * @param Request $request
-     */
-    public function makeShippingLabel(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $order_id = $request->request->get('order_id');
-        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
-
-        $shipment = new \RocketShipIt\Shipment('fedex');
-
-
-
-        $shipment->setParameter('toCode', $order->getShipZip());
-//        $shipment->setParameter('residentialAddressIndicator','1');
-        $shipment->setParameter('service', 'GROUND_HOME_DELIVERY');
-        $shipment->setParameter('toCompany', 'John Doe');
-        $shipment->setParameter('toName', 'John Doe');
-        $shipment->setParameter('toPhone', '1231231234');
-        $shipment->setParameter('toAddr1', '111 W Legion');
-        $shipment->setParameter('toCity', 'Knoxville');
-        $shipment->setParameter('toState', 'TN');
-        $shipment->setParameter('toCode', '37919');
-
-        foreach($order->getProductVariants() as $productVariant) {
-            $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
-            $package = new \RocketShipIt\Package('fedex');
-            $package->setParameter('length', "$dimensions[0]");
-            $package->setParameter('width', "$dimensions[1]");
-            $package->setParameter('height', "$dimensions[2]");
-            $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
-            $shipment->addPackageToShipment($package);
-        }
-
-        $response = $shipment->submitShipment();
-
-        if (isset($response['error']) && $response['error'] != '') {
-            // Something went wrong, show debug information
-            echo $shipment->debug();
-        } else {
-            // Create label as a file
-            $fole = base64_decode($response['pkgs'][0]['label_img']);
-            file_put_contents('label.png', base64_decode($response['pkgs'][0]['label_img']));
-            return JsonResponse::create($response); // display response
-        }
-    }
+//    /**
+//     * @Route("/api_create_shipping_label", name="api_create_shipping_label")
+//     * @param Request $request
+//     */
+//    public function makeShippingLabel(Request $request) {
+//        $em = $this->getDoctrine()->getManager();
+//        $order_id = $request->request->get('order_id');
+//        $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+//
+//        $shipment = new \RocketShipIt\Shipment('fedex');
+//
+//        $shipment->setParameter('toCode', $order->getShipZip());
+////        $shipment->setParameter('residentialAddressIndicator','1');
+//        $shipment->setParameter('service', 'GROUND_HOME_DELIVERY');
+//        $shipment->setParameter('toCompany', 'John Doe');
+//        $shipment->setParameter('toName', 'John Doe');
+//        $shipment->setParameter('toPhone', '1231231234');
+//        $shipment->setParameter('toAddr1', '111 W Legion');
+//        $shipment->setParameter('toCity', 'Knoxville');
+//        $shipment->setParameter('toState', 'TN');
+//        $shipment->setParameter('toCode', '37919');
+//
+//        $shipment->setParameter('length', '5');
+//        $shipment->setParameter('width', '5');
+//        $shipment->setParameter('height', '5');
+//        $shipment->setParameter('weight','25');
+//
+//        $response = $shipment->submitShipment();
+//
+//        if (isset($response['error']) && $response['error'] != '') {
+//            // Something went wrong, show debug information
+//            echo $shipment->debug();
+//        } else {
+//            // Create label as a file
+//            $fole = base64_decode($response['pkgs'][0]['label_img']);
+//            file_put_contents('label.png', base64_decode($response['pkgs'][0]['label_img']));
+//            return JsonResponse::create($response); // display response
+//        }
+//        return JsonResponse::create(true);
+//    }
 
 
 
@@ -299,28 +301,125 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $order_id = $request->request->get('order_id');
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
+        $type = $request->request->get('type');
 
 
         $payment_type = $request->request->get('payment_type');
-        if($payment_type == 'ledger') {
+        if($payment_type == 'ledger' && $type == 'complete') {
             $ledger_service = $this->get('order.ledger');
             $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+            $order->setAmountPaid($order->getTotal());
+            $order = $this->generateShippingLabels($order);
         }
-        else if($payment_type == 'cc') {
+        else if($payment_type == 'cc' && $type == 'complete') {
             $cc = $request->request->get('cc');
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+            $order->setAmountPaid($order->getTotal());
             // Charge CC here
+
+
+
+
+            $order = $this->generateShippingLabels($order);
         }
-
-
-
-        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+        else if($type == 'admin' && $payment_type == '') {
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+        }
 
         $order->setStatus($status);
         $order->setPaymentType($payment_type);
-        $order->setAmountPaid($order->getTotal());
         $em->persist($order);
         $em->flush();
         return JsonResponse::create(true);
+    }
+
+    private function generateShippingLabels(Orders $orders) {
+        $em = $this->getDoctrine()->getManager();
+        $numProdVariants = 0; //count($orders->getProductVariants());
+        foreach($orders->getProductVariants() as $variant)
+            $numProdVariants += $variant->getQuantity();
+
+        foreach($orders->getShippingLabels() as $label)
+            $em->remove($label);
+
+        $em->persist($orders);
+
+        $shipmentId = '';
+        $count = 0;
+
+        foreach($orders->getProductVariants() as $variant) {
+            foreach($variant->getWarehouseInfo() as $info) {
+                $count++;
+                $shipment = new \RocketShipIt\Shipment('fedex');
+
+                $shipment->setParameter('toCompany', $orders->getShipName());
+                $shipment->setParameter('toName', $orders->getShipName());
+                $shipment->setParameter('toPhone', $orders->getShipPhone());
+                $shipment->setParameter('toAddr1', $orders->getShipAddress());
+                if($orders->getShipAddress2() != '')
+                    $shipment->setParameter('toAddr2', $orders->getShipAddress());
+                $shipment->setParameter('toCity', $orders->getShipCity());
+                $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
+                $shipment->setParameter('toCode', $orders->getShipZip());
+
+                /*
+                 * THis needs to change once warehouses have addresses.
+                 *
+                 * They also need to add the fedex numbers of Distributors when applicable..
+                 */
+                $shipment->setParameter('shipAddr1', '7505 Lawford Rd.');
+                $shipment->setParameter('shipCity', 'Knoxville');
+                $shipment->setParameter('shipState', 'TN');
+                $shipment->setParameter('shipCode', '37919');
+                $shipment->setParameter('shipPhone', '1231231234');
+
+                $shipment->setParameter('packageCount', $numProdVariants);
+                $shipment->setParameter('sequenceNumber', $count);
+
+                if($count != 1)
+                    $shipment->setParameter('shipmentIdentification', $shipmentId);
+
+                $dimensions = explode('x', $variant->getProductVariant()->getFedexDimensions());
+
+                $shipment->setParameter('length', $dimensions[0]);
+                $shipment->setParameter('width', $dimensions[1]);
+                $shipment->setParameter('height', $dimensions[2]);
+                $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
+
+                try {
+                    $response = $shipment->submitShipment();
+                }
+                catch(\Exception $e) {
+                    return JsonResponse::create(false);
+                }
+
+                if($count == 1)
+                    $shipmentId = $response['trk_main'];
+
+                $path = 'uploads/shipping/'.$response['pkgs'][0]['pkg_trk_num'].'.png';
+                file_put_contents($path, base64_decode($response['pkgs'][0]['label_img']));
+
+                $orderShippingLabel = new OrdersShippingLabel();
+                $orderShippingLabel->setPath($path);
+                $orderShippingLabel->setOrder($orders);
+                $orderShippingLabel->setTrackingNumber($response['pkgs'][0]['pkg_trk_num']);
+                $em->persist($orderShippingLabel);
+
+                $orders->getShippingLabels()->add($orderShippingLabel);
+                $em->persist($orders);
+
+                if($count == $numProdVariants) {
+                    $charges = $response['charges'];
+                    $orders->setEstimatedShipping($orders->getShipping());
+                    $orders->setShipping($charges);
+                }
+
+            }
+        }
+
+        $em->flush();
+        return $orders;
     }
 
     /**

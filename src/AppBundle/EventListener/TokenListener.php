@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Controller\TraceableControllerResolver;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Bundle\TwigBundle\TwigEngine;
@@ -18,14 +19,12 @@ class TokenListener
     protected $token_storage;
     protected $templating;
     protected $router;
-    protected $resolver;
-    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, ControllerResolver $resolver, Session $session)
+    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, Session $session)
     {
         $this->em = $em;
         $this->token_storage = $token_storage;
         $this->templating = $templating;
         $this->router = $router;
-        $this->resolver = $resolver;
         $this->session = $session;
     }
 
@@ -57,6 +56,7 @@ class TokenListener
             'adjustables'
         ); //These are excluded routes. These are always allowed. Required for login page
 
+        $user = $this->token_storage->getToken() ? $this->token_storage->getToken()->getUser() : null;
 
         if(!is_int(array_search($route, $routeArr)) && $route != null) //This is for excluding routes that you don't want to check for.
         {
@@ -64,7 +64,6 @@ class TokenListener
                 $route_names = explode(',', $this->session->get('route_names'));
             }
             else {
-                $user = $this->token_storage->getToken()->getUser();
                 if (!$user || $user === 'anon.') {
                     $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_login', array())));
                     return;
@@ -87,6 +86,28 @@ class TokenListener
             {
                 //A matching role and route was not found so we do not give access to the user here and redirect to another page.
                 $event->setResponse(new RedirectResponse($this->router->generate('404')));
+            }
+        }
+
+        if ( $user && $user != 'anon.') {
+            $authorized = false;
+            if ( $current_channel = $this->session->get('active_channel') ) {
+                // make sure user has access to channel
+                foreach($user->getUserChannels() as $channel) {
+                    if ( !$authorized && ($channel->getId() == $current_channel->getId()) ) {
+                        $authorized = true;
+                        $user->setActiveChannel($current_channel);
+                    }
+                }
+            }
+
+            if ( !$authorized ) {
+                if ( $current_channel = $user->getUserChannels()->first() ) {
+                    $this->session->set('active_channel', $current_channel);
+                    $user->setActiveChannel($current_channel);
+                } else {
+                    $event->setResponse(new RedirectResponse($this->router->generate('401')));
+                }
             }
         }
     }

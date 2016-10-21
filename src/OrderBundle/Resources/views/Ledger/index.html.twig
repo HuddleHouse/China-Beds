@@ -87,9 +87,9 @@
                         <th>Date Created</th>
                         <th>Submitted by</th>
                         <th>On Behalf of</th>
-                        <th>ACH</th>
+                        {#<th>ACH</th>#}
                         <th>Description</th>
-                        {% if user.hasRole('ROLE_ADMIN') %}<th>Channel</th>{% endif %}
+                        {% if user.hasRole('ROLE_ADMIN') %}<th>ACH STATUS</th>{% endif %}
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -105,15 +105,13 @@
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
                             <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
                             <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
-                            <td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>
-                            {% if ledger.description is not null %}<td id="description"><span>Click to expand</span></td>
-                            {% else %} <td>--</td> {% endif %}
-                            {% if user.hasRole('ROLE_ADMIN') %}<td>{{ ledger.channel.name | default('--') }}</td>{% endif %}
+                            {#<td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>#}
+                            <td id="description">{% if ledger.description is not null %}<span>Click to expand</span>{% endif %}</td>
+                            {% if user.hasRole('ROLE_ADMIN') %}<td>{% if ledger.type|upper == 'CREDIT"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% endif %}</td>{% endif %}
                             <td>
-                                {#{% if app.user.hasRole('ROLE_ADMIN') %}#}
-                                {#<a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_show', { 'id': ledger.id }) }}">Show</a>#}
-                                {#{% endif %}#}
+                        {% if app.user.hasRole('ROLE_ADMIN') and ledger.type|upper == 'CREDIT' and not ledger.achRequested %}
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
+                        {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
