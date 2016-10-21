@@ -41,7 +41,6 @@ services:
             token_storage: "@security.token_storage"
             templating: "@templating"
             router: "@router"
-            resolver: "@controller_resolver"
             session: "@session"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

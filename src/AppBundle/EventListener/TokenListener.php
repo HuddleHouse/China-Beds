@@ -19,14 +19,12 @@ class TokenListener
     protected $token_storage;
     protected $templating;
     protected $router;
-    protected $resolver;
-    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, TraceableControllerResolver $resolver, Session $session)
+    public function __construct($em,TokenStorageInterface $token_storage, TwigEngine $templating, Router $router, Session $session)
     {
         $this->em = $em;
         $this->token_storage = $token_storage;
         $this->templating = $templating;
         $this->router = $router;
-        $this->resolver = $resolver;
         $this->session = $session;
     }
 
