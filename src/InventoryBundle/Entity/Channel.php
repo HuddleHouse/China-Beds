@@ -32,6 +32,13 @@ class Channel
     /**
      * @var string
      *
+     * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
+     */
+    private $company_name;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="url", type="string", length=255)
      */
     private $url;
@@ -120,6 +127,24 @@ class Channel
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        if($this->company_name != null)
+            return $this->company_name;
+        return $this->name;
+    }
+
+    /**
+     * @param string $company_name
+     */
+    public function setCompanyName($company_name)
+    {
+        $this->company_name = $company_name;
     }
 
     /**

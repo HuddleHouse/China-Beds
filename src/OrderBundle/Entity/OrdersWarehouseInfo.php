@@ -69,7 +69,7 @@ class OrdersWarehouseInfo
      *
      * @param integer $quantity
      *
-     * @return OrderProductVariant
+     * @return OrdersProductVariant
      */
     public function setQuantity($quantity)
     {
