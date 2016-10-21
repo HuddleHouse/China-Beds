@@ -213,7 +213,7 @@ class OrderProductsController extends Controller
 
         foreach($order->getProductVariants() as $productVariant) {
             foreach($productVariant->getWarehouseInfo() as $info) {
-                $rate->setParameter('toCode', $info->getZip());
+                $rate->setParameter('toCode', $info->getWarehouse()->getZip());
 
                 $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
                 $package = new \RocketShipIt\Package('fedex');
@@ -319,11 +319,11 @@ class OrderProductsController extends Controller
                  *
                  * They also need to add the fedex numbers of Distributors when applicable..
                  */
-                $shipment->setParameter('shipAddr1', $info->getAddress1());
-                $shipment->setParameter('shipCity', $info->getCity());
-                $shipment->setParameter('shipState', $info->getState()->getAbbreviation());
-                $shipment->setParameter('shipCode', $info->getZip());
-                $shipment->setParameter('shipPhone', $info->getPhone());
+                $shipment->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
+                $shipment->setParameter('shipCity', $info->getWarehouse()->getCity());
+                $shipment->setParameter('shipState', $info->getWarehouse()->getState()->getAbbreviation());
+                $shipment->setParameter('shipCode', $info->getWarehouse()->getZip());
+                $shipment->setParameter('shipPhone', $info->getWarehouse()->getPhone());
 
                 $shipment->setParameter('packageCount', $numProdVariants);
                 $shipment->setParameter('sequenceNumber', $count);
