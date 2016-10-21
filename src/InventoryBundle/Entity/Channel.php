@@ -43,8 +43,8 @@ class Channel
      *
      * @ORM\Column(name="front_logo", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontLogo;
 
@@ -74,8 +74,8 @@ class Channel
      *
      * @ORM\Column(name="front_slider_one", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontSliderOne;
 
@@ -84,8 +84,8 @@ class Channel
      *
      * @ORM\Column(name="front_slider_two", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontSliderTwo;
 
@@ -94,8 +94,8 @@ class Channel
      *
      * @ORM\Column(name="front_slider_three", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontSliderThree;
 
@@ -104,8 +104,8 @@ class Channel
      *
      * @ORM\Column(name="front_footer_one", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontFooterOne;
 
@@ -114,8 +114,8 @@ class Channel
      *
      * @ORM\Column(name="front_footer_two", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontFooterTwo;
 
@@ -124,8 +124,8 @@ class Channel
      *
      * @ORM\Column(name="front_footer_three", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $frontFooterThree;
 
@@ -141,8 +141,8 @@ class Channel
      *
      * @ORM\Column(name="faq_warranty_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $faqWarrantyPic;
 
@@ -151,8 +151,8 @@ class Channel
      *
      * @ORM\Column(name="faq_unpacking_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $faqUnpackingPic;
 
@@ -161,8 +161,8 @@ class Channel
      *
      * @ORM\Column(name="faq_support_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $faqSupportPic;
 
@@ -171,8 +171,8 @@ class Channel
      *
      * @ORM\Column(name="faq_maintenance_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $faqMaintenancePic;
 
@@ -181,8 +181,8 @@ class Channel
      *
      * @ORM\Column(name="faq_contact_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $faqContactPic;
 
@@ -191,8 +191,8 @@ class Channel
      *
      * @ORM\Column(name="faq_tc_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $faqTCPic;
 
@@ -201,8 +201,8 @@ class Channel
      *
      * @ORM\Column(name="pf_memoryfoam_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFmemoryFoamPic;
 
@@ -211,8 +211,8 @@ class Channel
      *
      * @ORM\Column(name="pf_side_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFSidePic;
 
@@ -221,8 +221,8 @@ class Channel
      *
      * @ORM\Column(name="pf_renewresource_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFRenewResourcewPic;
 
@@ -231,8 +231,8 @@ class Channel
      *
      * @ORM\Column(name="pf_socs_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFsocsPic;
 
@@ -241,8 +241,8 @@ class Channel
      *
      * @ORM\Column(name="pf_pbo_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFpboPic;
 
@@ -251,8 +251,8 @@ class Channel
      *
      * @ORM\Column(name="pf_bcharcoal_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFBCharcoalPic;
 
@@ -261,8 +261,8 @@ class Channel
      *
      * @ORM\Column(name="pf_bfibers_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFBFibersPic;
 
@@ -271,8 +271,8 @@ class Channel
      *
      * @ORM\Column(name="pf_silk_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFSilkPic;
 
@@ -281,8 +281,8 @@ class Channel
      *
      * @ORM\Column(name="pf_aloevera_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFAloeVeraPic;
 
@@ -291,8 +291,8 @@ class Channel
      *
      * @ORM\Column(name="pf_certified_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFCertifiedPic;
 
@@ -301,8 +301,8 @@ class Channel
      *
      * @ORM\Column(name="pf_texstand_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $pFTexStandPic;
 
@@ -311,8 +311,8 @@ class Channel
      *
      * @ORM\Column(name="retail_header_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $retailHeaderPic;
 
@@ -321,8 +321,8 @@ class Channel
      *
      * @ORM\Column(name="retail_first_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $retailFirstPic;
 
@@ -331,8 +331,8 @@ class Channel
      *
      * @ORM\Column(name="retail_second_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $retailSecondPic;
 
@@ -341,8 +341,8 @@ class Channel
      *
      * @ORM\Column(name="retail_third_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $retailThirdPic;
 
@@ -351,8 +351,8 @@ class Channel
      *
      * @ORM\Column(name="retail_fourth_pic", type="string")
      *
-     * @Assert\NotBlank(message="Please, upload logo as either a jpg or png file.")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     *
+     *
      */
     private $retailFourthPic;
 

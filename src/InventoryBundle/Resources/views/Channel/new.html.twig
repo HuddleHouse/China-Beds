@@ -102,7 +102,7 @@
         <div class="col-md-1"></div>
         <div class="col-md-10" style="padding:20px; background-color:white; border-radius:50px;">
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#homepage-modal"><h1>Homepage</h1></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#homepage-modal"><h3>Homepage</h3></div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -167,7 +167,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#faq-modal"><h1>FAQ Page</h1></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#faq-modal"><h3>FAQ Page</h3></div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -198,7 +198,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#features-modal"><h1>Product Features Page</h1></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#features-modal"><h3>Product Features Page</h3></div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -253,7 +253,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#retailers-modal"><h1>Retailer Page</h1></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#retailers-modal"><h3>Retailer Page</h3></div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -282,7 +282,7 @@
 
 
 
-            <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            <input class="btn btn-raised btn-success" type="submit" value="Create" />
             {{ form_end(form) }}
         </div>
     </div>
@@ -438,6 +438,10 @@
             -ms-transition: opacity .7s, background-color .7s;
             -o-transition: opacity .7s, background-color .7s;
             transition: opacity .7s, background-color .7s;
+        }
+
+        .page-banner h3{
+            margin-top:-5px;
         }
 
         .page-banner:hover{
