@@ -27,9 +27,9 @@ class RebateController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if($this->getUser()->hasRole('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SALES_MANAGER'))
-            $rebates = $em->getRepository('InventoryBundle:Rebate')->findAll();
+            $rebates = $em->getRepository('InventoryBundle:Rebate')->findBy(['channel' => $this->getUser()->getActiveChannel()]);
         else
-            $rebates = $em->getRepository('InventoryBundle:Rebate')->findBy((array('active' => true)));
+            $rebates = $em->getRepository('InventoryBundle:Rebate')->findBy((array('active' => true,'channel' => $this->getUser()->getActiveChannel())));
 
         return $this->render('@Inventory/Rebate/index.html.twig', array(
             'rebates' => $rebates,

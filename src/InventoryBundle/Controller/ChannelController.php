@@ -16,6 +16,20 @@ use InventoryBundle\Form\ChannelType;
  */
 class ChannelController extends Controller
 {
+
+    /**
+     * Finds and displays a Channel entity.
+     *
+     * @Route("/switch/{id}", name="admin_channel_switch")
+     * @Method("GET")
+     */
+    public function switchAction(Channel $channel)
+    {
+        $this->get('session')->set('active_channel', $channel);
+        $this->getUser()->setActiveChannel($channel);
+        return $this->redirectToRoute('fos_user_profile_show');
+    }
+
     /**
      * Lists all Channel entities.
      *

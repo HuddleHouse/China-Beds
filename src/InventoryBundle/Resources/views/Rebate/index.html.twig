@@ -122,7 +122,7 @@
                                 {% if rebate.description is not null %}<td id="description"><span>Click to expand</span></td>
                                 {% else %} <td>--</td> {% endif %}
                                 <td><input type="checkbox" {% if rebate.active %}checked="checked"{% endif %} onchange="changeRebateActive({{ rebate.id }}, this.checked)" /></td>
-                                <td>{{ rebate.channel.name }}</td>
+                                <td>{{ rebate.channel ? rebate.channel.name : ''}}</td>
                                 <td>
                                     <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('rebate_edit', { 'id': rebate.id }) }}">Edit</a>
                                     <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('rebate_show', { 'id': rebate.id }) }}">Show Submissions</a>

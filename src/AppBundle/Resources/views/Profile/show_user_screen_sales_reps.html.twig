@@ -24,7 +24,6 @@
                     <tr role="row">
                         <th>Retailer Name</th>
                         <th>Location</th>
-                        <th>Channel</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,11 +31,6 @@
                         <tr role="row">
                             <td><a href="{{ path('edit_child_user', { 'id': sales_rep.id }) }}">{{ sales_rep.firstName }} {{ sales_rep.lastName }}</a></td>
                             <td>{{ sales_rep.state.name }}</td>
-                            <td>
-                                {% for channel in sales_rep.userChannels %}
-                                    {{ channel.name }}
-                                {% endfor %}
-                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

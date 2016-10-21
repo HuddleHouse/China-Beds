@@ -7,12 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -73,6 +75,12 @@ class User extends BaseUser
      *
      */
     protected $company_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $distributor_fedex_number;
 
     /**
      * @var int
@@ -210,6 +218,15 @@ class User extends BaseUser
     private $stock_transfers;
 
     /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="managers")
+     * @ORM\JoinTable(name="user_managed_warehouses",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")}
+     * )
+     */
+    protected $managed_warehouses;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustment", mappedBy="user")
      */
     private $stock_adjustments;
@@ -280,11 +297,14 @@ class User extends BaseUser
      */
     private $credited_ledgers;
 
+    private $active_channel = null;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->warranty_claims = new ArrayCollection();
+        $this->managed_warehouses = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
@@ -337,10 +357,40 @@ class User extends BaseUser
             return true;
     }
 
-    public function getLedgerTotal($options = null) {
+    public function hasPendingOrders() {
+        $count = 0;
+        foreach($this->orders as $order) {
+            if($order->getStatus()->getName() == 'Pending') {
+                $count++;
+                break;
+            }
+        }
+        if($count == 0)
+            return false;
+        else
+            return true;
+    }
+
+    public function getPendingOrderTotal($channel_id = null) {
+        $total = 0;
+        foreach($this->orders as $order) {
+            if($order->getStatus()->getName() == 'Pending') {
+                if($channel_id == null)
+                    $total += $order->getTotal();
+                else if($order->getChannel()->getId() == $channel_id)
+                    $total += $order->getTotal();
+            }
+        }
+        return $total;
+    }
+
+    public function getLedgerTotal($channel_id = null) {
         $total = 0;
         foreach($this->ledgers as $ledger) {
-            $total += $ledger->getAmountCredited();
+            if($channel_id == null)
+                $total += $ledger->getAmountCredited();
+            else if($ledger->getChannel()->getId() == $channel_id)
+                $total += $ledger->getAmountCredited();
         }
         return $total;
     }
@@ -386,6 +436,14 @@ class User extends BaseUser
             $user_groups[$group->getName()] = $group->getId(). ", ";
 
         return $user_groups;
+    }
+
+    public function canManageWarehouse(Warehouse $warehouse){
+        foreach($this->managed_warehouses as $ware) {
+            if($ware->getName() == $warehouse->getName())
+                return true;
+        }
+        return false;
     }
 
     public function setInvitation(Invitation $invitation)
@@ -557,6 +615,24 @@ class User extends BaseUser
     {
         return $this->is_residential;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getManagedWarehouses()
+    {
+        return $this->managed_warehouses;
+    }
+
+    /**
+     * @param mixed $managed_warehouses
+     */
+    public function setManagedWarehouses($managed_warehouses)
+    {
+        $this->managed_warehouses = $managed_warehouses;
+    }
+
+
 
     /**
      * @param mixed $is_residential
@@ -942,7 +1018,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->retailers as $retailer)
             if($retailer->hasRole('ROLE_RETAILER'))
-                $data[] = $retailer;
+                if ( $retailer->belongsToChannel($this->getActiveChannel()) )
+                    $data[] = $retailer;
         return $data;
     }
 
@@ -987,7 +1064,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->distributors as $distributor)
             if($distributor->hasRole('ROLE_DISTRIBUTOR'))
-                $data[] = $distributor;
+                if ( $distributor->belongsToChannel($this->getActiveChannel()) )
+                    $data[] = $distributor;
         return $data;
     }
 
@@ -1033,8 +1111,18 @@ class User extends BaseUser
         $data = array();
         foreach($this->sales_reps as $rep)
             if($rep->hasRole('ROLE_SALES_REP'))
-                $data[] = $rep;
+                if ( $rep->belongsToChannel($this->getActiveChannel()) )
+                    $data[] = $rep;
         return $data;
+    }
+
+    public function belongsToChannel(Channel $channel) {
+        foreach($this->getUserChannels() as $user_channel) {
+            if ( $user_channel->getId() == $channel->getId() ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1168,5 +1256,36 @@ class User extends BaseUser
         $this->submitted_rebates = $submitted_rebates;
     }
 
+    /**
+     * @return null
+     */
+    public function getActiveChannel()
+    {
+        return $this->active_channel;
+    }
+
+    /**
+     * @param null $active_channel
+     */
+    public function setActiveChannel(Channel $active_channel)
+    {
+        $this->active_channel = $active_channel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDistributorFedexNumber()
+    {
+        return $this->distributor_fedex_number;
+    }
+
+    /**
+     * @param mixed $distributor_fedex_number
+     */
+    public function setDistributorFedexNumber($distributor_fedex_number)
+    {
+        $this->distributor_fedex_number = $distributor_fedex_number;
+    }
 
 }
