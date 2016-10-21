@@ -373,9 +373,11 @@
                                     <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Ledger</a>
                                 </li>
                                 {%  if(is_granted('ROLE_ADMIN')) %}
-                                <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
-                                    <a href="{{ path('ledger_credit_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>Issue new Ledger</a>
-                                </li>
+                                    {% for channel in sidebar_user_channels %}
+                                    <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
+                                        {#<a href="{{ path('ledger_credit_new', { 'id': channel.id }) }}"><i class="fa fa-circle-o"></i>Issue new Ledger</a>#}
+                                        {{ dump(sidebar_user_channels) }}
+                                    </li>
                                 {% endif %}
                                 {% for channel in sidebar_user_channels %}
                                     <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == channel.id) %} class="active"{% endif %}>
