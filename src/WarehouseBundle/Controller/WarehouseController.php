@@ -43,7 +43,23 @@ class WarehouseController extends Controller
     public function channelledIndexAction($channelName)
     {
         $em = $this->getDoctrine()->getManager();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesInChannelArray($channelName);
+        $user = $this->getUser();
+
+        if(!$user->hasRole('ROLE_WAREHOUSE'))
+            $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesInChannelArray($channelName);
+        else {
+            $warehouseEntities = $user->getManagedWarehouses();
+            $warehouses = array();
+
+            foreach($warehouseEntities as $warehouse)
+                $warehouses[] = array(
+                    'id' => $warehouse->getId(),
+                    'name' => $warehouse->getName(),
+                    'list_id' => $warehouse->getListId(),
+                    'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory($warehouse),
+                    'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                );
+        }
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(
             'warehouses' => $warehouses,
@@ -65,6 +81,8 @@ class WarehouseController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+                $warehouse->addChannel($channel);
                 $em->persist($warehouse);
                 $em->flush();
                 $this->addFlash('notice', 'Warehouse created successfully.');

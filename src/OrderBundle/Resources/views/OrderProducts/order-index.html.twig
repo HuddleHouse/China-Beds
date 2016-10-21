@@ -77,6 +77,7 @@
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
             $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
+            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
             $scope.products = {{ products | json_encode | raw}};
             $scope.pop = {{ pop | json_encode | raw}};
             $scope.states = {{ states | json_encode | raw}};
@@ -94,6 +95,21 @@
             $scope.form_info.ship = false;
             $scope.hasError = [];
             $scope.ship_to_id = {{ app.user.id }};
+
+            $scope.due_date = new Date();
+            $scope.date = ($scope.due_date.getTime() + 86400000);
+            $scope.min_date = new Date($scope.date);
+
+            $('body').addClass('sidebar-collapse');
+
+            if($scope.is_admin == 1) {
+                $scope.form_info['ship'] = true;
+                $('#ship').show();
+                $scope.form_info['pick_up'] = false;
+                $('#pick_up_date').hide();
+                $('#pick_up_agent').hide();
+                $('#pick_up_warehouse').hide();
+            }
 
             {% if is_edit == 1 %}
                 $scope.order_pop = {{ order_pop | json_encode | raw}};
@@ -114,6 +130,8 @@
                         $scope.form_info['ship_name'] = '{{ order.shipName }}';
                         $scope.cart_num_items = Number({{ order.numItems }});
                         $scope.cart_total = Number({{ order.subTotal }});
+                        $scope.form_info.pick_up_date = new Date({{ order.pickUpDate | date('Y,m,d') }});
+
 
                         $('#dist_ship').val({{ order.submittedForUser.id }});
                         var is_pickup = '{{ order.isPickUp }}';
@@ -163,8 +181,6 @@
 
 
             $scope.updateCart = function (variantId, cost, max, type) {
-                console.log(type);
-                console.log($scope.cart);
                 if(typeof($scope.cart[type][variantId]) != "undefined" && $scope.cart[type][variantId] !== null) {
                     if(type == 'variant')
                         $scope.cart[type][variantId].quantity = $scope.product_variant_order_quan[variantId];
@@ -504,8 +520,6 @@
 
         }]);
 
-
-
     </script>
 {% endblock footer %}
 
@@ -608,7 +622,7 @@
         }
         .price_box {
              max-width: 15%;
-            width: 12%;
+            width: 15%;
              display: inline-block;
             margin-left: 3px;
             margin-right: 3px;
@@ -638,13 +652,7 @@
             list-style-type: none;
             color: #AAAAAA;
         }
-
-        .price_box.ng-scope
-        {
-            margin: 0 10px;
-        }
     </style>
-
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
@@ -662,7 +670,6 @@
             </div>
         </div>
 
-        {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
         <div class="row" style="padding-bottom: 40px;padding-top: 20px;">
             <div class="col-md-6">
                 <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
@@ -682,7 +689,7 @@
                         <div class="col-lg-4 col-md-4">
                             <center>Total ($)</center>
                             {% verbatim %}
-                            <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
+                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
                             {% endverbatim %}
                         </div>
                         <div class="col-lg-4 col-md-4">
@@ -766,17 +773,16 @@
         </div>
 
 
-                <div id="floaty-box" class="col-md-2 visible-lg">
-                    <ul>
-                        <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
-                        {% for category in categories %}
-                            <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
-                        {% endfor %}
-                        <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
+        <div id="floaty-box" class="col-md-2 visible-lg">
+            <ul>
+                <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
+                {% for category in categories %}
+                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
+                {% endfor %}
+                <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
 
-                    </ul>
-                </div>
-        {% endif %}
+            </ul>
+        </div>
     </div>
 </div>
 {#</form>#}

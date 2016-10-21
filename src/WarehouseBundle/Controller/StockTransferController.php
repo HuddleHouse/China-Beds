@@ -26,7 +26,7 @@ class StockTransferController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $stockTransfers = $em->getRepository('WarehouseBundle:StockTransfer')->findAll();
+        $stockTransfers = $em->getRepository('WarehouseBundle:StockTransfer')->findAllForChannel($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/StockTransfer/index.html.twig', array(
             'stockTransfers' => $stockTransfers,
@@ -44,7 +44,7 @@ class StockTransferController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/StockTransfer/new.html.twig', array(
             'inventory_data' => $inventory_data,

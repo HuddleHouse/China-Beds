@@ -198,6 +198,16 @@
                 <br>
                 <br>
             {% endif %}
+            {% if user.hasRole('ROLE_WAREHOUSE') %}
+                <div class="row" style="display: block;">
+                    <div class="col-md-12">
+                        {{ form_label(form.managed_warehouses) }}
+                        {{ form_widget(form.managed_warehouses) }}
+                    </div>
+                </div>
+                <br>
+                <br>
+            {% endif %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Address</h2>

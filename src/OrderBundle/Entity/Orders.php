@@ -131,6 +131,13 @@ class Orders
     private $shipping;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="estimated_shipping", type="integer", nullable=true)
+     */
+    private $estimatedShipping;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -148,6 +155,11 @@ class Orders
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order")
      */
     private $product_variants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order")
+     */
+    private $shipping_labels;
 
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
@@ -228,6 +240,7 @@ class Orders
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
+        $this->shipping_labels = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
@@ -441,6 +454,22 @@ class Orders
     public function getIsPickUp()
     {
         return $this->isPickUp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEstimatedShipping()
+    {
+        return $this->estimatedShipping;
+    }
+
+    /**
+     * @param int $estimatedShipping
+     */
+    public function setEstimatedShipping($estimatedShipping)
+    {
+        $this->estimatedShipping = $estimatedShipping;
     }
 
     /**
@@ -810,6 +839,30 @@ class Orders
     public function getAmountPaid()
     {
         return $this->amount_paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShippingLabels()
+    {
+        return $this->shipping_labels;
+    }
+
+    /**
+     * @param mixed $shipping_labels
+     */
+    public function setShippingLabels($shipping_labels)
+    {
+        $this->shipping_labels = $shipping_labels;
+    }
+
+    /**
+     * @param mixed $shipping_labels
+     */
+    public function addShippingLabel($shipping_label)
+    {
+        $this->shipping_labels[] = $shipping_label;
     }
 
     /**
