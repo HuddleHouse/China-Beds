@@ -30,16 +30,16 @@ class RetailerController extends Controller
     public function usersAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:User')->findAll();
+        $users = $em->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel());
 
-        $userObjects = array();
-        foreach ($users as $user) {
-          if($user->hasRole('ROLE_RETAILER')) {
-            $userObjects[]  = $user;
-          }
-        }
+//        $userObjects = array();
+//        foreach ($users as $user) {
+//          if($user->hasRole('ROLE_RETAILER')) {
+//            $userObjects[]  = $user;
+//          }
+//        }
         return $this->render('AppBundle:Retailer:users.html.twig', array(
-            'users' => $userObjects
+            'users' => $users
         ));
     }
 }

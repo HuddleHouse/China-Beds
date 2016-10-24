@@ -33,9 +33,12 @@
 {% endblock footer %}
 
 {% block content %}
-
 		<input type="hidden" value="{{path('retailer_affiliates_get_users')}}" id="retaler_user_routing">
-    	<div id="panel"></div>
-	    <div id="map-canvas"></div>
-	
+	<div class="row">
+		<div class="col-md-12">
+			<div id="panel"></div>
+			<div id="map-canvas"></div>
+		</div>
+	</div>
+
 {% endblock content %}
