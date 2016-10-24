@@ -336,7 +336,7 @@ class PopItem
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        $tmp = __DIR__ . '/../../../../resume/web/' . $this->getUploadDir();
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
         return $tmp;
     }
 
