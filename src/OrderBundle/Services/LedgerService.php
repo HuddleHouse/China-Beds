@@ -171,13 +171,12 @@ class LedgerService
                 $pass = $this->container->getParameter('nacha.uat.pass');
 
         }
-
         $sftp = new SFTP($host);
         if ( !$sftp->login($user, $pass) ) {
             die('Login Failed');
         }
 
-        $sftp->put('/' . basename($filename), $filename);
+        echo $sftp->put('/' . basename($filename), $filename);
 
         return true;
 

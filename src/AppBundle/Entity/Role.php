@@ -166,4 +166,28 @@ class Role extends BaseGroup
     }
     
     
+
+    /**
+     * Add permission
+     *
+     * @param \AppBundle\Entity\RolePermission $permission
+     *
+     * @return Role
+     */
+    public function addPermission(\AppBundle\Entity\RolePermission $permission)
+    {
+        $this->permissions[] = $permission;
+
+        return $this;
+    }
+
+    /**
+     * Remove permission
+     *
+     * @param \AppBundle\Entity\RolePermission $permission
+     */
+    public function removePermission(\AppBundle\Entity\RolePermission $permission)
+    {
+        $this->permissions->removeElement($permission);
+    }
 }

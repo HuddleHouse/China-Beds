@@ -38,6 +38,10 @@ class EditUserSettingsType extends AbstractType
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
 
+            ->add('ach_routing_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('ach_account_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('distributor_fedex_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'label' => 'FedEx Number'), 'required' => false))
+
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 array($this, 'onPreSetData')

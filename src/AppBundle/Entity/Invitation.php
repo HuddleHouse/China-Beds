@@ -156,4 +156,18 @@ class Invitation
 
 
 
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Invitation
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
 }
