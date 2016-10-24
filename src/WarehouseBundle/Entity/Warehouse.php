@@ -118,6 +118,13 @@ class Warehouse
     private $email_2;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $shipping_label_image_type = 'PNG';
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
@@ -1004,5 +1011,19 @@ class Warehouse
         $this->pop_inventory_on_hold = $pop_inventory_on_hold;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getShippingLabelImageType()
+    {
+        return $this->shipping_label_image_type;
+    }
 
+    /**
+     * @param mixed $shipping_label_image_type
+     */
+    public function setShippingLabelImageType($shipping_label_image_type)
+    {
+        $this->shipping_label_image_type = $shipping_label_image_type;
+    }
 }
