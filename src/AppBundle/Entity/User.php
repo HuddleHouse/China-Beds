@@ -1032,7 +1032,7 @@ class User extends BaseUser
         $data = array();
         foreach($this->retailers as $retailer)
             if($retailer->hasRole('ROLE_RETAILER'))
-                if ( $retailer->belongsToChannel($this->getActiveChannel()) )
+                if ( $retailer->belongsToChannel($this->getActiveChannel() ? $this->getActiveChannel() : $this->getUserChannels()->toArray()) )
                     $data[] = $retailer;
         return $data;
     }
@@ -1078,7 +1078,7 @@ class User extends BaseUser
         $data = array();
         foreach($this->distributors as $distributor)
             if($distributor->hasRole('ROLE_DISTRIBUTOR'))
-                if ( $distributor->belongsToChannel($this->getActiveChannel()) )
+                if ( $distributor->belongsToChannel($this->getActiveChannel() ? $this->getActiveChannel() : $this->getUserChannels()->toArray()) )
                     $data[] = $distributor;
         return $data;
     }
@@ -1125,15 +1125,19 @@ class User extends BaseUser
         $data = array();
         foreach($this->sales_reps as $rep)
             if($rep->hasRole('ROLE_SALES_REP'))
-                if ( $rep->belongsToChannel($this->getActiveChannel()) )
+                if ( $rep->belongsToChannel($this->getActiveChannel() ? $this->getActiveChannel() : $this->getUserChannels()->toArray()) )
                     $data[] = $rep;
         return $data;
     }
 
-    public function belongsToChannel(Channel $channel) {
+    public function belongsToChannel($channel = null) {
+        if ( !is_array($channel) ) { $channel = [$channel]; }
+
         foreach($this->getUserChannels() as $user_channel) {
-            if ( $user_channel->getId() == $channel->getId() ) {
-                return true;
+            foreach($channel as $chan) {
+                if ($user_channel->getId() == $chan->getId()) {
+                    return true;
+                }
             }
         }
         return false;
