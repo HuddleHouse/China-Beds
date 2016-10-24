@@ -58,7 +58,10 @@ class AttributeController extends Controller
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating attribute: ' . $e->getMessage());
 
-                return $this->redirectToRoute('attribute_index');
+                return $this->render('@Inventory/Attribute/new.html.twig', array(
+                    'attribute' => $attribute,
+                    'form' => $form->createView(),
+                ));
             }
         }
 
@@ -104,7 +107,7 @@ class AttributeController extends Controller
                 $em->persist($attribute);
                 $em->flush();
                 $this->addFlash('notice', 'Attribute updated successfully.');
-                return $this->redirectToRoute('attribute_edit', array('id' => $attribute->getId()));
+                return $this->redirectToRoute('attribute_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error editing attribute: ' . $e->getMessage());
