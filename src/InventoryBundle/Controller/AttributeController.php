@@ -53,7 +53,7 @@ class AttributeController extends Controller
                 $em->flush();
                 $this->addFlash('notice', 'Attribute created successfully.');
 
-                return $this->redirectToRoute('attribute_new');
+                return $this->redirectToRoute('attribute_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating attribute: ' . $e->getMessage());
