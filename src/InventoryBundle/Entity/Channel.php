@@ -5,6 +5,7 @@ namespace InventoryBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 /**
@@ -27,14 +28,14 @@ class Channel
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
 
@@ -132,7 +133,7 @@ class Channel
     /**
      * @var string
      *
-     * @ORM\Column(name="front_footer_text", type="string")
+     * @ORM\Column(name="front_footer_text", type="string", nullable=true)
      */
     private $frontFooterText;
 

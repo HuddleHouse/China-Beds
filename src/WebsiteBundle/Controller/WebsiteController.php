@@ -7,10 +7,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class WebsiteController extends Controller
 {
+
     public function indexAction($site)
     {
+        $em = $this->getDoctrine()->getManager();
+        if($site == 'mlily'){
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'MLILY'));
+        }
+        else{
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'BedBoss'));
+        }
         return $this->render('WebsiteBundle:Website:home.html.twig', array(
-            'site' => $site
+            'site' => $site,
+            'channel' => $channel
         ));
     }
 

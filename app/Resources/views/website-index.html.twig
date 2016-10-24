@@ -36,40 +36,7 @@
 <body>
 
 <div class="container">
-    <nav class="navbar">
-        <div class="social-links">
-            <ul>
-                <li><i class="fa fa-facebook" aria-hidden="true"></i></li>
-                <li><i class="fa fa-twitter" aria-hidden="true"></i></li>
-                <li><i class="fa fa-instagram" aria-hidden="true"></i></li>
-            </ul>
-        </div>
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ path('website_homepage', {site: site}) }}">
-                <img style="max-width: 140px;" src="{{ asset('images/web/MlilylogoColor@2x.png') }}" />
-            </a>
-            <div class="login-btn">
-                <ul>
-                    <li>Login</li>
-                </ul>
-            </div>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ path('website_homepage', {site: site}) }}">Home</a></li>
-                <li><a href="{{ path('mattresses', {site: site}) }}">MATTRESSES</a></li>
-                <li><a href="{{ path('pillows', {site: site}) }}">PILLOWS</a></li>
-                <li><a href="{{ path('adjustables', {site: site}) }}">ADJUSTABLE BEDS</a></li>
-            </ul>
-            <div class="regiter-head"><a href="{{ path('web_retailers', {site: site}) }}"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></a></div>
-        </div><!--/.nav-collapse -->
-    </nav>
+
     {% block body %}{% endblock %}
 </div>
 

@@ -46,29 +46,12 @@
 {% endblock footer %}
 
 {% block content %}
-    {#<div class="row">#}
-        {#<div class="col-md-8" style="background:white">#}
-
-            {#{{ form_start(edit_form) }}#}
-            {#{{ form_widget(edit_form.frontLogo) }}#}
-            {#{{ form_widget(edit_form.name) }}#}
-            {#{{ form_widget(edit_form.url) }}#}
-            {#<br>#}
-            {#<input class="btn btn-raised btn-success" type="submit" value="Update" />#}
-            {#{{ form_end(edit_form) }}#}
-
-            {#{{ form_start(delete_form) }}#}
-            {#<input class="btn btn-raised btn-danger" type="submit" value="Delete">#}
-            {#{{ form_end(delete_form) }}#}
-        {#</div>#}
-    {#</div>#}
-
     {{ form_start(edit_form) }}
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10" style="padding:20px; background-color:white; border-radius:50px;">
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#homepage-modal">Homepage</div>
+                <div class="col-md-12 page-banner homepage" data-toggle="modal" data-target="#homepage-modal">Homepage</div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -290,8 +273,9 @@
                 </div>
                 <div class="modal-body">
                     <p>All changes made within the FAQ section will effect the FAQ page of your site</p>
-                    <img src="{{ asset('uploads/documents/FAQsitemap1.png') }}" style="width:100%; height:800px;"/>
-                    <img src="{{ asset('uploads/documents/FAQsitemap2.png') }}" style="width:80%; height:900px;"/>
+                    <img src="{{ asset('uploads/documents/faq-sitemap1.png') }}" style="width:100%; height:800px;"/>
+                    <img src="{{ asset('uploads/documents/faq-sitemap2.png') }}" style="width:80%; height:700px;"/>
+                    <img src="{{ asset('uploads/documents/faq-sitemap3.png') }}" style="width:80%; height:700px;"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -334,8 +318,8 @@
                 </div>
                 <div class="modal-body">
                     <p>All changes made within the Features section will effect the Product Features page of your site</p>
-                    <img src="{{ asset('uploads/documents/pf-sitemap1.png') }}" style="width:100%; height:800px;"/>
-                    <img src="{{ asset('uploads/documents/pf-sitemap2.png') }}" style="width:100%; height:800px;"/>
+                    <img src="{{ asset('uploads/documents/retailer-sitemap1.png') }}" style="width:100%; height:800px;"/>
+                    <img src="{{ asset('uploads/documents/retailer-sitemap2.png') }}" style="width:100%; height:800px;"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -387,27 +371,39 @@
             Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
         }
 
-        .page-banner{
-            text-align: center;
-            background-color: #42A5F5;
-            height: 50px;
-            /*border-radius: 30px;*/
-            margin-bottom: 60px;
-            margin-top:40px;
-            padding-top:12px;
-            font-size: x-large;
-            margin-left:0;
-            margin-right:0;
-            padding-left:0;
-            padding-right:0;
-            cursor:help;
-            opacity:.7;
-            -webkit-transition: opacity .7s, background-color .7s;
-            -moz-transition: opacity .7s, background-color .7s;
-            -ms-transition: opacity .7s, background-color .7s;
-            -o-transition: opacity .7s, background-color .7s;
-            transition: opacity .7s, background-color .7s;
-        }
+      .page-banner{
+          text-align: center;
+          background-color: #42A5F5;
+          height: 50px;
+          width:100.7%;
+          /*border-radius: 30px;*/
+          margin-bottom: 60px;
+          margin-top:40px;
+          margin-left:-5px;
+          padding-top:12px;
+          font-size: x-large;
+          margin-right:0;
+          padding-left:0;
+          padding-right:0;
+          cursor:help;
+          opacity:.7;
+          -webkit-transition: opacity .7s, background-color .7s;
+          -moz-transition: opacity .7s, background-color .7s;
+          -ms-transition: opacity .7s, background-color .7s;
+          -o-transition: opacity .7s, background-color .7s;
+          transition: opacity .7s, background-color .7s;
+      }
+
+      .homepage{
+          top: 0;
+          margin-top: -20px;
+          height: 100px;
+          border-radius: 50px 50px 1px 1px;
+          border-top-left-radius: 50px;
+          border-top-right-radius: 50px;
+          border-bottom-right-radius: 1px;
+          border-bottom-left-radius: 1px;
+      }
 
         .page-banner:hover{
             background-color:#0fb2fc;

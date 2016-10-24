@@ -58,7 +58,8 @@
                 method: "GET",
                 url: Routing.generate('api_get_variant_image' , { variantId : variantId})
             }).done(function(data){
-                $('#variant-img').empty().append("<img src='"+ data +"' width='100px' height='120px'/>");
+                $('#variant-img').empty().append("<img src='"+ data +"' width='100%' height='350px' style='display:none;'/>");
+                $('#variant-img img').slideDown(700);
             });
         }
 
@@ -100,11 +101,8 @@
                     {{ form_label(form.quantity) }}
                     {{ form_widget(form.quantity) }}
                 </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.dateMadeAware) }}
-                    {{ form_widget(form.dateMadeAware) }}
-                </div>
-                <div class="col-md-4" id="variant-img">
+                <div class="col-md-4"></div>
+                <div class="col-md-4" id="variant-img" style="height:350px;">
 
                 </div>
 
@@ -113,18 +111,6 @@
                 <div class="col-md-12 form-group">
                     {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.description) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    {{ form_label(form.retailerResAttempt) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
-                    {{ form_widget(form.retailerResAttempt) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    {{ form_label(form.otherComments) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
-                    {{ form_widget(form.otherComments) }}
                 </div>
             </div>
             <input class="btn btn-raised btn-success" type="submit" value="Create" />

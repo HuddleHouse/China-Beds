@@ -95,15 +95,8 @@ class WarrantyClaimType extends AbstractType
                 'required' => true
 
             ))
-            ->add('dateMadeAware', DateType::class, array(
-                'label' => 'Date Made Aware',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'widget' => 'single_text',
-                'input' => 'datetime'
-            ))
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
-            ->add('retailerResAttempt', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
-            ->add('otherComments',  TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false));
+            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')));
+
     }
     
     /**
