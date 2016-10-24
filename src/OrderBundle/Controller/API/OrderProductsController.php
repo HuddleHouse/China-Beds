@@ -257,13 +257,14 @@ class OrderProductsController extends Controller
 
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
+            $order = $this->generateShippingLabels($order);
             $ledger_service = $this->get('order.ledger');
             $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
-            $order = $this->generateShippingLabels($order);
         }
         else if($payment_type == 'cc' && $type == 'complete') {
+            $order = $this->generateShippingLabels($order);
             $cc = $request->request->get('cc');
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
@@ -272,7 +273,6 @@ class OrderProductsController extends Controller
 
 
 
-            $order = $this->generateShippingLabels($order);
         }
         else if($type == 'admin' && $payment_type == '') {
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
@@ -285,6 +285,10 @@ class OrderProductsController extends Controller
         return JsonResponse::create(true);
     }
 
+    /**
+     * @param Orders $orders
+     * @return Orders
+     */
     private function generateShippingLabels(Orders $orders) {
         $em = $this->getDoctrine()->getManager();
         $numProdVariants = 0; //count($orders->getProductVariants());
@@ -337,6 +341,12 @@ class OrderProductsController extends Controller
                 $shipment->setParameter('width', $dimensions[1]);
                 $shipment->setParameter('height', $dimensions[2]);
                 $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
+
+
+                if($orders->getSubmittedForUser()->getDistributorFedexNumber() != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != '') {
+                    $shipment->setParameter('paymentType', 'THIRD_PARTY');
+                    $shipment->setParameter('thirdPartyAccount', $orders->getSubmittedForUser()->getDistributorFedexNumber());
+                }
 
                 try {
                     $response = $shipment->submitShipment();
