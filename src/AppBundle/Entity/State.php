@@ -85,4 +85,3 @@ class State
         $this->abbreviation = $abbreviation;
     }
 }
-

@@ -36,6 +36,42 @@ class Channel
      */
     private $url;
 
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_routing_number", type="string", length=9, nullable=true)
+     */
+    private $ach_routing_number;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_account_number", type="string", length=17, nullable=true)
+     */
+    private $ach_account_number;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_company_id", type="string", length=17, nullable=true)
+     */
+    private $ach_company_id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_originating_dfi", type="string", length=17, nullable=true)
+     */
+    private $ach_originating_dfi;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_company_name", type="string", length=25, nullable=true)
+     */
+    private $ach_company_name;
+
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="channel")
      */
@@ -262,5 +298,292 @@ class Channel
     {
         $this->rebate_submissions = $rebate_submissions;
     }
-}
 
+    /**
+     * Set achRoutingNumber
+     *
+     * @param integer $achRoutingNumber
+     *
+     * @return Channel
+     */
+    public function setAchRoutingNumber($achRoutingNumber)
+    {
+        $this->ach_routing_number = $achRoutingNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get achRoutingNumber
+     *
+     * @return integer
+     */
+    public function getAchRoutingNumber()
+    {
+        return $this->ach_routing_number;
+    }
+
+    /**
+     * Set achAccountNumber
+     *
+     * @param string $achAccountNumber
+     *
+     * @return Channel
+     */
+    public function setAchAccountNumber($achAccountNumber)
+    {
+        $this->ach_account_number = $achAccountNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get achAccountNumber
+     *
+     * @return string
+     */
+    public function getAchAccountNumber()
+    {
+        return $this->ach_account_number;
+    }
+
+    /**
+     * Add productChannel
+     *
+     * @param \InventoryBundle\Entity\ProductChannel $productChannel
+     *
+     * @return Channel
+     */
+    public function addProductChannel(\InventoryBundle\Entity\ProductChannel $productChannel)
+    {
+        $this->product_channels[] = $productChannel;
+
+        return $this;
+    }
+
+    /**
+     * Remove productChannel
+     *
+     * @param \InventoryBundle\Entity\ProductChannel $productChannel
+     */
+    public function removeProductChannel(\InventoryBundle\Entity\ProductChannel $productChannel)
+    {
+        $this->product_channels->removeElement($productChannel);
+    }
+
+    /**
+     * Add order
+     *
+     * @param \OrderBundle\Entity\Orders $order
+     *
+     * @return Channel
+     */
+    public function addOrder(\OrderBundle\Entity\Orders $order)
+    {
+        $this->orders[] = $order;
+
+        return $this;
+    }
+
+    /**
+     * Remove order
+     *
+     * @param \OrderBundle\Entity\Orders $order
+     */
+    public function removeOrder(\OrderBundle\Entity\Orders $order)
+    {
+        $this->orders->removeElement($order);
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Channel
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Add ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return Channel
+     */
+    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Remove ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     */
+    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers->removeElement($ledger);
+    }
+
+    /**
+     * Add warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     *
+     * @return Channel
+     */
+    public function addWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims[] = $warrantyClaim;
+
+        return $this;
+    }
+
+    /**
+     * Remove warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     */
+    public function removeWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims->removeElement($warrantyClaim);
+    }
+
+    /**
+     * Add rebate
+     *
+     * @param \InventoryBundle\Entity\Rebate $rebate
+     *
+     * @return Channel
+     */
+    public function addRebate(\InventoryBundle\Entity\Rebate $rebate)
+    {
+        $this->rebates[] = $rebate;
+
+        return $this;
+    }
+
+    /**
+     * Remove rebate
+     *
+     * @param \InventoryBundle\Entity\Rebate $rebate
+     */
+    public function removeRebate(\InventoryBundle\Entity\Rebate $rebate)
+    {
+        $this->rebates->removeElement($rebate);
+    }
+
+    /**
+     * Add rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     *
+     * @return Channel
+     */
+    public function addRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions[] = $rebateSubmission;
+
+        return $this;
+    }
+
+    /**
+     * Remove rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     */
+    public function removeRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions->removeElement($rebateSubmission);
+    }
+
+    /**
+     * Set achCompanyId
+     *
+     * @param integer $achCompanyId
+     *
+     * @return Channel
+     */
+    public function setAchCompanyId($achCompanyId)
+    {
+        $this->ach_company_id = $achCompanyId;
+
+        return $this;
+    }
+
+    /**
+     * Get achCompanyId
+     *
+     * @return integer
+     */
+    public function getAchCompanyId()
+    {
+        return $this->ach_company_id;
+    }
+
+    /**
+     * Set achOriginatingDfi
+     *
+     * @param integer $achOriginatingDfi
+     *
+     * @return Channel
+     */
+    public function setAchOriginatingDfi($achOriginatingDfi)
+    {
+        $this->ach_originating_dfi = $achOriginatingDfi;
+
+        return $this;
+    }
+
+    /**
+     * Get achOriginatingDfi
+     *
+     * @return integer
+     */
+    public function getAchOriginatingDfi()
+    {
+        return $this->ach_originating_dfi;
+    }
+
+    /**
+     * Set achCompanyName
+     *
+     * @param string $achCompanyName
+     *
+     * @return Channel
+     */
+    public function setAchCompanyName($achCompanyName)
+    {
+        $this->ach_company_name = $achCompanyName;
+
+        return $this;
+    }
+
+    /**
+     * Get achCompanyName
+     *
+     * @return string
+     */
+    public function getAchCompanyName()
+    {
+        return $this->ach_company_name;
+    }
+}

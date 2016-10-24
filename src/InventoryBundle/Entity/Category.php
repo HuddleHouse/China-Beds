@@ -122,5 +122,28 @@ class Category
         $this->product_categories = $product_categories;
     }
 
-}
 
+    /**
+     * Add productCategory
+     *
+     * @param \InventoryBundle\Entity\ProductCategory $productCategory
+     *
+     * @return Category
+     */
+    public function addProductCategory(\InventoryBundle\Entity\ProductCategory $productCategory)
+    {
+        $this->product_categories[] = $productCategory;
+
+        return $this;
+    }
+
+    /**
+     * Remove productCategory
+     *
+     * @param \InventoryBundle\Entity\ProductCategory $productCategory
+     */
+    public function removeProductCategory(\InventoryBundle\Entity\ProductCategory $productCategory)
+    {
+        $this->product_categories->removeElement($productCategory);
+    }
+}
