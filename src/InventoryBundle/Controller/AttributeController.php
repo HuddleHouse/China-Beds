@@ -58,10 +58,7 @@ class AttributeController extends Controller
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating attribute: ' . $e->getMessage());
 
-                return $this->render('@Inventory/Attribute/new.html.twig', array(
-                    'attribute' => $attribute,
-                    'form' => $form->createView(),
-                ));
+                return $this->redirectToRoute('attribute_index');
             }
         }
 
