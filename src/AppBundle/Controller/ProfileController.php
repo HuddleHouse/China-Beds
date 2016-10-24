@@ -135,18 +135,6 @@ class ProfileController extends Controller
     }
 
     /**
-     *
-     * @Route("/settings", name="show_settings")
-     */
-    public function showUserSettings(Request $request) {
-
-        return $this->render('@App/Profile/settings-index.html.twig', array(
-
-        ));
-    }
-
-
-    /**
      * Edit the user
      */
     public function editAction(Request $request)
