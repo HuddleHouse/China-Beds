@@ -17,6 +17,7 @@ class ChannelType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('url', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
         ;
     }

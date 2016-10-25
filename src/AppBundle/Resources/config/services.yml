@@ -2,6 +2,9 @@ services:
     email_service:
         class: AppBundle\Services\EmailService
         arguments: ["@swiftmailer.mailer"]
+    settings_service:
+        class: AppBundle\Services\SettingsService
+        arguments: ["@doctrine.orm.default_entity_manager"]
     core.extension:
         class: AppBundle\Twig\CoreExtensions
         arguments: ["@service_container"]

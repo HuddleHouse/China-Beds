@@ -1,0 +1,39 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}New Setting{% endblock %}
+{% block page_title %}New Setting{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('settings_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#ledger_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

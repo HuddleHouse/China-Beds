@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Controller\API;
 
+use AppBundle\Services\EmailService;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
@@ -282,6 +283,9 @@ class OrderProductsController extends Controller
         $order->setPaymentType($payment_type);
         $em->persist($order);
         $em->flush();
+
+        $this->get('email_service')->sendOrderEmails($order);
+
         return JsonResponse::create(true);
     }
 

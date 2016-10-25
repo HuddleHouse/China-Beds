@@ -1,0 +1,85 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}Admin Settings{% endblock %}
+{% block page_title %}
+    Admin Settings
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {});
+
+        function saveSettings() {
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_save_settings') }}",
+                dataType: 'json',
+                data: { data: $('#settings-form').serializeArray() },
+                success: function (rtn) {
+                    if(rtn[0] == true)
+                        showSuccessModal('Settings Updated');
+                    if(rtn[0] == false)
+                        showErrorModal('Error updating settings: ' + rtn[1]);
+                }
+            });
+        }
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="table">
+        <div class="form-body" style="padding-left:10px">
+            <form id="settings-form">
+                {% for section in sections %}
+                    <div class="row">
+                        <h5>{{ section.name }}</h5>
+                    </div>
+                    {% if(section.settings.empty) %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                No settings yet
+                            </div>
+                        </div>
+                    {% else %}
+                        {% for setting in section.settings %}
+                            {% if(setting.type == 'text') %}
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="{{ setting.name }}">{{ setting.label }}</label>
+                                        <input type="text" id="{{ setting.name }}" name="{{ setting.name }}" class="form-control" style="margin-bottom: 10px" value="{{ setting.value }}">
+                                    </div>
+                                </div>
+                            {% elseif(setting.type == 'textarea') %}
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label for="{{ setting.name }}">{{ setting.label }}</label>
+                                        <textarea id="{{ setting.name }}" name="{{ setting.name }}" class="form-control" style="margin-bottom: 10px" rows="5" maxlength="255">{{ setting.value }}</textarea>
+                                    </div>
+                                </div>
+                            {% elseif(setting.type == 'select') %}
+                                {% set options = setting.choices|split(',') %}
+                                <div class="row">
+                                    <div class="col-md-4 form-group is-empty">
+                                        <label for="{{ setting.name }}">{{ setting.label }}</label>
+                                        <select id="{{ setting.name }}" name="{{ setting.name }}" required="required" class="form-control" style="margin-bottom: 10px">
+                                            {% for option in options %}
+                                                <option value="{{ option }}"{% if(option == setting.value) %} selected="selected"{% endif %}>{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <input class="btn btn-raised btn-success" type="button" value="Save" onclick="saveSettings()"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
