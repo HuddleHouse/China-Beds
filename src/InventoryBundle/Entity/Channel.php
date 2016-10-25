@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="channel")
  * @ORM\Entity(repositoryClass="InventoryBundle\Repository\ChannelRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Channel
 {
@@ -43,9 +44,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_logo", type="string")
-     *
-     *
-     *
      */
     private $frontLogo;
 
@@ -74,9 +72,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_slider_one", type="string")
-     *
-     *
-     *
      */
     private $frontSliderOne;
 
@@ -84,9 +79,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_slider_two", type="string")
-     *
-     *
-     *
      */
     private $frontSliderTwo;
 
@@ -94,9 +86,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_slider_three", type="string")
-     *
-     *
-     *
      */
     private $frontSliderThree;
 
@@ -104,9 +93,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_footer_one", type="string")
-     *
-     *
-     *
      */
     private $frontFooterOne;
 
@@ -114,9 +100,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_footer_two", type="string")
-     *
-     *
-     *
      */
     private $frontFooterTwo;
 
@@ -124,9 +107,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="front_footer_three", type="string")
-     *
-     *
-     *
      */
     private $frontFooterThree;
 
@@ -141,9 +121,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="faq_warranty_pic", type="string")
-     *
-     *
-     *
      */
     private $faqWarrantyPic;
 
@@ -151,9 +128,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="faq_unpacking_pic", type="string")
-     *
-     *
-     *
      */
     private $faqUnpackingPic;
 
@@ -161,9 +135,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="faq_support_pic", type="string")
-     *
-     *
-     *
      */
     private $faqSupportPic;
 
@@ -171,9 +142,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="faq_maintenance_pic", type="string")
-     *
-     *
-     *
      */
     private $faqMaintenancePic;
 
@@ -181,9 +149,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="faq_contact_pic", type="string")
-     *
-     *
-     *
      */
     private $faqContactPic;
 
@@ -191,9 +156,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="faq_tc_pic", type="string")
-     *
-     *
-     *
      */
     private $faqTCPic;
 
@@ -201,9 +163,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_memoryfoam_pic", type="string")
-     *
-     *
-     *
      */
     private $pFmemoryFoamPic;
 
@@ -211,9 +170,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_side_pic", type="string")
-     *
-     *
-     *
      */
     private $pFSidePic;
 
@@ -221,9 +177,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_renewresource_pic", type="string")
-     *
-     *
-     *
      */
     private $pFRenewResourcewPic;
 
@@ -231,9 +184,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_socs_pic", type="string")
-     *
-     *
-     *
      */
     private $pFsocsPic;
 
@@ -241,9 +191,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_pbo_pic", type="string")
-     *
-     *
-     *
      */
     private $pFpboPic;
 
@@ -251,9 +198,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_bcharcoal_pic", type="string")
-     *
-     *
-     *
      */
     private $pFBCharcoalPic;
 
@@ -261,9 +205,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_bfibers_pic", type="string")
-     *
-     *
-     *
      */
     private $pFBFibersPic;
 
@@ -271,9 +212,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_silk_pic", type="string")
-     *
-     *
-     *
      */
     private $pFSilkPic;
 
@@ -281,9 +219,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_aloevera_pic", type="string")
-     *
-     *
-     *
      */
     private $pFAloeVeraPic;
 
@@ -291,9 +226,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_certified_pic", type="string")
-     *
-     *
-     *
      */
     private $pFCertifiedPic;
 
@@ -301,9 +233,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="pf_texstand_pic", type="string")
-     *
-     *
-     *
      */
     private $pFTexStandPic;
 
@@ -311,9 +240,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="retail_header_pic", type="string")
-     *
-     *
-     *
      */
     private $retailHeaderPic;
 
@@ -321,9 +247,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="retail_first_pic", type="string")
-     *
-     *
-     *
      */
     private $retailFirstPic;
 
@@ -331,9 +254,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="retail_second_pic", type="string")
-     *
-     *
-     *
      */
     private $retailSecondPic;
 
@@ -341,9 +261,6 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="retail_third_pic", type="string")
-     *
-     *
-     *
      */
     private $retailThirdPic;
 
@@ -351,17 +268,8 @@ class Channel
      * @var string
      *
      * @ORM\Column(name="retail_fourth_pic", type="string")
-     *
-     *
-     *
      */
     private $retailFourthPic;
-
-
-
-
-
-
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="channel")
@@ -414,7 +322,24 @@ class Channel
         $this->rebates = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
     }
-    
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function alterForLinkUsage(){
+        if(!preg_match('/^http(s)?:\/\/(www.)?/i', $this->fbLink)){
+            $this->fbLink =  'http://' . $this->fbLink;
+        }
+        if(!preg_match('/^http(s)?:\/\/(www.)?/i', $this->twLink)){
+            $this->twLink =  'http://' . $this->twLink;
+        }
+        if(!preg_match('/^http(s)?:\/\/(www.)?/i', $this->instaLink)){
+            $this->instaLink =  'http://' . $this->instaLink;
+        }
+
+    }
+
     /**
      * Get id
      *

@@ -48,7 +48,7 @@
             </a>
             <div class="login-btn">
                 <ul>
-                    <li>Login</li>
+                    <li><a href="">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -65,9 +65,9 @@
         <div class="content-section">
             <div class="slider-section">
                 <div class="home-slider">
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderOne) }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderTwo) }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderThree) }}" /></div>
                 </div>
             </div>
 
@@ -77,7 +77,7 @@
                         <a href="{{ path('web_retailers', {site: site}) }}">
                             <div class="box">
                                 <div class="heading">FOR RETAILERS</div>
-                                <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterOne) }}" />
                             </div>
                         </a>
                     </div>
@@ -85,7 +85,7 @@
                         <a href="{{ path('web_product_features', {site: site}) }}">
                             <div class="box">
                                 <div class="heading">PRODUCT FEATURES</div>
-                                <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterTwo) }}" />
                             </div>
                         </a>
                     </div>
@@ -93,7 +93,7 @@
                         <a href="{{ path('web_faq', {site: site}) }}">
                             <div class="box">
                                 <div class="heading">WARRANTY/QUESTIONS?</div>
-                                <img src="{{ asset('images/web/Warranty@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterThree) }}" />
                             </div>
                         </a>
                     </div>

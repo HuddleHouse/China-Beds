@@ -25,22 +25,46 @@ class WebsiteController extends Controller
 
     public function faqIndexAction($site)
     {
+        $em = $this->getDoctrine()->getManager();
+        if($site == 'mlily'){
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'MLILY'));
+        }
+        else{
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'BedBoss'));
+        }
         return $this->render('WebsiteBundle:Website:faq.html.twig', array(
-            'site' => $site
+            'site' => $site,
+            'channel' => $channel
         ));
     }
 
     public function productFeaturesIndexAction($site)
     {
+        $em = $this->getDoctrine()->getManager();
+        if($site == 'mlily'){
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'MLILY'));
+        }
+        else{
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'BedBoss'));
+        }
         return $this->render('WebsiteBundle:Website:product-features.html.twig', array(
-            'site' => $site
+            'site' => $site,
+            'channel' => $channel
         ));
     }
 
     public function retailerIndexAction($site)
     {
+        $em = $this->getDoctrine()->getManager();
+        if($site == 'mlily'){
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'MLILY'));
+        }
+        else{
+            $channel = $em->getRepository('InventoryBundle:Channel')->findOneBy(array('name' => 'BedBoss'));
+        }
         return $this->render('WebsiteBundle:Website:retailer.html.twig', array(
-            'site' => $site
+            'site' => $site,
+            'channel' => $channel
         ));
     }
 
