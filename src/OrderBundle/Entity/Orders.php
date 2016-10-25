@@ -245,6 +245,7 @@ class Orders
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
+        $this->manual_items = new ArrayCollection();
         $this->shipping_labels = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
@@ -971,6 +972,23 @@ class Orders
     {
         $this->orderId = $orderId;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getManualItems()
+    {
+        return $this->manual_items;
+    }
+
+    /**
+     * @param mixed $manual_items
+     */
+    public function setManualItems($manual_items)
+    {
+        $this->manual_items = $manual_items;
+    }
+
 
 }
 
