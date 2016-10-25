@@ -490,19 +490,6 @@ class WarrantyClaim
         return $this->otherComments;
     }
 
-    /**
-     * Add ledger
-     *
-     * @param \OrderBundle\Entity\Ledger $ledger
-     *
-     * @return WarrantyClaim
-     */
-    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
-    {
-        $this->ledgers[] = $ledger;
-
-        return $this;
-    }
 
     /**
      * Remove ledger
@@ -513,14 +500,5 @@ class WarrantyClaim
     {
         $this->ledgers->removeElement($ledger);
     }
-}
-    /**
-     * Remove ledger
-     *
-     * @param \OrderBundle\Entity\Ledger $ledger
-     */
-    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
-    {
-        $this->ledgers->removeElement($ledger);
-    }
+
 }
