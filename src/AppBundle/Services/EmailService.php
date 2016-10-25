@@ -28,6 +28,7 @@ class EmailService extends BaseService
 //                $warehouse = $warehouseInfo->getWarehouse();
 //                $warehouses[$warehouse->getName()]['email'] = $warehouse->getEmail();
 //            }
+
 //        }
     }
 
