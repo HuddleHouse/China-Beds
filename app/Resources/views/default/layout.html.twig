@@ -372,7 +372,7 @@
                                     <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>Warranty Claims</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_warranty and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
-                                    <a href="{{ path('warrantyclaim_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>Warranty Claim</a>
+                                    <a href="{{ path('warrantyclaim_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>New Warranty Claim</a>
                                 </li>
                             </ul>
                         </li>
@@ -426,6 +426,11 @@
                                 <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
                                     <a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Fund</a>
                                 </li>
+                                {% if (is_granted('ROLE_ADMIN')) %}
+                                <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
+                                    <a href="{{ path('ledger_credit_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Assign Credit</a>
+                                </li>
+                                {% endif %}
                             </ul>
                         </li>
 

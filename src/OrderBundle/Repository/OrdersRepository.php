@@ -184,6 +184,11 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getLatestOrdersForUser(User $user) {
-        return $this->getEntityManager()->getRepository('AppBundle:User')->getLatestOrdersForUser($user);
+        if($user->hasRole('ROLE_ADMIN'))
+            $orders = $this->findBy(array(), array('submitDate' => 'DESC'));
+        else
+            $orders = $this->findBy(array('submitted_for_user' => $user, 'channel' => $user->getActiveChannel()), array('submitDate' => 'DESC'));
+
+        return $orders;
     }
 }

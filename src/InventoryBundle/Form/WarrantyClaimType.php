@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -61,7 +62,7 @@ class WarrantyClaimType extends AbstractType
                         return $order->getOrderId();
                     },
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
-                    'required' => true
+                    'required' => false
                 )
             )
             ->add('productVariant', EntityType::class, array(
@@ -72,6 +73,7 @@ class WarrantyClaimType extends AbstractType
                     'choice_label' => function(ProductVariant $productVariant) {
                         return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();
                     },
+                    'required' => false
                 )
             )
             ->add('creditRequested', MoneyType::class, array(
@@ -87,7 +89,40 @@ class WarrantyClaimType extends AbstractType
                     'required' => true
                 )
             )
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')));
+            ->add('description', TextareaType::class, array('label' => 'Comments', 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('file1', FileType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'label' => 'Proof Image 1',
+                    'required' => false,
+                )
+            )
+            ->add('path1', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser1()', 'readonly' => 'readonly'),
+                    'required' => false,
+                )
+            )
+            ->add('file2', FileType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'label' => 'Proof Image 2',
+                    'required' => false,
+                )
+            )
+            ->add('path2', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser2()', 'readonly' => 'readonly'),
+                    'required' => false,
+                )
+            )
+            ->add('file3', FileType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'label' => 'Proof Image 3',
+                    'required' => false,
+                )
+            )
+            ->add('path3', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser3()', 'readonly' => 'readonly'),
+                    'required' => false,
+                )
+            );
     }
     
     /**

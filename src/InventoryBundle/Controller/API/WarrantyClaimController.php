@@ -87,12 +87,15 @@ class WarrantyClaimController extends Controller
     public function showAction(Request $request)
     {
         if($request->get('claim_id') == 0)
-            return new JsonResponse(array(false, "Invalid Rebate Submission ID."), 404);
+            return new JsonResponse(array(false, "Invalid Rebate Submission ID."));
 
         try {
             $warrantyClaim = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:WarrantyClaim')->find($request->get('claim_id'));
-            if($warrantyClaim->getDateMadeAware() == null)
+            if($warrantyClaim->getDateMadeAware() == null) {
                 $warrantyClaim->setDateMadeAware(new \DateTime());
+                $this->getDoctrine()->getManager()->persist($warrantyClaim);
+                $this->getDoctrine()->getManager()->flush();
+            }
             $template = $this->renderView('@Inventory/WarrantyClaim/modal-show.html.twig', array(
                 'warranty_claim' => $warrantyClaim,
                 'order' => $warrantyClaim->getOrder(),

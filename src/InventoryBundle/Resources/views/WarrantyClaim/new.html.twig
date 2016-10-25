@@ -51,6 +51,18 @@
             m_strOut = m_strOut.replace(/[^0-9.]/g, '');
             return m_strOut;
         }
+
+        function openFileBrowser1() {
+            $('#warranty_claim_file1').click();
+        }
+
+        function openFileBrowser2() {
+            $('#warranty_claim_file2').click();
+        }
+
+        function openFileBrowser3() {
+            $('#warranty_claim_file3').click();
+        }
     </script>
 {% endblock footer %}
 
@@ -76,12 +88,47 @@
                     {{ form_widget(form.creditRequested) }}
                 </div>
                 <div class="col-md-4 form-group">
-                    {{ form_label(form.order) }}
+                    {{ form_label(form.order) }} <i id="info-icon" class="fa fa-info-circle" aria-hidden="true" onclick="showInfoModal()"></i><div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="info-icon">If you don't know your Order ID, input relevant information in the comments</div>
                     {{ form_widget(form.order) }}
                 </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(form.productVariant) }}
                     {{ form_widget(form.productVariant) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.file1) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="warranty_claim_file1" name="warranty_claim[file1]" accept="image/*">
+                    </span>
+                        </label>
+                        {{ form_widget(form.path1) }}
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.file2) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="warranty_claim_file2" name="warranty_claim[file2]" accept="image/*">
+                    </span>
+                        </label>
+                        {{ form_widget(form.path2) }}
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.file3) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="warranty_claim_file3" name="warranty_claim[file3]" accept="image/*">
+                    </span>
+                        </label>
+                        {{ form_widget(form.path3) }}
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -91,6 +138,9 @@
                 </div>
             </div>
             <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            {% do form.file1.setRendered %}
+            {% do form.file2.setRendered %}
+            {% do form.file3.setRendered %}
             {{ form_end(form) }}
         </div>
     </div>
