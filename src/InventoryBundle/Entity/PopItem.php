@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -96,6 +97,13 @@ class PopItem
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventoryOnHold", mappedBy="pop_item")
      */
     private $warehouse_pop_inventory_on_hold;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
+     */
+    private $channel;
+
 
     public function __construct()
     {
@@ -483,5 +491,29 @@ class PopItem
     public function removeWarehousePopInventoryOnHold(\WarehouseBundle\Entity\WarehousePopInventoryOnHold $warehousePopInventoryOnHold)
     {
         $this->warehouse_pop_inventory_on_hold->removeElement($warehousePopInventoryOnHold);
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \InventoryBundle\Entity\Channel $channel
+     *
+     * @return PopItem
+     */
+    public function setChannel(\InventoryBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \InventoryBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }
