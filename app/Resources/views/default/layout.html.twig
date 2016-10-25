@@ -372,7 +372,7 @@
                                     <a href="{{ path('warrantyclaim_index') }}"><i class="fa fa-circle-o"></i>Warranty Claims</a>
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_warranty and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
-                                    <a href="{{ path('warrantyclaim_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>Warranty Claim</a>
+                                    <a href="{{ path('warrantyclaim_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>New Warranty Claim</a>
                                 </li>
                             </ul>
                         </li>
