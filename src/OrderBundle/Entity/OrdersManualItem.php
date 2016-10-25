@@ -24,13 +24,6 @@ class OrdersManualItem
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="string", length=255)
-     */
-    private $text;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
@@ -51,30 +44,6 @@ class OrdersManualItem
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set text
-     *
-     * @param string $text
-     *
-     * @return OrdersManualItem
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-
-        return $this;
-    }
-
-    /**
-     * Get text
-     *
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
     }
 
     /**
