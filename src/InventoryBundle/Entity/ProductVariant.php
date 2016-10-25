@@ -387,5 +387,196 @@ class ProductVariant
         $this->warranty_claims = $warranty_claims;
     }
 
-}
 
+    /**
+     * Add purchaseOrderProductVariant
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrderProductVariant $purchaseOrderProductVariant
+     *
+     * @return ProductVariant
+     */
+    public function addPurchaseOrderProductVariant(\WarehouseBundle\Entity\PurchaseOrderProductVariant $purchaseOrderProductVariant)
+    {
+        $this->purchase_order_product_variant[] = $purchaseOrderProductVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrderProductVariant
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrderProductVariant $purchaseOrderProductVariant
+     */
+    public function removePurchaseOrderProductVariant(\WarehouseBundle\Entity\PurchaseOrderProductVariant $purchaseOrderProductVariant)
+    {
+        $this->purchase_order_product_variant->removeElement($purchaseOrderProductVariant);
+    }
+
+    /**
+     * Add stockTransferProductVariant
+     *
+     * @param \WarehouseBundle\Entity\StockTransferProductVariant $stockTransferProductVariant
+     *
+     * @return ProductVariant
+     */
+    public function addStockTransferProductVariant(\WarehouseBundle\Entity\StockTransferProductVariant $stockTransferProductVariant)
+    {
+        $this->stock_transfer_product_variant[] = $stockTransferProductVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockTransferProductVariant
+     *
+     * @param \WarehouseBundle\Entity\StockTransferProductVariant $stockTransferProductVariant
+     */
+    public function removeStockTransferProductVariant(\WarehouseBundle\Entity\StockTransferProductVariant $stockTransferProductVariant)
+    {
+        $this->stock_transfer_product_variant->removeElement($stockTransferProductVariant);
+    }
+
+    /**
+     * Add ordersProductVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $ordersProductVariant
+     *
+     * @return ProductVariant
+     */
+    public function addOrdersProductVariant(\OrderBundle\Entity\OrdersProductVariant $ordersProductVariant)
+    {
+        $this->orders_product_variant[] = $ordersProductVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove ordersProductVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $ordersProductVariant
+     */
+    public function removeOrdersProductVariant(\OrderBundle\Entity\OrdersProductVariant $ordersProductVariant)
+    {
+        $this->orders_product_variant->removeElement($ordersProductVariant);
+    }
+
+    /**
+     * Add stockAdjustmentProductVariant
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustmentProductVariant $stockAdjustmentProductVariant
+     *
+     * @return ProductVariant
+     */
+    public function addStockAdjustmentProductVariant(\WarehouseBundle\Entity\StockAdjustmentProductVariant $stockAdjustmentProductVariant)
+    {
+        $this->stock_adjustment_product_variant[] = $stockAdjustmentProductVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockAdjustmentProductVariant
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustmentProductVariant $stockAdjustmentProductVariant
+     */
+    public function removeStockAdjustmentProductVariant(\WarehouseBundle\Entity\StockAdjustmentProductVariant $stockAdjustmentProductVariant)
+    {
+        $this->stock_adjustment_product_variant->removeElement($stockAdjustmentProductVariant);
+    }
+
+    /**
+     * Add priceGroupPrice
+     *
+     * @param \AppBundle\Entity\PriceGroupPrices $priceGroupPrice
+     *
+     * @return ProductVariant
+     */
+    public function addPriceGroupPrice(\AppBundle\Entity\PriceGroupPrices $priceGroupPrice)
+    {
+        $this->price_group_prices[] = $priceGroupPrice;
+
+        return $this;
+    }
+
+    /**
+     * Remove priceGroupPrice
+     *
+     * @param \AppBundle\Entity\PriceGroupPrices $priceGroupPrice
+     */
+    public function removePriceGroupPrice(\AppBundle\Entity\PriceGroupPrices $priceGroupPrice)
+    {
+        $this->price_group_prices->removeElement($priceGroupPrice);
+    }
+
+    /**
+     * Add warehouseInventory
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventory $warehouseInventory
+     *
+     * @return ProductVariant
+     */
+    public function addWarehouseInventory(\WarehouseBundle\Entity\WarehouseInventory $warehouseInventory)
+    {
+        $this->warehouse_inventory[] = $warehouseInventory;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouseInventory
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventory $warehouseInventory
+     */
+    public function removeWarehouseInventory(\WarehouseBundle\Entity\WarehouseInventory $warehouseInventory)
+    {
+        $this->warehouse_inventory->removeElement($warehouseInventory);
+    }
+
+    /**
+     * Add warehouseInventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventoryOnHold $warehouseInventoryOnHold
+     *
+     * @return ProductVariant
+     */
+    public function addWarehouseInventoryOnHold(\WarehouseBundle\Entity\WarehouseInventoryOnHold $warehouseInventoryOnHold)
+    {
+        $this->warehouse_inventory_on_hold[] = $warehouseInventoryOnHold;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouseInventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventoryOnHold $warehouseInventoryOnHold
+     */
+    public function removeWarehouseInventoryOnHold(\WarehouseBundle\Entity\WarehouseInventoryOnHold $warehouseInventoryOnHold)
+    {
+        $this->warehouse_inventory_on_hold->removeElement($warehouseInventoryOnHold);
+    }
+
+    /**
+     * Add warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     *
+     * @return ProductVariant
+     */
+    public function addWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims[] = $warrantyClaim;
+
+        return $this;
+    }
+
+    /**
+     * Remove warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     */
+    public function removeWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims->removeElement($warrantyClaim);
+    }
+}

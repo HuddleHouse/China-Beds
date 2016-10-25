@@ -94,4 +94,3 @@ class PromoKit
         return $this->description;
     }
 }
-

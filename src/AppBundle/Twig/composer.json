@@ -1,0 +1,83 @@
+<?php
+
+namespace Conceptrix\BandVistaBundle\Twig;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * @author Matt Drollette <matt@drollette.com>
+ */
+class LocaleExtension extends \Twig_Extension
+{
+    protected $container;
+    protected $timezone;
+
+    public function __construct(ContainerInterface $container)
+    {
+   
+        $this->container = $container;
+        $this->timezone = $this->container->get('session')->get('timezone', 'UTC');
+
+
+//        $token = $this->container->get('security.context')->getToken();
+//
+//        if (!$token || !is_object($user = $token->getUser())) {
+//            $this->timezone = 'UTC';
+//        } else {
+//            $this->timezone = $user->getTimeZone();
+//        }
+
+    }
+
+    public function getFunctions()
+    {
+        return array();
+    }
+
+    public function getFilters()
+    {
+        return array(
+            'datetime' => new \Twig_Filter_Method($this, 'formatDatetime', array('is_safe' => array('html'))),
+	        'money' => new \Twig_Filter_Method($this, 'formatMoney'),
+        );
+    }
+    
+    public function formatMoney($amount, $format)
+    {
+	    if ($format == 'USD') {
+		return '$'.(number_format($amount, 2, '.', ','));
+	    } else {
+		return $format.' '.(number_format($amount, 2, '.', ','));
+	    }
+    }
+    
+    public function formatDatetime($date, $format, $timezone = null)
+    {
+        if (null === $timezone) {
+            $timezone = $this->timezone;
+        }
+
+        if (!$date instanceof \DateTime) {
+            if (ctype_digit((string) $date)) {
+                $date = new \DateTime('@'.$date, new \DateTimeZone("UTC"));
+            } else {
+                $date = new \DateTime($date, new \DateTimeZone("UTC"));
+            }
+        }
+
+        if (!$timezone instanceof \DateTimeZone) {
+            $timezone = new \DateTimeZone($timezone);
+        }
+
+        $date->setTimezone($timezone);
+
+
+
+        return $date->format($format);
+    }
+
+    public function getName()
+    {
+        return 'conceptrix_core_locale';
+    }
+}

@@ -53,7 +53,7 @@ class AttributeController extends Controller
                 $em->flush();
                 $this->addFlash('notice', 'Attribute created successfully.');
 
-                return $this->redirectToRoute('attribute_edit', array('id' => $attribute->getId()));
+                return $this->redirectToRoute('attribute_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating attribute: ' . $e->getMessage());
@@ -107,7 +107,7 @@ class AttributeController extends Controller
                 $em->persist($attribute);
                 $em->flush();
                 $this->addFlash('notice', 'Attribute updated successfully.');
-                return $this->redirectToRoute('attribute_edit', array('id' => $attribute->getId()));
+                return $this->redirectToRoute('attribute_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error editing attribute: ' . $e->getMessage());

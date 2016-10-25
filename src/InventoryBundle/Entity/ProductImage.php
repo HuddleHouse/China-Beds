@@ -151,5 +151,14 @@ class ProductImage
     {
         $this->path = $path;
     }
-}
 
+    /**
+     * Get product
+     *
+     * @return \InventoryBundle\Entity\Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+}
