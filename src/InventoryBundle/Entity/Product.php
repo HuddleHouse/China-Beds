@@ -86,6 +86,12 @@ class Product
     private $active;
 
     /**
+     * @var bool
+     * @ORM\Column(name="hide_frontend", type="boolean", nullable=true)
+     */
+    private $hideFrontend;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")
      */
     private $attributes;
@@ -572,5 +578,29 @@ class Product
     public function removeImage(\InventoryBundle\Entity\ProductImage $image)
     {
         $this->images->removeElement($image);
+    }
+
+    /**
+     * Set hideFrontend
+     *
+     * @param boolean $hideFrontend
+     *
+     * @return Product
+     */
+    public function setHideFrontend($hideFrontend)
+    {
+        $this->hideFrontend = $hideFrontend;
+
+        return $this;
+    }
+
+    /**
+     * Get hideFrontend
+     *
+     * @return boolean
+     */
+    public function getHideFrontend()
+    {
+        return $this->hideFrontend;
     }
 }

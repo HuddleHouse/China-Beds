@@ -122,6 +122,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
                 foreach($prod->getVariants() as $variant)
                     if($variant->getMsrp() < $lowest_price)
@@ -131,7 +132,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     'description' => $prod->getDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
