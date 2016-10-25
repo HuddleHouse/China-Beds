@@ -41,7 +41,7 @@
                             ng-options="option.name for option in user_warehouses track by option.id" required>
                             <option value="" >Warehouse</option>
                         </select>
-                        {% endverbatim %}
+                    {% endverbatim %}
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
             {% for retailer in user_retailers %}
                 <option value="{{ retailer.id }}">{{ retailer.firstName }} {{ retailer.lastName }}</option>
             {% endfor %}
-                        </select>
+            </select>
         </div>
     </div>
 {% endif %}
