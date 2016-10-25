@@ -2,3 +2,8 @@ services:
     email_service:
         class: AppBundle\Services\EmailService
         arguments: ["@swiftmailer.mailer"]
+    core.extension:
+        class: AppBundle\Twig\CoreExtensions
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension  }

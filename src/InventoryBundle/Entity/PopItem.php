@@ -336,7 +336,7 @@ class PopItem
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        $tmp = __DIR__ . '/../../../../resume/web/' . $this->getUploadDir();
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
         return $tmp;
     }
 
@@ -412,5 +412,76 @@ class PopItem
     }
 
 
-}
 
+    /**
+     * Add ordersPopItem
+     *
+     * @param \OrderBundle\Entity\OrdersPopItem $ordersPopItem
+     *
+     * @return PopItem
+     */
+    public function addOrdersPopItem(\OrderBundle\Entity\OrdersPopItem $ordersPopItem)
+    {
+        $this->orders_pop_item[] = $ordersPopItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove ordersPopItem
+     *
+     * @param \OrderBundle\Entity\OrdersPopItem $ordersPopItem
+     */
+    public function removeOrdersPopItem(\OrderBundle\Entity\OrdersPopItem $ordersPopItem)
+    {
+        $this->orders_pop_item->removeElement($ordersPopItem);
+    }
+
+    /**
+     * Add warehousePopInventory
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventory $warehousePopInventory
+     *
+     * @return PopItem
+     */
+    public function addWarehousePopInventory(\WarehouseBundle\Entity\WarehousePopInventory $warehousePopInventory)
+    {
+        $this->warehouse_pop_inventory[] = $warehousePopInventory;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehousePopInventory
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventory $warehousePopInventory
+     */
+    public function removeWarehousePopInventory(\WarehouseBundle\Entity\WarehousePopInventory $warehousePopInventory)
+    {
+        $this->warehouse_pop_inventory->removeElement($warehousePopInventory);
+    }
+
+    /**
+     * Add warehousePopInventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventoryOnHold $warehousePopInventoryOnHold
+     *
+     * @return PopItem
+     */
+    public function addWarehousePopInventoryOnHold(\WarehouseBundle\Entity\WarehousePopInventoryOnHold $warehousePopInventoryOnHold)
+    {
+        $this->warehouse_pop_inventory_on_hold[] = $warehousePopInventoryOnHold;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehousePopInventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventoryOnHold $warehousePopInventoryOnHold
+     */
+    public function removeWarehousePopInventoryOnHold(\WarehouseBundle\Entity\WarehousePopInventoryOnHold $warehousePopInventoryOnHold)
+    {
+        $this->warehouse_pop_inventory_on_hold->removeElement($warehousePopInventoryOnHold);
+    }
+}

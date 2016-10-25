@@ -64,7 +64,7 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
                 // get only the product variants the user has a price in their price group for
                 $connection = $em->getConnection();
                 $statement = $connection->prepare("
-select *, v.id as variant_id, min(p.price/100) as cost, 0 as inventory, 'variant' as type
+select *, v.id as variant_id, TRUNCATE(min(p.price/100), 2) as cost, 0 as inventory, 'variant' as type
 	from product_variant v 
 		left join price_group_prices p 
 			on p.product_variant_id = v.id

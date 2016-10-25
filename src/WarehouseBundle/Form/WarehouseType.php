@@ -3,6 +3,7 @@
 namespace WarehouseBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,6 +30,7 @@ class WarehouseType extends AbstractType
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => true))
             ->add('manager_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('management_comp', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('shipping_label_image_type', ChoiceType::class, array('choices' => array('PNG' => 'PNG', 'PDF' => 'PDF', 'DPL' => 'DPL', 'EPL2' => 'EPL2', 'ZPLII' => 'ZPLII'), 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => true))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
                 'label' => 'State',

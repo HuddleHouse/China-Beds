@@ -429,5 +429,148 @@ class Product
     {
         $this->variants = $variants;
     }
-}
 
+    /**
+     * Add attribute
+     *
+     * @param \InventoryBundle\Entity\ProductAttribute $attribute
+     *
+     * @return Product
+     */
+    public function addAttribute(\InventoryBundle\Entity\ProductAttribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param \InventoryBundle\Entity\ProductAttribute $attribute
+     */
+    public function removeAttribute(\InventoryBundle\Entity\ProductAttribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+    }
+
+    /**
+     * Add category
+     *
+     * @param \InventoryBundle\Entity\ProductCategory $category
+     *
+     * @return Product
+     */
+    public function addCategory(\InventoryBundle\Entity\ProductCategory $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \InventoryBundle\Entity\ProductCategory $category
+     */
+    public function removeCategory(\InventoryBundle\Entity\ProductCategory $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Add variant
+     *
+     * @param \InventoryBundle\Entity\ProductVariant $variant
+     *
+     * @return Product
+     */
+    public function addVariant(\InventoryBundle\Entity\ProductVariant $variant)
+    {
+        $this->variants[] = $variant;
+
+        return $this;
+    }
+
+    /**
+     * Remove variant
+     *
+     * @param \InventoryBundle\Entity\ProductVariant $variant
+     */
+    public function removeVariant(\InventoryBundle\Entity\ProductVariant $variant)
+    {
+        $this->variants->removeElement($variant);
+    }
+
+    /**
+     * Add channel
+     *
+     * @param \InventoryBundle\Entity\ProductChannel $channel
+     *
+     * @return Product
+     */
+    public function addChannel(\InventoryBundle\Entity\ProductChannel $channel)
+    {
+        $this->channels[] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Remove channel
+     *
+     * @param \InventoryBundle\Entity\ProductChannel $channel
+     */
+    public function removeChannel(\InventoryBundle\Entity\ProductChannel $channel)
+    {
+        $this->channels->removeElement($channel);
+    }
+
+    /**
+     * Add specification
+     *
+     * @param \InventoryBundle\Entity\ProductSpecification $specification
+     *
+     * @return Product
+     */
+    public function addSpecification(\InventoryBundle\Entity\ProductSpecification $specification)
+    {
+        $this->specifications[] = $specification;
+
+        return $this;
+    }
+
+    /**
+     * Remove specification
+     *
+     * @param \InventoryBundle\Entity\ProductSpecification $specification
+     */
+    public function removeSpecification(\InventoryBundle\Entity\ProductSpecification $specification)
+    {
+        $this->specifications->removeElement($specification);
+    }
+
+    /**
+     * Add image
+     *
+     * @param \InventoryBundle\Entity\ProductImage $image
+     *
+     * @return Product
+     */
+    public function addImage(\InventoryBundle\Entity\ProductImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \InventoryBundle\Entity\ProductImage $image
+     */
+    public function removeImage(\InventoryBundle\Entity\ProductImage $image)
+    {
+        $this->images->removeElement($image);
+    }
+}

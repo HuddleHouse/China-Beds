@@ -152,7 +152,7 @@ class ProfileController extends Controller
     public function editAction(Request $request)
     {
         $user = $this->getUser();
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
 
         $form = $this->createForm(EditUserSettingsType::class, $user);
         $form->handleRequest($request);
@@ -161,10 +161,10 @@ class ProfileController extends Controller
             try {
                 $event = new FormEvent($form, $request);
                 $userManager->updateUser($user);
-                $successMessage = "User information updated succesfully.";
+                $successMessage = "User information updated successfully.";
                 $this->addFlash('notice', $successMessage);
 
-                return $this->redirectToRoute('fos_user_profile_edit', array('user_id' => $user_id));
+                return $this->redirectToRoute('fos_user_profile_edit');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating user: ' . $e->getMessage());

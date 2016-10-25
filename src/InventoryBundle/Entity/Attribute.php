@@ -185,7 +185,7 @@ class Attribute
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        $tmp = __DIR__ . '/../../../../resume/web/' . $this->getUploadDir();
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
         return $tmp;
     }
 
@@ -261,5 +261,28 @@ class Attribute
     }
     
     
-}
 
+    /**
+     * Add productAttribute
+     *
+     * @param \InventoryBundle\Entity\ProductAttribute $productAttribute
+     *
+     * @return Attribute
+     */
+    public function addProductAttribute(\InventoryBundle\Entity\ProductAttribute $productAttribute)
+    {
+        $this->product_attributes[] = $productAttribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove productAttribute
+     *
+     * @param \InventoryBundle\Entity\ProductAttribute $productAttribute
+     */
+    public function removeProductAttribute(\InventoryBundle\Entity\ProductAttribute $productAttribute)
+    {
+        $this->product_attributes->removeElement($productAttribute);
+    }
+}

@@ -105,5 +105,38 @@ class ManageOption
     {
         return $this->code;
     }
-}
 
+    /**
+     * Add optionValue
+     *
+     * @param \InventoryBundle\Entity\OptionValue $optionValue
+     *
+     * @return ManageOption
+     */
+    public function addOptionValue(\InventoryBundle\Entity\OptionValue $optionValue)
+    {
+        $this->option_values[] = $optionValue;
+
+        return $this;
+    }
+
+    /**
+     * Remove optionValue
+     *
+     * @param \InventoryBundle\Entity\OptionValue $optionValue
+     */
+    public function removeOptionValue(\InventoryBundle\Entity\OptionValue $optionValue)
+    {
+        $this->option_values->removeElement($optionValue);
+    }
+
+    /**
+     * Get optionValues
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOptionValues()
+    {
+        return $this->option_values;
+    }
+}

@@ -105,5 +105,38 @@ class Specification
     {
         return $this->code;
     }
-}
 
+    /**
+     * Add productSpecification
+     *
+     * @param \InventoryBundle\Entity\ProductSpecification $productSpecification
+     *
+     * @return Specification
+     */
+    public function addProductSpecification(\InventoryBundle\Entity\ProductSpecification $productSpecification)
+    {
+        $this->product_specifications[] = $productSpecification;
+
+        return $this;
+    }
+
+    /**
+     * Remove productSpecification
+     *
+     * @param \InventoryBundle\Entity\ProductSpecification $productSpecification
+     */
+    public function removeProductSpecification(\InventoryBundle\Entity\ProductSpecification $productSpecification)
+    {
+        $this->product_specifications->removeElement($productSpecification);
+    }
+
+    /**
+     * Get productSpecifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProductSpecifications()
+    {
+        return $this->product_specifications;
+    }
+}

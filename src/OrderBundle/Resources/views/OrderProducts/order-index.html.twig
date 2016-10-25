@@ -689,7 +689,7 @@
                         <div class="col-lg-4 col-md-4">
                             <center>Total ($)</center>
                             {% verbatim %}
-                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
+                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px;    min-width: 91px;" >{{ cart_total | currency:'$' }}</div>
                             {% endverbatim %}
                         </div>
                         <div class="col-lg-4 col-md-4">
@@ -715,7 +715,7 @@
 
                         <div class="price_box_row ">
 
-                                <div ng-repeat="variant in product.variants track by $index" class="price_box" style="align">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box" style="min-width: 64px;">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
@@ -729,9 +729,26 @@
                                                ng-change="updateCart({{ variant.variant_id }}, {{ variant.cost }}, {{ variant.inventory}}, '{{variant.type}}')"
                                         >
                                     </div>
-                                    <div class="variant_price">
-                                        {{ variant.cost | currency}}
+                {% endverbatim %}
+                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
+                                    <div class="variant_price gray_box">
+                                        {% verbatim %}
+                                             <input
+                                               onclick="this.select()"
+                                               style="text-align: center; width: 100%;    border: none;"
+                                               ng-model="variant.cost"
+                                               filter="currency"
+                                               >
+                                        {% endverbatim %}
                                     </div>
+                                    {% else %}
+                                        <div class="variant_price gray_box">
+                                        {% verbatim %}
+                                            {{ variant.cost | currency}}
+                                        {% endverbatim %}
+                                        </div>
+                                    {% endif %}
+                {% verbatim %}
 
                                     <div ng-if="variant.inventory < 10" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail

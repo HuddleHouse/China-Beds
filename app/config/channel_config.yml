@@ -1,0 +1,36 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: global_config.yml }
+    - { resource: "@WebsiteBundle/Resources/config/services.yml" }
+
+
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        main:
+            anonymous:    true
+
+    access_control:
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+services:
+    fos_user.doctrine_registry:
+         alias: doctrine
+    app.tokens.action_listener:
+        class: WebsiteBundle\EventListener\TokenListener
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+            session: "@session"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        scope: request

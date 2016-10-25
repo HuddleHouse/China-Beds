@@ -443,6 +443,20 @@ class WarrantyClaim
     }
 
     /**
+     * Add ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return WarrantyClaim
+     */
+    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
      * Get retailerResAttempt
      *
      * @return string
@@ -490,6 +504,16 @@ class WarrantyClaim
         return $this;
     }
 
+    /**
+     * Remove ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     */
+    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers->removeElement($ledger);
+    }
+}
     /**
      * Remove ledger
      *
