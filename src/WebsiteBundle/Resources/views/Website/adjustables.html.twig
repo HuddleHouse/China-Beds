@@ -17,11 +17,6 @@
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
     </script>
-    <style>
-        body{
-            background-color: {{ channel.siteBackgroundColor }};
-        }
-    </style>
 {% endblock footer %}
 
 {% block body %}

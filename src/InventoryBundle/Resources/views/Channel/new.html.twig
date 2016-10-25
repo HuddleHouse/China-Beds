@@ -105,10 +105,6 @@
                 <div class="col-md-12 page-banner homepage" data-toggle="modal" data-target="#homepage-modal"><h3>Homepage</h3></div>
             </div>
             <div class="row">
-                <div class="col-md-4 file-wrap">
-                    {{ form_label(form.frontLogo) }}
-                    {{ form_widget(form.frontLogo) }}
-                </div>
                 <div class="col-md-4">
                     {{ form_label(form.name) }}
                     {{ form_widget(form.name) }}
@@ -117,12 +113,12 @@
                     {{ form_label(form.url) }}
                     {{ form_widget(form.url) }}
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-4">
                     {{ form_label(form.fbLink) }}
                     {{ form_widget(form.fbLink) }}
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     {{ form_label(form.twLink) }}
                     {{ form_widget(form.twLink) }}
@@ -130,6 +126,10 @@
                 <div class="col-md-4">
                     {{ form_label(form.instaLink) }}
                     {{ form_widget(form.instaLink) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.frontFooterText) }}
+                    {{ form_widget(form.frontFooterText) }}
                 </div>
             </div>
             <div class="row">
@@ -161,13 +161,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    {{ form_label(form.frontFooterText) }}
-                    {{ form_widget(form.frontFooterText) }}
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(form.frontLogo) }}
+                    {{ form_widget(form.frontLogo) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(form.siteBackgroundColor) }}
+                    {{ form_widget(form.siteBackgroundColor) }}
+                    <p>applies to background color when signed in this channel</p>
+                    <p>use <a href="http://www.w3schools.com/colors/colors_picker.asp" target="_blank">W3 schools Color Picker</a></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#faq-modal"><h3>FAQ Page</h3></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#faq-modal">FAQ Page</div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -198,7 +204,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#features-modal"><h3>Product Features Page</h3></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#features-modal">Product Features Page</div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
@@ -253,7 +259,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#retailers-modal"><h3>Retailer Page</h3></div>
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#retailers-modal">Retailer Page</div>
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
