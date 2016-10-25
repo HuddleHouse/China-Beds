@@ -440,9 +440,11 @@ class ChannelController extends Controller
      */
     public function editAction(Request $request, Channel $channel)
     {
+        $channel_clone = clone $channel;
         $deleteForm = $this->createDeleteForm($channel);
         $editForm = $this->createForm('InventoryBundle\Form\ChannelType', $channel);
         $editForm->handleRequest($request);
+
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
@@ -461,6 +463,8 @@ class ChannelController extends Controller
                         $frontLogoName
                     );
                     $channel->setFrontLogo($frontLogoName);
+                }else{
+                    $channel->setFrontLogo($channel_clone->getFrontLogo());
                 }
 
 
@@ -473,7 +477,8 @@ class ChannelController extends Controller
                         $firstSliderName
                     );
                     $channel->setFrontSliderOne($firstSliderName);
-
+                }else{
+                    $channel->setFrontSliderOne($channel_clone->getFrontSliderOne());
                 }
 
                 //second slider upload
@@ -485,6 +490,8 @@ class ChannelController extends Controller
                         $secondSliderName
                     );
                     $channel->setFrontSliderTwo($secondSliderName);
+                }else{
+                    $channel->setFrontSliderTwo($channel_clone->getFrontSliderTwo());
                 }
 
                 //third slider upload
@@ -496,6 +503,8 @@ class ChannelController extends Controller
                         $thirdSliderName
                     );
                     $channel->setFrontSliderThree($thirdSliderName);
+                }else{
+                    $channel->setFrontSliderThree($channel_clone->getFrontSliderThree());
                 }
 
                 //first footer box upload
@@ -507,6 +516,8 @@ class ChannelController extends Controller
                         $firstFooterName
                     );
                     $channel->setFrontFooterOne($firstFooterName);
+                }else{
+                    $channel->setFrontFooterOne($channel_clone->getFrontFooterOne());
                 }
 
                 //second footer box upload
@@ -518,6 +529,8 @@ class ChannelController extends Controller
                         $secondFooterName
                     );
                     $channel->setFrontFooterTwo($secondFooterName);
+                }else{
+                    $channel->setFrontFooterTwo($channel_clone->getFrontFooterTwo());
                 }
 
                 //third footer box upload
@@ -529,6 +542,8 @@ class ChannelController extends Controller
                         $thirdFooterName
                     );
                     $channel->setFrontFooterThree($thirdFooterName);
+                }else{
+                    $channel->setFrontFooterThree($channel_clone->getFrontFooterThree());
                 }
 
                 /////////////////////////
@@ -544,6 +559,8 @@ class ChannelController extends Controller
                         $warrantyPicName
                     );
                     $channel->setFaqWarrantyPic($warrantyPicName);
+                }else{
+                    $channel->setFaqWarrantyPic($channel_clone->getFaqWarrantyPic());
                 }
 
                 //unpacking upload
@@ -555,6 +572,8 @@ class ChannelController extends Controller
                         $unpackingPicName
                     );
                     $channel->setFaqUnpackingPic($unpackingPicName);
+                }else{
+                    $channel->setFaqUnpackingPic($channel_clone->getFaqUnpackingPic());
                 }
 
                 //support upload
@@ -566,6 +585,8 @@ class ChannelController extends Controller
                         $supportPicName
                     );
                     $channel->setFaqSupportPic($supportPicName);
+                }else{
+                    $channel->setFaqSupportPic($channel_clone->getFaqSupportPic());
                 }
 
                 //maintenance upload
@@ -577,6 +598,8 @@ class ChannelController extends Controller
                         $maintenancePicName
                     );
                     $channel->setFaqMaintenancePic($maintenancePicName);
+                }else{
+                    $channel->setFaqMaintenancePic($channel_clone->getFaqMaintenancePic());
                 }
 
                 //contact upload
@@ -588,6 +611,8 @@ class ChannelController extends Controller
                         $contactPicName
                     );
                     $channel->setFaqContactPic($contactPicName);
+                }else{
+                    $channel->setFaqContactPic($channel_clone->getFaqContactPic());
                 }
 
                 //terms & conditions upload
@@ -599,6 +624,8 @@ class ChannelController extends Controller
                         $tandcPicName
                     );
                     $channel->setFaqTCPic($tandcPicName);
+                }else{
+                    $channel->setFaqTCPic($channel_clone->getFaqTCPic());
                 }
 
                 /////////////////////////////
@@ -614,6 +641,8 @@ class ChannelController extends Controller
                         $memoryFoamPicName
                     );
                     $channel->setPFmemoryFoamPic($memoryFoamPicName);
+                }else{
+                    $channel->setPFmemoryFoamPic($channel_clone->getPFmemoryFoamPic());
                 }
 
                 //side picture upload
@@ -625,6 +654,8 @@ class ChannelController extends Controller
                         $sidePicName
                     );
                     $channel->setPFSidePic($sidePicName);
+                }else{
+                    $channel->setPFSidePic($channel_clone->getPFSidePic());
                 }
 
                 //renewable ersource upload
@@ -636,6 +667,8 @@ class ChannelController extends Controller
                         $renewableResourcePicName
                     );
                     $channel->setPFRenewResourcewPic($renewableResourcePicName);
+                }else{
+                    $channel->setPFRenewResourcewPic($channel_clone->getPFRenewResourcewPic());
                 }
 
                 //semi-open cell structure upload
@@ -647,6 +680,8 @@ class ChannelController extends Controller
                         $socsPicName
                     );
                     $channel->setPFsocsPic($socsPicName);
+                }else{
+                    $channel->setPFsocsPic($channel_clone->getPFsocsPic());
                 }
 
                 //plant based oils picture
@@ -658,6 +693,8 @@ class ChannelController extends Controller
                         $pboPicName
                     );
                     $channel->setPFpboPic($pboPicName);
+                }else{
+                    $channel->setPFpboPic($channel_clone->getPFpboPic());
                 }
 
                 //bamboo charcoal upload
@@ -669,6 +706,8 @@ class ChannelController extends Controller
                         $bCharcoalPicName
                     );
                     $channel->setPFBCharcoalPic($bCharcoalPicName);
+                }else{
+                    $channel->setPFBCharcoalPic($channel_clone->getPFBCharcoalPic());
                 }
 
                 //bamboo fibers upload
@@ -680,6 +719,8 @@ class ChannelController extends Controller
                         $bFiberPicName
                     );
                     $channel->setPFBFibersPic($bFiberPicName);
+                }else{
+                    $channel->setPFBFibersPic($channel_clone->getPFBFibersPic());
                 }
 
                 //silk upload
@@ -691,6 +732,8 @@ class ChannelController extends Controller
                         $silkPicName
                     );
                     $channel->setPFSilkPic($silkPicName);
+                }else{
+                    $channel->setPFSilkPic($channel_clone->getPFSilkPic());
                 }
 
                 //aloe vera picture
@@ -702,6 +745,8 @@ class ChannelController extends Controller
                         $aloeVeraPicName
                     );
                     $channel->setPFAloeVeraPic($aloeVeraPicName);
+                }else{
+                    $channel->setPFAloeVeraPic($channel_clone->getPFAloeVeraPic());
                 }
 
                 //certified foam picture
@@ -713,6 +758,8 @@ class ChannelController extends Controller
                         $certFoamPicName
                     );
                     $channel->setPFCertifiedPic($certFoamPicName);
+                }else{
+                    $channel->setPFCertifiedPic($channel_clone->getPFCertifiedPic());
                 }
 
                 //OEKO TEX standard upload
@@ -724,6 +771,8 @@ class ChannelController extends Controller
                         $oekotexPicName
                     );
                     $channel->setPFTexStandPic($oekotexPicName);
+                }else{
+                    $channel->setPFTexStandPic($channel_clone->getPFTexStandPic());
                 }
 
                 $retailHeaderPic = $channel->getRetailHeaderPic();
@@ -734,7 +783,8 @@ class ChannelController extends Controller
                         $retailHeaderPicName
                     );
                     $channel->setRetailHeaderPic($retailHeaderPicName);
-
+                }else{
+                    $channel->setRetailHeaderPic($channel_clone->getRetailHeaderPic());
                 }
 
                 $retailFirstPic = $channel->getRetailFirstPic();
@@ -745,6 +795,8 @@ class ChannelController extends Controller
                         $retailFirstPicName
                     );
                     $channel->setRetailFirstPic($retailFirstPicName);
+                }else{
+                    $channel->setRetailFirstPic($channel_clone->getRetailFirstPic());
                 }
 
                 $retailSecondPic = $channel->getRetailSecondPic();
@@ -755,6 +807,8 @@ class ChannelController extends Controller
                         $retailSecondPicName
                     );
                     $channel->setRetailSecondPic($retailSecondPicName);
+                }else{
+                    $channel->setRetailSecondPic($channel_clone->getRetailSecondPic());
                 }
 
                 $retailThirdPic = $channel->getRetailThirdPic();
@@ -765,6 +819,8 @@ class ChannelController extends Controller
                         $retailThirdPicName
                     );
                     $channel->setRetailThirdPic($retailThirdPicName);
+                }else{
+                    $channel->setRetailThirdPic($channel_clone->getRetailThirdPic());
                 }
 
                 $retailFourthPic = $channel->getRetailFourthPic();
@@ -775,6 +831,8 @@ class ChannelController extends Controller
                         $retailFourthPicName
                     );
                     $channel->setRetailFourthPic($retailFourthPicName);
+                }else{
+                    $channel->setRetailFourthPic($channel_clone->getRetailFourthPic());
                 }
 
                 $em->persist($channel);

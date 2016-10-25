@@ -30,6 +30,7 @@ class ChannelType extends AbstractType
             ->add('frontFooterTwo', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Second Footer Box', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
             ->add('frontFooterThree', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Third Footer Box', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
             ->add('frontFooterText', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Footer Text', 'required' => false))
+            ->add('siteBackgroundColor', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'placeholder' => '#888b91'), 'label' => 'Site Background Color', 'required' => false))
 
             ->add('faqWarrantyPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Warranty Picture', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
             ->add('faqUnpackingPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Unpacking Picture', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))

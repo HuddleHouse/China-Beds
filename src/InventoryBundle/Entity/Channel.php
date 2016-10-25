@@ -68,6 +68,13 @@ class Channel
      */
     private $instaLink;
 
+
+    /**
+     * @var string
+     * @ORM\Column(name="site_background", type="string", length=255)
+     */
+    private $siteBackgroundColor;
+
     /**
      * @var string
      *
@@ -373,6 +380,7 @@ class Channel
         if(!preg_match('/^http(s)?:\/\/(www.)?/i', $this->instaLink)){
             $this->instaLink =  'http://' . $this->instaLink;
         }
+
 
     }
 
@@ -1630,5 +1638,29 @@ class Channel
     public function getAchCompanyName()
     {
         return $this->ach_company_name;
+    }
+
+    /**
+     * Set siteBackgroundColor
+     *
+     * @param string $siteBackgroundColor
+     *
+     * @return Channel
+     */
+    public function setSiteBackgroundColor($siteBackgroundColor)
+    {
+        $this->siteBackgroundColor = $siteBackgroundColor;
+
+        return $this;
+    }
+
+    /**
+     * Get siteBackgroundColor
+     *
+     * @return string
+     */
+    public function getSiteBackgroundColor()
+    {
+        return $this->siteBackgroundColor;
     }
 }
