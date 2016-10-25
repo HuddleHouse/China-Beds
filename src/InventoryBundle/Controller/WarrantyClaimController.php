@@ -102,7 +102,6 @@ class WarrantyClaimController extends Controller
         $oldPath3 = $warrantyClaim->getPath3();
         $oldOrder = $warrantyClaim->getOrder();
         
-        $deleteForm = $this->createDeleteForm($warrantyClaim);
         $editForm = $this->createForm('InventoryBundle\Form\WarrantyClaimType', $warrantyClaim, array('method' => 'PATCH'));
         $editForm->handleRequest($request);
 
@@ -138,7 +137,6 @@ class WarrantyClaimController extends Controller
                 return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
                     'warranty_claim' => $warrantyClaim,
                     'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
                 ));
             }
         }
@@ -146,7 +144,6 @@ class WarrantyClaimController extends Controller
         return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
             'warranty_claim' => $warrantyClaim,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
