@@ -713,5 +713,4 @@ class WarrantyClaim
         $file_path = $this->getAbsolutePath3();
         if(file_exists($file_path)) unlink($file_path);
     }
-
 }
