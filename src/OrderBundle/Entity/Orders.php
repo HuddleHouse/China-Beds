@@ -167,6 +167,11 @@ class Orders
     private $pop_items;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order")
+     */
+    private $manual_items;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_orders")
      * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */

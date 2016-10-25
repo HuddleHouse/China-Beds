@@ -35,6 +35,11 @@ class OrdersManualItem
      */
     private $price;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="manual_items")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     */
+    private $order;
 
     /**
      * Get id
@@ -93,5 +98,23 @@ class OrdersManualItem
     {
         return $this->price;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+
 }
 
