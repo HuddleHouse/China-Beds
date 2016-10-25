@@ -4,15 +4,8 @@
     <list id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="" />
     <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="" />
     <list id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="channel work done" />
-    <list default="true" id="209e076b-1a2b-49ad-abac-4b1ead68b0a9" name="New changelist" comment="">
+    <list default="true" id="209e076b-1a2b-49ad-abac-4b1ead68b0a9" name="New changelist" comment="Added hide from front end option to product creation and edit ( hides product from front end site)">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Entity/Product.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Entity/Product.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Form/ProductType.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Form/ProductType.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Repository/ProductRepository.php" afterPath="$PROJECT_DIR$/src/InventoryBundle/Repository/ProductRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-images.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/edit-images.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/product-form.html.twig" afterPath="$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/product-form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/home.html.twig" afterPath="$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/home.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/mattresses.html.twig" afterPath="$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/mattresses.html.twig" />
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,8 +41,8 @@
       <file leaf-file-name="WebsiteController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Controller/WebsiteController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="66" column="88" selection-start-line="66" selection-start-column="88" selection-end-line="66" selection-end-column="88" />
+            <state relative-caret-position="630">
+              <caret line="87" column="30" selection-start-line="87" selection-start-column="30" selection-end-line="87" selection-end-column="30" />
               <folding>
                 <element signature="e#44#79#0#PHP" expanded="true" />
                 <element signature="e#918#968#0#PHP" expanded="true" />
@@ -59,11 +52,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mattresses.html.twig" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pillows.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/pillows.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+              <folding>
+                <element signature="e#12#35#0#Twig" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mattresses.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/mattresses.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="40" column="52" selection-start-line="40" selection-start-column="52" selection-end-line="40" selection-end-column="52" />
+            <state relative-caret-position="300">
+              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding>
                 <element signature="e#12#35#0#Twig" expanded="true" />
               </folding>
@@ -121,16 +126,6 @@
               <folding>
                 <marker date="1477428841000" expanded="true" signature="7951:8064" ph="SELECT COALE... warehouse_inventory" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Product.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Entity/Product.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="121" column="19" selection-start-line="121" selection-start-column="19" selection-end-line="121" selection-end-column="19" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -583,13 +578,6 @@
       <workItem from="1472485546631" duration="594000" />
       <workItem from="1472486231215" duration="3175000" />
     </task>
-    <task id="LOCAL-00009" summary="Fixing Entity relationshiops&#10;">
-      <created>1465331814508</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1465331814508</updated>
-    </task>
     <task id="LOCAL-00010" summary="Fixing Entity relationshiops&#10;">
       <created>1465412767037</created>
       <option name="number" value="00010" />
@@ -943,14 +931,21 @@
       <option name="presentableId" value="LOCAL-00057" />
       <option name="project" value="LOCAL" />
       <updated>1477423792069</updated>
-      <workItem from="1477423792187" duration="3785000" />
+      <workItem from="1477423792187" duration="3949000" />
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Added hide from front end option to product creation and edit ( hides product from front end site)">
+      <created>1477429196516</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1477429196516</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <option name="trackContextForNewChangelist" value="true" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="237273000" />
+    <option name="totallyTimeSpent" value="237437000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1031,7 +1026,8 @@
     <MESSAGE value="merge" />
     <MESSAGE value="finished channel form." />
     <MESSAGE value="channel work done" />
-    <option name="LAST_COMMIT_MESSAGE" value="channel work done" />
+    <MESSAGE value="Added hide from front end option to product creation and edit ( hides product from front end site)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added hide from front end option to product creation and edit ( hides product from front end site)" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="false" />
   </component>
@@ -1211,16 +1207,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/adjustables.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding>
-            <element signature="e#12#35#0#Twig" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/pillows.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
@@ -1504,18 +1490,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Controller/WebsiteController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="66" column="88" selection-start-line="66" selection-start-column="88" selection-end-line="66" selection-end-column="88" />
-          <folding>
-            <element signature="e#44#79#0#PHP" expanded="true" />
-            <element signature="e#918#968#0#PHP" expanded="true" />
-            <element signature="e#1185#1227#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InventoryBundle/Resources/views/Product/product-form.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
@@ -1552,8 +1526,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/mattresses.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" column="52" selection-start-line="40" selection-start-column="52" selection-end-line="40" selection-end-column="52" />
+        <state relative-caret-position="300">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <element signature="e#12#35#0#Twig" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Controller/WebsiteController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="87" column="30" selection-start-line="87" selection-start-column="30" selection-end-line="87" selection-end-column="30" />
+          <folding>
+            <element signature="e#44#79#0#PHP" expanded="true" />
+            <element signature="e#918#968#0#PHP" expanded="true" />
+            <element signature="e#1185#1227#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WebsiteBundle/Resources/views/Website/pillows.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
           <folding>
             <element signature="e#12#35#0#Twig" expanded="true" />
           </folding>
