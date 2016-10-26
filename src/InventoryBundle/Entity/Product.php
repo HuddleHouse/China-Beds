@@ -107,7 +107,7 @@ class Product
     private $variants;
     
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product", cascade={"persist", "remove"})
      */
     private $channels;
 
