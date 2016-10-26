@@ -374,15 +374,17 @@ class OrderProductsController extends Controller
                     $shipment->setParameter('thirdPartyAccount', $orders->getSubmittedForUser()->getDistributorFedexNumber());
                 }
 
+                $response = $shipment->submitShipment();
+
                 try {
-                    $response = $shipment->submitShipment();
+                    if($count == 1)
+                        $shipmentId = $response['trk_main'];
                 }
                 catch(\Exception $e) {
                     return JsonResponse::create(false);
                 }
 
-                if($count == 1)
-                    $shipmentId = $response['trk_main'];
+
 
                 $path = 'uploads/shipping/'.$response['pkgs'][0]['pkg_trk_num'].'.png';
                 file_put_contents($path, base64_decode($response['pkgs'][0]['label_img']));
