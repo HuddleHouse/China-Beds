@@ -87,9 +87,9 @@ class Product
 
     /**
      * @var bool
-     * @ORM\Column(name="hide_frontend", type="boolean", nullable=true)
+     * @ORM\Column(name="hide_frontend", type="boolean")
      */
-    private $hideFrontend;
+    private $hideFrontend = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")

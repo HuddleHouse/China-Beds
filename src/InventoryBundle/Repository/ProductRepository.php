@@ -101,7 +101,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllMattressesForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -142,7 +142,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllPillowsForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -180,7 +180,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllAdjustablesForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {

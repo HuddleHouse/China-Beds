@@ -31,9 +31,8 @@
         <div class="mattresses-list">
             <ul class="row">
                 {% for mattress in mattresses %}
-                    {% if mattress.hideFrontEnd == false %}
                     <li class="col-md-3 col-sm-4 col-xs-12">
-                        <a href="{{ path('single_mattresses',{site: site, id: mattress.id}) }}">
+                        <a href="{{ path('single_mattresses',{id: mattress.id}) }}">
                             <div class="box">
                                 <div class="img"><img src="{{ mattress.image_url }}" /></div>
                                 <h3>{{ mattress.name| upper }}</h3>
@@ -42,7 +41,6 @@
                             </div>
                         </a>
                     </li>
-                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
