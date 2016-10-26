@@ -31,6 +31,7 @@ class UserType extends AbstractType
             ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'phone-input' => '', 'ng-model' => 'phone_val')))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
                 'label' => 'State',
