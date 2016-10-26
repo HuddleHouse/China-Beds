@@ -46,7 +46,6 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Returns single product based on variant
      *
-     *
      * @return Product
      */
     public function getProdImg($variantId){

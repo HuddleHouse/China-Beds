@@ -31,7 +31,7 @@
                     if(variants != '<option>Select Order ID first</option>')
                         el.prop('disabled', false);
                     el.prop('disabled', false);
-                    el.val({{ warranty_claim.productVariant.id | default('') }});
+                    el.val('<option onclick="fillImage('el.val()')">{{ warranty_claim.productVariant.id | default('') }}</option>');
                 }
             });
         }

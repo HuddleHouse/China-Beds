@@ -25,6 +25,10 @@
                     $('#charNum').text(l);
                 }
             });
+            $('#warranty_claim_productVariant').change(function(){
+                    fillImage($(this).val());
+            })
+
         });
 
         function getProductVariants() {
@@ -42,6 +46,8 @@
                     el.html(variants);
                     if(variants != '<option>Select Order ID first</option>')
                         el.prop('disabled', false);
+                    el.prop('disabled', false);
+                    el.val({{ warranty_claim.productVariant.id | default('') }});
                 }
             });
         }
@@ -58,8 +64,8 @@
                 method: "GET",
                 url: Routing.generate('api_get_variant_image' , { variantId : variantId})
             }).done(function(data){
-                $('#variant-img').empty().append("<img src='"+ data +"' width='100%' height='350px' style='display:none;'/>");
-                $('#variant-img img').slideDown(700);
+                $('#variant-img').empty().append("<img src='"+ data +"' style='display:none;height:auto;width:100%;'/>");
+                $('#variant-img img').slideDown(400);
             });
         }
 
