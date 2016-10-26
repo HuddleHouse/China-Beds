@@ -129,6 +129,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
+                    'short_description' => $prod->getShortDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
                     'lowest_price' => $lowest_price,
@@ -167,6 +168,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
+                    'short_description' => $prod->getShortDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
                     'lowest_price' => $lowest_price,
@@ -206,6 +208,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
+                    'short_description' => $prod->getShortDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
                     'lowest_price' => $lowest_price,
