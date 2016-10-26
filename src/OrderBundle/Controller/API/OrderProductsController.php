@@ -376,14 +376,14 @@ class OrderProductsController extends Controller
 
                 $response = $shipment->submitShipment();
 
-                try {
+                if(isset($response['trk_main'])) {
                     if($count == 1)
                         $shipmentId = $response['trk_main'];
                 }
-                catch(\Exception $e) {
-                    return JsonResponse::create(false);
-                }
+                else {
+                    return $orders;
 
+                }
 
 
                 $path = 'uploads/shipping/'.$response['pkgs'][0]['pkg_trk_num'].'.png';
