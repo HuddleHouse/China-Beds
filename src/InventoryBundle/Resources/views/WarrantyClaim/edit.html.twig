@@ -42,7 +42,9 @@
                 method: "GET",
                 url: Routing.generate('api_get_variant_image' , { variantId : variantId})
             }).done(function(data){
-                $('#variant-img').empty().append("<img src='"+ data +"' width='100px' height='120px'/>");
+                $('#warranty_claim_productVariant').change(function(){
+                    fillImage($(this).val());
+                })
             });
         }
 
@@ -59,6 +61,9 @@
                     $('#charNum').text(l);
                 }
             });
+            $('#warranty_claim_productVariant').change(function(){
+                fillImage($(this).val());
+            })
         });
 
         function openFileBrowser1() {

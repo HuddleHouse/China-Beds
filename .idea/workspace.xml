@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list id="274d963c-c93d-478d-90c5-b5dc98982a17" name="Default" comment="" />
     <list id="76ff70b9-8180-44eb-9b2e-c1328a32b198" name="Poop" comment="" />
+<<<<<<< Updated upstream
     <list default="true" id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="pre-update&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/default/layout.html.twig" />
@@ -10,6 +11,11 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php" afterPath="$PROJECT_DIR$/src/AppBundle/EventListener/TokenListener.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Repository/UserRepository.php" afterPath="$PROJECT_DIR$/src/AppBundle/Repository/UserRepository.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/OrderBundle/Form/NewCreditType.php" afterPath="$PROJECT_DIR$/src/OrderBundle/Form/NewCreditType.php" />
+=======
+    <list id="f2962c30-34be-40ef-8e33-50d96e09402d" name="sdfsafasdf" comment="channel work done" />
+    <list default="true" id="209e076b-1a2b-49ad-abac-4b1ead68b0a9" name="New changelist" comment="Added hide from front end option to product creation and edit ( hides product from front end site) for pillows, mattresses and adjustables">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+>>>>>>> Stashed changes
     </list>
     <ignored path="resume.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -568,6 +574,7 @@
       <workItem from="1472485546631" duration="594000" />
       <workItem from="1472486231215" duration="3175000" />
     </task>
+<<<<<<< Updated upstream
     <task id="LOCAL-00002" summary="Fixing Entity relationshiops&#10;">
       <created>1465303198005</created>
       <option name="number" value="00002" />
@@ -638,6 +645,8 @@
       <option name="project" value="LOCAL" />
       <updated>1465413165473</updated>
     </task>
+=======
+>>>>>>> Stashed changes
     <task id="LOCAL-00012" summary="Fixing Entity relationshiops&#10;">
       <created>1465498537037</created>
       <option name="number" value="00012" />
@@ -923,12 +932,93 @@
       <option name="project" value="LOCAL" />
       <updated>1473441900025</updated>
     </task>
+<<<<<<< Updated upstream
     <option name="localTasksCounter" value="51" />
+=======
+    <task id="LOCAL-00051" summary="tweaks to channel form">
+      <created>1477076986332</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1477076986332</updated>
+    </task>
+    <task id="LOCAL-00052" summary="channel form work done, syncing to site started. Changes to warranty claims">
+      <created>1477341697485</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1477341697486</updated>
+    </task>
+    <task id="LOCAL-00053" summary="channel work done">
+      <created>1477408329196</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1477408329199</updated>
+    </task>
+    <task id="LOCAL-00054" summary="merge">
+      <created>1477410187633</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1477410187634</updated>
+    </task>
+    <task id="LOCAL-00055" summary="finished channel form.">
+      <created>1477423183275</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1477423183276</updated>
+    </task>
+    <task id="LOCAL-00056" summary="channel work done">
+      <created>1477423777890</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1477423777891</updated>
+    </task>
+    <task active="true" id="LOCAL-00057" summary="New changelist">
+      <changelist id="209e076b-1a2b-49ad-abac-4b1ead68b0a9" name="New changelist" comment="" />
+      <created>1477423791436</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1477423792069</updated>
+      <workItem from="1477423792187" duration="4002000" />
+      <workItem from="1477486092458" duration="1046000" />
+    </task>
+    <task id="LOCAL-00058" summary="Added hide from front end option to product creation and edit ( hides product from front end site)">
+      <created>1477429196516</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1477429196516</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Added hide from front end option to product creation and edit ( hides product from front end site)">
+      <created>1477429333027</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1477429333027</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Added hide from front end option to product creation and edit ( hides product from front end site) for pillows, mattresses and adjustables">
+      <created>1477488752462</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1477488752463</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
+>>>>>>> Stashed changes
     <option name="trackContextForNewChangelist" value="true" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="188770000" />
+=======
+    <option name="totallyTimeSpent" value="238536000" />
+>>>>>>> Stashed changes
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1004,7 +1094,18 @@
     <MESSAGE value="Header preference changes" />
     <MESSAGE value="sdfsafasdf" />
     <MESSAGE value="pre-update&#10;" />
+<<<<<<< Updated upstream
     <option name="LAST_COMMIT_MESSAGE" value="pre-update&#10;" />
+=======
+    <MESSAGE value="tweaks to channel form" />
+    <MESSAGE value="channel form work done, syncing to site started. Changes to warranty claims" />
+    <MESSAGE value="merge" />
+    <MESSAGE value="finished channel form." />
+    <MESSAGE value="channel work done" />
+    <MESSAGE value="Added hide from front end option to product creation and edit ( hides product from front end site)" />
+    <MESSAGE value="Added hide from front end option to product creation and edit ( hides product from front end site) for pillows, mattresses and adjustables" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added hide from front end option to product creation and edit ( hides product from front end site) for pillows, mattresses and adjustables" />
+>>>>>>> Stashed changes
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="false" />
   </component>
