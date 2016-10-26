@@ -88,12 +88,14 @@
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
             $scope.pop_order_quan = [];
-            $scope.cart = {'variant': [], 'pop': []};
+            $scope.cart = {'variant': [], 'pop': [], 'customItems': []};
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
             $scope.hasError = [];
+            $scope.hasCustomItem = 0;
+            $scope.customItems = [];
             $scope.ship_to_id = {{ app.user.id }};
 
             $scope.due_date = new Date();
@@ -178,7 +180,23 @@
                 });
             {% endif %}
 
-
+            $scope.addCustomItem = function () {
+                $scope.cart['customItems'].push({
+                    description: '',
+                    price: 0.00
+                });
+                $scope.calculateCart();
+                $scope.hasCustomItem = 1;
+            };
+            
+            $scope.removeCustomItem = function (item) {
+                var index = $scope.cart['customItems'].indexOf(item);
+                $scope.cart['customItems'].splice(index, 1);
+                $scope.calculateCart();
+                var ol = Object.keys($scope.cart['customItems']);
+                if(ol.length == 0)
+                    $scope.hasCustomItem = 0;
+            };
 
             $scope.updateCart = function (variantId, cost, max, type) {
                 if(typeof($scope.cart[type][variantId]) != "undefined" && $scope.cart[type][variantId] !== null) {
@@ -383,6 +401,10 @@
                 angular.forEach($scope.cart['pop'], function(value, key) {
                     $scope.cart_num_items += value.quantity;
                     $scope.cart_total += value.quantity * value.cost;
+                });
+                angular.forEach($scope.cart['customItems'], function(value, key) {
+                    $scope.cart_num_items += 1;
+                    $scope.cart_total += value.price;
                 });
             }
 
@@ -689,7 +711,7 @@
                         <div class="col-lg-4 col-md-4">
                             <center>Total ($)</center>
                             {% verbatim %}
-                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px;    min-width: 91px;" >{{ cart_total | currency:'$' }}</div>
+                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px; min-width: 91px;" >{{ cart_total | currency:'$' }}</div>
                             {% endverbatim %}
                         </div>
                         <div class="col-lg-4 col-md-4">
@@ -699,6 +721,44 @@
                 </div>
             </div>
         </div>
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
+        <div class="row" style="margin-bottom: 30px;" >
+            <div class="col-md-10" >
+                <div class="table-responsive" ng-show="hasCustomItem == 1">
+                    <table class="table no-margin">
+                        <thead>
+                        <center><h4>Manual Items</h4></center>
+                        <tr>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in cart['customItems']">
+                            <td>
+                                <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                    <textarea class="form-control" ng-model="item.description">This is the description Yoyoyoyoyo.</textarea>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                    <input type="number" class="form-control" ng-change="calculateCart()" ng-model="item.price">
+                                </div>
+                            </td>
+                            <td>
+                                <button ng-click="removeCustomItem(item)" class="btn btn-raised btn-sm btn-warning btn-flat">X</button>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button ng-click="addCustomItem()" class="btn btn-raised btn-sm btn-default btn-flat pull-right">Add Custom Item<div class="ripple-container"></div></button>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="row">
             <div class="grid col-md-10">

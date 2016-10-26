@@ -4,6 +4,7 @@ namespace InventoryBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\DateTime;
 use OrderBundle\Entity\Ledger;
 use OrderBundle\Entity\Orders;
@@ -13,6 +14,7 @@ use OrderBundle\Entity\Orders;
  *
  * @ORM\Table(name="warranty_claim")
  * @ORM\Entity(repositoryClass="InventoryBundle\Repository\WarrantyClaimRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class WarrantyClaim
 {
@@ -82,20 +84,6 @@ class WarrantyClaim
     private $isArchived = false;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="retail_res_attempt", type="text" )
-     */
-    private $retailerResAttempt;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="other_comments", type="text" )
-     */
-    private $otherComments;
-
-    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="warranty_claims")
      * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
      */
@@ -128,6 +116,36 @@ class WarrantyClaim
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="warranty_claims")
      */
     private $channel;
+
+    /**
+     * @Assert\Image
+     */
+    private $file1;
+
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $path1;
+
+    /**
+     * @Assert\Image
+     */
+    private $file2;
+
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $path2;
+
+    /**
+     * @Assert\Image
+     */
+    private $file3;
+
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $path3;
 
     /**
      * WarrantyClaim constructor.
@@ -429,20 +447,6 @@ class WarrantyClaim
     }
 
     /**
-     * Set retailerResAttempt
-     *
-     * @param string $retailerResAttempt
-     *
-     * @return WarrantyClaim
-     */
-    public function setRetailerResAttempt($retailerResAttempt)
-    {
-        $this->retailerResAttempt = $retailerResAttempt;
-
-        return $this;
-    }
-
-    /**
      * Add ledger
      *
      * @param \OrderBundle\Entity\Ledger $ledger
@@ -457,41 +461,6 @@ class WarrantyClaim
     }
 
     /**
-     * Get retailerResAttempt
-     *
-     * @return string
-     */
-    public function getRetailerResAttempt()
-    {
-        return $this->retailerResAttempt;
-    }
-
-    /**
-     * Set otherComments
-     *
-     * @param string $otherComments
-     *
-     * @return WarrantyClaim
-     */
-    public function setOtherComments($otherComments)
-    {
-        $this->otherComments = $otherComments;
-
-        return $this;
-    }
-
-    /**
-     * Get otherComments
-     *
-     * @return string
-     */
-    public function getOtherComments()
-    {
-        return $this->otherComments;
-    }
-
-
-    /**
      * Remove ledger
      *
      * @param \OrderBundle\Entity\Ledger $ledger
@@ -501,4 +470,247 @@ class WarrantyClaim
         $this->ledgers->removeElement($ledger);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFile1()
+    {
+        return $this->file1;
+    }
+
+    /**
+     * @param mixed $file1
+     */
+    public function setFile1($file1)
+    {
+        $this->file1 = $file1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath1()
+    {
+        return $this->path1;
+    }
+
+    /**
+     * @param mixed $path1
+     */
+    public function setPath1($path1)
+    {
+        $this->path1 = $path1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile2()
+    {
+        return $this->file2;
+    }
+
+    /**
+     * @param mixed $file2
+     */
+    public function setFile2($file2)
+    {
+        $this->file2 = $file2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath2()
+    {
+        return $this->path2;
+    }
+
+    /**
+     * @param mixed $path2
+     */
+    public function setPath2($path2)
+    {
+        $this->path2 = $path2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile3()
+    {
+        return $this->file3;
+    }
+
+    /**
+     * @param mixed $file3
+     */
+    public function setFile3($file3)
+    {
+        $this->file3 = $file3;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath3()
+    {
+        return $this->path3;
+    }
+
+    /**
+     * @param mixed $path3
+     */
+    public function setPath3($path3)
+    {
+        $this->path3 = $path3;
+    }
+
+    public function upload1()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile1()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile1()->getClientOriginalName()) . '-' . $this->getFile1()->getClientOriginalName();
+
+        $this->getFile1()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path1 = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file1 = null;
+    }
+
+    public function upload2()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile2()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile2()->getClientOriginalName()) . '-' . $this->getFile2()->getClientOriginalName();
+
+        $this->getFile2()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path2 = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file2 = null;
+    }
+
+    public function upload3()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile3()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile3()->getClientOriginalName()) . '-' . $this->getFile3()->getClientOriginalName();
+
+        $this->getFile3()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path3 = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file3 = null;
+    }
+
+    public function getAbsolutePath1()
+    {
+        return null === $this->path1
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path1;
+    }
+
+    public function getWebPath1()
+    {
+        return null === $this->path1
+            ? null
+            : $this->getUploadDir() . '/' . $this->path1;
+    }
+
+    public function getAbsolutePath2()
+    {
+        return null === $this->path2
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path2;
+    }
+
+    public function getWebPath2()
+    {
+        return null === $this->path2
+            ? null
+            : $this->getUploadDir() . '/' . $this->path2;
+    }
+
+    public function getAbsolutePath3()
+    {
+        return null === $this->path3
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path3;
+    }
+
+    public function getWebPath3()
+    {
+        return null === $this->path3
+            ? null
+            : $this->getUploadDir() . '/' . $this->path3;
+    }
+
+    public function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
+        return $tmp;
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/warranty_images';
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function removeUpload()
+    {
+        $file_path = $this->getAbsolutePath1();
+        if(file_exists($file_path)) unlink($file_path);
+        $file_path = $this->getAbsolutePath2();
+        if(file_exists($file_path)) unlink($file_path);
+        $file_path = $this->getAbsolutePath3();
+        if(file_exists($file_path)) unlink($file_path);
+    }
 }
