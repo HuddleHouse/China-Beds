@@ -34,6 +34,7 @@
         <div class="mattresses-list pillow-list">
             <ul class="row">
                 {% for pillow in pillows %}
+                    {% if pillow.hideFrontEnd == false %}
                     <li class="col-md-4 col-sm-4 col-xs-12">
                         <div class="box">
                             <div class="img"><img src="{{ pillow.image_url }}" /></div>
@@ -41,6 +42,7 @@
                             <p>{{ pillow.description }}</p>
                         </div>
                     </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>

@@ -163,14 +163,15 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
-
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
@@ -200,6 +201,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
 
                 $products[] = array(
@@ -207,7 +209,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     'description' => $prod->getDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
