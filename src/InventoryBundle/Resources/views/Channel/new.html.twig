@@ -1,37 +1,3 @@
-{#{% extends ':default:layout.html.twig' %}#}
-
-{#{% block title %}Channel creation{% endblock %}#}
-{#{% block page_title %}#}
-    {#Channel creation#}
-{#{% endblock page_title %}#}
-
-{#{% block page_name %}#}
-    {#<a href="{{ path('admin_channel_index') }}">< Back to the list</a>#}
-{#{% endblock page_name %}#}
-
-{#{% block actions %}#}
-{#{% endblock actions %}#}
-
-{#{% block footer %}#}
-    {#<script>#}
-        {#$(document).ready(function () {#}
-            {#$('#part-table').DataTable({#}
-                {#"iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });#}
-        {#});#}
-    {#</script>#}
-{#{% endblock footer %}#}
-
-{#{% block content %}#}
-    {#<div class="row">#}
-        {#<div class="col-md-8">#}
-
-            {#{{ form_start(form) }}#}
-            {#{{ form_widget(form) }}#}
-            {#<input class="btn btn-raised btn-success" type="submit" value="Create" />#}
-            {#{{ form_end(form) }}#}
-        {#</div>#}
-    {#</div>#}
-{#{% endblock %}#}
 {% extends ':default:layout.html.twig' %}
 
 {% block title %}Channel Edit{% endblock %}
@@ -80,23 +46,6 @@
 {% endblock footer %}
 
 {% block content %}
-    {#<div class="row">#}
-    {#<div class="col-md-8" style="background:white">#}
-
-    {#{{ form_start(form) }}#}
-    {#{{ form_widget(form.frontLogo) }}#}
-    {#{{ form_widget(form.name) }}#}
-    {#{{ form_widget(form.url) }}#}
-    {#<br>#}
-    {#<input class="btn btn-raised btn-success" type="submit" value="Update" />#}
-    {#{{ form_end(form) }}#}
-
-    {#{{ form_start(delete_form) }}#}
-    {#<input class="btn btn-raised btn-danger" type="submit" value="Delete">#}
-    {#{{ form_end(delete_form) }}#}
-    {#</div>#}
-    {#</div>#}
-
     {{ form_start(form) }}
     <div class="row">
         <div class="col-md-1"></div>
@@ -164,6 +113,10 @@
                 <div class="col-md-4 file-wrap">
                     {{ form_label(form.frontLogo) }}
                     {{ form_widget(form.frontLogo) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.company_name) }}
+                    {{ form_widget(form.company_name) }}
                 </div>
                 <div class="col-md-4 file-wrap">
                     {{ form_label(form.siteBackgroundColor) }}

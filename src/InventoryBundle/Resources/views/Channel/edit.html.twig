@@ -35,12 +35,6 @@
                  parent.css({'background-color':'lightgreen', 'opacity':'1.0'}).append('<span> &#10004;</span>')
             })
 
-
-
-
-
-
-
         });
     </script>
 {% endblock footer %}
@@ -116,6 +110,10 @@
                 <div class="col-md-4 file-wrap">
                     {{ form_label(edit_form.frontLogo) }}
                     {{ form_widget(edit_form.frontLogo) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.company_name) }}
+                    {{ form_widget(edit_form.company_name) }}
                 </div>
                 <div class="col-md-4 file-wrap">
                     {{ form_label(edit_form.siteBackgroundColor) }}
