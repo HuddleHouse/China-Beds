@@ -113,7 +113,7 @@
             <tbody>
             {% for p in product %}
                     <tr>
-                        <th>{{ p.name }}</th>
+                        <th>{{ p.category_names|upper }}: {{ p.name }}</th>
                         <th></th>
                         <th></th>
                         <th></th>
