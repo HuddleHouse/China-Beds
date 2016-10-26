@@ -150,8 +150,6 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
-//        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
-
         return JsonResponse::create($order->getId());
     }
 
@@ -161,8 +159,11 @@ class OrderProductsController extends Controller
         foreach($cart['customItems'] as $item) {
             $orderManualItem = new OrdersManualItem();
             $orderManualItem->setOrder($orders);
-            $orderManualItem->setDescription($item[''])
+            $orderManualItem->setDescription($item['description']);
+            $orderManualItem->setPrice($item['price']);
+            $em->persist($orderManualItem);
         }
+        $em->flush();
     }
 
     /**
