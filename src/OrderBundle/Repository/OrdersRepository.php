@@ -18,7 +18,7 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
      * THIS IS OLD AND DOES NOT GET USED ANYMORE.
      */
     public function setWarehouseDataForOrder(Orders $order) {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         foreach($order->getProductVariants() as $productVariant) {
             $warehouse1_inventory = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($productVariant->getProductVariant(), $order->getUser()->getWarehouse1());
@@ -87,7 +87,7 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
      * @return array
      */
     public function getProductsByWarehouseArray(Orders $order, Warehouse $warehouse = null) {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select i.*, v.price,((v.price/100)*i.quantity) as subtotal , concat(p.name, ': ', pv.name) as product_name, w.name as warehouse_name, pv.sku
 	from orders_warehouse_info i

@@ -17,7 +17,7 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
 
     public function getCartArray(StockTransfer $stockTransfer)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
 
         $cart = array();
         $total = 0;
@@ -70,7 +70,7 @@ class StockTransferRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getActiveForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
 	from stock_transfers p 
@@ -95,7 +95,7 @@ select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_tra
     }
 
     public function getAllForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_transfer' as type
 	from stock_transfers p 

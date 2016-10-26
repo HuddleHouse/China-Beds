@@ -20,7 +20,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getAllProductsArray()
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 
@@ -44,7 +44,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllMattressVariantsForChannelArray(Channel $channel)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 
@@ -79,7 +79,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllMattressesForChannelArray(Channel $channel)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 
@@ -118,7 +118,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllPillowsForChannelArray(Channel $channel)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 
@@ -155,7 +155,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllAdjustablesForChannelArray(Channel $channel)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 
@@ -198,7 +198,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
      */
     public function getAllProductsWithQuantityArray(Warehouse $warehouse = null)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
         $products = array();
 

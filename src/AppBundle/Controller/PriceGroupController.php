@@ -154,7 +154,7 @@ class PriceGroupController extends Controller
      */
     public function editPricesAction(Request $request, PriceGroup $priceGroup)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
         //get all products
         $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id

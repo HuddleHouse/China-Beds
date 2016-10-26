@@ -19,7 +19,7 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
         // select all products that are in the channel
         // get all product variants for it.
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $product_channels = $em->getRepository('InventoryBundle:ProductChannel')->findBy(array('channel' => $channel));
         $product_data = array();
         $user_price_groups = $user->getPriceGroupsString();
@@ -149,7 +149,7 @@ select i.quantity, i.warehouse_id
         // select all products that are in the channel
         // get all product variants for it.
 
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $product_channels = $em->getRepository('InventoryBundle:ProductChannel')->findBy(array('channel' => $channel));
         $product_data = array();
         $user_price_groups = $user->getPriceGroupsString();

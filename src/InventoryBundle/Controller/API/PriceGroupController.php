@@ -27,7 +27,7 @@ class PriceGroupController extends Controller
         $price_group_id = $request->request->get('price_group_id');
 
         foreach($products as $product) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getEntityManager();
             $connection = $em->getConnection();
             $statement = $connection->prepare("SELECT price FROM price_group_prices WHERE product_id = :product_id AND price_group_id = :price_group_id");
             $statement->bindValue('product_id', $product->getId());
@@ -66,7 +66,7 @@ class PriceGroupController extends Controller
 
         foreach($changed_products as $product) {
             if($product != "") {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getEntityManager();
                 $connection = $em->getConnection();
                 $statement = $connection->prepare("select *
 	from price_group_prices p
