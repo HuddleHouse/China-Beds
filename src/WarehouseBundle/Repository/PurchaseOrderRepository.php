@@ -14,7 +14,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getCartArray(PurchaseOrder $purchaseOrder)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
 
         $cart = array();
         $total = 0;
@@ -66,7 +66,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getActiveForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'purchase_order' as type
 	from purchase_order p
@@ -82,7 +82,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getAllForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'purchase_order' as type
 	from purchase_order p

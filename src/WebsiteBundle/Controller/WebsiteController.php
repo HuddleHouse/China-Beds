@@ -50,7 +50,7 @@ class WebsiteController extends BaseController
     }
 
     public function  mattressIndexAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $channel = $this->getChannel();
 
@@ -70,7 +70,7 @@ class WebsiteController extends BaseController
     }
 
     public function  pillowsIndexAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $channel = $this->getChannel();
         $pillows = $em->getRepository('InventoryBundle:Product')->getAllPillowsForChannelArray($channel);
@@ -82,7 +82,7 @@ class WebsiteController extends BaseController
     }
 
     public function  adjustablesIndexAction() {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $channel = $this->getChannel();
 

@@ -13,7 +13,7 @@ class PopItemRepository extends \Doctrine\ORM\EntityRepository
 
     public function getAllPopItemsArrayForCart()
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $pop = $em->getRepository('InventoryBundle:PopItem')->findAll();
         $data = array();
 

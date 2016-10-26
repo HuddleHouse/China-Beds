@@ -14,7 +14,7 @@ use OrderBundle\Entity\Orders;
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getAllDistributorsArray() {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select u.*
 	from users u 
@@ -35,7 +35,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getAllRetailersArray(Channel $channel = null) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select u.*
 	from users u 
@@ -141,7 +141,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      * This gets the latest orders for a user according to their Roles
      */
     public function getLatestOrdersForUser(User $user) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $user_ids = array();
         $user_ids[$user->getId()] = $user->getId();
         $orders = array();
@@ -227,7 +227,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      * Returns an array of all User Entities that are in the channel
      */
     public function findUsersByChannel(Channel $channel) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $users = $em->getRepository('AppBundle:User')->findAll();
         $correct_users = array();
 
@@ -249,7 +249,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      * This gets the latest orders for a user according to their Roles
      */
     public function findByUser(User $user) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $user_ids = array();
         $user_ids[$user->getId()] = $user->getId();
         $users = array();
@@ -312,7 +312,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findDR(User $admin)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
 
         $user_ids = array();
         $user_ids[$admin->getId()] = $admin->getId();

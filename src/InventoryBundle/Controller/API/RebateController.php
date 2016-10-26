@@ -27,8 +27,8 @@ class RebateController extends Controller
         try {
             $rebate = $this->getDoctrine()->getRepository('InventoryBundle:Rebate')->find($request->get('rebate_id'));
             $rebate->setActive($request->get('active') == "true" ? true : false);
-            $this->getDoctrine()->getEntityManager()->persist($rebate);
-            $this->getDoctrine()->getEntityManager()->flush();
+            $this->getDoctrine()->getManager()->persist($rebate);
+            $this->getDoctrine()->getManager()->flush();
             return new JsonResponse(true);
         }
         catch(\Exception $e){
