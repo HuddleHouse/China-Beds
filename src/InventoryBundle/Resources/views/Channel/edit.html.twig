@@ -32,7 +32,9 @@
 
             $("input:file").change(function(){
                  var parent = $(this).parents('.file-wrap').find('.file-input');
-                 parent.css({'background-color':'lightgreen', 'opacity':'1.0'}).append('<span> &#10004;</span>')
+                 if(parent.css('background-color')!== 'rgb(144, 238, 144)'){
+                     parent.css({'background-color':'lightgreen', 'opacity':'1.0'}).append('<span> &#10004;</span>')
+                 }
             })
 
         });
