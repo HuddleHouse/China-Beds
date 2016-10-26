@@ -16,25 +16,416 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                }}
+            });
+
+
+
+            $(".file-wrap .form-group").each(function () {
+                if (!$(this).hasClass('is-empty')) {
+                    $(this).parent().find('.file-input').css("background-color", "green");
+                    $(this).parent().find('.file-input').append("<span class=''>&#10004;</span>");
+                }
+            });
+
+
+            $("input:file").change(function(){
+                 var parent = $(this).parents('.file-wrap').find('.file-input');
+                 parent.css({'background-color':'lightgreen', 'opacity':'1.0'}).append('<span> &#10004;</span>')
+            })
+
+
+
+
+
+
 
         });
     </script>
 {% endblock footer %}
 
 {% block content %}
+    {{ form_start(edit_form) }}
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-1"></div>
+        <div class="col-md-10" style="padding:20px; background-color:white; border-radius:50px;">
+            <div class="row">
+                <div class="col-md-12 page-banner homepage" data-toggle="modal" data-target="#homepage-modal">Homepage</div>
+            </div>
+            <div class="row">
+                <h5 class="text-center" >Only import images for ones you wish to replace. Any ignored image fields will remain as they were</h5>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.name) }}
+                    {{ form_widget(edit_form.name) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.url) }}
+                    {{ form_widget(edit_form.url) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.fbLink) }}
+                    {{ form_widget(edit_form.fbLink) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.twLink) }}
+                    {{ form_widget(edit_form.twLink) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.instaLink) }}
+                    {{ form_widget(edit_form.instaLink) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frontFooterText) }}
+                    {{ form_widget(edit_form.frontFooterText) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontSliderOne) }}
+                    {{ form_widget(edit_form.frontSliderOne) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontSliderTwo) }}
+                    {{ form_widget(edit_form.frontSliderTwo) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontSliderThree) }}
+                    {{ form_widget(edit_form.frontSliderThree) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontFooterOne) }}
+                    {{ form_widget(edit_form.frontFooterOne) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontFooterTwo) }}
+                    {{ form_widget(edit_form.frontFooterTwo) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontFooterThree) }}
+                    {{ form_widget(edit_form.frontFooterThree) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.frontLogo) }}
+                    {{ form_widget(edit_form.frontLogo) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.siteBackgroundColor) }}
+                    {{ form_widget(edit_form.siteBackgroundColor) }}
+                    <p>applies to background color when signed in this channel</p>
+                    <p>use <a href="http://www.w3schools.com/colors/colors_picker.asp" target="_blank">W3 schools Color Picker</a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#faq-modal">FAQ Page</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.faqWarrantyPic) }}
+                    {{ form_widget(edit_form.faqWarrantyPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.faqUnpackingPic) }}
+                    {{ form_widget(edit_form.faqUnpackingPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.faqSupportPic) }}
+                    {{ form_widget(edit_form.faqSupportPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.faqMaintenancePic) }}
+                    {{ form_widget(edit_form.faqMaintenancePic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.faqContactPic) }}
+                    {{ form_widget(edit_form.faqContactPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.faqTCPic) }}
+                    {{ form_widget(edit_form.faqTCPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#features-modal">Product Features Page</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFMemoryFoamPic) }}
+                    {{ form_widget(edit_form.pFMemoryFoamPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFSidePic) }}
+                    {{ form_widget(edit_form.pFSidePic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFRenewResourcewPic) }}
+                    {{ form_widget(edit_form.pFRenewResourcewPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFsocsPic) }}
+                    {{ form_widget(edit_form.pFsocsPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFpboPic) }}
+                    {{ form_widget(edit_form.pFpboPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFBCharcoalPic) }}
+                    {{ form_widget(edit_form.pFBCharcoalPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFBFibersPic) }}
+                    {{ form_widget(edit_form.pFBFibersPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFSilkPic) }}
+                    {{ form_widget(edit_form.pFSilkPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFAloeVeraPic) }}
+                    {{ form_widget(edit_form.pFAloeVeraPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFCertifiedPic) }}
+                    {{ form_widget(edit_form.pFCertifiedPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.pFTexStandPic) }}
+                    {{ form_widget(edit_form.pFTexStandPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 page-banner" data-toggle="modal" data-target="#retailers-modal">Retailer Page</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.retailHeaderPic) }}
+                    {{ form_widget(edit_form.retailHeaderPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.retailFirstPic) }}
+                    {{ form_widget(edit_form.retailFirstPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.retailSecondPic) }}
+                    {{ form_widget(edit_form.retailSecondPic) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.retailThirdPic) }}
+                    {{ form_widget(edit_form.retailThirdPic) }}
+                </div>
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.retailFourthPic) }}
+                    {{ form_widget(edit_form.retailFourthPic) }}
+                </div>
+            </div>
 
-            {{ form_start(edit_form) }}
-            {{ form_widget(edit_form) }}
-            <br>
-            <input class="btn btn-raised btn-success" type="submit" value="Update" />
-            {{ form_end(edit_form) }}
 
-            {{ form_start(delete_form) }}
-            <input class="btn btn-raised btn-danger" type="submit" value="Delete">
-            {{ form_end(delete_form) }}
+
+    <input class="btn btn-raised btn-success" type="submit" value="Update" />
+    {{ form_end(edit_form) }}
+    {{ form_start(delete_form) }}
+    <input class="btn btn-raised btn-danger" type="submit" value="Delete">
+    {{ form_end(delete_form) }}
         </div>
     </div>
+
+    <!--  BANNERS   -->
+
+    <div id="homepage-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Homepage Changes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>All changes made within the Homepage section will effect the homepage of your site</p>
+                    <img src="{{ asset('uploads/documents/sitemapmlily.png') }}" style="width:100%; height:600px;"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="faq-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="wid">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">FAQ Page Changes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>All changes made within the FAQ section will effect the FAQ page of your site</p>
+                    <img src="{{ asset('uploads/documents/faq-sitemap1.png') }}" style="width:100%; height:800px;"/>
+                    <img src="{{ asset('uploads/documents/faq-sitemap2.png') }}" style="width:80%; height:700px;"/>
+                    <img src="{{ asset('uploads/documents/faq-sitemap3.png') }}" style="width:80%; height:700px;"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="features-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">FAQ Page Changes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>All changes made within the Features section will effect the Product Features page of your site</p>
+                    <img src="{{ asset('uploads/documents/pf-sitemap1.png') }}" style="width:100%; height:800px;"/>
+                    <img src="{{ asset('uploads/documents/pf-sitemap2.png') }}" style="width:100%; height:800px;"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="retailers-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">FAQ Page Changes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>All changes made within the Features section will effect the Product Features page of your site</p>
+                    <img src="{{ asset('uploads/documents/retailer-sitemap1.png') }}" style="width:100%; height:800px;"/>
+                    <img src="{{ asset('uploads/documents/retailer-sitemap2.png') }}" style="width:100%; height:800px;"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- end of banners -->
+
+
+    <style>
+
+      input[type=file]{
+          z-index:-1;
+      }
+
+        .form-group, .form-control{
+            border:none;
+
+        }
+
+        .file-input{
+            margin-top:40px;
+            font-size:1.25em;
+            font-weight:700;
+            color:black;
+            background-color: #42A5F5;
+            display:inline-block;
+            padding:5px 10px;
+            opacity:.5;
+            -webkit-transition: opacity .7s, background-color .7s;
+            -moz-transition: opacity .7s, background-color .7s;
+            -ms-transition: opacity .7s, background-color .7s;
+            -o-transition: opacity .7s, background-color .7s;
+            transition: opacity .7s, background-color .7s;
+        }
+
+        .file-input:focus, .file-input:hover{
+            background-color:deepskyblue;
+            /*outline: 1px dotted #000;*/
+            /*outline: -webkit-focus-ring-color auto 5px;*/
+            opacity:.7;
+        }
+
+        .file-input{
+            cursor:pointer;
+            Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+
+      .page-banner{
+          text-align: center;
+          background-color: #42A5F5;
+          height: 50px;
+          width:100.7%;
+          /*border-radius: 30px;*/
+          margin-bottom: 60px;
+          margin-top:40px;
+          margin-left:-5px;
+          padding-top:12px;
+          font-size: x-large;
+          margin-right:0;
+          padding-left:0;
+          padding-right:0;
+          cursor:help;
+          opacity:.7;
+          -webkit-transition: opacity .7s, background-color .7s;
+          -moz-transition: opacity .7s, background-color .7s;
+          -ms-transition: opacity .7s, background-color .7s;
+          -o-transition: opacity .7s, background-color .7s;
+          transition: opacity .7s, background-color .7s;
+      }
+
+      .homepage{
+          top: 0;
+          margin-top: -20px;
+          height: 100px;
+          border-radius: 50px 50px 1px 1px;
+          border-top-left-radius: 50px;
+          border-top-right-radius: 50px;
+          border-bottom-right-radius: 1px;
+          border-bottom-left-radius: 1px;
+      }
+
+        .page-banner:hover{
+            background-color:#0fb2fc;
+            opacity: 1.0
+        }
+
+        .modal-dialog{
+            width:50%;
+        }
+
+        .text-center{
+            padding-bottom:50px;
+            color:grey;
+        }
+    </style>
 {% endblock %}

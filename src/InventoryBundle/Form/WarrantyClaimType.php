@@ -33,6 +33,7 @@ class WarrantyClaimType extends AbstractType
     private $tokenStorage;
     private $ordersRepository;
     private $usersRepository;
+    private $prodVariant;
 
     /**
      * WarrantyClaimType constructor.
@@ -44,6 +45,7 @@ class WarrantyClaimType extends AbstractType
         $this->tokenStorage = $tokenStorage;
         $this->ordersRepository = $entityManager->getRepository('OrderBundle:Orders');
         $this->usersRepository = $entityManager->getRepository('AppBundle:User');
+        $this->prodVariant = $entityManager->getRepository('InventoryBundle:ProductVariant');
     }
 
     /**
@@ -89,6 +91,14 @@ class WarrantyClaimType extends AbstractType
                     'required' => true
                 )
             )
+            ->add('quantity', IntegerType::class, array(
+                'label' => 'Quantity',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'empty_data' => 1,
+                'data' => 1,
+                'required' => true
+
+            ))
             ->add('description', TextareaType::class, array('label' => 'Comments', 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('file1', FileType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),

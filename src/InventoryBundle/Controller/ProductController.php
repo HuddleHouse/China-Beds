@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use InventoryBundle\Entity\ProductChannel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -29,8 +30,17 @@ class ProductController extends Controller
 
         $products = $em->getRepository('InventoryBundle:Product')->findAll();
 
+        $prod = [];
+        foreach($products as $k => $product) {
+            foreach($product->getChannels() as $product_channel) {
+                if ( $product_channel->getChannel()->getId() == $this->getUser()->getActiveChannel()->getId() ) {
+                    $prod[] = $product;
+                }
+            }
+        }
+
         return $this->render('@Inventory/Product/index.html.twig', array(
-            'products' => $products,
+            'products' => $prod,
         ));
     }
 
@@ -48,6 +58,10 @@ class ProductController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+                $pc = new ProductChannel();
+                $pc->setChannel($channel);
+                $product->addChannel($pc);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($product);
                 $em->flush();

@@ -25,6 +25,7 @@
         <p>Discover the perfect compliment to your mattress, and a coveted partner in the best sleep of your life.<br>Each model boasts a unique look and feel to satisfy even the most discriminating sleeper.</p>
         <div class="adjustable-list">
             {% for adjust in adjustables %}
+                {% if adjust.hideFrontEnd == false %}
             <div class="row box">
                 <div class="col-md-4 col-sm-5 col-xs-12">
                     <div class="description">
@@ -36,7 +37,11 @@
                     <div class="img"><img src="{{ adjust.image_url }}" /></div>
                 </div>
             </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
 {% endblock body %}
+{% block footbox %}
+    <div class="copyright">{{ channel.frontFooterText }}</div>
+{% endblock %}

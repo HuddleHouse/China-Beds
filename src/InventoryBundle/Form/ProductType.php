@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Form;
 
+use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -27,6 +28,7 @@ class ProductType extends AbstractType
             ->add('shortDescription', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('sku', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('tagline', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('hideFrontend', ChoiceType::class, array('attr' => array('style' => 'margin-bottom: 10px'), 'required' => false, 'label' => 'Hide product item from front end of site', 'choices' => ['No' => false, 'Yes' => true]))
             ->add('front_headline', TextType::class, array('attr' =>
                 array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'label' => 'Front Headline',

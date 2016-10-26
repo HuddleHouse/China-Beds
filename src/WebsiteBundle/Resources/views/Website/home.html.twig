@@ -17,42 +17,83 @@
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
     </script>
+    <style>
+        .social-links ul li a{
+            list-style: none;
+        }
+        .social-links ul li a:hover{
+
+        }
+    </style>
 {% endblock footer %}
 
 {% block body %}
-
+    <nav class="navbar">
+        <div class="social-links">
+            <ul>
+                <a href="{{ channel.fbLink }}" target="_blank"><li><i class="fa fa-facebook" aria-hidden="true"></i></li></a>
+                <a href="{{ channel.twLink }}" target="_blank"><li><i class="fa fa-twitter" aria-hidden="true"></i></li></a>
+                <a href="{{ channel.instaLink }}" target="_blank"><li><i class="fa fa-instagram" aria-hidden="true"></i></li></a>
+            </ul>
+        </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ path('website_homepage', {}) }}">
+                <img style="max-width: 140px;" src="{{ asset('uploads/websites/' ~ channel.frontLogo) }}" />
+            </a>
+            <div class="login-btn">
+                <ul>
+                    <li><a href="">Login</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{ path('website_homepage', {}) }}">Home</a></li>
+                <li><a href="{{ path('mattresses', {}) }}">MATTRESSES</a></li>
+                <li><a href="{{ path('pillows', {}) }}">PILLOWS</a></li>
+                <li><a href="{{ path('adjustables', {}) }}">ADJUSTABLE BEDS</a></li>
+            </ul>
+            <div class="regiter-head"><a href="{{ path('web_retailers', {}) }}"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></a></div>
+        </div><!--/.nav-collapse -->
+    </nav>
         <div class="content-section">
             <div class="slider-section">
                 <div class="home-slider">
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderOne) }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderTwo) }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderThree) }}" /></div>
                 </div>
             </div>
 
             <div class="home-banners">
                 <div class="row">
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="{{ path('web_retailers', {site: site}) }}">
+                        <a href="{{ path('web_retailers', {}) }}">
                             <div class="box">
                                 <div class="heading">FOR RETAILERS</div>
-                                <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterOne) }}" />
                             </div>
                         </a>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="{{ path('web_product_features', {site: site}) }}">
+                        <a href="{{ path('web_product_features', {}) }}">
                             <div class="box">
                                 <div class="heading">PRODUCT FEATURES</div>
-                                <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterTwo) }}" />
                             </div>
                         </a>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="{{ path('web_faq', {site: site}) }}">
+                        <a href="{{ path('web_faq', {}) }}">
                             <div class="box">
                                 <div class="heading">WARRANTY/QUESTIONS?</div>
-                                <img src="{{ asset('images/web/Warranty@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterThree) }}" />
                             </div>
                         </a>
                     </div>
@@ -60,3 +101,6 @@
             </div>
         </div>
 {% endblock body %}
+{% block footbox %}
+    <div class="copyright">{{ channel.frontFooterText }}</div>
+{% endblock %}

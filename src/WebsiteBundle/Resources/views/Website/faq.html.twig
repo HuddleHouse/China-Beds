@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="content-main">
-                        <div class="text-center"><img src="{{ asset('images/web/Warranty_badge@2x.png') }}" height="200" /></div>
+                        <div class="text-center"><img src="{{ asset('uploads/websites/' ~ channel.faqWarrantyPic) }}" height="200" /></div>
                         <h2>Warranty</h2>
                         <h3>How long is the warranty on my mattress?</h3>
                         <p>Your new memory foam mattress is covered by a 10 year prorated limited warranty. Please retain your receipt as your warranty record.
@@ -43,7 +43,7 @@
                         <h3>Buying from a reseller like Amazon, Craig's list, or E-bay?</h3>
                         <p>Purchases from traditional retailers, 'brick and mortar' stores, and any Premier Retailer are ALWAYS covered under the MLILY Limited Warranty. You can feel confident in your purchase!</p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="{{ asset('images/web/Maintenence2_Mattress@2x.png') }}" width="300" /></div>
+                        <div class="text-center"><img src="{{ asset('uploads/websites/' ~ channel.faqMaintenancePic) }}" width="300" /></div>
                         <div class="clearfix">&nbsp;</div>
                         <h2>Maintenance</h2>
                         <h3>Do I need to flip my mattress?</h3>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="content-main">
-                        <div class="text-center"><img src="{{ asset('images/web/Unpacking2Gray@2x.png') }}" height="200" /></div>
+                        <div class="text-center"><img src="{{ asset('uploads/websites/' ~ channel.faqUnpackingPic) }}" height="200" /></div>
                         <h2>Unpacking</h2>
                         <h3>Where should I unpack the mattress?</h3>
                         <p>Unpack your mattress in a well ventilated area such as an open garage or porch, before moving it to your living space.</p>
@@ -65,7 +65,7 @@
                         <h3>When will my mattress be ready to sleep on?</h3>
                         <p>Your mattress should be fully decompressed in about 24 hours, returning to its normal shape and size. Walking on the surface of your mattress, while it is positioned on the floor can speed this process.</p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="{{ asset('images/web/bedframe.png') }}" width="300" /></div>
+                        <div class="text-center"><img src="{{ asset('uploads/websites/' ~ channel.faqSupportPic) }}" width="300" /></div>
                         <div class="clearfix">&nbsp;</div>
                         <h2>Support</h2>
                         <h3>What kind of box spring should I use?</h3>
@@ -73,7 +73,7 @@
                         <h3>Do you sell boxsprings?</h3>
                         <p>No. Mlily does not provide foundations. However any local mattress or furniture retailer will carry a variety of box solutions in stock.</p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="{{ asset('images/web/Contact Icon@2x.png') }}" width="150" /></div>
+                        <div class="text-center"><img src="{{ asset('uploads/websites/' ~ channel.faqContactPic) }}" width="150" /></div>
                         <div class="clearfix">&nbsp;</div>
                         <h2>Contact</h2>
                         <h3>How can I get in touch with you?</h3>
@@ -124,10 +124,13 @@
                         <h3>Shipping Policy?</h3>
                         <p>Orders are usually processed within 2 business, according to stock availability. Products purchased through mlilyusa.com will be shipped via FedEx Ground. Purchaser is responsible for all applicable shipping charges. Shipping times vary but average delivery time is 2-3 days. </p>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="text-center"><img src="{{ asset('images/web/Security Icon@2x.png') }}" width="250" /></div>
+                        <div class="text-center"><img src="{{ asset('uploads/websites/' ~ channel.faqTCPic) }}" width="250" /></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endblock body %}
+{% block footbox %}
+    <div class="copyright">{{ channel.frontFooterText }}</div>
+{% endblock %}

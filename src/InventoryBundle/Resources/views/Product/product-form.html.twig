@@ -22,9 +22,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_label(form.hideFrontend) }}
+                {{ form_widget(form.hideFrontend) }}
             </div>
         </div>
         <hr>

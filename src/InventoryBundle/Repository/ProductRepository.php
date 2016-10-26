@@ -3,6 +3,7 @@
 namespace InventoryBundle\Repository;
 
 use InventoryBundle\Entity\Channel;
+use InventoryBundle\Entity\Product;
 use WarehouseBundle\Entity\Warehouse;
 
 /**
@@ -40,6 +41,26 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $products;
+    }
+
+    /**
+     * Returns single product based on variant
+     *
+     * @return Product
+     */
+    public function getProdImg($variantId){
+        $em = $this->getEntityManager();
+        $productVariant = $em->getRepository('InventoryBundle:ProductVariant')->find($variantId);
+        $product = $productVariant->getProduct();
+
+        $image_url = '/';
+
+        foreach($product->getImages() as $image) {
+            $image_url .= $image->getWebPath();
+            break;
+        }
+
+        return $image_url;
     }
 
     public function getAllMattressVariantsForChannelArray(Channel $channel)
@@ -80,7 +101,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllMattressesForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -100,6 +121,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
                 foreach($prod->getVariants() as $variant)
                     if($variant->getMsrp() < $lowest_price)
@@ -109,7 +131,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     'description' => $prod->getDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
@@ -119,7 +142,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllPillowsForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -139,14 +162,15 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
-
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
@@ -156,7 +180,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllAdjustablesForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -176,6 +200,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
 
                 $products[] = array(
@@ -183,7 +208,8 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     'description' => $prod->getDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
