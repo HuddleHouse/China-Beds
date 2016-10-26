@@ -4,6 +4,7 @@ namespace OrderBundle\Controller\API;
 
 use AppBundle\Services\EmailService;
 use OrderBundle\Entity\Orders;
+use OrderBundle\Entity\OrdersManualItem;
 use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
 use OrderBundle\Entity\OrdersShippingLabel;
@@ -64,6 +65,11 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
         $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
+
+        /*
+        * Save the manual Items here
+        */
+        $this->saveManualItems($cart, $order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
@@ -147,6 +153,16 @@ class OrderProductsController extends Controller
 //        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
 
         return JsonResponse::create($order->getId());
+    }
+
+    private function saveManualItems($cart, Orders $orders){
+        $em = $this->getDoctrine()->getManager();
+
+        foreach($cart['customItems'] as $item) {
+            $orderManualItem = new OrdersManualItem();
+            $orderManualItem->setOrder($orders);
+            $orderManualItem->setDescription($item[''])
+        }
     }
 
     /**
