@@ -153,15 +153,20 @@ class OrderProductsController extends Controller
         return JsonResponse::create($order->getId());
     }
 
+    /**
+     * @param $cart
+     * @param Orders $orders
+     */
     private function saveManualItems($cart, Orders $orders){
         $em = $this->getDoctrine()->getManager();
-
+        $count = 0;
         foreach($cart['customItems'] as $item) {
             $orderManualItem = new OrdersManualItem();
             $orderManualItem->setOrder($orders);
             $orderManualItem->setDescription($item['description']);
             $orderManualItem->setPrice($item['price']);
             $em->persist($orderManualItem);
+            $count++;
         }
         $em->flush();
     }

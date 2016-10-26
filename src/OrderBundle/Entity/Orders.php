@@ -329,6 +329,9 @@ class Orders
             $total += $productVariant->getQuantity() * $productVariant->getPrice();
         foreach($this->getPopItems() as $popItem)
             $total += $popItem->getQuantity() * $popItem->getPrice();
+        foreach($this->manual_items as $manual_item) {
+            $total += $manual_item->getPrice();
+        }
 
         return $total;
     }
@@ -340,6 +343,8 @@ class Orders
             $total += $productVariant->getQuantity() * $productVariant->getPrice();
         foreach($this->getPopItems() as $popItem)
             $total += $popItem->getQuantity() * $popItem->getPrice();
+        foreach($this->manual_items as $manual_item)
+            $total += $manual_item->getPrice();
 
         $total += $this->getShipping();
         return $total;
