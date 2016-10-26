@@ -17,7 +17,7 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
 
     public function getCartArray(StockAdjustment $stockAdjustment)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
 
         $cart = array();
         $total = 0;
@@ -68,7 +68,7 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getActiveForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_adjustment' as type
 	from stock_adjustments p
@@ -84,7 +84,7 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getAllForWarehouseArray(Warehouse $warehouse) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_adjustment' as type
 	from stock_adjustments p

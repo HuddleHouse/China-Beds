@@ -153,7 +153,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
      * @param $quantity
      */
     public function updateWarehouseInventoryById($id, $quantity) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
 
         $warehouseInventory = $em->getRepository('WarehouseBundle:WarehouseInventory')->find($id);
         if($warehouseInventory) {
@@ -172,7 +172,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
      * @param $quantity
      */
     public function addWarehouseInventory(Warehouse $warehouse, ProductVariant $productVariant, $quantity) {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $warehouseInventory = new WarehouseInventory();
         $warehouseInventory->setWarehouse($warehouse);
         $warehouseInventory->setProductVariant($productVariant);
@@ -186,7 +186,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
 
     public function getInventoryForProduct(ProductVariant $productVariant, Warehouse $warehouse)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $warehouse_id = $warehouse->getId();
         $product_variant_id = $productVariant->getId();
 

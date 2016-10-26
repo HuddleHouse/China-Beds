@@ -94,7 +94,7 @@ class AdminController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $data = $form->getData();
 
             if($officeId = $data->getOffice()) {

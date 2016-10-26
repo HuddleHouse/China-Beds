@@ -32,7 +32,7 @@ class OrderProductsController extends Controller
      */
     public function getOrdersIndex()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
@@ -49,7 +49,7 @@ class OrderProductsController extends Controller
      */
     public function getPendingOrdersIndex()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
@@ -67,7 +67,7 @@ class OrderProductsController extends Controller
      */
     public function orderProductsAction(Channel $channel)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
         if(count($user->getPriceGroups()) != 0)
@@ -122,7 +122,7 @@ class OrderProductsController extends Controller
      */
     public function renderOrderReviewAction(Channel $channel, Orders $order)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
 
         if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
@@ -168,7 +168,7 @@ class OrderProductsController extends Controller
      */
     public function renderOrderWarehouseReviewAction(Orders $order, Warehouse $warehouse)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $channel = $order->getChannel();
 
         if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
@@ -224,7 +224,7 @@ class OrderProductsController extends Controller
      */
     public function renderOrderEditAction(Channel $channel, Orders $order)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
         if(count($user->getPriceGroups()) != 0)
