@@ -161,7 +161,7 @@ class OrderProductsController extends Controller
         foreach($cart['customItems'] as $item) {
             $orderManualItem = new OrdersManualItem();
             $orderManualItem->setOrder($orders);
-            $orderManualItem->setDescription($item[''])
+            $orderManualItem->setDescription($item['']);
         }
     }
 
