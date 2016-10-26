@@ -107,7 +107,7 @@ class Product
     private $variants;
     
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product", cascade={"persist"})
      */
     private $channels;
 
@@ -517,6 +517,7 @@ class Product
      */
     public function addChannel(\InventoryBundle\Entity\ProductChannel $channel)
     {
+        $channel->setProduct($this);
         $this->channels[] = $channel;
 
         return $this;
