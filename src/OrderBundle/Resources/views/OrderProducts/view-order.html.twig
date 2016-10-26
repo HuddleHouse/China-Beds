@@ -344,6 +344,40 @@
                 </div>
                 <!-- /.row -->
             {% endif %}
+
+            {% if manual_items_count != 0 %}
+                <div class="row" style="margin-bottom: 30px;" >
+                    <div class="col-md-12" >
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <center><h4>Manual Items</h4></center>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in manual_items %}
+                                <tr>
+                                    <td>
+                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                            {{ item.description }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                            ${{ item.price | number_format(2, '.', ',') }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
                 <div class="col-md-6">
