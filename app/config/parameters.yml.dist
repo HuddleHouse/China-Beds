@@ -28,3 +28,5 @@ parameters:
     nacha.prod.host:    b2b22.bankofamerica.com
     nacha.prod.user:    nacha_prod_user
     nacha.prod.pass:    nacha_prod_pass
+
+    channel_upload_directory: '%kernel.root_dir%/../web/uploads/websites'
