@@ -1,0 +1,62 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Report') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Report') }}
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        function createLedgerWithAPI(amount, submittedForUserId, channelId, description, type, typeId) {
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_new_ledger') }}",
+                dataType: 'json',
+                data: {amount: amount, submittedForUserId: submittedForUserId, channelId: channelId, description: description, type: type, typeId: typeId},
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+                }
+            });
+        }
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="" class="table table-striped table-bordered no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        {% for header in report.headers %}
+                            <th>{{ header | default('') }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in report.data %}
+                        <tr>
+                            {% for col in row %}
+                                <td>{{ col | default('--') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    {% if report.totals is not null %}
+                        <tr>
+                            {% for col in report.totals %}
+                                <td>{{ col | default('--') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

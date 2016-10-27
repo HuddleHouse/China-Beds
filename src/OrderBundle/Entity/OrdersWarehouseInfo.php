@@ -89,62 +89,6 @@ class OrdersWarehouseInfo
     }
 
     /**
-     * Set price
-     *
-     * @param integer $price
-     *
-     * @return OrderProductVariant
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return int
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductVariant()
-    {
-        return $this->product_variant;
-    }
-
-    /**
-     * @param mixed $product_variant
-     */
-    public function setProductVariant($product_variant)
-    {
-        $this->product_variant = $product_variant;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param mixed $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    /**
      * @return mixed
      */
     public function getOrdersProductVariant()

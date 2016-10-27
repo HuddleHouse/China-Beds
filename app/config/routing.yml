@@ -1,3 +1,8 @@
+report:
+    resource: "@ReportBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 order_ledger:
     resource: "@OrderBundle/Controller/LedgerController.php"
     type:     annotation
