@@ -195,17 +195,26 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
     public function getTemplateReportData() {
         $rtn = array();
         $qb = $this->createQueryBuilder('o')
-            ->addSelect('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'o.shipAddress', 'u.address_1', 'u.first_name', 'u.last_name', 'u.phone')
+            ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress')
             ->leftJoin('o.submitted_for_user', 'u', 'WHERE', 'o.submitted_for_user = u');
-        $rtn = $qb->getQuery()->getResult();
 
+        foreach($qb->getQuery()->getResult() as $row) {
+            $row['first_name'] .= ' ' . $row['last_name'];
+            array_splice($row, 4, 1);
+            //convert DateTime objects to strings
+            if($row['pickUpDate'] != null)
+                $row['pickUpDate'] = $row['pickUpDate']->format('m/d/y H:i');
+            $rtn[] = $row;
+        }
         return $rtn;
     }
 
     public function getDailyOrderReportData() {
         $rtn = array();
+        //$total = 0;
+
         $qb = $this->createQueryBuilder('o')
-            ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress')
+            ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress', 'o.amount_paid')
             ->leftJoin('o.submitted_for_user', 'u', 'WITH', 'o.submitted_for_user = u')
             ->andWhere('o.submitDate between :today and :tomorrow')
             ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
@@ -216,6 +225,9 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
             //convert DateTime objects to strings
             if($row['pickUpDate'] != null)
                 $row['pickUpDate'] = $row['pickUpDate']->format('m/d/y H:i');
+
+            //$total += $row['amount_paid'];
+
             $rtn[] = $row;
         }
         return $rtn;
