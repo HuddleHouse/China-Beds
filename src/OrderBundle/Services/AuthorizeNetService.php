@@ -11,8 +11,19 @@ use OrderBundle\Entity\Orders;
 
 class AuthorizeNetService extends BaseService
 {
-    function chargeCreditCard($amount){
-
+    /**
+     * @param array $data
+     *
+     * indexes should be
+     *      amount = 00.00
+     *      card_number = 4111111111111111
+     *      expiration = 1226
+     *      code = 123
+     *
+     * @return AnetAPI\AnetApiResponseType
+     */
+    function chargeCreditCard(array $data){
+        $sandboxUrl = "https://apitest.authorize.net/xml/v1/request.api";
 
         // Common setup for API credentials
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -21,9 +32,9 @@ class AuthorizeNetService extends BaseService
         $refId = 'ref' . time();
         // Create the payment data for a credit card
         $creditCard = new AnetAPI\CreditCardType();
-        $creditCard->setCardNumber("4111111111111111");
-        $creditCard->setExpirationDate("1226");
-        $creditCard->setCardCode("123");
+        $creditCard->setCardNumber($data['card_number']);
+        $creditCard->setExpirationDate($data['expiration']);
+        $creditCard->setCardCode($data['code']);
         $paymentOne = new AnetAPI\PaymentType();
         $paymentOne->setCreditCard($creditCard);
         $order = new AnetAPI\OrderType();
@@ -31,7 +42,7 @@ class AuthorizeNetService extends BaseService
         //create a transaction
         $transactionRequestType = new AnetAPI\TransactionRequestType();
         $transactionRequestType->setTransactionType( "authCaptureTransaction");
-        $transactionRequestType->setAmount($amount);
+        $transactionRequestType->setAmount($data['amount']);
         $transactionRequestType->setOrder($order);
         $transactionRequestType->setPayment($paymentOne);
 
@@ -40,11 +51,11 @@ class AuthorizeNetService extends BaseService
         $request->setRefId( $refId);
         $request->setTransactionRequest( $transactionRequestType);
         $controller = new AnetController\CreateTransactionController($request);
-        $response = $controller->executeWithApiResponse( \net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        $response = $controller->executeWithApiResponse($sandboxUrl);
 
         if ($response != null)
         {
-            if($response->getMessages()->getResultCode() == \SampleCode\Constants::RESPONSE_OK)
+            if($response->getMessages()->getResultCode() == "Ok")
             {
                 $tresponse = $response->getTransactionResponse();
 
