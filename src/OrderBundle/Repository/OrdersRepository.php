@@ -209,27 +209,14 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         return $rtn;
     }
 
+    /**
+     * @return Orders[]
+     */
     public function getDailyOrderReportData() {
-        $rtn = array();
-        //$total = 0;
-
         $qb = $this->createQueryBuilder('o')
-            ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress', 'o.amount_paid')
-            ->leftJoin('o.submitted_for_user', 'u', 'WITH', 'o.submitted_for_user = u')
             ->andWhere('o.submitDate between :today and :tomorrow')
             ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
-        foreach($qb->getQuery()->getResult() as $row) {
-            // merge the first and last name fields
-            $row['first_name'] .= ' ' . $row['last_name'];
-            array_splice($row, 5, 1);
-            //convert DateTime objects to strings
-            if($row['pickUpDate'] != null)
-                $row['pickUpDate'] = $row['pickUpDate']->format('m/d/y H:i');
-
-            //$total += $row['amount_paid'];
-
-            $rtn[] = $row;
-        }
-        return $rtn;
+        return $qb->getQuery()->getResult();
     }
+
 }

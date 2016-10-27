@@ -11,6 +11,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @Route("/reports")
@@ -79,24 +81,65 @@ class ReportController extends Controller
             'Ship Name',
             'User Name',
             'Address',
-            'Order Amount'
+            'Order Amount',
+            'Shipping Amount'
         );
-
-
 
         //2D array of data from the query for each row[column] of data
         $report['data'] = $em->getRepository('OrderBundle:Orders')->getDailyOrderReportData();
         //total to be displayed if applicable
         $report['total'] = 0;
 
-        foreach($report['data'] as $reports){
-            $report['total'] += $reports['amount_paid'];
+        foreach($report['data'] as $order){
+            $report['total'] += $order->getSubTotal();
         }
 
         if($report['data'] == array())
             $this->addFlash('notice', 'No Orders Today');
-        return $this->render('ReportBundle:Reports:report-base.html.twig', array(
+
+        return $this->render('ReportBundle:Reports:daily-order.html.twig', array(
             'report' => $report
         ));
     }
+
+    /**
+     * Description
+     *
+     * @Route("/monthly_order", name="monthly_order")
+     * @Method({"GET", "POST"})
+     */
+    public function monthOrderAction(Request $request){
+
+        $report = array();
+
+        $report['headers'] = array(
+            'Order ID',
+            'Order Number',
+            'Pickup Date',
+            'Ship Name',
+            'User Name',
+            'Address',
+            'Order Amount',
+            'Shipping Amount'
+        );
+
+        $em = $this->getDoctrine()->getManager();
+
+        $orders = $em->getRepository('OrderBundle:Orders');
+        $query = $orders->createQueryBuilder('o')
+            ->where('o.submitDate between ?0 AND ?1 ')
+            ->setParameters(array(date('Y-m-01'), date('Y-m-t')));
+        $result = $query->getQuery()->getResult();
+
+        $report['data'] = $result;
+
+        $report['total'] = 0;
+        foreach ($report['data'] as $order){
+            $report['total'] += $order->getSubtotal();
+        }
+
+        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y') ));
+    }
+
+
 }
