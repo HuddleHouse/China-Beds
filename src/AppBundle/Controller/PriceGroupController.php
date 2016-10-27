@@ -157,7 +157,7 @@ class PriceGroupController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
         //get all products
-        $statement = $connection->prepare("select p.id, p.name, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id
+        $statement = $connection->prepare("select p.id, p.name, GROUP_CONCAT(DISTINCT(ca.name)) as category_names, p.description, p.sku, ch.name as channel_name, ch.url as channel_url, ch.id as channel_id
 	from product p
 		left join product_channels c
 			on c.product_id = p.id
@@ -165,14 +165,21 @@ class PriceGroupController extends Controller
 			on c.channel_id = ch.id
 		left join product_variant v
 			on p.id = v.product_id
+		left join product_categories pc
+		    on p.id = pc.product_id
+		left join categories ca
+		    on pc.category_id = ca.id
 		where p.active = 1
-		group by c.id");
+		and c.channel_id = :channel_id
+		group by c.id, ca.id
+        order by GROUP_CONCAT(ca.name), p.name ASC
+				");
 
         //will store formatted array
         $product_data = array();
 
         try {
-            $statement->execute();
+            $statement->execute(['channel_id' => $this->getUser()->getActiveChannel()->getId()]);
             $products = $statement->fetchAll();
 
             foreach($products as $product) {

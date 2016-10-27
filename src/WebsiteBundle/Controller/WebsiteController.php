@@ -47,17 +47,14 @@ class WebsiteController extends BaseController
 
     public function warrantyIndexAction()
     {
-        $em = $this->getDoctrine()->getManager();
         return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
             'site' => strtolower($this->getChannel()->getName()),
-            'chanel' => $this->getChannel()
-
+            'channel' => $this->getChannel()
         ));
     }
 
     public function contactIndexAction()
     {
-        $em = $this->getDoctrine()->getManager();
         return $this->render('WebsiteBundle:Website:contact.html.twig', array(
             'site' => strtolower($this->getChannel()->getName()),
             'channel' => $this->getChannel()
@@ -79,7 +76,6 @@ class WebsiteController extends BaseController
     }
 
     public function  singleMattressIndexAction(Product $product) {
-        $em = $this->getDoctrine()->getManager();
         return $this->render('WebsiteBundle:Website:single-mattresses.html.twig', array(
             'site' => strtolower($this->getChannel()->getName()),
             'product' => $product,

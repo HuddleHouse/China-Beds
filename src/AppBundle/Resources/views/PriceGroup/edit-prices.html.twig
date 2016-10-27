@@ -99,7 +99,7 @@
 
         <div class="row">
         {% for key, product in products %}
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h3>{{ key }}</h3>
         <table class="table" style="">
             <thead>
@@ -113,7 +113,7 @@
             <tbody>
             {% for p in product %}
                     <tr>
-                        <th>{{ p.name }}</th>
+                        <th>{{ p.category_names|upper }}: {{ p.name }}</th>
                         <th></th>
                         <th></th>
                         <th></th>

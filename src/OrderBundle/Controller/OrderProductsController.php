@@ -140,6 +140,11 @@ class OrderProductsController extends Controller
                 $is_dis = 1;
             $pop = $order->getPopItems();
 
+            $manualItems = $order->getManualItems();
+            $manualCount = 0;
+            foreach($manualItems as $manualItem) {
+                $manualCount++;
+            }
 
             return $this->render('@Order/OrderProducts/view-order.html.twig', array(
                 'channel' => $channel,
@@ -149,7 +154,9 @@ class OrderProductsController extends Controller
                 'is_retail' => $is_retail,
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
-                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+                'manual_items' => $manualItems,
+                'manual_items_count' => $manualCount
             ));
         }
         else

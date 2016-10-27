@@ -4,6 +4,7 @@ namespace OrderBundle\Controller\API;
 
 use AppBundle\Services\EmailService;
 use OrderBundle\Entity\Orders;
+use OrderBundle\Entity\OrdersManualItem;
 use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
 use OrderBundle\Entity\OrdersShippingLabel;
@@ -64,6 +65,11 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
         $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
+
+        /*
+        * Save the manual Items here
+        */
+        $this->saveManualItems($cart, $order);
 
         $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
         $order->setStatus($status);
@@ -144,9 +150,25 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
-//        $em->getRepository('OrderBundle:Orders')->setWarehouseDataForOrder($order);
-
         return JsonResponse::create($order->getId());
+    }
+
+    /**
+     * @param $cart
+     * @param Orders $orders
+     */
+    private function saveManualItems($cart, Orders $orders){
+        $em = $this->getDoctrine()->getManager();
+        $count = 0;
+        foreach($cart['customItems'] as $item) {
+            $orderManualItem = new OrdersManualItem();
+            $orderManualItem->setOrder($orders);
+            $orderManualItem->setDescription($item['description']);
+            $orderManualItem->setPrice($item['price']);
+            $em->persist($orderManualItem);
+            $count++;
+        }
+        $em->flush();
     }
 
     /**
@@ -352,15 +374,17 @@ class OrderProductsController extends Controller
                     $shipment->setParameter('thirdPartyAccount', $orders->getSubmittedForUser()->getDistributorFedexNumber());
                 }
 
-                try {
-                    $response = $shipment->submitShipment();
+                $response = $shipment->submitShipment();
+
+                if(isset($response['trk_main'])) {
+                    if($count == 1)
+                        $shipmentId = $response['trk_main'];
                 }
-                catch(\Exception $e) {
-                    return JsonResponse::create(false);
+                else {
+                    return $orders;
+
                 }
 
-                if($count == 1)
-                    $shipmentId = $response['trk_main'];
 
                 $path = 'uploads/shipping/'.$response['pkgs'][0]['pkg_trk_num'].'.png';
                 file_put_contents($path, base64_decode($response['pkgs'][0]['label_img']));

@@ -87,9 +87,9 @@ class Product
 
     /**
      * @var bool
-     * @ORM\Column(name="hide_frontend", type="boolean", nullable=true)
+     * @ORM\Column(name="hide_frontend", type="boolean")
      */
-    private $hideFrontend;
+    private $hideFrontend = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")
@@ -107,7 +107,7 @@ class Product
     private $variants;
     
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product", cascade={"persist", "remove"})
      */
     private $channels;
 
@@ -517,6 +517,7 @@ class Product
      */
     public function addChannel(\InventoryBundle\Entity\ProductChannel $channel)
     {
+        $channel->setProduct($this);
         $this->channels[] = $channel;
 
         return $this;
