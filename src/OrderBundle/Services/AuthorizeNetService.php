@@ -8,6 +8,7 @@ use AppBundle\Entity\User;
 use AppBundle\Services\BaseService;
 use InventoryBundle\Entity\WarrantyClaim;
 use OrderBundle\Entity\Orders;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AuthorizeNetService extends BaseService
 {
@@ -22,9 +23,10 @@ class AuthorizeNetService extends BaseService
      *
      * indexes should be
      *      amount = 00.00
-     *      card_number = 4111111111111111
-     *      expiration = 1226
-     *      code = 123
+     *      number = 4111111111111111
+     *      expiry-month = 12
+     *      expiry-year = 26
+     *      cvv = 123
      *
      * @return AnetAPI\AnetApiResponseType
      */
@@ -39,9 +41,9 @@ class AuthorizeNetService extends BaseService
         $refId = 'ref' . time();
         // Create the payment data for a credit card
         $creditCard = new AnetAPI\CreditCardType();
-        $creditCard->setCardNumber($data['card_number']);
-        $creditCard->setExpirationDate($data['expiration']);
-        $creditCard->setCardCode($data['code']);
+        $creditCard->setCardNumber($data['number']);
+        $creditCard->setExpirationDate($data['expiry-month'].$data['expiry-year']);
+        $creditCard->setCardCode($data['cvv']);
         $paymentOne = new AnetAPI\PaymentType();
         $paymentOne->setCreditCard($creditCard);
         $order = new AnetAPI\OrderType();
