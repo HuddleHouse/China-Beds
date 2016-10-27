@@ -11,6 +11,12 @@ use OrderBundle\Entity\Orders;
 
 class AuthorizeNetService extends BaseService
 {
+    private $container;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @param array $data
      *
@@ -23,12 +29,13 @@ class AuthorizeNetService extends BaseService
      * @return AnetAPI\AnetApiResponseType
      */
     function chargeCreditCard(array $data){
+
         $sandboxUrl = "https://apitest.authorize.net/xml/v1/request.api";
 
         // Common setup for API credentials
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName(\SampleCode\Constants::MERCHANT_LOGIN_ID);
-        $merchantAuthentication->setTransactionKey(\SampleCode\Constants::MERCHANT_TRANSACTION_KEY);
+        $merchantAuthentication->setName($this->container->getParameter('default_sales_rep'));
+        $merchantAuthentication->setTransactionKey($this->container->getParameter('default_sales_rep'));
         $refId = 'ref' . time();
         // Create the payment data for a credit card
         $creditCard = new AnetAPI\CreditCardType();

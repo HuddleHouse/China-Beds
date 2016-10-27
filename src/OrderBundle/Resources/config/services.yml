@@ -15,3 +15,6 @@ services:
         arguments: ["@security.token_storage","@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: newcredit_type }
+    order.ledger:
+        class: OrderBundle\Services\AuthorizeNetService
+        arguments: ["@service_container"]
