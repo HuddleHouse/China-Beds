@@ -19,6 +19,9 @@ parameters:
     default_sales_rep:
     default_sales_manager:
 
+    authorize_login_id: 3845HahjteBH
+    authorize_tansaction_key: 69872hkT4b7WnQVt
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
