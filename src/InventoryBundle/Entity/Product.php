@@ -92,17 +92,17 @@ class Product
     private $hideFrontend = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product", cascade={"persist", "remove"})
      */
     private $attributes;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product", cascade={"persist"})
      */
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product", cascade={"persist", "remove"})
      */
     private $variants;
     
@@ -112,12 +112,12 @@ class Product
     private $channels;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product", cascade={"persist", "remove"})
      */
     private $specifications;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product", cascade={"persist", "remove"})
      */
     private $images;
 
