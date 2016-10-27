@@ -195,24 +195,12 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
     public function getTemplateReportData() {
         $rtn = array();
         $qb = $this->createQueryBuilder('o')
-            ->addSelect('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'o.shipAddress', 'u.address_1', 'u.first_name', 'u.last_name', 'u.phone')
-            ->leftJoin('o.submitted_for_user', 'u', 'WHERE', 'o.submitted_for_user = u');
-        $rtn = $qb->getQuery()->getResult();
-
-        return $rtn;
-    }
-
-    public function getDailyOrderReportData() {
-        $rtn = array();
-        $qb = $this->createQueryBuilder('o')
             ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress')
-            ->leftJoin('o.submitted_for_user', 'u', 'WITH', 'o.submitted_for_user = u')
-            ->andWhere('o.submitDate between :today and :tomorrow')
-            ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
+            ->leftJoin('o.submitted_for_user', 'u', 'WHERE', 'o.submitted_for_user = u');
+
         foreach($qb->getQuery()->getResult() as $row) {
-            // merge the first and last name fields
             $row['first_name'] .= ' ' . $row['last_name'];
-            array_splice($row, 5, 1);
+            array_splice($row, 4, 1);
             //convert DateTime objects to strings
             if($row['pickUpDate'] != null)
                 $row['pickUpDate'] = $row['pickUpDate']->format('m/d/y H:i');
@@ -220,4 +208,15 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         }
         return $rtn;
     }
+
+    /**
+     * @return Orders[]
+     */
+    public function getDailyOrderReportData() {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.submitDate between :today and :tomorrow')
+            ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
+        return $qb->getQuery()->getResult();
+    }
+
 }

@@ -40,25 +40,28 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for row in report.data %}
+                    {% for order in report.data %}
                         <tr>
-                            {% for col in row %}
-                                <td>{{ col }}</td>
-                            {% endfor %}
+                            <td>{{ order.orderId | default('--') }}</td>
+                            <td>{{ order.orderNumber | default('--') }}</td>
+                            <td>{{ order.pickUpDate | date('m/d/y H:i') | default('--') }}</td>
+                            <td>{{ order.shipName | default('--') }}</td>
+                            <td>{{ order.submittedForUser.fullName | default('--') }}</td>
+                            <td>{{ order.shipAddress | default('--') }}</td>
+                            <td>${{ order.subtotal | number_format(2) | default('--') }}</td>
+                            <td>${{ order.shipping | number_format(2) | default('--') }}</td>
                         </tr>
                     {% endfor %}
                     {% if report.total is not null %}
                         <tr>
-                            {#{% for col in report.totals %}#}
-                                {#<td>{{ col | default('--') }}</td>#}
-                            {#{% endfor %}#}
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>TOTAL : {{ report.total | number_format}}</td>
+                            <td></td>
+                            <td>TOTAL : ${{ report.total | number_format(2)}}</td>
                         </tr>
                     {% endif %}
                     </tbody>
