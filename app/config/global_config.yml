@@ -88,3 +88,43 @@ fos_user:
     profile:
             form:
                 type: AppBundle\Form\ProfileFormType
+
+# SemanticReportsBundle Configuration
+semantic_reports:
+    # report_directory and dashboard_directory root is the 'web' directory
+    report_directory    : "reports/"
+    dashboard_directory : "sample_dashboards"
+    default_file_extension_mapping:
+        sql :   'Mysql'
+        php :   'Php'
+        js  :   'jQuery'
+        ado :   'Ado'
+    environments:
+        dev:
+            mysql:
+                host:   '%database_host%'
+                user:   '%database_user%'
+                pass:   '%database_password%'
+                database: '%database_name%'
+        prod:
+            mysql:
+                host:   '%database_host%'
+                user:   '%database_user%'
+                pass:   '%database_password%'
+                database: '%database_name%'
+    report_formats:
+        csv         : 'csv'
+        xlsx        : 'Download Excel 2007'
+        xls         : 'Download Excel 97-2003'
+        text        : 'Text'
+        table       : 'Simple table'
+        json        : 'JSON'
+        xml         : 'XML'
+        sql         : 'SQL INSERT command'
+        debug       : 'Debug information'
+        raw         : 'Raw report dump'
+    mail_settings:
+        enabled : true
+        from    : '%mailer_user%'
+        method  : '%mailer_transport%'
+        server  : '%mailer_host%'
