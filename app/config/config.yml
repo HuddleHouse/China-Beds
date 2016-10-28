@@ -8,7 +8,6 @@ imports:
     - { resource: "@OrderBundle/Resources/config/services.yml" }
     - { resource: "@WarehouseBundle/Resources/config/services.yml" }
     - { resource: "@AppBundle/Resources/config/services.yml" }
-    - { resource: "@ReportBundle/Resources/config/services.yml" }
 
 
 fos_js_routing:
