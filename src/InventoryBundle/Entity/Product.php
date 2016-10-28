@@ -87,6 +87,13 @@ class Product
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="promo_kit_available", type="boolean")
+     */
+    private $promo_kit_available = false;
+
+    /**
+     * @var bool
      * @ORM\Column(name="hide_frontend", type="boolean")
      */
     private $hideFrontend = 0;
@@ -355,6 +362,21 @@ class Product
         return $this->active;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * @param boolean $promo_kit_available
+     */
+    public function setPromoKitAvailable($promo_kit_available)
+    {
+        $this->promo_kit_available = $promo_kit_available;
+    }
 
     /**
      * @return mixed

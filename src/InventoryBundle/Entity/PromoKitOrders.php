@@ -72,6 +72,13 @@ class PromoKitOrders
     private $shipPhone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
@@ -83,11 +90,29 @@ class PromoKitOrders
     private $promoKitItems;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="promo_kit_orders")
+     * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
+     */
+    private $submittedByUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="promo_kit_order")
+     */
+    private $productVariants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="promo_kit_order")
+     */
+    private $popItems;
+
+    /**
      * PromoKit constructor.
      */
     public function __construct()
     {
         $this->promoKitItems = new ArrayCollection();
+        $this->productVariants = new ArrayCollection();
+        $this->popItems = new ArrayCollection();
     }
 
     /**
@@ -237,6 +262,22 @@ class PromoKitOrders
     /**
      * @return mixed
      */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getPromoKitItems()
     {
         return $this->promoKitItems;
@@ -248,5 +289,53 @@ class PromoKitOrders
     public function setPromoKitItems($promoKitItems)
     {
         $this->promoKitItems = $promoKitItems;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubmittedByUser()
+    {
+        return $this->submittedByUser;
+    }
+
+    /**
+     * @param mixed $submittedByUser
+     */
+    public function setSubmittedByUser($submittedByUser)
+    {
+        $this->submittedByUser = $submittedByUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductVariants()
+    {
+        return $this->productVariants;
+    }
+
+    /**
+     * @param mixed $productVariants
+     */
+    public function setProductVariants($productVariants)
+    {
+        $this->productVariants = $productVariants;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPopItems()
+    {
+        return $this->popItems;
+    }
+
+    /**
+     * @param mixed $popItems
+     */
+    public function setPopItems($popItems)
+    {
+        $this->popItems = $popItems;
     }
 }
