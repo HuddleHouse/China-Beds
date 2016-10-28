@@ -1,5 +1,5 @@
-reports:
-    resource: "@ReportsBundle/Controller/"
+report:
+    resource: "@ReportBundle/Controller/"
     type:     annotation
     prefix:   /
 

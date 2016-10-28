@@ -177,7 +177,6 @@ class User extends BaseUser
      */
     private $user_channels;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Office", inversedBy="users")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
@@ -457,6 +456,16 @@ class User extends BaseUser
                 return true;
         }
         return false;
+    }
+
+    public function setInvitation(Invitation $invitation)
+    {
+        $this->invitation = $invitation;
+    }
+
+    public function getInvitation()
+    {
+        return $this->invitation;
     }
 
     /**
