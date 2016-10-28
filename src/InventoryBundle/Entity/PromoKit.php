@@ -35,6 +35,18 @@ class PromoKit
      */
     private $description;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=true)
+     */
+    private $active;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PromoKitOrders", inversedBy="promoKitItems")
+     * @ORM\JoinColumn(name="promo_kit_order_id", referencedColumnName="id")
+     */
+    private $promoKitOrder;
 
     /**
      * Get id
@@ -92,5 +104,37 @@ class PromoKit
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrder()
+    {
+        return $this->promoKitOrder;
+    }
+
+    /**
+     * @param mixed $promoKitOrder
+     */
+    public function setPromoKitOrder($promoKitOrder)
+    {
+        $this->promoKitOrder = $promoKitOrder;
     }
 }
