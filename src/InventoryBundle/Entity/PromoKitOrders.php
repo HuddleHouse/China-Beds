@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PromoKitOrders
  *
  * @ORM\Table(name="promo_kit_orders")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="InventoryBundle\Repository\PromoKitOrdersRepository")
  */
 class PromoKitOrders
 {

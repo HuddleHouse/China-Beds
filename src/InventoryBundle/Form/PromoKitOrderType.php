@@ -2,6 +2,8 @@
 
 namespace InventoryBundle\Form;
 
+use AppBundle\Services\SettingsService;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use OrderBundle\Entity\OrdersPopItem;
 use OrderBundle\Entity\OrdersProductVariant;
@@ -15,6 +17,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PromoKitOrderType extends AbstractType
 {
+    private $settingsService;
+    private $repository;
+
+    /**
+     * PromoKitOrderType constructor.
+     * @param SettingsService $settingsService
+     * @param EntityManager $em
+     */
+    public function __construct(SettingsService $settingsService, EntityManager $em)
+    {
+        $this->settingsService = $settingsService;
+        $this->repository = $em->getRepository('InventoryBundle:PromoKitOrders');
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -46,13 +62,15 @@ class PromoKitOrderType extends AbstractType
                     'choice_label' => function (OrdersProductVariant $pv) {
                         return $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName();
                     },
+                    'choices' => $this->repository->getProductVariants(),
                     'expanded' => true,
                     'multiple' => true,
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
 //                    'query_builder' => function (EntityRepository $er) {
-//                        return $er->createQueryBuilder('p')
-//                            ->andWhere('p.');
+//                        return $er->createQueryBuilder('pv')
+//                            ->leftJoin('pv.warehouse_info', 'whi', 'WITH', 'pv.warehouse_info = whi')
+//                            ->leftJoin('whi.warehouse', 'w', 'WITH', 'whi.warehouse = w');
 //                    },
                 )
             )
