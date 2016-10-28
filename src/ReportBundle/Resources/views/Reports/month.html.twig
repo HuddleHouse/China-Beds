@@ -24,24 +24,120 @@
                 }
             });
         }
+
+        $('#latest-orders').DataTable({
+            "iDisplayLength": 10,
+            "order": [[ 1, "desc" ]],
+            responsive: true,
+            "fnDrawCallback": function(oSettings) {
+                if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()){
+                    $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                }
+            }
+        });
+
+
+        function fetchMonth(month){
+            var route = '{{ path('monthly_order') }}';
+            location.href = route + '?month=' + month;
+            return;
+
+
+
+            {#january = 0;#}
+            {#febuary = 1;#}
+            {#march = 2;#}
+            {#april = 3;#}
+            {#may = 4;#}
+            {#june = 5;#}
+            {#july = 6;#}
+            {#august = 7;#}
+            {#september = 8;#}
+            {#october = 9;#}
+            {#november = 10;#}
+            {#december = 11;#}
+
+            {#var d = new Date();#}
+            {#var thisMonth = d.getMonth();#}
+            {#alert(thisMonth);#}
+            {#var noGreaterThen = null;#}
+
+            {#switch(month){#}
+                {#case 'January':#}
+                    {#noGreaterThan = 0;#}
+                    {#if(thisMonth < noGreaterThan){#}
+                        {#//return '';#}
+                        {#console.log('this month hasnt happened yet');#}
+                    {#}else{#}
+                        {#console.log('attempting tp update datatable');#}
+                        {#$.ajax({#}
+                            {#type: 'POST',#}
+                            {#url: Routing.generate('api_monthly_report'),#}
+                            {#dataType: 'json',#}
+                            {#data: {'month' : 01},#}
+                            {#success: function (data) {#}
+                                {#{% set report %}data{% endset %}#}
+                            {#}#}
+                        {#})#}
+                    {#}#}
+                    {#break;#}
+                {#case 'Febuary':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'March':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'April':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'May':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'June':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'July':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'August':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'September':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'October':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'November':#}
+                    {#//#}
+                    {#break;#}
+                {#case 'December':#}
+                    {#//#}
+                    {#break;#}
+                {#default:#}
+                    {#break;#}
+            {#}#}
+        }
+
     </script>
 {% endblock footer %}
 
 {% block content %}
     <div class="row">
-        <select>
-            <option>January {{ date }}</option>
-            <option>Febuary {{ date }}</option>
-            <option>March {{ date }}</option>
-            <option>April {{ date }}</option>
-            <option>May {{ date }}</option>
-            <option>June {{ date }}</option>
-            <option>July {{ date }}</option>
-            <option>August {{ date }}</option>
-            <option>September {{ date }}</option>
-            <option>October {{ date }}</option>
-            <option>November {{ date }}</option>
-            <option>December {{ date }}</option>
+        <select onchange="fetchMonth(this.value)">
+            <option>Pick a Month</option>
+            <option value="01">January {{ date }}</option>
+            <option value="02">Febuary {{ date }}</option>
+            <option value="03">March {{ date }}</option>
+            <option value="04">April {{ date }}</option>
+            <option value="05">May {{ date }}</option>
+            <option value="06">June {{ date }}</option>
+            <option value="07">July {{ date }}</option>
+            <option value="08">August {{ date }}</option>
+            <option value="09">September {{ date }}</option>
+            <option value="10">October {{ date }}</option>
+            <option value="11">November {{ date }}</option>
+            <option value="12">December {{ date }}</option>
         </select>
     </div>
     <div class="row">

@@ -119,16 +119,23 @@ class ReportController extends Controller
             'Ship Name',
             'User Name',
             'Address',
-            'Order Amount',
-            'Shipping Amount'
+            'Shipping Amount',
+            'Order Amount'
+
         );
+
+        $d = new \DateTime();
+        $d2 = new \DateTime();
+        $month = $request->get('month') ? $request->get('month') : date('m');
+        $d->setDate(date('Y'), $month, 01);
+        $d2->setDate(date('Y'), $month, date('t'));
 
         $em = $this->getDoctrine()->getManager();
 
         $orders = $em->getRepository('OrderBundle:Orders');
         $query = $orders->createQueryBuilder('o')
             ->where('o.submitDate between ?0 AND ?1 ')
-            ->setParameters(array(date('Y-m-01'), date('Y-m-t')));
+            ->setParameters(array($d, $d2));
         $result = $query->getQuery()->getResult();
 
         $report['data'] = $result;
