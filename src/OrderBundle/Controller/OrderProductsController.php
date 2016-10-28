@@ -78,7 +78,7 @@ class OrderProductsController extends Controller
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])
-            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, null, null, 1);
         else
             $this->redirectToRoute('404');
 
@@ -242,7 +242,7 @@ class OrderProductsController extends Controller
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
 
         if($user_channels[$channel->getId()])
-            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, null, null, 1);
         else
             $this->redirectToRoute('404');
 
