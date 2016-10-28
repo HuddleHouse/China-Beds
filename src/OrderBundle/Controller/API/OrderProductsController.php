@@ -160,14 +160,15 @@ class OrderProductsController extends Controller
     private function saveManualItems($cart, Orders $orders){
         $em = $this->getDoctrine()->getManager();
         $count = 0;
-        foreach($cart['customItems'] as $item) {
-            $orderManualItem = new OrdersManualItem();
-            $orderManualItem->setOrder($orders);
-            $orderManualItem->setDescription($item['description']);
-            $orderManualItem->setPrice($item['price']);
-            $em->persist($orderManualItem);
-            $count++;
-        }
+        if(isset($cart['customItems']))
+            foreach($cart['customItems'] as $item) {
+                $orderManualItem = new OrdersManualItem();
+                $orderManualItem->setOrder($orders);
+                $orderManualItem->setDescription($item['description']);
+                $orderManualItem->setPrice($item['price']);
+                $em->persist($orderManualItem);
+                $count++;
+            }
         $em->flush();
     }
 
@@ -289,13 +290,18 @@ class OrderProductsController extends Controller
         else if($payment_type == 'cc' && $type == 'complete') {
             $order = $this->generateShippingLabels($order);
             $cc = $request->request->get('cc');
+            $cc['amount'] = $order->getTotal();
+
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
             // Charge CC here
 
-
-
-
+            try {
+                $this->get('authorize.net')->chargeCreditCard($cc);
+            }
+            catch(\Exception $e) {
+                return JsonResponse::create($e);
+            }
         }
         else if($type == 'admin' && $payment_type == '') {
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));

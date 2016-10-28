@@ -40,6 +40,14 @@ class ProductType extends AbstractType
                     'No' => 0,
                 ),
             ))
+            ->add('promo_kit_available', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Promo Kit Available',
+                'choices' => array(
+                    'No' => 0,
+                    'Yes' => 1,
+                ),
+            ))
         ;
     }
     

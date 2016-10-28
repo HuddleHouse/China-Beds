@@ -1,5 +1,7 @@
 {{ form_start(form) }}
-
+<style>
+     #warehouse_channels label { padding-right: 5px; padding-left: 5px;  }
+</style>
 <div class="row">
     <div class="col-md-12">
         <div class="nav-tabs-custom">
@@ -74,6 +76,10 @@
                         <div class="col-md-6">
                             {{ form_label(form.shipping_label_image_type) }}
                             {{ form_widget(form.shipping_label_image_type) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.channels) }}
+                            {{ form_widget(form.channels) }}
                         </div>
                     </div>
                 </div>

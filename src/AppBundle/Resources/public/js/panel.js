@@ -9,12 +9,14 @@ google.maps.event.addDomListener(window, 'load', function() {
 
   var data = new MedicareDataSource;
 
-  var view = new storeLocator.View(map, data, {
-    geolocation: false,
-    features: data.getFeatures()
-  });
+  if ( storeLocator ) {
+    var view = new storeLocator.View(map, data, {
+      geolocation: false,
+      features: data.getFeatures()
+    });
 
-  new storeLocator.Panel(panelDiv, {
-    view: view
-  });
+    new storeLocator.Panel(panelDiv, {
+      view: view
+    });
+  }
 });

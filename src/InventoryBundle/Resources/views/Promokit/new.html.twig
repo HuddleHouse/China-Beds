@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}PromoKit creation{% endblock %}
+{% block title %}New Promo Kit Item{% endblock %}
 {% block page_title %}
-    PromoKit creation
+    New Promo Kit Item
 {% endblock page_title %}
 
 {% block page_name %}
@@ -15,18 +15,53 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#promo_kit_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
         });
     </script>
 {% endblock footer %}
 
 {% block content %}
-
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input class="btn btn-raised btn-success" type="submit" value="Create" />
-    {{ form_end(form) }}
-
-
+    {% if not form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(form.name) }}
+                    {{ form_errors(form.description) }}
+                    {{ form_errors(form.active) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.active) }}
+                    {{ form_widget(form.active) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_widget(form.description) }}
+                </div>
+            </div>
+            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

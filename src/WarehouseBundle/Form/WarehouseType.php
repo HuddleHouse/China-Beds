@@ -37,6 +37,15 @@ class WarehouseType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
+            ->add('channels',  EntityType::class, array(
+                'class' => 'InventoryBundle:Channel',
+                'label' => 'Channels',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control'),
+                'expanded'  => true,
+                'multiple' => true,
+                'required' => false
+            ))
         ;
     }
     

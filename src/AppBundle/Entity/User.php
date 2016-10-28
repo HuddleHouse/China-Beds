@@ -11,7 +11,6 @@ use InventoryBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
-
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
@@ -178,18 +177,17 @@ class User extends BaseUser
      */
     private $user_channels;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Invitation")
-     * @ORM\JoinColumn(referencedColumnName="code")
-     * @Assert\NotNull(message="Your code is invalid.", groups={"Registration"})
-     */
-    protected $invitation;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Office", inversedBy="users")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      */
     private $office;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="submittedByUser")
+     */
+    private $promo_kit_orders;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="submittedForUser")
@@ -321,6 +319,7 @@ class User extends BaseUser
         $this->managed_warehouses = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
+        $this->promo_kit_orders = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->submitted_rebates = new ArrayCollection();
         $this->groups = new ArrayCollection();
@@ -458,16 +457,6 @@ class User extends BaseUser
                 return true;
         }
         return false;
-    }
-
-    public function setInvitation(Invitation $invitation)
-    {
-        $this->invitation = $invitation;
-    }
-
-    public function getInvitation()
-    {
-        return $this->invitation;
     }
 
     /**
@@ -1641,5 +1630,21 @@ class User extends BaseUser
     public function removeCreditedLedger(\OrderBundle\Entity\Ledger $creditedLedger)
     {
         $this->credited_ledgers->removeElement($creditedLedger);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrders()
+    {
+        return $this->promo_kit_orders;
+    }
+
+    /**
+     * @param mixed $promo_kit_orders
+     */
+    public function setPromoKitOrders($promo_kit_orders)
+    {
+        $this->promo_kit_orders = $promo_kit_orders;
     }
 }

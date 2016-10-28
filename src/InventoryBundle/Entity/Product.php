@@ -87,22 +87,29 @@ class Product
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="promo_kit_available", type="boolean")
+     */
+    private $promo_kit_available = false;
+
+    /**
+     * @var bool
      * @ORM\Column(name="hide_frontend", type="boolean")
      */
     private $hideFrontend = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product", cascade={"persist", "remove"})
      */
     private $attributes;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product", cascade={"persist"})
      */
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product", cascade={"persist", "remove"})
      */
     private $variants;
     
@@ -112,12 +119,12 @@ class Product
     private $channels;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product", cascade={"persist", "remove"})
      */
     private $specifications;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product", cascade={"persist", "remove"})
      */
     private $images;
 
@@ -355,6 +362,21 @@ class Product
         return $this->active;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * @param boolean $promo_kit_available
+     */
+    public function setPromoKitAvailable($promo_kit_available)
+    {
+        $this->promo_kit_available = $promo_kit_available;
+    }
 
     /**
      * @return mixed
