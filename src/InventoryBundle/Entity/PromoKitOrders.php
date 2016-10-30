@@ -79,29 +79,39 @@ class PromoKitOrders
     private $description;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="approved", type="boolean", nullable=true)
+     */
+    private $approved;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKit", mappedBy="promoKitOrder")
-     */
-    private $promoKitItems;
-
-    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="promo_kit_orders")
      * @ORM\JoinColumn(name="submitted_by_user_id", referencedColumnName="id")
      */
     private $submittedByUser;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PromoKit", inversedBy="promoKitOrders")
+     * @ORM\JoinTable(name="promo_kit_orders_promo_kits")
+     */
+    private $promoKitItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="promo_kit_order")
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="promo_kit_orders")
+     * @ORM\JoinTable(name="promo_kit_orders_product_variants")
      */
     private $productVariants;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="promo_kit_order")
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PopItem", inversedBy="promo_kit_orders")
+     * @ORM\JoinTable(name="promo_kit_orders_pop_items")
      */
     private $popItems;
 
@@ -276,7 +286,7 @@ class PromoKitOrders
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection[]
      */
     public function getPromoKitItems()
     {
@@ -337,5 +347,21 @@ class PromoKitOrders
     public function setPopItems($popItems)
     {
         $this->popItems = $popItems;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApproved()
+    {
+        return $this->approved;
+    }
+
+    /**
+     * @param mixed $approved
+     */
+    public function setApproved($approved)
+    {
+        $this->approved = $approved;
     }
 }

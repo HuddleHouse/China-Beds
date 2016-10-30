@@ -60,6 +60,36 @@
                     '<span class="dtr-title">Description</span>&nbsp;' +
                     '<span class="dtr-data"><span>'+description+'</span></span></li></ul>';
         }
+
+        function spinModal(id) {
+            var target = document.getElementById(id);
+            var spinner = new Spinner(opts).spin(target);
+            target.appendChild(spinner.el);
+        }
+
+        function showPromoKitOrder(id) {
+            $('#promoKitOrderModal').modal('show');
+            spinModal('promo-kit-order-modal-content');
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_show_promo_kit_request') }}",
+                dataType: 'json',
+                data: {id: id},
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+
+                    $('.spinner').hide();
+                    if(!data[0]) {
+                        $('#promoKitOrderModal').modal('hide');
+                        showErrorModal('Error: ' + data[1]);
+                    }
+                    else {
+                        $('#promo-kit-order-modal-content').removeClass('expand');
+                        $('#promo-kit-order-modal-body').html(data[1]);
+                    }
+                }
+            });
+        }
     </script>
 {% endblock footer %}
 
@@ -94,7 +124,11 @@
                             <td>{{ order.shipCity }}</td>
                             <td>{{ order.shipZip }}</td>
                             <td id="description">{% if order.description is not null %}<span>Click to expand</span>{% else %}--{% endif %}</td>
-                            <td></td>
+                            <td>
+                                <a class="btn btn-raised btn-xs" href="{{ path('promokit_edit_order', { 'id': order.id }) }}">Edit</a>
+                                {% if(is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                    <button class="btn btn-raised btn-xs" onclick="showPromoKitOrder({{ order.id }})">Show</button>
+                                {% endif %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -108,5 +142,18 @@
     </a>
     <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
         New Promo Kit Order
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="promoKitOrderModal" tabindex="-1" role="dialog" aria-labelledby="promoKitOrderModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content expand" id="promo-kit-order-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="promoKitOrderModalLabel">Approve/Deny Promo Kit Request</h4>
+                </div>
+                <div id="promo-kit-order-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

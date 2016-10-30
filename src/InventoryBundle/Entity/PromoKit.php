@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,10 +44,14 @@ class PromoKit
     private $active;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PromoKitOrders", inversedBy="promoKitItems")
-     * @ORM\JoinColumn(name="promo_kit_order_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="promoKitItems")
      */
-    private $promoKitOrder;
+    private $promoKitOrders;
+
+    public function __construct()
+    {
+        $this->promoKitOrders = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -125,16 +130,16 @@ class PromoKit
     /**
      * @return mixed
      */
-    public function getPromoKitOrder()
+    public function getPromoKitOrders()
     {
-        return $this->promoKitOrder;
+        return $this->promoKitOrders;
     }
 
     /**
-     * @param mixed $promoKitOrder
+     * @param mixed $promoKitOrders
      */
-    public function setPromoKitOrder($promoKitOrder)
+    public function setPromoKitOrders($promoKitOrders)
     {
-        $this->promoKitOrder = $promoKitOrder;
+        $this->promoKitOrders = $promoKitOrders;
     }
 }

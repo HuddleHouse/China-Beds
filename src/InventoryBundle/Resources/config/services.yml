@@ -14,6 +14,6 @@ services:
             - { name: form.type, alias: rebatesubmission_type }
   form.type.promokitorder:
         class: InventoryBundle\Form\PromoKitOrderType
-        arguments: ["@settings_service", "@doctrine.orm.default_entity_manager"]
+        arguments: ["@security.token_storage", "@settings_service", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: promokitorder_type }

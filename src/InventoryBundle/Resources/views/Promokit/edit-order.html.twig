@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}New Promo Kit Order{% endblock %}
+{% block title %}Edit Promo Kit Order{% endblock %}
 {% block page_title %}
-    New Promo Kit Order
+    Edit Promo Kit Order
 {% endblock page_title %}
 
 {% block page_name %}
@@ -25,6 +25,7 @@
     </style>
     <script>
         $(document).ready(function () {
+            $('#charNum').text(255 - $('#promo_kit_order_description').val().length);
             $('#promo_kit_order_description').keyup(function () {
                 var len = $(this).val().length;
                 if (len >= 255) {
@@ -108,7 +109,11 @@
                     {{ form_widget(form.popItems) }}
                 </div>
             </div>
-            <input class="btn btn-raised btn-success" type="submit" value="Create" />
+            {% if promoKitOrder.approved is not null %}
+                <br><strong>You may not edit a promo kit request that has been processed.</strong>
+            {% else %}
+                <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            {% endif %}
             {{ form_end(form) }}
         </div>
     </div>
