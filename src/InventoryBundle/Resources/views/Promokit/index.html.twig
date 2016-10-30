@@ -36,17 +36,10 @@
         <tbody>
         {% for promoKit in promoKits %}
             <tr>
-                <td><a href="{{ path('promokit_show', { 'id': promoKit.id }) }}">{{ promoKit.name }}</a></td>
+                <td>{{ promoKit.name }}</td>
                 <td>{{ promoKit.description }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('promokit_show', { 'id': promoKit.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('promokit_edit', { 'id': promoKit.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a class="btn btn-raised btn-xs" href="{{ path('promokit_edit', { 'id': promoKit.id }) }}">Edit</a>
                 </td>
             </tr>
         {% endfor %}
