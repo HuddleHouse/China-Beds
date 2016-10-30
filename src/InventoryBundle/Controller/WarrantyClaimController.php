@@ -56,7 +56,10 @@ class WarrantyClaimController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 //set values that the form didn't
-                $warrantyClaim->setSubmittedForUser($warrantyClaim->getOrder()->getSubmittedForUser());
+                if($warrantyClaim->getOrder() != null)
+                    $warrantyClaim->setSubmittedForUser($warrantyClaim->getOrder()->getSubmittedForUser());
+                else
+                    $warrantyClaim->setSubmittedForUser($this->getUser());
                 $warrantyClaim->setSubmittedByUser($this->getUser());
                 $warrantyClaim->setChannel($channel);
                 //set other side of relations
