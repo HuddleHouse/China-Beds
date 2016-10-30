@@ -342,7 +342,7 @@ class User extends BaseUser
         foreach($this->ledgers as $ledger) {
             if($channel_id == null)
                 $total += $ledger->getAmountCredited();
-            else if($ledger->getChannel()->getI0d() == $channel_id)
+            else if($ledger->getChannel()->getId() == $channel_id)
                 $total += $ledger->getAmountCredited();
         }
         return $total;
