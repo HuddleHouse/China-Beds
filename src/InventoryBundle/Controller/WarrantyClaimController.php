@@ -69,7 +69,7 @@ class WarrantyClaimController extends Controller
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
-                return $this->redirectToRoute('warrantyclaim_new', array('id' => $warrantyClaim->getId()));
+                return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Warranty Claim Item: ' . $e->getMessage());
@@ -101,7 +101,7 @@ class WarrantyClaimController extends Controller
         $oldPath2 = $warrantyClaim->getPath2();
         $oldPath3 = $warrantyClaim->getPath3();
         $oldOrder = $warrantyClaim->getOrder();
-        
+
         $editForm = $this->createForm('InventoryBundle\Form\WarrantyClaimType', $warrantyClaim, array('method' => 'PATCH'));
         $editForm->handleRequest($request);
 
@@ -234,6 +234,8 @@ class WarrantyClaimController extends Controller
         return $this->redirectToRoute('warrantyclaim_index');
     }
 
+
+
     /**
      * Creates a form to delete a WarrantyClaim entity.
      *
@@ -247,6 +249,6 @@ class WarrantyClaimController extends Controller
             ->setAction($this->generateUrl('warrantyclaim_delete', array('id' => $warrantyClaim->getId())))
             ->setMethod('DELETE')
             ->getForm()
-        ;
+            ;
     }
 }
