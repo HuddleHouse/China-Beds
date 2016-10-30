@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Entity;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use InventoryBundle\Entity\ProductVariant;
@@ -781,7 +782,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getSubmittedByUser()
     {
@@ -789,7 +790,7 @@ class Orders
     }
 
     /**
-     * @param mixed $submitted_by_user
+     * @param User $submitted_by_user
      */
     public function setSubmittedByUser($submitted_by_user)
     {
@@ -797,7 +798,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getSubmittedForUser()
     {

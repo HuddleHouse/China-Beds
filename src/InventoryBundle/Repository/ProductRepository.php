@@ -225,7 +225,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
      * @param Warehouse $warehouse
      * @return array
      */
-    public function getAllProductsWithQuantityArray(Warehouse $warehouse = null)
+    public function getAllProductsWithQuantityArray(Warehouse $warehouse = null, Channel $channel = null)
     {
         $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
@@ -238,32 +238,45 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
-            foreach($prod->getVariants() as $variant) {
-                $connection = $em->getConnection();
-                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
-                $statement->bindValue('product_variant_id', $variant->getId());
-                $statement->execute();
-                $total_quantity = $statement->fetch();
-
-                if(isset($warehouse)) {
-                    $warehouse_quantity = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
+            $is_channel = 0;
+            if($channel != null)
+                foreach ($prod->getChannels() as $chan) {
+                    if($chan->getChannel()->getId() == $channel->getId())
+                       $is_channel = 1;
                 }
-                else {
-                    $warehouse_quantity = 0;
-                }
+            else
+                $is_channel = 1;
 
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId(),
-                    'image_url' => $image_url,
-                    'total_quantity' => $total_quantity['total'],
-                    'warehouse_quantity' => $warehouse_quantity,
-                    'departing_warehouse_quantity' => 0,
-                    'receiving_warehouse_quantity' => 0,
-                    'ordered_quantity' => 0,
-                    'quantity' => 0
-                );
+            if($is_channel == 1) {
+                foreach($prod->getVariants() as $variant) {
+                    $connection = $em->getConnection();
+                    $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
+                    $statement->bindValue('product_variant_id', $variant->getId());
+                    $statement->execute();
+                    $total_quantity = $statement->fetch();
+
+                    if(isset($warehouse)) {
+                        $warehouse_quantity = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
+                    }
+                    else {
+                        $warehouse_quantity = 0;
+                    }
+
+                    $products[] = array(
+                        'name' => $prod->getName().": ".$variant->getName(),
+                        'id' => $variant->getId(),
+                        'image_url' => $image_url,
+                        'total_quantity' => $total_quantity['total'],
+                        'warehouse_quantity' => $warehouse_quantity,
+                        'departing_warehouse_quantity' => 0,
+                        'receiving_warehouse_quantity' => 0,
+                        'ordered_quantity' => 0,
+                        'quantity' => 0
+                    );
+                }
             }
+
+
         }
 
         return $products;

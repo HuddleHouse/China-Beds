@@ -300,22 +300,6 @@ class ProductVariant
     /**
      * @return mixed
      */
-    public function getWarehouseInventory()
-    {
-        return $this->warehouse;
-    }
-
-    /**
-     * @param mixed $warehouse_inventory
-     */
-    public function setWarehouseInventory($warehouse_inventory)
-    {
-        $this->warehouse = $warehouse_inventory;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getStockTransferProductVariant()
     {
         return $this->stock_transfer_product_variant;
