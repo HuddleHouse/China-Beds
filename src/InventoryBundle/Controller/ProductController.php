@@ -167,6 +167,9 @@ class ProductController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($product);
+
+
+
                 $em->flush();
                 $this->addFlash('notice', 'Product deleted successfully.');
             }

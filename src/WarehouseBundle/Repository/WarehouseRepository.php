@@ -69,13 +69,20 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         return $quantity;
     }
 
+    public function findByChannels($channels = []) {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT w FROM WarehouseBundle:Warehouse w LEFT JOIN w.channels c WHERE c IN (:channels)'
+            )
+            ->setParameter('channels', $channels)
+            ->getResult();
+    }
+
     public function getAllWarehousesArray(Channel $channel = null) {
-        $warehouses = $this->findAll();
+        $warehouses = $this->findByChannels([$channel]);
         $data = array();
 
         foreach($warehouses as $warehouse)
-            if ( $channel && !$warehouse->belongsToChannel($channel)) { continue; }
-
             $data[] = array(
                 'id' => $warehouse->getId(),
                 'name' => $warehouse->getName(),
