@@ -285,6 +285,13 @@ class Channel
      */
     private $retailFourthPic;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="detail_mattress", type="string")
+     */
+    private $detailMattressFooter;
+
 
     /**
      * @var int
@@ -1687,5 +1694,29 @@ class Channel
     public function getSiteBackgroundColor()
     {
         return $this->siteBackgroundColor;
+    }
+
+    /**
+     * Set detailMattressFooter
+     *
+     * @param string $detailMattressFooter
+     *
+     * @return Channel
+     */
+    public function setDetailMattressFooter($detailMattressFooter)
+    {
+        $this->detailMattressFooter = $detailMattressFooter;
+
+        return $this;
+    }
+
+    /**
+     * Get detailMattressFooter
+     *
+     * @return string
+     */
+    public function getDetailMattressFooter()
+    {
+        return $this->detailMattressFooter;
     }
 }

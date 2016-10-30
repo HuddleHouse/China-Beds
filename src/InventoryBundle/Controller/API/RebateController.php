@@ -51,7 +51,7 @@ class RebateController extends Controller
             $em->flush();
         }
         catch(\Exception $e) {
-            $this->addFlash('error', 'Error deleting Rebate: ' . $e->getMessage());
+            $this->addFlash('error', 'This rebate cannot be deleted because someone has claimed it. Make it inactive if you would like no one else to be able to claim it.');
             return new JsonResponse(false);
         }
         $this->addFlash('notice', 'Rebate Deleted successfully.');

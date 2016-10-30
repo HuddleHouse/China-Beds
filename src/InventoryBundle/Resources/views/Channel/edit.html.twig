@@ -237,14 +237,23 @@
                     {{ form_widget(edit_form.retailFourthPic) }}
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 page-banner" data-toggle="" data-target="#details-modal">Detail Pages</div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.detailMattressFooter) }}
+                    {{ form_widget(edit_form.detailMattressFooter) }}
+                </div>
+            </div>
 
 
 
-    <input class="btn btn-raised btn-success" type="submit" value="Update" />
-    {{ form_end(edit_form) }}
-    {{ form_start(delete_form) }}
-    <input class="btn btn-raised btn-danger" type="submit" value="Delete">
-    {{ form_end(delete_form) }}
+            <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            {{ form_end(edit_form) }}
+            {{ form_start(delete_form) }}
+            <input class="btn btn-raised btn-danger" type="submit" value="Delete">
+            {{ form_end(delete_form) }}
         </div>
     </div>
 

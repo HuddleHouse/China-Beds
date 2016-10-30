@@ -15,14 +15,14 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
-            $('#charNum').text(255 - $('#rebate_description').val().length);
+            $('#charNum').text(1000 - $('#rebate_description').val().length);
             $('#rebate_description').keyup(function () {
                 var len = $(this).val().length;
-                if (len >= 255) {
-                    $(this).val($(this).val().substring(0, 255));
+                if (len >= 1000) {
+                    $(this).val($(this).val().substring(0, 1000));
                     $('#charNum').text(0);
                 } else {
-                    var l = 255 - len;
+                    var l = 1000 - len;
                     $('#charNum').text(l);
                 }
             });
@@ -57,7 +57,7 @@
             </div>
             <div class="row">
                 <div class="col-md-8 form-group">
-                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">1000</span>
                     {{ form_widget(edit_form.description) }}
                 </div>
             </div>

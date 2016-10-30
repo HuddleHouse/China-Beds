@@ -31,7 +31,7 @@ class LedgerController extends Controller
      */
     public function newLedgerAction(Request $request)
     {
-        $service = new LedgerService($this->container);
+        $service = $this->get('ledger.service');
 
         try {
             $ledger = $service->newEntry(
