@@ -2,6 +2,8 @@
 
 namespace InventoryBundle\Repository;
 
+use InventoryBundle\Entity\Channel;
+
 /**
  * PopItemRepository
  *
@@ -11,10 +13,10 @@ namespace InventoryBundle\Repository;
 class PopItemRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getAllPopItemsArrayForCart()
+    public function getAllPopItemsArrayForCart(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $pop = $em->getRepository('InventoryBundle:PopItem')->findAll();
+        $pop = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $channel]);
         $data = array();
 
         foreach($pop as $popitem) {
