@@ -38,8 +38,8 @@
         "leafo/scssphp": "^0.6.5",
         "patchwork/jsqueeze": "^2.0",
         "friendsofsymfony/jsrouting-bundle": "^1.6",
+        "eidsonator/semantic-reports-bundle" : "dev-master"
         "authorizenet/authorizenet": "1.8.8",
-        "jms/serializer": "xsd2php-dev as 0.18.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -75,10 +75,5 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         }
-    },
-    "repositories":
-    [{
-        "type": "vcs",
-        "url": "https://github.com/goetas/serializer.git"
-    }]
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use InventoryBundle\Entity\PromoKitOrders;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,6 +36,26 @@ class PromoKitController extends Controller
     }
 
     /**
+     * Lists all PromoKitOrder entities.
+     *
+     * @Route("/orders", name="promokit_orders_index")
+     * @Method("GET")
+     */
+    public function ordersIndexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if($this->getUser()->hasRole('ROLE_ADMIN'))
+            $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findAll();
+        else
+            $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findBy(array('submittedByUser' => $this->getUser()));
+
+        return $this->render('@Inventory/Promokit/order-index.html.twig', array(
+            'promoKitOrders' => $promoKitOrders,
+        ));
+    }
+
+    /**
      * Creates a new PromoKit entity.
      *
      * @Route("/new", name="promokit_new")
@@ -53,7 +74,7 @@ class PromoKitController extends Controller
                 $em->flush();
                 $this->addFlash('notice', 'Promo Kit created successfully.');
 
-                return $this->redirectToRoute('promokit_index', array('id' => $promoKit->getId()));
+                return $this->redirectToRoute('promokit_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Promo Kit Item: ' . $e->getMessage());
@@ -68,6 +89,83 @@ class PromoKitController extends Controller
 
         return $this->render('@Inventory/Promokit/new.html.twig', array(
             'promoKit' => $promoKit,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a new PromoKitOrders entity.
+     *
+     * @Route("/new_order", name="promokit_new_order")
+     * @Method({"GET", "POST"})
+     */
+    public function newOrderAction(Request $request)
+    {
+        $promoKitOrder = new PromoKitOrders();
+        $form = $this->createForm('InventoryBundle\Form\PromoKitOrderType', $promoKitOrder);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $promoKitOrder->setSubmittedByUser($this->getUser());
+                $this->getUser()->getPromoKitOrders()->add($promoKitOrder);
+                $em->persist($promoKitOrder);
+                $em->flush();
+                $this->addFlash('notice', 'Promo Kit Order successfully submitted.');
+
+                return $this->redirectToRoute('promokit_orders_index');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Promo Kit Order: ' . $e->getMessage());
+
+                return $this->render('@Inventory/Promokit/new-order.html.twig', array(
+                    'promoKitOrder' => $promoKitOrder,
+                    'form' => $form->createView(),
+                ));
+            }
+
+        }
+
+        return $this->render('@Inventory/Promokit/new-order.html.twig', array(
+            'promoKitOrder' => $promoKitOrder,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * Edit a new PromoKitOrders entity.
+     *
+     * @Route("/{id}/edit_order", name="promokit_edit_order")
+     * @Method({"GET", "POST"})
+     */
+    public function editOrderAction(Request $request, PromoKitOrders $promoKitOrder)
+    {
+        $form = $this->createForm('InventoryBundle\Form\PromoKitOrderType', $promoKitOrder);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($promoKitOrder);
+                $em->flush();
+                $this->addFlash('notice', 'Promo Kit Order successfully submitted.');
+
+                return $this->redirectToRoute('promokit_orders_index');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Promo Kit Order: ' . $e->getMessage());
+
+                return $this->render('@Inventory/Promokit/edit-order.html.twig', array(
+                    'promoKitOrder' => $promoKitOrder,
+                    'form' => $form->createView(),
+                ));
+            }
+
+        }
+
+        return $this->render('@Inventory/Promokit/edit-order.html.twig', array(
+            'promoKitOrder' => $promoKitOrder,
             'form' => $form->createView(),
         ));
     }
@@ -96,7 +194,6 @@ class PromoKitController extends Controller
      */
     public function editAction(Request $request, PromoKit $promoKit)
     {
-        $deleteForm = $this->createDeleteForm($promoKit);
         $editForm = $this->createForm('InventoryBundle\Form\PromoKitType', $promoKit);
         $editForm->handleRequest($request);
 
@@ -115,17 +212,13 @@ class PromoKitController extends Controller
                 return $this->render('@Inventory/Promokit/edit.html.twig', array(
                     'promoKit' => $promoKit,
                     'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
                 ));
             }
-
-
         }
 
         return $this->render('@Inventory/Promokit/edit.html.twig', array(
             'promoKit' => $promoKit,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

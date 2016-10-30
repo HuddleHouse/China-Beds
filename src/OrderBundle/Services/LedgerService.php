@@ -16,6 +16,7 @@ use Nacha\Record\DebitEntry;
 use OrderBundle\Entity\Ledger;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use phpseclib\Net\SFTP;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class LedgerService
@@ -29,7 +30,7 @@ class LedgerService
      * LedgerService constructor.
      * @param $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }

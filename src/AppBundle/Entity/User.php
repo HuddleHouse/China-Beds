@@ -178,7 +178,6 @@ class User extends BaseUser
      */
     private $user_channels;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Office", inversedBy="users")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")

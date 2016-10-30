@@ -110,6 +110,11 @@ class ProductVariant
      */
     private $warranty_claims;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="productVariants")
+     */
+    private $promo_kit_orders;
+
 
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
@@ -119,6 +124,7 @@ class ProductVariant
         $this->stock_transfer_product_variant = new ArrayCollection();
         $this->stock_adjustment_product_variant = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
+        $this->promo_kit_orders = new ArrayCollection();
     }
 
     /**
@@ -289,22 +295,6 @@ class ProductVariant
     public function setPurchaseOrderProductVariant($purchase_order_product_variant)
     {
         $this->purchase_order_product_variant = $purchase_order_product_variant;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWarehouseInventory()
-    {
-        return $this->warehouse;
-    }
-
-    /**
-     * @param mixed $warehouse_inventory
-     */
-    public function setWarehouseInventory($warehouse_inventory)
-    {
-        $this->warehouse = $warehouse_inventory;
     }
 
     /**
@@ -578,5 +568,21 @@ class ProductVariant
     public function removeWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
     {
         $this->warranty_claims->removeElement($warrantyClaim);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrders()
+    {
+        return $this->promo_kit_orders;
+    }
+
+    /**
+     * @param mixed $promo_kit_orders
+     */
+    public function setPromoKitOrders($promo_kit_orders)
+    {
+        $this->promo_kit_orders = $promo_kit_orders;
     }
 }

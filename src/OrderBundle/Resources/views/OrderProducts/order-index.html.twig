@@ -902,25 +902,25 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">
                             <center>{{item.name}}</center>
                         </div>
                         <div class="row solid_gray_box" style="margin-right: 0px; margin-left: 0px;">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="pop_name" style="padding-top: 13px;">{{item.description}}</div>
                             </div>
-                            <div class="col-md-6" >
-                                <input id="pop-{{item.id}}" type="number" class="pop_amount form-control" style="margin-top: -20px; background-color: #fff; text-align: center; width: 100%;    border: none;"
+                            <div class="col-md-12" >
+                                <input id="pop-{{item.id}}" type="number" class="pop_amount form-control" style="margin-top: -20px; background-color: #fff; text-align: center; width: 100%;    border: none;;"
                                                min="0"
                                                onclick="this.select()"
                                                ng-model="pop_order_quan[ item.id ]"
                                                ng-init="pop_order_quan[ item.id ] = 0"
                                                ng-change="updateCart({{ item.id }}, {{ item.cost }}, {{item.inventory}}, '{{item.type}}')"
                                         >
-                                <div class="pop_price" style="text-align: center;">{{item.cost | currency}}</div>
+                                <div class="pop_price" style="text-align: center; padding-bottom:10px;">{{item.cost | currency}}</div>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,120 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Edit Promo Kit Order{% endblock %}
+{% block page_title %}
+    Edit Promo Kit Order
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('promokit_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <style>
+        .checks .form-group .form-group input {
+            display: list-item !important;
+        }
+        .checks .form-group .form-group label {
+            position: relative;
+            top: -17px;
+            left: 15px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#charNum').text(255 - $('#promo_kit_order_description').val().length);
+            $('#promo_kit_order_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    {% if not form.vars.valid %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table">
+        <div class="form-body">
+            {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.retailerStoreName) }}
+                    {{ form_widget(form.retailerStoreName) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.shipContact) }}
+                    {{ form_widget(form.shipContact) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.shipPhone) }}
+                    {{ form_widget(form.shipPhone) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.state) }}
+                    {{ form_widget(form.state) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.shipAddress) }}
+                    {{ form_widget(form.shipAddress) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.shipAddress2) }}
+                    {{ form_widget(form.shipAddress2) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.shipCity) }}
+                    {{ form_widget(form.shipCity) }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ form_label(form.shipZip) }}
+                    {{ form_widget(form.shipZip) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_widget(form.description) }}
+                </div>
+            </div>
+            <div class="row checks">
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.promoKitItems) }}
+                    {{ form_widget(form.promoKitItems) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.productVariants) }}
+                    {{ form_widget(form.productVariants) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.popItems) }}
+                    {{ form_widget(form.popItems) }}
+                </div>
+            </div>
+            {% if promoKitOrder.approved is not null %}
+                <br><strong>You may not edit a promo kit request that has been processed.</strong>
+            {% else %}
+                <input class="btn btn-raised btn-success" type="submit" value="Update" />
+            {% endif %}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +36,22 @@ class PromoKit
      */
     private $description;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=true)
+     */
+    private $active;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="promoKitItems")
+     */
+    private $promoKitOrders;
+
+    public function __construct()
+    {
+        $this->promoKitOrders = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -92,5 +109,37 @@ class PromoKit
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrders()
+    {
+        return $this->promoKitOrders;
+    }
+
+    /**
+     * @param mixed $promoKitOrders
+     */
+    public function setPromoKitOrders($promoKitOrders)
+    {
+        $this->promoKitOrders = $promoKitOrders;
     }
 }

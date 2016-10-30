@@ -32,7 +32,7 @@ class RebateType extends AbstractType
                     'required' => true
                 )
             )
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => true));
+            ->add('description', TextAreaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => true));
     }
 
     /**
