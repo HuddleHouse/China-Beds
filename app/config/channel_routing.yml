@@ -1,0 +1,3 @@
+website:
+    resource: "@WebsiteBundle/Resources/config/routing.yml"
+    prefix:   /

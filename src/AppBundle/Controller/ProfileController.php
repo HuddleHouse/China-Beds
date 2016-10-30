@@ -32,7 +32,7 @@ class ProfileController extends Controller
      */
     public function showAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -53,13 +53,14 @@ class ProfileController extends Controller
         //get the correct data to be shown.
         if($this->getUser()->hasRole('ROLE_ADMIN')) {
             $retailers_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Retailer'));
-            $retailers = $retailers_data->getUsers();
+            $retailers = $retailers_data->getUsersForChannel($this->getUser()->getActiveChannel());
 
             $sales_reps_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Sales Rep'));
-            $sales_reps = $sales_reps_data->getUsers();
+            $sales_reps = $sales_reps_data->getUsersForChannel($this->getUser()->getActiveChannel());
 
             $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
-            $distributors = $distributors_data->getUsers();
+            $distributors = $distributors_data->getUsersForChannel($this->getUser()->getActiveChannel());
+
         }
         else if($this->getUser()->hasRole('ROLE_SALES_REP')) {
             $distributors = $this->getUser()->getDistributors();
@@ -134,24 +135,12 @@ class ProfileController extends Controller
     }
 
     /**
-     *
-     * @Route("/settings", name="show_settings")
-     */
-    public function showUserSettings(Request $request) {
-
-        return $this->render('@App/Profile/settings-index.html.twig', array(
-
-        ));
-    }
-
-
-    /**
      * Edit the user
      */
     public function editAction(Request $request)
     {
         $user = $this->getUser();
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->get('fos_user.user_manager');
 
         $form = $this->createForm(EditUserSettingsType::class, $user);
         $form->handleRequest($request);
@@ -160,10 +149,10 @@ class ProfileController extends Controller
             try {
                 $event = new FormEvent($form, $request);
                 $userManager->updateUser($user);
-                $successMessage = "User information updated succesfully.";
+                $successMessage = "User information updated successfully.";
                 $this->addFlash('notice', $successMessage);
 
-                return $this->redirectToRoute('fos_user_profile_edit', array('user_id' => $user_id));
+                return $this->redirectToRoute('fos_user_profile_edit');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating user: ' . $e->getMessage());

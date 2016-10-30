@@ -69,7 +69,7 @@ class OrdersWarehouseInfo
      *
      * @param integer $quantity
      *
-     * @return OrderProductVariant
+     * @return OrdersProductVariant
      */
     public function setQuantity($quantity)
     {
@@ -86,62 +86,6 @@ class OrdersWarehouseInfo
     public function getQuantity()
     {
         return $this->quantity;
-    }
-
-    /**
-     * Set price
-     *
-     * @param integer $price
-     *
-     * @return OrderProductVariant
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return int
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductVariant()
-    {
-        return $this->product_variant;
-    }
-
-    /**
-     * @param mixed $product_variant
-     */
-    public function setProductVariant($product_variant)
-    {
-        $this->product_variant = $product_variant;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param mixed $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
     }
 
     /**

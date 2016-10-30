@@ -2,7 +2,7 @@ services:
 #    order.example:
 #        class: OrderBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
-    order.ledger:
+    ledger.service:
         class: OrderBundle\Services\LedgerService
         arguments: ["@service_container"]
     form.type.creditrequest:
@@ -10,3 +10,11 @@ services:
         arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: creditrequest_type }
+    form.type.addcredit:
+        class: OrderBundle\Form\NewCreditType
+        arguments: ["@security.token_storage","@doctrine.orm.default_entity_manager"]
+        tags:
+            - { name: form.type, alias: newcredit_type }
+    authorize.net:
+        class: OrderBundle\Services\AuthorizeNetService
+        arguments: ["@service_container"]

@@ -50,16 +50,16 @@
 
                 <div style="font:smaller">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
                     <span class="progress" ng-show="f.progress >= 0">
-          <div style="width:{{f.progress}}%"
-               ng-bind="f.progress + '%'"></div>
-      </span>
+                        <div style="width:{{f.progress}}%" ng-bind="f.progress + '%'"></div>
+                    </span>
                 </div>
                 {{errorMsg}}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-raised btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-raised btn-success" data-dismiss="modal">Accept</button>
             </div>
             {% endverbatim %}
+
             </div>
         </div>
     </div>

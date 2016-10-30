@@ -30,6 +30,7 @@ class EditUserSettingsType extends AbstractType
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'phone-input' => '', 'ng-model' => 'phone_val')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
@@ -37,6 +38,10 @@ class EditUserSettingsType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
+
+            ->add('ach_routing_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('ach_account_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
+            ->add('distributor_fedex_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'label' => 'FedEx Number'), 'required' => false))
 
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,

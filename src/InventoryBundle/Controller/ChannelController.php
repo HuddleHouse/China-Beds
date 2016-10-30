@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Form\ChannelType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Channel controller.
@@ -16,6 +17,20 @@ use InventoryBundle\Form\ChannelType;
  */
 class ChannelController extends Controller
 {
+
+    /**
+     * Finds and displays a Channel entity.
+     *
+     * @Route("/switch/{id}", name="admin_channel_switch")
+     * @Method("GET")
+     */
+    public function switchAction(Channel $channel)
+    {
+        $this->get('session')->set('active_channel', $channel);
+        $this->getUser()->setActiveChannel($channel);
+        return $this->redirectToRoute('fos_user_profile_show');
+    }
+
     /**
      * Lists all Channel entities.
      *
@@ -48,6 +63,346 @@ class ChannelController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+
+                ///////////////////////////
+                //logo uploads for Homepage
+                //////////////////////////
+
+                //front logo upload
+                $frontLogo = $channel->getFrontLogo();
+                if ($frontLogo != NULL && $frontLogo != '') {
+                    $frontLogoName = md5(uniqid()) . '.' . $frontLogo->guessExtension();
+                    $frontLogo->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $frontLogoName
+                    );
+                    $channel->setFrontLogo($frontLogoName);
+                }
+
+
+                //first slider upload
+                $firstSlider = $channel->getFrontSliderOne();
+                if($firstSlider != NULL && $firstSlider != '') {
+                    $firstSliderName = md5(uniqid()) . '.' . $firstSlider->guessExtension();
+                    $firstSlider->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $firstSliderName
+                    );
+                    $channel->setFrontSliderOne($firstSliderName);
+
+                }
+
+                //second slider upload
+                $secondSlider = $channel->getFrontSliderTwo();
+                if($secondSlider !=NULL && $secondSlider != '') {
+                    $secondSliderName = md5(uniqid()) . '.' . $secondSlider->guessExtension();
+                    $secondSlider->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $secondSliderName
+                    );
+                    $channel->setFrontSliderTwo($secondSliderName);
+                }
+
+                //third slider upload
+                $thirdSlider = $channel->getFrontSliderThree();
+                if($thirdSlider != NULL && $thirdSlider != '') {
+                    $thirdSliderName = md5(uniqid()) . '.' . $thirdSlider->guessExtension();
+                    $thirdSlider->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $thirdSliderName
+                    );
+                    $channel->setFrontSliderThree($thirdSliderName);
+                }
+
+                //first footer box upload
+                $firstFooter = $channel->getFrontFooterOne();
+                if($firstFooter != NULL && $firstFooter != '') {
+                    $firstFooterName = md5(uniqid()) . '.' . $firstFooter->guessExtension();
+                    $firstFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $firstFooterName
+                    );
+                    $channel->setFrontFooterOne($firstFooterName);
+                }
+
+                //second footer box upload
+                $secondFooter = $channel->getFrontFooterTwo();
+                if($secondFooter != NULL && $secondFooter != '') {
+                    $secondFooterName = md5(uniqid()) . '.' . $secondFooter->guessExtension();
+                    $secondFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $secondFooterName
+                    );
+                    $channel->setFrontFooterTwo($secondFooterName);
+                }
+
+                //third footer box upload
+                $thirdFooter = $channel->getFrontFooterThree();
+                if($thirdFooter != NULL && $thirdFooter != '') {
+                    $thirdFooterName = md5(uniqid()) . '.' . $thirdFooter->guessExtension();
+                    $thirdFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $thirdFooterName
+                    );
+                    $channel->setFrontFooterThree($thirdFooterName);
+                }
+
+                /////////////////////////
+                //FAQ page image uploads
+                /////////////////////////
+
+                //warranty upload
+                $warrantyPic = $channel->getFaqWarrantyPic();
+                if($warrantyPic != NULL && $warrantyPic != '') {
+                    $warrantyPicName = md5(uniqid()) . '.' . $warrantyPic->guessExtension();
+                    $warrantyPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $warrantyPicName
+                    );
+                    $channel->setFaqWarrantyPic($warrantyPicName);
+                }
+
+                //unpacking upload
+                $unpackingPic = $channel->getFaqUnpackingPic();
+                if($unpackingPic != NUll && $unpackingPic != '') {
+                    $unpackingPicName = md5(uniqid()) . '.' . $unpackingPic->guessExtension();
+                    $unpackingPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $unpackingPicName
+                    );
+                    $channel->setFaqUnpackingPic($unpackingPicName);
+                }
+
+                //support upload
+                $supportPic = $channel->getFaqSupportPic();
+                if($supportPic != NULL && $supportPic != '') {
+                    $supportPicName = md5(uniqid()) . '.' . $supportPic->guessExtension();
+                    $supportPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $supportPicName
+                    );
+                    $channel->setFaqSupportPic($supportPicName);
+                }
+
+                //maintenance upload
+                $maintenancePic = $channel->getFaqMaintenancePic();
+                if($maintenancePic != NULL && $maintenancePic != '') {
+                    $maintenancePicName = md5(uniqid()) . '.' . $maintenancePic->guessExtension();
+                    $maintenancePic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $maintenancePicName
+                    );
+                    $channel->setFaqMaintenancePic($maintenancePicName);
+                }
+
+                //contact upload
+                $contactPic = $channel->getFaqContactPic();
+                if($contactPic != NULL && $contactPic != '') {
+                    $contactPicName = md5(uniqid()) . '.' . $contactPic->guessExtension();
+                    $contactPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $contactPicName
+                    );
+                    $channel->setFaqContactPic($contactPicName);
+                }
+
+                //terms & conditions upload
+                $tandcPic = $channel->getFaqTCPic();
+                if($tandcPic != NULL && $tandcPic != '') {
+                    $tandcPicName = md5(uniqid()) . '.' . $tandcPic->guessExtension();
+                    $tandcPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $tandcPicName
+                    );
+                    $channel->setFaqTCPic($tandcPicName);
+                }
+
+                /////////////////////////////
+                // Product Features Uploads
+                ////////////////////////////
+
+                //memory foam upload
+                $memoryFoamPic = $channel->getPFmemoryFoamPic();
+                if($memoryFoamPic != NULL && $memoryFoamPic != '') {
+                    $memoryFoamPicName = md5(uniqid()) . '.' . $memoryFoamPic->guessExtension();
+                    $memoryFoamPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $memoryFoamPicName
+                    );
+                    $channel->setPFmemoryFoamPic($memoryFoamPicName);
+                }
+
+                //side picture upload
+                $sidePic = $channel->getPFSidePic();
+                if($sidePic != NULL && $sidePic != '') {
+                    $sidePicName = md5(uniqid()) . '.' . $sidePic->guessExtension();
+                    $sidePic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $sidePicName
+                    );
+                    $channel->setPFSidePic($sidePicName);
+                }
+
+                //renewable ersource upload
+                $renewableResourcePic = $channel->getPFRenewResourcewPic();
+                if($renewableResourcePic != NULL && $renewableResourcePic !='') {
+                    $renewableResourcePicName = md5(uniqid()) . '.' . $renewableResourcePic->guessExtension();
+                    $renewableResourcePic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $renewableResourcePicName
+                    );
+                    $channel->setPFRenewResourcewPic($renewableResourcePicName);
+                }
+
+                //semi-open cell structure upload
+                $socsPic = $channel->getPFsocsPic();
+                if($socsPic != NULL && $socsPic != '') {
+                    $socsPicName = md5(uniqid()) . '.' . $socsPic->guessExtension();
+                    $socsPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $socsPicName
+                    );
+                    $channel->setPFsocsPic($socsPicName);
+                }
+
+                //plant based oils picture
+                $pboPic = $channel->getPFpboPic();
+                if($pboPic != NULL && $pboPic != '') {
+                    $pboPicName = md5(uniqid()) . '.' . $pboPic->guessExtension();
+                    $pboPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $pboPicName
+                    );
+                    $channel->setPFpboPic($pboPicName);
+                }
+
+                //bamboo charcoal upload
+                $bCharcoalPic = $channel->getPFBCharcoalPic();
+                if($bCharcoalPic != NULL && $bCharcoalPic != '') {
+                    $bCharcoalPicName = md5(uniqid()) . '.' . $bCharcoalPic->guessExtension();
+                    $bCharcoalPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $bCharcoalPicName
+                    );
+                    $channel->setPFBCharcoalPic($bCharcoalPicName);
+                }
+
+                //bamboo fibers upload
+                $bFiberPic = $channel->getPFBFibersPic();
+                if($bFiberPic != NULL & $bFiberPic != '') {
+                    $bFiberPicName = md5(uniqid()) . '.' . $bFiberPic->guessExtension();
+                    $bFiberPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $bFiberPicName
+                    );
+                    $channel->setPFBFibersPic($bFiberPicName);
+                }
+
+                //silk upload
+                $silkPic = $channel->getPFSilkPic();
+                if($silkPic != NULL && $silkPic != '') {
+                    $silkPicName = md5(uniqid()) . '.' . $silkPic->guessExtension();
+                    $silkPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $silkPicName
+                    );
+                    $channel->setPFSilkPic($silkPicName);
+                }
+
+                //aloe vera picture
+                $aloeVeraPic = $channel->getPFAloeVeraPic();
+                if($aloeVeraPic != NULL && $aloeVeraPic != '') {
+                    $aloeVeraPicName = md5(uniqid()) . '.' . $aloeVeraPic->guessExtension();
+                    $aloeVeraPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $aloeVeraPicName
+                    );
+                    $channel->setPFAloeVeraPic($aloeVeraPicName);
+                }
+
+                //certified foam picture
+                $certFoamPic = $channel->getPFCertifiedPic();
+                if($certFoamPic != NULL && $certFoamPic != '') {
+                    $certFoamPicName = md5(uniqid()) . '.' . $certFoamPic->guessExtension();
+                    $certFoamPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $certFoamPicName
+                    );
+                    $channel->setPFCertifiedPic($certFoamPicName);
+                }
+
+                //OEKO TEX standard upload
+                $oekotexPic = $channel->getPFTexStandPic();
+                if($oekotexPic != NULL && $oekotexPic != '') {
+                    $oekotexPicName = md5(uniqid()) . '.' . $oekotexPic->guessExtension();
+                    $oekotexPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $oekotexPicName
+                    );
+                    $channel->setPFTexStandPic($oekotexPicName);
+                }
+
+                $retailHeaderPic = $channel->getRetailHeaderPic();
+                if($retailHeaderPic != NULL && $retailHeaderPic != ''){
+                    $retailHeaderPicName = md5(uniqid()). '.' . $retailHeaderPic->guessExtension();
+                    $retailHeaderPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailHeaderPicName
+                    );
+                    $channel->setRetailHeaderPic($retailHeaderPicName);
+
+                }
+
+                $retailFirstPic = $channel->getRetailFirstPic();
+                if($retailFirstPic != NULL && $retailFirstPic != ''){
+                    $retailFirstPicName = md5(uniqid()). '.' . $retailFirstPic->guessExtension();
+                    $retailFirstPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailFirstPicName
+                    );
+                    $channel->setRetailFirstPic($retailFirstPicName);
+                }
+
+                $retailSecondPic = $channel->getRetailSecondPic();
+                if($retailSecondPic != NULL && $retailSecondPic != ''){
+                    $retailSecondPicName = md5(uniqid()). '.' . $retailSecondPic->guessExtension();
+                    $retailSecondPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailSecondPicName
+                    );
+                    $channel->setRetailSecondPic($retailSecondPicName);
+                }
+
+                $retailThirdPic = $channel->getRetailThirdPic();
+                if($retailThirdPic != NULL && $retailThirdPic != ''){
+                    $retailThirdPicName = md5(uniqid()). '.' . $retailThirdPic->guessExtension();
+                    $retailThirdPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailThirdPicName
+                    );
+                    $channel->setRetailThirdPic($retailThirdPicName);
+                }
+
+                $retailFourthPic = $channel->getRetailFourthPic();
+                if($retailFourthPic != NULL && $retailFourthPic != ''){
+                    $retailFourthPicName = md5(uniqid()). '.' . $retailFourthPic->guessExtension();
+                    $retailFourthPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailFourthPicName
+                    );
+                    $channel->setRetailFourthPic($retailFourthPicName);
+                }
+
+                $detailMattressFooter = $channel->getDetailMattressFooter();
+                if($detailMattressFooter != NULL && $detailMattressFooter != ''){
+                    $detailMattressFooterName = md5(uniqid()). '.' . $detailMattressFooter->guessExtension();
+                    $detailMattressFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $detailMattressFooterName
+                    );
+                    $channel->setRetailFourthPic($detailMattressFooterName);
+                }
+
                 $em->persist($channel);
                 $em->flush();
 
@@ -95,13 +450,411 @@ class ChannelController extends Controller
      */
     public function editAction(Request $request, Channel $channel)
     {
+        $channel_clone = clone $channel;
         $deleteForm = $this->createDeleteForm($channel);
         $editForm = $this->createForm('InventoryBundle\Form\ChannelType', $channel);
         $editForm->handleRequest($request);
 
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+
+                ///////////////////////////
+                //logo uploads for Homepage
+                //////////////////////////
+
+                //front logo upload
+                $frontLogo = $channel->getFrontLogo();
+                if ($frontLogo != NULL && $frontLogo != '') {
+                    $frontLogoName = md5(uniqid()) . '.' . $frontLogo->guessExtension();
+                    $frontLogo->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $frontLogoName
+                    );
+                    $channel->setFrontLogo($frontLogoName);
+                }else{
+                    $channel->setFrontLogo($channel_clone->getFrontLogo());
+                }
+
+
+                //first slider upload
+                $firstSlider = $channel->getFrontSliderOne();
+                if($firstSlider != NULL && $firstSlider != '') {
+                    $firstSliderName = md5(uniqid()) . '.' . $firstSlider->guessExtension();
+                    $firstSlider->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $firstSliderName
+                    );
+                    $channel->setFrontSliderOne($firstSliderName);
+                }else{
+                    $channel->setFrontSliderOne($channel_clone->getFrontSliderOne());
+                }
+
+                //second slider upload
+                $secondSlider = $channel->getFrontSliderTwo();
+                if($secondSlider !=NULL && $secondSlider != '') {
+                    $secondSliderName = md5(uniqid()) . '.' . $secondSlider->guessExtension();
+                    $secondSlider->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $secondSliderName
+                    );
+                    $channel->setFrontSliderTwo($secondSliderName);
+                }else{
+                    $channel->setFrontSliderTwo($channel_clone->getFrontSliderTwo());
+                }
+
+                //third slider upload
+                $thirdSlider = $channel->getFrontSliderThree();
+                if($thirdSlider != NULL && $thirdSlider != '') {
+                    $thirdSliderName = md5(uniqid()) . '.' . $thirdSlider->guessExtension();
+                    $thirdSlider->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $thirdSliderName
+                    );
+                    $channel->setFrontSliderThree($thirdSliderName);
+                }else{
+                    $channel->setFrontSliderThree($channel_clone->getFrontSliderThree());
+                }
+
+                //first footer box upload
+                $firstFooter = $channel->getFrontFooterOne();
+                if($firstFooter != NULL && $firstFooter != '') {
+                    $firstFooterName = md5(uniqid()) . '.' . $firstFooter->guessExtension();
+                    $firstFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $firstFooterName
+                    );
+                    $channel->setFrontFooterOne($firstFooterName);
+                }else{
+                    $channel->setFrontFooterOne($channel_clone->getFrontFooterOne());
+                }
+
+                //second footer box upload
+                $secondFooter = $channel->getFrontFooterTwo();
+                if($secondFooter != NULL && $secondFooter != '') {
+                    $secondFooterName = md5(uniqid()) . '.' . $secondFooter->guessExtension();
+                    $secondFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $secondFooterName
+                    );
+                    $channel->setFrontFooterTwo($secondFooterName);
+                }else{
+                    $channel->setFrontFooterTwo($channel_clone->getFrontFooterTwo());
+                }
+
+                //third footer box upload
+                $thirdFooter = $channel->getFrontFooterThree();
+                if($thirdFooter != NULL && $thirdFooter != '') {
+                    $thirdFooterName = md5(uniqid()) . '.' . $thirdFooter->guessExtension();
+                    $thirdFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $thirdFooterName
+                    );
+                    $channel->setFrontFooterThree($thirdFooterName);
+                }else{
+                    $channel->setFrontFooterThree($channel_clone->getFrontFooterThree());
+                }
+
+                /////////////////////////
+                //FAQ page image uploads
+                /////////////////////////
+
+                //warranty upload
+                $warrantyPic = $channel->getFaqWarrantyPic();
+                if($warrantyPic != NULL && $warrantyPic != '') {
+                    $warrantyPicName = md5(uniqid()) . '.' . $warrantyPic->guessExtension();
+                    $warrantyPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $warrantyPicName
+                    );
+                    $channel->setFaqWarrantyPic($warrantyPicName);
+                }else{
+                    $channel->setFaqWarrantyPic($channel_clone->getFaqWarrantyPic());
+                }
+
+                //unpacking upload
+                $unpackingPic = $channel->getFaqUnpackingPic();
+                if($unpackingPic != NUll && $unpackingPic != '') {
+                    $unpackingPicName = md5(uniqid()) . '.' . $unpackingPic->guessExtension();
+                    $unpackingPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $unpackingPicName
+                    );
+                    $channel->setFaqUnpackingPic($unpackingPicName);
+                }else{
+                    $channel->setFaqUnpackingPic($channel_clone->getFaqUnpackingPic());
+                }
+
+                //support upload
+                $supportPic = $channel->getFaqSupportPic();
+                if($supportPic != NULL && $supportPic != '') {
+                    $supportPicName = md5(uniqid()) . '.' . $supportPic->guessExtension();
+                    $supportPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $supportPicName
+                    );
+                    $channel->setFaqSupportPic($supportPicName);
+                }else{
+                    $channel->setFaqSupportPic($channel_clone->getFaqSupportPic());
+                }
+
+                //maintenance upload
+                $maintenancePic = $channel->getFaqMaintenancePic();
+                if($maintenancePic != NULL && $maintenancePic != '') {
+                    $maintenancePicName = md5(uniqid()) . '.' . $maintenancePic->guessExtension();
+                    $maintenancePic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $maintenancePicName
+                    );
+                    $channel->setFaqMaintenancePic($maintenancePicName);
+                }else{
+                    $channel->setFaqMaintenancePic($channel_clone->getFaqMaintenancePic());
+                }
+
+                //contact upload
+                $contactPic = $channel->getFaqContactPic();
+                if($contactPic != NULL && $contactPic != '') {
+                    $contactPicName = md5(uniqid()) . '.' . $contactPic->guessExtension();
+                    $contactPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $contactPicName
+                    );
+                    $channel->setFaqContactPic($contactPicName);
+                }else{
+                    $channel->setFaqContactPic($channel_clone->getFaqContactPic());
+                }
+
+                //terms & conditions upload
+                $tandcPic = $channel->getFaqTCPic();
+                if($tandcPic != NULL && $tandcPic != '') {
+                    $tandcPicName = md5(uniqid()) . '.' . $tandcPic->guessExtension();
+                    $tandcPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $tandcPicName
+                    );
+                    $channel->setFaqTCPic($tandcPicName);
+                }else{
+                    $channel->setFaqTCPic($channel_clone->getFaqTCPic());
+                }
+
+                /////////////////////////////
+                // Product Features Uploads
+                ////////////////////////////
+
+                //memory foam upload
+                $memoryFoamPic = $channel->getPFmemoryFoamPic();
+                if($memoryFoamPic != NULL && $memoryFoamPic != '') {
+                    $memoryFoamPicName = md5(uniqid()) . '.' . $memoryFoamPic->guessExtension();
+                    $memoryFoamPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $memoryFoamPicName
+                    );
+                    $channel->setPFmemoryFoamPic($memoryFoamPicName);
+                }else{
+                    $channel->setPFmemoryFoamPic($channel_clone->getPFmemoryFoamPic());
+                }
+
+                //side picture upload
+                $sidePic = $channel->getPFSidePic();
+                if($sidePic != NULL && $sidePic != '') {
+                    $sidePicName = md5(uniqid()) . '.' . $sidePic->guessExtension();
+                    $sidePic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $sidePicName
+                    );
+                    $channel->setPFSidePic($sidePicName);
+                }else{
+                    $channel->setPFSidePic($channel_clone->getPFSidePic());
+                }
+
+                //renewable ersource upload
+                $renewableResourcePic = $channel->getPFRenewResourcewPic();
+                if($renewableResourcePic != NULL && $renewableResourcePic !='') {
+                    $renewableResourcePicName = md5(uniqid()) . '.' . $renewableResourcePic->guessExtension();
+                    $renewableResourcePic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $renewableResourcePicName
+                    );
+                    $channel->setPFRenewResourcewPic($renewableResourcePicName);
+                }else{
+                    $channel->setPFRenewResourcewPic($channel_clone->getPFRenewResourcewPic());
+                }
+
+                //semi-open cell structure upload
+                $socsPic = $channel->getPFsocsPic();
+                if($socsPic != NULL && $socsPic != '') {
+                    $socsPicName = md5(uniqid()) . '.' . $socsPic->guessExtension();
+                    $socsPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $socsPicName
+                    );
+                    $channel->setPFsocsPic($socsPicName);
+                }else{
+                    $channel->setPFsocsPic($channel_clone->getPFsocsPic());
+                }
+
+                //plant based oils picture
+                $pboPic = $channel->getPFpboPic();
+                if($pboPic != NULL && $pboPic != '') {
+                    $pboPicName = md5(uniqid()) . '.' . $pboPic->guessExtension();
+                    $pboPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $pboPicName
+                    );
+                    $channel->setPFpboPic($pboPicName);
+                }else{
+                    $channel->setPFpboPic($channel_clone->getPFpboPic());
+                }
+
+                //bamboo charcoal upload
+                $bCharcoalPic = $channel->getPFBCharcoalPic();
+                if($bCharcoalPic != NULL && $bCharcoalPic != '') {
+                    $bCharcoalPicName = md5(uniqid()) . '.' . $bCharcoalPic->guessExtension();
+                    $bCharcoalPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $bCharcoalPicName
+                    );
+                    $channel->setPFBCharcoalPic($bCharcoalPicName);
+                }else{
+                    $channel->setPFBCharcoalPic($channel_clone->getPFBCharcoalPic());
+                }
+
+                //bamboo fibers upload
+                $bFiberPic = $channel->getPFBFibersPic();
+                if($bFiberPic != NULL & $bFiberPic != '') {
+                    $bFiberPicName = md5(uniqid()) . '.' . $bFiberPic->guessExtension();
+                    $bFiberPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $bFiberPicName
+                    );
+                    $channel->setPFBFibersPic($bFiberPicName);
+                }else{
+                    $channel->setPFBFibersPic($channel_clone->getPFBFibersPic());
+                }
+
+                //silk upload
+                $silkPic = $channel->getPFSilkPic();
+                if($silkPic != NULL && $silkPic != '') {
+                    $silkPicName = md5(uniqid()) . '.' . $silkPic->guessExtension();
+                    $silkPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $silkPicName
+                    );
+                    $channel->setPFSilkPic($silkPicName);
+                }else{
+                    $channel->setPFSilkPic($channel_clone->getPFSilkPic());
+                }
+
+                //aloe vera picture
+                $aloeVeraPic = $channel->getPFAloeVeraPic();
+                if($aloeVeraPic != NULL && $aloeVeraPic != '') {
+                    $aloeVeraPicName = md5(uniqid()) . '.' . $aloeVeraPic->guessExtension();
+                    $aloeVeraPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $aloeVeraPicName
+                    );
+                    $channel->setPFAloeVeraPic($aloeVeraPicName);
+                }else{
+                    $channel->setPFAloeVeraPic($channel_clone->getPFAloeVeraPic());
+                }
+
+                //certified foam picture
+                $certFoamPic = $channel->getPFCertifiedPic();
+                if($certFoamPic != NULL && $certFoamPic != '') {
+                    $certFoamPicName = md5(uniqid()) . '.' . $certFoamPic->guessExtension();
+                    $certFoamPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $certFoamPicName
+                    );
+                    $channel->setPFCertifiedPic($certFoamPicName);
+                }else{
+                    $channel->setPFCertifiedPic($channel_clone->getPFCertifiedPic());
+                }
+
+                //OEKO TEX standard upload
+                $oekotexPic = $channel->getPFTexStandPic();
+                if($oekotexPic != NULL && $oekotexPic != '') {
+                    $oekotexPicName = md5(uniqid()) . '.' . $oekotexPic->guessExtension();
+                    $oekotexPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $oekotexPicName
+                    );
+                    $channel->setPFTexStandPic($oekotexPicName);
+                }else{
+                    $channel->setPFTexStandPic($channel_clone->getPFTexStandPic());
+                }
+
+                $retailHeaderPic = $channel->getRetailHeaderPic();
+                if($retailHeaderPic != NULL && $retailHeaderPic != ''){
+                    $retailHeaderPicName = md5(uniqid()). '.' . $retailHeaderPic->guessExtension();
+                    $retailHeaderPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailHeaderPicName
+                    );
+                    $channel->setRetailHeaderPic($retailHeaderPicName);
+                }else{
+                    $channel->setRetailHeaderPic($channel_clone->getRetailHeaderPic());
+                }
+
+                $retailFirstPic = $channel->getRetailFirstPic();
+                if($retailFirstPic != NULL && $retailFirstPic != ''){
+                    $retailFirstPicName = md5(uniqid()). '.' . $retailFirstPic->guessExtension();
+                    $retailFirstPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailFirstPicName
+                    );
+                    $channel->setRetailFirstPic($retailFirstPicName);
+                }else{
+                    $channel->setRetailFirstPic($channel_clone->getRetailFirstPic());
+                }
+
+                $retailSecondPic = $channel->getRetailSecondPic();
+                if($retailSecondPic != NULL && $retailSecondPic != ''){
+                    $retailSecondPicName = md5(uniqid()). '.' . $retailSecondPic->guessExtension();
+                    $retailSecondPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailSecondPicName
+                    );
+                    $channel->setRetailSecondPic($retailSecondPicName);
+                }else{
+                    $channel->setRetailSecondPic($channel_clone->getRetailSecondPic());
+                }
+
+                $retailThirdPic = $channel->getRetailThirdPic();
+                if($retailThirdPic != NULL && $retailThirdPic != ''){
+                    $retailThirdPicName = md5(uniqid()). '.' . $retailThirdPic->guessExtension();
+                    $retailThirdPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailThirdPicName
+                    );
+                    $channel->setRetailThirdPic($retailThirdPicName);
+                }else{
+                    $channel->setRetailThirdPic($channel_clone->getRetailThirdPic());
+                }
+
+                $retailFourthPic = $channel->getRetailFourthPic();
+                if($retailFourthPic != NULL && $retailFourthPic != ''){
+                    $retailFourthPicName = md5(uniqid()). '.' . $retailFourthPic->guessExtension();
+                    $retailFourthPic->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $retailFourthPicName
+                    );
+                    $channel->setRetailFourthPic($retailFourthPicName);
+                }else{
+                    $channel->setRetailFourthPic($channel_clone->getRetailFourthPic());
+                }
+
+                $detailMattressFooter = $channel->getDetailMattressFooter();
+                if($detailMattressFooter != NULL && $detailMattressFooter != ''){
+                    $detailMattressFooterName = md5(uniqid()). '.' . $detailMattressFooter->guessExtension();
+                    $detailMattressFooter->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $detailMattressFooterName
+                    );
+                    $channel->setDetailMattressFooter($detailMattressFooterName);
+                }
+
                 $em->persist($channel);
                 $em->flush();
 

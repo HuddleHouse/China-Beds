@@ -26,7 +26,7 @@ class PopItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $popItems = $em->getRepository('InventoryBundle:PopItem')->findAll();
+        $popItems = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel'=>$this->getUser()->getActiveChannel()]);
 
         return $this->render('@Inventory/Popitem/index.html.twig', array(
             'popItems' => $popItems,
@@ -46,6 +46,8 @@ class PopItemController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+            $popItem->setChannel($channel);
             $em = $this->getDoctrine()->getManager();
             $em->persist($popItem);
             $em->flush();

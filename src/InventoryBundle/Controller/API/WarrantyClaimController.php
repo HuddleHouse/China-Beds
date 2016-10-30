@@ -34,7 +34,7 @@ class WarrantyClaimController extends Controller
 
         $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
         $rtn = array();
-
+        $rtn[] = '<option disabled selected value>Select of the following options</option>';
         foreach($order->getProductVariants() as $pv)
             $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
 
@@ -87,12 +87,15 @@ class WarrantyClaimController extends Controller
     public function showAction(Request $request)
     {
         if($request->get('claim_id') == 0)
-            return new JsonResponse(array(false, "Invalid Rebate Submission ID."), 404);
+            return new JsonResponse(array(false, "Invalid Rebate Submission ID."));
 
         try {
             $warrantyClaim = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:WarrantyClaim')->find($request->get('claim_id'));
-            if($warrantyClaim->getDateMadeAware() == null)
+            if($warrantyClaim->getDateMadeAware() == null) {
                 $warrantyClaim->setDateMadeAware(new \DateTime());
+                $this->getDoctrine()->getManager()->persist($warrantyClaim);
+                $this->getDoctrine()->getManager()->flush();
+            }
             $template = $this->renderView('@Inventory/WarrantyClaim/modal-show.html.twig', array(
                 'warranty_claim' => $warrantyClaim,
                 'order' => $warrantyClaim->getOrder(),
@@ -103,4 +106,24 @@ class WarrantyClaimController extends Controller
             return new JsonResponse(array(false, $e->getMessage()));
         }
     }
+
+    /**
+     * Get Image via variant Id provided
+     *
+     * @Route("/api_get_variant_image/{variantId}", name="api_get_variant_image", options = { "expose" = true })
+     * @Method({"GET", "POST"})
+     */
+    public function getVariantImage($variantId)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $image = $em->getRepository('InventoryBundle:Product')->getProdImg($variantId);
+            return new JsonResponse($image);
+        }
+        catch(\Exception $e){
+            return new JsonResponse($e->getMessage());
+        }
+    }
+
+
 }

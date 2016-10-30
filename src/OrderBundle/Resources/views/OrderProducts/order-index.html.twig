@@ -74,9 +74,91 @@
 
 
         var app = angular.module('myApp', ['ngMaterial']);
+
+        app.directive('phoneInput', function($filter, $browser) {
+            return {
+                require: 'ngModel',
+                link: function($scope, $element, $attrs, ngModelCtrl) {
+                    var listener = function() {
+                        var value = $element.val().replace(/[^0-9]/g, '');
+                        $element.val($filter('tel')(value, false));
+                    };
+
+                    // This runs when we update the text field
+                    ngModelCtrl.$parsers.push(function(viewValue) {
+                        return viewValue.replace(/[^0-9]/g, '').slice(0,10);
+                    });
+
+                    // This runs when the model gets updated on the scope directly and keeps our view in sync
+                    ngModelCtrl.$render = function() {
+                        $element.val($filter('tel')(ngModelCtrl.$viewValue, false));
+                    };
+
+                    $element.bind('change', listener);
+                    $element.bind('keydown', function(event) {
+                        var key = event.keyCode;
+                        // If the keys include the CTRL, SHIFT, ALT, or META keys, or the arrow keys, do nothing.
+                        // This lets us support copy and paste too
+                        if (key == 91 || (15 < key && key < 19) || (37 <= key && key <= 40)){
+                            return;
+                        }
+                        $browser.defer(listener); // Have to do this or changes don't get picked up properly
+                    });
+
+                    $element.bind('paste cut', function() {
+                        $browser.defer(listener);
+                    });
+                }
+
+            };
+        });
+
+        app.filter('tel', function () {
+            return function (tel) {
+                console.log(tel);
+                if (!tel) { return ''; }
+
+                var value = tel.toString().trim().replace(/^\+/, '');
+
+                if (value.match(/[^0-9]/)) {
+                    return tel;
+                }
+
+                var country, city, number;
+
+                switch (value.length) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        city = value;
+                        break;
+
+                    default:
+                        city = value.slice(0, 3);
+                        number = value.slice(3);
+                }
+
+                if(number){
+                    if(number.length>3){
+                        number = number.slice(0, 3) + '-' + number.slice(3,7);
+                    }
+                    else{
+                        number = number;
+                    }
+
+                    return ("(" + city + ") " + number).trim();
+                }
+                else{
+                    return "(" + city;
+                }
+
+            };
+        });
+
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
             $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
+            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
             $scope.products = {{ products | json_encode | raw}};
             $scope.pop = {{ pop | json_encode | raw}};
             $scope.states = {{ states | json_encode | raw}};
@@ -87,13 +169,30 @@
             $scope.cart_total = 0.00;
             $scope.product_variant_order_quan = [];
             $scope.pop_order_quan = [];
-            $scope.cart = {'variant': [], 'pop': []};
+            $scope.cart = {'variant': [], 'pop': [], 'customItems': []};
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
             $scope.hasError = [];
+            $scope.hasCustomItem = 0;
+            $scope.customItems = [];
             $scope.ship_to_id = {{ app.user.id }};
+
+            $scope.due_date = new Date();
+            $scope.date = ($scope.due_date.getTime() + 86400000);
+            $scope.min_date = new Date($scope.date);
+
+            $('body').addClass('sidebar-collapse');
+
+            if($scope.is_admin == 1) {
+                $scope.form_info['ship'] = true;
+                $('#ship').show();
+                $scope.form_info['pick_up'] = false;
+                $('#pick_up_date').hide();
+                $('#pick_up_agent').hide();
+                $('#pick_up_warehouse').hide();
+            }
 
             {% if is_edit == 1 %}
                 $scope.order_pop = {{ order_pop | json_encode | raw}};
@@ -162,16 +261,32 @@
                 });
             {% endif %}
 
-
+            $scope.addCustomItem = function () {
+                $scope.cart['customItems'].push({
+                    description: '',
+                    price: 0.00
+                });
+                $scope.calculateCart();
+                $scope.hasCustomItem = 1;
+            };
+            
+            $scope.removeCustomItem = function (item) {
+                var index = $scope.cart['customItems'].indexOf(item);
+                $scope.cart['customItems'].splice(index, 1);
+                $scope.calculateCart();
+                var ol = Object.keys($scope.cart['customItems']);
+                if(ol.length == 0)
+                    $scope.hasCustomItem = 0;
+            };
 
             $scope.updateCart = function (variantId, cost, max, type) {
-                console.log(type);
-                console.log($scope.cart);
                 if(typeof($scope.cart[type][variantId]) != "undefined" && $scope.cart[type][variantId] !== null) {
                     if(type == 'variant')
                         $scope.cart[type][variantId].quantity = $scope.product_variant_order_quan[variantId];
                     if(type == 'pop')
                         $scope.cart[type][variantId].quantity = $scope.pop_order_quan[variantId];
+                    console.log('cost: '+ JSON.stringify($scope.cart));
+
                 }
                 else {
                     if(type == 'variant')
@@ -188,7 +303,6 @@
                             cost: cost
                         };
                 }
-
                 if(type == 'variant') {
                     if($scope.product_variant_order_quan[variantId] > max) {
                         if(jQuery.inArray(variantId, $scope.hasError) == -1) {
@@ -370,6 +484,10 @@
                     $scope.cart_num_items += value.quantity;
                     $scope.cart_total += value.quantity * value.cost;
                 });
+                angular.forEach($scope.cart['customItems'], function(value, key) {
+                    $scope.cart_num_items += 1;
+                    $scope.cart_total += value.price;
+                });
             }
 
             $scope.shipping = function () {
@@ -506,8 +624,6 @@
 
         }]);
 
-
-
     </script>
 {% endblock footer %}
 
@@ -610,7 +726,7 @@
         }
         .price_box {
              max-width: 15%;
-            width: 12%;
+            width: 15%;
              display: inline-block;
             margin-left: 3px;
             margin-right: 3px;
@@ -640,13 +756,7 @@
             list-style-type: none;
             color: #AAAAAA;
         }
-
-        .price_box.ng-scope
-        {
-            margin: 0 10px;
-        }
     </style>
-
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
@@ -664,7 +774,6 @@
             </div>
         </div>
 
-        {%  if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_RETAILER') %}
         <div class="row" style="padding-bottom: 40px;padding-top: 20px;">
             <div class="col-md-6">
                 <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
@@ -684,7 +793,7 @@
                         <div class="col-lg-4 col-md-4">
                             <center>Total ($)</center>
                             {% verbatim %}
-                            <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px;" >{{ cart_total | currency:'$' }}</div>
+                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px; min-width: 91px;" >{{ cart_total | currency:'$' }}</div>
                             {% endverbatim %}
                         </div>
                         <div class="col-lg-4 col-md-4">
@@ -694,6 +803,44 @@
                 </div>
             </div>
         </div>
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
+        <div class="row" style="margin-bottom: 30px;" >
+            <div class="col-md-10" >
+                <div class="table-responsive" ng-show="hasCustomItem == 1">
+                    <table class="table no-margin">
+                        <thead>
+                        <center><h4>Manual Items</h4></center>
+                        <tr>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in cart['customItems']">
+                            <td>
+                                <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                    <textarea class="form-control" ng-model="item.description">This is the description Yoyoyoyoyo.</textarea>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                    <input type="number" class="form-control" ng-change="calculateCart()" ng-model="item.price">
+                                </div>
+                            </td>
+                            <td>
+                                <button ng-click="removeCustomItem(item)" class="btn btn-raised btn-sm btn-warning btn-flat">X</button>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button ng-click="addCustomItem()" class="btn btn-raised btn-sm btn-default btn-flat pull-right">Add Custom Item<div class="ripple-container"></div></button>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="row">
             <div class="grid col-md-10">
@@ -710,7 +857,7 @@
 
                         <div class="price_box_row ">
 
-                                <div ng-repeat="variant in product.variants track by $index" class="price_box" style="align">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box" style="min-width: 64px;">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
@@ -724,9 +871,26 @@
                                                ng-change="updateCart({{ variant.variant_id }}, {{ variant.cost }}, {{ variant.inventory}}, '{{variant.type}}')"
                                         >
                                     </div>
-                                    <div class="variant_price">
-                                        {{ variant.cost | currency}}
+                {% endverbatim %}
+                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
+                                    <div class="variant_price gray_box">
+                                        {% verbatim %}
+                                             <input
+                                               onclick="this.select()"
+                                               style="text-align: center; width: 100%;    border: none;"
+                                               ng-model="variant.cost"
+                                               ng-change="calculateCart()"
+                                               >
+                                        {% endverbatim %}
                                     </div>
+                                    {% else %}
+                                        <div class="variant_price gray_box">
+                                        {% verbatim %}
+                                            {{ variant.cost | currency}}
+                                        {% endverbatim %}
+                                        </div>
+                                    {% endif %}
+                {% verbatim %}
 
                                     <div ng-if="variant.inventory < 10" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
@@ -738,25 +902,25 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">
                             <center>{{item.name}}</center>
                         </div>
                         <div class="row solid_gray_box" style="margin-right: 0px; margin-left: 0px;">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="pop_name" style="padding-top: 13px;">{{item.description}}</div>
                             </div>
-                            <div class="col-md-6" >
-                                <input id="pop-{{item.id}}" type="number" class="pop_amount form-control" style="margin-top: -20px; background-color: #fff; text-align: center; width: 100%;    border: none;"
+                            <div class="col-md-12" >
+                                <input id="pop-{{item.id}}" type="number" class="pop_amount form-control" style="margin-top: -20px; background-color: #fff; text-align: center; width: 100%;    border: none;;"
                                                min="0"
                                                onclick="this.select()"
                                                ng-model="pop_order_quan[ item.id ]"
                                                ng-init="pop_order_quan[ item.id ] = 0"
                                                ng-change="updateCart({{ item.id }}, {{ item.cost }}, {{item.inventory}}, '{{item.type}}')"
                                         >
-                                <div class="pop_price" style="text-align: center;">{{item.cost | currency}}</div>
+                                <div class="pop_price" style="text-align: center; padding-bottom:10px;">{{item.cost | currency}}</div>
                             </div>
                         </div>
                     </div>
@@ -768,17 +932,16 @@
         </div>
 
 
-                <div id="floaty-box" class="col-md-2 visible-lg">
-                    <ul>
-                        <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
-                        {% for category in categories %}
-                            <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
-                        {% endfor %}
-                        <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
+        <div id="floaty-box" class="col-md-2 visible-lg">
+            <ul>
+                <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
+                {% for category in categories %}
+                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
+                {% endfor %}
+                <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
 
-                    </ul>
-                </div>
-        {% endif %}
+            </ul>
+        </div>
     </div>
 </div>
 {#</form>#}

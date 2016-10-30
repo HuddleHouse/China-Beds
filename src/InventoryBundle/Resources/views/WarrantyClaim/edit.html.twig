@@ -28,9 +28,23 @@
                 data: {order_id: $('#warranty_claim_order').val()},
                 success: function (variants) {
                     el.html(variants);
+                    if(variants != '<option>Select Order ID first</option>')
+                        el.prop('disabled', false);
                     el.prop('disabled', false);
-                    el.val({{ warranty_claim.productVariant.id }});
+                    el.val('<option onclick="fillImage('el.val()')">{{ warranty_claim.productVariant.id | default('') }}</option>');
                 }
+            });
+        }
+
+        function fillImage(variantId)
+        {
+            $.ajax({
+                method: "GET",
+                url: Routing.generate('api_get_variant_image' , { variantId : variantId})
+            }).done(function(data){
+                $('#warranty_claim_productVariant').change(function(){
+                    fillImage($(this).val());
+                })
             });
         }
 
@@ -47,7 +61,22 @@
                     $('#charNum').text(l);
                 }
             });
+            $('#warranty_claim_productVariant').change(function(){
+                fillImage($(this).val());
+            })
         });
+
+        function openFileBrowser1() {
+            $('#warranty_claim_file1').click();
+        }
+
+        function openFileBrowser2() {
+            $('#warranty_claim_file2').click();
+        }
+
+        function openFileBrowser3() {
+            $('#warranty_claim_file3').click();
+        }
     </script>
 {% endblock footer %}
 
@@ -82,9 +111,57 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.quantity) }}
+                    {{ form_widget(edit_form.quantity) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.dateMadeAware) }}
+                    {{ form_widget(edit_form.dateMadeAware) }}
+                </div>
+                <div class="col-md-4" id="variant-img">
+
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12 form-group">
                     {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
                     {{ form_widget(edit_form.description) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.file1) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="warranty_claim_file1" name="warranty_claim[file1]" accept="image/*">
+                    </span>
+                        </label>
+                        {{ form_widget(edit_form.path1) }}
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.file2) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="warranty_claim_file2" name="warranty_claim[file2]" accept="image/*">
+                    </span>
+                        </label>
+                        {{ form_widget(edit_form.path2) }}
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(edit_form.file3) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse&hellip; <input type="file" id="warranty_claim_file3" name="warranty_claim[file3]" accept="image/*">
+                    </span>
+                        </label>
+                        {{ form_widget(edit_form.path3) }}
+                    </div>
                 </div>
             </div>
             {% if warranty_claim.isArchived %}
@@ -92,6 +169,9 @@
             {% else %}
                 <input class="btn btn-raised btn-success" type="submit" value="Update" />
             {% endif %}
+            {% do edit_form.file1.setRendered %}
+            {% do edit_form.file2.setRendered %}
+            {% do edit_form.file3.setRendered %}
             {{ form_end(edit_form) }}
         </div>
     </div>

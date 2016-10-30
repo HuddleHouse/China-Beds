@@ -17,42 +17,49 @@
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
     </script>
+    <style>
+        .social-links ul li a{
+            list-style: none;
+        }
+        .social-links ul li a:hover{
+
+        }
+    </style>
 {% endblock footer %}
 
 {% block body %}
-
         <div class="content-section">
             <div class="slider-section">
                 <div class="home-slider">
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
-                    <div><img src="{{ asset('images/web/TranquilityBed@2x.png') }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderOne) }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderTwo) }}" /></div>
+                    <div><img src="{{ asset('uploads/websites/' ~ channel.frontSliderThree) }}" /></div>
                 </div>
             </div>
 
             <div class="home-banners">
                 <div class="row">
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="{{ path('web_retailers', {site: site}) }}">
+                        <a href="{{ path('web_retailers', {}) }}">
                             <div class="box">
                                 <div class="heading">FOR RETAILERS</div>
-                                <img src="{{ asset('images/web/ForReatilers@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterOne) }}" />
                             </div>
                         </a>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="{{ path('web_product_features', {site: site}) }}">
+                        <a href="{{ path('web_product_features', {}) }}">
                             <div class="box">
                                 <div class="heading">PRODUCT FEATURES</div>
-                                <img src="{{ asset('images/web/ProductFeatures@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterTwo) }}" />
                             </div>
                         </a>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
-                        <a href="{{ path('web_faq', {site: site}) }}">
+                        <a href="{{ path('web_faq', {}) }}">
                             <div class="box">
                                 <div class="heading">WARRANTY/QUESTIONS?</div>
-                                <img src="{{ asset('images/web/Warranty@2x.png') }}" />
+                                <img src="{{ asset('uploads/websites/' ~ channel.frontFooterThree) }}" />
                             </div>
                         </a>
                     </div>
@@ -60,3 +67,6 @@
             </div>
         </div>
 {% endblock body %}
+{% block footbox %}
+    <div class="copyright">{{ channel.frontFooterText }}</div>
+{% endblock %}

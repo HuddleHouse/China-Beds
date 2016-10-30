@@ -21,21 +21,11 @@
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
 
-        $("#form").validate({
-            submitHandler: function(form) {
-                console.log($scope.payment_type);
-                var scope = angular.element(document.getElementById('MainCtrl')).scope();
-                var count = scope.formValidate();
-                if(count == 0)
-                    $(form).submit();
-                $(form).preventDefault;
-            }
-        });
-
         var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {{ is_dis }};
             $scope.is_retailer = {{ is_retail }};
+            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
             $scope.cart_num_items = 0;
             $scope.product_variant_order_quan = [];
             $scope.cart = [];
@@ -49,6 +39,11 @@
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
             $scope.is_paid = {{ is_paid }};
+            $scope.admin_paid = 0;
+
+            {% if order.status.name == 'Pending' %}
+                $scope.admin_paid = 1;
+            {% endif %}
 
             $(document).ready(function () {
                 if ($scope.is_paid == 1) {
@@ -65,7 +60,7 @@
                     $('#cc').hide();
             };
 
-            $scope.formValidate = function () {
+            $scope.formValidate = function (type) {
                 var count = 0;
                 if($scope.payment_type == '') {
                     $('#payment').addClass('has-error');
@@ -74,7 +69,7 @@
                 else
                     $('#payment').removeClass('has-error');
 
-                console.log($scope.cc);
+                console.log(type);
 
                 if($scope.payment_type == 'cc') {
                     if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
@@ -94,19 +89,25 @@
                         $('#cc-cvv').removeClass('has-error');
                 }
 
+                if($scope.is_admin == 1) {
+                    count = 0;
+                    $scope.ledgerTotal = $scope.cart_total;
+                }
 
                 if(count > 0)
                     showErrorModal('Please fix the form errors.');
                 else if ($scope.cart_total > $scope.ledgerTotal)
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
                 else {
+                    showSpinner();
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_pay_for_order') }}",
                         dataType: 'json',
                         data: {cc: $scope.cc,
                             payment_type: $scope.payment_type,
-                            order_id: {{ order.id}}
+                            order_id: {{ order.id}},
+                            type: type
                         },
                         success: function (data) {
                             $scope.$apply(function () {
@@ -280,8 +281,7 @@
                     <br>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    {#<b>Payment Due:</b> 2/22/2014<br>#}
-                    {#<b>Account:</b> 968-34567#}
+
                 </div>
                 <!-- /.col -->
             </div>
@@ -344,10 +344,44 @@
                 </div>
                 <!-- /.row -->
             {% endif %}
+
+            {% if manual_items_count != 0 %}
+                <div class="row" style="margin-bottom: 30px;" >
+                    <div class="col-md-12" >
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <center><h4>Manual Items</h4></center>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in manual_items %}
+                                <tr>
+                                    <td>
+                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                            {{ item.description }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                            ${{ item.price | number_format(2, '.', ',') }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
                 <div class="col-md-6">
-                    <fieldset style="margin-top: 20px;margin-bottom: 50px;">
+                    <fieldset style="margin-top: 20px;margin-bottom: 50px;" ng-show="is_admin == 0">
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
@@ -406,6 +440,11 @@
                                                 <option value="21">2021</option>
                                                 <option value="22">2022</option>
                                                 <option value="23">2023</option>
+                                                <option value="24">2024</option>
+                                                <option value="25">2025</option>
+                                                <option value="26">2026</option>
+                                                <option value="27">2027</option>
+                                                <option value="28">2028</option>
                                             </select>
                                         </div>
                                     </div>
@@ -419,16 +458,39 @@
                             </div>
                         </div>
                     </fieldset>
-
                     <h5 style="margin: -14px 0 16px;">Comments</h5>
                     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 50px;">
                         {{ order.comments }}
                     </p>
                 </div>
                 <div class="col-md-6">
-                    {% if order.isPickUp == 0%}
-                    <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
-                    {% else %}
+                    {% if order.status.name == 'Paid' or order.status.name == 'Shipped' %}
+                        <h4>Shipping Info/ Tracking Numbers</h4>
+                        <ul>
+                            {% for label in order.shippingLabels %}
+                                <li>Tracking:
+                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
+                                        {{ label.trackingNumber }}
+                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') ==1  %}
+                                    -
+                                    <a class="btn btn-raised btn-default btn-sm" href="/{{ label.webPath }}" download>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                        Download Label
+                                    </a>
+                                    {% endif %}
+                                </li>
+
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+
+                    {% if order.isPickUp == 0 and is_granted('ROLE_ADMIN') == 0 and is_granted('ROLE_SALES_MANAGER') == 0 and is_granted('ROLE_SALES_REP') == 0 %}
+                        {% if order.status.name != 'Paid' %}
+                            <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        {% endif %}
+                    {% elseif order.isPickUp == 1 %}
                     <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
                     <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
                     {% endif %}
@@ -467,10 +529,13 @@
                 <div class="col-xs-12 col-md-6">
                     <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
-                    <button type="button" ng-show="is_paid == 0" ng-click="formValidate()" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                    <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                        Submit Order for User
+                    </button>
+                    <button type="button" ng-show="is_paid == 0 && is_admin == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Complete Order
                     </button>
-                    <a ng-show="is_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
+                    <a ng-show="is_paid == 0 && admin_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
                         Edit Order
                     </a>
                 </div>

@@ -1,0 +1,37 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}New {{ channel.name }} Admin Credit Distribution{% endblock %}
+{% block page_title %}
+    New {{ channel.name }} Admin Credit Distribution
+{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('ledger_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{%  block content %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_label(form.submittedForUser) }}
+            {{ form_widget(form.submittedForUser) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_label(form.amountRequested) }}
+            {{ form_widget(form.amountRequested) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+        </div>
+    </div>
+    <input class="btn btn-raised btn-success" type="submit" value="Create" />
+    {{ form_end(form) }}
+
+
+{% endblock %}

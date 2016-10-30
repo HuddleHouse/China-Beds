@@ -14,6 +14,7 @@ use OrderBundle\Form\CreditApprovalType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Validator\Constraints\DateTime;
+use OrderBundle\Form\NewCreditType;
 
 /**
  * Ledger controller.
@@ -56,8 +57,8 @@ class LedgerController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 //add info that the form doesn't have
-                if(!$ledger->getSubmittedForUser())
-                    $ledger->setSubmittedForUser($this->getUser());
+//                if(!$ledger->getSubmittedForUser())
+                $ledger->setSubmittedForUser($this->getUser());
                 $ledger->setSubmittedByUser($this->getUser());
                 $ledger->setAchRequested(false);
                 $ledger->setAmountCredited($ledger->getAmountRequested());
@@ -89,6 +90,53 @@ class LedgerController extends Controller
             'form' => $form->createView()
         ));
     }
+
+    /**
+     * Dislays form for admin to distribute credits to retailers and distributors
+     *
+     * @Route("/{id}/new-credit", name="ledger_credit_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newCreditAction(Request $request, Channel $channel)
+    {
+        $ledger = new Ledger();
+        $form = $this->createForm(NewCreditType::class, $ledger);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            try{
+                $em = $this->getDoctrine()->getManager();
+
+                $ledger->setSubmittedByUser($this->getUser());
+                $ledger->setAchRequested(false);
+                $ledger->setAmountCredited($ledger->getAmountRequested());
+                $ledger->setCreditedByUser($this->getUser());
+                $ledger->setDatePosted(new \DateTime());
+                $ledger->setChannel($channel);
+                $ledger->getSubmittedForUser()->getLedgers()->add($ledger);
+                $channel->getLedgers()->add($ledger);
+                $em->persist($ledger);
+                $em->flush();
+            }
+            catch(\Exception $e)
+            {
+                $this->addFlash('error', 'Error creating credit request entry: ' . $e->getMessage());
+                return $this->render('@Order/AddCredit/new.html.twig', array(
+                    'ledger' => $ledger,
+                    'channel' => $channel,
+                    'form' => $form->createView(),
+                ));
+            }
+        }
+
+        return $this->render('@Order/AddCredit/new.html.twig' , array(
+            'ledger' => $ledger,
+            'channel' =>$channel,
+            'form' => $form->createView()
+        ));
+    }
+
 
     /**
      * Displays a form to edit an existing credit request.

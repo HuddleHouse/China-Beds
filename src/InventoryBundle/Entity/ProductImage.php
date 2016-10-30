@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @ORM\Table(name="product_images")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductImage
 {
@@ -151,5 +152,23 @@ class ProductImage
     {
         $this->path = $path;
     }
-}
 
+    /**
+     * Get product
+     *
+     * @return \InventoryBundle\Entity\Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function removeUpload()
+    {
+        $file_path = $this->getAbsolutePath();
+        if(file_exists($file_path)) unlink($file_path);
+    }
+}

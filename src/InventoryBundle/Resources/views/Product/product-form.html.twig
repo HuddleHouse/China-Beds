@@ -22,10 +22,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
             </div>
+
         </div>
         <hr>
         <hr>
@@ -51,6 +52,18 @@
             <div class="col-md-2">
                 {{ form_label(form.active) }}
                 {{ form_widget(form.active) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_label(form.promo_kit_available) }}
+                {{ form_widget(form.promo_kit_available) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_label(form.hideFrontend) }}
+                {{ form_widget(form.hideFrontend) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_label(form.hideBackend) }}
+                {{ form_widget(form.hideBackend) }}
             </div>
         </div>
     </div>

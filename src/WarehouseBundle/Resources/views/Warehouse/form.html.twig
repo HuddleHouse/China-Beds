@@ -1,61 +1,94 @@
 {{ form_start(form) }}
+<style>
+     #warehouse_channels label { padding-right: 5px; padding-left: 5px;  }
+</style>
 <div class="row">
-    <div class="col-md-6">
-        {{ form_label(form.name) }}
-        {{ form_widget(form.name) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_label(form.phone) }}
-        {{ form_widget(form.phone) }}
+    <div class="col-md-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Warehouse</a></li>
+                <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Address</a></li>
+                <li><a href="#tab_3" data-toggle="tab">Advanced</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.phone) }}
+                            {{ form_widget(form.phone) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.email_2) }}
+                            {{ form_widget(form.email_2) }}
+                        </div>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_label(form.address1) }}
+                            {{ form_widget(form.address1) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.address2) }}
+                            {{ form_widget(form.address2) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_label(form.city) }}
+                            {{ form_widget(form.city) }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form_label(form.state) }}
+                            {{ form_widget(form.state) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_label(form.zip) }}
+                            {{ form_widget(form.zip) }}
+                        </div>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_label(form.manager_name) }}
+                            {{ form_widget(form.manager_name) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.management_comp) }}
+                            {{ form_widget(form.management_comp) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_label(form.shipping_label_image_type) }}
+                            {{ form_widget(form.shipping_label_image_type) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.channels) }}
+                            {{ form_widget(form.channels) }}
+                        </div>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-6">
-        {{ form_label(form.email) }}
-        {{ form_widget(form.email) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_label(form.email_2) }}
-        {{ form_widget(form.email_2) }}
-    </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-6">
-        {{ form_label(form.address1) }}
-        {{ form_widget(form.address1) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_label(form.address2) }}
-        {{ form_widget(form.address2) }}
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        {{ form_label(form.city) }}
-        {{ form_widget(form.city) }}
-    </div>
-    <div class="col-md-2">
-        {{ form_label(form.state) }}
-        {{ form_widget(form.state) }}
-    </div>
-    <div class="col-md-2">
-        {{ form_label(form.zip) }}
-        {{ form_widget(form.zip) }}
-    </div>
-    <div class="col-md-2">
-        {{ form_label(form.channels) }}
-        {{ form_widget(form.channels) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_label(form.manager_name) }}
-        {{ form_widget(form.manager_name) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_label(form.management_comp, 'Management Company') }}
-        {{ form_widget(form.management_comp) }}
-    </div>
-</div>
-{{ form_widget(form) }}
+
 <input class="btn btn-raised btn-success" type="submit" value="Save" />
 {{ form_end(form) }}

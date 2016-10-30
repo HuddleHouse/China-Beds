@@ -31,6 +31,7 @@ class UserType extends AbstractType
             ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'phone-input' => '', 'ng-model' => 'phone_val')))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
                 'label' => 'State',
@@ -225,6 +226,17 @@ class UserType extends AbstractType
                 'label' => 'Retailers',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+            ));
+        }
+        if($user->hasRole('ROLE_WAREHOUSE')) {
+            $form->add('managed_warehouses', EntityType::class, array(
+                'class' => 'WarehouseBundle\Entity\Warehouse',
+                'label' => 'Managed Warehouses',
+                'choice_label' => 'name',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 150px; '),
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,

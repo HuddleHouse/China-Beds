@@ -38,8 +38,8 @@
                     {% for warehouse in warehouses %}
                         <tr>
                             <td><a href="{{ path('warehouse_show', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
-                            <td><center>{{ warehouse.quantity }}</center></td>
-                            <td><center>{{ warehouse.po_quantity }}</center></td>
+                            <td><center>{{ warehouse.quantity  }}</center></td>
+                            <td><center>{{ warehouse.po_quantity  }}</center></td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> view</a>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}"><i class="fa fa-shopping-basket"></i> inventory</a>

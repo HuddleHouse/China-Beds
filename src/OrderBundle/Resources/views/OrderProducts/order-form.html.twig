@@ -27,7 +27,8 @@
                 <div class="col-md-6">
                     <div id="pick_up_date" style="display: none;">
                         <label class="control-label" for="pick_up_date">Pick Up Date *</label>
-                        <md-datepicker ng-model="form_info['pick_up_date']"></md-datepicker>
+                        {#<md-datepicker ng-model="form_info['pick_up_date']" md-min-date="min_date()"></md-datepicker>#}
+                        <md-datepicker ng-model="min_date" md-min-date="min_date"></md-datepicker>
                     </div>
                 </div>
             </div>
@@ -40,7 +41,7 @@
                             ng-options="option.name for option in user_warehouses track by option.id" required>
                             <option value="" >Warehouse</option>
                         </select>
-                        {% endverbatim %}
+                    {% endverbatim %}
                 </div>
             </div>
 
@@ -55,8 +56,7 @@
     </form>
 </div>
 <div class="table" id='ship' style="background-color: #EFEFEF; display: none;    margin-top: -19px;">
-
-    {% if is_granted('ROLE_DISTRIBUTOR') %}
+    {% if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
     <div class="row" id="pick_up_warehouse" style="margin-bottom: 10px;">
         <div class="col-md-12">
             <select class="" id="dist_ship" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart['dist_ship']" ng-change="updateShipForm()" required>
@@ -64,7 +64,7 @@
             {% for retailer in user_retailers %}
                 <option value="{{ retailer.id }}">{{ retailer.firstName }} {{ retailer.lastName }}</option>
             {% endfor %}
-                        </select>
+            </select>
         </div>
     </div>
 {% endif %}
@@ -103,7 +103,7 @@
     <div class="row">
         <div class="col-md-12">
             <label class="control-label" for="phone">Phone *</label>
-            <input id="phone" ng-model="form_info['phone']" ng-init="form_info['phone'] = '{{ app.user.phone }}'" type="text" class="form_field input-md">
+            <input id="phone" ng-model="form_info['phone']" ng-init="form_info['phone'] = '{{ app.user.phone }}'" phone-input class="form_field input-md">
         </div>
         <div class="col-md-12">
             <label class="control-label" for="email">Email *</label>

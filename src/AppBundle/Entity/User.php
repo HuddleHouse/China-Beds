@@ -7,12 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use InventoryBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -75,11 +77,31 @@ class User extends BaseUser
     protected $company_name;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $distributor_fedex_number;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="zip", type="integer", nullable=true)
      */
     private $zip;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_routing_number", type="integer", length=9, nullable=true)
+     */
+    private $ach_routing_number;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ach_account_number", type="string", length=17, nullable=true)
+     */
+    private $ach_account_number;
 
     /**
      *
@@ -157,13 +179,6 @@ class User extends BaseUser
     private $user_channels;
 
     /**
-     * @ORM\OneToOne(targetEntity="Invitation")
-     * @ORM\JoinColumn(referencedColumnName="code")
-     * @Assert\NotNull(message="Your code is invalid.", groups={"Registration"})
-     */
-    protected $invitation;
-
-    /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Office", inversedBy="users")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      */
@@ -208,6 +223,15 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
      */
     private $stock_transfers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="managers")
+     * @ORM\JoinTable(name="user_managed_warehouses",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")}
+     * )
+     */
+    protected $managed_warehouses;
 
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockAdjustment", mappedBy="user")
@@ -280,11 +304,14 @@ class User extends BaseUser
      */
     private $credited_ledgers;
 
+    private $active_channel = null;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->warranty_claims = new ArrayCollection();
+        $this->managed_warehouses = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
@@ -335,6 +362,33 @@ class User extends BaseUser
             return false;
         else
             return true;
+    }
+
+    public function hasPendingOrders() {
+        $count = 0;
+        foreach($this->orders as $order) {
+            if($order->getStatus()->getName() == 'Pending') {
+                $count++;
+                break;
+            }
+        }
+        if($count == 0)
+            return false;
+        else
+            return true;
+    }
+
+    public function getPendingOrderTotal($channel_id = null) {
+        $total = 0;
+        foreach($this->orders as $order) {
+            if($order->getStatus()->getName() == 'Pending') {
+                if($channel_id == null)
+                    $total += $order->getTotal();
+                else if($order->getChannel()->getId() == $channel_id)
+                    $total += $order->getTotal();
+            }
+        }
+        return $total;
     }
 
     public function getLedgerTotal($channel_id = null) {
@@ -391,14 +445,12 @@ class User extends BaseUser
         return $user_groups;
     }
 
-    public function setInvitation(Invitation $invitation)
-    {
-        $this->invitation = $invitation;
-    }
-
-    public function getInvitation()
-    {
-        return $this->invitation;
+    public function canManageWarehouse(Warehouse $warehouse){
+        foreach($this->managed_warehouses as $ware) {
+            if($ware->getName() == $warehouse->getName())
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -560,6 +612,24 @@ class User extends BaseUser
     {
         return $this->is_residential;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getManagedWarehouses()
+    {
+        return $this->managed_warehouses;
+    }
+
+    /**
+     * @param mixed $managed_warehouses
+     */
+    public function setManagedWarehouses($managed_warehouses)
+    {
+        $this->managed_warehouses = $managed_warehouses;
+    }
+
+
 
     /**
      * @param mixed $is_residential
@@ -945,7 +1015,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->retailers as $retailer)
             if($retailer->hasRole('ROLE_RETAILER'))
-                $data[] = $retailer;
+                if ( $retailer->belongsToChannel($this->getActiveChannel() ? $this->getActiveChannel() : $this->getUserChannels()->toArray()) )
+                    $data[] = $retailer;
         return $data;
     }
 
@@ -990,7 +1061,8 @@ class User extends BaseUser
         $data = array();
         foreach($this->distributors as $distributor)
             if($distributor->hasRole('ROLE_DISTRIBUTOR'))
-                $data[] = $distributor;
+                if ( $distributor->belongsToChannel($this->getActiveChannel() ? $this->getActiveChannel() : $this->getUserChannels()->toArray()) )
+                    $data[] = $distributor;
         return $data;
     }
 
@@ -1036,8 +1108,22 @@ class User extends BaseUser
         $data = array();
         foreach($this->sales_reps as $rep)
             if($rep->hasRole('ROLE_SALES_REP'))
-                $data[] = $rep;
+                if ( $rep->belongsToChannel($this->getActiveChannel() ? $this->getActiveChannel() : $this->getUserChannels()->toArray()) )
+                    $data[] = $rep;
         return $data;
+    }
+
+    public function belongsToChannel($channel = null) {
+        if ( !is_array($channel) ) { $channel = [$channel]; }
+
+        foreach($this->getUserChannels() as $user_channel) {
+            foreach($channel as $chan) {
+                if ($user_channel->getId() == $chan->getId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -1171,5 +1257,372 @@ class User extends BaseUser
         $this->submitted_rebates = $submitted_rebates;
     }
 
+    /**
+     * @return null
+     */
+    public function getActiveChannel()
+    {
+        return $this->active_channel;
+    }
 
+    /**
+     * @param null $active_channel
+     */
+    public function setActiveChannel(Channel $active_channel)
+    {
+        $this->active_channel = $active_channel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDistributorFedexNumber()
+    {
+        return $this->distributor_fedex_number;
+    }
+
+    /**
+     * @param mixed $distributor_fedex_number
+     */
+    public function setDistributorFedexNumber($distributor_fedex_number)
+    {
+        $this->distributor_fedex_number = $distributor_fedex_number;
+    }
+
+
+    /**
+     * Set achRoutingNumber
+     *
+     * @param integer $achRoutingNumber
+     *
+     * @return User
+     */
+    public function setAchRoutingNumber($achRoutingNumber)
+    {
+        $this->ach_routing_number = $achRoutingNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get achRoutingNumber
+     *
+     * @return integer
+     */
+    public function getAchRoutingNumber()
+    {
+        return $this->ach_routing_number;
+    }
+
+    /**
+     * Set achAccountNumber
+     *
+     * @param string $achAccountNumber
+     *
+     * @return User
+     */
+    public function setAchAccountNumber($achAccountNumber)
+    {
+        $this->ach_account_number = $achAccountNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get achAccountNumber
+     *
+     * @return string
+     */
+    public function getAchAccountNumber()
+    {
+        return $this->ach_account_number;
+    }
+
+    /**
+     * Add rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     *
+     * @return User
+     */
+    public function addRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions[] = $rebateSubmission;
+
+        return $this;
+    }
+
+    /**
+     * Remove rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     */
+    public function removeRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions->removeElement($rebateSubmission);
+    }
+
+    /**
+     * Add submittedRebate
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $submittedRebate
+     *
+     * @return User
+     */
+    public function addSubmittedRebate(\InventoryBundle\Entity\RebateSubmission $submittedRebate)
+    {
+        $this->submitted_rebates[] = $submittedRebate;
+
+        return $this;
+    }
+
+    /**
+     * Remove submittedRebate
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $submittedRebate
+     */
+    public function removeSubmittedRebate(\InventoryBundle\Entity\RebateSubmission $submittedRebate)
+    {
+        $this->submitted_rebates->removeElement($submittedRebate);
+    }
+
+    /**
+     * Add warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     *
+     * @return User
+     */
+    public function addWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims[] = $warrantyClaim;
+
+        return $this;
+    }
+
+    /**
+     * Remove warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     */
+    public function removeWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims->removeElement($warrantyClaim);
+    }
+
+    /**
+     * Add submittedWarrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $submittedWarrantyClaim
+     *
+     * @return User
+     */
+    public function addSubmittedWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $submittedWarrantyClaim)
+    {
+        $this->submitted_warranty_claims[] = $submittedWarrantyClaim;
+
+        return $this;
+    }
+
+    /**
+     * Remove submittedWarrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $submittedWarrantyClaim
+     */
+    public function removeSubmittedWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $submittedWarrantyClaim)
+    {
+        $this->submitted_warranty_claims->removeElement($submittedWarrantyClaim);
+    }
+
+    /**
+     * Add purchaseOrder
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrder $purchaseOrder
+     *
+     * @return User
+     */
+    public function addPurchaseOrder(\WarehouseBundle\Entity\PurchaseOrder $purchaseOrder)
+    {
+        $this->purchase_orders[] = $purchaseOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrder
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrder $purchaseOrder
+     */
+    public function removePurchaseOrder(\WarehouseBundle\Entity\PurchaseOrder $purchaseOrder)
+    {
+        $this->purchase_orders->removeElement($purchaseOrder);
+    }
+
+    /**
+     * Add order
+     *
+     * @param \OrderBundle\Entity\Orders $order
+     *
+     * @return User
+     */
+    public function addOrder(\OrderBundle\Entity\Orders $order)
+    {
+        $this->orders[] = $order;
+
+        return $this;
+    }
+
+    /**
+     * Remove order
+     *
+     * @param \OrderBundle\Entity\Orders $order
+     */
+    public function removeOrder(\OrderBundle\Entity\Orders $order)
+    {
+        $this->orders->removeElement($order);
+    }
+
+    /**
+     * Add submittedOrder
+     *
+     * @param \OrderBundle\Entity\Orders $submittedOrder
+     *
+     * @return User
+     */
+    public function addSubmittedOrder(\OrderBundle\Entity\Orders $submittedOrder)
+    {
+        $this->submitted_orders[] = $submittedOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove submittedOrder
+     *
+     * @param \OrderBundle\Entity\Orders $submittedOrder
+     */
+    public function removeSubmittedOrder(\OrderBundle\Entity\Orders $submittedOrder)
+    {
+        $this->submitted_orders->removeElement($submittedOrder);
+    }
+
+    /**
+     * Add stockTransfer
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransfer
+     *
+     * @return User
+     */
+    public function addStockTransfer(\WarehouseBundle\Entity\StockTransfer $stockTransfer)
+    {
+        $this->stock_transfers[] = $stockTransfer;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockTransfer
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransfer
+     */
+    public function removeStockTransfer(\WarehouseBundle\Entity\StockTransfer $stockTransfer)
+    {
+        $this->stock_transfers->removeElement($stockTransfer);
+    }
+
+    /**
+     * Add stockAdjustment
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustment $stockAdjustment
+     *
+     * @return User
+     */
+    public function addStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
+    {
+        $this->stock_adjustments[] = $stockAdjustment;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockAdjustment
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustment $stockAdjustment
+     */
+    public function removeStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
+    {
+        $this->stock_adjustments->removeElement($stockAdjustment);
+    }
+
+    /**
+     * Add ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return User
+     */
+    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Remove ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     */
+    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers->removeElement($ledger);
+    }
+
+    /**
+     * Add submittedLedger
+     *
+     * @param \OrderBundle\Entity\Ledger $submittedLedger
+     *
+     * @return User
+     */
+    public function addSubmittedLedger(\OrderBundle\Entity\Ledger $submittedLedger)
+    {
+        $this->submitted_ledgers[] = $submittedLedger;
+
+        return $this;
+    }
+
+    /**
+     * Remove submittedLedger
+     *
+     * @param \OrderBundle\Entity\Ledger $submittedLedger
+     */
+    public function removeSubmittedLedger(\OrderBundle\Entity\Ledger $submittedLedger)
+    {
+        $this->submitted_ledgers->removeElement($submittedLedger);
+    }
+
+    /**
+     * Add creditedLedger
+     *
+     * @param \OrderBundle\Entity\Ledger $creditedLedger
+     *
+     * @return User
+     */
+    public function addCreditedLedger(\OrderBundle\Entity\Ledger $creditedLedger)
+    {
+        $this->credited_ledgers[] = $creditedLedger;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditedLedger
+     *
+     * @param \OrderBundle\Entity\Ledger $creditedLedger
+     */
+    public function removeCreditedLedger(\OrderBundle\Entity\Ledger $creditedLedger)
+    {
+        $this->credited_ledgers->removeElement($creditedLedger);
+    }
 }

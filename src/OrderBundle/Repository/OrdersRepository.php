@@ -184,6 +184,39 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getLatestOrdersForUser(User $user) {
-        return $this->getEntityManager()->getRepository('AppBundle:User')->getLatestOrdersForUser($user);
+        if($user->hasRole('ROLE_ADMIN'))
+            $orders = $this->findBy(array(), array('submitDate' => 'DESC'));
+        else
+            $orders = $this->findBy(array('submitted_for_user' => $user, 'channel' => $user->getActiveChannel()), array('submitDate' => 'DESC'));
+
+        return $orders;
     }
+
+    public function getTemplateReportData() {
+        $rtn = array();
+        $qb = $this->createQueryBuilder('o')
+            ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress')
+            ->leftJoin('o.submitted_for_user', 'u', 'WHERE', 'o.submitted_for_user = u');
+
+        foreach($qb->getQuery()->getResult() as $row) {
+            $row['first_name'] .= ' ' . $row['last_name'];
+            array_splice($row, 4, 1);
+            //convert DateTime objects to strings
+            if($row['pickUpDate'] != null)
+                $row['pickUpDate'] = $row['pickUpDate']->format('m/d/y H:i');
+            $rtn[] = $row;
+        }
+        return $rtn;
+    }
+
+    /**
+     * @return Orders[]
+     */
+    public function getDailyOrderReportData() {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.submitDate between :today and :tomorrow')
+            ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
+        return $qb->getQuery()->getResult();
+    }
+
 }

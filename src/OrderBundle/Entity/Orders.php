@@ -2,6 +2,7 @@
 
 namespace OrderBundle\Entity;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use InventoryBundle\Entity\ProductVariant;
@@ -131,6 +132,13 @@ class Orders
     private $shipping;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="estimated_shipping", type="integer", nullable=true)
+     */
+    private $estimatedShipping;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ship_phone", type="string", length=255, nullable=true)
@@ -150,9 +158,19 @@ class Orders
     private $product_variants;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order")
+     */
+    private $shipping_labels;
+
+    /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
      */
     private $pop_items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order")
+     */
+    private $manual_items;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="submitted_orders")
@@ -228,6 +246,8 @@ class Orders
     {
         $this->product_variants = new ArrayCollection();
         $this->pop_items = new ArrayCollection();
+        $this->manual_items = new ArrayCollection();
+        $this->shipping_labels = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
@@ -310,6 +330,9 @@ class Orders
             $total += $productVariant->getQuantity() * $productVariant->getPrice();
         foreach($this->getPopItems() as $popItem)
             $total += $popItem->getQuantity() * $popItem->getPrice();
+        foreach($this->manual_items as $manual_item) {
+            $total += $manual_item->getPrice();
+        }
 
         return $total;
     }
@@ -321,6 +344,8 @@ class Orders
             $total += $productVariant->getQuantity() * $productVariant->getPrice();
         foreach($this->getPopItems() as $popItem)
             $total += $popItem->getQuantity() * $popItem->getPrice();
+        foreach($this->manual_items as $manual_item)
+            $total += $manual_item->getPrice();
 
         $total += $this->getShipping();
         return $total;
@@ -441,6 +466,22 @@ class Orders
     public function getIsPickUp()
     {
         return $this->isPickUp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEstimatedShipping()
+    {
+        return $this->estimatedShipping;
+    }
+
+    /**
+     * @param int $estimatedShipping
+     */
+    public function setEstimatedShipping($estimatedShipping)
+    {
+        $this->estimatedShipping = $estimatedShipping;
     }
 
     /**
@@ -741,7 +782,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getSubmittedByUser()
     {
@@ -749,7 +790,7 @@ class Orders
     }
 
     /**
-     * @param mixed $submitted_by_user
+     * @param User $submitted_by_user
      */
     public function setSubmittedByUser($submitted_by_user)
     {
@@ -757,7 +798,7 @@ class Orders
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getSubmittedForUser()
     {
@@ -810,6 +851,30 @@ class Orders
     public function getAmountPaid()
     {
         return $this->amount_paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShippingLabels()
+    {
+        return $this->shipping_labels;
+    }
+
+    /**
+     * @param mixed $shipping_labels
+     */
+    public function setShippingLabels($shipping_labels)
+    {
+        $this->shipping_labels = $shipping_labels;
+    }
+
+    /**
+     * @param mixed $shipping_labels
+     */
+    public function addShippingLabel($shipping_label)
+    {
+        $this->shipping_labels[] = $shipping_label;
     }
 
     /**
@@ -913,6 +978,23 @@ class Orders
     {
         $this->orderId = $orderId;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getManualItems()
+    {
+        return $this->manual_items;
+    }
+
+    /**
+     * @param mixed $manual_items
+     */
+    public function setManualItems($manual_items)
+    {
+        $this->manual_items = $manual_items;
+    }
+
 
 }
 

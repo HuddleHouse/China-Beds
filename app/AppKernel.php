@@ -7,6 +7,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
+
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -15,18 +16,22 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new InventoryBundle\InventoryBundle(),
+            new OrderBundle\OrderBundle(),
+            new \WarehouseBundle\WarehouseBundle(),
+            new AppBundle\AppBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             new QuickbooksBundle\QuickbooksBundle(),
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new OrderBundle\OrderBundle(),
-            new WarehouseBundle\WarehouseBundle(),
-            new WebsiteBundle\WebsiteBundle(),
+            new Eidsonator\SemanticReportsBundle\SemanticReportsBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+        if ( in_array($this->getEnvironment(), ['channel', 'channel_dev']) ) {
+            $bundles[] = new \WebsiteBundle\WebsiteBundle();
+        }
+
+        if (in_array($this->getEnvironment(), ['dev', 'test', 'channel_dev'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();

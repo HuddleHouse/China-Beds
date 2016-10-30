@@ -86,32 +86,51 @@ class Product
     private $active;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product")
+     * @var bool
+     *
+     * @ORM\Column(name="promo_kit_available", type="boolean")
+     */
+    private $promo_kit_available = false;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="hide_frontend", type="boolean")
+     */
+    private $hideFrontend = 0;
+
+    /**
+     * @var bool
+     *@ORM\Column(name="hide_backend", type="boolean")
+     */
+    private $hideBackend = 0;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product", cascade={"persist", "remove"})
      */
     private $attributes;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductCategory", mappedBy="product", cascade={"persist"})
      */
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductVariant", mappedBy="product", cascade={"persist", "remove"})
      */
     private $variants;
     
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="product", cascade={"persist", "remove"})
      */
     private $channels;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductSpecification", mappedBy="product", cascade={"persist", "remove"})
      */
     private $specifications;
 
     /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductImage", mappedBy="product", cascade={"persist", "remove"})
      */
     private $images;
 
@@ -349,6 +368,21 @@ class Product
         return $this->active;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * @param boolean $promo_kit_available
+     */
+    public function setPromoKitAvailable($promo_kit_available)
+    {
+        $this->promo_kit_available = $promo_kit_available;
+    }
 
     /**
      * @return mixed
@@ -429,5 +463,207 @@ class Product
     {
         $this->variants = $variants;
     }
-}
 
+    /**
+     * Add attribute
+     *
+     * @param \InventoryBundle\Entity\ProductAttribute $attribute
+     *
+     * @return Product
+     */
+    public function addAttribute(\InventoryBundle\Entity\ProductAttribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param \InventoryBundle\Entity\ProductAttribute $attribute
+     */
+    public function removeAttribute(\InventoryBundle\Entity\ProductAttribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+    }
+
+    /**
+     * Add category
+     *
+     * @param \InventoryBundle\Entity\ProductCategory $category
+     *
+     * @return Product
+     */
+    public function addCategory(\InventoryBundle\Entity\ProductCategory $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \InventoryBundle\Entity\ProductCategory $category
+     */
+    public function removeCategory(\InventoryBundle\Entity\ProductCategory $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Add variant
+     *
+     * @param \InventoryBundle\Entity\ProductVariant $variant
+     *
+     * @return Product
+     */
+    public function addVariant(\InventoryBundle\Entity\ProductVariant $variant)
+    {
+        $this->variants[] = $variant;
+
+        return $this;
+    }
+
+    /**
+     * Remove variant
+     *
+     * @param \InventoryBundle\Entity\ProductVariant $variant
+     */
+    public function removeVariant(\InventoryBundle\Entity\ProductVariant $variant)
+    {
+        $this->variants->removeElement($variant);
+    }
+
+    /**
+     * Add channel
+     *
+     * @param \InventoryBundle\Entity\ProductChannel $channel
+     *
+     * @return Product
+     */
+    public function addChannel(\InventoryBundle\Entity\ProductChannel $channel)
+    {
+        $channel->setProduct($this);
+        $this->channels[] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Remove channel
+     *
+     * @param \InventoryBundle\Entity\ProductChannel $channel
+     */
+    public function removeChannel(\InventoryBundle\Entity\ProductChannel $channel)
+    {
+        $this->channels->removeElement($channel);
+    }
+
+    /**
+     * Add specification
+     *
+     * @param \InventoryBundle\Entity\ProductSpecification $specification
+     *
+     * @return Product
+     */
+    public function addSpecification(\InventoryBundle\Entity\ProductSpecification $specification)
+    {
+        $this->specifications[] = $specification;
+
+        return $this;
+    }
+
+    /**
+     * Remove specification
+     *
+     * @param \InventoryBundle\Entity\ProductSpecification $specification
+     */
+    public function removeSpecification(\InventoryBundle\Entity\ProductSpecification $specification)
+    {
+        $this->specifications->removeElement($specification);
+    }
+
+    /**
+     * Add image
+     *
+     * @param \InventoryBundle\Entity\ProductImage $image
+     *
+     * @return Product
+     */
+    public function addImage(\InventoryBundle\Entity\ProductImage $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \InventoryBundle\Entity\ProductImage $image
+     */
+    public function removeImage(\InventoryBundle\Entity\ProductImage $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Set hideFrontend
+     *
+     * @param boolean $hideFrontend
+     *
+     * @return Product
+     */
+    public function setHideFrontend($hideFrontend)
+    {
+        $this->hideFrontend = $hideFrontend;
+
+        return $this;
+    }
+
+    /**
+     * Get hideFrontend
+     *
+     * @return boolean
+     */
+    public function getHideFrontend()
+    {
+        return $this->hideFrontend;
+    }
+
+    /**
+     * Get promoKitAvailable
+     *
+     * @return boolean
+     */
+    public function getPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * Set hideBackend
+     *
+     * @param boolean $hideBackend
+     *
+     * @return Product
+     */
+    public function setHideBackend($hideBackend)
+    {
+        $this->hideBackend = $hideBackend;
+
+        return $this;
+    }
+
+    /**
+     * Get hideBackend
+     *
+     * @return boolean
+     */
+    public function getHideBackend()
+    {
+        return $this->hideBackend;
+    }
+}

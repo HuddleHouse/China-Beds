@@ -35,6 +35,7 @@ class Rebate
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
      */
     private $description;
 
@@ -198,5 +199,28 @@ class Rebate
     {
         $this->submissions = $submissions;
     }
-}
 
+    /**
+     * Add submission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $submission
+     *
+     * @return Rebate
+     */
+    public function addSubmission(\InventoryBundle\Entity\RebateSubmission $submission)
+    {
+        $this->submissions[] = $submission;
+
+        return $this;
+    }
+
+    /**
+     * Remove submission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $submission
+     */
+    public function removeSubmission(\InventoryBundle\Entity\RebateSubmission $submission)
+    {
+        $this->submissions->removeElement($submission);
+    }
+}

@@ -15,5 +15,21 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    default_distributor:
+    default_sales_rep:
+    default_sales_manager:
+
+    authorize_login_id: 3845HahjteBH
+    authorize_tansaction_key: 69872hkT4b7WnQVt
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    nacha.uat.host:     b2b02u.bankofamerica.com
+    nacha.uat.user:     nacha_uat_user
+    nacha.uat.pass:     nacha_uat_pass
+    nacha.prod.host:    b2b22.bankofamerica.com
+    nacha.prod.user:    nacha_prod_user
+    nacha.prod.pass:    nacha_prod_pass
+
+    channel_upload_directory: '%kernel.root_dir%/../web/uploads/websites'

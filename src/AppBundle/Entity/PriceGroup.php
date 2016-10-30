@@ -125,4 +125,28 @@ class PriceGroup
     }
 
 
+
+    /**
+     * Add price
+     *
+     * @param \AppBundle\Entity\PriceGroupPrices $price
+     *
+     * @return PriceGroup
+     */
+    public function addPrice(\AppBundle\Entity\PriceGroupPrices $price)
+    {
+        $this->prices[] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Remove price
+     *
+     * @param \AppBundle\Entity\PriceGroupPrices $price
+     */
+    public function removePrice(\AppBundle\Entity\PriceGroupPrices $price)
+    {
+        $this->prices->removeElement($price);
+    }
 }

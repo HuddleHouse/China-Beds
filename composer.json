@@ -37,11 +37,15 @@
         "consolibyte/quickbooks": "^3.1",
         "leafo/scssphp": "^0.6.5",
         "patchwork/jsqueeze": "^2.0",
-        "friendsofsymfony/jsrouting-bundle": "^1.6"
+        "friendsofsymfony/jsrouting-bundle": "^1.6",
+        "eidsonator/semantic-reports-bundle" : "dev-master"
+        "authorizenet/authorizenet": "1.8.8",
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "goetas/xsd2php": "2.*@dev",
+        "goetas/xsd-reader": "2.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-md-6 col-sm-7 col-xs-12">
                     <h3>{{ product.name }}</h3>
-                    <p>{{ product.description }}</p>
+                    <p>{{ product.description | nl2br }}</p>
                 </div>
             </div>
             <div class="row">
@@ -72,8 +72,11 @@
                 </div>
             </div>
             <div class="product-struture">
-                <img src="{{ asset('images/web/AmbiancePancake@2x.png') }}" />
+                <img src="{{ asset('uploads/websites/' ~ channel.detailMattressFooter) }}" />
             </div>
         </div>
     </div>
 {% endblock body %}
+{% block footbox %}
+    <div class="copyright">{{ channel.frontFooterText }}</div>
+{% endblock %}

@@ -20,7 +20,7 @@ use OrderBundle\Repository\OrdersRepository;
 class RebateSubmissionType extends AbstractType
 {
     private $tokenStorage;
-    private $usersRepository;
+    private $ordersRepository;
 
     /**
      * RebateSubmissionType constructor.

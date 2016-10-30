@@ -37,7 +37,26 @@ class OrderProductsController extends Controller
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
-            'orders' => $orders
+            'orders' => $orders,
+            'pending' => ''
+        ));
+    }
+
+    /**
+     *
+     * @Route("/pending", name="my_pending_orders_index")
+     * @Method("GET")
+     */
+    public function getPendingOrdersIndex()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->getUser();
+        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+
+        return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
+            'orders' => $orders,
+            'pending' => ' Pending'
         ));
     }
 
@@ -73,6 +92,8 @@ class OrderProductsController extends Controller
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
             $user_retailers = $user->getRetailers();
+        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
+            $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
         else
             $user_retailers = null;
 
@@ -119,6 +140,11 @@ class OrderProductsController extends Controller
                 $is_dis = 1;
             $pop = $order->getPopItems();
 
+            $manualItems = $order->getManualItems();
+            $manualCount = 0;
+            foreach($manualItems as $manualItem) {
+                $manualCount++;
+            }
 
             return $this->render('@Order/OrderProducts/view-order.html.twig', array(
                 'channel' => $channel,
@@ -128,7 +154,9 @@ class OrderProductsController extends Controller
                 'is_retail' => $is_retail,
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
-                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+                'manual_items' => $manualItems,
+                'manual_items_count' => $manualCount
             ));
         }
         else
@@ -228,6 +256,8 @@ class OrderProductsController extends Controller
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
             $user_retailers = $user->getRetailers();
+        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
+            $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
         else
             $user_retailers = null;
 

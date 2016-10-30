@@ -63,10 +63,13 @@ class WarrantyClaimController extends Controller
                 $channel->getWarrantyClaims()->add($warrantyClaim);
                 $this->getUser()->getSubmittedWarrantyClaims()->add($warrantyClaim);
                 $warrantyClaim->getSubmittedForUser()->getWarrantyClaims()->add($warrantyClaim);
+                $warrantyClaim->upload1();
+                $warrantyClaim->upload2();
+                $warrantyClaim->upload3();
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
-                return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
+                return $this->redirectToRoute('warrantyclaim_new', array('id' => $warrantyClaim->getId()));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Warranty Claim Item: ' . $e->getMessage());
@@ -93,13 +96,37 @@ class WarrantyClaimController extends Controller
      */
     public function editAction(Request $request, WarrantyClaim $warrantyClaim)
     {
-        $deleteForm = $this->createDeleteForm($warrantyClaim);
+
+        $oldPath1 = $warrantyClaim->getPath1();
+        $oldPath2 = $warrantyClaim->getPath2();
+        $oldPath3 = $warrantyClaim->getPath3();
+        $oldOrder = $warrantyClaim->getOrder();
+        
         $editForm = $this->createForm('InventoryBundle\Form\WarrantyClaimType', $warrantyClaim, array('method' => 'PATCH'));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                if($oldPath1 != $warrantyClaim->getPath1()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldPath1;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload1();
+                }
+                if($oldPath2 != $warrantyClaim->getPath2()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldPath2;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload2();
+                }
+                if($oldPath3 != $warrantyClaim->getPath3()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldPath3;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload3();
+                }
+                if($oldOrder != $warrantyClaim->getOrder()) {
+                    $oldOrder->getWarrantyClaims()->remove($warrantyClaim);
+                    $warrantyClaim->getOrder()->getWarrantyClaims()->add($warrantyClaim);
+                }
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim updated successfully.');
@@ -110,7 +137,6 @@ class WarrantyClaimController extends Controller
                 return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
                     'warranty_claim' => $warrantyClaim,
                     'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
                 ));
             }
         }
@@ -118,7 +144,6 @@ class WarrantyClaimController extends Controller
         return $this->render('@Inventory/WarrantyClaim/edit.html.twig', array(
             'warranty_claim' => $warrantyClaim,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

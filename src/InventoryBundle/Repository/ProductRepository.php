@@ -3,6 +3,7 @@
 namespace InventoryBundle\Repository;
 
 use InventoryBundle\Entity\Channel;
+use InventoryBundle\Entity\Product;
 use WarehouseBundle\Entity\Warehouse;
 
 /**
@@ -40,6 +41,26 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $products;
+    }
+
+    /**
+     * Returns single product based on variant
+     *
+     * @return Product
+     */
+    public function getProdImg($variantId){
+        $em = $this->getEntityManager();
+        $productVariant = $em->getRepository('InventoryBundle:ProductVariant')->find($variantId);
+        $product = $productVariant->getProduct();
+
+        $image_url = '/';
+
+        foreach($product->getImages() as $image) {
+            $image_url .= $image->getWebPath();
+            break;
+        }
+
+        return $image_url;
     }
 
     public function getAllMattressVariantsForChannelArray(Channel $channel)
@@ -80,7 +101,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllMattressesForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -100,6 +121,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
                 foreach($prod->getVariants() as $variant)
                     if($variant->getMsrp() < $lowest_price)
@@ -107,9 +129,11 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
+                    'short_description' => $prod->getShortDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
@@ -119,7 +143,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllPillowsForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -139,14 +163,16 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
-
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
+                    'short_description' => $prod->getShortDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
@@ -156,7 +182,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function getAllAdjustablesForChannelArray(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        $products_all = $em->getRepository('InventoryBundle:Product')->findBy(['hideFrontend' => false], ['name' => 'ASC']);
         $products = array();
 
         foreach($products_all as $prod) {
@@ -176,14 +202,17 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                     break;
                 }
                 $lowest_price = 9999999;
+                $hideOnFrontEnd = $prod->getHideFrontend();
 
 
                 $products[] = array(
                     'name' => $prod->getName(),
                     'description' => $prod->getDescription(),
+                    'short_description' => $prod->getShortDescription(),
                     'id' => $prod->getId(),
                     'image_url' => $image_url,
-                    'lowest_price' => $lowest_price
+                    'lowest_price' => $lowest_price,
+                    'hideFrontEnd' => $hideOnFrontEnd
                 );
             }
         }
@@ -196,7 +225,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
      * @param Warehouse $warehouse
      * @return array
      */
-    public function getAllProductsWithQuantityArray(Warehouse $warehouse = null)
+    public function getAllProductsWithQuantityArray(Warehouse $warehouse = null, Channel $channel = null)
     {
         $em = $this->getEntityManager();
         $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
@@ -209,32 +238,45 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
                 break;
             }
 
-            foreach($prod->getVariants() as $variant) {
-                $connection = $em->getConnection();
-                $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
-                $statement->bindValue('product_variant_id', $variant->getId());
-                $statement->execute();
-                $total_quantity = $statement->fetch();
-
-                if(isset($warehouse)) {
-                    $warehouse_quantity = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
+            $is_channel = 0;
+            if($channel != null)
+                foreach ($prod->getChannels() as $chan) {
+                    if($chan->getChannel()->getId() == $channel->getId())
+                       $is_channel = 1;
                 }
-                else {
-                    $warehouse_quantity = 0;
-                }
+            else
+                $is_channel = 1;
 
-                $products[] = array(
-                    'name' => $prod->getName().": ".$variant->getName(),
-                    'id' => $variant->getId(),
-                    'image_url' => $image_url,
-                    'total_quantity' => $total_quantity['total'],
-                    'warehouse_quantity' => $warehouse_quantity,
-                    'departing_warehouse_quantity' => 0,
-                    'receiving_warehouse_quantity' => 0,
-                    'ordered_quantity' => 0,
-                    'quantity' => 0
-                );
+            if($is_channel == 1) {
+                foreach($prod->getVariants() as $variant) {
+                    $connection = $em->getConnection();
+                    $statement = $connection->prepare("SELECT COALESCE(sum(quantity),0) as total FROM warehouse_inventory WHERE product_variant_id = :product_variant_id");
+                    $statement->bindValue('product_variant_id', $variant->getId());
+                    $statement->execute();
+                    $total_quantity = $statement->fetch();
+
+                    if(isset($warehouse)) {
+                        $warehouse_quantity = $em->getRepository('WarehouseBundle:Warehouse')->getInventoryForProduct($variant, $warehouse);
+                    }
+                    else {
+                        $warehouse_quantity = 0;
+                    }
+
+                    $products[] = array(
+                        'name' => $prod->getName().": ".$variant->getName(),
+                        'id' => $variant->getId(),
+                        'image_url' => $image_url,
+                        'total_quantity' => $total_quantity['total'],
+                        'warehouse_quantity' => $warehouse_quantity,
+                        'departing_warehouse_quantity' => 0,
+                        'receiving_warehouse_quantity' => 0,
+                        'ordered_quantity' => 0,
+                        'quantity' => 0
+                    );
+                }
             }
+
+
         }
 
         return $products;

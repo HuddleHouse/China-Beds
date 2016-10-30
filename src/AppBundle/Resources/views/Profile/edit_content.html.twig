@@ -9,66 +9,108 @@
         </div>
     </div>
 {% endif %}
+<div class="body" ng-app="myApp">
+    <div class="wrapper" ng-controller="MyCtrl">
+        <div class="table">
+            <div class="form-body">
+                {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'form-horizontal' } }) }}
 
-<div class="table">
-    <div class="form-body">
-        {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'form-horizontal' } }) }}
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_label(form.first_name) }}
-                {{ form_widget(form.first_name) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_label(form.last_name) }}
-                {{ form_widget(form.last_name) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_label(form.company_name) }}
-                {{ form_widget(form.company_name) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_label(form.email) }}
-                {{ form_widget(form.email) }}
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_label(form.address_1) }}
-                {{ form_widget(form.address_1) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_label(form.address_2) }}
-                {{ form_widget(form.address_2) }}
-            </div>
-        </div>
+                <!-- Nav tabs -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">User</a></li>
+                                <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Address</a></li>
+                                <li><a href="#tab_3" data-toggle="tab">Advanced</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.first_name) }}
+                                            {{ form_widget(form.first_name) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_label(form.last_name) }}
+                                            {{ form_widget(form.last_name) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.company_name) }}
+                                            {{ form_widget(form.company_name) }}
+                                            {{ form_label(form.phone) }}
+                                            {{ form_widget(form.phone) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_label(form.email) }}
+                                            {{ form_widget(form.email) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.address_1) }}
+                                            {{ form_widget(form.address_1) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_label(form.address_2) }}
+                                            {{ form_widget(form.address_2) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.city) }}
+                                            {{ form_widget(form.city) }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form_label(form.state) }}
+                                            {{ form_widget(form.state) }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form_label(form.zip) }}
+                                            {{ form_widget(form.zip) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.ach_routing_number) }}
+                                            {{ form_widget(form.ach_routing_number) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_label(form.ach_account_number) }}
+                                            {{ form_widget(form.ach_account_number) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_label(form.distributor_fedex_number) }}
+                                            {{ form_widget(form.distributor_fedex_number) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div>
+                    </div>
+                </div>
+                <div style="padding-top: 20px;">
+                    <input class="btn btn-raised btn-success" type="submit" value="Update"/>
+                </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_label(form.city) }}
-                {{ form_widget(form.city) }}
+                {{ form_end(form) }}
             </div>
-            <div class="col-md-2">
-                {{ form_label(form.state) }}
-                {{ form_widget(form.state) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_label(form.zip) }}
-                {{ form_widget(form.zip) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-            </div>
-        </div>
-        <div style="padding-top: 20px;">
-            <input class="btn btn-raised btn-success" type="submit" value="Update"/>
+
         </div>
     </div>
-
 </div>
 
-{{ form_end(form) }}
+
 
