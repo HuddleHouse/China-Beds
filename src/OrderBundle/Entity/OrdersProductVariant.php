@@ -49,12 +49,6 @@ class OrdersProductVariant
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\PromoKitOrders", inversedBy="productVariants")
-     * @ORM\JoinColumn(name="promo_kit_order_id", referencedColumnName="id")
-     */
-    private $promo_kit_order;
-
-    /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersWarehouseInfo", mappedBy="orders_product_variant")
      */
     private $warehouse_info;
@@ -161,22 +155,6 @@ class OrdersProductVariant
     public function getWarehouseInfo()
     {
         return $this->warehouse_info;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPromoKitOrder()
-    {
-        return $this->promo_kit_order;
-    }
-
-    /**
-     * @param mixed $promo_kit_order
-     */
-    public function setPromoKitOrder($promo_kit_order)
-    {
-        $this->promo_kit_order = $promo_kit_order;
     }
 
     /**
