@@ -54,7 +54,7 @@ class RebateController extends Controller
                 $em->persist($rebate);
                 $em->flush();
                 $this->addFlash('notice', 'Rebate Created successfully.');
-                return $this->redirectToRoute('rebate_show', array('id' => $rebate->getId()));
+                return $this->redirectToRoute('rebate_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error creating Rebate ' . $e->getMessage());

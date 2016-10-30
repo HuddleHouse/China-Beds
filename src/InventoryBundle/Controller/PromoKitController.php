@@ -72,7 +72,7 @@ class PromoKitController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($promoKit);
                 $em->flush();
-                $this->addFlash('notice', 'Promo Kit created successfully.');
+                $this->addFlash('notice', 'Promo Kit Item created successfully.');
 
                 return $this->redirectToRoute('promokit_index');
             }
