@@ -78,6 +78,8 @@ class WarrantyClaimController extends Controller
         }
     }
 
+
+
     /**
      * Show a Warranty Claim
      *

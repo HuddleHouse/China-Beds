@@ -234,6 +234,8 @@ class WarrantyClaimController extends Controller
         return $this->redirectToRoute('warrantyclaim_index');
     }
 
+
+
     /**
      * Creates a form to delete a WarrantyClaim entity.
      *

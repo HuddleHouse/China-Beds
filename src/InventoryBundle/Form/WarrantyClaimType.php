@@ -125,6 +125,8 @@ class WarrantyClaimType extends AbstractType
             );
     }
 
+
+
     /**
      * @param OptionsResolver $resolver
      */
