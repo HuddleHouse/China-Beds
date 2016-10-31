@@ -53,7 +53,7 @@ class Resource
     public $path;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="resources")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
      */
     private $channel;

@@ -369,6 +369,11 @@ class Channel
     protected $rebate_submissions;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Resource", mappedBy="channel")
+     */
+    private $resources;
+
+    /**
      * Channel constructor.
      */
     public function __construct() {
@@ -378,6 +383,7 @@ class Channel
         $this->warranty_claims = new ArrayCollection();
         $this->rebates = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
+        $this->resources = new ArrayCollection();
     }
 
     /**
@@ -1728,5 +1734,21 @@ class Channel
     public function getDetailMattressFooter()
     {
         return $this->detailMattressFooter;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResources()
+    {
+        return $this->resources;
+    }
+
+    /**
+     * @param mixed $resources
+     */
+    public function setResources($resources)
+    {
+        $this->resources = $resources;
     }
 }
