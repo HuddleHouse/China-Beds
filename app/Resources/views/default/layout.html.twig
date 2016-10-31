@@ -435,8 +435,8 @@
                         </li>
 
                         <li class="header">LINKS</li>
-                        <li>
-                            <a href="#">
+                        <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
+                            <a href="{{ path('resource_index') }}">
                                 <i class="fa fa-circle-o text-aqua"></i>
                                 <span>Resources</span>
                             </a>
