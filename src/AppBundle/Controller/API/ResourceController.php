@@ -50,23 +50,6 @@ class ResourceController extends Controller
     }
 
     /**
-     * Show a Resource Upload Form
-     *
-     * @Route("/api_show_resource", name="api_show_resource")
-     * @Method("GET")
-     */
-    public function showAction()
-    {
-        try {
-            $template = $this->renderView('@App/Resource/modal-show.html.twig');
-            return new JsonResponse(array(true, $template));
-        }
-        catch(\Exception $e) {
-            return new JsonResponse(array(false, $e->getMessage()));
-        }
-    }
-
-    /**
      * Deletes a Resource file and entity.
      *
      * @Route("/api_resource_delete", name="api_resource_delete")
