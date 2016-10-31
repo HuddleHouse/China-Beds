@@ -7,6 +7,8 @@ use AppBundle\Services\BaseService;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Entity\WarrantyClaim;
 use OrderBundle\Entity\Orders;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use WarehouseBundle\Entity\PurchaseOrder;
 use WarehouseBundle\Entity\Warehouse;
 
 class EmailService extends BaseService
@@ -76,14 +78,57 @@ class EmailService extends BaseService
             ));
     }
 
-    public function sendPortETAEmail() {
+    public function sendPortETAEmail(PurchaseOrder $po) {
+        $settings = $this->container->get('settings_service');
+
+        if($settings->get('warehouse-po-eta') == 'yes') {
+            $url = $this->generateUrl('purchaseorder_show', array('id' => $po->getId()));
 //        When the Port ETA is updated (later, after initial entry of PO)
 //        Warehouse that will be receiving the stock receives email with full PO information.
 //        should spool up an email to be sent at ETA
+            $this->sendEmail(array(
+                'subject' => 'Port ETA Updated',
+                'from' => $po->getUser()->getUserChannels()->first()->getEmailUrl(),
+                'to' => $po->getWarehouse()->getEmail(),
+                'body' => 'Hello,\n\n'.
+                    'You are receiving this email because your Purchase Order #' . $po->getOrderNumber() . ' is expected for to arrive on ' . $po->getStockDueDate()->format('m/d/y') .
+                    '.\n\nFeel free to <a href="'.$url.'">click here</a> or paste the link below in your browser for details.\n\n' . $url
+            ));
+        }
     }
 
-    public function sendETAUpdateEmail() {
+    public function sendETAUpdateEmail(PurchaseOrder $po) {
+        $settings = $this->container->get('settings_service');
+        if($settings->get('warehouse-po-reminder') == 'yes') {
+            $url = $this->generateUrl('purchaseorder_show', array('id' => $po->getId()));
+            $confirm_url = $this->generateUrl('api_purchase_order_receive_all', array());
 //        On the Warehouse Eta date
 //        Resend the same email with full PO information. This email should have contain a "confirm" or "Edit" link/button that the warehouse can use to quickly alert us that the stock has been received.
+            $this->sendEmail(array(
+                'subject' => 'Port ETA Updated',
+                'from' => $po->getUser()->getUserChannels()->first()->getEmailUrl(),
+                'to' => $po->getWarehouse()->getEmail(),
+                'body' => 'Hello,\n\n'.
+                    'You are receiving this email because your Purchase Order #' . $po->getOrderNumber() . ' is expected for to arrive today.' .
+                    '.\n\nFeel free to <a href="'.$url.'">click here</a> or paste the link below in your browser for details.' .
+                    '\n\n' . $url
+            ));
+        }
+    }
+
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string $route         The name of the route
+     * @param mixed  $parameters    An array of parameters
+     * @param int    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 }

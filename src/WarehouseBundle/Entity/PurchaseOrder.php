@@ -253,7 +253,7 @@ class PurchaseOrder
     /**
      * Get warehouseId
      *
-     * @return int
+     * @return Warehouse
      */
     public function getWarehouse()
     {
@@ -285,7 +285,7 @@ class PurchaseOrder
     }
 
     /**
-     * @return mixed
+     * @return \AppBundle\Entity\User
      */
     public function getUser()
     {
