@@ -1,8 +1,8 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Resources{% endblock %}
+{% block title %}{{ channel.name }} Resources{% endblock %}
 {% block page_title %}
-    Resource Listing
+    {{ channel.name }} Resources
 {% endblock page_title %}
 
 {% block page_name %}
@@ -133,7 +133,7 @@
             <i class="material-icons">add</i>
         </a>
         <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-            Upload Resource
+            Upload {{ channel.name }} Resource
         </div>
         <!-- Modal -->
         <div class="modal fade" id="resourceModal" tabindex="-1" role="dialog" aria-labelledby="resourceModalLabel">
@@ -141,7 +141,7 @@
                 <div class="modal-content" id="resource-modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="resourceModalLabel">Upload Resource</h4>
+                        <h4 class="modal-title" id="resourceModalLabel">Upload {{ channel.name }} Resource</h4>
                     </div>
                     <div id="resource-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
                         <div class="form-body">

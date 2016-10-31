@@ -467,6 +467,16 @@ class Channel
     }
 
     /**
+     * @return string
+     */
+    public function getEmailUrl()
+    {
+        if(substr($this->url, 0, 4) == 'www.')
+            return 'no-reply@' . substr($this->url, 5);
+        return 'no-reply@' . $this->url;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getProductChannels()

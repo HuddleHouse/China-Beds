@@ -150,6 +150,35 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
+        $groups = $this->getUser()->getGroupsArray();
+        $is_dis = $is_retail = 0;
+
+        if(isset($groups['Retailer']))
+            $is_retail = 1;
+        if(isset($groups['Distributor']))
+            $is_dis = 1;
+        $pop = $order->getPopItems();
+
+        $manualItems = $order->getManualItems();
+        $manualCount = 0;
+        foreach($manualItems as $manualItem) {
+            $manualCount++;
+        }
+
+        $this->container->get('email_service')->sendOrderEmails($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
+                'channel' => $channel,
+                'order' => $order,
+                'user' => $this->getUser(),
+                'product_data' => $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order),
+                'is_retail' => $is_retail,
+                'is_dis' => $is_dis,
+                'pop_items' => $pop,
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+                'manual_items' => $manualItems,
+                'manual_items_count' => $manualCount
+            )
+        ));
+
         return JsonResponse::create($order->getId());
     }
 

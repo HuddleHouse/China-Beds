@@ -24,10 +24,11 @@ class ResourceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $resources = $em->getRepository('AppBundle:Resource')->findAll();
+        $resources = $em->getRepository('AppBundle:Resource')->findBy(array('channel' => $this->getUser()->getActiveChannel()));
 
         return $this->render('AppBundle:Resource:index.html.twig', array(
             'resources' => $resources,
+            'channel' => $this->getUser()->getActiveChannel(),
         ));
     }
 }

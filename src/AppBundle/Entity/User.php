@@ -1267,7 +1267,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return null
+     * @return Channel
      */
     public function getActiveChannel()
     {
@@ -1275,7 +1275,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param null $active_channel
+     * @param Channel $active_channel
      */
     public function setActiveChannel(Channel $active_channel)
     {
