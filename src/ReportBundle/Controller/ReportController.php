@@ -112,6 +112,8 @@ class ReportController extends Controller
 
         $report = array();
 
+        $report['title'] = 'Monthly Order Report';
+
         $report['headers'] = array(
             'Order ID',
             'Order Number',
@@ -121,7 +123,6 @@ class ReportController extends Controller
             'Address',
             'Shipping Amount',
             'Order Amount'
-
         );
 
         $d = new \DateTime();
@@ -148,5 +149,51 @@ class ReportController extends Controller
         return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y') ));
     }
 
+    /**
+     * Retailer and Distributor Ledger Reports for Accounting
+     *
+     * @Route("/accounting_ledger", name="accounting_ledger")
+     * @Method({"GET", "POST"})
+     */
+    public function ledgerReportAction(Request $request){
+        if($request->get('uid') != null) {
+            $user = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->find($request->get('uid'));
+            $report = array();
+            $report['title'] = $user->getFullName() . ' Ledger Report';
+            $report['headers'] = array(
+                'Type',
+                'Date',
+                'User',
+                'ACH Status',
+                'Amount'
+            );
+            $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->findBy(array('submittedForUser' => $request->get('uid')), array('dateCreated' => 'DESC'));
+            $total = $user->getLedgerTotal($this->getUser()->getActiveChannel()->getId());
+            return $this->render('ReportBundle:Reports:ledger.html.twig', array('report' => $report, 'total' => $total, 'user' => $user));
+        }
 
+        return $this->render('ReportBundle:Reports:ledger.html.twig', array());
+    }
+
+    /**
+     * Retailer and Distributor Price Lists for Accounting
+     *
+     * @Route("/price_list", name="price_list")
+     * @Method({"GET", "POST"})
+     */
+    public function priceListAction(Request $request){
+        if($request->get('uid') != null) {
+            $user = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->find($request->get('uid'));
+            $report = array();
+            $report['title'] = $user->getFullName() . ' Price List';
+            $report['headers'] = array(
+                'Product',
+                'Price'
+            );
+            $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user);
+            return $this->render('ReportBundle:Reports:price-list.html.twig', array('report' => $report, 'user' => $user));
+        }
+
+        return $this->render('ReportBundle:Reports:price-list.html.twig', array());
+    }
 }
