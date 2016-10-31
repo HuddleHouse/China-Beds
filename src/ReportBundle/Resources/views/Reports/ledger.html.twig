@@ -1,0 +1,98 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Ledger Report') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Select a user to see their ledger history.') }}
+{% endblock page_title %}
+
+{% block page_name %}
+    {% if total is defined %}
+        Balance: ${{ total | number_format(2) }}
+    {% endif %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 1, "desc" ]] });
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ path('api_get_distributors') }}",
+                dataType: 'json',
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+                    $('#distributors').html(data);
+                }
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ path('api_get_retailers') }}",
+                dataType: 'json',
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+                    $('#retailers').html(data);
+                }
+            });
+        });
+
+        function fetchLedger(id){
+            var route = '{{ path('accounting_ledger') }}';
+            location.href = route + '?uid=' + id;
+        }
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2">
+            <label class="form-control" for="retailers">Retailers</label>
+            <select id="retailers" class="form-control" onchange="fetchLedger(this.value)">
+                <option>Loading...</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-control" for="distributors">Distributors</label>
+            <select id="distributors" class="form-control" onchange="fetchLedger(this.value)">
+                <option>Loading...</option>
+            </select>
+        </div>
+    </div>
+    {% if(report is defined) %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table">
+                    <table id="part-table" class="table table-striped table-hover table-bordered no-footer" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            {% for header in report.headers %}
+                                <th>{{ header | default('') }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ledger in report.data %}
+                            <tr>
+                                <td>{{ ledger.type | default('--') }}</td>
+                                <td>{{ ledger.dateCreated | date('m/d/y h:i:s A') }}</td>
+                                <td>{{ ledger.submittedForUser.fullName }}</td>
+                                <td>{% if ledger.type|upper == 'CREDIT"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% else %}--{% endif %}</td>
+                                {% if ledger.amountCredited >= 0 %}
+                                    <td style="text-align: right">${{ ledger.amountCredited | number_format(2) }}</td>
+                                {% else %}
+                                    <td style="text-align: right">$<span style="color:red">{{ ledger.amountCredited | number_format(2) }}</span></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

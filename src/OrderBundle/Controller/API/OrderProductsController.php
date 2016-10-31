@@ -220,7 +220,7 @@ class OrderProductsController extends Controller
         $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
 
         if($warehouse_id != null && $warehouse_id != 0)
-            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse, null, null, 1);
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, $warehouse, null, 1);
         else
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
 

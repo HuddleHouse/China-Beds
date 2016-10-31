@@ -1,0 +1,83 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Recent Orders') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Recent Orders') }}
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="" class="table table-striped table-hover table-bordered no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        {% for header in report.headers %}
+                            <th>{{ header | default('') }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in report.data %}
+                        <tr>
+                            <td><a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderId | default('--') }}</a></td>
+                            <td>{{ order.orderNumber | default('--') }}</td>
+                            <td>{{ order.pickUpDate | date('m/d/y H:i') | default('--') }}</td>
+                            <td>{{ order.shipName | default('--') }}</td>
+                            <td>{{ order.submittedForUser.fullName | default('--') }}</td>
+                            <td>{{ order.shipAddress | default('--') }}</td>
+                            <td style="text-align:right">${{ order.shipping | number_format(2) | default('--') }}</td>
+                            <td style="text-align:right">${{ order.subtotal | number_format(2) | default('--') }}</td>
+                            <td>
+                                {% if order.status.name == 'Paid' or order.status.name == 'Shipped' %}
+                                    <ul>
+                                        {% for label in order.shippingLabels %}
+                                            <li>Tracking:
+                                                <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
+                                                    {{ label.trackingNumber }}
+                                                </a>
+                                                {% if is_granted('ROLE_ADMIN') ==1  %}
+                                                    -
+                                                    <a class="btn btn-raised btn-default btn-sm" href="/{{ label.webPath }}" download>
+                                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                                        Download Label
+                                                    </a>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% if report.total is not null %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:right">TOTAL : ${{ report.total | number_format(2) }}</td>
+                            <td></td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

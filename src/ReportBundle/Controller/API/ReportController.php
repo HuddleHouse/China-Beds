@@ -18,28 +18,31 @@ use Symfony\Component\Serializer\Serializer;
  */
 class ReportController extends Controller
 {
-
     /**
-     * Returns monthly report data.
+     * Returns all retailers for selects.
      *
-     * @Route("/api_monthly_report", name="api_monthly_report")
-     * @Method({"GET", "POST"})
+     * @Route("/api_get_retailers", name="api_get_retailers")
+     * @Method("GET")
      */
-    public function getMonthReportData(Request $request)
+    public function getRetailersAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-
+        $rtn = '<option>Select a Retailer</option>';
+        foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel()) as $retailer)
+            $rtn .= '<option value="'.$retailer->getId().'">'.$retailer->getFullName().'</option>';
+        return new JsonResponse($rtn);
     }
 
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Returns all distributors selects.
+     *
+     * @Route("/api_get_distributors", name="api_get_distributors")
+     * @Method("GET")
+     */
+    public function getDistributorsAction()
+    {
+        $rtn = '<option>Select a Distributor</option>';
+        foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllDistributorsArray() as $distributor)
+            $rtn .= '<option value="'.$distributor->getId().'">'.$distributor->getFullName().'</option>';
+        return new JsonResponse($rtn);
+    }
 }

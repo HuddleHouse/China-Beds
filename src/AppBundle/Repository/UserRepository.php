@@ -243,7 +243,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param Channel $channel
-     * @return array
+     * @return User[]
      *
      * Returns an array of all User Entities that are in the channel
      */
