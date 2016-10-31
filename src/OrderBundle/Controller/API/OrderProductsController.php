@@ -47,6 +47,7 @@ class OrderProductsController extends Controller
         //array indexed at prod variant id that tell you the ordered quantity
         $product_variant_order_quan = $request->request->get('product_variant_order_quan');
         $pop_order_quan = $request->request->get('pop_order_quan');
+        $warehouses = array();
 
         if($order_id == 0)
             $order = new Orders($info);
@@ -104,6 +105,7 @@ class OrderProductsController extends Controller
                             //we passed in the complete warehouse quantities at start so we know where to go ahead and pull the inventory from.
                             foreach($variant['warehouse_data'] as $warehouse_data) {
                                 $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_data['warehouse_id']);
+                                $warehouses[] = $warehouse_data['warehouse_id'];
                                 if($quantity <= $warehouse_data['quantity']) {
                                     $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouse);
                                     $em->persist($orders_warehouse_info);
@@ -165,7 +167,7 @@ class OrderProductsController extends Controller
             $manualCount++;
         }
 
-        $this->container->get('email_service')->sendOrderEmails($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
+        $this->container->get('email_service')->sendOrderReceipt($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
                 'channel' => $channel,
                 'order' => $order,
                 'user' => $this->getUser(),
@@ -178,6 +180,37 @@ class OrderProductsController extends Controller
                 'manual_items_count' => $manualCount
             )
         ));
+
+        $warehouses = array_unique($warehouses);
+
+        foreach($warehouses as $warehouse_id) {
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $w);
+            $is_shipped = false;
+
+            foreach($product_data as $prod) {
+                foreach($prod as $item)
+                    if($item['shipped'] == true)
+                        $is_shipped = true;
+            }
+
+            if($is_shipped == true)
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
+            else
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
+
+
+            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+            $this->container->get('email_service')->sendWarehouseOrderReceipt($channel, $w, $this->renderView('@Order/OrderProducts/order-email-receipt-warehouse.html.twig', array(
+                'channel' => $channel,
+                'order' => $order,
+                'product_data' => $product_data,
+                'is_retail' => $is_retail,
+                'is_dis' => $is_dis,
+                'pop_items' => $pop,
+                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+                'shipped_status' => $shipped_status
+            )));
+        }
 
         return JsonResponse::create($order->getId());
     }

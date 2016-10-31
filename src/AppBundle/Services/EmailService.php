@@ -7,6 +7,7 @@ use AppBundle\Services\BaseService;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Entity\WarrantyClaim;
 use OrderBundle\Entity\Orders;
+use WarehouseBundle\Entity\Warehouse;
 
 class EmailService extends BaseService
 {
@@ -15,8 +16,7 @@ class EmailService extends BaseService
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
             ->setFrom($data['from'])
-            //->setTo($data['to'])
-            ->setTo('rajeffords@gmail.com')
+            ->setTo($data['to'])
             ->setBody($data['body'], 'text/html');
 
         $this->mailer->send($message);
@@ -27,7 +27,7 @@ class EmailService extends BaseService
      * @param Orders $order
      * @param $orderReceipt
      */
-    public function sendOrderEmails(Channel $channel, Orders $order, $orderReceipt) {
+    public function sendOrderReceipt(Channel $channel, Orders $order, $orderReceipt) {
         $settings = $this->container->get('settings_service');
 
         if($settings->get('user-receipt') == 'yes') {
@@ -38,14 +38,23 @@ class EmailService extends BaseService
                 'body' => $orderReceipt
             ));
         }
+    }
 
-        if($settings->get('warehouse-receipt') == 'yes') {
-//        $warehouses = array();
-//        foreach($order->getProductVariants() as $productVariant) {
-//            foreach($productVariant->getWarehouseInfo() as $warehouseInfo) {
-//                $warehouse = $warehouseInfo->getWarehouse();
-//                $warehouses[$warehouse->getName()]['email'] = $warehouse->getEmail();
-//            }
+    /**
+     * @param Channel $channel
+     * @param Warehouse $warehouse
+     * @param $orderReceipt
+     */
+    public function sendWarehouseOrderReceipt(Channel $channel, Warehouse $warehouse, $orderReceipt) {
+        $settings = $this->container->get('settings_service');
+
+        if($settings->get('warehouse-receipt') == 'yes' && $warehouse->getEmail() != null) {
+            $this->sendEmail(array(
+                'subject' => $channel->getName() . ' Order Receipt',
+                'from' => $channel->getEmailUrl(),
+                'to' => $warehouse->getEmail(),
+                'body' => $orderReceipt
+            ));
         }
     }
 
