@@ -26,16 +26,16 @@ class ResourceController extends Controller
     {
         $data = $request->get('resource');
         $file = $request->files->get('resource')['file'];
+        $channel = $this->getDoctrine()->getEntityManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
 
         try {
             $resource = new Resource();
             $resource->setName($data['name']);
-            $resource->setChannel($this->getUser()->getActiveChannel());
+            $resource->setChannel($channel);
             $resource->setFile($file);
             $resource->upload();
             $resource->setDateCreated(new \DateTime());
             $this->getDoctrine()->getEntityManager()->persist($resource);
-            $this->getDoctrine()->getEntityManager()->persist($resource->getChannel());
             $this->getDoctrine()->getEntityManager()->flush();
 
             $rtn = array(
