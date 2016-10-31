@@ -45,6 +45,7 @@ class WebsiteController extends BaseController
         ));
     }
 
+
     public function warrantyIndexAction()
     {
         return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
