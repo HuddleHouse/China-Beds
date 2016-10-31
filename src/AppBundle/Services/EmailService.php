@@ -14,9 +14,10 @@ class EmailService extends BaseService
     {
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
-            ->setFrom($data['from'])
+            ->setFrom('matt@245tech.com')
+//            ->setFrom($data['from'])
             //->setTo($data['to'])
-            ->setTo('rajeffords@gmail.com')
+            ->setTo('mthuddleston@gmail.com')
             ->setBody($data['body'], 'text/html');
 
         $this->mailer->send($message);
