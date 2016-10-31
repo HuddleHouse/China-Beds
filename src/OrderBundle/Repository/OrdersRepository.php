@@ -218,5 +218,4 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
             ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
         return $qb->getQuery()->getResult();
     }
-
 }

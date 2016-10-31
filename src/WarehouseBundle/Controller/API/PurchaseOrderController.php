@@ -177,7 +177,6 @@ class PurchaseOrderController extends Controller
             return JsonResponse::create(false);
         }
 
-
         return JsonResponse::create($po->getId());
     }
 
@@ -236,11 +235,13 @@ class PurchaseOrderController extends Controller
 
         $em->persist($purchase);
 
-        try{
+        try {
             $em->flush();
-        }catch(\Exception $e){
+        } catch(\Exception $e){
             return JsonResponse::create(false);
         }
+
+        $this->container->get('email_service')->sendPortETAEmail($purchase);
 
         return JsonResponse::create($purchase->getId());
     }

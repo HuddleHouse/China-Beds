@@ -17,60 +17,13 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * @Route("/admin")
  */
 class AdminController extends Controller
 {
-    /**
-     * @Route("/{id_channel}/test/{id_order}", name="test_email")
-     * @ParamConverter("channel", class="InventoryBundle:Channel", options={"id" = "id_channel"})
-     * @ParamConverter("order", class="OrderBundle:Orders", options={"id" = "id_order"})
-     * @Method("GET")
-     */
-    public function testEmailAction(Channel $channel, Orders $order)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        if($em->getRepository('AppBundle:User')->canViewOrder($order, $this->getUser()) == 1) {
-            $user = $this->getUser();
-            $user_channels = $user->getUserChannelsArray();
-
-            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order);
-
-            $groups = $user->getGroupsArray();
-            $is_dis = $is_retail = 0;
-
-            if(isset($groups['Retailer']))
-                $is_retail = 1;
-            if(isset($groups['Distributor']))
-                $is_dis = 1;
-            $pop = $order->getPopItems();
-
-            $manualItems = $order->getManualItems();
-            $manualCount = 0;
-            foreach($manualItems as $manualItem) {
-                $manualCount++;
-            }
-
-            return $this->render('@Order/OrderProducts/order-email-receipt.html.twig', array(
-                'channel' => $channel,
-                'order' => $order,
-                'user' => $user,
-                'product_data' => $product_data,
-                'is_retail' => $is_retail,
-                'is_dis' => $is_dis,
-                'pop_items' => $pop,
-                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'manual_items' => $manualItems,
-                'manual_items_count' => $manualCount
-            ));
-        }
-        else
-            return $this->redirectToRoute('404');
-    }
-
     /**
      * @Route("/view-users", name="view_users")
      */
