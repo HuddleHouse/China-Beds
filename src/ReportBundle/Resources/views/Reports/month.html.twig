@@ -63,59 +63,59 @@
             {#var noGreaterThen = null;#}
 
             {#switch(month){#}
-                {#case 'January':#}
-                    {#noGreaterThan = 0;#}
-                    {#if(thisMonth < noGreaterThan){#}
-                        {#//return '';#}
-                        {#console.log('this month hasnt happened yet');#}
-                    {#}else{#}
-                        {#console.log('attempting tp update datatable');#}
-                        {#$.ajax({#}
-                            {#type: 'POST',#}
-                            {#url: Routing.generate('api_monthly_report'),#}
-                            {#dataType: 'json',#}
-                            {#data: {'month' : 01},#}
-                            {#success: function (data) {#}
-                                {#{% set report %}data{% endset %}#}
-                            {#}#}
-                        {#})#}
-                    {#}#}
-                    {#break;#}
-                {#case 'Febuary':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'March':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'April':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'May':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'June':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'July':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'August':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'September':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'October':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'November':#}
-                    {#//#}
-                    {#break;#}
-                {#case 'December':#}
-                    {#//#}
-                    {#break;#}
-                {#default:#}
-                    {#break;#}
+            {#case 'January':#}
+            {#noGreaterThan = 0;#}
+            {#if(thisMonth < noGreaterThan){#}
+            {#//return '';#}
+            {#console.log('this month hasnt happened yet');#}
+            {#}else{#}
+            {#console.log('attempting tp update datatable');#}
+            {#$.ajax({#}
+            {#type: 'POST',#}
+            {#url: Routing.generate('api_monthly_report'),#}
+            {#dataType: 'json',#}
+            {#data: {'month' : 01},#}
+            {#success: function (data) {#}
+            {#{% set report %}data{% endset %}#}
+            {#}#}
+            {#})#}
+            {#}#}
+            {#break;#}
+            {#case 'Febuary':#}
+            {#//#}
+            {#break;#}
+            {#case 'March':#}
+            {#//#}
+            {#break;#}
+            {#case 'April':#}
+            {#//#}
+            {#break;#}
+            {#case 'May':#}
+            {#//#}
+            {#break;#}
+            {#case 'June':#}
+            {#//#}
+            {#break;#}
+            {#case 'July':#}
+            {#//#}
+            {#break;#}
+            {#case 'August':#}
+            {#//#}
+            {#break;#}
+            {#case 'September':#}
+            {#//#}
+            {#break;#}
+            {#case 'October':#}
+            {#//#}
+            {#break;#}
+            {#case 'November':#}
+            {#//#}
+            {#break;#}
+            {#case 'December':#}
+            {#//#}
+            {#break;#}
+            {#default:#}
+            {#break;#}
             {#}#}
         }
 
@@ -124,21 +124,23 @@
 
 {% block content %}
     <div class="row">
-        <select onchange="fetchMonth(this.value)">
-            <option>Pick a Month</option>
-            <option value="01">January {{ date }}</option>
-            <option value="02">Febuary {{ date }}</option>
-            <option value="03">March {{ date }}</option>
-            <option value="04">April {{ date }}</option>
-            <option value="05">May {{ date }}</option>
-            <option value="06">June {{ date }}</option>
-            <option value="07">July {{ date }}</option>
-            <option value="08">August {{ date }}</option>
-            <option value="09">September {{ date }}</option>
-            <option value="10">October {{ date }}</option>
-            <option value="11">November {{ date }}</option>
-            <option value="12">December {{ date }}</option>
-        </select>
+        <div class="col-md-2">
+            <select class="form-control" onchange="fetchMonth(this.value)">
+                <option>Pick a Month</option>
+                <option value="01">January {{ date }}</option>
+                <option value="02">Febuary {{ date }}</option>
+                <option value="03">March {{ date }}</option>
+                <option value="04">April {{ date }}</option>
+                <option value="05">May {{ date }}</option>
+                <option value="06">June {{ date }}</option>
+                <option value="07">July {{ date }}</option>
+                <option value="08">August {{ date }}</option>
+                <option value="09">September {{ date }}</option>
+                <option value="10">October {{ date }}</option>
+                <option value="11">November {{ date }}</option>
+                <option value="12">December {{ date }}</option>
+            </select>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">

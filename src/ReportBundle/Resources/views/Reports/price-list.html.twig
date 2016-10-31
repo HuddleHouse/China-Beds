@@ -1,0 +1,91 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Price List') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Select a user to see their price list.') }}
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 0, "desc" ]] });
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ path('api_get_distributors') }}",
+                dataType: 'json',
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+                    $('#distributors').html(data);
+                }
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ path('api_get_retailers') }}",
+                dataType: 'json',
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+                    $('#retailers').html(data);
+                }
+            });
+        });
+
+        function fetchList(id){
+            var route = '{{ path('price_list') }}';
+            location.href = route + '?uid=' + id;
+        }
+
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2">
+            <label class="form-control" for="retailers">Retailers</label>
+            <select id="retailers" class="form-control" onchange="fetchList(this.value)">
+                <option>Loading...</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-control" for="distributors">Distributors</label>
+            <select id="distributors" class="form-control" onchange="fetchList(this.value)">
+                <option>Loading...</option>
+            </select>
+        </div>
+    </div>
+    {% if(report is defined) %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table">
+                    <table id="part-table" class="table table-striped table-hover table-bordered no-footer" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            {% for header in report.headers %}
+                                <th>{{ header | default('') }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in report.data %}
+                            {% for variant in product.variants %}
+                                <tr>
+                                    <td>{{ product.name | default('--') }} {{ variant.name | default('--') }}</td>
+                                    <td style="text-align: right">${{ variant.cost | number_format(2) }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}
