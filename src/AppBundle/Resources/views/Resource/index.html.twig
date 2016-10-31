@@ -13,44 +13,47 @@
 
 {% block footer %}
     <script>
-        var table = '';
-        $(document).ready(function () {
-            table = $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 1, "desc" ]] });
-
-            $('#resourceModal').on('hidden.bs.modal', function (e) {
-                $('#resource-modal-content').addClass('expand');
-                $('#resource-modal-body').html('');
-            });
-        });
-
         function spinModal(id) {
             var target = document.getElementById(id);
             var spinner = new Spinner(opts).spin(target);
             target.appendChild(spinner.el);
         }
 
+        var table = '';
+        $(document).ready(function () {
+            table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 1, "desc" ]] });
+
+            $('#resourceModal').on('hidden.bs.modal', function (e) {
+                $('#resource-form').trigger('reset');
+            });
+
+            $('#resource-form').submit(function(e) {
+                spinModal('resource-modal-body');
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ path('api_save_resource') }}',
+                    type: 'POST',
+                    data: new FormData(this),
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(JSON.stringify(data,null,4));
+                        if (!data[0]) {
+                            showErrorInModal('Error: ' + data[1]);
+                        }
+                        else {
+                            $('#resourceModal').modal('hide');
+                            addRow(data[1]);
+                        }
+                    }
+                });
+                $('.spinner').hide();
+            });
+        });
+
         function showResourceForm() {
             $('#resourceModal').modal('show');
-            spinModal('resource-modal-content');
-            $.ajax({
-                type: 'GET',
-                url: "{{ path('api_show_resource') }}",
-                dataType: 'json',
-                success: function (data) {
-//                    console.log(JSON.stringify(data,null,4));
-
-                    $('.spinner').hide();
-                    if(!data[0]) {
-                        $('#resourceModal').modal('hide');
-                        showErrorModal('Error: ' + data[1]);
-                    }
-                    else {
-                        $('#resource-modal-content').removeClass('expand');
-                        $('#resource-modal-body').html(data[1]);
-                    }
-                }
-            });
         }
 
         function deleteResource(id, el) {
@@ -72,6 +75,28 @@
 
         function addRow(data) {
             table.row.add(data).draw(false);
+        }
+
+        function openFileBrowser() {
+            $('#resource_file').click();
+        }
+
+        function showErrorInModal(message) {
+            $('#error-in-modal').append(
+                    '<div class="col-lg-12 alert alert-danger alert-dismissable"> ' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"> ' +
+                    '<span aria-hidden="true">&times;</span> ' +
+                    '</button> ' +
+                    message +
+                    '</div>'
+            );
+        }
+
+        function autoFillName() {
+            if($('#resource_name').val() == "") {
+                var fname = $('#resource_file')[0].files[0].name;
+                $('#resource_name').val(fname.substr(0, fname.indexOf('.')));
+            }
         }
     </script>
 {% endblock footer %}
@@ -117,12 +142,38 @@
     <!-- Modal -->
     <div class="modal fade" id="resourceModal" tabindex="-1" role="dialog" aria-labelledby="resourceModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content expand" id="resource-modal-content">
+            <div class="modal-content" id="resource-modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="resourceModalLabel">Upload Resource</h4>
                 </div>
                 <div id="resource-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
+                    <div class="form-body">
+                        <form id="resource-form">
+                            <div id="error-in-modal" class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group is-empty is-fileinput">
+                                    <label for="resource_file" class="required">File</label>
+                                    <div class="input-group">
+                                        <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse… <input type="file" id="resource_file" name="resource[file]" required="required" onchange="autoFillName()">
+                    </span>
+                                        </label>
+                                        <input type="text" id="resource_path" name="resource[path]" required="required" class="form-control" style="margin-bottom: 10px; margin-left: 10px;" onclick="openFileBrowser()" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="resource_name" class="required">Name</label>
+                                    <input type="text" id="resource_name" name="resource[name]" class="form-control" style="margin-bottom: 10px" onclick="this.select()" />
+                                </div>
+                            </div>
+                            <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Upload" style="float:right" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
