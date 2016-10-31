@@ -16,7 +16,7 @@ class PopItemRepository extends \Doctrine\ORM\EntityRepository
     public function getAllPopItemsArrayForCart(Channel $channel)
     {
         $em = $this->getEntityManager();
-        $pop = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $channel]);
+        $pop = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $channel, 'is_hide_on_order' => 0, 'active' => 1]);
         $data = array();
 
         foreach($pop as $popitem) {

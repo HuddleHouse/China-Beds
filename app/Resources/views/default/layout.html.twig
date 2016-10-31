@@ -131,7 +131,8 @@
         {% set sidebar_rebate = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_specification = ['specification_index', 'specification_new', 'specification_edit', 'specification_show'] %}
         {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
-        {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
+        {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit'] %}
+        {% set sidebar_promokit_orders = ['promokit_orders_index', 'promokit_new_order', 'promokit_edit_order'] %}
         {% set sidebar_status = ['status_index', 'status_new', 'status_edit', 'status_show'] %}
         {% set sidebar_stock_adjustment = ['stockadjustment_index', 'stockadjustment_new', 'stockadjustment_edit', 'stockadjustment_show'] %}
         {% set sidebar_purchase_orders = ['purchaseorder_index', 'purchaseorder_new', 'purchaseorder_edit', 'purchaseorder_show'] %}
@@ -175,6 +176,7 @@
                         {% elseif (app.request.get('_route') in sidebar_specification) %} active
                         {% elseif (app.request.get('_route') in sidebar_pop_item_edit) %} active
                         {% elseif (app.request.get('_route') in sidebar_promokit) %} active
+                        {% elseif (app.request.get('_route') in sidebar_promokit_orders) %} active
                         {% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -202,6 +204,9 @@
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_promokit) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Items</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in sidebar_promokit_orders) %} class="active"{% endif %}>
+                                    <a href="{{ path('promokit_orders_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Orders</a>
                                 </li>
                             </ul>
                         </li>
@@ -402,10 +407,11 @@
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
-
+                            {% if (app.request.get('_route') in ['retailer_affiliates']) %}
                                 <li {% if (app.request.get('_route') =='retailer_affiliates') %} class="active"{% endif %}>
                                     <a href="{{ path('retailer_affiliates') }}"><i class="fa fa-circle-o"></i>Affiliates Map</a>
                                 </li>
+                            {% endif %}
                             </ul>
                         </li>
 

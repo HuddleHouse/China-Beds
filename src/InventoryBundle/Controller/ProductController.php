@@ -174,7 +174,7 @@ class ProductController extends Controller
                 $this->addFlash('notice', 'Product deleted successfully.');
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error deleting Product ' . $e->getMessage());
+                $this->addFlash('error', 'This product cannot be deleted. You can make it inactive if you no longer want it to show up on on the website or order forms.');
                 return $this->redirectToRoute('admin_product_index');
             }
         }

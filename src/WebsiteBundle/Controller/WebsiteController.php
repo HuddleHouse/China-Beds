@@ -45,9 +45,18 @@ class WebsiteController extends BaseController
         ));
     }
 
+
     public function warrantyIndexAction()
     {
         return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
+            'site' => strtolower($this->getChannel()->getName()),
+            'channel' => $this->getChannel()
+        ));
+    }
+
+    public function termsIndexAction()
+    {
+        return $this->render('WebsiteBundle:Website:terms.html.twig', array(
             'site' => strtolower($this->getChannel()->getName()),
             'channel' => $this->getChannel()
         ));

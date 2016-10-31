@@ -26,7 +26,7 @@ class PopItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $popItems = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel'=>$this->getUser()->getActiveChannel()]);
+        $popItems = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $this->getUser()->getActiveChannel()]);
 
         return $this->render('@Inventory/Popitem/index.html.twig', array(
             'popItems' => $popItems,
@@ -102,7 +102,7 @@ class PopItemController extends Controller
                 return $this->redirectToRoute('pop_item_edit', array('id' => $popItem->getId()));
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error editing POP Item: ' . $e->getMessage());
+                $this->addFlash('error', 'Cannot delete POP Item. To remove from future orders and the website you can make it inactive.');
 
                 return $this->render('@Inventory/Popitem/edit.html.twig', array(
                     'popItem' => $popItem,

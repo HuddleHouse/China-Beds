@@ -29,6 +29,7 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             $product = $product_channel->getProduct();
 
             if ( $product->getHideBackEnd() ) { continue; }
+            if ( !$product->getActive() ) { continue; }
 
             // get first image url
             $image_url = '/';

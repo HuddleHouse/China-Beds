@@ -71,4 +71,23 @@ class PromoKitController extends Controller
         }
     }
 
+    /**
+     * Toggle Promo Kit Item active/inactive
+     *
+     * @Route("/api_change_promo_kit_item_active", name="api_change_promo_kit_item_active")
+     * @Method({"GET", "POST"})
+     */
+    public function changePromoKitItemActiveAction(Request $request)
+    {
+        try {
+            $promoKitItem = $this->getDoctrine()->getRepository('InventoryBundle:PromoKit')->find($request->get('promokit_id'));
+            $promoKitItem->setActive($request->get('active') == "true" ? true : false);
+            $this->getDoctrine()->getEntityManager()->persist($promoKitItem);
+            $this->getDoctrine()->getEntityManager()->flush();
+            return new JsonResponse(true);
+        }
+        catch(\Exception $e){
+            return new JsonResponse("Error changing Promo Kit Item status: ", $e->getMessage());
+        }
+    }
 }

@@ -53,6 +53,10 @@
                 else
                     $(row.child()).find('span.dtr-data span').html('Click to expand');
             });
+
+            $('.active-field').click(function() {
+                $(this).find('input').click();
+            });
         });
 
         function format(description, index) {
@@ -121,7 +125,7 @@
                                 <td>{{ rebate.name }}</td>
                                 {% if rebate.description is not null %}<td id="description"><span>Click to expand</span></td>
                                 {% else %} <td>--</td> {% endif %}
-                                <td><input type="checkbox" {% if rebate.active %}checked="checked"{% endif %} onchange="changeRebateActive({{ rebate.id }}, this.checked)" /></td>
+                                <td class="active-field"><input type="checkbox" {% if rebate.active %}checked="checked"{% endif %} onchange="changeRebateActive({{ rebate.id }}, this.checked)" /></td>
                                 <td>{{ rebate.channel.name | default('--') }}</td>
                                 <td>
                                     <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('rebate_edit', { 'id': rebate.id }) }}">Edit</a>
