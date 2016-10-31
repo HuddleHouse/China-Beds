@@ -13,12 +13,18 @@ use WarehouseBundle\Entity\Warehouse;
  */
 class ChannelRepository extends \Doctrine\ORM\EntityRepository
 {
-
+    /**
+     * @param Channel $channel
+     * @param User $user
+     * @param Warehouse|null $warehouse
+     * @param null $categories
+     * @param null $include_closeouts
+     * @return array
+     */
     public function getProductArrayForChannel(Channel $channel, User $user, Warehouse $warehouse = null, $categories = null, $include_closeouts = null)
     {
         // select all products that are in the channel
         // get all product variants for it.
-
         $em = $this->getEntityManager();
         $product_channels = $em->getRepository('InventoryBundle:ProductChannel')->findBy(array('channel' => $channel));
         $product_data = array();
