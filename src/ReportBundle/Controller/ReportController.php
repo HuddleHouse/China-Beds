@@ -103,12 +103,12 @@ class ReportController extends Controller
     }
 
     /**
-     * Description
+     * General monthly order report
      *
      * @Route("/monthly_order", name="monthly_order")
      * @Method({"GET", "POST"})
      */
-    public function monthOrderAction(Request $request){
+    public function monthlyOrderAction(Request $request){
 
         $report = array();
 
@@ -147,6 +147,87 @@ class ReportController extends Controller
         }
 
         return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y') ));
+    }
+
+    /**
+     * recent orders w/tracking
+     *
+     * @Route("/recent_orders", name="recent_orders")
+     * @Method({"GET", "POST"})
+     */
+    public function recentOrderAction(Request $request){
+        $report = array();
+        $report['title'] = 'Recent Orders';
+        $report['headers'] = array(
+            'Order ID',
+            'Order Number',
+            'Pickup Date',
+            'Ship Name',
+            'User Name',
+            'Address',
+            'Shipping Amount',
+            'Order Amount',
+            'Shipping Info/Tracking Numbers'
+        );
+
+        $em = $this->getDoctrine()->getManager();
+        $orders = $em->getRepository('OrderBundle:Orders');
+        $query = $orders->createQueryBuilder('o')
+            ->where('o.submitted_for_user = :user')
+            ->orderBy('o.submitDate', 'DESC')
+            ->setParameter('user', $this->getUser());
+        $result = $query->getQuery()->getResult();
+
+        $report['data'] = $result;
+
+        $report['total'] = 0;
+        foreach ($report['data'] as $order){
+            $report['total'] += $order->getSubtotal();
+        }
+
+        return $this->render('ReportBundle:Reports:recent-orders.html.twig', array('report' => $report, 'date' => date('Y') ));
+    }
+
+    /**
+     * recent orders w/tracking for sales
+     *
+     * @Route("/all_recent_orders", name="all_recent_orders")
+     * @Method({"GET", "POST"})
+     */
+    public function allRecentOrdersAction(Request $request){
+        $report = array();
+        $report['title'] = 'All Recent Orders';
+        $report['headers'] = array(
+            'Order ID',
+            'Order Number',
+            'Pickup Date',
+            'Ship Name',
+            'User Name',
+            'Address',
+            'Shipping Amount',
+            'Order Amount',
+            'Shipping Info/Tracking Numbers'
+        );
+
+        $date = new \DateTime();
+        $date = $date->sub(new \DateInterval('P1W'));
+
+        $em = $this->getDoctrine()->getManager();
+        $orders = $em->getRepository('OrderBundle:Orders');
+        $query = $orders->createQueryBuilder('o')
+            ->orderBy('o.submitDate', 'DESC')
+            ->where('o.submitDate >= :aweekago')
+            ->setParameter('aweekago', $date);
+        $result = $query->getQuery()->getResult();
+
+        $report['data'] = $result;
+
+        $report['total'] = 0;
+        foreach ($report['data'] as $order){
+            $report['total'] += $order->getSubtotal();
+        }
+
+        return $this->render('ReportBundle:Reports:recent-orders.html.twig', array('report' => $report, 'date' => date('Y') ));
     }
 
     /**
@@ -195,5 +276,29 @@ class ReportController extends Controller
         }
 
         return $this->render('ReportBundle:Reports:price-list.html.twig', array());
+    }
+
+    /**
+     * Contact List
+     *
+     * @Route("/contact_list", name="contact_list")
+     * @Method({"GET", "POST"})
+     */
+    public function contactListAction(Request $request){
+        $report = array();
+        $report['title'] = $this->getUser()->getActiveChannel()->getName() . ' Contact List';
+        $report['headers'] = array(
+            'Username',
+            'Email',
+            'Phone #',
+            'Last Login',
+            'Full Name',
+            'Address',
+            'City',
+            'State',
+            'Zip Code',
+        );
+        $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->findUsersByChannel($this->getUser()->getActiveChannel());
+        return $this->render('ReportBundle:Reports:contact-list.html.twig', array('report' => $report));
     }
 }
