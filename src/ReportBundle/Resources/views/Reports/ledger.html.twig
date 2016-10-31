@@ -6,6 +6,9 @@
 {% endblock page_title %}
 
 {% block page_name %}
+    {% if total is defined %}
+        Balance: ${{ total | number_format(2) }}
+    {% endif %}
 {% endblock page_name %}
 
 {% block actions %}
@@ -42,7 +45,6 @@
             var route = '{{ path('accounting_ledger') }}';
             location.href = route + '?uid=' + id;
         }
-
     </script>
 {% endblock footer %}
 
@@ -87,15 +89,6 @@
                                 {% endif %}
                             </tr>
                         {% endfor %}
-                        {% if total is not null %}
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="text-align: right">BALANCE : ${{ total | number_format(2) }}</td>
-                            </tr>
-                        {% endif %}
                         </tbody>
                     </table>
                 </div>
