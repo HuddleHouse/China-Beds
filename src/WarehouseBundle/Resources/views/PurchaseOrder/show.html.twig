@@ -46,6 +46,7 @@
                 self.setActive   = setActive;
                 self.updatePurchaseOrderNumbers = updatePurchaseOrderNumbers;
                 self.receiveAll   = receiveAll;
+                self.removeCartItem = removeCartItem;
                 self.getWarehouseInv   = getWarehouseInv;
                 self.save = save;
                 self.warehouseChange = warehouseChange;
@@ -64,6 +65,7 @@
                 self.physicalContainerNumber = '{{ purchaseOrder.physicalContainerNumber }}';
                 self.factoryOrderNumber = '{{ purchaseOrder.factoryOrderNumber }}';
                 self.updateETA = updateETA;
+                self.updateIt = updateIt;
                 self.all_warehouse_inventory = {};
 
                 self.date = (self.due_date.getTime() + 432000000);
@@ -128,6 +130,8 @@
                 }
 
                 function querySearch (query) {
+                    $("html").css("overflow-y", "initial");
+
                     var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
                             deferred;
                     if (self.simulateQuery) {
@@ -140,10 +144,13 @@
                 }
 
                 function searchTextChange(text) {
+                    $("html").css("overflow-y", "initial");
+
                     $log.info('Text changed to ' + text);
                 }
 
                 function selectedItemChange(item) {
+                    $("html").css("overflow-y", "initial");
 
                     if(item != undefined) {
                         if(!self.cart_items[self.selectedItem.id]) {
@@ -178,6 +185,8 @@
                  * Create filter function for a query string
                  */
                 function createFilterFor(query) {
+                    $("html").css("overflow-y", "initial");
+
                     var lowercaseQuery = angular.lowercase(query);
 
                     return function filterFn(item) {
@@ -223,6 +232,8 @@
                 }
 
                 function updateCartItem(newVal, oldVal, index) {
+                    $("html").css("overflow-y", "initial");
+
                     var total = 0;
                     self.cart[index].warehouse_quantity = parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
@@ -247,6 +258,35 @@
                     });
 
                 }
+
+                function updateIt() {
+                    $("html").css("overflow-y", "initial");
+                }
+
+                function removeCartItem(index) {
+                    console.log(index);
+                    var total = 0;
+                    var tmp = [];
+                    var tmpItems = [];
+                    angular.forEach(self.cart, function(value, key) {
+                        if(key != index) {
+                            var tmpIndex = tmp.push(self.cart[key]) - 1;
+                            tmpItems[value.id] = tmpIndex;
+                            total += value.ordered_quantity;
+                        }
+                    });
+
+                    console.log('old cart: ');
+                    console.log(JSON.stringify(self.cart,null,4));
+                    console.log('tmp: ');
+                    console.log(JSON.stringify(tmp,null,4));
+                    self.cart = [];
+                    self.cart = tmp;
+                    self.cart_items = [];
+                    self.cart_items = tmpItems;
+                    self.cart_total = total;
+                }
+
 
                 function updateETA(){
                     addSpinner();
@@ -398,6 +438,7 @@
                             <th class="table-name" style="width: 100px;">Received</th>
                             <th class="table-name" style="width: 175px;">Selected Warehouse Inv.</th>
                             <th class="table-name" style="width: 175px;">Total All Sites Inv.</th>
+                            <th ng-if="ctrl.isEdit == 1"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -431,6 +472,9 @@
                                     </ul>
                                 </div>
                             </td>
+                               <td ng-if="ctrl.isEdit == 1" class="table-form" style="width:140px;text-align: center;" >
+                                   <a class="btn btn-raised btn-danger" ng-click="ctrl.removeCartItem($index)">Remove</a>
+                               </td>
                                   {% endverbatim %}
                             </div>
                         </tr>
@@ -450,6 +494,7 @@
                                 md-min-length="0"
                                 placeholder="Pick a Product"
                                 md-autofocus="false"
+                                ng-click="ctrl.updateIt()"
                                 md-menu-class="autocomplete-custom-template">
                                 <md-item-template>
                                     <span class="item-title">
