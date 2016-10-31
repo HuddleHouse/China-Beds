@@ -149,4 +149,31 @@ class ReportController extends Controller
     }
 
 
+    /**
+     * Description
+     *
+     * @Route("/best_selling", name="best_selling")
+     * @Method({"GET", "POST"})
+     */
+    public function bestSellingAction(Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+        $report = array();
+
+        $report['headers'] = array(
+            'Item',
+            'Amount Ordered '
+        );
+
+        $userDate = $request->get('date') ? $request->get('month') : date('Y-m-d');
+
+
+//        $orders = $em->getRepository('OrderBundle:Orders');
+//        $query = $orders->createQueryBuilder('o')
+//            ->where()
+
+
+        return $this->render('ReportBundle:Reports:best-selling.html.twig', array('report' => $report ));
+    }
+
 }
