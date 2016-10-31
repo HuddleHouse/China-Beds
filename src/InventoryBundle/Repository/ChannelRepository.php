@@ -45,12 +45,10 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             foreach($product->getCategories() as $cat) {
                 $cat_ids .= $cat->getCategory()->getId() . ' ';
                 $cat_count++;
-                if(strtoupper($cat->getCategory()->getName()) == 'CLOSEOUT')
+                $cat_name = $cat->getCategory()->getName();
+                if(strtoupper($cat_name) == 'CLOSEOUT' && $include_closeouts != null)
                     $is_closeout = 1;
             }
-
-            if($include_closeouts != null)
-                $is_closeout = 1;
 
             // format needed data to array
             $product_array = array(
