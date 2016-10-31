@@ -43,7 +43,7 @@
                             showErrorInModal('Error: ' + data[1]);
                         }
                         else {
-                            table.row.add(data[1]).draw(false);
+                            table.row.add(data[1]).draw();
                             $('#resourceModal').modal('hide');
                         }
                     }
@@ -67,7 +67,7 @@
                         showErrorModal(data[1]);
                     }
                     else {
-                        table.row($(el).parents('tr')).remove().draw(false);
+                        table.row($(el).parents('tr')).remove().draw();
                     }
                 }
             });
