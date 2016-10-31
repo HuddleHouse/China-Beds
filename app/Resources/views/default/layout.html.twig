@@ -522,6 +522,9 @@
             <div class="tab-pane active" id="control-sidebar-home-tab">
                 <a style="width: 100%;" class="btn btn-raised btn-default" href="{{ path('fos_user_profile_edit') }}"><i class="fa fa-user"></i> Update Info</a>
                 <a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('fos_user_change_password') }}"><i class="fa fa-lock"></i> Change Password</a>
+                {% if(is_granted('ROLE_ADMIN')) %}
+                    <a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('settings_index') }}"><i class="fa fa-gears"></i> Admin Settings</a>
+                {% endif %}
                 {#<a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('qb_import_home') }}"><i class="fa fa-lock"></i> Import Settings</a>#}
                 {#<a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('show_settings') }}"><i class="fa fa-lock"></i> Settings</a>#}
                 <hr>

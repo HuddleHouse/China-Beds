@@ -32,18 +32,22 @@ class EmailService extends BaseService
 //        }
     }
 
+    /**
+     * @param User $user
+     * @param WarrantyClaim $warrantyClaim
+     */
     public function sendWarrantyClaimAcknowledgementEmail(User $user, WarrantyClaim $warrantyClaim) {
-        $this->sendEmail(array(
-            'subject' => '',
-            'from' => '',
-            'to' => '',
-            'body' => 'Dear '. $user->getFullName() .',\n\n'.
-                'Thank you for contacting ' . $warrantyClaim->getChannel()->getCompanyName() .
-                '. Your warranty claim has been received and will be reviewed shortly. ' .
-                'A customer service specialist may contact you for additional information as needed. ' .
-                'You can expect a response with 3-7 business days. \n\n' .
-                'Thank you for your patience and your patronage.'
-        ));
+        $settings = $this->container->get('settings_service');
+
+        if($settings->get('warrantyclaim-acknowledgement') == 'yes')
+            $this->sendEmail(array(
+                'subject' => 'Warranty Claim Acknowledgement',
+                'from' => $warrantyClaim->getChannel()->getEmailUrl(),
+                'to' => $user->getEmail(),
+                'body' => 'Dear '. $user->getFullName() .',\n\n'.
+                    'Thank you for contacting ' . $warrantyClaim->getChannel()->getCompanyName() . '.' .
+                    $settings->get('warrantyclaim-acknowledgement-text')
+            ));
     }
 
     public function sendPortETAEmail() {
