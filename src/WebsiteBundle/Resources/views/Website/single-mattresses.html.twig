@@ -27,6 +27,7 @@
                     <div class="slider-section">
                         <div class="prod-slider">
                             {% set count = 0 %}
+                            {% set path = '' %}
                             {% for image in product.images %}
                                 {% if count == 0 %}
                                     {% set path = image.webPath %}
@@ -34,8 +35,8 @@
                                 {% else %}
                                     <div class="product-image"><img src="/{{ image.webPath }}" /></div>
                                 {% endif %}
-                                <div class="product-image"><img src="/{{ path }}" /></div>
                             {% endfor %}
+                            <div class="product-image"><img src="/{{ path }}" /></div>
                         </div>
                     </div>
                 </div>
