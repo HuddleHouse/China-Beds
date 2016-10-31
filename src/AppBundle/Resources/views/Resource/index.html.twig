@@ -38,13 +38,13 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        console.log(JSON.stringify(data,null,4));
+//                        console.log(JSON.stringify(data,null,4));
                         if (!data[0]) {
                             showErrorInModal('Error: ' + data[1]);
                         }
                         else {
+                            table.row.add(data[1]).draw(false);
                             $('#resourceModal').modal('hide');
-                            addRow(data[1]);
                         }
                     }
                 });
@@ -71,10 +71,6 @@
                     }
                 }
             });
-        }
-
-        function addRow(data) {
-            table.row.add(data).draw(false);
         }
 
         function openFileBrowser() {
@@ -117,11 +113,11 @@
                     {% for resource in resources %}
                         <tr>
                             <td><a href="{{ asset(resource.webPath) }}" target="_blank">{{ resource.name }}</a></td>
-                            <td>{{ resource.dateCreated | date('m/d/y H:i:s') }}</td>
+                            <td>{{ resource.dateCreated | date('m/d/y h:i:s A') }}</td>
                             <td>
                                 <a download class="btn btn-raised btn-xs" href="{{ asset(resource.webPath) }}">Download</a>
                                 {% if(is_granted('ROLE_ADMIN')) %}
-                                    <button class="btn btn-raised btn-xs" onclick="deleteResource({{ resource.id }}, this)">Delete</button>
+                                    <button class="btn btn-raised btn-danger btn-xs" onclick="deleteResource({{ resource.id }}, this)">Delete</button>
                                 {% endif %}
                             </td>
                         </tr>
@@ -132,51 +128,51 @@
             </div>
         </div>
     </div>
-{% if(is_granted('ROLE_ADMIN')) %}
-    <a id="new-button" href="#" onclick="showResourceForm()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons">add</i>
-    </a>
-    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Upload Resource
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="resourceModal" tabindex="-1" role="dialog" aria-labelledby="resourceModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" id="resource-modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="resourceModalLabel">Upload Resource</h4>
-                </div>
-                <div id="resource-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
-                    <div class="form-body">
-                        <form id="resource-form">
-                            <div id="error-in-modal" class="row">
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 form-group is-empty is-fileinput">
-                                    <label for="resource_file" class="required">File</label>
-                                    <div class="input-group">
-                                        <label class="input-group-btn" style="padding: 0;">
+    {% if(is_granted('ROLE_ADMIN')) %}
+        <a id="new-button" href="#" onclick="showResourceForm()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+            <i class="material-icons">add</i>
+        </a>
+        <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
+            Upload Resource
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="resourceModal" tabindex="-1" role="dialog" aria-labelledby="resourceModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="resource-modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="resourceModalLabel">Upload Resource</h4>
+                    </div>
+                    <div id="resource-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
+                        <div class="form-body">
+                            <form id="resource-form">
+                                <div id="error-in-modal" class="row">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group is-empty is-fileinput">
+                                        <label for="resource_file" class="required">File</label>
+                                        <div class="input-group">
+                                            <label class="input-group-btn" style="padding: 0;">
                     <span class="btn btn-file btn-raised">
                         Browse… <input type="file" id="resource_file" name="resource[file]" required="required" onchange="autoFillName()">
                     </span>
-                                        </label>
-                                        <input type="text" id="resource_path" name="resource[path]" required="required" class="form-control" style="margin-bottom: 10px; margin-left: 10px;" onclick="openFileBrowser()" readonly="readonly" />
+                                            </label>
+                                            <input type="text" id="resource_path" name="resource[path]" required="required" class="form-control" style="margin-bottom: 10px; margin-left: 10px;" onclick="openFileBrowser()" readonly="readonly" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 form-group">
-                                    <label for="resource_name" class="required">Name</label>
-                                    <input type="text" id="resource_name" name="resource[name]" class="form-control" style="margin-bottom: 10px" onclick="this.select()" />
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label for="resource_name" class="required">Name</label>
+                                        <input type="text" id="resource_name" name="resource[name]" class="form-control" style="margin-bottom: 10px" onclick="this.select()" />
+                                    </div>
                                 </div>
-                            </div>
-                            <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Upload" style="float:right" />
-                        </form>
+                                <input id="submit_btn" class="btn btn-raised btn-success" type="submit" value="Upload" style="float:right" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 {% endblock %}

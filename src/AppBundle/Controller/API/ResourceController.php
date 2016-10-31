@@ -38,8 +38,8 @@ class ResourceController extends Controller
 
             $rtn = array(
                 '<a href="/' . $resource->getWebPath() . '" target="_blank">' . $resource->getName() . '</a>',
-                $resource->getDateCreated()->format('m/d/y H:i:s'),
-                '<a download class="btn btn-raised btn-xs" href="/' . $resource->getWebPath() . '">Download</a><button class="btn btn-raised btn-xs" onclick="deleteResource('. $resource->getId() .', this)">Delete</button>'
+                $resource->getDateCreated()->format('m/d/y h:i:s A'),
+                '<a download class="btn btn-raised btn-danger btn-xs" href="/' . $resource->getWebPath() . '">Download</a><button class="btn btn-raised btn-xs" onclick="deleteResource('. $resource->getId() .', this)">Delete</button>'
             );
 
             return new JsonResponse(array(true, $rtn));
