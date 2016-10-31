@@ -37,7 +37,7 @@ web_retailers:
     defaults: { _controller: WebsiteBundle:Website:retailerIndex }
 
 web_warranty:
-    path:     /contact
+    path:     /warranty
     defaults: { _controller: WebsiteBundle:Website:warrantyIndex }
 
 web_terms:

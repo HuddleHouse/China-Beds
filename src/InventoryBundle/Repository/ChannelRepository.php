@@ -128,8 +128,6 @@ select i.quantity, i.warehouse_id
 
                     $variants[$key]['inventory'] = $quantity;
                     $variants[$key]['warehouse_data'] = $warehouse_data;
-
-
                 }
 
                 $product_array['variants'] = $variants;
