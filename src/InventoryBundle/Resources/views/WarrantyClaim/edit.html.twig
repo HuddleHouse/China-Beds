@@ -28,8 +28,10 @@
                 data: {order_id: $('#warranty_claim_order').val()},
                 success: function (variants) {
                     el.html(variants);
+                    {% if(warranty_claim.productVariant.id is defined) %}
+                    el.val({{ warranty_claim.productVariant.id }});
                     el.prop('disabled', false);
-                    el.val({{ warranty_claim.productVariant.id | default('') }});
+                    {% endif %}
                 }
             });
         }
