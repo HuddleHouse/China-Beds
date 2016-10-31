@@ -39,6 +39,13 @@ class PurchaseOrder
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="port_eta", type="date", nullable=true)
+     */
+    private $portEta;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="order_received_date", type="datetime", nullable=true)
      */
     private $orderReceivedDate;
@@ -388,5 +395,21 @@ class PurchaseOrder
     public function removeProductVariant(\WarehouseBundle\Entity\PurchaseOrderProductVariant $productVariant)
     {
         $this->product_variants->removeElement($productVariant);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPortEta()
+    {
+        return $this->portEta;
+    }
+
+    /**
+     * @param \DateTime $portEta
+     */
+    public function setPortEta($portEta)
+    {
+        $this->portEta = $portEta;
     }
 }

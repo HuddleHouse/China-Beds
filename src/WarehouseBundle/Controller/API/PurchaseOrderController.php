@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Controller\API;
 
+use Symfony\Component\Validator\Constraints\DateTime;
 use WarehouseBundle\Entity\PurchaseOrder;
 use WarehouseBundle\Entity\PurchaseOrderProductVariant;
 use Symfony\Component\HttpFoundation\Request;
@@ -181,11 +182,54 @@ class PurchaseOrderController extends Controller
     }
 
     /**
-     * @Route("/api_update_eta", name="api_update_eta")
+     * @Route("/api_update_warehouse_eta", name="api_update_warehouse_eta")
      */
-    public function apiUpdateEta(Request $request){
+    public function apiUpdateWarehouseEta(Request $request){
         $date = new \DateTime($request->request->get('due_date'));
         $poId = $request->request->get('purchase_order_id');
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
+        $purchase->setStockDueDate($date);
+
+        $em->persist($purchase);
+
+        try{
+            $em->flush();
+        }catch(\Exception $e){
+            return JsonResponse::create(false);
+        }
+
+        return JsonResponse::create($purchase->getId());
+    }
+
+    /**
+     * @Route("/api_update_port_eta", name="api_update_port_eta")
+     */
+    public function apiUpdatePortEta(Request $request){
+        $date = new \DateTime($request->request->get('due_date'));
+        $poId = $request->request->get('purchase_order_id');
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
+        $purchase->setPortEta($date);
+
+        $em->persist($purchase);
+
+        try{
+            $em->flush();
+        }catch(\Exception $e){
+            return JsonResponse::create(false);
+        }
+
+        return JsonResponse::create($purchase->getId());
+    }
+
+    /**
+     * @Route("/api_update_date_received", name="api_update_date_received")
+     */
+    public function apiUpdateDateReceived(Request $request){
+        $date = new \DateTime($request->request->get('due_date'));
+        $poId = $request->request->get('purchase_order_id');
+
         $em = $this->getDoctrine()->getManager();
         $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
         $purchase->setOrderReceivedDate($date);
