@@ -60,9 +60,9 @@ class PurchaseOrder
     /**
      * @var string
      *
-     * @ORM\Column (name="physical_container", type="string", nullable=true)
+     * @ORM\Column (name="physical_container_number", type="string", nullable=true)
      */
-    private $physicalContainer;
+    private $physicalContainerNumber;
 
     /**
      * @var string
@@ -321,13 +321,13 @@ class PurchaseOrder
     /**
      * Set physicalContainer
      *
-     * @param string $physicalContainer
+     * @param string $physicalContainerNumber
      *
      * @return PurchaseOrder
      */
-    public function setPhysicalContainer($physicalContainer)
+    public function setPhysicalContainerNumber($physicalContainerNumber)
     {
-        $this->physicalContainer = $physicalContainer;
+        $this->physicalContainerNumber = $physicalContainerNumber;
 
         return $this;
     }
@@ -337,9 +337,9 @@ class PurchaseOrder
      *
      * @return string
      */
-    public function getPhysicalContainer()
+    public function getPhysicalContainerNumber()
     {
-        return $this->physicalContainer;
+        return $this->physicalContainerNumber;
     }
 
     /**

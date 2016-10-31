@@ -43,7 +43,6 @@
                             <td>{% if product.active %}Yes{% else %}No{% endif %}</td>
                             <td>
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('admin_product_edit', { 'id': product.id }) }}"><i class="fa fa-edit"></i> edit</a>
-                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('admin_product_show', { 'id': product.id }) }}"><i class="fa fa-list"></i> show</a>
                             </td>
                         </tr>
                     {% endfor %}
