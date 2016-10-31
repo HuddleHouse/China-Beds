@@ -35,6 +35,7 @@ class ResourceController extends Controller
             $resource->upload();
             $resource->setDateCreated(new \DateTime());
             $this->getDoctrine()->getEntityManager()->persist($resource);
+            $this->getDoctrine()->getEntityManager()->persist($resource->getChannel());
             $this->getDoctrine()->getEntityManager()->flush();
 
             $rtn = array(
