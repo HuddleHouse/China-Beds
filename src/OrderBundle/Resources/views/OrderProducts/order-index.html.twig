@@ -843,7 +843,7 @@
         {% endif %}
 
         <div class="row">
-            <div class="grid col-md-10">
+            <div class="grid col-md-12 col-lg-10">
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
@@ -936,7 +936,7 @@
             <ul>
                 <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
                 {% for category in categories %}
-                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
+                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin"></i> {{ category.name }}</h6></li>
                 {% endfor %}
                 <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
 
