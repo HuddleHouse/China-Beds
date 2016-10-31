@@ -28,6 +28,8 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
         foreach($product_channels as $product_channel) {
             $product = $product_channel->getProduct();
 
+            if ( $product->getHideBackEnd() ) { continue; }
+
             // get first image url
             $image_url = '/';
             foreach($product->getImages() as $image) {

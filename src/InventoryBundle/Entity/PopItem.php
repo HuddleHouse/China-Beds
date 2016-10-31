@@ -111,12 +111,18 @@ class PopItem
      */
     private $channel;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="popItems")
+     */
+    private $promo_kit_orders;
+
 
     public function __construct()
     {
         $this->warehouse_pop_inventory = new ArrayCollection();
         $this->warehouse_pop_inventory_on_hold = new ArrayCollection();
         $this->orders_pop_item = new ArrayCollection();
+        $this->promo_kit_orders = new ArrayCollection();
     }
 
     /**
@@ -538,5 +544,21 @@ class PopItem
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrders()
+    {
+        return $this->promo_kit_orders;
+    }
+
+    /**
+     * @param mixed $promo_kit_orders
+     */
+    public function setPromoKitOrders($promo_kit_orders)
+    {
+        $this->promo_kit_orders = $promo_kit_orders;
     }
 }

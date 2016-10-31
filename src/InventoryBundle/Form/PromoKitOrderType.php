@@ -5,8 +5,9 @@ namespace InventoryBundle\Form;
 use AppBundle\Services\SettingsService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use OrderBundle\Entity\OrdersPopItem;
-use OrderBundle\Entity\OrdersProductVariant;
+use InventoryBundle\Entity\PopItem;
+use InventoryBundle\Entity\ProductVariant;
+use InventoryBundle\Entity\PromoKit;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -14,19 +15,23 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PromoKitOrderType extends AbstractType
 {
+    private $tokenStorageInterface;
     private $settingsService;
     private $repository;
 
     /**
      * PromoKitOrderType constructor.
+     * @param TokenStorageInterface $tokenStorageInterface
      * @param SettingsService $settingsService
      * @param EntityManager $em
      */
-    public function __construct(SettingsService $settingsService, EntityManager $em)
+    public function __construct(TokenStorageInterface $tokenStorageInterface, SettingsService $settingsService, EntityManager $em)
     {
+        $this->tokenStorageInterface = $tokenStorageInterface;
         $this->settingsService = $settingsService;
         $this->repository = $em->getRepository('InventoryBundle:PromoKitOrders');
     }
@@ -48,46 +53,40 @@ class PromoKitOrderType extends AbstractType
             )
             ->add('promoKitItems', EntityType::class, array(
                     'class' => 'InventoryBundle\Entity\PromoKit',
-                    'label' => 'Items',
-                    'choice_label' => 'name',
+                    'label' => 'Promo Kit Items',
+                    'choice_label' => function (PromoKit $p) {
+                        return $p->getName() . ': ' . $p->getDescription();
+                    },
+                    'choices' => $this->repository->getActivePromoKitItems(),
                     'expanded' => true,
                     'multiple' => true,
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
                 )
             )
             ->add('productVariants', EntityType::class, array(
-                    'class' => 'OrderBundle\Entity\OrdersProductVariant',
-                    'label' => 'Items',
-                    'choice_label' => function (OrdersProductVariant $pv) {
-                        return $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName();
+                    'class' => 'InventoryBundle\Entity\ProductVariant',
+                    'label' => 'Products',
+                    'choice_label' => function (ProductVariant $pv) {
+                        return $pv->getProduct()->getName() . ' ' . $pv->getName();
                     },
-                    'choices' => $this->repository->getProductVariants(),
+                    'choices' => $this->repository->getProductVariants($this->tokenStorageInterface->getToken()->getUser()->getActiveChannel(), $this->settingsService->get('default-warehouse')),
                     'expanded' => true,
                     'multiple' => true,
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
-//                    'query_builder' => function (EntityRepository $er) {
-//                        return $er->createQueryBuilder('pv')
-//                            ->leftJoin('pv.warehouse_info', 'whi', 'WITH', 'pv.warehouse_info = whi')
-//                            ->leftJoin('whi.warehouse', 'w', 'WITH', 'whi.warehouse = w');
-//                    },
                 )
             )
             ->add('popItems', EntityType::class, array(
-                    'class' => 'OrderBundle\Entity\OrdersPopItem',
-                    'label' => 'Items',
-                    'choice_label' => function (OrdersPopItem $p) {
-                        return $p->getPopItem()->getName();
+                    'class' => 'InventoryBundle\Entity\PopItem',
+                    'label' => 'Pop Items',
+                    'choice_label' => function (PopItem $p) {
+                        return $p->getName() . ': ' . $p->getDescription();
                     },
                     'expanded' => true,
                     'multiple' => true,
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
-//                    'query_builder' => function (EntityRepository $er) {
-//                        return $er->createQueryBuilder('p')
-//                            ->andWhere('p.');
-//                    },
                 )
             )
             ->add('retailerStoreName', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Retailer Store Name'))

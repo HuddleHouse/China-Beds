@@ -11,6 +11,7 @@ use InventoryBundle\Entity\Channel;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
@@ -177,17 +178,11 @@ class User extends BaseUser
      */
     private $user_channels;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Office", inversedBy="users")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      */
     private $office;
-
-    /**
-     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="submittedByUser")
-     */
-    private $promo_kit_orders;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="submittedForUser")
@@ -311,6 +306,14 @@ class User extends BaseUser
 
     private $active_channel = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="submittedByUser")
+     */
+    private $promo_kit_orders;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -319,7 +322,6 @@ class User extends BaseUser
         $this->managed_warehouses = new ArrayCollection();
         $this->submitted_warranty_claims = new ArrayCollection();
         $this->user_channels = new ArrayCollection();
-        $this->promo_kit_orders = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->submitted_rebates = new ArrayCollection();
         $this->groups = new ArrayCollection();
@@ -333,6 +335,7 @@ class User extends BaseUser
         $this->ledgers = new ArrayCollection();
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
+        $this->promo_kit_orders = new ArrayCollection();
     }
 
     /**

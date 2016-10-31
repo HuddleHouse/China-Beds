@@ -72,7 +72,7 @@ class PromoKitController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($promoKit);
                 $em->flush();
-                $this->addFlash('notice', 'Promo Kit created successfully.');
+                $this->addFlash('notice', 'Promo Kit Item created successfully.');
 
                 return $this->redirectToRoute('promokit_index');
             }
@@ -94,7 +94,7 @@ class PromoKitController extends Controller
     }
 
     /**
-     * Creates a new PromoKit entity.
+     * Creates a new PromoKitOrders entity.
      *
      * @Route("/new_order", name="promokit_new_order")
      * @Method({"GET", "POST"})
@@ -134,18 +134,39 @@ class PromoKitController extends Controller
     }
 
     /**
-     * Finds and displays a PromoKit entity.
+     * Edit a new PromoKitOrders entity.
      *
-     * @Route("/{id}", name="promokit_show")
-     * @Method("GET")
+     * @Route("/{id}/edit_order", name="promokit_edit_order")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(PromoKit $promoKit)
+    public function editOrderAction(Request $request, PromoKitOrders $promoKitOrder)
     {
-        $deleteForm = $this->createDeleteForm($promoKit);
+        $form = $this->createForm('InventoryBundle\Form\PromoKitOrderType', $promoKitOrder);
+        $form->handleRequest($request);
 
-        return $this->render('@Inventory/Promokit/show.html.twig', array(
-            'promoKit' => $promoKit,
-            'delete_form' => $deleteForm->createView(),
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($promoKitOrder);
+                $em->flush();
+                $this->addFlash('notice', 'Promo Kit Order successfully submitted.');
+
+                return $this->redirectToRoute('promokit_orders_index');
+            }
+            catch(\Exception $e) {
+                $this->addFlash('error', 'Error creating Promo Kit Order: ' . $e->getMessage());
+
+                return $this->render('@Inventory/Promokit/edit-order.html.twig', array(
+                    'promoKitOrder' => $promoKitOrder,
+                    'form' => $form->createView(),
+                ));
+            }
+
+        }
+
+        return $this->render('@Inventory/Promokit/edit-order.html.twig', array(
+            'promoKitOrder' => $promoKitOrder,
+            'form' => $form->createView(),
         ));
     }
 
@@ -165,9 +186,9 @@ class PromoKitController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($promoKit);
                 $em->flush();
-                $this->addFlash('notice', 'Promo Kit updated successfully.');
+                $this->addFlash('notice', 'Promo Kit Item updated successfully.');
 
-                return $this->redirectToRoute('promokit_edit', array('id' => $promoKit->getId()));
+                return $this->redirectToRoute('promokit_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error editing Promo Kit Item: ' . $e->getMessage());

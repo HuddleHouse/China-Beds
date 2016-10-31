@@ -17,11 +17,11 @@
         $(document).ready(function () {
             $('#rebate_description').keyup(function () {
                 var len = $(this).val().length;
-                if (len >= 255) {
-                    $(this).val($(this).val().substring(0, 255));
+                if (len >= 1000) {
+                    $(this).val($(this).val().substring(0, 1000));
                     $('#charNum').text(0);
                 } else {
-                    var l = 255 - len;
+                    var l = 1000 - len;
                     $('#charNum').text(l);
                 }
             });
@@ -56,7 +56,7 @@
             </div>
             <div class="row">
                 <div class="col-md-8 form-group">
-                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">1000</span>
                     {{ form_widget(form.description) }}
                 </div>
             </div>

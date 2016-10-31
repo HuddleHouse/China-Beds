@@ -191,4 +191,32 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
 
         return $orders;
     }
+
+    public function getTemplateReportData() {
+        $rtn = array();
+        $qb = $this->createQueryBuilder('o')
+            ->select('o.orderId', 'o.orderNumber', 'o.pickUpDate', 'o.shipName', 'u.first_name', 'u.last_name', 'o.shipAddress')
+            ->leftJoin('o.submitted_for_user', 'u', 'WHERE', 'o.submitted_for_user = u');
+
+        foreach($qb->getQuery()->getResult() as $row) {
+            $row['first_name'] .= ' ' . $row['last_name'];
+            array_splice($row, 4, 1);
+            //convert DateTime objects to strings
+            if($row['pickUpDate'] != null)
+                $row['pickUpDate'] = $row['pickUpDate']->format('m/d/y H:i');
+            $rtn[] = $row;
+        }
+        return $rtn;
+    }
+
+    /**
+     * @return Orders[]
+     */
+    public function getDailyOrderReportData() {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.submitDate between :today and :tomorrow')
+            ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
+        return $qb->getQuery()->getResult();
+    }
+
 }

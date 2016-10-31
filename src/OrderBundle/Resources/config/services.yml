@@ -2,7 +2,7 @@ services:
 #    order.example:
 #        class: OrderBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
-    order.ledger:
+    ledger.service:
         class: OrderBundle\Services\LedgerService
         arguments: ["@service_container"]
     form.type.creditrequest:

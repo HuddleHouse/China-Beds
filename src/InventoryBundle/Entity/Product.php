@@ -99,6 +99,12 @@ class Product
     private $hideFrontend = 0;
 
     /**
+     * @var bool
+     *@ORM\Column(name="hide_backend", type="boolean")
+     */
+    private $hideBackend = 0;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductAttribute", mappedBy="product", cascade={"persist", "remove"})
      */
     private $attributes;
@@ -625,5 +631,39 @@ class Product
     public function getHideFrontend()
     {
         return $this->hideFrontend;
+    }
+
+    /**
+     * Get promoKitAvailable
+     *
+     * @return boolean
+     */
+    public function getPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * Set hideBackend
+     *
+     * @param boolean $hideBackend
+     *
+     * @return Product
+     */
+    public function setHideBackend($hideBackend)
+    {
+        $this->hideBackend = $hideBackend;
+
+        return $this;
+    }
+
+    /**
+     * Get hideBackend
+     *
+     * @return boolean
+     */
+    public function getHideBackend()
+    {
+        return $this->hideBackend;
     }
 }
