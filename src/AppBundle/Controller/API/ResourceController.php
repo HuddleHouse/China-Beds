@@ -30,6 +30,7 @@ class ResourceController extends Controller
         try {
             $resource = new Resource();
             $resource->setName($data['name']);
+            $resource->setChannel($this->getUser()->getActiveChannel());
             $resource->setFile($file);
             $resource->upload();
             $resource->setDateCreated(new \DateTime());

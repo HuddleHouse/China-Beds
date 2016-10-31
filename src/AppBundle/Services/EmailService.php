@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 use AppBundle\Entity\User;
 use AppBundle\Services\BaseService;
+use InventoryBundle\Entity\Channel;
 use InventoryBundle\Entity\WarrantyClaim;
 use OrderBundle\Entity\Orders;
 
@@ -21,15 +22,31 @@ class EmailService extends BaseService
         $this->mailer->send($message);
     }
 
-    public function sendOrderEmails(Orders $order) {
+    /**
+     * @param Channel $channel
+     * @param Orders $order
+     * @param $orderReceipt
+     */
+    public function sendOrderEmails(Channel $channel, Orders $order, $orderReceipt) {
+        $settings = $this->container->get('settings_service');
+
+        if($settings->get('user-receipt') == 'yes') {
+            $this->sendEmail(array(
+                'subject' => $channel->getName() . ' Order Receipt',
+                'from' => $channel->getEmailUrl(),
+                'to' => $order->getShipEmail(),
+                'body' => $orderReceipt
+            ));
+        }
+
+        if($settings->get('warehouse-receipt') == 'yes') {
 //        $warehouses = array();
 //        foreach($order->getProductVariants() as $productVariant) {
 //            foreach($productVariant->getWarehouseInfo() as $warehouseInfo) {
 //                $warehouse = $warehouseInfo->getWarehouse();
 //                $warehouses[$warehouse->getName()]['email'] = $warehouse->getEmail();
 //            }
-
-//        }
+        }
     }
 
     /**

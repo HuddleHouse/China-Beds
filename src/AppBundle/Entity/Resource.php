@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use InventoryBundle\Entity\Channel;
 
 
 /**
@@ -51,6 +52,11 @@ class Resource
      */
     public $path;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id")
+     */
+    private $channel;
 
     /**
      * Get id
@@ -200,6 +206,22 @@ class Resource
     public function setDateCreated($dateCreated)
     {
         $this->dateCreated = $dateCreated;
+    }
+
+    /**
+     * @return Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param Channel $channel
+     */
+    public function setChannel($channel)
+    {
+        $this->channel = $channel;
     }
 }
 
