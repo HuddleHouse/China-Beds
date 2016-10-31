@@ -53,6 +53,14 @@ class WebsiteController extends BaseController
         ));
     }
 
+    public function policyIndexAction()
+    {
+        return $this->render('WebsiteBundle:Website:policy.html.twig', array(
+            'site' => strtolower($this->getChannel()->getName()),
+            'channel' => $this->getChannel()
+        ));
+    }
+
     public function contactIndexAction()
     {
         return $this->render('WebsiteBundle:Website:contact.html.twig', array(
