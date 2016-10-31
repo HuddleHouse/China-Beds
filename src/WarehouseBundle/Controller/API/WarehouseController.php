@@ -46,6 +46,24 @@ class WarehouseController extends Controller
     }
 
     /**
+     * @Route("/api_update_purchase_order_numbers", name="api_update_purchase_order_numbers")
+     */
+    public function updateDemNumbers(Request $request)
+    {
+        $physicalContainerNumber = $request->request->get('physicalContainerNumber');
+        $factoryOrderNumber = $request->request->get('factoryOrderNumber');
+        $poId = $request->request->get('purchaseOrderId');
+        $em = $this->getDoctrine()->getManager();
+        $po = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
+        $po->setFactoryOrderNumber($factoryOrderNumber);
+        $po->setPhysicalContainerNumber($physicalContainerNumber);
+        $em->persist($po);
+        $em->flush();
+
+        return JsonResponse::create(true);
+    }
+
+    /**
      * @Route("/api_get_warehouse_inventory_for_product", name="api_get_warehouse_inventory_for_product")
      */
     public function getWarehouseInventoryForProduct(Request $request)

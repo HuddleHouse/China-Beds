@@ -44,6 +44,7 @@
                 self.updateCartItem   = updateCartItem;
                 self.getCartTotal   = getCartTotal;
                 self.setActive   = setActive;
+                self.updatePurchaseOrderNumbers = updatePurchaseOrderNumbers;
                 self.receiveAll   = receiveAll;
                 self.getWarehouseInv   = getWarehouseInv;
                 self.save = save;
@@ -60,6 +61,8 @@
                 self.isEdit = 0;
                 self.warehouses = {{ warehouses | json_encode | raw}};
                 self.warehouse = {{ purchaseOrder.warehouse.id }};
+                self.physicalContainerNumber = '{{ purchaseOrder.physicalContainerNumber }}';
+                self.factoryOrderNumber = '{{ purchaseOrder.factoryOrderNumber }}';
                 self.updateETA = updateETA;
                 self.all_warehouse_inventory = {};
 
@@ -77,6 +80,19 @@
 
                 function warehouseChange() {
                     updateCart()
+                }
+
+                function updatePurchaseOrderNumbers() {
+                    showSpinner();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_purchase_order_numbers') }}",
+                        dataType: 'json',
+                        data: {physicalContainerNumber: self.physicalContainerNumber, factoryOrderNumber: self.factoryOrderNumber, purchaseOrderId: {{ purchaseOrder.id }} },
+                        success: function (data) {
+                            window.location.reload();
+                        }
+                    });
                 }
 
                 function updateCart() {
@@ -330,6 +346,7 @@
                 <div class="col-md-6">
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 0">
                     {% if purchaseOrder.status.name == 'Active' %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE</a>
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
                         <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
                     {% elseif purchaseOrder.status.name == 'Draft' %}
@@ -339,6 +356,7 @@
                     {% endif %}
                     </div>
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE</a>
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE</a>
                     </div>
                 </div>
@@ -354,10 +372,8 @@
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
                         <div>
-                            <ul>
-                                <li style="color:lightslategray;list-style-type:none">Physical Container Number: 234234fSo34DOs3Ikop223</li>
-                                <li style="color:lightslategray;list-style-type:none">Factory Order Number: 30243</li>
-                            </ul>
+                                <h4 style="color:lightslategray;list-style-type:none">Physical Container Number: <input class="form-control" type="text" ng-model="ctrl.physicalContainerNumber"></h4>
+                                <h4 style="color:lightslategray;list-style-type:none">Factory Order Number: <input class="form-control" type="text" ng-model="ctrl.factoryOrderNumber"></h4>
                         </div>
                         {% verbatim %}
                         <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;"
