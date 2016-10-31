@@ -26,4 +26,8 @@ class PromoKitOrdersRepository extends EntityRepository
 
         return $products;
     }
+
+    public function getActivePromoKitItems() {
+        return $this->getEntityManager()->getRepository('InventoryBundle:PromoKit')->findBy(array('active' => true));
+    }
 }
