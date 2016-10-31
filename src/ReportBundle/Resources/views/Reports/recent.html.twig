@@ -1,0 +1,56 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Report') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Report') }}
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function() {
+            $('#recent-orders').DataTable({
+                'scrollY': false,
+                'pageLength': 5,
+                'orderFixed': [2, 'desc']
+            });
+        } );
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table class="table table-striped no-footer" cellspacing="0" id="recent-orders" width="100%">
+                    <thead>
+                    <tr>
+                        {% for header in report.headers %}
+                            <th>{{ header | default('') }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in report.data %}
+                        <tr>
+                            <td>{{ order.orderId | default('--') }}</td>
+                            <td>{{ order.orderNumber | default('--') }}</td>
+                            <td>{{ order.submitDate | date('m/d/y H:i') | default('--') }}</td>
+                            <td>{{ order.shipName | default('--') }}</td>
+                            <td>{{ order.submittedForUser.fullName | default('--') }}</td>
+                            <td>{{ order.shipAddress | default('--') }}</td>
+                            <td>${{ order.subtotal | number_format(2) | default('--') }}</td>
+                            <td>${{ order.shipping | number_format(2) | default('--') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -124,6 +124,8 @@ class ReportController extends Controller
 
         );
 
+        $report['title'] = 'Monthly Orders';
+
         $d = new \DateTime();
         $d2 = new \DateTime();
         $month = $request->get('month') ? $request->get('month') : date('m');
@@ -176,4 +178,49 @@ class ReportController extends Controller
         return $this->render('ReportBundle:Reports:best-selling.html.twig', array('report' => $report ));
     }
 
+
+    /**
+     * Description
+     *
+     * @Route("/recent_orders", name="recent_orders")
+     * @Method({"GET", "POST"})
+     */
+    public function recentReportAction(Request $request)
+    {
+
+        $report = array();
+
+        $report['headers'] = array(
+            'Order ID',
+            'Order Number',
+            'Submit Date',
+            'Ship Name',
+            'User Name',
+            'Address',
+            'Shipping Amount',
+            'Order Amount'
+
+        );
+
+        $report['title'] = 'Recent Orders';
+
+        $d = new \DateTime();
+        $d2 = new \DateTime();
+        $month = $request->get('month') ? $request->get('month') : date('m');
+        $d->setDate(date('Y'), $month, 01);
+        $d2->setDate(date('Y'), $month, date('t'));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $orders = $em->getRepository('OrderBundle:Orders');
+        $query = $orders->createQueryBuilder('o');
+        $result = $query->getQuery()->getResult();
+
+        $report['data'] = $result;
+
+        return $this->render('ReportBundle:Reports:recent.html.twig', array('report' => $report));
+
+
+    }
 }
+
