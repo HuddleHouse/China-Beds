@@ -52,7 +52,6 @@
                 <td>{% if popItem.active %}Yes{% else %}No{% endif %}</td>
                 <td>
                     <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('pop_item_edit', { 'id': popItem.id }) }}"><i class="fa fa-edit"></i> edit</a>
-                    <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('pop_item_show', { 'id': popItem.id }) }}"><i class="fa fa-list"></i> show</a>
                 </td>
             </tr>
         {% endfor %}
