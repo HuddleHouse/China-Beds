@@ -219,7 +219,7 @@ class Resource
     /**
      * @param Channel $channel
      */
-    public function setChannel($channel)
+    public function setChannel(Channel $channel)
     {
         $this->channel = $channel;
     }
