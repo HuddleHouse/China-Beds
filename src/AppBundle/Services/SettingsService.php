@@ -19,6 +19,11 @@ class SettingsService
         //put default settings here
         $this->defaults = array(
             'default-warehouse' => 'BB Chattanooga WH Textile Lane',
+            'user-receipt' => 'no',
+            'warehouse-receipt' => 'no',
+            'warrantyclaim-acknowledgement' => 'no',
+            'warehouse-po-eta' => 'no',
+            'warehouse-po-reminder' => 'no',
         );
     }
 

@@ -56,7 +56,10 @@ class WarrantyClaimController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 //set values that the form didn't
-                $warrantyClaim->setSubmittedForUser($warrantyClaim->getOrder()->getSubmittedForUser());
+                if($warrantyClaim->getOrder() != null)
+                    $warrantyClaim->setSubmittedForUser($warrantyClaim->getOrder()->getSubmittedForUser());
+                else
+                    $warrantyClaim->setSubmittedForUser($this->getUser());
                 $warrantyClaim->setSubmittedByUser($this->getUser());
                 $warrantyClaim->setChannel($channel);
                 //set other side of relations
@@ -69,6 +72,7 @@ class WarrantyClaimController extends Controller
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
+                $this->get('email_service')->sendWarrantyClaimAcknowledgementEmail($this->getUser(), $warrantyClaim);
                 return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
             }
             catch(\Exception $e) {
