@@ -402,10 +402,11 @@
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
-
+                            {% if (app.request.get('_route') in ['retailer_affiliates']) %}
                                 <li {% if (app.request.get('_route') =='retailer_affiliates') %} class="active"{% endif %}>
                                     <a href="{{ path('retailer_affiliates') }}"><i class="fa fa-circle-o"></i>Affiliates Map</a>
                                 </li>
+                            {% endif %}
                             </ul>
                         </li>
 
