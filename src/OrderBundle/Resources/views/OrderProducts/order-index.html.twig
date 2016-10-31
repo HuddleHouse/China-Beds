@@ -20,6 +20,9 @@
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
+            buttonGroup.find('.is-checked').removeClass('is-checked');
+            $( this ).addClass('is-checked');
+
             var grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
@@ -726,7 +729,7 @@
         }
         .price_box {
              max-width: 15%;
-            width: 15%;
+            width: 13%;
              display: inline-block;
             margin-left: 3px;
             margin-right: 3px;
@@ -843,13 +846,13 @@
         {% endif %}
 
         <div class="row">
-            <div class="grid col-md-12 col-lg-10">
+            <div class="grid md-col-12 col-lg-10">
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
                     <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
                         <div class="product_image" style="display: table; margin: 0 auto;">
-                            <img src="{{ product.path }}" style="padding: 10px;border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
+                            <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
                                 <center>{{ product.name }}</center>
                             </div>
@@ -932,7 +935,7 @@
         </div>
 
 
-        <div id="floaty-box" class="col-md-2 visible-lg">
+        <div id="floaty-box" class="col-lg-2 visible-lg">
             <ul>
                 <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
                 {% for category in categories %}
