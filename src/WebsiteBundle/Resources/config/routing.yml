@@ -59,8 +59,6 @@ web_warranty:
     requirements:
         site: mlily|bedboss
 
-web_policy:
-    path:     /mlily-advertising-policy-terms-and-conditions
-    defaults: { _controller: WebsiteBundle:Website:policyIndex }
-    requirements:
-        site: mlily|bedboss
+web_terms:
+    path: /mlily-advertising-policy-terms-and-conditions
+    defaults: { _controller: WebsiteBundle:Website:termsIndex }
