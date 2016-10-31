@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow-y: initial !important;">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -204,6 +204,12 @@
         $('#success-message1').empty();
         $('#success-message1').append(message);
     }
+
+    $( document ).ready(function() {
+        $( ".md-datepicker-triangle-button.md-icon-button.md-button" ).on( "click", function() {
+            $("html").css("overflow-y", "initial");
+        });
+    });
 </script>
 {% block footer %}{% endblock %}
 
