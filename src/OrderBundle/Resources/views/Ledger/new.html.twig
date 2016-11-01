@@ -43,27 +43,9 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {#{% if app.user.hasRole('ROLE_RETAILER') %}#}
-                {#{% do form.submittedForUser.setRendered %}#}
-                {#{% else %}#}
-                {#<div class="col-md-3 form-group">#}
-                {#{{ form_label(form.submittedForUser) }}#}
-                {#{{ form_widget(form.submittedForUser) }}#}
-                {#</div>#}
-                {#{% endif %}#}
                 <div class="col-md-3 form-group">
                     {{ form_label(form.amountRequested) }}
                     {{ form_widget(form.amountRequested) }}
-                </div>
-                <div class="col-md-3 form-group">
-                    {{ form_label(form.phone) }}
-                    {{ form_widget(form.phone) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.email) }}
-                    {{ form_widget(form.email) }}
                 </div>
             </div>
             <div class="row">

@@ -501,10 +501,6 @@
                                 <th >Subtotal:</th>
                                 <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
                             </tr>
-                            {#<tr>#}
-                                {#<th>Tax (9.3%)</th>#}
-                                {#<td>$0.00</td>#}
-                            {#</tr>#}
                             <tr>
                                 <th>Shipping: {{ order.getShipDescription }}</th>
                                 <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
