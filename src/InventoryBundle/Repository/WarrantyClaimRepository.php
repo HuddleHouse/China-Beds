@@ -26,7 +26,7 @@ class WarrantyClaimRepository extends EntityRepository
             $warrantyClaims[] = $item;
 
         if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE')) {
-            $warrantyClaims = $this->findAll();
+            $warrantyClaims = $this->findBy(['channel' => $user->getActiveChannel()]);
         }
         else {
 
@@ -34,7 +34,7 @@ class WarrantyClaimRepository extends EntityRepository
                 foreach($user->getRetailers() as $retailer) {
                     if(!isset($user_ids[$retailer->getId()])) {
                         $user_ids[$retailer->getId()] = $retailer->getId();
-                        $data = $this->findBy(array('submittedForUser' => $retailer));
+                        $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $warrantyClaims[] = $item;
                     }
@@ -44,14 +44,14 @@ class WarrantyClaimRepository extends EntityRepository
                 foreach($user->getDistributors() as $distributor) {
                     if(!isset($user_ids[$distributor->getId()])) {
                         $user_ids[$distributor->getId()] = $distributor->getId();
-                        $data = $this->findBy(array('submittedForUser' => $distributor));
+                        $data = $this->findBy(array('submittedForUser' => $distributor, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $warrantyClaims[] = $item;
                     }
                     foreach($distributor->getRetailers() as $retailer) {
                         if(!isset($user_ids[$retailer->getId()])) {
                             $user_ids[$retailer->getId()] = $retailer->getId();
-                            $data = $this->findBy(array('submittedForUser' => $retailer));
+                            $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $warrantyClaims[] = $item;
                         }
@@ -62,21 +62,21 @@ class WarrantyClaimRepository extends EntityRepository
                 foreach($user->getSalesReps() as $salesRep) {
                     if(!isset($user_ids[$salesRep->getId()])) {
                         $user_ids[$salesRep->getId()] = $salesRep->getId();
-                        $data = $this->findBy(array('submittedForUser' => $salesRep));
+                        $data = $this->findBy(array('submittedForUser' => $salesRep, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $warrantyClaims[] = $item;
                     }
                     foreach($salesRep->getDistributors() as $distributor) {
                         if(!isset($user_ids[$distributor->getId()])) {
                             $user_ids[$distributor->getId()] = $distributor->getId();
-                            $data = $this->findBy(array('submittedForUser' => $distributor));
+                            $data = $this->findBy(array('submittedForUser' => $distributor, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $warrantyClaims[] = $item;
                         }
                         foreach($distributor->getRetailers() as $retailer) {
                             if(!isset($user_ids[$retailer->getId()])) {
                                 $user_ids[$retailer->getId()] = $retailer->getId();
-                                $data = $this->findBy(array('submittedForUser' => $retailer));
+                                $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                                 foreach($data as $item)
                                     $warrantyClaims[] = $item;
                             }
