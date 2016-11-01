@@ -107,6 +107,10 @@ class RebateSubmission
      * @ORM\Column(type="string", length=510, nullable=true)
      */
     public $path;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    public $description;
 
     /**
      * RebateSubmission constructor.
@@ -441,5 +445,21 @@ class RebateSubmission
     public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
     {
         $this->ledgers->removeElement($ledger);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }
