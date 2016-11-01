@@ -183,8 +183,10 @@
             $scope.ship_to_id = {{ app.user.id }};
 
             $scope.due_date = new Date();
-            $scope.date = ($scope.due_date.getTime() + 86400000);
-            $scope.min_date = new Date($scope.date);
+            $scope.date_for_min = ($scope.due_date.getTime() + 60480000);
+            $scope.date_for_max = ($scope.due_date.getTime() + 604800000);
+            $scope.min_date = new Date($scope.date_for_min);
+            $scope.max_date = new Date($scope.date_for_max);
 
             $('body').addClass('sidebar-collapse');
 
