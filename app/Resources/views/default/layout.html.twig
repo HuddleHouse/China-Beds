@@ -417,7 +417,7 @@
                             {% endif %}
                         </li>
 
-
+                        {% if not ('ROLE_SALES_REP' in app.user.roles) %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
@@ -441,6 +441,7 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        {% endif %}
 
                         <li class="header">LINKS</li>
                         <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
