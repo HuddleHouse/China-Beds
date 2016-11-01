@@ -33,7 +33,10 @@ class SettingsService
      */
     public function get($name) {
         try {
-            $rtn = $this->em->getRepository('AppBundle:Settings')->findOneBy(array('name' => $name))->getValue();
+            if ( $setting = $this->em->getRepository('AppBundle:Settings')->findOneBy(array('name' => $name)) ) {
+                $rtn = $setting->getValue();
+            }
+
         }
         catch(\Exception $e) {
             if(array_key_exists($name, $this->defaults))

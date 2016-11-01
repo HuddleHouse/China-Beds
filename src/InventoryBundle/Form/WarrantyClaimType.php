@@ -76,19 +76,19 @@ class WarrantyClaimType extends AbstractType
                     'required' => false
                 )
             )
-            ->add('creditRequested', MoneyType::class, array(
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
-                    'label' => 'Amount',
-                    'constraints' => array(
-                        new GreaterThan(array(
-                                'value' => 0,
-                                'message' => 'You must enter an amount greater than zero.')
-                        )
-                    ),
-                    'currency' => 'USD',
-                    'required' => true
-                )
-            )
+//            ->add('creditRequested', MoneyType::class, array(
+//                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
+//                    'label' => 'Amount',
+//                    'constraints' => array(
+//                        new GreaterThan(array(
+//                                'value' => 0,
+//                                'message' => 'You must enter an amount greater than zero.')
+//                        )
+//                    ),
+//                    'currency' => 'USD',
+//                    'required' => true
+//                )
+//            )
             ->add('description', TextareaType::class, array('label' => 'Comments', 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('file1', FileType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),

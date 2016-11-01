@@ -85,10 +85,10 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.creditRequested) }}
-                    {{ form_widget(form.creditRequested) }}
-                </div>
+                {#<div class="col-md-4 form-group">#}
+                    {#{{ form_label(form.creditRequested) }}#}
+                    {#{{ form_widget(form.creditRequested) }}#}
+                {#</div>#}
                 <div class="col-md-4 form-group">
                     {{ form_label(form.order) }} <i id="info-icon" class="fa fa-info-circle" aria-hidden="true" onclick="showInfoModal()"></i><div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="info-icon">If you don't know your Order ID, input relevant information in the comments</div>
                     {{ form_widget(form.order) }}

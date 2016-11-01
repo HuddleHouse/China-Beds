@@ -31,18 +31,21 @@ class EmailService extends BaseService
      * @param Orders $order
      * @param $orderReceipt
      */
-    public function sendOrderReceipt(Channel $channel, Orders $order, $orderReceipt) {
+    public function sendOrderReceipt(Channel $channel, Orders $order, $orderReceipt)
+    {
         $settings = $this->container->get('settings_service');
 
-        if($settings->get('user-receipt') == 'yes') {
-            $this->sendEmail(array(
-                'subject' => $channel->getName() . ' Order Receipt',
-                'from' => $channel->getEmailUrl(),
-                'to' => $order->getShipEmail(),
-                'body' => $orderReceipt
-            ));
+        if ($settings->get('user-receipt') == 'yes') {
+            $this->sendEmail(
+                array(
+                    'subject' => $channel->getName() . ' Order Receipt',
+                    'from' => $channel->getEmailUrl(),
+                    'to' => $order->getShipEmail(),
+                    'body' => $orderReceipt
+                )
+            );
         }
-
+    }
 
     /**
      * @param Channel $channel
