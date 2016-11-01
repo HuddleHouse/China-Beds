@@ -393,6 +393,7 @@
                                 <span>Support</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
+                            {% if app.user.hideRebate == false %}
                             <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
                                     {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
@@ -413,6 +414,7 @@
                                 </li>
                             {% endif %}
                             </ul>
+                            {% endif %}
                         </li>
 
 
