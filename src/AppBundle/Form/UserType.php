@@ -83,7 +83,8 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'expanded' => true
             ))
             ->add('enabled', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
