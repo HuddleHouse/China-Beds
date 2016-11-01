@@ -75,7 +75,7 @@ class OrderProductsController extends Controller
         else
             $categories = $em->getRepository('InventoryBundle:Category')->findBy(array('name' => 'POP'));
 
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         if($user_channels[$channel->getId()])
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, null, null, 1);
@@ -239,7 +239,7 @@ class OrderProductsController extends Controller
         else
             $categories = $em->getRepository('InventoryBundle:Category')->findBy(array('name' => 'POP'));
 
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         if($user_channels[$channel->getId()])
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, null, null, 1);

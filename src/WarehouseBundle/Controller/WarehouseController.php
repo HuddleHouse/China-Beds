@@ -28,7 +28,7 @@ class WarehouseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(
             'warehouses' => $warehouses,
@@ -270,7 +270,7 @@ class WarehouseController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray($warehouse);
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/PurchaseOrder/new.html.twig', array(
             'warehouse' => $warehouse,
@@ -290,7 +290,7 @@ class WarehouseController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/StockTransfer/new.html.twig', array(
             'inventory_data' => $inventory_data,
@@ -309,7 +309,7 @@ class WarehouseController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/StockAdjustment/new.html.twig', array(
             'inventory_data' => $inventory_data,
