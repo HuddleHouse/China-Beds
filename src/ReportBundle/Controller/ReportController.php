@@ -219,8 +219,8 @@ class ReportController extends Controller
         $report['data'] = $result;
 
         return $this->render('ReportBundle:Reports:recent.html.twig', array('report' => $report));
-
-
     }
+
+
 }
 

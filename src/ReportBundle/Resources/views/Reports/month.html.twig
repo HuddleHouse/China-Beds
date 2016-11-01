@@ -47,7 +47,8 @@
 
 {% block content %}
     <div class="row">
-        <select onchange="fetchMonth(this.value)">
+        <div class="col-md-4">
+        <select class="form-control" onchange="fetchMonth(this.value)">
             <option>Pick a Month</option>
             <option value="01">January {{ date }}</option>
             <option value="02">Febuary {{ date }}</option>
@@ -62,6 +63,7 @@
             <option value="11">November {{ date }}</option>
             <option value="12">December {{ date }}</option>
         </select>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
