@@ -26,9 +26,17 @@
                 <div class="col-md-6 col-sm-5 col-xs-12">
                     <div class="slider-section">
                         <div class="prod-slider">
+                            {% set count = 0 %}
+                            {% set path = '' %}
                             {% for image in product.images %}
-                            <div class="product-image"><img src="/{{ image.webPath }}" /></div>
+                                {% if count == 0 %}
+                                    {% set path = image.webPath %}
+                                    {% set count = 1 %}
+                                {% else %}
+                                    <div class="product-image"><img src="/{{ image.webPath }}" /></div>
+                                {% endif %}
                             {% endfor %}
+                            <div class="product-image"><img src="/{{ path }}" /></div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +64,7 @@
                         <div class="price-list">
                             <ul>
                                 {% for variant in product.variants %}
-                                    <li>{{ variant.name }}: ${{ variant.msrp  }}</li>
+                                    <li>{{ variant.name }}<br />${{ variant.msrp  }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -65,7 +73,7 @@
                                 <p>Wondering where to find an MLILY USA retailer near you? Interested in becoming a retailer yourself? We are here to help.</p>
                             </div>
                             <div class="col-md-6 col-sm-12 col-xs-12">
-                                <a href="#" class="contact-btn">CONTACT US</a>
+                                <a href="{{ path('web_contact') }}" class="contact-btn">CONTACT US</a>
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Controller\API;
 
+use Symfony\Component\Validator\Constraints\DateTime;
 use WarehouseBundle\Entity\PurchaseOrder;
 use WarehouseBundle\Entity\PurchaseOrderProductVariant;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,17 +50,20 @@ class PurchaseOrderController extends Controller
         $purchase_order->setMessage($message);
         $purchase_order->setStatus($status);
 
+        foreach($purchase_order->getProductvariants() as $variant) {
+            $purchase_order->removeProductVariant($variant);
+            $em->remove($variant);
+        }
+
+        $em->persist($purchase_order);
+        $em->flush();
 
         foreach($cart as $item) {
-            if(isset($item['purchase_order_product_variant_id']))
-                $purchase_order_variant = $em->getRepository('WarehouseBundle:PurchaseOrderProductVariant')->find($item['purchase_order_product_variant_id']);
-            else
-            {
-                $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
-                $purchase_order_variant = new PurchaseOrderProductVariant();
-                $purchase_order_variant->setProductVariant($variant);
-                $purchase_order_variant->setPurchaseOrder($purchase_order);
-            }
+
+            $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
+            $purchase_order_variant = new PurchaseOrderProductVariant();
+            $purchase_order_variant->setProductVariant($variant);
+            $purchase_order_variant->setPurchaseOrder($purchase_order);
 
             $purchase_order_variant->setTotalQuantityAfter($item['total_quantity']);
             $purchase_order_variant->setWarehouseQuantityAfter($item['warehouse_quantity']);
@@ -173,19 +177,18 @@ class PurchaseOrderController extends Controller
             return JsonResponse::create(false);
         }
 
-
         return JsonResponse::create($po->getId());
     }
 
     /**
-     * @Route("/api_update_eta", name="api_update_eta")
+     * @Route("/api_update_warehouse_eta", name="api_update_warehouse_eta")
      */
-    public function apiUpdateEta(Request $request){
+    public function apiUpdateWarehouseEta(Request $request){
         $date = new \DateTime($request->request->get('due_date'));
         $poId = $request->request->get('purchase_order_id');
         $em = $this->getDoctrine()->getManager();
         $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
-        $purchase->setOrderReceivedDate($date);
+        $purchase->setStockDueDate($date);
 
         $em->persist($purchase);
 
@@ -194,6 +197,51 @@ class PurchaseOrderController extends Controller
         }catch(\Exception $e){
             return JsonResponse::create(false);
         }
+
+        return JsonResponse::create($purchase->getId());
+    }
+
+    /**
+     * @Route("/api_update_port_eta", name="api_update_port_eta")
+     */
+    public function apiUpdatePortEta(Request $request){
+        $date = new \DateTime($request->request->get('due_date'));
+        $poId = $request->request->get('purchase_order_id');
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
+        $purchase->setPortEta($date);
+
+        $em->persist($purchase);
+
+        try{
+            $em->flush();
+        }catch(\Exception $e){
+            return JsonResponse::create(false);
+        }
+
+        return JsonResponse::create($purchase->getId());
+    }
+
+    /**
+     * @Route("/api_update_date_received", name="api_update_date_received")
+     */
+    public function apiUpdateDateReceived(Request $request){
+        $date = new \DateTime($request->request->get('due_date'));
+        $poId = $request->request->get('purchase_order_id');
+
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
+        $purchase->setOrderReceivedDate($date);
+
+        $em->persist($purchase);
+
+        try {
+            $em->flush();
+        } catch(\Exception $e){
+            return JsonResponse::create(false);
+        }
+
+        $this->container->get('email_service')->sendPortETAEmail($purchase);
 
         return JsonResponse::create($purchase->getId());
     }

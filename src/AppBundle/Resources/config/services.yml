@@ -1,7 +1,7 @@
 services:
     email_service:
         class: AppBundle\Services\EmailService
-        arguments: ["@swiftmailer.mailer"]
+        arguments: ["@swiftmailer.mailer", "@service_container"]
     settings_service:
         class: AppBundle\Services\SettingsService
         arguments: ["@doctrine.orm.default_entity_manager"]

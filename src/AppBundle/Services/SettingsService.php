@@ -19,6 +19,11 @@ class SettingsService
         //put default settings here
         $this->defaults = array(
             'default-warehouse' => 'BB Chattanooga WH Textile Lane',
+            'user-receipt' => 'no',
+            'warehouse-receipt' => 'no',
+            'warrantyclaim-acknowledgement' => 'no',
+            'warehouse-po-eta' => 'no',
+            'warehouse-po-reminder' => 'no',
         );
     }
 
@@ -28,7 +33,10 @@ class SettingsService
      */
     public function get($name) {
         try {
-            $rtn = $this->em->getRepository('AppBundle:Settings')->findOneBy(array('name' => $name))->getValue();
+            if ( $setting = $this->em->getRepository('AppBundle:Settings')->findOneBy(array('name' => $name)) ) {
+                $rtn = $setting->getValue();
+            }
+
         }
         catch(\Exception $e) {
             if(array_key_exists($name, $this->defaults))

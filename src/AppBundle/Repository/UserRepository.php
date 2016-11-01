@@ -34,6 +34,27 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         return $distributors;
     }
 
+    public function getAllAdminArray() {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("select u.*
+	from users u 
+		left join role_users ru
+			on ru.user_id = u.id
+		left join roles r 
+			on r.id = ru.role_id
+		where r.roles LIKE '%ROLE_ADMIN%'");
+        $statement->execute();
+        $data = $statement->fetchAll();
+
+        $admin = array();
+        foreach($data as $d) {
+            $dist = $em->getRepository('AppBundle:User')->find($d['id']);
+            $admin[] = $dist;
+        }
+        return $admin;
+    }
+
     public function getAllRetailersArray(Channel $channel = null) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
@@ -222,7 +243,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * @param Channel $channel
-     * @return array
+     * @return User[]
      *
      * Returns an array of all User Entities that are in the channel
      */

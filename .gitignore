@@ -16,7 +16,4 @@
 /web/bundles/
 /web/css/
 /web/js/
-/.idea/*
 .idea
-.idea/*
-/src/WarehouseBundle/Controller/PurchaseOrderController.php

@@ -306,6 +306,14 @@ class User extends BaseUser
 
     private $active_channel = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="submittedByUser")
+     */
+    private $promo_kit_orders;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -327,6 +335,7 @@ class User extends BaseUser
         $this->ledgers = new ArrayCollection();
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
+        $this->promo_kit_orders = new ArrayCollection();
     }
 
     /**
@@ -1258,7 +1267,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return null
+     * @return Channel
      */
     public function getActiveChannel()
     {
@@ -1266,7 +1275,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param null $active_channel
+     * @param Channel $active_channel
      */
     public function setActiveChannel(Channel $active_channel)
     {
@@ -1624,5 +1633,21 @@ class User extends BaseUser
     public function removeCreditedLedger(\OrderBundle\Entity\Ledger $creditedLedger)
     {
         $this->credited_ledgers->removeElement($creditedLedger);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrders()
+    {
+        return $this->promo_kit_orders;
+    }
+
+    /**
+     * @param mixed $promo_kit_orders
+     */
+    public function setPromoKitOrders($promo_kit_orders)
+    {
+        $this->promo_kit_orders = $promo_kit_orders;
     }
 }

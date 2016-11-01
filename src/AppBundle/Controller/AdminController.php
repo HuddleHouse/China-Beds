@@ -3,7 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use InventoryBundle\Entity\Channel;
+use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
@@ -13,6 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use WarehouseBundle\Entity\Warehouse;
 
 /**
  * @Route("/admin")

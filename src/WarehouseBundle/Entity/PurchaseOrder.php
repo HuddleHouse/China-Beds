@@ -39,6 +39,13 @@ class PurchaseOrder
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="port_eta", type="date", nullable=true)
+     */
+    private $portEta;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="order_received_date", type="datetime", nullable=true)
      */
     private $orderReceivedDate;
@@ -60,9 +67,9 @@ class PurchaseOrder
     /**
      * @var string
      *
-     * @ORM\Column (name="physical_container", type="string", nullable=true)
+     * @ORM\Column (name="physical_container_number", type="string", nullable=true)
      */
-    private $physicalContainer;
+    private $physicalContainerNumber;
 
     /**
      * @var string
@@ -253,7 +260,7 @@ class PurchaseOrder
     /**
      * Get warehouseId
      *
-     * @return int
+     * @return Warehouse
      */
     public function getWarehouse()
     {
@@ -285,7 +292,7 @@ class PurchaseOrder
     }
 
     /**
-     * @return mixed
+     * @return \AppBundle\Entity\User
      */
     public function getUser()
     {
@@ -321,13 +328,13 @@ class PurchaseOrder
     /**
      * Set physicalContainer
      *
-     * @param string $physicalContainer
+     * @param string $physicalContainerNumber
      *
      * @return PurchaseOrder
      */
-    public function setPhysicalContainer($physicalContainer)
+    public function setPhysicalContainerNumber($physicalContainerNumber)
     {
-        $this->physicalContainer = $physicalContainer;
+        $this->physicalContainerNumber = $physicalContainerNumber;
 
         return $this;
     }
@@ -337,9 +344,9 @@ class PurchaseOrder
      *
      * @return string
      */
-    public function getPhysicalContainer()
+    public function getPhysicalContainerNumber()
     {
-        return $this->physicalContainer;
+        return $this->physicalContainerNumber;
     }
 
     /**
@@ -388,5 +395,21 @@ class PurchaseOrder
     public function removeProductVariant(\WarehouseBundle\Entity\PurchaseOrderProductVariant $productVariant)
     {
         $this->product_variants->removeElement($productVariant);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPortEta()
+    {
+        return $this->portEta;
+    }
+
+    /**
+     * @param \DateTime $portEta
+     */
+    public function setPortEta($portEta)
+    {
+        $this->portEta = $portEta;
     }
 }

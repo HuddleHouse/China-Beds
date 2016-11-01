@@ -8,6 +8,7 @@ use OrderBundle\Entity\Orders;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -60,6 +61,7 @@ class RebateSubmissionType extends AbstractType
                     'required' => true,
                 )
             )
+            ->add('description', TextareaType::class, array('label' => 'Comments', 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('amountRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
                     'label' => 'Amount',

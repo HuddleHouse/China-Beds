@@ -1,0 +1,53 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Contact List') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Contact List') }}
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}}, order: [[ 0, "desc" ]] });
+        });
+    </script>
+{% endblock footer %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-hover table-bordered no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        {% for header in report.headers %}
+                            <th>{{ header | default('') }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in report.data %}
+                        <tr>
+                            <td>{{ user.userName | default('--') }}</td>
+                            <td>{% if user.email is defined %}<a href="mailto:{{ user.email }}">{{ user.email}}</a>{% else %}--{% endif %}</td>
+                            <td>{{ user.phoneNumber | default('--') }}</td>
+                            <td>{{ user.lastLogin | date('m/d/y h:i:s A') | default('--') }}</td>
+                            <td>{{ user.fullName | default('--') }}</td>
+                            <td>{{ user.address1 | default('--') }}</td>
+                            <td>{{ user.city | default('--') }}</td>
+                            <td>{{ user.state.name | default('--') }}</td>
+                            <td>{{ user.zip | default('--') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

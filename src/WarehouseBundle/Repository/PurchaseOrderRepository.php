@@ -96,4 +96,13 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
         return $statement->fetchAll();
     }
 
+    /**
+     * @return PurchaseOrder[]
+     */
+    public function getTodaysPOs() {
+        $qb = $this->createQueryBuilder('po')
+            ->andWhere('po.stockDueDate between :today and :tomorrow')
+            ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
+        return $qb->getQuery()->getResult();
+    }
 }

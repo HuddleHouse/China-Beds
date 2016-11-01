@@ -57,6 +57,7 @@ class PromoKitOrderType extends AbstractType
                     'choice_label' => function (PromoKit $p) {
                         return $p->getName() . ': ' . $p->getDescription();
                     },
+                    'choices' => $this->repository->getActivePromoKitItems(),
                     'expanded' => true,
                     'multiple' => true,
                     'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
@@ -74,11 +75,6 @@ class PromoKitOrderType extends AbstractType
                     'multiple' => true,
                     'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
-//                    'query_builder' => function (EntityRepository $er) {
-//                        return $er->createQueryBuilder('pv')
-//                            ->leftJoin('pv.warehouse_info', 'whi', 'WITH', 'pv.warehouse_info = whi')
-//                            ->leftJoin('whi.warehouse', 'w', 'WITH', 'whi.warehouse = w');
-//                    },
                 )
             )
             ->add('popItems', EntityType::class, array(
@@ -91,10 +87,6 @@ class PromoKitOrderType extends AbstractType
                     'multiple' => true,
                     'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
-//                    'query_builder' => function (EntityRepository $er) {
-//                        return $er->createQueryBuilder('p')
-//                            ->andWhere('p.');
-//                    },
                 )
             )
             ->add('retailerStoreName', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Retailer Store Name'))
