@@ -172,7 +172,7 @@
                     <tr>
                         <th>Warranty ID</th>
                         <th>Order ID</th>
-                        <th>Date Aware</th>
+                        {#<th>Date Aware</th>#}
                         <th>Date of Claim</th>
                         <th>Submitted By</th>
                         {#<th>Credit Requested</th>#}
@@ -187,7 +187,7 @@
                         <tr data-description-body="{{ warranty_claim.description }}" data-description-expanded="0" data-resolution-body="{{ warranty_claim.resolution | default('--') }}" data-resolution-expanded="0">
                             <td>{{ warranty_claim.warrantyClaimId | default('--') }}</td>
                             <td>{{ warranty_claim.order.orderId | default('--') }}</td>
-                            <td>{% if warranty_claim.dateMadeAware %}{{ warranty_claim.dateMadeAware|date('m/d/y') }}{% else %}--{% endif %}</td>
+                            {#<td>{% if warranty_claim.dateMadeAware %}{{ warranty_claim.dateMadeAware|date('m/d/y') }}{% else %}--{% endif %}</td>#}
                             <td>{% if warranty_claim.dateOfClaim %}{{ warranty_claim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{{ warranty_claim.submittedByUser }}</td>
                             {#<td>${{ warranty_claim.creditRequested | number_format(2) }}</td>#}
