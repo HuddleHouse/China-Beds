@@ -36,14 +36,16 @@ class SettingsService
             if ( $setting = $this->em->getRepository('AppBundle:Settings')->findOneBy(array('name' => $name)) ) {
                 $rtn = $setting->getValue();
             }
+            if($rtn == null)
+                throw new \Exception();
 
+            return $rtn;
         }
         catch(\Exception $e) {
             if(array_key_exists($name, $this->defaults))
                 return $this->defaults[$name];
-            return "Could not find setting " . $name . ": " . $e->getMessage();
+            throw new \Exception("Could not find setting " . $name . ": " . $e->getMessage());
         }
-        return $rtn;
     }
 
     /**

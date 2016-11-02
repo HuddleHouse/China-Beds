@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Form\ContactUsType;
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -255,7 +256,17 @@ class AdminController extends Controller
             $statement->execute();
         }
         return JsonResponse::create(true);
-}
+    }
+
+    /**
+     * @Route("/contact_us", name="contact_us")
+     */
+    public function contactUsAction(){
+        $em = $this->getDoctrine()->getManager();
+        $contact = $em->getRepository('AppBundle:ContactUs');
+        $form = $this->createForm(ContactUsType::class, $contact);
+        return $this->render('@App/contact-us.html.twig', array('form' => $form));
+    }
 
 
 }
