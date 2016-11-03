@@ -27,7 +27,7 @@ class StockAdjustmentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $stockAdjustments = $em->getRepository('WarehouseBundle:StockAdjustment')->findAll();
+        $stockAdjustments = $em->getRepository('WarehouseBundle:StockAdjustment')->findBy([], ['date' => 'DESC']);
 
         return $this->render('@Warehouse/StockAdjustment/index.html.twig', array(
             'stockAdjustments' => $stockAdjustments,
