@@ -75,7 +75,8 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
 		left join status s
 			on s.id = p.status_id
 	where w.id = :warehouse_id 
-	and s.name = 'Active'");
+	and s.name = 'Active'
+	order by p.order_date desc");
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();

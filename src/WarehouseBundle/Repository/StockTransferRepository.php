@@ -111,7 +111,8 @@ select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_tra
 			on p.departing_warehouse_id = w.id
 		left join status s
 			on s.id = p.status_id
-	where w.id = :warehouse_id");
+	where w.id = :warehouse_id
+	order by date desc");
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();

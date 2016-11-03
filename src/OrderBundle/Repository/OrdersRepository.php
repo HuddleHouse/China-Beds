@@ -145,6 +145,11 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
                     );
             }
         }
+
+        usort($data, function($a, $b) {
+            return $a['date']->getTimestamp() - $b['date']->getTimestamp();
+        });
+
         return $data;
     }
 
@@ -179,6 +184,11 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
             }
 
         }
+
+
+        usort($data, function($a, $b) {
+            return $a['date']->getTimestamp() - $b['date']->getTimestamp();
+        });
 
         return $data;
     }
