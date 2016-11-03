@@ -2,7 +2,6 @@
 
 {% block title %}Contact Us{% endblock %}
 {% block page_title %}
-    Contact Us
 {% endblock page_title %}
 
 {% block page_name %}
@@ -18,10 +17,27 @@
         font-size:20px;
     }
 </style>
+    <script>
+        $(document).ready(function () {
+            $('#message').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 1000) {
+                    $(this).val($(this).val().substring(0, 1000));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 1000 - len;
+                    $('#charNum').text(l);
+                }
+            });
+        });
+    </script>
 {% endblock footer %}
 
 {%  block content %}
-
+    <div class="row" style="margin-bottom:30px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-10"><h2>Contact Us</h2></div>
+    </div>
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -34,14 +50,54 @@
                 Chattanooga TN 37421.</br>
             </p>
         </div>
-        <div class="row">
+
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             {{ form_start(form) }}
-                {{ form_widget(form) }}
+            <div class="form-group col-md-6">
+                {{  form_label(form.firstName) }}
+                {{ form_widget(form.firstName) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.lastName) }}
+                {{ form_widget(form.lastName) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.address) }}
+                {{ form_widget(form.address) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.city) }}
+                {{ form_widget(form.city) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.state) }}
+                {{ form_widget(form.state) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.zip) }}
+                {{ form_widget(form.zip) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form_label(form.phone) }}
+                {{ form_widget(form.phone) }}
+            </div>
+            <div class="form-group col-md-12">
+                {{ form_label(form.message) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">1000</span>
+                {{ form_widget(form.message) }}
+            </div>
+            <input class="btn btn-raised btn-success" type="submit" value="Create" />
 
             {{ form_end(form) }}
-
-
-
         </div>
+
+
     </div>
+
 {% endblock %}

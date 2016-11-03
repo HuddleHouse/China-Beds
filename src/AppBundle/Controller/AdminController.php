@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use WarehouseBundle\Entity\Warehouse;
+use AppBundle\Entity\ContactUs;
 
 /**
  * @Route("/admin")
@@ -261,11 +262,25 @@ class AdminController extends Controller
     /**
      * @Route("/contact_us", name="contact_us")
      */
-    public function contactUsAction(){
+    public function contactUsAction(Request $request){
         $em = $this->getDoctrine()->getManager();
-        $contact = $em->getRepository('AppBundle:ContactUs');
+        $contact = new ContactUs();
         $form = $this->createForm(ContactUsType::class, $contact);
-        return $this->render('@App/contact-us.html.twig', array('form' => $form));
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            try {
+                $em->persist($contact);
+                $em->flush();
+                $this->addFlash('notice','Thank you for your submission. We will be in contact with you shortly');
+                return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+            }catch(\Exception $e){
+                $this->addFlash('notice','We\'re sorry but there seems to have been an issue with your submission: ' . $e->getCode() . $e->getMessage());
+                return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+            }
+        }
+
+        return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
     }
 
 
