@@ -15,12 +15,41 @@
 
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+
+
+//            $('#contacted-retailer-y').click(function(){
+//                $(this).addClass('active');
+//                $('#contacted-retailer-n').removeClass('active');
+//                $('#front_warranty_claim_contactedRetailer').val(1);
+//
+//            });
+//            $('#contacted-retailer-n').click(function(){
+//                $(this).addClass('active');
+//                $('#contacted-retailer-y').removeClass('active');
+//                $('#front_warranty_claim_contactedRetailer').val(0);
+//            });
+
         });
+
+        function boolTrigger(yn, elementId, inputId){
+            if(yn == true) {
+                $('#' + elementId + '-y').addClass('active');
+                $('#' + elementId + '-n').removeClass('active');
+                $('#front_warranty_claim_' + inputId).val(1);
+            }else if(yn === false){
+                $('#' + elementId + '-n').addClass('active');
+                $('#' + elementId + '-y').removeClass('active');
+                $('#front_warranty_claim_' + inputId).val(0);
+            }
+        }
     </script>
+    <style>
+
+    </style>
 {% endblock footer %}
 
 {% block body %}
-
+    {{ form_start(form) }}
     <div class="content-section">
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
@@ -88,8 +117,9 @@
                     <div class="form-group">
                         <label for="username">I have contacted the retailer where I purchased my bed</label>
                         <div class="text-left">
-                            <span class="option-yn active">Yes</span>
-                            <span class="option-yn">No</span>
+                            <span class="option-yn active" id="contacted-retailer-y" onclick="boolTrigger(true,'contacted-retailer', 'contactedRetailer')" >Yes</span>
+                            <span class="option-yn" id="contacted-retailer-n" onclick="boolTrigger(false,'contacted-retailer', 'contactedRetailer')">No</span>
+                            {{ form_widget(form.contactedRetailer) }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -118,8 +148,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="shipping-damage-y" onclick="boolTrigger(true, 'shipping-damage', 'shippingDamage')">Yes</span>
+                                <span class="option-yn" id="shipping-damage-n" onclick="boolTrigger(false, 'shipping-damage', 'shippingDamage')">No</span>
+                                {{ form_widget(form.shippingDamage) }}
                             </div>
                         </div>
                     </div>
@@ -130,8 +161,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="within-48-y" onclick="boolTrigger(true, 'within-48', 'within48' )">Yes</span>
+                                <span class="option-yn" id="within-48-n" onclick="boolTrigger(false, 'within-48', 'within48' )">No</span>
+                                {{ form_widget(form.within48) }}
                             </div>
                         </div>
                     </div>
@@ -142,8 +174,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="length-different-y" onclick="boolTrigger(true, 'length-different', 'lengthDifferent')">Yes</span>
+                                <span class="option-yn" id="length-different-n" onclick="boolTrigger(false, 'length-different', 'lengthDifferent')">No</span>
+                                {{ form_widget(form.lengthDifferent) }}
                             </div>
                         </div>
                     </div>
@@ -154,8 +187,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="body-impression-y" onclick="boolTrigger(true, 'body-impression', 'bodyImpression')">Yes</span>
+                                <span class="option-yn" id="body-impression-n" onclick="boolTrigger(false, 'body-impression', 'bodyImpression')">No</span>
+                                {{ form_widget(form.bodyImpression) }}
                             </div>
                         </div>
                     </div>
@@ -166,8 +200,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="feeling-issue-y" onclick="boolTrigger(true, 'feeling-issue', 'feelingIssue')">Yes</span>
+                                <span class="option-yn" id="feeling-issue-n" onclick="boolTrigger(false, 'feeling-issue', 'feelingIssue')">No</span>
+                                {{ form_widget(form.feelingIssue) }}
                             </div>
                         </div>
                     </div>
@@ -201,6 +236,7 @@
 
                     <div class="char-box">
                         <button type="submit" class="btn btn-primary">Submit warranty claim</button>
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>
