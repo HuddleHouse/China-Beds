@@ -3,7 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Form\ContactUsType;
+use InventoryBundle\Entity\Channel;
+use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
@@ -13,6 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use WarehouseBundle\Entity\Warehouse;
+use AppBundle\Entity\ContactUs;
 
 /**
  * @Route("/admin")
@@ -250,7 +257,31 @@ class AdminController extends Controller
             $statement->execute();
         }
         return JsonResponse::create(true);
-}
+    }
+
+    /**
+     * @Route("/contact_us", name="contact_us")
+     */
+    public function contactUsAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $contact = new ContactUs();
+        $form = $this->createForm(ContactUsType::class, $contact);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            try {
+                $em->persist($contact);
+                $em->flush();
+                $this->addFlash('notice','Thank you for your submission. We will be in contact with you shortly');
+                return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+            }catch(\Exception $e){
+                $this->addFlash('notice','We\'re sorry but there seems to have been an issue with your submission: ' . $e->getCode() . $e->getMessage());
+                return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+            }
+        }
+
+        return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+    }
 
 
 }

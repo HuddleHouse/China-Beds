@@ -24,7 +24,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new QuickbooksBundle\QuickbooksBundle(),
             new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new Eidsonator\SemanticReportsBundle\SemanticReportsBundle(),
+            new ReportBundle\ReportBundle(),
         ];
 
         if ( in_array($this->getEnvironment(), ['channel', 'channel_dev']) ) {

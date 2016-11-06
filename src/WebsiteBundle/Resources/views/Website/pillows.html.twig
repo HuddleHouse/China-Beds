@@ -36,8 +36,8 @@
                 {% for pillow in pillows %}
                     {% if pillow.hideFrontEnd == false %}
                     <li class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="box" style="padding:25px;">
-                            <div class="img"><img src="{{ pillow.image_url }}" /></div>
+                        <div class="box">
+                            <div class="img" style="padding: 15px;"><img src="{{ pillow.image_url }}" /></div>
                             <h3>{{ pillow.name| upper }}</h3>
                             <p>{{ pillow.short_description }}</p>
                         </div>

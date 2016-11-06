@@ -45,7 +45,7 @@ class StockAdjustmentController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
 
         return $this->render('@Warehouse/StockAdjustment/new.html.twig', array(
             'inventory_data' => $inventory_data,
@@ -66,7 +66,7 @@ class StockAdjustmentController extends Controller
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
         $cart = $em->getRepository('WarehouseBundle:StockAdjustment')->getCartArray($stockAdjustment);
 
         return $this->render('@Warehouse/StockAdjustment/show.html.twig', array(

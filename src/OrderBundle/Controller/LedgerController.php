@@ -33,7 +33,7 @@ class LedgerController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $ledgers = $em->getRepository('OrderBundle:Ledger')->findByUser($this->getUser());;
+        $ledgers = $em->getRepository('OrderBundle:Ledger')->findByUser($this->getUser());
 
         return $this->render('@Order/Ledger/index.html.twig', array(
             'ledgers' => $ledgers,

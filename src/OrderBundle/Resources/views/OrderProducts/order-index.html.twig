@@ -20,6 +20,9 @@
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
+            buttonGroup.find('.is-checked').removeClass('is-checked');
+            $( this ).addClass('is-checked');
+
             var grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
@@ -180,8 +183,10 @@
             $scope.ship_to_id = {{ app.user.id }};
 
             $scope.due_date = new Date();
-            $scope.date = ($scope.due_date.getTime() + 86400000);
-            $scope.min_date = new Date($scope.date);
+            $scope.date_for_min = ($scope.due_date.getTime() + 60480000);
+            $scope.date_for_max = ($scope.due_date.getTime() + 604800000);
+            $scope.min_date = new Date($scope.date_for_min);
+            $scope.max_date = new Date($scope.date_for_max);
 
             $('body').addClass('sidebar-collapse');
 
@@ -726,7 +731,7 @@
         }
         .price_box {
              max-width: 15%;
-            width: 15%;
+            width: 13%;
              display: inline-block;
             margin-left: 3px;
             margin-right: 3px;
@@ -843,7 +848,7 @@
         {% endif %}
 
         <div class="row">
-            <div class="grid col-md-10">
+            <div class="grid md-col-12 col-lg-10">
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
@@ -855,9 +860,9 @@
                             </div>
                         </div>
 
-                        <div class="price_box_row ">
+                        <div class="price_box_row " style="font-size: smaller;">
 
-                                <div ng-repeat="variant in product.variants track by $index" class="price_box" style="min-width: 64px;">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
@@ -932,11 +937,11 @@
         </div>
 
 
-        <div id="floaty-box" class="col-md-2 visible-lg">
+        <div id="floaty-box" class="col-lg-2 visible-lg">
             <ul>
                 <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
                 {% for category in categories %}
-                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin" aria-hidden="true"></i> {{ category.name }}</h6></li>
+                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin"></i> {{ category.name }}</h6></li>
                 {% endfor %}
                 <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
 

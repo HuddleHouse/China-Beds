@@ -131,7 +131,8 @@
         {% set sidebar_rebate = ['rebate_index', 'rebate_new', 'rebate_edit', 'rebate_show'] %}
         {% set sidebar_specification = ['specification_index', 'specification_new', 'specification_edit', 'specification_show'] %}
         {% set sidebar_channel = ['admin_channel_index', 'admin_channel_new', 'admin_channel_edit', 'admin_channel_show'] %}
-        {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit', 'promokit_show'] %}
+        {% set sidebar_promokit = ['promokit_index', 'promokit_new', 'promokit_edit'] %}
+        {% set sidebar_promokit_orders = ['promokit_orders_index', 'promokit_new_order', 'promokit_edit_order'] %}
         {% set sidebar_status = ['status_index', 'status_new', 'status_edit', 'status_show'] %}
         {% set sidebar_stock_adjustment = ['stockadjustment_index', 'stockadjustment_new', 'stockadjustment_edit', 'stockadjustment_show'] %}
         {% set sidebar_purchase_orders = ['purchaseorder_index', 'purchaseorder_new', 'purchaseorder_edit', 'purchaseorder_show'] %}
@@ -175,6 +176,7 @@
                         {% elseif (app.request.get('_route') in sidebar_specification) %} active
                         {% elseif (app.request.get('_route') in sidebar_pop_item_edit) %} active
                         {% elseif (app.request.get('_route') in sidebar_promokit) %} active
+                        {% elseif (app.request.get('_route') in sidebar_promokit_orders) %} active
                         {% endif %}">
                             <a href="$">
                                 <i class="fa fa-tasks"></i>
@@ -202,6 +204,9 @@
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_promokit) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Items</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in sidebar_promokit_orders) %} class="active"{% endif %}>
+                                    <a href="{{ path('promokit_orders_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Orders</a>
                                 </li>
                             </ul>
                         </li>
@@ -388,6 +393,7 @@
                                 <span>Support</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
+                            {% if app.user.hideRebate == false %}
                             <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
                                     {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
@@ -402,14 +408,16 @@
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
                                     <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 </li>
-
+                            {% if (app.request.get('_route') in ['retailer_affiliates']) %}
                                 <li {% if (app.request.get('_route') =='retailer_affiliates') %} class="active"{% endif %}>
                                     <a href="{{ path('retailer_affiliates') }}"><i class="fa fa-circle-o"></i>Affiliates Map</a>
                                 </li>
+                            {% endif %}
                             </ul>
+                            {% endif %}
                         </li>
 
-
+                        {% if not ('ROLE_SALES_REP' in app.user.roles) %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
@@ -433,16 +441,17 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        {% endif %}
 
                         <li class="header">LINKS</li>
-                        <li>
-                            <a href="#">
+                        <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
+                            <a href="{{ path('resource_index') }}">
                                 <i class="fa fa-circle-o text-aqua"></i>
                                 <span>Resources</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="{{ path('contact_us') }}">
                                 <i class="fa fa-circle-o" style="color: #4caf50;"></i>
                                 <span>Contact Us</span>
                             </a>
@@ -516,6 +525,9 @@
             <div class="tab-pane active" id="control-sidebar-home-tab">
                 <a style="width: 100%;" class="btn btn-raised btn-default" href="{{ path('fos_user_profile_edit') }}"><i class="fa fa-user"></i> Update Info</a>
                 <a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('fos_user_change_password') }}"><i class="fa fa-lock"></i> Change Password</a>
+                {% if(is_granted('ROLE_ADMIN')) %}
+                    <a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('settings_index') }}"><i class="fa fa-gears"></i> Admin Settings</a>
+                {% endif %}
                 {#<a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('qb_import_home') }}"><i class="fa fa-lock"></i> Import Settings</a>#}
                 {#<a style="width: 100%;margin-top: 15px;margin-bottom: 15px;" class="btn btn-raised btn-default" href="{{ path('show_settings') }}"><i class="fa fa-lock"></i> Settings</a>#}
                 <hr>

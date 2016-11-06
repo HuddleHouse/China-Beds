@@ -17,7 +17,23 @@
         $(document).ready(function () {
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('.active-field').click(function() {
+                $(this).find('input').click();
+            });
         });
+
+        function changePromoKitActive(promokit_id, active) {
+            console.log('active: '+active);
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('api_change_promo_kit_item_active') }}",
+                dataType: 'json',
+                data: {promokit_id: promokit_id, active: active},
+                success: function (data) {
+//                    console.log(JSON.stringify(data,null,4));
+                }
+            });
+        }
     </script>
 {% endblock footer %}
 
@@ -30,23 +46,19 @@
             <tr>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Active</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for promoKit in promoKits %}
             <tr>
-                <td><a href="{{ path('promokit_show', { 'id': promoKit.id }) }}">{{ promoKit.name }}</a></td>
+                <td>{{ promoKit.name }}</td>
                 <td>{{ promoKit.description }}</td>
+                <td class="active-field"><input type="checkbox" {% if promoKit.active %}checked="checked"{% endif %} onchange="changePromoKitActive({{ promoKit.id }}, this.checked)" /></td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('promokit_show', { 'id': promoKit.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('promokit_edit', { 'id': promoKit.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a class="btn btn-raised btn-xs" href="{{ path('promokit_edit', { 'id': promoKit.id }) }}">Edit</a>
+                    {#<a class="btn btn-raised btn-xs btn-danger" href="{{ path('delete_promokit', { 'id': promoKit.id }) }}">Delete</a>#}
                 </td>
             </tr>
         {% endfor %}

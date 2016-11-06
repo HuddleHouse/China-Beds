@@ -25,11 +25,9 @@
                     $('#charNum').text(l);
                 }
             });
-            $('#warranty_claim_productVariant').change(function(){
-                    fillImage($(this).val());
-            })
-
         });
+
+
 
         function getProductVariants() {
             var el = $('#warranty_claim_productVariant');
@@ -46,8 +44,6 @@
                     el.html(variants);
                     if(variants != '<option>Select Order ID first</option>')
                         el.prop('disabled', false);
-                    el.prop('disabled', false);
-                    el.val({{ warranty_claim.productVariant.id | default('') }});
                 }
             });
         }
@@ -57,18 +53,6 @@
             m_strOut = m_strOut.replace(/[^0-9.]/g, '');
             return m_strOut;
         }
-
-        function fillImage(variantId)
-        {
-            $.ajax({
-                method: "GET",
-                url: Routing.generate('api_get_variant_image' , { variantId : variantId})
-            }).done(function(data){
-                $('#variant-img').empty().append("<img src='"+ data +"' style='display:none;height:auto;width:100%;'/>");
-                $('#variant-img img').slideDown(400);
-            });
-        }
-
 
         function openFileBrowser1() {
             $('#warranty_claim_file1').click();
@@ -101,10 +85,10 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.creditRequested) }}
-                    {{ form_widget(form.creditRequested) }}
-                </div>
+                {#<div class="col-md-4 form-group">#}
+                    {#{{ form_label(form.creditRequested) }}#}
+                    {#{{ form_widget(form.creditRequested) }}#}
+                {#</div>#}
                 <div class="col-md-4 form-group">
                     {{ form_label(form.order) }} <i id="info-icon" class="fa fa-info-circle" aria-hidden="true" onclick="showInfoModal()"></i><div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="info-icon">If you don't know your Order ID, input relevant information in the comments</div>
                     {{ form_widget(form.order) }}
@@ -113,17 +97,6 @@
                     {{ form_label(form.productVariant) }}
                     {{ form_widget(form.productVariant) }}
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.quantity) }}
-                    {{ form_widget(form.quantity) }}
-                </div>
-                <div class="col-md-4"></div>
-                <div class="col-md-4" id="variant-img" style="height:350px;">
-
-                </div>
-
             </div>
             <div class="row">
                 <div class="col-md-4 form-group">
@@ -158,6 +131,16 @@
                         </label>
                         {{ form_widget(form.path3) }}
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.lawLabel) }}
+                    {{ form_widget(form.lawLabel) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.frLabel) }}
+                    {{ form_widget(form.frLabel) }}
                 </div>
             </div>
             <div class="row">

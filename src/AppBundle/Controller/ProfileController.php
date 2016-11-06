@@ -104,38 +104,38 @@ class ProfileController extends Controller
 
     /**
      *
-     * @Route("/user/edit/{id}", name="edit_child_user")
      */
-    public function showUser(User $user, Request $request) {
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-        $user_id = $user->getId();
-
-        $form = $this->createForm(EditChildUserType::class, $user);
-        $form->handleRequest($request);
-
-        if($form->isValid()) {
-            try {
-                $event = new FormEvent($form, $request);
-                $userManager->updateUser($user);
-                $successMessage = "User information updated succesfully.";
-                $this->addFlash('notice', $successMessage);
-
-                return $this->redirectToRoute('edit_child_user', array('id' => $user->getId()));
-            }
-            catch(\Exception $e) {
-                $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
-                return $this->render('AppBundle:Profile:edit_child_user.html.twig', array(
-                    'form' => $form->createView(),
-                    'user_id' => $user_id,
-                    'user' =>$user
-                ));
-            }
-        }
-    }
+//    public function showUser(User $user, Request $request) {
+//        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+//        $userManager = $this->get('fos_user.user_manager');
+//        $user_id = $user->getId();
+//
+//        $form = $this->createForm(EditChildUserType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if($form->isValid()) {
+//            try {
+//                $event = new FormEvent($form, $request);
+//                $userManager->updateUser($user);
+//                $successMessage = "User information updated succesfully.";
+//                $this->addFlash('notice', $successMessage);
+//
+//                return $this->redirectToRoute('edit_child_user', array('id' => $user->getId()));
+//            }
+//            catch(\Exception $e) {
+//                $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+//                return $this->render('AppBundle:Profile:edit_child_user.html.twig', array(
+//                    'form' => $form->createView(),
+//                    'user_id' => $user_id,
+//                    'user' =>$user
+//                ));
+//            }
+//        }
+//    }
 
     /**
      * Edit the user
+     * @Route("/user/edit/{id}", name="edit_child_user")
      */
     public function editAction(Request $request)
     {

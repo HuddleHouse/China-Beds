@@ -4,6 +4,7 @@ namespace InventoryBundle\Controller;
 
 use InventoryBundle\Entity\PromoKitOrders;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -72,7 +73,7 @@ class PromoKitController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($promoKit);
                 $em->flush();
-                $this->addFlash('notice', 'Promo Kit created successfully.');
+                $this->addFlash('notice', 'Promo Kit Item created successfully.');
 
                 return $this->redirectToRoute('promokit_index');
             }
@@ -171,22 +172,6 @@ class PromoKitController extends Controller
     }
 
     /**
-     * Finds and displays a PromoKit entity.
-     *
-     * @Route("/{id}", name="promokit_show")
-     * @Method("GET")
-     */
-    public function showAction(PromoKit $promoKit)
-    {
-        $deleteForm = $this->createDeleteForm($promoKit);
-
-        return $this->render('@Inventory/Promokit/show.html.twig', array(
-            'promoKit' => $promoKit,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
      * Displays a form to edit an existing PromoKit entity.
      *
      * @Route("/{id}/edit", name="promokit_edit")
@@ -202,9 +187,9 @@ class PromoKitController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($promoKit);
                 $em->flush();
-                $this->addFlash('notice', 'Promo Kit updated successfully.');
+                $this->addFlash('notice', 'Promo Kit Item updated successfully.');
 
-                return $this->redirectToRoute('promokit_edit', array('id' => $promoKit->getId()));
+                return $this->redirectToRoute('promokit_index');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error editing Promo Kit Item: ' . $e->getMessage());
@@ -265,4 +250,29 @@ class PromoKitController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Deletes Entity for Index listing
+     *
+     * @Route("/delete/{id}", name="delete_promokit")
+     * @Method({"GET", "POST"})
+     */
+    public function deletePromoAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $promo = $em->getRepository('InventoryBundle:PromoKit')->find($id);
+        $promo_kits = $em->getRepository('InventoryBundle:PromoKit')->findAll();
+
+        try {
+            $em->remove($promo);
+            $em->flush();
+            $this->addFlash('notice', 'Successfuly deleted promo item ');
+            return $this->redirectToRoute('promokit_index');
+        }catch(Exception $e) {
+            $this->addFlash('notice', 'error deleting promo kit item' . $e);
+            return $this->redirectToRoute('promokit_index');
+        }
+
+
+    }
+
 }

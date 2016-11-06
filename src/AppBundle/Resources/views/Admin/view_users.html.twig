@@ -45,7 +45,25 @@ All Registered Users
                                 {{ user.hasRole('ROLE_ADMIN') ? 'Yes' : 'No' }}
                             </td>
                             <td>
-                                {{ user.enabled ? 'Yes' : 'No' }}
+                                {#{{ user.enabled ? 'Yes' : 'No' }}#}
+                                {% for role in user.roles %}
+                                    {% if role == 'ROLE_ADMIN' %}
+                                        {% set role_print = 'Admin'%}
+                                    {% elseif  role == 'ROLE_DISTRIBUTOR'%}
+                                        {% set role_print = 'Distributor' %}
+                                    {% elseif  role == 'ROLE_RETAILER'%}
+                                        {% set role_print = 'Retailer' %}
+                                    {% elseif  role == 'ROLE_SALES_REP'%}
+                                        {% set role_print = 'Sales Rep' %}
+                                    {% elseif  role == 'ROLE_SALES_MANAGER'%}
+                                        {% set role_print = 'Sales Manager' %}
+                                    {% elseif  role == 'ROLE_WAREHOUSE'%}
+                                        {% set role_print = 'Warehouse' %}
+                                    {% else %}
+                                        {% set role_print = 'User' %}
+                                    {% endif %}
+                                    {{ role_print }} ,
+                                {% endfor %}
                             </td>
                             <td>
                                 {{ user.lastLogin |date("F jS \\a\\t g:ia") }}

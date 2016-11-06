@@ -4,6 +4,7 @@
 namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,14 +33,60 @@ class RetailerController extends Controller
         $em = $this->getDoctrine()->getManager();
         $users = $em->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel());
 
-//        $userObjects = array();
-//        foreach ($users as $user) {
-//          if($user->hasRole('ROLE_RETAILER')) {
-//            $userObjects[]  = $user;
-//          }
-//        }
+
+        $userObjects = array();
+        foreach ($users as $user) {
+          if($user->hasRole('ROLE_RETAILER')) {
+
+              $latlong = $this->latLongConvert(sprintf('%s, %s %s, %s', $user->getAddress1(), $user->getCity(), $user->getState()->getAbbreviation(), $user->getZip()));
+
+            $userObjects[] = [
+                'company_name' => $user->getCompanyName(),
+                'first_name' => $user->getFirstName(),
+                'last_name' => $user->getLastName(),
+                'address1' => $user->getAddress1(),
+                'address2' => $user->getAddress2(),
+                'city' => $user->getCity(),
+                'state' => $user->getState()->getAbbreviation(),
+                'zip' => $user->getZip(),
+                'phone' => $user->getPhone(),
+                'lat' => $latlong['lat'],
+                'long' => $latlong['long']
+            ];
+          }
+        }
+        return new JsonResponse($userObjects, 200);
+
         return $this->render('AppBundle:Retailer:users.html.twig', array(
             'users' => $users
         ));
+    }
+
+    private function latLongConvert($address)
+    {
+        $url = "http://maps.google.com/maps/api/geocode/json?address=".urlencode($address)."&sensor=false&region=false";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_PROXYPORT, 3128);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response_a = json_decode($response);
+
+        $lat = 0;
+        $long = 0;
+
+        if (is_object($response_a)) {
+            if (count($response_a->results)>0) {
+                $lat = $response_a->results[0]->geometry->location->lat;
+                $long = $response_a->results[0]->geometry->location->lng;
+            }
+        }
+
+         return ['lat' => $lat, 'long' => $long];
+
     }
 }

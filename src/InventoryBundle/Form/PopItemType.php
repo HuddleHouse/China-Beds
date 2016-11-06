@@ -31,6 +31,14 @@ class PopItemType extends AbstractType
                     'No' => 0,
                 ),
             ))
+            ->add('isHideOnOrder', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Hide on order form?',
+                'choices' => array(
+                    'Yes' => 1,
+                    'No' => 0,
+                ),
+            ))
             ->add('list_id', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'readonly' => 'readonly'), 'required' => false))
             ->add('file', FileType::class, array(
                 'attr' => array('style' => 'margin-bottom: 29px'),

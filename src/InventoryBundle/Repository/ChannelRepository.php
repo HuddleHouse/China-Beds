@@ -13,12 +13,18 @@ use WarehouseBundle\Entity\Warehouse;
  */
 class ChannelRepository extends \Doctrine\ORM\EntityRepository
 {
-
+    /**
+     * @param Channel $channel
+     * @param User $user
+     * @param Warehouse|null $warehouse
+     * @param null $categories
+     * @param null $include_closeouts
+     * @return array
+     */
     public function getProductArrayForChannel(Channel $channel, User $user, Warehouse $warehouse = null, $categories = null, $include_closeouts = null)
     {
         // select all products that are in the channel
         // get all product variants for it.
-
         $em = $this->getEntityManager();
         $product_channels = $em->getRepository('InventoryBundle:ProductChannel')->findBy(array('channel' => $channel));
         $product_data = array();
@@ -29,6 +35,7 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             $product = $product_channel->getProduct();
 
             if ( $product->getHideBackEnd() ) { continue; }
+            if ( !$product->getActive() ) { continue; }
 
             // get first image url
             $image_url = '/';
@@ -44,12 +51,10 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
             foreach($product->getCategories() as $cat) {
                 $cat_ids .= $cat->getCategory()->getId() . ' ';
                 $cat_count++;
-                if(strtoupper($cat->getCategory()->getName()) == 'CLOSEOUT')
+                $cat_name = $cat->getCategory()->getName();
+                if(strtoupper($cat_name) == 'CLOSEOUT' && $include_closeouts != null)
                     $is_closeout = 1;
             }
-
-            if($include_closeouts != null)
-                $is_closeout = 1;
 
             // format needed data to array
             $product_array = array(
@@ -127,8 +132,6 @@ select i.quantity, i.warehouse_id
 
                     $variants[$key]['inventory'] = $quantity;
                     $variants[$key]['warehouse_data'] = $warehouse_data;
-
-
                 }
 
                 $product_array['variants'] = $variants;

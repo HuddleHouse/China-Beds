@@ -121,6 +121,12 @@ class PopItem
      */
     private $promo_kit_orders;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_hide_on_order", type="boolean", nullable=true)
+     */
+    private $is_hide_on_order;
 
     public function __construct()
     {
@@ -152,6 +158,22 @@ class PopItem
         $this->sku = $sku;
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsHideOnOrder()
+    {
+        return $this->is_hide_on_order;
+    }
+
+    /**
+     * @param boolean $is_hide_on_order
+     */
+    public function setIsHideOnOrder($is_hide_on_order)
+    {
+        $this->is_hide_on_order = $is_hide_on_order;
     }
 
     /**

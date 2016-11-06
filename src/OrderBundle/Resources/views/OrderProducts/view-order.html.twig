@@ -465,7 +465,7 @@
                 </div>
                 <div class="col-md-6">
                     {% if order.status.name == 'Paid' or order.status.name == 'Shipped' %}
-                        <h4>Shipping Info/ Tracking Numbers</h4>
+                        <h4>Shipping Info/Tracking Numbers</h4>
                         <ul>
                             {% for label in order.shippingLabels %}
                                 <li>Tracking:
@@ -501,10 +501,6 @@
                                 <th >Subtotal:</th>
                                 <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
                             </tr>
-                            {#<tr>#}
-                                {#<th>Tax (9.3%)</th>#}
-                                {#<td>$0.00</td>#}
-                            {#</tr>#}
                             <tr>
                                 <th>Shipping: {{ order.getShipDescription }}</th>
                                 <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>

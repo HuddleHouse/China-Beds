@@ -83,7 +83,8 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'expanded' => true
             ))
             ->add('enabled', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
@@ -192,6 +193,14 @@ class UserType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false
+            ))
+            ->add('hide_rebate', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Hide Rebate form from user',
+                'choices' => array(
+                    'Yes' => 1,
+                    'No' => 0,
+                )
             ))
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,

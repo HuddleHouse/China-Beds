@@ -44,10 +44,13 @@
                 self.updateCartItem   = updateCartItem;
                 self.getCartTotal   = getCartTotal;
                 self.setActive   = setActive;
+                self.updatePurchaseOrderNumbers = updatePurchaseOrderNumbers;
                 self.receiveAll   = receiveAll;
+                self.removeCartItem = removeCartItem;
                 self.getWarehouseInv   = getWarehouseInv;
                 self.save = save;
                 self.warehouseChange = warehouseChange;
+                self.updateDateReceived = updateDateReceived;
                 self.cart = {{ cart | json_encode | raw}};
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -56,18 +59,18 @@
                 self.cart_total = {{ total | json_encode | raw }};
                 self.initial_total = {{ total | json_encode | raw }};
                 self.due_date = new Date("{{ purchaseOrder.stockDueDate |date("Y,m,d") }}");
+                self.received_date = new Date("{{ purchaseOrder.orderReceivedDate |date("Y,m,d") }}");
                 self.setEdit = setEdit;
+                self.updatePortETA = updatePortETA;
+                self.updateWarehouseETA = updateWarehouseETA;
                 self.isEdit = 0;
                 self.warehouses = {{ warehouses | json_encode | raw}};
                 self.warehouse = {{ purchaseOrder.warehouse.id }};
-                self.updateETA = updateETA;
+                self.physicalContainerNumber = '{{ purchaseOrder.physicalContainerNumber }}';
+                self.factoryOrderNumber = '{{ purchaseOrder.factoryOrderNumber }}';
+                self.updateIt = updateIt;
                 self.all_warehouse_inventory = {};
-
-                self.date = (self.due_date.getTime() + 432000000);
-                self.wheta = new Date(self.date);
-
-
-
+                self.portEta = new Date("{{ purchaseOrder.portEta |date("Y,m,d") }}");
 
                 function setEdit(val){
                     self.isEdit = val;
@@ -77,6 +80,19 @@
 
                 function warehouseChange() {
                     updateCart()
+                }
+
+                function updatePurchaseOrderNumbers() {
+                    showSpinner();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_purchase_order_numbers') }}",
+                        dataType: 'json',
+                        data: {physicalContainerNumber: self.physicalContainerNumber, factoryOrderNumber: self.factoryOrderNumber, purchaseOrderId: {{ purchaseOrder.id }} },
+                        success: function (data) {
+                            window.location.reload();
+                        }
+                    });
                 }
 
                 function updateCart() {
@@ -112,6 +128,8 @@
                 }
 
                 function querySearch (query) {
+                    $("html").css("overflow-y", "initial");
+
                     var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
                             deferred;
                     if (self.simulateQuery) {
@@ -124,10 +142,13 @@
                 }
 
                 function searchTextChange(text) {
+                    $("html").css("overflow-y", "initial");
+
                     $log.info('Text changed to ' + text);
                 }
 
                 function selectedItemChange(item) {
+                    $("html").css("overflow-y", "initial");
 
                     if(item != undefined) {
                         if(!self.cart_items[self.selectedItem.id]) {
@@ -162,6 +183,8 @@
                  * Create filter function for a query string
                  */
                 function createFilterFor(query) {
+                    $("html").css("overflow-y", "initial");
+
                     var lowercaseQuery = angular.lowercase(query);
 
                     return function filterFn(item) {
@@ -207,6 +230,8 @@
                 }
 
                 function updateCartItem(newVal, oldVal, index) {
+                    $("html").css("overflow-y", "initial");
+
                     var total = 0;
                     self.cart[index].warehouse_quantity = parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
@@ -232,12 +257,69 @@
 
                 }
 
-                function updateETA(){
+                function updateIt() {
+                    $("html").css("overflow-y", "initial");
+                }
+
+                function removeCartItem(index) {
+                    console.log(index);
+                    var total = 0;
+                    var tmp = [];
+                    var tmpItems = [];
+                    angular.forEach(self.cart, function(value, key) {
+                        if(key != index) {
+                            var tmpIndex = tmp.push(self.cart[key]) - 1;
+                            tmpItems[value.id] = tmpIndex;
+                            total += value.ordered_quantity;
+                        }
+                    });
+
+                    console.log('old cart: ');
+                    console.log(JSON.stringify(self.cart,null,4));
+                    console.log('tmp: ');
+                    console.log(JSON.stringify(tmp,null,4));
+                    self.cart = [];
+                    self.cart = tmp;
+                    self.cart_items = [];
+                    self.cart_items = tmpItems;
+                    self.cart_total = total;
+                }
+
+
+                function updateDateReceived(){
                     addSpinner();
-                    alert({{ purchaseOrder.id }});
+                    {#alert({{ purchaseOrder.id }});#}
                     $.ajax({
                         type: 'POST',
-                        url: "{{ path('api_update_eta') }}",
+                        url: "{{ path('api_update_date_received') }}",
+                        daraType: 'json',
+                        data: { due_date: self.due_date, purchase_order_id: {{ purchaseOrder.id}} },
+                        success: function (data) {
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
+                        }
+                    })
+                }
+
+                function updatePortETA(){
+                    addSpinner();
+                    {#alert({{ purchaseOrder.id }});#}
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_port_eta') }}",
+                        daraType: 'json',
+                        data: { due_date: self.portEta, purchase_order_id: {{ purchaseOrder.id}} },
+                        success: function (data) {
+                            window.location.href = Routing.generate('purchaseorder_show', {id: data});
+                        }
+                    })
+                }
+
+                function updateWarehouseETA(){
+                    addSpinner();
+                    {#alert({{ purchaseOrder.id }});#}
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_update_warehouse_eta') }}",
                         daraType: 'json',
                         data: { due_date: self.due_date, purchase_order_id: {{ purchaseOrder.id}} },
                         success: function (data) {
@@ -310,12 +392,12 @@
             <div class="row">
                 {% if purchaseOrder.status.name == 'Active' or purchaseOrder.status.name == 'Draft' %}
                     <div class="col-md-4">
-                        <h5>Port ETA<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                        <h5>Port ETA<md-datepicker ng-model="ctrl.portEta" ng-change="ctrl.updatePortETA()" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
                     </div>
                 {% else %}
                     <div class="col-md-4">
-                        <h5>Date Received<p><b>{{ purchaseOrder.orderReceivedDate | date("m/d/Y") }}</b></p><md-datepicker ng-model="ctrl.due_date" md-placeholder="Change Received Date" md-current-view=""></md-datepicker></h5>
-                        <h5>Day merchandise got here<md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
+                        <h5>Date Received
+                            <md-datepicker ng-model="ctrl.received_date" md-placeholder="Change Received Date" md-current-view=""></md-datepicker></h5>
                     </div>
 
                 {% endif %}
@@ -330,22 +412,24 @@
                 <div class="col-md-6">
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 0">
                     {% if purchaseOrder.status.name == 'Active' %}
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE</a>
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
                         <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
                     {% elseif purchaseOrder.status.name == 'Draft' %}
                         <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
                     {% else %}
-                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updateETA()">Update Time</a>
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updateDateReceived()">Update Time</a>
                     {% endif %}
                     </div>
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE</a>
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE</a>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Warehouse Eta<md-datepicker ng-model="ctrl.wheta" ng-disabled="ctrl.isEdit == 0" md-placeholder="Enter date"></md-datepicker></h5>
+                    <h5>Warehouse Eta<md-datepicker ng-model="ctrl.due_date" ng-disabled="ctrl.isEdit == 0" ng-change="ctrl.updateWarehouseETA()" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
             </div>
             <hr>
@@ -354,10 +438,8 @@
                     <form id="warehouse-form">
                         <label for="warehouse">Warehouse</label>
                         <div>
-                            <ul>
-                                <li style="color:lightslategray;list-style-type:none">Physical Container Number: 234234fSo34DOs3Ikop223</li>
-                                <li style="color:lightslategray;list-style-type:none">Factory Order Number: 30243</li>
-                            </ul>
+                                <h4 style="color:lightslategray;list-style-type:none">Physical Container Number: <input class="form-control" type="text" ng-model="ctrl.physicalContainerNumber"></h4>
+                                <h4 style="color:lightslategray;list-style-type:none">Factory Order Number: <input class="form-control" type="text" ng-model="ctrl.factoryOrderNumber"></h4>
                         </div>
                         {% verbatim %}
                         <select class="form-control" id="warehouse" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;"
@@ -382,6 +464,7 @@
                             <th class="table-name" style="width: 100px;">Received</th>
                             <th class="table-name" style="width: 175px;">Selected Warehouse Inv.</th>
                             <th class="table-name" style="width: 175px;">Total All Sites Inv.</th>
+                            <th ng-if="ctrl.isEdit == 1"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -415,6 +498,9 @@
                                     </ul>
                                 </div>
                             </td>
+                               <td ng-if="ctrl.isEdit == 1" class="table-form" style="width:140px;text-align: center;" >
+                                   <a class="btn btn-raised btn-danger" ng-click="ctrl.removeCartItem($index)">Remove</a>
+                               </td>
                                   {% endverbatim %}
                             </div>
                         </tr>
@@ -434,6 +520,7 @@
                                 md-min-length="0"
                                 placeholder="Pick a Product"
                                 md-autofocus="false"
+                                ng-click="ctrl.updateIt()"
                                 md-menu-class="autocomplete-custom-template">
                                 <md-item-template>
                                     <span class="item-title">

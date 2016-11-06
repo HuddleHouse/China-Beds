@@ -152,6 +152,11 @@ class User extends BaseUser
     protected $is_online_intentions = false;
 
     /**
+     * @ORM\Column(name="hide_rebate", type="boolean")
+     */
+    protected $hideRebate;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      */
@@ -306,6 +311,14 @@ class User extends BaseUser
 
     private $active_channel = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="submittedByUser")
+     */
+    private $promo_kit_orders;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -327,6 +340,7 @@ class User extends BaseUser
         $this->ledgers = new ArrayCollection();
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
+        $this->promo_kit_orders = new ArrayCollection();
     }
 
     /**
@@ -1258,7 +1272,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return null
+     * @return Channel
      */
     public function getActiveChannel()
     {
@@ -1266,7 +1280,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param null $active_channel
+     * @param Channel $active_channel
      */
     public function setActiveChannel(Channel $active_channel)
     {
@@ -1624,5 +1638,93 @@ class User extends BaseUser
     public function removeCreditedLedger(\OrderBundle\Entity\Ledger $creditedLedger)
     {
         $this->credited_ledgers->removeElement($creditedLedger);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoKitOrders()
+    {
+        return $this->promo_kit_orders;
+    }
+
+    /**
+     * @param mixed $promo_kit_orders
+     */
+    public function setPromoKitOrders($promo_kit_orders)
+    {
+        $this->promo_kit_orders = $promo_kit_orders;
+    }
+
+    /**
+     * Set hideRebate
+     *
+     * @param boolean $hideRebate
+     *
+     * @return User
+     */
+    public function setHideRebate($hideRebate)
+    {
+        $this->hideRebate = $hideRebate;
+
+        return $this;
+    }
+
+    /**
+     * Get hideRebate
+     *
+     * @return boolean
+     */
+    public function getHideRebate()
+    {
+        return $this->hideRebate;
+    }
+
+    /**
+     * Add managedWarehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $managedWarehouse
+     *
+     * @return User
+     */
+    public function addManagedWarehouse(\WarehouseBundle\Entity\Warehouse $managedWarehouse)
+    {
+        $this->managed_warehouses[] = $managedWarehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove managedWarehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $managedWarehouse
+     */
+    public function removeManagedWarehouse(\WarehouseBundle\Entity\Warehouse $managedWarehouse)
+    {
+        $this->managed_warehouses->removeElement($managedWarehouse);
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return User
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders->removeElement($promoKitOrder);
     }
 }

@@ -34,7 +34,7 @@ class WarrantyClaimController extends Controller
 
         $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
         $rtn = array();
-        $rtn[] = '<option disabled selected value>Select of the following options</option>';
+
         foreach($order->getProductVariants() as $pv)
             $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
 
@@ -78,6 +78,8 @@ class WarrantyClaimController extends Controller
         }
     }
 
+
+
     /**
      * Show a Warranty Claim
      *
@@ -106,24 +108,4 @@ class WarrantyClaimController extends Controller
             return new JsonResponse(array(false, $e->getMessage()));
         }
     }
-
-    /**
-     * Get Image via variant Id provided
-     *
-     * @Route("/api_get_variant_image/{variantId}", name="api_get_variant_image", options = { "expose" = true })
-     * @Method({"GET", "POST"})
-     */
-    public function getVariantImage($variantId)
-    {
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $image = $em->getRepository('InventoryBundle:Product')->getProdImg($variantId);
-            return new JsonResponse($image);
-        }
-        catch(\Exception $e){
-            return new JsonResponse($e->getMessage());
-        }
-    }
-
-
 }

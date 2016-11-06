@@ -28,25 +28,16 @@
                 data: {order_id: $('#warranty_claim_order').val()},
                 success: function (variants) {
                     el.html(variants);
-                    if(variants != '<option>Select Order ID first</option>')
-                        el.prop('disabled', false);
+                    {% if(warranty_claim.productVariant.id is defined) %}
+                    el.val({{ warranty_claim.productVariant.id }});
                     el.prop('disabled', false);
-                    el.val('<option onclick="fillImage('el.val()')">{{ warranty_claim.productVariant.id | default('') }}</option>');
+                    {% endif %}
                 }
             });
         }
 
-        function fillImage(variantId)
-        {
-            $.ajax({
-                method: "GET",
-                url: Routing.generate('api_get_variant_image' , { variantId : variantId})
-            }).done(function(data){
-                $('#warranty_claim_productVariant').change(function(){
-                    fillImage($(this).val());
-                })
-            });
-        }
+
+
 
         $(document).ready(function () {
             getProductVariants();
@@ -61,9 +52,6 @@
                     $('#charNum').text(l);
                 }
             });
-            $('#warranty_claim_productVariant').change(function(){
-                fillImage($(this).val());
-            })
         });
 
         function openFileBrowser1() {
@@ -86,7 +74,6 @@
             <div class="col-md-12">
                 <div class="alert alert-danger">
                     {{ form_errors(edit_form.order) }}
-                    {{ form_errors(edit_form.creditRequested) }}
                     {{ form_errors(edit_form.productVariant) }}
                     {{ form_errors(edit_form.description) }}
                 </div>
@@ -98,35 +85,12 @@
             {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
                 <div class="col-md-4 form-group">
-                    {{ form_label(edit_form.creditRequested) }}
-                    {{ form_widget(edit_form.creditRequested) }}
-                </div>
-                <div class="col-md-4 form-group">
                     {{ form_label(edit_form.order) }}
                     {{ form_widget(edit_form.order) }}
                 </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.productVariant) }}
                     {{ form_widget(edit_form.productVariant) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(edit_form.quantity) }}
-                    {{ form_widget(edit_form.quantity) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(edit_form.dateMadeAware) }}
-                    {{ form_widget(edit_form.dateMadeAware) }}
-                </div>
-                <div class="col-md-4" id="variant-img">
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 form-group">
-                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
-                    {{ form_widget(edit_form.description) }}
                 </div>
             </div>
             <div class="row">
@@ -162,6 +126,22 @@
                         </label>
                         {{ form_widget(edit_form.path3) }}
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.lawLabel) }}
+                    {{ form_widget(edit_form.lawLabel) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frLabel) }}
+                    {{ form_widget(edit_form.frLabel) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
+                    {{ form_widget(edit_form.description) }}
                 </div>
             </div>
             {% if warranty_claim.isArchived %}

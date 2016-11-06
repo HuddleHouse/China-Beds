@@ -111,8 +111,10 @@
                             {% endif %}
                             <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a> Submission (PDF)</td>
                             <td>
+                                {% if(rebateSubmission.creditIssued is null) %}
                                 <a class="btn btn-raised btn-xs" href="{{ path('rebate_submit_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
                                 <button class="btn btn-raised btn-xs" onclick="deleteSubmission({{ rebateSubmission.id }})">Delete</button>
+                                {% endif %}
                                 {% if(is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
                                     <button class="btn btn-raised btn-xs" onclick="showSubmission({{ rebateSubmission.id }})">Show</button>
                                 {% endif %}
