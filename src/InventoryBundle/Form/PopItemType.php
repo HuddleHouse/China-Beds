@@ -45,6 +45,7 @@ class PopItemType extends AbstractType
                     'Yes' => 1,
                 ),
             ))
+            ->add('hide_order', )
         ;
     }
     
