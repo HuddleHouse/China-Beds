@@ -77,7 +77,8 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
 		left join status s
 			on s.id = p.status_id
 	where w.id = :warehouse_id 
-	and s.name = 'Active'");
+	and s.name = 'Active'
+	order by date desc");
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();
@@ -92,7 +93,8 @@ class StockAdjustmentRepository extends \Doctrine\ORM\EntityRepository
 			on p.warehouse_id = w.id
 		left join status s
 			on s.id = p.status_id
-	where w.id = :warehouse_id");
+	where w.id = :warehouse_id
+	order by date desc");
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();
