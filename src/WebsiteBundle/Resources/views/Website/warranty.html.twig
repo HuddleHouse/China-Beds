@@ -59,61 +59,50 @@
                     <div class="text-right"><img src="{{ asset('images/web/Yellow Round Icon@2x.png') }}" width="70" /></div>
                     <div class="form-group">
                         <label for="username">Your name</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
+                        {{ form_widget(form.name) }}
                     </div>
                     <div class="form-group">
                         <label for="username">Your Email Address</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.email) }}                    </div>
                     <div class="form-group">
                         <label for="username">Address One</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.address) }}                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="username">City*:</label>
-                                <input class="form-control" id="username" placeholder="" type="text">
-                            </div>
+                                {{ form_widget(form.city) }}                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="username">State*:</label>
-                                <input class="form-control" id="username" placeholder="" type="text">
-                            </div>
+                                {{ form_widget(form.state) }}                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="username">Zip*:</label>
-                                <input class="form-control" id="username" placeholder="" type="text">
-                            </div>
+                                {{ form_widget(form.zip) }}                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="username">Phone</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.phone) }}                    </div>
                     <div class="form-group">
                         <label for="username">Purchase Date</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.purchaseDate) }}                    </div>
                     <div class="form-group">
                         <label for="username">Retailer Name</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.retailerName) }}                    </div>
                     <div class="form-group">
                         <label for="username">Mattress Model</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.mattressModel) }}                    </div>
                     <div class="form-group">
                         <label for="username">Mattress Size</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.mattressSize) }}                    </div>
                     <div class="form-group">
                         <label for="username">Purchase Price</label>
-                        <input class="form-control" id="username" placeholder="" type="text">
-                    </div>
+                        {{ form_widget(form.purchasePice) }}                    </div>
                     <div class="form-group">
                         <label for="username">I have contacted the retailer where I purchased my bed</label>
                         <div class="text-left">
@@ -213,8 +202,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="pillow-issue-y" onclick="boolTrigger(true, 'pillow-issue', 'pillowIssue')">Yes</span>
+                                <span class="option-yn" id="pillow-issue-n" onclick="boolTrigger(false, 'pillow-issue', 'pillowIssue')">No</span>
+                                {{ form_widget(form.pillowIssue) }}
                             </div>
                         </div>
                     </div>
@@ -225,8 +215,9 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active">Yes</span>
-                                <span class="option-yn">No</span>
+                                <span class="option-yn active" id="diff-issue-y" onclick="boolTrigger(true, 'diff-issue', 'diffIssue')">Yes</span>
+                                <span class="option-yn" id="diff-issue-n" onclick="boolTrigger(false, 'diff-issue', 'diffIssue')">No</span>
+                                {{ form_widget(form.diffIssue) }}
                             </div>
                         </div>
                     </div>
