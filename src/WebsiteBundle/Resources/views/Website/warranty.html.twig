@@ -1,6 +1,6 @@
 {% extends 'website-index.html.twig' %}
 
-{% block title %}MLILY{% endblock %}
+{% block title %}MLILY {% endblock %}
 
 {% block footer %}
     <script>
@@ -16,19 +16,15 @@
             $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
+            $('#front_warranty_claim_channel').val('mlily');
 
-//            $('#contacted-retailer-y').click(function(){
-//                $(this).addClass('active');
-//                $('#contacted-retailer-n').removeClass('active');
-//                $('#front_warranty_claim_contactedRetailer').val(1);
-//
-//            });
-//            $('#contacted-retailer-n').click(function(){
-//                $(this).addClass('active');
-//                $('#contacted-retailer-y').removeClass('active');
-//                $('#front_warranty_claim_contactedRetailer').val(0);
-//            });
+            $('#front_warranty_claim_receiptCopy').on('change', function () {
+                $('#front_warranty_claim_receiptPath').val($(this)[0].files[0].name);
+            });
 
+            $('#front_warranty_claim_lawCopy').on('change', function () {
+                $('#front_warranty_claim_lawPath').val($(this)[0].files[0].name);
+            });
         });
 
         function boolTrigger(yn, elementId, inputId){
@@ -44,12 +40,32 @@
         }
     </script>
     <style>
-
+        .choose-file .active {
+            position: relative;
+            top: 0.75em;
+            overflow: hidden;
+        }
+        .button > input[type='file'] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
     </style>
 {% endblock footer %}
 
 {% block body %}
     {{ form_start(form) }}
+    {{ form_widget(form.channel) }}
     <div class="content-section">
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
@@ -63,66 +79,83 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Your Email Address</label>
-                        {{ form_widget(form.email) }}                    </div>
+                        {{ form_widget(form.email) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">Address One</label>
-                        {{ form_widget(form.address) }}                    </div>
+                        {{ form_widget(form.address) }}
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="username">City*:</label>
-                                {{ form_widget(form.city) }}                            </div>
+                                {{ form_widget(form.city) }}
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="username">State*:</label>
-                                {{ form_widget(form.state) }}                            </div>
+                                {{ form_widget(form.state) }}
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="username">Zip*:</label>
-                                {{ form_widget(form.zip) }}                            </div>
+                                {{ form_widget(form.zip) }}
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="username">Phone</label>
-                        {{ form_widget(form.phone) }}                    </div>
+                        {{ form_widget(form.phone) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">Purchase Date</label>
-                        {{ form_widget(form.purchaseDate) }}                    </div>
+                        {{ form_widget(form.purchaseDate) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">Retailer Name</label>
-                        {{ form_widget(form.retailerName) }}                    </div>
+                        {{ form_widget(form.retailerName) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">Mattress Model</label>
-                        {{ form_widget(form.mattressModel) }}                    </div>
+                        {{ form_widget(form.mattressModel) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">Mattress Size</label>
-                        {{ form_widget(form.mattressSize) }}                    </div>
+                        {{ form_widget(form.mattressSize) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">Purchase Price</label>
-                        {{ form_widget(form.purchasePice) }}                    </div>
+                        {{ form_widget(form.purchasePrice) }}
+                    </div>
                     <div class="form-group">
                         <label for="username">I have contacted the retailer where I purchased my bed</label>
                         <div class="text-left">
-                            <span class="option-yn active" id="contacted-retailer-y" onclick="boolTrigger(true,'contacted-retailer', 'contactedRetailer')" >Yes</span>
-                            <span class="option-yn" id="contacted-retailer-n" onclick="boolTrigger(false,'contacted-retailer', 'contactedRetailer')">No</span>
+                            <span class="option-yn" id="contacted-retailer-y" onclick="boolTrigger(true,'contacted-retailer', 'contactedRetailer')" >Yes</span>
+                            <span class="option-yn active" id="contacted-retailer-n" onclick="boolTrigger(false,'contacted-retailer', 'contactedRetailer')">No</span>
                             {{ form_widget(form.contactedRetailer) }}
                         </div>
                     </div>
                     <div class="form-group">
+                        {#<span class="button active">Choose file</span>#}
+                        {#<span class="button ">No file chosen</span>#}
                         <label for="username">Copy of Receipt: Please provide a copy of your original purchase receipt. Can be uploaded as PDF or jpeg *</label>
                         <div class="choose-file pull-left">
-                            <span class="button active">Choose file</span>
-                            <span class="button ">No file chosen</span>
+                            <span class="button active" style="width:50%">
+                                Choose File <input type="file" id="front_warranty_claim_receiptCopy" name="front_warranty_claim[receiptCopy]">
+                            </span>
+                            {{ form_widget(form.receiptPath) }}
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="username">Copy of Law Label: This is the tag sewn onto the cover with manufacturing information. Can be uploaded as PDF or jpeg *</label>
                         <div class="choose-file pull-left">
-                            <span class="button active">Choose file</span>
-                            <span class="button ">No file chosen</span>
+                            <span class="button active" style="width:50%">
+                                Choose File <input type="file" id="front_warranty_claim_lawCopy" name="front_warranty_claim[lawCopy]">
+                            </span>
+                            {{ form_widget(form.lawPath) }}
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
@@ -137,8 +170,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="shipping-damage-y" onclick="boolTrigger(true, 'shipping-damage', 'shippingDamage')">Yes</span>
-                                <span class="option-yn" id="shipping-damage-n" onclick="boolTrigger(false, 'shipping-damage', 'shippingDamage')">No</span>
+                                <span class="option-yn" id="shipping-damage-y" onclick="boolTrigger(true, 'shipping-damage', 'shippingDamage')">Yes</span>
+                                <span class="option-yn active" id="shipping-damage-n" onclick="boolTrigger(false, 'shipping-damage', 'shippingDamage')">No</span>
                                 {{ form_widget(form.shippingDamage) }}
                             </div>
                         </div>
@@ -150,8 +183,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="within-48-y" onclick="boolTrigger(true, 'within-48', 'within48' )">Yes</span>
-                                <span class="option-yn" id="within-48-n" onclick="boolTrigger(false, 'within-48', 'within48' )">No</span>
+                                <span class="option-yn" id="within-48-y" onclick="boolTrigger(true, 'within-48', 'within48' )">Yes</span>
+                                <span class="option-yn active" id="within-48-n" onclick="boolTrigger(false, 'within-48', 'within48' )">No</span>
                                 {{ form_widget(form.within48) }}
                             </div>
                         </div>
@@ -163,8 +196,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="length-different-y" onclick="boolTrigger(true, 'length-different', 'lengthDifferent')">Yes</span>
-                                <span class="option-yn" id="length-different-n" onclick="boolTrigger(false, 'length-different', 'lengthDifferent')">No</span>
+                                <span class="option-yn" id="length-different-y" onclick="boolTrigger(true, 'length-different', 'lengthDifferent')">Yes</span>
+                                <span class="option-yn active" id="length-different-n" onclick="boolTrigger(false, 'length-different', 'lengthDifferent')">No</span>
                                 {{ form_widget(form.lengthDifferent) }}
                             </div>
                         </div>
@@ -176,8 +209,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="body-impression-y" onclick="boolTrigger(true, 'body-impression', 'bodyImpression')">Yes</span>
-                                <span class="option-yn" id="body-impression-n" onclick="boolTrigger(false, 'body-impression', 'bodyImpression')">No</span>
+                                <span class="option-yn" id="body-impression-y" onclick="boolTrigger(true, 'body-impression', 'bodyImpression')">Yes</span>
+                                <span class="option-yn active" id="body-impression-n" onclick="boolTrigger(false, 'body-impression', 'bodyImpression')">No</span>
                                 {{ form_widget(form.bodyImpression) }}
                             </div>
                         </div>
@@ -189,8 +222,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="feeling-issue-y" onclick="boolTrigger(true, 'feeling-issue', 'feelingIssue')">Yes</span>
-                                <span class="option-yn" id="feeling-issue-n" onclick="boolTrigger(false, 'feeling-issue', 'feelingIssue')">No</span>
+                                <span class="option-yn" id="feeling-issue-y" onclick="boolTrigger(true, 'feeling-issue', 'feelingIssue')">Yes</span>
+                                <span class="option-yn active" id="feeling-issue-n" onclick="boolTrigger(false, 'feeling-issue', 'feelingIssue')">No</span>
                                 {{ form_widget(form.feelingIssue) }}
                             </div>
                         </div>
@@ -202,8 +235,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="pillow-issue-y" onclick="boolTrigger(true, 'pillow-issue', 'pillowIssue')">Yes</span>
-                                <span class="option-yn" id="pillow-issue-n" onclick="boolTrigger(false, 'pillow-issue', 'pillowIssue')">No</span>
+                                <span class="option-yn" id="pillow-issue-y" onclick="boolTrigger(true, 'pillow-issue', 'pillowIssue')">Yes</span>
+                                <span class="option-yn active" id="pillow-issue-n" onclick="boolTrigger(false, 'pillow-issue', 'pillowIssue')">No</span>
                                 {{ form_widget(form.pillowIssue) }}
                             </div>
                         </div>
@@ -215,8 +248,8 @@
                         </div>
                         <div class="col-md-5 col-sm-5 col-xs-12">
                             <div class="text-right">
-                                <span class="option-yn active" id="diff-issue-y" onclick="boolTrigger(true, 'diff-issue', 'diffIssue')">Yes</span>
-                                <span class="option-yn" id="diff-issue-n" onclick="boolTrigger(false, 'diff-issue', 'diffIssue')">No</span>
+                                <span class="option-yn" id="diff-issue-y" onclick="boolTrigger(true, 'diff-issue', 'diffIssue')">Yes</span>
+                                <span class="option-yn active" id="diff-issue-n" onclick="boolTrigger(false, 'diff-issue', 'diffIssue')">No</span>
                                 {{ form_widget(form.diffIssue) }}
                             </div>
                         </div>
@@ -227,12 +260,14 @@
 
                     <div class="char-box">
                         <button type="submit" class="btn btn-primary">Submit warranty claim</button>
-                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% do form.receiptCopy.setRendered %}
+    {% do form.lawCopy.setRendered %}
+    {{ form_end(form) }}
 {% endblock body %}
 {% block footbox %}
     <div class="copyright">{{ channel.frontFooterText }}</div>

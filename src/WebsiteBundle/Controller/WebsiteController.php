@@ -58,6 +58,8 @@ class WebsiteController extends BaseController
 
         if($form->isSubmitted() && $form->isValid())
         {
+            $warranty->uploadLawCopy();
+            $warranty->uploadReceipt();
             $em->persist($warranty);
             $em->flush();
             //render something

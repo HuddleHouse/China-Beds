@@ -27,13 +27,6 @@ class FrontWarrantyClaim
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_made_aware", type="datetime", nullable=true)
-     */
-    private $dateMadeAware;
-
-    /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date_of_claim", type="datetime")
      */
     private $dateOfClaim;
@@ -185,27 +178,38 @@ class FrontWarrantyClaim
      */
     private $channel;
 
+    /**
+     * @ORM\Column(name="receipt_copy", type="string", nullable=true)
+     *
+     * @Assert\NotBlank(message="Please, include in this submission a copy of the receipt")
+     * @Assert\File(mimeTypes={"application/pdf", "image/*"})
+     */
+    private $receiptCopy;
 
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $receiptPath;
 
+    /**
+     * @ORM\Column(name="law_copy", type="string", nullable=true)
+     *
+     * @Assert\NotBlank(message="Please, include in this submission a copy of the receipt")
+     * @Assert\File(mimeTypes={"application/pdf", "image/*"})
+     */
+    private $lawCopy;
 
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $lawPath;
+
+    /**
+     * FrontWarrantyClaim constructor.
+     */
     public function __construct()
     {
         $this->setDateOfClaim(new \DateTime());
-        $this->ledgers = new ArrayCollection();
-    }
-
-    /**
-     * Set dateMadeAware
-     *
-     * @param \DateTime $dateMadeAware
-     *
-     * @return WarrantyClaim
-     */
-    public function setDateMadeAware($dateMadeAware)
-    {
-        $this->dateMadeAware = $dateMadeAware;
-
-        return $this;
     }
 
     /**
@@ -216,16 +220,6 @@ class FrontWarrantyClaim
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Get dateMadeAware
-     *
-     * @return \DateTime
-     */
-    public function getDateMadeAware()
-    {
-        return $this->dateMadeAware;
     }
 
     /**
@@ -754,5 +748,166 @@ class FrontWarrantyClaim
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    /**
+     * Set receiptCopy
+     *
+     * @param string $receiptCopy
+     *
+     * @return FrontWarrantyClaim
+     */
+    public function setReceiptCopy($receiptCopy)
+    {
+        $this->receiptCopy = $receiptCopy;
+
+        return $this;
+    }
+
+    /**
+     * Get receiptCopy
+     *
+     * @return string
+     */
+    public function getReceiptCopy()
+    {
+        return $this->receiptCopy;
+    }
+
+    /**
+     * Set lawCopy
+     *
+     * @param string $lawCopy
+     *
+     * @return FrontWarrantyClaim
+     */
+    public function setLawCopy($lawCopy)
+    {
+        $this->lawCopy = $lawCopy;
+
+        return $this;
+    }
+
+    /**
+     * Get lawCopy
+     *
+     * @return string
+     */
+    public function getLawCopy()
+    {
+        return $this->lawCopy;
+    }
+
+    public function uploadReceipt()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getReceiptCopy()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getReceiptCopy()->getClientOriginalName()) . '-' . $this->getReceiptCopy()->getClientOriginalName();
+
+        $this->getReceiptCopy()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->receiptPath = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->receiptCopy = null;
+    }
+
+    public function uploadLawCopy()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getLawCopy()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getLawCopy()->getClientOriginalName()) . '-' . $this->getLawCopy()->getClientOriginalName();
+
+        $this->getLawCopy()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->lawPath = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->lawCopy = null;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir() . '/' . $this->path;
+    }
+
+    public function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
+        return $tmp;
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/frontend_warranty_claims';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReceiptPath()
+    {
+        return $this->receiptPath;
+    }
+
+    /**
+     * @param mixed $receiptPath
+     */
+    public function setReceiptPath($receiptPath)
+    {
+        $this->receiptPath = $receiptPath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLawPath()
+    {
+        return $this->lawPath;
+    }
+
+    /**
+     * @param mixed $lawPath
+     */
+    public function setLawPath($lawPath)
+    {
+        $this->lawPath = $lawPath;
     }
 }
