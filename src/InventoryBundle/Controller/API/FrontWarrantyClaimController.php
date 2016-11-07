@@ -14,15 +14,15 @@ class FrontWarrantyClaimController extends Controller
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/front_warranty_claim", name="front_warranty_claim")
+     * @Route("/front_warranty_claim/{id}", name="front_warranty_claim")
      * @Method("GET")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $fwc = $em->getRepository('InventoryBundle:FrontWarrantyClaim')->findAll();
 
-        return $this->render('InventoryBundle:FrontWarrantyClaim:index.html.twig', array('fwc' => $fwc));
+        return $this->render('InventoryBundle:FrontWarrantyClaim:index.html.twig', array('fwc' => $fwc, 'id'=>$id));
 
     }
 

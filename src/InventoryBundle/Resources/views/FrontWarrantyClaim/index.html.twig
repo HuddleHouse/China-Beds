@@ -54,9 +54,15 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if id == 1 %}
+                        {% set channel = 'mlily' %}
+                    {% elseif id == 2 %}
+                        {% set channel = 'bedboss' %}
+                    {% endif %}
                     {% for claim in fwc %}
-                        <tr>
 
+                        {% if claim.channel == channel %}
+                        <tr>
                             <td>{{ claim.id }}</td>
                             <td>{{ claim.name }}</td>
                             <td>{{ claim.email }}</td>
@@ -70,6 +76,7 @@
                             <td>{{ claim.mattressSize }}</td>
                             <td>{{ claim.purchasePrice }}</td>
                         </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
