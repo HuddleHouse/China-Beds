@@ -1,0 +1,92 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Warranty Claim{% endblock %}
+{% block page_title %}
+    Warranty Claim
+{% endblock page_title %}
+
+{% block page_name %}
+    Listings
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function (oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                    }
+                }, order: [[2, "desc"]]
+            });
+        });
+
+        function spinModal(id) {
+            var target = document.getElementById(id);
+            var spinner = new Spinner(opts).spin(target);
+            target.appendChild(spinner.el);
+        }
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Warranty ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Purchase Date</th>
+                        <th>Date of Claim</th>
+                        <th>Channel</th>
+                        <th>Retailer Name</th>
+                        <th>Mattress Model</th>
+                        <th>Mattress Size</th>
+                        <th>Purchase Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for claim in fwc %}
+                        <tr>
+
+                            <td>{{ claim.id }}</td>
+                            <td>{{ claim.name }}</td>
+                            <td>{{ claim.email }}</td>
+                            <td>{{ claim.address + ", " + claim.city + " " + claim.state + ", " + claim.zip }}</td>
+                            <td>{{ claim.phone }}</td>
+                            <td>{{ claim.purchaseDate }}</td>
+                            <td>{{ claim.dateOfClaim | date("m/d/Y")}}</td>
+                            <td>{{ claim.channel }}</td>
+                            <td>{{ claim.retailerName }}</td>
+                            <td>{{ claim.mattressModel }}</td>
+                            <td>{{ claim.mattressSize }}</td>
+                            <td>{{ claim.purchasePrice }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="claimModal" tabindex="-1" role="dialog" aria-labelledby="claimModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content expand" id="claim-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="claimModalLabel">Approve/Deny Warranty Claim</h4>
+                </div>
+                <div id="claim-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
