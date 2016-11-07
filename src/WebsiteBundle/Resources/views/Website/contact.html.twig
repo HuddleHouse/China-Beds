@@ -32,11 +32,16 @@
                     dataType: 'json',
                     data: {data: data},
                     success: function (data) {
-                        $scope.$apply(function () {
-                            $scope.products = data;
-                            $scope.cart['pick_up_warehouse'] = warehouse;
-                            $scope.validate();
-                        });
+                        if(data.success == false) {
+                            $("#contact-form").hide('fast', function () {
+                                $("#modal-fail").modal('show');
+                                $('#modal-fail .modal-body').html(data.message);
+                            });
+                        }else{
+                            $("#contact-form").hide(fast, function(){
+                                $("#modal-success").modal('show')
+                            });
+                        }
                     }
                 });
             });
@@ -132,6 +137,38 @@
         </div>
     </div>
     </form>
+    <div id="modal-success" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Upload success we will be in touch shortly.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="modal-fail" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 {% endblock body %}
 {% block footbox %}
     <div class="copyright">{{ channel.frontFooterText }}</div>

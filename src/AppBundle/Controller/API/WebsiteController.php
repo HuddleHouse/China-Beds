@@ -66,13 +66,13 @@ class WebsiteController extends Controller
                 $this->get('email_service')->sendEmail($email);
             }
             catch(\Exception $e) {
-                return new JsonResponse(array(false, $e->getMessage()));
+                return new JsonResponse(array('success' => false, 'message' => $e->getMessage()));
             }
 
         }
-        $this->addFlash('notice', 'Contact form submitted succesfully.');
+//        $this->addFlash('notice', 'Contact form submitted succesfully.');
 
-        return JsonResponse::create(true);
+        return JsonResponse::create(['success' => true]);
     }
 
 }
