@@ -57,8 +57,6 @@ class ChannelType extends AbstractType
             ->add('retailThirdPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Third Row Picture', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
             ->add('retailFourthPic', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Fourth Row Picture', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
             ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
-            ->add('detailMattressFooter', FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Single Mattress Detail Footer Picture', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
-
         ;
     }
     

@@ -32,6 +32,7 @@
     {#<link href="css/responsive.css" rel="stylesheet">#}
     <script src="https://use.typekit.net/hkr5qzv.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 
@@ -52,7 +53,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="{{ path('website_homepage', {}) }}">
-                <img style="max-width: 140px;" src="{{ asset('uploads/websites/' ~ channel.frontLogo) }}" />
+                <img style="max-width: 380px; max-height:165px;" src="{{ asset('uploads/websites/' ~ channel.frontLogo) }}" />
             </a>
             <div class="login-btn">
                 <ul>
