@@ -77,9 +77,10 @@
                         <th>Rebate</th>
                         <th>Submission Date</th>
                         <th>Amount Requested</th>
+                        <th>For Whom</th>
                         <th>Date Posted</th>
                         <th>Amount Issued</th>
-                        <th>Approved</th>
+                        <th>Status</th>
                         <th>Invoice PDF</th>
                         <th>Actions</th>
                     </tr>
@@ -90,6 +91,7 @@
                             <td>{{ rebateSubmission.rebate.name | default('No Longer Available') }}</td>
                             <td>{{ rebateSubmission.dateCreated | date('m/d/y') }}</td>
                             <td>${{ rebateSubmission.amountRequested | number_format(2) }}</td>
+                            <td>{{ rebateSubmission.submittedforuser.name }}</td>
                             {% if(rebateSubmission.datePosted is not null) %}
                                 <td>{{ rebateSubmission.datePosted | date('m/d/y') }}</td>
                             {% else %}

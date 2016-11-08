@@ -16,19 +16,19 @@ class RebateSubmissionRepository extends \Doctrine\ORM\EntityRepository
         $user_ids[$user->getId()] = $user->getId();
         $submissions = array();
 
-        $data = $this->findBy(array('submittedForUser' => $user));
+        $data = $this->findBy(array('submittedForUser' => $user, 'channel' => $user->getActiveChannel()));
         foreach($data as $item)
             $submissions[] = $item;
 
         if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE'))
-            $submissions = $this->findAll();
+            $submissions = $this->findBy(['channel' => $user->getActiveChannel()]);
 
         else {
             if($user->hasRole('ROLE_DISTRIBUTOR')) {
                 foreach($user->getRetailers() as $retailer) {
                     if(!isset($user_ids[$retailer->getId()])) {
                         $user_ids[$retailer->getId()] = $retailer->getId();
-                        $data = $this->findBy(array('submittedForUser' => $retailer));
+                        $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $submissions[] = $item;
                     }
@@ -38,14 +38,14 @@ class RebateSubmissionRepository extends \Doctrine\ORM\EntityRepository
                 foreach($user->getDistributors() as $distributor) {
                     if(!isset($user_ids[$distributor->getId()])) {
                         $user_ids[$distributor->getId()] = $distributor->getId();
-                        $data = $this->findBy(array('submittedForUser' => $distributor));
+                        $data = $this->findBy(array('submittedForUser' => $distributor, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $submissions[] = $item;
                     }
                     foreach($distributor->getRetailers() as $retailer) {
                         if(!isset($user_ids[$retailer->getId()])) {
                             $user_ids[$retailer->getId()] = $retailer->getId();
-                            $data = $this->findBy(array('submittedForUser' => $retailer));
+                            $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $submissions[] = $item;
                         }
@@ -56,21 +56,21 @@ class RebateSubmissionRepository extends \Doctrine\ORM\EntityRepository
                 foreach($user->getSalesReps() as $salesRep) {
                     if(!isset($user_ids[$salesRep->getId()])) {
                         $user_ids[$salesRep->getId()] = $salesRep->getId();
-                        $data = $this->findBy(array('submittedForUser' => $salesRep));
+                        $data = $this->findBy(array('submittedForUser' => $salesRep, 'channel' => $user->getActiveChannel()));
                         foreach($data as $item)
                             $submissions[] = $item;
                     }
                     foreach($salesRep->getDistributors() as $distributor) {
                         if(!isset($user_ids[$distributor->getId()])) {
                             $user_ids[$distributor->getId()] = $distributor->getId();
-                            $data = $this->findBy(array('submittedForUser' => $distributor));
+                            $data = $this->findBy(array('submittedForUser' => $distributor, 'channel' => $user->getActiveChannel()));
                             foreach($data as $item)
                                 $submissions[] = $item;
                         }
                         foreach($distributor->getRetailers() as $retailer) {
                             if(!isset($user_ids[$retailer->getId()])) {
                                 $user_ids[$retailer->getId()] = $retailer->getId();
-                                $data = $this->findBy(array('submittedForUser' => $retailer));
+                                $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
                                 foreach($data as $item)
                                     $submissions[] = $item;
                             }

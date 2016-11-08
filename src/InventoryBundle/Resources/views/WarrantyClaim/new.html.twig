@@ -25,6 +25,7 @@
                     $('#charNum').text(l);
                 }
             });
+            $('#warranty_claim_order').append($('<option>', {value:'', text:'None/Unknown'}));
         });
 
 
@@ -74,9 +75,7 @@
             <div class="col-md-12">
                 <div class="alert alert-danger">
                     {{ form_errors(form.order) }}
-                    {{ form_errors(form.creditRequested) }}
-                    {{ form_errors(form.productVariant) }}
-                    {{ form_errors(form.description) }}
+                    {#{{ form_errors(form.creditRequested) }}#}
                 </div>
             </div>
         </div>
@@ -94,6 +93,7 @@
                     {{ form_widget(form.order) }}
                 </div>
                 <div class="col-md-4 form-group">
+                    {{ form_errors(form.productVariant) }}
                     {{ form_label(form.productVariant) }}
                     {{ form_widget(form.productVariant) }}
                 </div>
@@ -135,6 +135,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
+                    {{ form_errors(form.description) }}
                     {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.description) }}
                 </div>
