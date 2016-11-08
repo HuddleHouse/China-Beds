@@ -33,7 +33,6 @@ class OrderProductsController extends Controller
     public function getOrdersIndex()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->getUser();
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
