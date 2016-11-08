@@ -175,7 +175,7 @@
                         <th>Date Aware</th>
                         <th>Date of Claim</th>
                         <th>Submitted By</th>
-                        {#<th>Credit Requested</th>#}
+                        <th>Product</th>
                         <th>Description</th>
                         <th>Resolution</th>
                         {% if user.hasRole('ROLE_ADMIN') %}<th>Channel</th>{% endif %}
@@ -190,6 +190,11 @@
                             <td>{% if warranty_claim.dateMadeAware %}{{ warranty_claim.dateMadeAware|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{% if warranty_claim.dateOfClaim %}{{ warranty_claim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{{ warranty_claim.submittedByUser }}</td>
+                            {% if warranty_claim.productVariant %}
+                            <td>{{ warranty_claim.productVariant.product.name }} {{ warranty_claim.productVariant.name }}</td>
+                            {% else %}
+                                <td>--</td>
+                            {% endif %}
                             {#<td>${{ warranty_claim.creditRequested | number_format(2) }}</td>#}
                             {% if warranty_claim.description is not null %}<td id="description">Click to expand</td>
                             {% else %}<td>--</td>{% endif %}

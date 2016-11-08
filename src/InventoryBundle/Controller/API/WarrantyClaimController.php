@@ -29,14 +29,24 @@ class WarrantyClaimController extends Controller
      */
     public function getProductVariantsFromOrderAction(Request $request)
     {
-        if($request->get('order_id') == '')
-            return new JsonResponse('<option>Select Order ID first</option>');
+//        if($request->get('order_id') == '')
+//            return new JsonResponse('<option>Select Order ID first</option>');
 
-        $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
-        $rtn = array();
+        if ( $request->get('order_id') == '' ) {
+            $products = $this->getDoctrine()->getRepository('InventoryBundle:Product')->getAllProductsArray($this->getUser());
 
-        foreach($order->getProductVariants() as $pv)
-            $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
+            $rtn = array();
+
+            foreach($products as $product)
+                $rtn[] = '<option value="' . $product['id'] . '">'. $product['name'] . '</option>';
+        } else {
+            $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
+            $rtn = array();
+
+            foreach($order->getProductVariants() as $pv)
+                $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
+        }
+
 
         return new JsonResponse($rtn);
     }
