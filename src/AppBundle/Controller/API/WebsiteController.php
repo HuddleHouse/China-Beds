@@ -7,22 +7,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use WebsiteBundle\Controller\BaseController;
 use WebsiteBundle\Entity\ContactForm;
 
 /**
- * Website controller.
+ * Website API controller.
  *
  * @Route("/api")
  */
-class WebsiteController extends Controller
+class WebsiteController extends BaseController
 {
-
     /**
      * Creates a new ledger entry.
      *
      * @Route("/api_submit_contact_form", name="api_submit_contact_form")
      * @Method({"POST"})
-     *
      */
     public function submitContactFormAction(Request $request)
     {
@@ -70,7 +69,7 @@ class WebsiteController extends Controller
             }
 
         }
-//        $this->addFlash('notice', 'Contact form submitted succesfully.');
+//        $this->addFlash('notice', 'Contact form submitted successfully.');
 
         return JsonResponse::create(['success' => true]);
     }
