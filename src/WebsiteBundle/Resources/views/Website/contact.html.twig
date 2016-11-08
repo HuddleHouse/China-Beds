@@ -33,14 +33,11 @@
                     data: {data: data},
                     success: function (data) {
                         if(data.success == false) {
-                            $("#contact-form").hide('fast', function () {
-                                $("#modal-fail").modal('show');
-                                $('#modal-fail .modal-body').html(data.message);
-                            });
+                            $("#modal-fail").modal('show');
+                            $('#modal-fail .modal-body').html(data.message);
                         }else{
-                            $("#contact-form").hide(fast, function(){
-                                $("#modal-success").modal('show')
-                            });
+                            $("#contact-form").hide();
+                            $('#thank-you').show();
                         }
                     }
                 });
@@ -137,22 +134,12 @@
         </div>
     </div>
     </form>
-    <div id="modal-success" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p>Upload success we will be in touch shortly.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+    <div class="content-section" id="thank-you" style="display: none;">
+        <div class="row">
+            <div class="col-md-12  col-sm-12 col-xs-12">
+                <h1 class="text-center">Thank You!</h1>
+                <p>Thank you for contacting us!  We will get back with you shortly.</p>
             </div>
-
         </div>
     </div>
     <div id="modal-fail" class="modal fade" role="dialog">

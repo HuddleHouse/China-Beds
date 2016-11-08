@@ -26,7 +26,7 @@ class WebsiteController extends BaseController
     public function submitContactFormAction(Request $request)
     {
         $form_data = $request->get('data');
-
+        $channel = $this->getChannel();
         $contactForm = new ContactForm();
         $html = '<center><h2>New Contact Form submission</h2></center><br><br><div><ul>';
         $data = array();
@@ -47,6 +47,7 @@ class WebsiteController extends BaseController
         $contactForm->setZip($data['Zip']);
         $contactForm->setContactReason($data['contact_reason']);
         $contactForm->setMessage($data['Message']);
+        $contactForm->setChannel($channel);
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($contactForm);
@@ -57,7 +58,8 @@ class WebsiteController extends BaseController
         foreach($admin as $ad) {
             $email = array(
                 'subject' => 'New Contact Form Submission',
-                'to' => $ad->getEmail(),
+                'to' => $channel->getSupportEmailAddress(),
+                'from' => $channel->getFromEmailAddress(),
                 'body' => $html
             );
 

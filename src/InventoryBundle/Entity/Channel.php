@@ -75,6 +75,20 @@ class Channel
      */
     private $instaLink;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $support_email_address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $from_email_address;
+
 
     /**
      * @var string
@@ -1718,5 +1732,77 @@ class Channel
     public function setResources($resources)
     {
         $this->resources = $resources;
+    }
+
+    /**
+     * Set supportEmailAddress
+     *
+     * @param string $supportEmailAddress
+     *
+     * @return Channel
+     */
+    public function setSupportEmailAddress($supportEmailAddress)
+    {
+        $this->support_email_address = $supportEmailAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get supportEmailAddress
+     *
+     * @return string
+     */
+    public function getSupportEmailAddress()
+    {
+        return $this->support_email_address;
+    }
+
+    /**
+     * Set fromEmailAddress
+     *
+     * @param string $fromEmailAddress
+     *
+     * @return Channel
+     */
+    public function setFromEmailAddress($fromEmailAddress)
+    {
+        $this->from_email_address = $fromEmailAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get fromEmailAddress
+     *
+     * @return string
+     */
+    public function getFromEmailAddress()
+    {
+        return $this->from_email_address;
+    }
+
+    /**
+     * Add resource
+     *
+     * @param \AppBundle\Entity\Resource $resource
+     *
+     * @return Channel
+     */
+    public function addResource(\AppBundle\Entity\Resource $resource)
+    {
+        $this->resources[] = $resource;
+
+        return $this;
+    }
+
+    /**
+     * Remove resource
+     *
+     * @param \AppBundle\Entity\Resource $resource
+     */
+    public function removeResource(\AppBundle\Entity\Resource $resource)
+    {
+        $this->resources->removeElement($resource);
     }
 }

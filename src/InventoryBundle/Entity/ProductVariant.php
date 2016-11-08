@@ -585,4 +585,38 @@ class ProductVariant
     {
         $this->promo_kit_orders = $promo_kit_orders;
     }
+
+    /**
+     * Get warehouseInventory
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWarehouseInventory()
+    {
+        return $this->warehouse_inventory;
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return ProductVariant
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
 }

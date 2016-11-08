@@ -86,6 +86,12 @@ class ContactForm
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="contact_forms")
+     */
+    private $channel;
+
+
+    /**
      * Get id
      *
      * @return int
@@ -310,5 +316,28 @@ class ContactForm
     {
         return $this->message;
     }
-}
 
+    /**
+     * Set channel
+     *
+     * @param \InventoryBundle\Entity\Channel $channel
+     *
+     * @return ContactForm
+     */
+    public function setChannel(\InventoryBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \InventoryBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+}
