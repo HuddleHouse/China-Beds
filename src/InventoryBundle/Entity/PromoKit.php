@@ -142,4 +142,38 @@ class PromoKit
     {
         $this->promoKitOrders = $promoKitOrders;
     }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return PromoKit
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promoKitOrders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promoKitOrders->removeElement($promoKitOrder);
+    }
 }
