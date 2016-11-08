@@ -34,12 +34,12 @@ class WebsiteController extends BaseController
         $recaptcha = \json_decode($response->getBody()->getContents(), true);
 
         if(!$recaptcha['success']) {
-//            $msg = 'Recaptcha failure: ';
-//            foreach ($recaptcha['error-codes'] as $code) {
-//                $tmp = str_replace('-', ' ', $code);
-//                $msg .= $tmp . ', ';
-//            }
-//            return new JsonResponse(array(false, rtrim($msg, ',')));
+            $msg = 'Recaptcha failure: ';
+            foreach ($recaptcha['error-codes'] as $code) {
+                $tmp = str_replace('-', ' ', $code);
+                $msg .= $tmp . ', ';
+            }
+            return new JsonResponse(array(false, rtrim($msg, ',')));
         }
 
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(array('username' => $request->get('username')));
