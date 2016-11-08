@@ -37,3 +37,4 @@ parameters:
     nacha.prod.pass:    nacha_prod_pass
 
     channel_upload_directory: '%kernel.root_dir%/../web/uploads/websites'
+    retailer_recaptcha_secret: 6LcNZAsUAAAAAExNNxEAqidcHy5oWFZ2DOmFqsd7

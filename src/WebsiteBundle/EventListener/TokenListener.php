@@ -30,16 +30,12 @@ class TokenListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $channel = $this->em->getRepository('InventoryBundle\Entity\Channel')->findOneByUrl($_SERVER['SERVER_NAME']);
-        
-	if ( !$channel ) {
-		$channel = $this->em->getRepository('InventoryBUndle\Entity\CHannel')->find(1);
-            //$event->setResponse(new Response(sprintf('%s Not found!', $_SERVER['SERVER_NAME']), 404));
+
+        if ( !$channel ) {
+            $event->setResponse(new Response(sprintf('%s Not found!', $_SERVER['SERVER_NAME']), 404));
         }
-
-        $this->session->set('channel_id', $channel->getId());
-
+        if($channel) {
+            $this->session->set('channel_id', $channel->getId());
+        }
     }
-
-
-
 }

@@ -10,13 +10,85 @@
                 slidesToScroll: 1,
                 autoplay: true,
                 autoplaySpeed: 3000,
-                dots: true,
+                dots: true
             });
 
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            $('#currentYes').on('click', function() {
+                $(this).addClass('active');
+                $('#currentNo').removeClass('active');
+                $('#currentRetailer').val(1);
+            });
+
+            $('#currentNo').on('click', function() {
+                $(this).addClass('active');
+                $('#currentYes').removeClass('active');
+                $('#currentRetailer').val(0);
+            });
+
+            $('#residentialYes').on('click', function() {
+                $(this).addClass('active');
+                $('#residentialNo').removeClass('active');
+                $('#residential').val(1);
+            });
+
+            $('#residentialNo').on('click', function() {
+                $(this).addClass('active');
+                $('#residentialYes').removeClass('active');
+                $('#residential').val(0);
+            });
+
+            $('#onlineYes').on('click', function() {
+                $(this).addClass('active');
+                $('#onlineNo').removeClass('active');
+                $('#online').val(1);
+            });
+
+            $('#onlineNo').on('click', function() {
+                $(this).addClass('active');
+                $('#onlineYes').removeClass('active');
+                $('#online').val(0);
+            });
+
+            $('form#retailer').submit(function(ev) {
+                ev.preventDefault();
+                var flg = true;
+                if($('#online').val() == '1' && $('#url').val() == "") {
+                    $('.modal-body').html('If you intend to offer products online, you must enter a Web Address/URL');
+                    $("#modal-fail").modal('show');
+                    flg = false;
+                    console.log('online fail');
+                }
+                if($('#currentRetailer').val() == '1' && ($('#username').val() == "" || $('#pw').val() == "")) {
+                    $('.modal-body').html('If you\'re a current retailer, please enter your username and password. If not, please select "No" next to "I am a current Mlily retailer:"');
+                    $("#modal-fail").modal('show');
+                    flg = false;
+                    console.log('currentRetailer fail');
+                }
+                if(grecaptcha.getResponse() == '') {
+//                    flg = false;
+                    console.log('recaptcha fail');
+                }
+                if(flg) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_front_retailer_form') }}",
+                        data: $('form#retailer').serialize(),
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    });
+                }
+            });
         });
     </script>
+    <style>
+        .form-error input.form-control {
+            border: 1px solid #BF3F3F;
+        }
+        .form-error label {
+            color: #BF3F3F;
+        }
+    </style>
 {% endblock footer %}
 
 {% block body %}
@@ -27,107 +99,113 @@
         </div>
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="retailer-form">
-                    <div class="title">
-                        <i></i> MLILY Premier Retailer Program
-                    </div>
-                    <p>Become a Premier Retailer and receive free Extended Product Warranty coverage for your customers, online access to point of purchase materials, and training tools exclusively from MLILY USA. Your login and password will be emailed automatically and you should receive your retailer kit by mail in 3-5 days!</p>
-                    <div class="current-retailer">
-                        I am a current Mlily retailer:
-                        <span class="button active">Yes</span>
-                        <span class="button ">No</span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Username (ex: email, store or business name):</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Password:</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Company name*:</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Email*:</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Mgr/Purchaser name*:</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Address1*:</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Address2*:</label>
-                        <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label for="username">City*:</label>
-                                <input type="text" class="form-control" id="username" placeholder="">
+                <form id="retailer">
+                    <div class="retailer-form">
+                        <div class="title">
+                            <img src="{{ asset('images/web/Yellow Round Icon@2x.png') }}" width="70" style="margin-right:13px;"/>MLILY Premier Retailer Program
+                        </div>
+                        <p>Become a Premier Retailer and receive free Extended Product Warranty coverage for your customers, online access to point of purchase materials, and training tools exclusively from MLILY USA. Your login and password will be emailed automatically and you should receive your retailer kit by mail in 3-5 days!</p>
+                        <div class="current-retailer">
+                            I am a current Mlily retailer:
+                            <input id="currentRetailer" name="currentRetailer" type="hidden" value="0" />
+                            <span id="currentYes" class="button">Yes</span>
+                            <span id="currentNo" class="button active">No</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username (ex: email, store or business name):</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="pw">Password:</label>
+                            <input type="password" class="form-control" id="pw" name="pw" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company name*:</label>
+                            <input type="text" class="form-control" id="company" name="company" placeholder="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email*:</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Mgr/Purchaser name*:</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address1">Address1*:</label>
+                            <input type="text" class="form-control" id="address1" name="address1" placeholder="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address2">Address2:</label>
+                            <input type="text" class="form-control" id="address2" name="address2" placeholder="">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="city">City*:</label>
+                                    <input type="text" class="form-control" id="city" name="city" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    <label for="state">State*:</label>
+                                    <input type="text" class="form-control" maxlength="2" id="state" name="state" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="form-group">
+                                    <label for="zip">Zip*:</label>
+                                    <input type="text" maxlength="5" class="form-control" id="zip" name="zip" placeholder="" required>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label for="username">State*:</label>
-                                <input type="text" class="form-control" id="username" placeholder="">
-                            </div>
+                        <div class="current-retailer">
+                            Residential Address?*:
+                            <input id="residential" name="residential" type="hidden" value="0" />
+                            <span id="residentialYes" class="button">Yes</span>
+                            <span id="residentialNo" class="button active">No</span>
                         </div>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label for="username">Zip*:</label>
-                                <input type="text" class="form-control" id="username" placeholder="">
-                            </div>
+
+                        <hr>
+
+                        <div class="current-retailer">
+                            I intend to offer MLILY USA products online:
+                            <input id="online" name="online" type="hidden" value="0" />
+                            <span id="onlineYes" class="button">Yes</span>
+                            <span id="onlineNo" class="button active">No</span>
                         </div>
-                    </div>
-
-                    <div class="current-retailer">
-                        Residential Address?*:
-                        <span class="button active">Yes</span>
-                        <span class="button ">No</span>
-                    </div>
-
-                    <hr>
-
-                    <div class="current-retailer">
-                        I intend to offer MLILY USA products online:
-                        <span class="button active">Yes</span>
-                        <span class="button ">No</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Web Address/URL:</label>
-                        <p></p>
-                    </div>
-                    <div class="clearfix">&nbsp;</div>
-
-                    <p>By submitting this form you are agreeing to the <a href="#">Mlily Advertising Policy Terms and Conditions</a> including "Products may only be discounted up to 30% off MSRP in print advertisements, online promotions, or through e-commerce. No published sale price may exceed 30% off the MLILY MSRP." No print or online advertisement may directly compare MLILY USA products to any competitor by name or through the use of a trademarked logo.</p>
-
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="username">Please enter these characters:</label>
-                                <input type="text" class="form-control" id="username" placeholder="">
-                            </div>
+                        <div id="url-div" class="form-group">
+                            <label for="url">Web Address/URL:</label>
+                            <input type="text" class="form-control" id="url" name="url" placeholder="">
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="username">Not case sensitive</label>
-                                <input type="text" class="form-control" id="username" placeholder="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix">&nbsp;</div>
-                    <div class="clearfix" align="center"><a href="#"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></a></div>
-                    <div class="clearfix">&nbsp;</div>
+                        <div class="clearfix">&nbsp;</div>
 
-                </div>
+                        <p>By submitting this form you are agreeing to the <a href="{{ path('web_terms') }}">Mlily Advertising Policy Terms and Conditions</a> including "Products may only be discounted up to 30% off MSRP in print advertisements, online promotions, or through e-commerce. No published sale price may exceed 30% off the MLILY MSRP." No print or online advertisement may directly compare MLILY USA products to any competitor by name or through the use of a trademarked logo.</p>
+
+
+                        {#<div class="row">#}
+                        {#<div class="col-md-6">#}
+                        {#<div class="form-group">#}
+                        {#<label for="username">Please enter these characters:</label>#}
+                        {#<input type="text" class="form-control" id="username" placeholder="">#}
+                        {#</div>#}
+                        {#</div>#}
+                        {#<div class="col-md-6">#}
+                        {#<div class="form-group">#}
+                        {#<label for="username">Not case sensitive</label>#}
+                        {#<input type="text" class="form-control" id="username" placeholder="">#}
+                        {#</div>#}
+                        {#</div>#}
+                        {#</div>#}
+
+
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="clearfix" align="center" style="float:left;display:inline-block"><div class="g-recaptcha" data-sitekey="6LcNZAsUAAAAAMryAnQrTomF0YGxMxHt7OFSaloc"></div></div>
+                        <div class="clearfix" align="center" style="float:right;display:inline-block"><input id="submit_btn" alt="submit" type="image" style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></div>
+                        <div class="clearfix">&nbsp;</div>
+
+                    </div>
+                </form>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="mlily-benifit">
@@ -186,4 +264,20 @@
             </div>
         </div>
     </div>
+    <div id="modal-fail" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 {% endblock body %}
+{% block footbox %}
+    <div class="copyright">{{ channel.frontFooterText }}</div>
+{% endblock %}
