@@ -343,16 +343,16 @@ class User extends BaseUser
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if($this->hasRole('ROLE_RETAILER')) {
-            $count = 0;
-            foreach($this->getUserChannels() as $channel)
-                $count++;
-            if ($count > 1) {
-                $context->buildViolation('A retailer can only be on one Channel.')
-                    ->atPath('user_channels')
-                    ->addViolation();
-            }
-        }
+//        if($this->hasRole('ROLE_RETAILER')) {
+//            $count = 0;
+//            foreach($this->getUserChannels() as $channel)
+//                $count++;
+//            if ($count > 1) {
+//                $context->buildViolation('A retailer can only be on one Channel.')
+//                    ->atPath('user_channels')
+//                    ->addViolation();
+//            }
+//        }
     }
 
 

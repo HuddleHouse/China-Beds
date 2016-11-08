@@ -304,6 +304,10 @@ class OrderProductsController extends Controller
                 $rate->setParameter('toCode', $info->getWarehouse()->getZip());
 
                 $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+                if ( count($dimensions) == 1 ) {
+                    $dimensions = explode('X', $productVariant->getProductVariant()->getFedexDimensions());
+                }
+
                 $package = new \RocketShipIt\Package('fedex');
 
                 $package->setParameter('length', "$dimensions[0]");
