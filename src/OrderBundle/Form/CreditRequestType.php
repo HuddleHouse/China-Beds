@@ -76,20 +76,21 @@ class CreditRequestType extends AbstractType
                 )
             )
 
-            ->add('phone', NumberType::class, array(
-                'required' => false,
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Phone',
-            ))
+//            ->add('phone', NumberType::class, array(
+//                'required' => false,
+//                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+//                'label' => 'Phone',
+//            ))
+//
+//            ->add('email', EmailType::class, array(
+//                'required' => false,
+//                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+//                'label' => 'Email (leave empty to use  '.$this->tokenStorage->getToken()->getUser()->getEmail().')',
+//                'empty_data' => $this->tokenStorage->getToken()->getUser()->getEmail()
+//            ))
 
-            ->add('email', EmailType::class, array(
-                'required' => false,
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Email (leave empty to use  '.$this->tokenStorage->getToken()->getUser()->getEmail().')',
-                'empty_data' => $this->tokenStorage->getToken()->getUser()->getEmail()
-            ))
-
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false));
+//            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false))
+        ;
     }
 
     /**
