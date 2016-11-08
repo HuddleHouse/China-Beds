@@ -54,6 +54,11 @@ class WarrantyClaimController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+
+                if ( empty($warrantyClaim->getFile2()) ) {
+                    throw new \Exception("You must have at least 2 images uploaded.");
+                }
+
                 $em = $this->getDoctrine()->getManager();
                 //set values that the form didn't
                 if($warrantyClaim->getOrder() != null)
