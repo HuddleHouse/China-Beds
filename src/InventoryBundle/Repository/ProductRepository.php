@@ -131,8 +131,10 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             if($is_mattress == 1 && $is_channel == 1 && $prod->getActive() == true) {
                 $image_url = '/';
                 foreach($prod->getImages() as $image) {
-                    $image_url .= $image->getWebPath();
-                    break;
+                    if ( !$image->getDetailImage() ) {
+                        $image_url .= $image->getWebPath();
+                        break;
+                    }
                 }
                 $lowest_price = 9999999;
                 $hideOnFrontEnd = $prod->getHideFrontend();
