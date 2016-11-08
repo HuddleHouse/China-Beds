@@ -90,24 +90,32 @@
                                     }
                                     else {
                                         grecaptcha.reset();
-                                        if(data[1] == 'username taken') {
+                                        if (data[1] == 'username taken') {
                                             $('#modal-fail-body').html('The requested username is already in use.');
                                             $('#modal-fail').modal('show');
                                             $('#username-group').addClass('form-error');
                                         }
-                                        if(data[1] == 'username not found') {
-                                            $('#modal-fail-body').html('Your username was name found.');
-                                            $('#modal-fail').modal('show');
-                                            $('#username-group').addClass('form-error');
-                                        }
                                         else {
-                                            if (data[1].indexOf("I'm sorry there was an error creating the user:") >= 0) {
-                                                $('#modal-fail-body').html(data[1]);
+                                            if (data[1] == 'username not found') {
+                                                $('#modal-fail-body').html('Your username was name found.');
                                                 $('#modal-fail').modal('show');
+                                                $('#username-group').addClass('form-error');
                                             }
                                             else {
-                                                $('#modal-fail-body').html('Recaptcha has expired, please try again.');
-                                                $('#modal-fail').modal('show');
+                                                if (data[1] == 'email error') {
+                                                    $('#modal-fail-body').html('User creation successful, but was not sent to admin for approval. Please call the office or <a href="/contact">contact us</a>.');
+                                                    $('#modal-fail').modal('show');
+                                                }
+                                                else {
+                                                    if (data[1].indexOf("I'm sorry there was an error creating the user:") >= 0) {
+                                                        $('#modal-fail-body').html(data[1]);
+                                                        $('#modal-fail').modal('show');
+                                                    }
+                                                    else {
+                                                        $('#modal-fail-body').html('Recaptcha has expired, please try again.');
+                                                        $('#modal-fail').modal('show');
+                                                    }
+                                                }
                                             }
                                         }
                                     }

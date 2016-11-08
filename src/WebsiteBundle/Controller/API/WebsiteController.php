@@ -117,7 +117,7 @@ class WebsiteController extends BaseController
                 $em->flush();
 
                 $html = 'New retailer submission from ' . $request->get('name') . '. Their email is ' . $request->get('email') . '.<br>';
-                $html .= '<a href="'. $this->generateUrl('admin_edit_user', array('user_id' => $user->getId())) .'">Click here</a> to view the new retailer and mark them as active to get enable their login.';
+                $html .= '<a href="http://'. $channel->getBackendUrl() . '/admin/view-users/edit/' . $user->getId() .'">Click here</a> to view the new retailer. Mark them as active to get enable their login.';
 
                 $email = array(
                     'subject' => 'New Retailer Form Submission',
@@ -130,7 +130,7 @@ class WebsiteController extends BaseController
                     $this->get('email_service')->sendEmail($email);
                 }
                 catch(\Exception $e) {
-                    return new JsonResponse(array(true, 'User creation successful, but was not sent to admin for approval. Please call the office.'));
+                    return new JsonResponse(array(false, 'email error'));
                 }
 
                 return new JsonResponse(array(true, 'User creation successful, waiting for admin approval. You will be notified of the decision.'));
