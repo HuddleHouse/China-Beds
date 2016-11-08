@@ -1751,4 +1751,28 @@ class Channel
     {
         $this->resources = $resources;
     }
+
+    /**
+     * Add resource
+     *
+     * @param \AppBundle\Entity\Resource $resource
+     *
+     * @return Channel
+     */
+    public function addResource(\AppBundle\Entity\Resource $resource)
+    {
+        $this->resources[] = $resource;
+
+        return $this;
+    }
+
+    /**
+     * Remove resource
+     *
+     * @param \AppBundle\Entity\Resource $resource
+     */
+    public function removeResource(\AppBundle\Entity\Resource $resource)
+    {
+        $this->resources->removeElement($resource);
+    }
 }

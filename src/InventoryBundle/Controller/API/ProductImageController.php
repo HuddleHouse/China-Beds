@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller\API;
 
+use InventoryBundle\Entity\ProductImage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -90,5 +91,32 @@ class ProductImageController extends Controller
         catch(\Exception $e) {
             return JsonResponse::create(false);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/api_set_product_image_as_detail", name="api_set_product_image_as_detail")
+     */
+    public function setProductImageAsDetail(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->request->get('id');
+
+        if ( $image = $em->getRepository('InventoryBundle:ProductImage')->find($id) ) {
+            foreach($image->getProduct()->getImages() as $prod_image) {
+                $prod_image->setDetailImage(false);
+                $em->persist($prod_image);
+            }
+            $image->setDetailImage(true);
+            $em->persist($image);
+
+            try {
+                $em->flush();
+            } catch (\Exception $e) {
+                return new JsonResponse(['success' => false, 'message' => $e->getMessage()]);
+            }
+            return new JsonResponse(['success' => true]);
+        }
+
+        return new JsonResponse(['success' => false]);
     }
 }

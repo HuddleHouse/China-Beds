@@ -15,9 +15,13 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
-    default_distributor:
-    default_sales_rep:
-    default_sales_manager:
+    default_distributor: 1
+    default_sales_rep: 1
+    default_sales_manager: 1
+
+    warehouse_1: 1
+    warehouse_2: 2
+    warehouse_3: 3
 
     authorize_login_id: 3845HahjteBH
     authorize_tansaction_key: 69872hkT4b7WnQVt
