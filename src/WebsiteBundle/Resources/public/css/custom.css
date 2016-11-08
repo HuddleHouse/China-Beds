@@ -65,8 +65,8 @@ li {
 }
 .navbar-header .navbar-brand {
 	/*background:url(../images/logo.png) no-repeat;*/
-	width:138px;
-	height:79px;
+	/*width:138px;*/
+	height: 160px;
 	text-indent:-5555px;
 	padding:0;
 }
