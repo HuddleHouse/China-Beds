@@ -64,6 +64,7 @@ class LedgerController extends Controller
                 $ledger->setAmountCredited($ledger->getAmountRequested());
                 $ledger->setDatePosted(new \DateTime());
                 $ledger->setChannel($channel);
+                $ledger->setType(Ledger::TYPE_PAYMENT);
                 //add the opposite side of the relations
                 $ledger->getSubmittedForUser()->getLedgers()->add($ledger);
                 $this->getUser()->getSubmittedLedgers()->add($ledger);
@@ -72,7 +73,7 @@ class LedgerController extends Controller
                 $em->flush();
             }
             catch(\Exception $e) {
-                $this->addFlash('error', 'Error creating credit request entry: ' . $e->getMessage());
+                $this->addFlash('error', 'Error creating payment request entry: ' . $e->getMessage());
                 return $this->render('@Order/Ledger/new.html.twig', array(
                     'ledger' => $ledger,
                     'channel' => $channel,
@@ -80,7 +81,7 @@ class LedgerController extends Controller
                 ));
             }
 
-            $this->addFlash('notice', 'Credit request created.');
+            $this->addFlash('notice', 'Payment request created.');
             return $this->redirectToRoute('ledger_index');
         }
 
@@ -94,7 +95,7 @@ class LedgerController extends Controller
     /**
      * Dislays form for admin to distribute credits to retailers and distributors
      *
-     * @Route("/{id}/new-credit", name="ledger_credit_new")
+     * @Route("/{id}/new/credit", name="ledger_credit_new")
      * @Method({"GET", "POST"})
      */
     public function newCreditAction(Request $request, Channel $channel)
@@ -128,6 +129,9 @@ class LedgerController extends Controller
                     'form' => $form->createView(),
                 ));
             }
+
+            $this->addFlash('notice', 'Credit request created.');
+            return $this->redirectToRoute('ledger_index');
         }
 
         return $this->render('@Order/AddCredit/new.html.twig' , array(
