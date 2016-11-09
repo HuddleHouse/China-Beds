@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Repository;
 
+use AppBundle\Entity\User;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Entity\Product;
 use WarehouseBundle\Entity\Warehouse;
@@ -19,10 +20,23 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
      *
      * @return array
      */
-    public function getAllProductsArray()
+    public function getAllProductsArray(User $user = null)
     {
         $em = $this->getEntityManager();
-        $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        if ( $user ) {
+            $products_all = $this->createQueryBuilder('p')
+                ->leftJoin('p.channels', 'pc')
+                ->leftJoin('pc.channel', 'c')
+                ->where('c in (:channel)')
+                ->andWhere('p.active = 1')
+                ->setParameter('channel' , $user->getActiveChannel())
+                ->orderBy('p.name', 'ASC')
+                ->addOrderBy('c.name', 'ASC')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $products_all = $em->getRepository('InventoryBundle:Product')->findAll();
+        }
         $products = array();
 
         foreach($products_all as $prod) {
@@ -117,8 +131,10 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             if($is_mattress == 1 && $is_channel == 1 && $prod->getActive() == true) {
                 $image_url = '/';
                 foreach($prod->getImages() as $image) {
-                    $image_url .= $image->getWebPath();
-                    break;
+                    if ( !$image->getDetailImage() ) {
+                        $image_url .= $image->getWebPath();
+                        break;
+                    }
                 }
                 $lowest_price = 9999999;
                 $hideOnFrontEnd = $prod->getHideFrontend();

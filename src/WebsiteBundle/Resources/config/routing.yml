@@ -46,3 +46,7 @@ web_terms:
 api_submit_contact_form:
     path: /api/api_submit_contact_form
     defaults: {_controller: AppBundle:API/Website:submitContactForm }
+
+api_front_retailer_form:
+    path: /api/api_front_retailer_form
+    defaults: { _controller: WebsiteBundle:API/Website:retailerForm }

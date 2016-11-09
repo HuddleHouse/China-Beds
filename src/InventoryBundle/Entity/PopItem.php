@@ -345,13 +345,14 @@ class PopItem
 
         // move takes the target directory and then the
         // target filename to move to
+        $newName = md5(date('Y-m-d H:i:s:u')) . $this->getbiFile()->getClientOriginalName();
         $this->getFile()->move(
             $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+            $newName
         );
 
         // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
+        $this->path = $newName;
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
@@ -582,5 +583,39 @@ class PopItem
     public function setPromoKitOrders($promo_kit_orders)
     {
         $this->promo_kit_orders = $promo_kit_orders;
+    }
+
+    /**
+     * Get promoKitAvailable
+     *
+     * @return boolean
+     */
+    public function getPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return PopItem
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders->removeElement($promoKitOrder);
     }
 }

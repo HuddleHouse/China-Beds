@@ -364,4 +364,76 @@ class PromoKitOrders
     {
         $this->approved = $approved;
     }
+
+    /**
+     * Add promoKitItem
+     *
+     * @param \InventoryBundle\Entity\PromoKit $promoKitItem
+     *
+     * @return PromoKitOrders
+     */
+    public function addPromoKitItem(\InventoryBundle\Entity\PromoKit $promoKitItem)
+    {
+        $this->promoKitItems[] = $promoKitItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitItem
+     *
+     * @param \InventoryBundle\Entity\PromoKit $promoKitItem
+     */
+    public function removePromoKitItem(\InventoryBundle\Entity\PromoKit $promoKitItem)
+    {
+        $this->promoKitItems->removeElement($promoKitItem);
+    }
+
+    /**
+     * Add productVariant
+     *
+     * @param \InventoryBundle\Entity\ProductVariant $productVariant
+     *
+     * @return PromoKitOrders
+     */
+    public function addProductVariant(\InventoryBundle\Entity\ProductVariant $productVariant)
+    {
+        $this->productVariants[] = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove productVariant
+     *
+     * @param \InventoryBundle\Entity\ProductVariant $productVariant
+     */
+    public function removeProductVariant(\InventoryBundle\Entity\ProductVariant $productVariant)
+    {
+        $this->productVariants->removeElement($productVariant);
+    }
+
+    /**
+     * Add popItem
+     *
+     * @param \InventoryBundle\Entity\PopItem $popItem
+     *
+     * @return PromoKitOrders
+     */
+    public function addPopItem(\InventoryBundle\Entity\PopItem $popItem)
+    {
+        $this->popItems[] = $popItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove popItem
+     *
+     * @param \InventoryBundle\Entity\PopItem $popItem
+     */
+    public function removePopItem(\InventoryBundle\Entity\PopItem $popItem)
+    {
+        $this->popItems->removeElement($popItem);
+    }
 }

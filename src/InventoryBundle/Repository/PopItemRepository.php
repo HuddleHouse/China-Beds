@@ -35,7 +35,7 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'cost' => $popitem->getPricePer(),
                 'name' => $popitem->getName(),
                 'description' => $popitem->getDescription(),
-                'picture' => 'http://placehold.it/175x150',
+                'picture' => $this->getParameter('pop_upload_directory') . $popitem->getPath(),
                 'type' => 'pop',
                 'inventory' => $quantity //get actually inventory one day
             );

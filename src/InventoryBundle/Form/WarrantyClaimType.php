@@ -93,7 +93,7 @@ class WarrantyClaimType extends AbstractType
             ->add('file1', FileType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                     'label' => 'Proof Image 1',
-                    'required' => false,
+                    'required' => true,
                 )
             )
             ->add('path1', TextType::class, array(

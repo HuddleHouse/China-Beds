@@ -28,27 +28,29 @@ class ProfileController extends Controller
         $em = $this->getDoctrine()->getManager();
         $channel_name = $request->request->get('type_name');
 
-        $type_id = $request->request->get('type_id');
-        $channel = $em->getRepository('InventoryBundle:Channel')->find($type_id);
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
 
         $type_role = $request->request->get('type_role');
         $user_role = $request->request->get('user_role');
         $role = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => $type_role));
 
+        $distributor = null;
         if($this->getUser()->hasRole('ROLE_DISTRIBUTOR'))
             $distributor = $this->getUser();
-        else
-            $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
+//        else
+//            $distributor = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_distributor'));
 
+        $sales_rep = null;
         if($this->getUser()->hasRole('ROLE_SALES_REP'))
             $sales_rep = $this->getUser();
-        else
-            $sales_rep = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_rep'));
+//        else
+//            $sales_rep = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_rep'));
 
+        $sales_manager = null;
         if($this->getUser()->hasRole('ROLE_SALES_MANAGER'))
             $sales_manager = $this->getUser();
-        else
-            $sales_manager = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_manager'));
+//        else
+//            $sales_manager = $em->getRepository('AppBundle:User')->find($this->container->getParameter('default_sales_manager'));
 
         $values = $request->request->get('values');
 
@@ -98,23 +100,29 @@ class ProfileController extends Controller
         $user->setIsOnlineIntentions($data['is_online_intentions']);
         $user->setOnlineWebUrl($data['online_web_url']);
         $user->setPlainPassword('matt');
-
-        $user->setWarehouse1($warehouse_1);
-        $user->setWarehouse2($warehouse_2);
-        $user->setWarehouse3($warehouse_3);
+//
+//        $user->setWarehouse1($warehouse_1);
+//        $user->setWarehouse2($warehouse_2);
+//        $user->setWarehouse3($warehouse_3);
 
         try {
-            $user->setMyDistributor($distributor);
-            $distributor->addRetailer($user);
-            $em->persist($distributor);
+            if ( $distributor ) {
+                $user->setMyDistributor($distributor);
+                $distributor->addRetailer($user);
+                $em->persist($distributor);
+            }
 
-            $user->setMySalesRep($sales_rep);
-            $sales_rep->addRetailer($user);
-            $em->persist($sales_rep);
+            if ( $sales_rep ) {
+                $user->setMySalesRep($sales_rep);
+                $sales_rep->addRetailer($user);
+                $em->persist($sales_rep);
+            }
 
-            $user->setMySalesManager($sales_manager);
-            $sales_manager->addRetailer($user);
-            $em->persist($sales_manager);
+            if ( $sales_manager ) {
+                $user->setMySalesManager($sales_manager);
+                $sales_manager->addRetailer($user);
+                $em->persist($sales_manager);
+            }
 
             $user->addUserChannel($channel);
             $user->addGroup($role);

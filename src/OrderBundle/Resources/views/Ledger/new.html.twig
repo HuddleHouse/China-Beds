@@ -40,6 +40,7 @@
         </div>
     {% endif %}
     <div class="table">
+        {% if app.user.achaccountnumber %}
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
@@ -47,16 +48,40 @@
                     {{ form_label(form.amountRequested) }}
                     {{ form_widget(form.amountRequested) }}
                 </div>
+                {#<div class="col-md-3 form-group">#}
+                    {#{{ form_label(form.phone) }}#}
+                    {#{{ form_widget(form.phone) }}#}
+                {#</div>#}
             </div>
+            {#<div class="row">#}
+                {#<div class="col-md-6 form-group">#}
+                    {#{{ form_label(form.email) }}#}
+                    {#{{ form_widget(form.email) }}#}
+                {#</div>#}
+            {#</div>#}
+            {#<div class="row">#}
+                {#<div class="col-md-6 form-group">#}
+                    {#{{ form_label(form.description) }} <span id="charNum"#}
+                                                             {#style="font-weight:200;color:#8e8e8e;">255</span>#}
+                    {#{{ form_widget(form.description) }}#}
+                {#</div>#}
+            {#</div>#}
             <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.description) }} <span id="charNum"
-                                                             style="font-weight:200;color:#8e8e8e;">255</span>
-                    {{ form_widget(form.description) }}
+                <div class="col-md-12">
+                    By submitting the form below, I authorize {{ app.user.activechannel.name }} to perform an ACH transfer on my behalf from the account ending in {{ app.user.achaccountnumber[-4:] }}.
                 </div>
             </div>
-            <input class="btn btn-raised btn-success" type="submit" value="Request"/>
+            <input class="btn btn-raised btn-success" type="submit" value="Pay"/>
             {{ form_end(form) }}
         </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="danger">
+                            You must have a valid ACH account setup in your <a href="{{ path('fos_user_profile_edit') }}">User Profile</a>.
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
     </div>
 {% endblock %}

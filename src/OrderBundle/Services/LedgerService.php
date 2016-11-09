@@ -138,7 +138,7 @@ class LedgerService
                 ->setEffectiveEntryDate(date('ymd'))
                 ->setOriginatingDFiId($channel->getAchOriginatingDfi());
 
-            foreach($this->getDoctrine()->getManager()->getRepository('OrderBundle:Ledger')->findBy(['type' => Ledger::TYPE_CREDIT, 'achRequested' => false, 'channel' => $channel]) as $entry) {
+            foreach($this->getDoctrine()->getManager()->getRepository('OrderBundle:Ledger')->findBy(['type' => Ledger::TYPE_PAYMENT, 'achRequested' => false, 'channel' => $channel]) as $entry) {
                 $receiving_dfi = substr($entry->getSubmittedForUser()->getAchRoutingNumber(), 0, 8);
                 $check_digit = substr($entry->getSubmittedForUser()->getAchRoutingNumber(), 8, 1);
                 $batch->addDebitEntry(

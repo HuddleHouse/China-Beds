@@ -121,14 +121,16 @@
             <tr>
                 <td colspan="2" style="text-align: center">Order Info</td>
             </tr>
+            {% if order %}
             <tr>
                 <td>Order #</td>
-                <td><a href="{{ path('order_products_review', { 'id_channel': order.channel.id, 'id_order': order.id }) }}">{{ order.orderId | default('--') }}</a></td>
+                <td><a href="{{ path('order_products_review', { 'id_channel': order.channel.id, 'id_order': order.id }) }}" target="_blank">{{ order.orderId | default('--') }}</a></td>
             </tr>
             <tr>
                 <td>Order Total</td>
                 <td>${{ order.total | number_format(2) | default('--') }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <td>Product</td>
                 <td>{{ warranty_claim.productVariant.product.name | default('--') }} {{ warranty_claim.productVariant.name | default('') }}</td>
