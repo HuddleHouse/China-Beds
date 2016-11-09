@@ -41,6 +41,11 @@ class ProductImage
     public $path;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    public $detail_image = false;
+
+    /**
      * Get id
      *
      * @return int
@@ -170,5 +175,29 @@ class ProductImage
     {
         $file_path = $this->getAbsolutePath();
         if(file_exists($file_path)) unlink($file_path);
+    }
+
+    /**
+     * Set detailImage
+     *
+     * @param boolean $detailImage
+     *
+     * @return ProductImage
+     */
+    public function setDetailImage($detailImage)
+    {
+        $this->detail_image = $detailImage;
+
+        return $this;
+    }
+
+    /**
+     * Get detailImage
+     *
+     * @return boolean
+     */
+    public function getDetailImage()
+    {
+        return $this->detail_image;
     }
 }

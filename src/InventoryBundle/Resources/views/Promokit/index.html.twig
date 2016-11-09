@@ -57,7 +57,11 @@
                 <td>{{ promoKit.description }}</td>
                 <td class="active-field"><input type="checkbox" {% if promoKit.active %}checked="checked"{% endif %} onchange="changePromoKitActive({{ promoKit.id }}, this.checked)" /></td>
                 <td>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a class="btn btn-raised btn-xs" href="{{ path('promokit_edit', { 'id': promoKit.id }) }}">Edit</a>
+                        <a class="btn btn-raised btn-xs btn-warning" href="{{ path('promokit_delete', { 'id': promoKit.id }) }}">Delete</a>
+                    {% endif %}
+
                 </td>
             </tr>
         {% endfor %}

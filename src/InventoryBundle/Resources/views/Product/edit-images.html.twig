@@ -11,6 +11,7 @@
             <table class="table">
                 <thead>
                 <tr>
+                    <td width="100px">Spec</td>
                     <th>Image</th>
                     <th style="width: 150px">Options</th>
                 </tr>
@@ -19,6 +20,7 @@
                 <tbody>
                 {% verbatim %}
                     <tr ng-repeat="(i, image) in product_images track by $index">
+                        <td><input type="radio" name="detail_image" ng-model="image.detail_image" value="image.id" ng-click="updateProductImageAsDetail(image.id)" /> </td>
                         <td><img src="/uploads/products/{{image.path}}" alt="Product Image" style="max-height: 150px;"> </td>
                         <td>
                             <a class="btn btn-raised btn-danger rich-btn" ng-click="removeProductImage(image.id)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -43,7 +45,7 @@
                 {% verbatim %}
                 <h4>Upload on file select</h4>
                 <button type="file" ngf-select="addProductImage($file, $invalidFiles)"
-                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" class="btn btn-raised btn-primary">
+                        accept="image/*" ngf-max-height="1000" ngf-max-size="6MB" class="btn btn-raised btn-primary">
                     Select File</button>
                 <br><br>
                 File:

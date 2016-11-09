@@ -2,8 +2,10 @@
 
 namespace WebsiteBundle\Controller;
 
+use InventoryBundle\Entity\FrontWarrantyClaim;
 use InventoryBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class WebsiteController extends BaseController
 {
@@ -46,11 +48,27 @@ class WebsiteController extends BaseController
     }
 
 
-    public function warrantyIndexAction()
+    public function warrantyIndexAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $warranty = new FrontWarrantyClaim();
+
+        $form = $this->createForm('InventoryBundle\Form\FrontWarrantyClaimType', $warranty);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $warranty->uploadLawCopy();
+            $warranty->uploadReceipt();
+            $em->persist($warranty);
+            $em->flush();
+            //render something
+        }
+
         return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
             'site' => strtolower($this->getChannel()->getName()),
-            'channel' => $this->getChannel()
+            'channel' => $this->getChannel(),
+            'form' => $form->createView()
         ));
     }
 

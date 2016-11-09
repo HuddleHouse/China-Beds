@@ -32,6 +32,7 @@ class SettingsService
      * @return \AppBundle\Entity\Settings[]|array|string
      */
     public function get($name) {
+        $rtn = null;
         try {
             if ( $setting = $this->em->getRepository('AppBundle:Settings')->findOneBy(array('name' => $name)) ) {
                 $rtn = $setting->getValue();

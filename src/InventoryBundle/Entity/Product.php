@@ -419,9 +419,24 @@ class Product
     /**
      * @return mixed
      */
-    public function getImages()
+    public function getImages($public_only = false)
     {
-        return $this->images;
+        $images = [];
+
+        foreach($this->images as $image) {
+            if ( !$public_only || ($public_only && !$image->getDetailImage()) ) {
+                $images[] = $image;
+            }
+        }
+        return $images;
+    }
+
+    public function getDetailImage() {
+        foreach($this->images as $image) {
+            if ( $image->getDetailImage() ) {
+                return $image;
+            }
+        }
     }
 
     /**
