@@ -38,6 +38,7 @@ class WebsiteController extends BaseController
 
         $html .= '</ul></div>';
 
+
         $contactForm->setName($data['Name']);
         $contactForm->setEmail($data['Email']);
         $contactForm->setAddress($data['Address']);
@@ -47,6 +48,7 @@ class WebsiteController extends BaseController
         $contactForm->setZip($data['Zip']);
         $contactForm->setContactReason($data['contact_reason']);
         $contactForm->setMessage($data['Message']);
+        $contactForm->setPhone($data['Phone']);
         $contactForm->setChannel($channel);
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -54,8 +56,8 @@ class WebsiteController extends BaseController
         $em->flush();
 
 
-        $admin = $em->getRepository('AppBundle:User')->getAllAdminArray();
-        foreach($admin as $ad) {
+//        $admin = $em->getRepository('AppBundle:User')->getAllAdminArray();
+//        foreach($admin as $ad) {
             $email = array(
                 'subject' => 'New Contact Form Submission',
                 'to' => $channel->getSupportEmailAddress(),
@@ -69,10 +71,7 @@ class WebsiteController extends BaseController
             catch(\Exception $e) {
                 return new JsonResponse(array('success' => false, 'message' => $e->getMessage()));
             }
-
-        }
-//        $this->addFlash('notice', 'Contact form submitted successfully.');
-
+//        }
         return JsonResponse::create(['success' => true]);
     }
 

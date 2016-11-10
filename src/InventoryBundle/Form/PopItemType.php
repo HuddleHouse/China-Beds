@@ -53,11 +53,7 @@ class PopItemType extends AbstractType
                     'Yes' => 1,
                 ),
             ))
-            ->add('hide_order', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Hide From Order Page',
-                'choices' => ['No' => false, 'Yes' => true],
-            ))
+            ->getForm()
         ;
     }
     

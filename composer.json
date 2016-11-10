@@ -39,6 +39,7 @@
         "patchwork/jsqueeze": "^2.0",
         "friendsofsymfony/jsrouting-bundle": "^1.6",
         "eidsonator/semantic-reports-bundle" : "dev-master",
+        "knplabs/knp-snappy-bundle": "^1.4",
         "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {

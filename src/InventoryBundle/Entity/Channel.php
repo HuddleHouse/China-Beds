@@ -50,6 +50,13 @@ class Channel
     /**
      * @var string
      *
+     * @ORM\Column(name="backend_url", type="string", length=255, nullable=true)
+     */
+    private $backend_url;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="front_logo", type="string")
      */
     private $frontLogo;
@@ -476,6 +483,22 @@ class Channel
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackendUrl()
+    {
+        return $this->backend_url;
+    }
+
+    /**
+     * @param string $backend_url
+     */
+    public function setBackendUrl($backend_url)
+    {
+        $this->backend_url = $backend_url;
     }
 
     /**
