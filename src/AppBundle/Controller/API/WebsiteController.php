@@ -56,8 +56,8 @@ class WebsiteController extends BaseController
         $em->flush();
 
 
-        $admin = $em->getRepository('AppBundle:User')->getAllAdminArray();
-        foreach($admin as $ad) {
+//        $admin = $em->getRepository('AppBundle:User')->getAllAdminArray();
+//        foreach($admin as $ad) {
             $email = array(
                 'subject' => 'New Contact Form Submission',
                 'to' => $channel->getSupportEmailAddress(),
@@ -71,10 +71,7 @@ class WebsiteController extends BaseController
             catch(\Exception $e) {
                 return new JsonResponse(array('success' => false, 'message' => $e->getMessage()));
             }
-
-        }
-//        $this->addFlash('notice', 'Contact form submitted successfully.');
-
+//        }
         return JsonResponse::create(['success' => true]);
     }
 
