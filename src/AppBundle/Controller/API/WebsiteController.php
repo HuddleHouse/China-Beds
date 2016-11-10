@@ -38,6 +38,7 @@ class WebsiteController extends BaseController
 
         $html .= '</ul></div>';
 
+
         $contactForm->setName($data['Name']);
         $contactForm->setEmail($data['Email']);
         $contactForm->setAddress($data['Address']);
@@ -47,6 +48,7 @@ class WebsiteController extends BaseController
         $contactForm->setZip($data['Zip']);
         $contactForm->setContactReason($data['contact_reason']);
         $contactForm->setMessage($data['Message']);
+        $contactForm->setPhone($data['Phone']);
         $contactForm->setChannel($channel);
 
         $em = $this->getDoctrine()->getEntityManager();

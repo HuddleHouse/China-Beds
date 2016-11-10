@@ -996,12 +996,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "3015f0965b74704362f9b2006646781d4613bcdd"
+                "reference": "dc8e624a6776d69850213df4de59f7c4afc72d00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3015f0965b74704362f9b2006646781d4613bcdd",
-                "reference": "3015f0965b74704362f9b2006646781d4613bcdd",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/dc8e624a6776d69850213df4de59f7c4afc72d00",
+                "reference": "dc8e624a6776d69850213df4de59f7c4afc72d00",
                 "shasum": ""
             },
             "require": {
@@ -1065,7 +1065,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-11-08 13:35:42"
+            "time": "2016-11-10 13:28:14"
         },
         {
             "name": "google/apiclient",
