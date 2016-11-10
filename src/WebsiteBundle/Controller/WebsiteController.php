@@ -136,4 +136,8 @@ class WebsiteController extends BaseController
             'channel' => $this->getChannel()
         ));
     }
+
+    public function fixFedexAction($filename) {
+        return $this->redirect(sprintf('https://order.mlilyusa.com/model/fedex_label/img/%s', $filename));
+    }
 }
