@@ -33,14 +33,14 @@ class WebsiteController extends BaseController
         $response = $guzzle->request('POST', 'https://www.google.com/recaptcha/api/siteverify', $options);
         $recaptcha = \json_decode($response->getBody()->getContents(), true);
 
-        if(!$recaptcha['success']) {
-            $msg = 'Recaptcha failure: ';
-            foreach ($recaptcha['error-codes'] as $code) {
-                $tmp = str_replace('-', ' ', $code);
-                $msg .= $tmp . ', ';
-            }
-            return new JsonResponse(array(false, rtrim($msg, ',')));
-        }
+//        if(!$recaptcha['success']) {
+//            $msg = 'Recaptcha failure: ';
+//            foreach ($recaptcha['error-codes'] as $code) {
+//                $tmp = str_replace('-', ' ', $code);
+//                $msg .= $tmp . ', ';
+//            }
+//            return new JsonResponse(array(false, rtrim($msg, ',')));
+//        }
 
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy(array('username' => $request->get('username')));
 
@@ -81,6 +81,7 @@ class WebsiteController extends BaseController
             $user->setEmail($request->get('email'));
             $user->setAddress1($request->get('address1'));
             $user->setAddress2($request->get('address2'));
+            $user->setPhone($request->get('phone'));
             $user->setCity($request->get('city'));
             $user->setState($em->getRepository('AppBundle:State')->findOneBy(array('abbreviation' => strtoupper($request->get('state')))));
             $user->setZip($request->get('zip'));
@@ -117,11 +118,23 @@ class WebsiteController extends BaseController
                 $em->flush();
 
                 $html = 'New retailer submission from ' . $request->get('name') . '. Their email is ' . $request->get('email') . '.<br>';
-                $html .= '<a href="http://'. $channel->getBackendUrl() . '/admin/view-users/edit/' . $user->getId() .'">Click here</a> to view the new retailer. Mark them as active to get enable their login.';
+
+                $html .= sprintf("Company Name: %s<br />", $request->get('company'));
+                $html .= sprintf("Email: %s<br />", $request->get('email'));
+                $html .= sprintf("Phone Number: %s<br />", $request->get('phone'));
+                $html .= sprintf("Mgr/Purchaser Name: %s<br />", $request->get('name'));
+                $html .= sprintf("Address 1: %s<br />", $request->get('address1'));
+                $html .= sprintf("Address 2: %s<br />", $request->get('address2'));
+                $html .= sprintf("City, St  Zip: %s, %s, %s<br />", $request->get('city'), $request->get('state'), $request->get('zip'));
+                $html .= sprintf("Residential: %s<br />", $request->get('residential') == "1" ? "Yes" : "No");
+                $html .= sprintf("Url: %s<br />", $request->get('url'));
+
+                $html .= '<br /><br /><a href="http://'. $channel->getBackendUrl() . '/admin/view-users/edit/' . $user->getId() .'">Click here</a> to view the new retailer. Mark them as active to get enable their login.';
 
                 $email = array(
                     'subject' => 'New Retailer Form Submission',
                     'to' => $channel->getSupportEmailAddress(),
+                    'cc' => 'chattwarehouse@mlilyusa.com',
                     'from' => $channel->getFromEmailAddress(),
                     'body' => $html
                 );
@@ -136,7 +149,7 @@ class WebsiteController extends BaseController
                 return new JsonResponse(array(true, 'User creation successful, waiting for admin approval. You will be notified of the decision.'));
             }
             catch(\Exception $e) {
-                return new JsonResponse(array(false, "There was an error creating the user, please try again later."));
+                return new JsonResponse(array(false, "There was an error creating the user, please try again later.  [%s]", $e->getMessage()));
             }        
         }
     }

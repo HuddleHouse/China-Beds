@@ -182,6 +182,10 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="" required>
                         </div>
                         <div class="form-group">
+                            <label for="phone">Phone*:</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="" required>
+                        </div>
+                        <div class="form-group">
                             <label for="name">Mgr/Purchaser name*:</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="" required>
                         </div>
@@ -224,9 +228,9 @@
 
                         <div class="current-retailer">
                             I intend to offer MLILY USA products online:
-                            <input id="online" name="online" type="hidden" value="0" />
-                            <span id="onlineYes" class="button">Yes</span>
-                            <span id="onlineNo" class="button active">No</span>
+                            <input id="online" name="online" type="hidden" value="1" />
+                            <span id="onlineYes" class="button active">Yes</span>
+                            <span id="onlineNo" class="button">No</span>
                         </div>
                         <div id="url-div" class="form-group">
                             <label for="url">Web Address/URL:</label>
@@ -234,7 +238,7 @@
                         </div>
                         <div class="clearfix">&nbsp;</div>
 
-                        <p>By submitting this form you are agreeing to the <a href="{{ path('web_terms') }}">Mlily Advertising Policy Terms and Conditions</a> including "Products may only be discounted up to 30% off MSRP in print advertisements, online promotions, or through e-commerce. No published sale price may exceed 30% off the MLILY MSRP." No print or online advertisement may directly compare MLILY USA products to any competitor by name or through the use of a trademarked logo.</p>
+                        <p>By submitting this form you are agreeing to the <a href="{{ path('web_terms') }}" target="_blank">Mlily Advertising Policy Terms and Conditions</a> including "Products may only be discounted up to 30% off MSRP in print advertisements, online promotions, or through e-commerce. No published sale price may exceed 30% off the MLILY MSRP." No print or online advertisement may directly compare MLILY USA products to any competitor by name or through the use of a trademarked logo.</p>
 
 
                         {#<div class="row">#}

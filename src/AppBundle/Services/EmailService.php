@@ -23,6 +23,10 @@ class EmailService extends BaseService
             ->setTo($data['to'])
             ->setBody($data['body'], 'text/html');
 
+        if ( isset($data['cc']) ) {
+            $message->addCc($data['cc']);
+        }
+
         $this->mailer->send($message);
     }
 
