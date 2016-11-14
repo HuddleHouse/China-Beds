@@ -33,7 +33,6 @@ class OrderProductsController extends Controller
     public function getOrdersIndex()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->getUser();
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
@@ -206,6 +205,47 @@ select coalesce(sum(i.quantity), 0) as quantity
             return $this->redirectToRoute('404');
     }
 
+    /**
+     *
+     * @Route("/{id_channel}/manual_order", name="manual_order")
+     *
+     * @ParamConverter("channel", class="InventoryBundle:Channel", options={"id" = "id_channel"})
+     *
+     * @Method("GET")
+     */
+    public function manualOrderAction(Channel $channel)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->getUser();
+        $user_channels = $user->getUserChannelsArray();
+        if(count($user->getPriceGroups()) != 0)
+            $categories = $em->getRepository('InventoryBundle:Category')->findAll();
+        else
+            $categories = $em->getRepository('InventoryBundle:Category')->findBy(array('name' => 'POP'));
+
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findByChannels(array($this->getUser()->getActiveChannel()));
+
+        $product_data = $em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray($warehouses[0], $this->getUser()->getActiveChannel());
+
+        if($user_channels[$channel->getId()])
+            $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user, null, null, 1);
+        else
+            $this->redirectToRoute('404');
+
+        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($channel);
+
+        $distributors = $em->getRepository('AppBundle:User')->getAllDistributorsArray($this->getUser()->getActiveChannel());
+        $retailers = $em->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel());
+
+        return $this->render('@Order/OrderProducts/manual-order.html.twig', array(
+            'channel' => $channel,
+            'order' => $this->getDoctrine()->getRepository('OrderBundle:Orders')->find(26),
+            'user' => $user,
+            'warehouses' => $warehouses,
+            'distributors' => $distributors,
+            'retailers' => $retailers
+        ));
+    }
 
     /**
      *
@@ -289,7 +329,7 @@ select coalesce(sum(i.quantity), 0) as quantity
         else
             $this->redirectToRoute('404');
 
-        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart();
+        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($this->getUser()->getActiveChannel());
 
         $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
         $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());

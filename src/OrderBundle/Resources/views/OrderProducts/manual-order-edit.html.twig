@@ -16,28 +16,18 @@
 
 {% block footer %}
     <script>
-        $(document).ready(function () {
-            $('#part-table').DataTable({
-                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
-        });
-
         var app = angular.module('myApp', ['ngMaterial']);
         app.controller('myCtrl', ['$scope', function($scope) {
-            $scope.is_distributor = {{ is_dis }};
-            $scope.is_retailer = {{ is_retail }};
             $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
-            $scope.cart_num_items = 0;
             $scope.product_variant_order_quan = [];
             $scope.cart = [];
-            $scope.form_info = {};
-            $scope.form_info.pick_up_date = new Date();
-            $scope.form_info.pick_up = false;
-            $scope.form_info.ship = false;
             $scope.payment_type = '';
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
-            $scope.cart_total = {{ order.getTotal  }};
-            $scope.is_paid = {{ is_paid }};
+            $scope.cart_total = {{ order.getTotal }};
+            $scope.is_paid = 0
+            {#{{ is_paid }}#}
+            ;
             $scope.admin_paid = 0;
 
             {% if order.status.name == 'Pending' %}
@@ -48,7 +38,7 @@
                 if ($scope.is_paid == 1) {
                     $('#payment-type').val('{{ order.paymentType }}');
                 }
-                console.log("{{ is_paid }}");
+                {#console.log("{{ is_paid }}");#}
             });
 
             $scope.changePayment = function () {
@@ -105,7 +95,7 @@
                         dataType: 'json',
                         data: {cc: $scope.cc,
                             payment_type: $scope.payment_type,
-                            order_id: {{ order.id}},
+                            order_id: {{ order.id }},
                             type: type
                         },
                         success: function (data) {
@@ -143,14 +133,9 @@
                     $('#submit-button').prop('disabled', false);
                     $('#submit-button').removeClass('button-error');
                 }
-
                 $scope.calculateCart();
             };
-
-
         }]);
-
-
     </script>
 {% endblock footer %}
 
@@ -256,7 +241,7 @@
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
 
-                    {% if order.isPickUp == 0%}
+                    {% if order.isPickUp == 0 %}
                         <address>
                             <strong>Shipping To</strong>
                             {{ order.shipName }}<br>
@@ -286,11 +271,13 @@
             </div>
             <!-- /.row -->
             <hr>
-            {% for prod in product_data %}
+            {#{% for prod in product_data %}#}
                 <!-- Table row -->
                 <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
-                        <h4 class="page-header"><b>Warehouse Location: </b>{{ prod[0].warehouse_name }}</h4>
+                        <h4 class="page-header"><b>Warehouse Location: </b>
+                            {#{{ prod[0].warehouse_name }}#}
+                        </h4>
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -300,22 +287,24 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for item in prod %}
+                            {#{% for item in prod %}#}
                                 <tr>
-                                    <td>{{ item.quantity }}</td>
-                                    <td>{{ item.product_name }}</td>
-                                    <td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>
+                                    <td>{{ item.quantity | default('') }}</td>
+                                    <td>{{ item.product_name | default('') }}</td>
+                                    <td><h6 style="margin: 0;">$
+                                            {#{{ item.subtotal | number_format(2, '.', ',')  | default(0) }}#}
+                                        </h6></td>
                                 </tr>
-                            {% endfor %}
+                            {#{% endfor %}#}
                             </tbody>
                         </table>
                     </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-            {% endfor %}
+            {#{% endfor %}#}
 
-            {% if pop_items is not empty %}
+            {#{% if pop_items is not empty %}#}
                 <!-- Table row -->
                 <div class="row" style="">
                     <div class="col-xs-12 table-responsive">
@@ -329,53 +318,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for item in pop_items %}
+                            {#{% for item in pop_items %}#}
                                 <tr>
-                                    <td>{{ item.quantity }}</td>
-                                    <td>{{ item.popItem.name }}: {{ item.popItem.description }}</td>
-                                    <td><h6 style="margin: 0;">${{ (item.price*item.quantity) |number_format(2, '.', ',') }}</h6></td>
+                                    <td>{{ item.quantity | default('') }}</td>
+                                    <td>{{ item.popItem.name | default('') }}: {{ item.popItem.description | default('') }}</td>
+                                    <td><h6 style="margin: 0;">$
+                                            {#{{ (item.price*item.quantity) |number_format(2, '.', ',') | default('') }}#}
+                                        </h6></td>
                                 </tr>
-                            {% endfor %}
+                            {#{% endfor %}#}
                             </tbody>
                         </table>
                     </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-            {% endif %}
-
-            {% if manual_items_count != 0 %}
-                <div class="row" style="margin-bottom: 30px;" >
-                    <div class="col-md-12" >
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                <center><h4>Manual Items</h4></center>
-                                <tr>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for item in manual_items %}
-                                <tr>
-                                    <td>
-                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
-                                            {{ item.description }}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
-                                            ${{ item.price | number_format(2, '.', ',') }}
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
+            {#{% endif %}#}
 
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
@@ -504,11 +462,11 @@
                             {#</tr>#}
                             <tr>
                                 <th>Shipping: {{ order.getShipDescription }}</th>
-                                <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
+                                <td>${{ order.getShipping | number_format(2, '.', ',') }}</td>
                             </tr>
                             <tr>
                                 <th>Total:</th>
-                                <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
+                                <td>${{ order.getTotal | number_format(2, '.', ',') }}</td>
                             </tr>
                             </tbody>
                         </table>
