@@ -196,7 +196,7 @@ class OrderProductsController extends Controller
 
         return $this->render('@Order/OrderProducts/manual-order.html.twig', array(
             'channel' => $channel,
-            'order' => $this->getDoctrine()->getRepository('OrderBundle:Orders')->find(26),
+            'order' => null,//$this->getDoctrine()->getRepository('OrderBundle:Orders')->find(26),
             'user' => $user,
             'warehouses' => $warehouses,
             'distributors' => $distributors,
