@@ -74,9 +74,9 @@ class FrontWarrantyClaim
     private $zip;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="phone", type="integer", nullable=true)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
@@ -203,6 +203,27 @@ class FrontWarrantyClaim
      * @ORM\Column(type="string", length=510, nullable=true)
      */
     public $lawPath;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="resolution", type="text", nullable=true)
+     */
+    private $resolution;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="archived", type="boolean", nullable=true, options={"default" : false})
+     */
+    private $archived;
 
     /**
      * FrontWarrantyClaim constructor.
@@ -910,4 +931,55 @@ class FrontWarrantyClaim
     {
         $this->lawPath = $lawPath;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResolution()
+    {
+        return $this->resolution;
+    }
+
+    /**
+     * @param mixed $resolution
+     */
+    public function setResolution($resolution)
+    {
+        $this->resolution = $resolution;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
+     * @param boolean $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+
+
 }
