@@ -94,7 +94,8 @@
                             <td>{{ claim.channel }}</td>
                             <td>{% if claim.archived == 1 %}Yes{% else %}No{% endif %}</td>
                             <td>{{ claim.resolution }}</td>
-                            <td><input type="button" value="show" onclick="showModal({{ claim.id }})"></td>
+                            <td><input type="button" value="show" class="btn btn-raised btn-default btn-xs purple" onclick="showModal({{ claim.id }})">
+
                         </tr>
                         {% endif %}
                     {% endfor %}
