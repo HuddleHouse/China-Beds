@@ -156,7 +156,7 @@
             $scope.payment_type = '';
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
-            $scope.cart_total = {{ order.getTotal }};
+            $scope.cart_total = {{ order.getTotal | default(669.53) }};
             $scope.is_paid = 0
             {#{{ is_paid }}#}
             ;
