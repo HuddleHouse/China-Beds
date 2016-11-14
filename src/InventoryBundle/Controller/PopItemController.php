@@ -49,6 +49,7 @@ class PopItemController extends Controller
             $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
             $popItem->setChannel($channel);
             $em = $this->getDoctrine()->getManager();
+            $popItem->upload();
             $em->persist($popItem);
             $em->flush();
             $this->addFlash('notice', 'POP Item created successfully.');
