@@ -345,7 +345,7 @@ class PopItem
 
         // move takes the target directory and then the
         // target filename to move to
-        $newName = md5(date('Y-m-d H:i:s:u')) . $this->getbiFile()->getClientOriginalName();
+        $newName = md5(date('Y-m-d H:i:s:u')) . $this->getFile()->getClientOriginalName();
         $this->getFile()->move(
             $this->getUploadRootDir(),
             $newName
