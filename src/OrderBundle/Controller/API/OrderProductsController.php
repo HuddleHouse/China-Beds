@@ -259,7 +259,6 @@ class OrderProductsController extends Controller
         else
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
 
-
         return JsonResponse::create($product_data);
     }
 
@@ -350,7 +349,7 @@ class OrderProductsController extends Controller
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
             $order = $this->generateShippingLabels($order);
-            $ledger_service = $this->get('order.ledger');
+            $ledger_service = $this->get('ledger.service');
             $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());

@@ -13,7 +13,7 @@ use OrderBundle\Entity\Orders;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getAllDistributorsArray() {
+    public function getAllDistributorsArray(Channel $channel = null) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select u.*
@@ -28,8 +28,11 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
         $distributors = array();
         foreach($data as $d) {
-            $dist = $em->getRepository('AppBundle:User')->find($d['id']);
-            $distributors[] = $dist;
+            if ( $dist = $em->getRepository('AppBundle:User')->find($d['id']) ) {
+                if ($dist->belongsToChannel($channel)) {
+                    $distributors[] = $dist;
+                }
+            }
         }
         return $distributors;
     }
