@@ -16,6 +16,7 @@
 
 {% block footer %}
     <script>
+        var buttonGroup = $( buttonGroup );
         $(document).ready(function () {
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
@@ -52,9 +53,8 @@
             });
             // change is-checked class on buttons
             $('.button-group').each( function( i, buttonGroup ) {
-                var buttonGroup = $( buttonGroup );
-                buttonGroup.on( 'click', 'button', function() {
-                    buttonGroup.find('.is-checked').removeClass('is-checked');
+                $(buttonGroup).on( 'click', 'button', function() {
+                    $(buttonGroup).find('.is-checked').removeClass('is-checked');
                     $( this ).addClass('is-checked');
                 });
             });

@@ -22,7 +22,7 @@ class FrontWarrantyClaimType extends AbstractType
             ->add('city', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
             ->add('state', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
             ->add('zip', NumberType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
-            ->add('phone', NumberType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
+            ->add('phone', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
             ->add('purchaseDate', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
             ->add('retailerName', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
             ->add('mattressModel', TextType::class, array('required' => true, 'attr' => array('class' => 'form-control')))
