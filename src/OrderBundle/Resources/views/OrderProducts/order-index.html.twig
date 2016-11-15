@@ -20,7 +20,7 @@
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
-            buttonGroup.find('.is-checked').removeClass('is-checked');
+            $('.button-group').find('.is-checked').removeClass('is-checked');
             $( this ).addClass('is-checked');
 
             var grid = $('.grid').isotope({
@@ -808,7 +808,7 @@
         </div>
         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
         <div class="row" style="margin-bottom: 30px;" >
-            <div class="col-md-10" >
+            <div class="col-md-12" >
                 <div class="table-responsive" ng-show="hasCustomItem == 1">
                     <table class="table no-margin">
                         <thead>
@@ -838,9 +838,6 @@
 
                     </table>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <button ng-click="addCustomItem()" class="btn btn-raised btn-sm btn-default btn-flat pull-right">Add Custom Item<div class="ripple-container"></div></button>
             </div>
         </div>
         {% endif %}

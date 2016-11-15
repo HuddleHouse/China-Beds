@@ -53,7 +53,7 @@ class AdminController extends Controller
             try {
                 $event = new FormEvent($form, $request);
                 $userManager->updateUser($user);
-                $successMessage = "User information updated succesfully.";
+                $successMessage = "User information updated successfully.";
                 $this->addFlash('notice', $successMessage);
 
                 return $this->redirectToRoute('admin_edit_user', array('user_id' => $user_id));
