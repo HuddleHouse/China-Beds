@@ -850,7 +850,7 @@ class ChannelController extends Controller
 
                 $this->addFlash('notice', 'Channel updated successfully.');
 
-                return $this->redirectToRoute('admin_channel_edit', array('id' => $channel->getId()));
+                return $this->redirectToRoute('admin_channel_edit', array('id' => $channel->getId(), 'channel' => $channel));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating Channel: ' . $e->getMessage());
