@@ -126,9 +126,15 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         //
 
-        $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
-        $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
-        $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
+        if ( $user->getWarehouse1() ) {
+            $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
+        }
+        if ( $user->getWarehouse2() ) {
+            $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
+        }
+        if ( $user->getWarehouse3()) {
+            $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
+        }
 
         $states = $em->getRepository('AppBundle:State')->findAll();
 
@@ -329,11 +335,27 @@ select coalesce(sum(i.quantity), 0) as quantity
         else
             $this->redirectToRoute('404');
 
-        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($this->getUser()->getActiveChannel());
+        $path = '/uploads/documents/';
+        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($this->getUser()->getActiveChannel(), $path);
 
-        $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
-        $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
-        $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
+        if ( $user->getWarehouse1() ) {
+            $user_warehouses[] = array(
+                'id' => $user->getWarehouse1()->getId(),
+                'name' => $user->getWarehouse1()->getName()
+            );
+        }
+        if ( $user->getWarehouse2() ) {
+            $user_warehouses[] = array(
+                'id' => $user->getWarehouse2()->getId(),
+                'name' => $user->getWarehouse2()->getName()
+            );
+        }
+        if ( $user->getWarehouse3() ) {
+            $user_warehouses[] = array(
+                'id' => $user->getWarehouse3()->getId(),
+                'name' => $user->getWarehouse3()->getName()
+            );
+        }
 
         $states = $em->getRepository('AppBundle:State')->findAll();
 

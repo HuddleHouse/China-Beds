@@ -595,7 +595,7 @@ class User extends BaseUser
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = preg_replace("/[^0-9,.]/", "", $phone);
     }
 
     /**

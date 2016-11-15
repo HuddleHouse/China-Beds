@@ -27,6 +27,7 @@ parameters:
 
     authorize_login_id: 3845HahjteBH
     authorize_tansaction_key: 69872hkT4b7WnQVt
+    authorize_test_mode: 1
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
@@ -39,4 +40,5 @@ parameters:
     nacha.prod.pass:    nacha_prod_pass
 
     channel_upload_directory: '%kernel.root_dir%/../web/uploads/websites'
+    pop_upload_directory: '%kernel.root_dir%/../web/uploads/documents/'
     retailer_recaptcha_secret: 6LcNZAsUAAAAAExNNxEAqidcHy5oWFZ2DOmFqsd7

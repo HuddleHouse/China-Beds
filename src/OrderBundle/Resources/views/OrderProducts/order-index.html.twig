@@ -918,7 +918,7 @@
                                                onclick="this.select()"
                                                ng-model="pop_order_quan[ item.id ]"
                                                ng-init="pop_order_quan[ item.id ] = 0"
-                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, {{item.inventory}}, '{{item.type}}')"
+                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, 999, '{{item.type}}')"
                                         >
                                 <div class="pop_price" style="text-align: center; padding-bottom:10px;">{{item.cost | currency}}</div>
                             </div>

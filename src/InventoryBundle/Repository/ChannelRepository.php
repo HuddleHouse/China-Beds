@@ -84,8 +84,19 @@ select *, v.id as variant_id, TRUNCATE(min(p.price/100), 2) as cost, 0 as invent
 
                 if($warehouse != null)
                     $warehouse_ids = "(".$warehouse->getId().')';
-                else
-                    $warehouse_ids = "(".$user->getWarehouse1()->getId().','.$user->getWarehouse2()->getId().','.$user->getWarehouse3()->getId().')';
+                else {
+                    $warehouses = [];
+                    if ( $user->getWarehouse1() ) {
+                        $warehouses[] = $user->getWarehouse1()->getId();
+                    }
+                    if ( $user->getWarehouse2() ) {
+                        $warehouses[] = $user->getWarehouse2()->getId();
+                    }
+                    if ( $user->getWarehouse3() ) {
+                        $warehouses[] = $user->getWarehouse3()->getId();
+                    }
+                    $warehouse_ids = "(" . implode(',', $warehouses) . ')';
+                }
 
                 foreach($variants as $key => $variant) {
                     $quantity = 0;

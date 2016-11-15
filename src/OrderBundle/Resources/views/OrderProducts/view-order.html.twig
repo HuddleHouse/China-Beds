@@ -95,7 +95,7 @@
 
                 if(count > 0)
                     showErrorModal('Please fix the form errors.');
-                else if ($scope.cart_total > $scope.ledgerTotal)
+                else if ($scope.cart_total > $scope.ledgerTotal && $scope.payment_type != 'cc')
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
                 else {
                     showSpinner();
@@ -483,14 +483,6 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-
-
-                    {% if order.isPickUp == 0 and is_granted('ROLE_ADMIN') == 0 and is_granted('ROLE_SALES_MANAGER') == 0 and is_granted('ROLE_SALES_REP') == 0 %}
-                        {% if order.status.name != 'Paid' %}
-                            <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
-                        {% endif %}
-                    {% elseif order.isPickUp == 1 %}
-                    {% endif %}
                     <div class="table-responsive" style="margin-top: 46px;">
                         <table class="table">
                             <tbody>
@@ -529,7 +521,7 @@
                     <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Submit Order for User
                     </button>
-                    <button type="button" ng-show="is_paid == 0 && is_admin == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                    <button type="button" ng-show="is_paid == 0 && is_admin == 0 && payment_type" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Complete Order
                     </button>
                     <a ng-show="is_paid == 0 && admin_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">

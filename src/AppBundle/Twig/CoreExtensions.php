@@ -35,7 +35,7 @@ class CoreExtensions extends \Twig_Extension
 
     public function isGrantedRoute(User $user, $route_name) {
         $granted_routes = $this->container->get('session')->get('route_names');
-        return in_array($route_name, explode(',',$granted_routes));
+        return $user->hasRole('ROLE_ADMIN') || in_array($route_name, explode(',',$granted_routes));
     }
 
     public function latLongConvert($address, $address2, $city)
