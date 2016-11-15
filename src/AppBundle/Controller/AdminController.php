@@ -56,7 +56,7 @@ class AdminController extends Controller
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $user_id));
 
-        $form = $this->createForm($user->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
+        $form = $this->createForm($this->getUser()->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
         $form->handleRequest($request);
 
         if($form->isValid()) {
