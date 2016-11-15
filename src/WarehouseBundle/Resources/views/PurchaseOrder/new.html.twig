@@ -414,7 +414,7 @@
                 <div class="col-md-9">
                     <p class="text-muted well well-sm no-shadow" >
                         <label for="message">Comments</label>
-                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
+                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;" {% if is_granted('ROLE_WAREHOUSE') %}required{% endif %}></textarea>
                     </p>
 
                 </div>
