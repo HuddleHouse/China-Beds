@@ -146,6 +146,7 @@
         {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit'] %}
         {% set sidebar_credit_index = ['ledger_index', 'ledger_edit'] %}
         {% set sidebar_credit_request = ['ledger_new', 'ledger_credit_new'] %}
+        {% set sidebar_reports = [] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar no-print" style="margin-top: 10px;">
@@ -441,6 +442,30 @@
                                 <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
                                     <a href="{{ path('ledger_credit_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Assign Credit</a>
                                 </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
+                            {% endif %}">
+
+                            <a href="#">
+                                <i class="fa fa-usd"></i>
+                                <span>Reports</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+                                    <a href="{{ path('daily_order') }}"><i class="fa fa-circle-o"></i>Daily Orders</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+                                    <a href="{{ path('monthly_order', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Monthly Orders</a>
+                                </li>
+                                {% if (is_granted('ROLE_ADMIN')) %}
+                                    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+                                        <a href="{{ path('recent_orders', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Recent Orders</a>
+                                    </li>
                                 {% endif %}
                             </ul>
                         </li>
