@@ -63,28 +63,25 @@ class UserType extends AbstractType
                 'class' => 'AppBundle:Role',
                 'label' => 'Roles',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false,
-                'expanded' => true
+                'required' => false
             ))
             ->add('price_groups', EntityType::class, array(
                 'class' => 'AppBundle:PriceGroup',
                 'label' => 'Price Groups',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false,
-                'expanded' => true
+                'required' => false
             ))
             ->add('user_channels', EntityType::class, array(
                 'class' => 'InventoryBundle\Entity\Channel',
                 'label' => 'Channels',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
-                'required' => false,
-                'expanded' => true
+                'required' => false
             ))
             ->add('enabled', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
@@ -226,10 +223,9 @@ class UserType extends AbstractType
                 },
                 'label' => 'Retailers',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                 'required' => false,
                 'multiple' => true,
-                'expanded' => true,
             ));
         }
         if($user->hasRole('ROLE_WAREHOUSE')) {
@@ -237,10 +233,9 @@ class UserType extends AbstractType
                 'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Managed Warehouses',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 150px; '),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 150px; '),
                 'required' => false,
                 'multiple' => true,
-                'expanded' => true,
             ));
         }
         if ($user->hasRole('ROLE_SALES_REP')) {
@@ -253,10 +248,9 @@ class UserType extends AbstractType
                 },
                 'label' => 'Distributors',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; '),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px; '),
                 'required' => false,
                 'multiple' => true,
-                'expanded' => true
             ));
         }
         if ($user->hasRole('ROLE_SALES_MANAGER')) {
@@ -269,10 +263,9 @@ class UserType extends AbstractType
                 },
                 'label' => 'Sales Reps',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                 'required' => false,
                 'multiple' => true,
-                'expanded' => true
             ));
         }
     }
