@@ -31,8 +31,11 @@ class PurchaseOrderController extends Controller
             $purchaseOrders = $em->getRepository('WarehouseBundle:PurchaseOrder')->findAll();
         elseif($this->getUser()->hasRole('ROLE_WAREHOUSE')) {
             $id_array = array();
-            foreach($this->getUser()->getManagedWarehouses() as $warehouse)
-                $id_array[] = $warehouse->getId();
+            foreach($this->getUser()->getManagedWarehouses() as $warehouse) {
+                if ($warehouse->belongsToChannel($this->getUser()->getActiveChannel())) {
+                    $id_array[] = $warehouse->getId();
+                }
+            }
             $purchaseOrders = $em->getRepository('WarehouseBundle:PurchaseOrder')->findBy(array('warehouse' => $id_array));
         }
         else
