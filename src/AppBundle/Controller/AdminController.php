@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Form\UserRestrictedType;
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,7 +31,16 @@ class AdminController extends Controller
     public function viewAllUsersAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:User')->findAll();
+        if ( $this->getUser()->hasRole('ROLE_ADMIN') ) {
+            $users = $em->getRepository('AppBundle:User')->findAll();
+        } elseif ( $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
+            $users = [];
+            foreach($this->getUser()->getRetailers() as $user) {
+                $users[] = $user;
+            }
+        }
+
+
 
         return $this->render('AppBundle:Admin:view_users.html.twig', array(
             'users' => $users
@@ -46,7 +56,7 @@ class AdminController extends Controller
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $user_id));
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm($user->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
         $form->handleRequest($request);
 
         if($form->isValid()) {
