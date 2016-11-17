@@ -67,7 +67,9 @@ class WarrantyClaimController extends Controller
 
         $rtn = array();
         foreach($user->getOrders() as $order) {
-            $rtn[] = sprintf('<option value="%d">%s</option>', $order->getId(), $order->getOrderId());
+            if ( $order->getChannel()->getId() == $this->getUser()->getActiveChannel()->getId() ) {
+                $rtn[] = sprintf('<option value="%d">%s</option>', $order->getId(), $order->getOrderId());
+            }
         }
 
         return new JsonResponse($rtn);
