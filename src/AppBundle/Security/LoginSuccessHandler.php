@@ -20,6 +20,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface {
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token) {
 
+        if ( $token->getUser()->hasRole('ROLE_WAREHOUSE') ) {
+            return new RedirectResponse($this->router->generate('warehouse_index'));
+        }
+
         $response = null;
         $response = new RedirectResponse($this->router->generate('fos_user_profile_show'));
 

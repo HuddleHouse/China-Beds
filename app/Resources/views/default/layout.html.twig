@@ -155,14 +155,14 @@
                     <!-- BEGIN SIDEBAR MENU -->
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
-
+                        {% if not is_granted('ROLE_WAREHOUSE') %}
                         <li >
                             <a href="{{ path('fos_user_profile_show') }}">
                                 <i class="fa fa-dashboard"></i>
                                 <span class="title">Dashboard</span>
                             </a>
                         </li>
-
+                        {% endif %}
                         <!-- ASSORTMENT SECTION -->
                     {% if 'product_category_index' in route_names
                         or 'manage_options_index' in route_names
@@ -214,9 +214,10 @@
                     {% endif %}
 
                         <!-- ORDERS SECTION -->
-                        {% if 'product_category_index' in route_names
+                        {% if ('product_category_index' in route_names
                         or 'order_products_index' in route_names
                         or 'my_orders_index' in route_names
+                        ) and not is_granted('ROLE_WAREHOUSE')
                         %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_order) %} active
                     {% elseif (app.request.get('_route') in ['my_orders_index']) %} active
@@ -338,15 +339,21 @@
                                 <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_index" and ((app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name != referer_array|last) or (app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name == referer_array|last) or (app.user.activechannel.name == referer_array|last and app.request.get('_route_params').id ?? false))) %} class="active"{% endif %}>
                                     <a href="{{ path('warehouse_channelled', {'channelName': app.user.activechannel.name}) }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                 </li>
+                                {% if isGrantedRoute(app.user, 'purchaseorder_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Receiving Stock</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'stocktransfer_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_stock_transfer) %} class="active"{% endif %}>
                                     <a href="{{ path('stocktransfer_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'stockadjustment_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_stock_adjustment) %} class="active"{% endif %}>
                                     <a href="{{ path('stockadjustment_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </li>
                 {% endif %}
@@ -460,6 +467,7 @@
                             </li>
                         {% endif %}
 
+                        {% if not is_granted('ROLE_WAREHOUSE') %}
                         <li class="header">LINKS</li>
                         <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
                             <a href="{{ path('resource_index') }}">
@@ -467,12 +475,13 @@
                                 <span>Resources</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-circle-o" style="color: #4caf50;"></i>
-                                <span>Contact Us</span>
-                            </a>
-                        </li>
+                        {% endif %}
+                        {#<li>#}
+                            {#<a href="#">#}
+                                {#<i class="fa fa-circle-o" style="color: #4caf50;"></i>#}
+                                {#<span>Contact Us</span>#}
+                            {#</a>#}
+                        {#</li>#}
                     </ul>
                     <!-- END SIDEBAR MENU -->
                 </section>

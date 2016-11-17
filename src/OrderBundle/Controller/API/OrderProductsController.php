@@ -424,89 +424,102 @@ class OrderProductsController extends Controller
         $count = 0;
 
         foreach($orders->getProductVariants() as $variant) {
-            foreach($variant->getWarehouseInfo() as $info) {
-                $count++;
-                $shipment = new \RocketShipIt\Shipment('fedex');
+            for($i=0;$i<$variant->getQuantity();$i++) {
+                foreach ($variant->getWarehouseInfo() as $info) {
+                    $count++;
+                    $shipment = new \RocketShipIt\Shipment('fedex');
 
-                $shipment->setParameter('toCompany', $orders->getShipName());
-                $shipment->setParameter('toName', $orders->getShipName());
-                $shipment->setParameter('toPhone', $orders->getShipPhone());
-                $shipment->setParameter('toAddr1', $orders->getShipAddress());
-                if($orders->getShipAddress2() != '')
-                    $shipment->setParameter('toAddr2', $orders->getShipAddress2());
-                $shipment->setParameter('toCity', $orders->getShipCity());
-                $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
-                $shipment->setParameter('toCode', $orders->getShipZip());
+                    $shipment->setParameter('toCompany', $orders->getShipName());
+                    $shipment->setParameter('toName', $orders->getShipName());
+                    $shipment->setParameter('toPhone', $orders->getShipPhone());
+                    $shipment->setParameter('toAddr1', $orders->getShipAddress());
+                    if ($orders->getShipAddress2() != '') {
+                        $shipment->setParameter('toAddr2', $orders->getShipAddress2());
+                    }
+                    $shipment->setParameter('toCity', $orders->getShipCity());
+                    $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
+                    $shipment->setParameter('toCode', $orders->getShipZip());
 
-                /*
-                 * THis needs to change once warehouses have addresses.
-                 *
-                 * They also need to add the fedex numbers of Distributors when applicable..
-                 */
-                $shipment->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
-                $shipment->setParameter('shipCity', $info->getWarehouse()->getCity());
-                $shipment->setParameter('shipState', $info->getWarehouse()->getState()->getAbbreviation());
-                $shipment->setParameter('shipCode', $info->getWarehouse()->getZip());
-                $shipment->setParameter('shipPhone', $info->getWarehouse()->getPhone());
+                    /*
+                     * THis needs to change once warehouses have addresses.
+                     *
+                     * They also need to add the fedex numbers of Distributors when applicable..
+                     */
+                    $shipment->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
+                    $shipment->setParameter('shipCity', $info->getWarehouse()->getCity());
+                    $shipment->setParameter('shipState', $info->getWarehouse()->getState()->getAbbreviation());
+                    $shipment->setParameter('shipCode', $info->getWarehouse()->getZip());
+                    $shipment->setParameter('shipPhone', $info->getWarehouse()->getPhone());
 
-                $shipment->setParameter('packageCount', $numProdVariants);
-                $shipment->setParameter('sequenceNumber', $count);
+                    $shipment->setParameter('packageCount', $numProdVariants);
+                    $shipment->setParameter('sequenceNumber', $count);
 
-                if($count != 1)
-                    $shipment->setParameter('shipmentIdentification', $shipmentId);
+                    if ($count != 1) {
+                        $shipment->setParameter('shipmentIdentification', $shipmentId);
+                    }
 
-                $dimensions = explode('x', $variant->getProductVariant()->getFedexDimensions());
-                if ( count($dimensions) == 1 ) {
-                    $dimensions = explode('X', $variant->getProductVariant()->getFedexDimensions());
+                    $dimensions = explode('x', $variant->getProductVariant()->getFedexDimensions());
+                    if (count($dimensions) == 1) {
+                        $dimensions = explode('X', $variant->getProductVariant()->getFedexDimensions());
+                    }
+
+                    if (isset($dimensions[0])) {
+                        $shipment->setParameter('length', $dimensions[0]);
+                    }
+                    if (isset($dimensions[1])) {
+                        $shipment->setParameter('width', $dimensions[1]);
+                    }
+                    if (isset($dimensions[2])) {
+                        $shipment->setParameter('height', $dimensions[2]);
+                    }
+                    $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
+
+
+                    if ($orders->getSubmittedForUser()->getDistributorFedexNumber(
+                        ) != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != ''
+                    ) {
+                        $shipment->setParameter('paymentType', 'THIRD_PARTY');
+                        $shipment->setParameter(
+                            'thirdPartyAccount',
+                            $orders->getSubmittedForUser()->getDistributorFedexNumber()
+                        );
+                    }
+
+                    $response = $shipment->submitShipment();
+
+                    if (isset($response['trk_main'])) {
+                        if ($count == 1) {
+                            $shipmentId = $response['trk_main'];
+                        }
+                    } else {
+                        return $orders;
+
+                    }
+
+                    foreach ($response['pkgs'] as $pkg) {
+                        $path = 'uploads/shipping/' . $pkg['pkg_trk_num'] . '.' . $pkg['label_fmt'];
+                        file_put_contents(
+                            $this->get('kernel')->getRootDir() . '/../web/' . $path,
+                            base64_decode($pkg['label_img'])
+                        );
+
+                        $orderShippingLabel = new OrdersShippingLabel();
+                        $orderShippingLabel->setPath($path);
+                        $orderShippingLabel->setOrder($orders);
+                        $orderShippingLabel->setTrackingNumber($pkg['pkg_trk_num']);
+
+                        $orders->addShippingLabel($orderShippingLabel);
+                        $variant->addShippingLabel($orderShippingLabel);
+                    }
+                    $em->persist($orders);
+
+                    if ($count == $numProdVariants) {
+                        $charges = $response['charges'];
+                        $orders->setEstimatedShipping($orders->getShipping());
+                        $orders->setShipping($charges);
+                    }
+
                 }
-
-                if ( isset($dimensions[0]) ) {
-                    $shipment->setParameter('length', $dimensions[0]);
-                }
-                if ( isset($dimensions[1]) ) {
-                    $shipment->setParameter('width', $dimensions[1]);
-                }
-                if ( isset($dimensions[2]) ) {
-                    $shipment->setParameter('height', $dimensions[2]);
-                }
-                $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
-
-
-                if($orders->getSubmittedForUser()->getDistributorFedexNumber() != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != '') {
-                    $shipment->setParameter('paymentType', 'THIRD_PARTY');
-                    $shipment->setParameter('thirdPartyAccount', $orders->getSubmittedForUser()->getDistributorFedexNumber());
-                }
-
-                $response = $shipment->submitShipment();
-
-                if(isset($response['trk_main'])) {
-                    if($count == 1)
-                        $shipmentId = $response['trk_main'];
-                }
-                else {
-                    return $orders;
-
-                }
-
-                foreach($response['pkgs'] as $pkg) {
-                    $path = 'uploads/shipping/' . $pkg['pkg_trk_num'] . '.' . $pkg['label_fmt'];
-                    file_put_contents($this->get('kernel')->getRootDir() . '/../web/' . $path, base64_decode($pkg['label_img']));
-
-                    $orderShippingLabel = new OrdersShippingLabel();
-                    $orderShippingLabel->setPath($path);
-                    $orderShippingLabel->setOrder($orders);
-                    $orderShippingLabel->setTrackingNumber($pkg['pkg_trk_num']);
-
-                    $orders->addShippingLabel($orderShippingLabel);
-                }
-                $em->persist($orders);
-
-                if($count == $numProdVariants) {
-                    $charges = $response['charges'];
-                    $orders->setEstimatedShipping($orders->getShipping());
-                    $orders->setShipping($charges);
-                }
-
             }
         }
 

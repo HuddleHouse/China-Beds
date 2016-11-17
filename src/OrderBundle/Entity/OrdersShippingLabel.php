@@ -50,6 +50,10 @@ class OrdersShippingLabel
      */
     private $order;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="OrdersProductVariant", inversedBy="shipping_labels")
+     */
+    private $order_product_variant;
 
 
     /**
@@ -183,4 +187,28 @@ class OrdersShippingLabel
         $this->order = $order;
     }
 
+
+    /**
+     * Set orderProductVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $orderProductVariant
+     *
+     * @return OrdersShippingLabel
+     */
+    public function setOrderProductVariant(\OrderBundle\Entity\OrdersProductVariant $orderProductVariant = null)
+    {
+        $this->order_product_variant = $orderProductVariant;
+
+        return $this;
+    }
+
+    /**
+     * Get orderProductVariant
+     *
+     * @return \OrderBundle\Entity\OrdersProductVariant
+     */
+    public function getOrderProductVariant()
+    {
+        return $this->order_product_variant;
+    }
 }
