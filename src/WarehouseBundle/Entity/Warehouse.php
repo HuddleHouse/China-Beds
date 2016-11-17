@@ -215,10 +215,16 @@ class Warehouse
      */
     private $channels;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PopItem", mappedBy="warehouses")
+     */
+    private $pop_items;
+
     public function __construct() {
         $this->purchase_orders = new ArrayCollection();
         $this->stock_adjustments = new ArrayCollection();
         $this->channels = new ArrayCollection();
+        $this->pop_items = new ArrayCollection();
         $this->users_1 = new ArrayCollection();
         $this->users_2 = new ArrayCollection();
         $this->pop_inventory = new ArrayCollection();
@@ -1183,5 +1189,21 @@ class Warehouse
     public function removePopInventoryOnHold(\WarehouseBundle\Entity\WarehousePopInventoryOnHold $popInventoryOnHold)
     {
         $this->pop_inventory_on_hold->removeElement($popInventoryOnHold);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPopItems()
+    {
+        return $this->pop_items;
+    }
+
+    /**
+     * @param mixed $pop_items
+     */
+    public function setPopItems($pop_items)
+    {
+        $this->pop_items = $pop_items;
     }
 }

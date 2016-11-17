@@ -4,6 +4,7 @@ namespace OrderBundle\Controller;
 
 use Doctrine\DBAL\Types\DateType;
 use InventoryBundle\Entity\Channel;
+use InventoryBundle\Entity\PopItem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -103,6 +104,10 @@ class LedgerController extends Controller
         $ledger = new Ledger();
         $form = $this->createForm(NewCreditType::class, $ledger);
         $form->handleRequest($request);
+
+        $pop_item = new PopItem();
+
+        $pop_item->getWarehouses()->remove($warehouse);
 
         if ($form->isSubmitted() && $form->isValid())
         {

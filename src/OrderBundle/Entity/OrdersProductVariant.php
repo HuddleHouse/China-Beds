@@ -199,7 +199,7 @@ class OrdersProductVariant
      */
     public function addShippingLabel(\OrderBundle\Entity\OrdersShippingLabel $shippingLabel)
     {
-        $shippingLabel->setOrderProductVariant($this);
+        $shippingLabel->setOrdersProductVariant($this);
         $this->shipping_labels[] = $shippingLabel;
 
         return $this;
