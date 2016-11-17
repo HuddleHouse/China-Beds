@@ -467,6 +467,13 @@ class User extends BaseUser
         return false;
     }
 
+    public function getDisplayName() {
+        if ( empty($this->company_name) ) {
+            return $this->getName();
+        } else {
+            return $this->getCompanyName();
+        }
+    }
     /**
      * @return mixed
      */
