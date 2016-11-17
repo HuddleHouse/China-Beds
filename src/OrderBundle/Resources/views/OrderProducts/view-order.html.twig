@@ -33,7 +33,7 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
-            $scope.payment_type = '';
+            $scope.payment_type = 'cc';
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
@@ -52,11 +52,6 @@
             });
 
             $scope.changePayment = function () {
-                console.log($scope.payment_type);
-                if($scope.payment_type == 'cc')
-                    $('#cc').show();
-                else
-                    $('#cc').hide();
             };
 
             $scope.formValidate = function (type) {
@@ -391,7 +386,7 @@
                                 {% endif %}
                             </select>
                         </div>
-                        <div id="cc" style="display: none;">
+                        <div id="cc" ng-show="payment_type=='cc'">
                             <div id="cc-name" class="form-group">
                                 <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
                                 <div class="col-sm-9">

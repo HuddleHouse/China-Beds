@@ -400,7 +400,12 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
-        $this->get('email_service')->sendAdminOrderNotification($order);
+        try {
+            $this->get('email_service')->sendAdminOrderNotification($order);
+        } catch (\Exception $e) {
+            // @todo ignore for now.  Need to log
+        }
+
 
         return JsonResponse::create(true);
     }

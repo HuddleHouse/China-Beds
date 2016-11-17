@@ -231,28 +231,13 @@
 
                                     {% if 'order_products_index' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
-                                            <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Order Products</a>
+                                            <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>New Order</a>
                                         </li>
                                     {% endif %}
 
                                     {% if 'my_orders_index' in route_names %}
                                         <li {% if (app.request.get('_route') in ['my_orders_index']) %} class="active"{% endif %}>
-                                            <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>My Orders</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'order_products_index' in ['order_products_index'] %}
-                                        <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                            <a href=""><i class="fa fa-circle-o"></i>Shipments</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'order_products_index' in ['order_products_index'] %}
-                                        <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                            <a href=""><i class="fa fa-circle-o"></i>Payments</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'order_products_index' in ['order_products_index'] %}
-                                        <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                            <a href=""><i class="fa fa-circle-o"></i>Reports</a>
+                                            <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>Order History</a>
                                         </li>
                                     {% endif %}
                                 </ul>
