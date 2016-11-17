@@ -137,8 +137,13 @@ class ProfileController extends Controller
      * Edit the user
      * @Route("/user/edit/{id}", name="edit_child_user")
      */
-    public function editAction(Request $request)
+    public function editAction(Request $request, $id)
     {
+        if ( $id ) {
+            return $this->redirectToRoute('admin_edit_user', array('user_id' => $id));
+        }
+
+
         $user = $this->getUser();
         $userManager = $this->get('fos_user.user_manager');
 

@@ -305,15 +305,16 @@
                 </div>
                 <div class="col-md-3">
                     <form id="warehouse-form">
-                        <h5>Warehousedis
+                        <h5>Warehouse
                         {% verbatim %}
                         <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;"
                             ng-model="ctrl.warehouse"
                             ng-change="ctrl.warehouseChange()"
                             ng-options="option.name for option in ctrl.warehouses track by option.id" required>
                             <option value="" disabled selected>Warehouse</option>
-                        </select></h5>
+                        </select>
                         {% endverbatim %}
+                        </h5>
                     </form>
                 </div>
                 <div class="col-md-3">
@@ -421,7 +422,7 @@
                 <div class="col-md-9">
                     <p class="text-muted well well-sm no-shadow" >
                         <label for="message">Comments</label>
-                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
+                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;" {% if is_granted('ROLE_WAREHOUSE') %}required{% endif %}></textarea>
                     </p>
 
                 </div>

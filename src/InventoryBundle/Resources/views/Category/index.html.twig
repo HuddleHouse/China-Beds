@@ -31,7 +31,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Code</th>
-                        <th style="width: 150px;">Total Inventory</th>
+                        <th style="width: 150px;">Total Products</th>
                         <th style="width: 150px;">Actions</th>
                     </tr>
                     </thead>
@@ -40,7 +40,7 @@
                         <tr>
                             <td><a href="{{ path('category_edit', { 'id': productCategory.id }) }}">{{ productCategory.name }}</a></td>
                             <td>{{ productCategory.code }}</td>
-                            <td><center>8,734</center></td>
+                            <td><center>{{ productCategory.productCategories|length }}</center></td>
                             <td>
                                 <a class="btn btn-raised btn-xs btn-default" href="{{ path('category_edit', { 'id': productCategory.id }) }}"><i class="fa fa-edit"></i> edit</a>
                                 <a class="btn btn-raised btn-xs btn-info" href="{{ path('category_show', { 'id': productCategory.id }) }}"><i class="fa fa-list"></i> show</a>

@@ -58,6 +58,7 @@ class WebsiteController extends BaseController
 
         if($form->isSubmitted() && $form->isValid())
         {
+            //$warranty->setAddress($warranty->getAddress() . ' ' . $warranty->getCity() . ' ' . $warranty->getState() . ' ' . $warranty->getZip());
             $warranty->uploadLawCopy();
             $warranty->uploadReceipt();
             $em->persist($warranty);
@@ -135,5 +136,9 @@ class WebsiteController extends BaseController
             'adjustables' => $adjustables,
             'channel' => $this->getChannel()
         ));
+    }
+
+    public function fixFedexAction($filename) {
+        return $this->redirect(sprintf('https://order.mlilyusa.com/model/fedex_label/img/%s', $filename));
     }
 }

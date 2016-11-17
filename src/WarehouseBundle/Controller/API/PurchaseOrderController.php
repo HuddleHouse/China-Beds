@@ -258,7 +258,7 @@ class PurchaseOrderController extends Controller
         $variant_id = $request->request->get('product_variant_id');
         $em = $this->getDoctrine()->getManager();
         $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant_id);
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findByChannels($this->getUser()->getActiveChannel());
         $data = array();
 
         foreach($warehouses as $warehouse)

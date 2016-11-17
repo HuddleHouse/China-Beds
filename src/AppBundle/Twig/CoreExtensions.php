@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,16 +20,24 @@ class CoreExtensions extends \Twig_Extension
 
     public function getFunctions()
     {
-        return array();
+        return array(
+            'isGrantedRoute' => new \Twig_Filter_Method($this, 'isGrantedRoute')
+        );
+
     }
 
     public function getFilters()
     {
         return array(
-            'latlong' => new \Twig_Filter_Method($this, 'latLongConvert'),
+            'latlong' => new \Twig_Filter_Method($this, 'latLongConvert')
         );
     }
-    
+
+    public function isGrantedRoute(User $user, $route_name) {
+        $granted_routes = $this->container->get('session')->get('route_names');
+        return $user->hasRole('ROLE_ADMIN') || in_array($route_name, explode(',',$granted_routes));
+    }
+
     public function latLongConvert($address, $address2, $city)
     {
           

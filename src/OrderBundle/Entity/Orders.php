@@ -153,22 +153,22 @@ class Orders
     private $shipEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order", cascade={"persist"})
      */
     private $product_variants;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order", cascade={"persist"})
      */
     private $shipping_labels;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist"})
      */
     private $pop_items;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order", cascade={"persist"})
      */
     private $manual_items;
 
@@ -237,6 +237,12 @@ class Orders
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="order")
      */
     private $rebate_submissions;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderPayment", mappedBy="order", cascade={"persist"})
+     */
+    private $order_payments;
 
     /**
      * Orders constructor.
@@ -850,7 +856,7 @@ class Orders
      */
     public function getAmountPaid()
     {
-        return $this->amount_paid;
+        return $this->amount_paid / 100;
     }
 
     /**
@@ -882,7 +888,7 @@ class Orders
      */
     public function setAmountPaid($amount_paid)
     {
-        $this->amount_paid = $amount_paid;
+        $this->amount_paid = $amount_paid * 100;
     }
 
     /**
@@ -996,5 +1002,193 @@ class Orders
     }
 
 
-}
 
+    /**
+     * Add productVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $productVariant
+     *
+     * @return Orders
+     */
+    public function addProductVariant(\OrderBundle\Entity\OrdersProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove productVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $productVariant
+     */
+    public function removeProductVariant(\OrderBundle\Entity\OrdersProductVariant $productVariant)
+    {
+        $this->product_variants->removeElement($productVariant);
+    }
+
+    /**
+     * Remove shippingLabel
+     *
+     * @param \OrderBundle\Entity\OrdersShippingLabel $shippingLabel
+     */
+    public function removeShippingLabel(\OrderBundle\Entity\OrdersShippingLabel $shippingLabel)
+    {
+        $this->shipping_labels->removeElement($shippingLabel);
+    }
+
+    /**
+     * Add popItem
+     *
+     * @param \OrderBundle\Entity\OrdersPopItem $popItem
+     *
+     * @return Orders
+     */
+    public function addPopItem(\OrderBundle\Entity\OrdersPopItem $popItem)
+    {
+        $this->pop_items[] = $popItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove popItem
+     *
+     * @param \OrderBundle\Entity\OrdersPopItem $popItem
+     */
+    public function removePopItem(\OrderBundle\Entity\OrdersPopItem $popItem)
+    {
+        $this->pop_items->removeElement($popItem);
+    }
+
+    /**
+     * Add manualItem
+     *
+     * @param \OrderBundle\Entity\OrdersManualItem $manualItem
+     *
+     * @return Orders
+     */
+    public function addManualItem(\OrderBundle\Entity\OrdersManualItem $manualItem)
+    {
+        $this->manual_items[] = $manualItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove manualItem
+     *
+     * @param \OrderBundle\Entity\OrdersManualItem $manualItem
+     */
+    public function removeManualItem(\OrderBundle\Entity\OrdersManualItem $manualItem)
+    {
+        $this->manual_items->removeElement($manualItem);
+    }
+
+    /**
+     * Add ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return Orders
+     */
+    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Remove ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     */
+    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers->removeElement($ledger);
+    }
+
+    /**
+     * Add warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     *
+     * @return Orders
+     */
+    public function addWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims[] = $warrantyClaim;
+
+        return $this;
+    }
+
+    /**
+     * Remove warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     */
+    public function removeWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims->removeElement($warrantyClaim);
+    }
+
+    /**
+     * Add rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     *
+     * @return Orders
+     */
+    public function addRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions[] = $rebateSubmission;
+
+        return $this;
+    }
+
+    /**
+     * Remove rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     */
+    public function removeRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions->removeElement($rebateSubmission);
+    }
+
+    /**
+     * Add orderPayment
+     *
+     * @param \OrderBundle\Entity\OrderPayment $orderPayment
+     *
+     * @return Orders
+     */
+    public function addOrderPayment(\OrderBundle\Entity\OrderPayment $orderPayment)
+    {
+        $orderPayment->setOrder($this);
+        $this->order_payments[] = $orderPayment;
+
+        return $this;
+    }
+
+    /**
+     * Remove orderPayment
+     *
+     * @param \OrderBundle\Entity\OrderPayment $orderPayment
+     */
+    public function removeOrderPayment(\OrderBundle\Entity\OrderPayment $orderPayment)
+    {
+        $this->order_payments->removeElement($orderPayment);
+    }
+
+    /**
+     * Get orderPayments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrderPayments()
+    {
+        return $this->order_payments;
+    }
+}

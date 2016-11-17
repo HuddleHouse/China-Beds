@@ -52,13 +52,19 @@ class WarehouseController extends Controller
             $warehouses = array();
 
             foreach($warehouseEntities as $warehouse)
-                $warehouses[] = array(
-                    'id' => $warehouse->getId(),
-                    'name' => $warehouse->getName(),
-                    'list_id' => $warehouse->getListId(),
-                    'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory($warehouse),
-                    'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse)
-                );
+                if ( $warehouse->belongsToChannel($user->getActiveChannel()) ) {
+                    $warehouses[] = array(
+                        'id' => $warehouse->getId(),
+                        'name' => $warehouse->getName(),
+                        'list_id' => $warehouse->getListId(),
+                        'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory(
+                            $warehouse
+                        ),
+                        'po_quantity' => $em->getRepository(
+                            'WarehouseBundle:Warehouse'
+                        )->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                    );
+                }
         }
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(

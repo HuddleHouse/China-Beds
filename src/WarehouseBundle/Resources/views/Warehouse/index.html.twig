@@ -41,9 +41,15 @@
                             <td><center>{{ warehouse.quantity  }}</center></td>
                             <td><center>{{ warehouse.po_quantity  }}</center></td>
                             <td>
+                                {% if isGrantedRoute(app.user, 'warehouse_show') %}
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> view</a>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'warehouse_inventory_show') %}
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_inventory_show', { 'id': warehouse.id }) }}"><i class="fa fa-shopping-basket"></i> inventory</a>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'warehouse_edit') %}
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}"><i class="fa fa-edit"></i> edit</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -54,10 +60,12 @@
         </div>
     </div>
 
+    {% if isGrantedRoute(app.user, 'warehouse_new') %}
     <a id="new-button" href="{{ path('warehouse_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons">add</i>
     </a>
     <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
         Create a warehouse.
     </div>
+    {% endif %}
 {% endblock %}

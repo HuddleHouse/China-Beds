@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
-class UserType extends AbstractType
+class UserRestrictedType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -37,51 +37,6 @@ class UserType extends AbstractType
                 'label' => 'State',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-            ))
-            ->add('warehouse_1', EntityType::class, array(
-                'class' => 'WarehouseBundle\Entity\Warehouse',
-                'label' => 'Warehouse #1',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('warehouse_2', EntityType::class, array(
-                'class' => 'WarehouseBundle\Entity\Warehouse',
-                'label' => 'Warehouse #2',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('warehouse_3', EntityType::class, array(
-                'class' => 'WarehouseBundle\Entity\Warehouse',
-                'label' => 'Warehouse #3',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('groups', EntityType::class, array(
-                'class' => 'AppBundle:Role',
-                'label' => 'Roles',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
-                'multiple' => true,
-                'required' => false
-            ))
-            ->add('price_groups', EntityType::class, array(
-                'class' => 'AppBundle:PriceGroup',
-                'label' => 'Price Groups',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
-                'multiple' => true,
-                'required' => false
-            ))
-            ->add('user_channels', EntityType::class, array(
-                'class' => 'InventoryBundle\Entity\Channel',
-                'label' => 'Channels',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
-                'multiple' => true,
-                'required' => false
             ))
             ->add('enabled', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
@@ -155,50 +110,6 @@ class UserType extends AbstractType
                     'No' => 0,
                 ),
             ))
-            ->add('my_distributor', EntityType::class, array(
-                'class' => 'AppBundle:User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 3');
-                },
-                'label' => 'Distributor',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('my_sales_rep', EntityType::class, array(
-                'class' => 'AppBundle:User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 6');
-                },
-                'label' => 'Sales Rep',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('my_sales_manager', EntityType::class, array(
-                'class' => 'AppBundle:User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 4');
-                },
-                'label' => 'Sales Manager',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('hide_rebate', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Hide Rebate form from user',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                )
-            ))
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 array($this, 'onPreSetData')
@@ -231,9 +142,10 @@ class UserType extends AbstractType
                 },
                 'label' => 'Retailers',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false,
                 'multiple' => true,
+                'expanded' => true,
             ));
         }
         if($user->hasRole('ROLE_WAREHOUSE')) {
@@ -241,9 +153,10 @@ class UserType extends AbstractType
                 'class' => 'WarehouseBundle\Entity\Warehouse',
                 'label' => 'Managed Warehouses',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 150px; '),
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 150px; '),
                 'required' => false,
                 'multiple' => true,
+                'expanded' => true,
             ));
         }
         if ($user->hasRole('ROLE_SALES_REP')) {
@@ -256,9 +169,10 @@ class UserType extends AbstractType
                 },
                 'label' => 'Distributors',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px; '),
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; '),
                 'required' => false,
                 'multiple' => true,
+                'expanded' => true
             ));
         }
         if ($user->hasRole('ROLE_SALES_MANAGER')) {
@@ -271,9 +185,10 @@ class UserType extends AbstractType
                 },
                 'label' => 'Sales Reps',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'required' => false,
                 'multiple' => true,
+                'expanded' => true
             ));
         }
     }
