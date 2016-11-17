@@ -16,6 +16,7 @@
 
 {% block footer %}
     <script>
+        var grid;
         var buttonGroup = $( buttonGroup );
         $(document).ready(function () {
             $('#part-table').DataTable({
@@ -24,7 +25,7 @@
             $('.button-group').find('.is-checked').removeClass('is-checked');
             $( this ).addClass('is-checked');
 
-            var grid = $('.grid').isotope({
+            grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
             });
@@ -374,6 +375,7 @@
                                 $('#state').val(data['state']);
                                 $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
+                                $('.grid').isotope( 'reloadItems' ).isotope();
                             });
                         }
                     });
