@@ -466,14 +466,6 @@ class User extends BaseUser
         }
         return false;
     }
-
-    public function getDisplayName() {
-        if ( empty($this->company_name) ) {
-            return $this->getName();
-        } else {
-            return $this->getCompanyName();
-        }
-    }
     /**
      * @return mixed
      */
@@ -1733,5 +1725,22 @@ class User extends BaseUser
     public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
     {
         $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * Returns either company name or first/last name if company name is empty.
+     * @return mixed|string
+     */
+    public function getDisplayName() {
+        if ( empty($this->company_name) ) {
+            return $this->getName();
+        } else {
+            return $this->getCompanyName();
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
     }
 }
