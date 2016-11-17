@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Form\CreateUserType;
+use AppBundle\Form\UserRestrictedType;
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -85,6 +87,37 @@ class AdminController extends Controller
         ));
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Route("/add-user", name="admin_add_user")
+     */
+   public function adminAddUserAction(Request $request){
+       $userManager = $this->get('fos_user.user_manager');
+       $user = $userManager->createUser();
+
+       $form = $this->createForm(CreateUserType::class, $user);
+       $form->handleRequest($request);
+
+       if($form->isValid()) {
+           try {
+               $event = new FormEvent($form, $request);
+               $userManager->updateUser($user);
+               $successMessage = "User information updated successfully.";
+               $this->addFlash('notice', $successMessage);
+
+               return $this->redirectToRoute('view_users');
+           } catch (\Exception $e) {
+               $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+               return $this->redirectToRoute('view_users');
+           }
+       }
+       return $this->render('AppBundle:admin:new-user-creation.html.twig', array(
+           'form' => $form->createView(),
+           'user' =>$user
+       ));
+
+   }
 
     /**
      * @Route("/add-user", name="send_invitation")

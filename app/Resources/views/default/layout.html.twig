@@ -117,7 +117,7 @@
             {% endif %}
         {% endfor %}
         {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
-        {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
+        {% set sidebar_users = ['view_users', 'admin_edit_user','admin_add_user'] %}
         {% set sidebar_access_restriction = ['access_restriction'] %}
         {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
         {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show', 'admin_price_group_edit_prices'] %}
@@ -268,6 +268,7 @@
                             or 'fos_user_group_list' in route_names
                             or 'access_restriction' in route_names
                             or 'admin_channel_index' in route_names
+                            or 'admin_add_user' in route_names
                         %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
                             {% elseif (app.request.get('_route') in sidebar_users) %} active
@@ -283,6 +284,12 @@
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
+                                    {# if 'admin_add_user' in route_names #}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li {% if (app.request.get('_route') in sidebar_users) %} class="active"{% endif %}>
+                                            <a href="{{ path('admin_add_user') }}"><i class="fa fa-circle-o"></i>Add User</a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'office_index' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_offices) %} class="active"{% endif %}>
                                             <a href="{{ path('office_index') }}"><i class="fa fa-circle-o"></i>Offices</a>
@@ -488,7 +495,6 @@
                                 <span>Resources</span>
                             </a>
                         </li>
-                        {% endif %}
                         {#<li>#}
                             {#<a href="#">#}
                                 {#<i class="fa fa-circle-o" style="color: #4caf50;"></i>#}
