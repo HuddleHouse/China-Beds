@@ -1650,4 +1650,21 @@ class User extends BaseUser
     {
         $this->promo_kit_orders = $promo_kit_orders;
     }
+
+    /**
+     * Returns either company name or first/last name if company name is empty.
+     * @return mixed|string
+     */
+    public function getDisplayName() {
+        if ( empty($this->company_name) ) {
+            return $this->getName();
+        } else {
+            return $this->getCompanyName();
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
+    }
 }
