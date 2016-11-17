@@ -766,6 +766,15 @@
             list-style-type: none;
             color: #AAAAAA;
         }
+        .order_product .product_image {
+            padding-top:150px;
+        }
+        .order_product .product_image img {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+        }
     </style>
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
@@ -854,7 +863,7 @@
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
+                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }} order_product">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
@@ -909,7 +918,7 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px; margin-top:45px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">
