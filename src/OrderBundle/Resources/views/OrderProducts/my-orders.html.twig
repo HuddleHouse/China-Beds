@@ -28,7 +28,7 @@
                     <thead>
                     <tr>
                         <th>Order Number</th>
-                        {% if is_granted('ROLE_RETAILER') == false %}<th>User</th>{% endif %}
+                        {% if is_granted('ROLE_RETAILER') == false %}<th>Company</th>{% endif %}
                         <th>Date</th>
                         <th>Total</th>
                         <th>Shipping</th>
@@ -43,7 +43,7 @@
                             <td>
                                 <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderId }}-{{ order.orderNumber }}</a>
                             </td>
-                            {% if is_granted('ROLE_RETAILER') == false %}<td>{{ order.submittedForUser.fullName }}</td>{% endif %}
+                            {% if is_granted('ROLE_RETAILER') == false %}<td>{{ order.submittedForUser.companyName }}</td>{% endif %}
                             <td>{{ order.submitDate|date("m/d/Y")}}</td>
                             <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
                             <td>${{ order.shipping |number_format(2, '.', ',') }}</td>
