@@ -84,6 +84,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function canViewOrder(Orders $order, User $user) {
+        $em = $this->getEntityManager();
         $is_allowed = 0;
         if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE'))
             return 1;
