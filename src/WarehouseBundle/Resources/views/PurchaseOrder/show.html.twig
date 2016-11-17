@@ -71,7 +71,8 @@
                 self.updateIt = updateIt;
                 self.all_warehouse_inventory = {};
                 self.portEta = new Date("{{ purchaseOrder.portEta |date("Y,m,d") }}");
-
+                self.admin = {{ is_granted('ROLE_ADMIN') ? 'true' : 'false' }};
+                self.postatus = '{{ purchaseOrder.status.name }}';
                 function setEdit(val){
                     self.isEdit = val;
                     if(self.isEdit == 1)
@@ -412,18 +413,16 @@
                 <div class="col-md-6">
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 0">
                     {% if purchaseOrder.status.name == 'Active' %}
-                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE</a>
-                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE ALL</a>
-                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)">EDIT</a>
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()" ng-if="ctrl.admin">SAVE META</a>
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.receiveAll()">RECEIVE</a>
+                        <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setEdit(1)" ng-if="ctrl.admin">EDIT</a>
                     {% elseif purchaseOrder.status.name == 'Draft' %}
                         <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.setActive()">APPROVE</a>
-                    {% else %}
-                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updateDateReceived()">Update Time</a>
                     {% endif %}
                     </div>
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
-                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE</a>
-                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE</a>
+                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE META</a>
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE LINE ITEMS</a>
                     </div>
                 </div>
             </div>
@@ -479,7 +478,7 @@
                                  <input id="{{item.id}}" ng-model="item.ordered_quantity" type="number" class="form-control " disabled ng-change="ctrl.updateCartItem(item.ordered_quantity, {{item.ordered_quantity}}, $index)" ng-disabled="ctrl.isEdit == 0" jq-spinner style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input class="form-control number_select" ng-model="item.received_quantity" type="number" disabled min="0" ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)"   >
+                                <input class="form-control number_select" ng-model="item.received_quantity" type="number"  min="0" ng-change="ctrl.updateCartItem(item.received_quantity, {{item.received_quantity}}, $index)"  ng-disabled="ctrl.postatus != 'Active'" >
                             </td>
                             <td class="table-form" >
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none;" disabled>
@@ -498,13 +497,13 @@
                                     </ul>
                                 </div>
                             </td>
-                               <td ng-if="ctrl.isEdit == 1" class="table-form" style="width:140px;text-align: center;" >
+                               <td ng-if="ctrl.isEdit == 1 && ctrl.admin" class="table-form" style="width:140px;text-align: center;" >
                                    <a class="btn btn-raised btn-danger" ng-click="ctrl.removeCartItem($index)">Remove</a>
                                </td>
                                   {% endverbatim %}
                             </div>
                         </tr>
-                        <tr id="search" ng-if="ctrl.isEdit == 1">
+                        <tr id="search" ng-if="ctrl.isEdit == 1 && ctrl.admin">
                             <td class="mdl-data-table__cell--non-numeric" style="padding: 0px;">
                                 {% verbatim %}
                             <md-content>

@@ -40,6 +40,16 @@ class AdminController extends Controller
             foreach($this->getUser()->getRetailers() as $user) {
                 $users[] = $user;
             }
+        } elseif ( $this->getUser()->hasRole('ROLE_SALES_REP') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
+            foreach($this->getUser()->getDistributors() as $user) {
+                $users[] = $user;
+                foreach($user->getRetailers() as $user) {
+                    $users[] = $user;
+                }
+            }
+            foreach($this->getUser()->getRetailers() as $user) {
+                $users[] = $user;
+            }
         }
 
         return $this->render('AppBundle:Admin:view_users.html.twig', array(

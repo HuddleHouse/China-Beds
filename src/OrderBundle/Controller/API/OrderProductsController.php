@@ -282,7 +282,8 @@ class OrderProductsController extends Controller
             'state' => (string)$user->getState()->getId(),
             'zip' => $user->getZip(),
             'phone' => $user->getPhone(),
-            'email' => $user->getEmail()
+            'email' => $user->getEmail(),
+            'products' => $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user, null, null, 1)
             );
 
         return JsonResponse::create($data);
@@ -400,7 +401,12 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
-        $this->get('email_service')->sendAdminOrderNotification($order);
+        try {
+            $this->get('email_service')->sendAdminOrderNotification($order);
+        } catch (\Exception $e) {
+            // @todo ignore for now.  Need to log
+        }
+
 
         return JsonResponse::create(true);
     }
