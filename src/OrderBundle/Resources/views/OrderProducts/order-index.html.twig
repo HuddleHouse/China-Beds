@@ -362,6 +362,7 @@
                 if(user_id == undefined)
                     user_id = {{ app.user.id }};
                 $scope.ship_to_id = user_id;
+                showSpinner();
                 $.ajax({
                         type: 'POST',
                         url: "{{ path('api_get_user_info_for_order_form') }}",
@@ -376,6 +377,7 @@
                                 $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
                                 $('.grid').isotope( 'reloadItems' ).isotope();
+                                hideSpinner();
                             });
                         }
                     });
