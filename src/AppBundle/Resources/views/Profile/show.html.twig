@@ -167,9 +167,9 @@
         }
     </style>
     <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
-    {% if false and  (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') or is_granted('ROLE_WAREHOUSE') ) %}
+    {#{% if (is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_OPERATIONS') or is_granted('ROLE_ADMIN') or is_granted('ROLE_WAREHOUSE') ) %}
         {% include "AppBundle:Profile:show_top_bar.html.twig" %}
-    {% endif %}
+    {% endif %}#}
     <div class="row">
         {% include "AppBundle:Profile:show_user_screens.html.twig" %}
         {#{% include "AppBundle:Profile:show_side_bar.html.twig" %}#}
