@@ -16,15 +16,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PromoKitOrdersRepository extends EntityRepository
 {
     public function getProductVariants(Channel $channel, $warehouseName) {
-        $warehouse = $this->getEntityManager()->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('name' => $warehouseName));
-        $products = array();
+        if ( $warehouse = $this->getEntityManager()->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('name' => $warehouseName)) ) {
+            $products = array();
 
-        foreach($warehouse->getInventory() as $item)
-            foreach($item->getProductVariant()->getProduct()->getChannels() as $c)
-                if($c->getId() == $channel->getId())
-                    $products[] = $item->getProductVariant();
+            foreach ($warehouse->getInventory() as $item) {
+                foreach ($item->getProductVariant()->getProduct()->getChannels() as $c) {
+                    if ($c->getId() == $channel->getId()) {
+                        $products[] = $item->getProductVariant();
+                    }
+                }
+            }
 
-        return $products;
+            return $products;
+        } else {
+            return [];
+        }
     }
 
     public function getActivePromoKitItems() {

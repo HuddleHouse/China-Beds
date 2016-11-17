@@ -58,9 +58,9 @@ class PromoKitOrderType extends AbstractType
                         return $p->getName() . ': ' . $p->getDescription();
                     },
                     'choices' => $this->repository->getActivePromoKitItems(),
-                    'expanded' => true,
+                    'expanded' => false,
                     'multiple' => true,
-                    'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-group select2', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
                 )
             )
@@ -71,9 +71,9 @@ class PromoKitOrderType extends AbstractType
                         return $pv->getProduct()->getName() . ' ' . $pv->getName();
                     },
                     'choices' => $this->repository->getProductVariants($this->tokenStorageInterface->getToken()->getUser()->getActiveChannel(), $this->settingsService->get('default-warehouse')),
-                    'expanded' => true,
+                    'expanded' => false,
                     'multiple' => true,
-                    'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-group select2', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
                 )
             )
@@ -83,9 +83,9 @@ class PromoKitOrderType extends AbstractType
                     'choice_label' => function (PopItem $p) {
                         return $p->getName() . ': ' . $p->getDescription();
                     },
-                    'expanded' => true,
+                    'expanded' => false,
                     'multiple' => true,
-                    'attr' => array('class' => 'form-group', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-group select2', 'style' => 'margin-bottom: 10px'),
                     'required' => false,
                 )
             )

@@ -170,6 +170,9 @@
                         or 'attribute_index' in route_names
                         or 'admin_product_index' in route_names
                         or 'specification_index' in route_names
+                        or 'attribute_index' in route_names
+                        or 'promokit_index' in route_names
+                        or 'promokit_orders_index' in route_names
                         %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_assortment) %} active
                         {% elseif (app.request.get('_route') in sidebar_manage_options) %} active
@@ -186,30 +189,46 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                {% if isGrantedRoute(app.user, 'admin_product_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_admin_products) %} class="active"{% endif %}>
                                     <a href="{{ path('admin_product_index') }}"><i class="fa fa-circle-o"></i>Products</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'admin_product_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_pop_item_edit) %} class="active"{% endif %}>
                                     <a href="{{ path('pop_item_index') }}"><i class="fa fa-circle-o"></i>POP Items</a>
                                 </li>
+                                {% endif %}
+                        {% if isGrantedRoute(app.user, 'category_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
                                     <a href="{{ path('category_index') }}"><i class="fa fa-circle-o"></i>Categories</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'manage_options_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_manage_options) %} class="active"{% endif %}>
                                     <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Options</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'specification_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_specification) %} class="active"{% endif %}>
                                     <a href="{{ path('specification_index') }}"><i class="fa fa-circle-o"></i>Specifications</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'attribute_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
                                     <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Image Attributes</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'promokit_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_promokit) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Items</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'promokit_orders_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_promokit_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_orders_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Orders</a>
                                 </li>
+                            {% endif %}
                             </ul>
                         </li>
                     {% endif %}

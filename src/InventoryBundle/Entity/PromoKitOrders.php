@@ -116,6 +116,11 @@ class PromoKitOrders
     private $popItems;
 
     /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
+     */
+    private $channel;
+
+    /**
      * PromoKit constructor.
      */
     public function __construct()
@@ -435,5 +440,29 @@ class PromoKitOrders
     public function removePopItem(\InventoryBundle\Entity\PopItem $popItem)
     {
         $this->popItems->removeElement($popItem);
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \InventoryBundle\Entity\Channel $channel
+     *
+     * @return PromoKitOrders
+     */
+    public function setChannel(\InventoryBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \InventoryBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }

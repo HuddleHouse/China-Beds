@@ -640,4 +640,38 @@ class PopItem
     {
         $this->warehouses = $warehouses;
     }
+
+    /**
+     * Get isHideOnOrder
+     *
+     * @return boolean
+     */
+    public function getIsHideOnOrder()
+    {
+        return $this->is_hide_on_order;
+    }
+
+    /**
+     * Add warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     *
+     * @return PopItem
+     */
+    public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses[] = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     */
+    public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses->removeElement($warehouse);
+    }
 }

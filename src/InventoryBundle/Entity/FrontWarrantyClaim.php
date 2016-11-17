@@ -980,4 +980,14 @@ class FrontWarrantyClaim
 
 
 
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
+    }
 }

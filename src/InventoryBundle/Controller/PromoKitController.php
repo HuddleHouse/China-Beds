@@ -50,10 +50,10 @@ class PromoKitController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($this->getUser()->hasRole('ROLE_ADMIN')) {
-            $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findAll();
+            $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findBy(['channel' => $this->getUser()->getActiveChannel()]);
         } else {
             $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findBy(
-                array('submittedByUser' => $this->getUser())
+                array('submittedByUser' => $this->getUser(), 'channel' => $this->getUser()->getActiveChannel())
             );
         }
 
@@ -120,10 +120,13 @@ class PromoKitController extends Controller
         $form = $this->createForm('InventoryBundle\Form\PromoKitOrderType', $promoKitOrder);
         $form->handleRequest($request);
 
+        $channel = $this->getDoctrine()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
                 $promoKitOrder->setSubmittedByUser($this->getUser());
+                $promoKitOrder->setChannel($channel);
                 $this->getUser()->getPromoKitOrders()->add($promoKitOrder);
                 $em->persist($promoKitOrder);
                 $em->flush();

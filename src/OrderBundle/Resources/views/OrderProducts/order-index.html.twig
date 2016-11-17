@@ -447,6 +447,7 @@
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                             $scope.cart['pick_up_warehouse'] = warehouse;
                             $scope.validate();
                         });
@@ -478,6 +479,7 @@
                         $scope.$apply(function () {
                             $scope.cart = [];
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                         });
                     }
                 });
