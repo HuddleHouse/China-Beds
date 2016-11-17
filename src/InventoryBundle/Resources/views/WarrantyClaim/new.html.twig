@@ -154,6 +154,16 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.lawLabel) }}
+                    {{ form_widget(form.lawLabel) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.frLabel) }}
+                    {{ form_widget(form.frLabel) }}
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12 form-group">
                     {{ form_errors(form.description) }}
                     {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>

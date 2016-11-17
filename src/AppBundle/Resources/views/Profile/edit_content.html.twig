@@ -88,12 +88,14 @@
                                             {{ form_widget(form.ach_account_number) }}
                                         </div>
                                     </div>
+                                    {% if is_granted("ROLE_ADMIN") %}
                                     <div class="row">
                                         <div class="col-md-6">
                                             {{ form_label(form.distributor_fedex_number) }}
                                             {{ form_widget(form.distributor_fedex_number) }}
                                         </div>
                                     </div>
+                                    {% endif %}
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
@@ -104,7 +106,6 @@
                 <div style="padding-top: 20px;">
                     <input class="btn btn-raised btn-success" type="submit" value="Update"/>
                 </div>
-
                 {{ form_end(form) }}
             </div>
 

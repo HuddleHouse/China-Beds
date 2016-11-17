@@ -4,6 +4,7 @@ namespace InventoryBundle\Controller;
 
 use InventoryBundle\Entity\PromoKitOrders;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -270,4 +271,29 @@ class PromoKitController extends Controller
             ->setMethod('DELETE')
             ->getForm();
     }
+
+    /**
+     * Deletes Entity for Index listing
+     *
+     * @Route("/delete/{id}", name="delete_promokit")
+     * @Method({"GET", "POST"})
+     */
+    public function deletePromoAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $promo = $em->getRepository('InventoryBundle:PromoKit')->find($id);
+        $promo_kits = $em->getRepository('InventoryBundle:PromoKit')->findAll();
+
+        try {
+            $em->remove($promo);
+            $em->flush();
+            $this->addFlash('notice', 'Successfuly deleted promo item ');
+            return $this->redirectToRoute('promokit_index');
+        }catch(Exception $e) {
+            $this->addFlash('notice', 'error deleting promo kit item' . $e);
+            return $this->redirectToRoute('promokit_index');
+        }
+
+
+    }
+
 }

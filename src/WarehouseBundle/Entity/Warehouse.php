@@ -125,6 +125,20 @@ class Warehouse
     private $shipping_label_image_type = 'PNG';
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="container_number", length=255, nullable=true)
+     */
+    private $containerNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="order_number", length=255, nullable=true)
+     */
+    private $orderNumber;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
@@ -1025,5 +1039,149 @@ class Warehouse
     public function setShippingLabelImageType($shipping_label_image_type)
     {
         $this->shipping_label_image_type = $shipping_label_image_type;
+    }
+
+    /**
+     * Set containerNumber
+     *
+     * @param string $containerNumber
+     *
+     * @return Warehouse
+     */
+    public function setContainerNumber($containerNumber)
+    {
+        $this->containerNumber = $containerNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get containerNumber
+     *
+     * @return string
+     */
+    public function getContainerNumber()
+    {
+        return $this->containerNumber;
+    }
+
+    /**
+     * Set orderNumber
+     *
+     * @param string $orderNumber
+     *
+     * @return Warehouse
+     */
+    public function setOrderNumber($orderNumber)
+    {
+        $this->orderNumber = $orderNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get orderNumber
+     *
+     * @return string
+     */
+    public function getOrderNumber()
+    {
+        return $this->orderNumber;
+    }
+
+    /**
+     * Add manager
+     *
+     * @param \AppBundle\Entity\User $manager
+     *
+     * @return Warehouse
+     */
+    public function addManager(\AppBundle\Entity\User $manager)
+    {
+        $this->managers[] = $manager;
+
+        return $this;
+    }
+
+    /**
+     * Remove manager
+     *
+     * @param \AppBundle\Entity\User $manager
+     */
+    public function removeManager(\AppBundle\Entity\User $manager)
+    {
+        $this->managers->removeElement($manager);
+    }
+
+    /**
+     * Add inventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventoryOnHold $inventoryOnHold
+     *
+     * @return Warehouse
+     */
+    public function addInventoryOnHold(\WarehouseBundle\Entity\WarehouseInventoryOnHold $inventoryOnHold)
+    {
+        $this->inventory_on_hold[] = $inventoryOnHold;
+
+        return $this;
+    }
+
+    /**
+     * Remove inventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehouseInventoryOnHold $inventoryOnHold
+     */
+    public function removeInventoryOnHold(\WarehouseBundle\Entity\WarehouseInventoryOnHold $inventoryOnHold)
+    {
+        $this->inventory_on_hold->removeElement($inventoryOnHold);
+    }
+
+    /**
+     * Add popInventory
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventory $popInventory
+     *
+     * @return Warehouse
+     */
+    public function addPopInventory(\WarehouseBundle\Entity\WarehousePopInventory $popInventory)
+    {
+        $this->pop_inventory[] = $popInventory;
+
+        return $this;
+    }
+
+    /**
+     * Remove popInventory
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventory $popInventory
+     */
+    public function removePopInventory(\WarehouseBundle\Entity\WarehousePopInventory $popInventory)
+    {
+        $this->pop_inventory->removeElement($popInventory);
+    }
+
+    /**
+     * Add popInventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventoryOnHold $popInventoryOnHold
+     *
+     * @return Warehouse
+     */
+    public function addPopInventoryOnHold(\WarehouseBundle\Entity\WarehousePopInventoryOnHold $popInventoryOnHold)
+    {
+        $this->pop_inventory_on_hold[] = $popInventoryOnHold;
+
+        return $this;
+    }
+
+    /**
+     * Remove popInventoryOnHold
+     *
+     * @param \WarehouseBundle\Entity\WarehousePopInventoryOnHold $popInventoryOnHold
+     */
+    public function removePopInventoryOnHold(\WarehouseBundle\Entity\WarehousePopInventoryOnHold $popInventoryOnHold)
+    {
+        $this->pop_inventory_on_hold->removeElement($popInventoryOnHold);
     }
 }

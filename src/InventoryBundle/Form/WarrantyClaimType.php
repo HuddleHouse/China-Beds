@@ -132,6 +132,16 @@ class WarrantyClaimType extends AbstractType
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser3()', 'readonly' => 'readonly'),
                     'required' => false,
                 )
+            )
+            ->add('lawLabel', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;'),
+                    'required' => true,
+                )
+            )
+            ->add('frLabel', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;'),
+                    'required' => true,
+                )
             );
     }
 
