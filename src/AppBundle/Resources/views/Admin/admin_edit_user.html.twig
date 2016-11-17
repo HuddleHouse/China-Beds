@@ -145,8 +145,22 @@
     <div class="wrapper" ng-controller="MyCtrl">
     <div class="table">
         <div class="form-body">
-            {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
-
+        {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
+        {% if is_granted("ROLE_ADMIN") %}
+            <div class="row">
+                    <div class="col-md-12">
+                        <h2>Username and Password</h2>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.username) }}
+                        {{ form_widget(form.username) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.plain_password) }}
+                        {{ form_widget(form.plain_password) }}
+                    </div>
+            </div>
+        {% endif %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Information</h2>

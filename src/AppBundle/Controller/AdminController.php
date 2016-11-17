@@ -55,6 +55,7 @@ class AdminController extends Controller
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $user_id));
+        $user_clone = clone $user;
 
         $form = $this->createForm($this->getUser()->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
         $form->handleRequest($request);
@@ -62,6 +63,13 @@ class AdminController extends Controller
         if($form->isValid()) {
             try {
                 $event = new FormEvent($form, $request);
+
+                if($user->getPlainPassword() == '' || $user->getPlainPassword() == null){
+                    $user->setPlainPassword($user_clone->getPlainPassword());
+                }else{
+                    $user->setPlainPassword($user->getPlainPassword());
+                }
+
                 $userManager->updateUser($user);
                 $successMessage = "User information updated successfully.";
                 $this->addFlash('notice', $successMessage);
