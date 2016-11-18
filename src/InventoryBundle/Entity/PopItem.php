@@ -631,16 +631,6 @@ class PopItem
     }
 
     /**
-     * Get promoKitAvailable
-     *
-     * @return boolean
-     */
-    public function getPromoKitAvailable()
-    {
-        return $this->promo_kit_available;
-    }
-
-    /**
      * Add promoKitOrder
      *
      * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
@@ -679,4 +669,6 @@ class PopItem
     {
         $this->warehouses = $warehouses;
     }
+
+
 }

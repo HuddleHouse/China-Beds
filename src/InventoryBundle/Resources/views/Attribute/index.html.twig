@@ -29,6 +29,7 @@
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <td>Channel</td>
                         <th style="width: 100px;">Image</th>
                         <th>Actions</th>
                     </tr>
@@ -37,6 +38,7 @@
                     {% for attribute in attributes %}
                         <tr>
                             <td><a href="{{ path('attribute_edit', { 'id': attribute.id }) }}">{{ attribute.name }}</a></td>
+                            <td>{{ attribute.channels.name | default('Not Assigned') }}</td>
                             <td>
                                 {% if attribute.webPath %}
                                 <div id="preview-pane" >

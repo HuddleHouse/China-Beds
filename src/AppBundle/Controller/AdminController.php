@@ -105,6 +105,7 @@ class AdminController extends Controller
 
     /**
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/add-user", name="admin_add_user")
      */
    public function adminAddUserAction(Request $request){
