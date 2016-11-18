@@ -46,8 +46,6 @@ class EmailService extends BaseService
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
             ->setFrom($data['from'])
-//            ->setFrom($data['from'])
-            //->setTo($data['to'])
             ->setTo($data['to'])
             ->setBody($data['body'], 'text/html');
 

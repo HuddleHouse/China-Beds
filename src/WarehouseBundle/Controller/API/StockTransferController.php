@@ -21,6 +21,7 @@ class StockTransferController extends Controller
      */
     public function saveStockTransfer(Request $request)
     {
+        $channel = $this->getUser()->getActiveChannel();
         $em = $this->getDoctrine()->getManager();
         $status_name = $request->request->get('status');
         $connection = $em->getConnection();
@@ -31,7 +32,7 @@ class StockTransferController extends Controller
         $status = $em->getRepository('WarehouseBundle:Status')->find($status_id['id']);
 
         $cart = $request->request->get('cart');
-        $cart_total_before = $cart[0]["departing_warehouse_quantity"] + $cart[0]["quantity"];
+        //$cart_total_before = $cart[0]["departing_warehouse_quantity"] + $cart[0]["quantity"];
 
         $due_date = new \DateTime($request->request->get('transfer_date'));
         $message = $request->request->get('message');
@@ -52,6 +53,9 @@ class StockTransferController extends Controller
         $stock_transfer->setMessage($message);
         $stock_transfer->setStatus($status);
 
+        $quantityBefore = 0;
+        $stock_transfer_variant = '';
+
         foreach($cart as $item) {
             $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($item['id']);
             if(isset($item['stock_transfer_product_variant_id']))
@@ -61,17 +65,39 @@ class StockTransferController extends Controller
                 $stock_transfer_variant->setProductVariant($variant);
                 $stock_transfer_variant->setStockTransfer($stock_transfer);
             }
+            $quantityBefore .= $stock_transfer_variant->getQuantity();
             $stock_transfer_variant->setDepartingWarehouseQuantityAfter($item['departing_warehouse_quantity']);
             $stock_transfer_variant->setReceivingWarehouseQuantityAfter($item['receiving_warehouse_quantity']);
             $stock_transfer_variant->setQuantity($item['quantity']);
             $em->persist($stock_transfer_variant);
         }
+        $quantityChanged = $stock_transfer_variant->getQuantity() - $quantityBefore;
+
+
         $em->persist($stock_transfer);
         $em->flush();
 
         $stock_transfer->setOrderNumber('ST-'. str_pad($stock_transfer->getId(), 5, "0", STR_PAD_LEFT));
         $em->persist($stock_transfer);
         $em->flush();
+
+        if($this->getUser()->hasRole('ROLE_WAREHOUSE')) {
+            $html = 'A pre-existent stock transfer has been edited by a warehouse user. The quantity of a transfer has been changed by ' . $quantityChanged . ' items.';
+            $email = array(
+                'subject' => 'Stock Transfer edited',
+                'to' => $channel->getSupportEmailAddress(),
+                'cc' => 'chattwarehouse@mlilyusa.com',
+                'from' => $channel->getFromEmailAddress(),
+                'body' => $html
+            );
+
+            try {
+                $this->get('email_service')->sendEmail($email);
+            }
+            catch(\Exception $e) {
+                return new JsonResponse(array(false, 'Email error: ' . $e->getMessage()));
+            }
+        }
 
         $complete = $request->request->get('complete');
 
