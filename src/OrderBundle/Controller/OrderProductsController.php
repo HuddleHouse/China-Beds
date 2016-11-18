@@ -50,7 +50,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(

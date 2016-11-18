@@ -71,9 +71,9 @@ class OrderProductsController extends Controller
         /*
         * Save the manual Items here
         */
-        $this->saveManualItems($cart, $order);
+//        $this->saveManualItems($cart, $order);
 
-        $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
+        $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName(Orders::STATUS_DRAFT);
         $order->setStatus($status);
         $order->setChannel($channel);
         $order->setSubmittedByUser($this->getUser());
@@ -198,9 +198,9 @@ class OrderProductsController extends Controller
             }
 
             if($is_shipped == true)
-                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => Orders::STATUS_SHIPPED));
             else
-                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
+                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => Orders::STATUS_READY_TO_SHIP));
 
 
 //            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
@@ -390,7 +390,7 @@ class OrderProductsController extends Controller
         }
         else if($type == 'admin' && $payment_type == '') {
             $order = $this->generateShippingLabels($order);
-            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => Orders::STATUS_PENDING));
             $order->removeOrderPayment($order_payment);
         }
 

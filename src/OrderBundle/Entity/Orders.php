@@ -17,6 +17,16 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class Orders
 {
+    const STATUS_ACTIVE             = 'Active';
+    const STATUS_RECEIVED           = 'Received';
+    const STATUS_COMPLETED          = 'Completed';
+    const STATUS_VOIDED             = 'Voided';
+    const STATUS_DRAFT              = 'Draft';
+    const STATUS_ARCHIVED           = 'Archived';
+    const STATUS_PAID               = 'Paid';
+    const STATUS_SHIPPED            = 'Shipped';
+    const STATUS_READY_TO_SHIP      = 'Ready To Ship';
+    const STATUS_PENDING            = 'Pending';
     /**
      * @var int
      *

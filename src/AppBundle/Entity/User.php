@@ -381,7 +381,7 @@ class User extends BaseUser
     public function hasPendingOrders() {
         $count = 0;
         foreach($this->orders as $order) {
-            if($order->getStatus()->getName() == 'Pending') {
+            if(in_array($order->getStatus()->getName(), ['Pending', 'Draft'])) {
                 $count++;
                 break;
             }
@@ -395,7 +395,7 @@ class User extends BaseUser
     public function getPendingOrderTotal($channel_id = null) {
         $total = 0;
         foreach($this->orders as $order) {
-            if($order->getStatus()->getName() == 'Pending') {
+            if(in_array($order->getStatus()->getName(), ['Pending', 'Draft'])) {
                 if($channel_id == null)
                     $total += $order->getTotal();
                 else if($order->getChannel()->getId() == $channel_id)

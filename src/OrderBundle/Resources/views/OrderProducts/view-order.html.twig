@@ -33,7 +33,7 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
-            $scope.payment_type = 'cc';
+            $scope.payment_type = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}''{% else %}'cc'{% endif %};
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
