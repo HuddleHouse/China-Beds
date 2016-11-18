@@ -268,7 +268,8 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'zip' => $user->getZip(),
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
-                'city' => $user->getCity()
+                'city' => $user->getCity(),
+                'state' => strval($user->getState()->getId())
             );
         }
 
@@ -280,7 +281,8 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'zip' => $user->getZip(),
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
-                'city' => $user->getCity()
+                'city' => $user->getCity(),
+                'state' => strval($user->getState()->getId())
             );
         }
 
@@ -292,7 +294,8 @@ select coalesce(sum(i.quantity), 0) as quantity
             'popItems' => $popItemArray,
             'distributors' => $distributors,
             'retailers' => $retailers,
-            'users' => $users
+            'users' => $users,
+            'states' => $em->getRepository('AppBundle:State')->findAll()
         ));
     }
 
