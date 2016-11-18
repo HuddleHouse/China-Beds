@@ -590,7 +590,7 @@ class PopItem
      *
      * @return PopItem
      */
-    public function setHideOrder(\bool $hideOrder)
+    public function setHideOrder($hideOrder)
     {
         $this->hide_order = $hideOrder;
 
