@@ -316,6 +316,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
+                            $scope.product_variant_order_quan[variantId] = max;
                             showErrorModal('Only '+max+' available.');
                         }
                     }
@@ -338,6 +339,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
+                            $scope.pop_order_quan[variantId] = max;
                             showErrorModal('Only '+max+' available.');
                         }
                     }
@@ -876,7 +878,7 @@
 
                         <div class="price_box_row " style="font-size: smaller;">
 
-                                <div ng-repeat="variant in product.variants track by $index" class="price_box">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box"  ng-hide="!form_info['pick_up']&&variant.open_item">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>

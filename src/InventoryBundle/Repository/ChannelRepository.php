@@ -143,6 +143,7 @@ select i.quantity, i.warehouse_id
 
                     $variants[$key]['inventory'] = $quantity;
                     $variants[$key]['warehouse_data'] = $warehouse_data;
+                    $variants[$key]['open_item'] = (strtoupper($variant['fedex_dimensions']) == 'OPEN');
                 }
 
                 $product_array['variants'] = $variants;

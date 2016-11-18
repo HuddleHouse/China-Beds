@@ -82,11 +82,6 @@ class OrderProductsController extends Controller
             $this->redirectToRoute('404');
 
 
-        //$pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($channel,);
-
-
-        //
-
         $pop = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $channel, 'is_hide_on_order' => 0, 'active' => 1]);
         $data = array();
 
