@@ -36,6 +36,12 @@ class OrderEmailCommand extends ContainerAwareCommand
             if ( in_array('admin', $input->getOption('email')) ) {
                 $service->sendAdminOrderNotification($order);
             }
+            if ( in_array('customer', $input->getOption('email')) ) {
+                $service->sendCustomerOrderNotification($order);
+            }
+            if ( in_array('warehouse', $input->getOption('email')) ) {
+                $service->sendWarehouseOrderNotification($order);
+            }
         }
     }
 }

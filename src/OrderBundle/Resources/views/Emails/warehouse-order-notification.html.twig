@@ -33,7 +33,7 @@
                                                                         <!--TEXT SECTION-->
                                                                         <td class="RegularTextTD"
                                                                             style="color: #727e8d;font-family: sans-serif;font-size: 13px;font-weight: lighter;text-align: left;line-height: 23px;">
-                                                                            Dear Admin,<br>See order details below.
+                                                                            Dear {{ manager.displayname }}, below is a new order that needs to be shipped!
                                                                         </td>
                                                                         <td width="30" class="wz"></td>
                                                                     </tr>
@@ -431,7 +431,7 @@
                                                                                     <td valign="top" class="header2TD"
                                                                                         align="left"
                                                                                         style="color: #425065;font-family: sans-serif;font-size: 14px;text-align: left;line-height: 19px;font-weight: lighter;">
-                                                                                        Order Total
+                                                                                        &nbsp;
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -440,7 +440,8 @@
                                                                                         class="RegularText4TD"
                                                                                         align="left"
                                                                                         style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: bold;text-align: left;line-height: 23px;">
-                                                                                        ${{ order.ordertotal|number_format(2,'.',',') }}</td>
+                                                                                        {#${{ order.ordertotal|number_format(2,'.',',') }}#}
+                                                                                    </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td colspan="3" height="25"
@@ -533,7 +534,7 @@
                                                                         <!-- PRICE TEXT -->
                                                                         <td class="header5TD"
                                                                             style="color: #ffffff;font-family: sans-serif;font-size: 15px;text-align: center;line-height: 27px;font-weight: bold;">
-                                                                            Price
+                                                                            &nbsp;
                                                                         </td>
                                                                         <td width="30" class="wz2"></td>
                                                                     </tr>
@@ -583,7 +584,7 @@
                                                                         <!-- TOTAL TEXT -->
                                                                         <td class="header5TD"
                                                                             style="color: #ffffff;font-family: sans-serif;font-size: 15px;text-align: center;line-height: 27px;font-weight: bold;">
-                                                                            Total
+                                                                            &nbsp;
                                                                         </td>
                                                                         <td width="30" class="wz2"></td>
                                                                     </tr>
@@ -633,7 +634,7 @@
                                                 <td align="left">
                                                     <table align="center" cellpadding="0" cellspacing="0" border="0"
                                                            style="border-bottom:1px solid #dde5f1;">
-                                                        {% for item in order.productvariants %}
+                                                        {% for item in products %}
                                                             <tr>
                                                                 <th width="" class="stack2"
                                                                     style="margin:0; padding:0;">
@@ -674,7 +675,8 @@
                                                                             <!-- PRICE -->
                                                                             <td class="RegularText5TD"
                                                                                 style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                                ${{ item.price|number_format(2,'.',',') }}</td>
+                                                                                {#${{ item.price|number_format(2,'.',',') }}#}
+                                                                            </td>
                                                                             <td width="30" class="wz2"></td>
                                                                         </tr>
                                                                         <tr>
@@ -723,7 +725,8 @@
                                                                             <!-- TOTAL -->
                                                                             <td class="RegularText5TD"
                                                                                 style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                                ${{ (item.price * item.quantity)|number_format(2, '.', ',') }}</td>
+                                                                                {#${{ (item.price * item.quantity)|number_format(2, '.', ',') }}#}
+                                                                            </td>
                                                                             <td width="30" class="wz2"></td>
                                                                         </tr>
                                                                         <tr>
@@ -734,82 +737,6 @@
                                                                     </table>
                                                                 </th>
                                                             </tr>
-                                                            {% for warehouse in item.warehouseinfo %}
-                                                            <tr>
-                                                                <th width="" colspan="2" class="stack2"
-                                                                    style="margin:0; padding:0;">
-                                                                    <table width="100%" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0" class="table60032"
-                                                                           style="border-bottom-color:#dde5f1;">
-                                                                        <tr>
-                                                                            <td colspan="3" height="10"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- DESCRIPTION -->
-                                                                            <td class="header2TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 11px;text-align: left;line-height: 15px;font-weight: lighter;">{{ warehouse.warehouse.name }}</td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                                <th width="100" class="stack3"
-                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
-                                                                    <table width="100%" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0"
-                                                                           class="table60033">
-                                                                        <tr>
-                                                                            <td colspan="3" height="10"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- QUANTITY -->
-                                                                            <td class="RegularText5TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 11px;font-weight: lighter;text-align: center;line-height: 25px;">{{ warehouse.quantity }}</td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                                <th width="100" class="stack3"
-                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
-                                                                    <table width="100%" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0"
-                                                                           class="table60033">
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- TOTAL -->
-                                                                            <td class="RegularText5TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">&nbsp;</td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                            </tr>
-                                                                {% endfor %}
                                                         {% endfor %}
                                                     </table>
                                                 </td>
@@ -868,234 +795,71 @@
                                                                         <td class="RegularText5TD"
                                                                             style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
                                                                             <br/>
-                                                                            {% for label in order.shippinglabels %}
-                                                                                <a href="{{ order.channel.backendurl }}/{{ label.path }}"
-                                                                                   style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
-                                                                            {% endfor %}
+                                                                                {% for variant in products %}
+                                                                                    {% for info in variant.warehouseinfo %}
+                                                                                        {% for label in info.shippinglabels %}
+                                                                                            <a href="{{ order.channel.backendurl }}/{{ label.path }}"
+                                                                                               style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
+                                                                                        {% endfor %}
+                                                                                    {% endfor %}
+                                                                                {% endfor %}
                                                                         </td>
                                                                     </tr>
                                                                 </table>
                                                             </th>
-                                                            <th width="139" class="stack3" valign="top"
-                                                                bgcolor="#eff3f7"
-                                                                style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                <table width="139" align="center" cellpadding="0"
-                                                                       cellspacing="0" border="0" class="table60033">
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td width="30" class="wz2"></td>
-                                                                        <!-- TOTAL -->
-                                                                        <td class="RegularText5TD"
-                                                                            style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                            Sub Total
-                                                                        </td>
-                                                                        <td width="30" class="wz2"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                </table>
-                                                            </th>
-                                                            <th width="139" class="stack3" valign="top"
-                                                                bgcolor="#eff3f7"
-                                                                style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                <table width="139" align="center" cellpadding="0"
-                                                                       cellspacing="0" border="0" class="table60033">
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td width="30" class="wz2"></td>
-                                                                        <!-- INVOICE TOTAL -->
-                                                                        <td class="RegularText5TD"
-                                                                            style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                            ${{ order.itemtotal|number_format(2,'.',',') }}</td>
-                                                                        <td width="30" class="wz2"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                </table>
-                                                            </th>
+                                                            {#<th width="139" class="stack3" valign="top"#}
+                                                                {#bgcolor="#eff3f7"#}
+                                                                {#style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">#}
+                                                                {#<table width="139" align="center" cellpadding="0"#}
+                                                                       {#cellspacing="0" border="0" class="table60033">#}
+                                                                    {#<tr>#}
+                                                                        {#<td colspan="3" height="20"#}
+                                                                            {#style="font-size:0;line-height:0;"#}
+                                                                            {#class="va2">&nbsp;</td>#}
+                                                                    {#</tr>#}
+                                                                    {#<tr>#}
+                                                                        {#<td width="30" class="wz2"></td>#}
+                                                                        {#<!-- TOTAL -->#}
+                                                                        {#<td class="RegularText5TD"#}
+                                                                            {#style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">#}
+                                                                            {#Sub Total#}
+                                                                        {#</td>#}
+                                                                        {#<td width="30" class="wz2"></td>#}
+                                                                    {#</tr>#}
+                                                                    {#<tr>#}
+                                                                        {#<td colspan="3" height="20"#}
+                                                                            {#style="font-size:0;line-height:0;"#}
+                                                                            {#class="va2">&nbsp;</td>#}
+                                                                    {#</tr>#}
+                                                                {#</table>#}
+                                                            {#</th>#}
+                                                            {#<th width="139" class="stack3" valign="top"#}
+                                                                {#bgcolor="#eff3f7"#}
+                                                                {#style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">#}
+                                                                {#<table width="139" align="center" cellpadding="0"#}
+                                                                       {#cellspacing="0" border="0" class="table60033">#}
+                                                                    {#<tr>#}
+                                                                        {#<td colspan="3" height="20"#}
+                                                                            {#style="font-size:0;line-height:0;"#}
+                                                                            {#class="va2">&nbsp;</td>#}
+                                                                    {#</tr>#}
+                                                                    {#<tr>#}
+                                                                        {#<td width="30" class="wz2"></td>#}
+                                                                        {#<!-- INVOICE TOTAL -->#}
+                                                                        {#<td class="RegularText5TD"#}
+                                                                            {#style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">#}
+                                                                            {#${{ order.itemtotal|number_format(2,'.',',') }}</td>#}
+                                                                        {#<td width="30" class="wz2"></td>#}
+                                                                    {#</tr>#}
+                                                                    {#<tr>#}
+                                                                        {#<td colspan="3" height="20"#}
+                                                                            {#style="font-size:0;line-height:0;"#}
+                                                                            {#class="va2">&nbsp;</td>#}
+                                                                    {#</tr>#}
+                                                                {#</table>#}
+                                                            {#</th>#}
                                                         </tr>
-                                                        {% if order.ispickup %}
-                                                        {% else %}
-                                                            <tr>
-                                                                <th width="139" class="stack3" valign="top"
-                                                                    bgcolor="#eff3f7"
-                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                    <table width="139" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0"
-                                                                           class="table60033">
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- TOTAL -->
-                                                                            <td class="RegularText5TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">{{ order.shipdescription }}</td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                                <th width="139" class="stack3" valign="top"
-                                                                    bgcolor="#eff3f7"
-                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                    <table width="139" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0"
-                                                                           class="table60033">
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- INVOICE TOTAL -->
-                                                                            <td class="RegularText5TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                                ${{ order.shipping|number_format(2, '.', ',') }}</td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                            </tr>
-                                                        {% endif %}
-                                                        <tr>
-                                                            <th width="139" class="stack3" bgcolor="#67bffd"
-                                                                valign="top"
-                                                                style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                <table width="139" align="center" cellpadding="0"
-                                                                       cellspacing="0" border="0" class="table60033">
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td width="30" class="wz2"></td>
-                                                                        <!-- TOTAL -->
-                                                                        <td bgcolor="#67bffd" class="header5TD"
-                                                                            style="color: #ffffff;font-family: sans-serif;font-size: 15px;text-align: center;line-height: 27px;font-weight: bold;">
-                                                                            Total
-                                                                        </td>
-                                                                        <td width="30" class="wz2"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                </table>
-                                                            </th>
-                                                            <th width="139" class="stack3" bgcolor="#67bffd"
-                                                                valign="top"
-                                                                style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                <table width="139" align="center" cellpadding="0"
-                                                                       cellspacing="0" border="0" class="table60033">
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td width="30" class="wz2"></td>
-                                                                        <!-- INVOICE TOTAL -->
-                                                                        <td bgcolor="#67bffd" class="header5TD"
-                                                                            style="color: #ffffff;font-family: sans-serif;font-size: 15px;text-align: center;line-height: 27px;font-weight: bold;">
-                                                                            ${{ order.total|number_format(2, '.', ',') }}</td>
-                                                                        <td width="30" class="wz2"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td colspan="3" height="20"
-                                                                            style="font-size:0;line-height:0;"
-                                                                            class="va2">&nbsp;</td>
-                                                                    </tr>
-                                                                </table>
-                                                            </th>
-                                                        </tr>
-                                                        {% for payment in order.orderpayments %}
-                                                            <tr>
-                                                                <th width="139" class="stack3" valign="top"
-                                                                    bgcolor="#eff3f7"
-                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                    <table width="139" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0"
-                                                                           class="table60033">
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- TOTAL -->
-                                                                            <td class="RegularText5TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                                {% if payment.method == 'cc' %}CREDIT CARD {{ payment.detail }} - auth {{ payment.gatewayauthcode }}{% endif %}
-                                                                                {% if payment.method == 'ledger' %}LEDGER{% endif %}
-                                                                                {% if payment.method == '' %}PENDING - NO PAYMENT{% endif %}
-                                                                            </td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                                <th width="139" class="stack3" valign="top"
-                                                                    bgcolor="#eff3f7"
-                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;vertical-align:top;border-bottom:1px solid #dde5f1;">
-                                                                    <table width="139" align="center" cellpadding="0"
-                                                                           cellspacing="0" border="0"
-                                                                           class="table60033">
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="30" class="wz2"></td>
-                                                                            <!-- INVOICE TOTAL -->
-                                                                            <td class="RegularText5TD"
-                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
-                                                                                ${{ payment.amount|number_format(2, '.', ',') }}</td>
-                                                                            <td width="30" class="wz2"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="3" height="20"
-                                                                                style="font-size:0;line-height:0;"
-                                                                                class="va2">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </th>
-                                                            </tr>
-                                                        {% endfor %}
+
                                                     </table>
                                                 </td>
                                             </tr>

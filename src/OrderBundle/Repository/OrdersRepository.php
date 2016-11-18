@@ -81,6 +81,27 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         $em->flush();
     }
 
+    public function getProductsByWarehouse(Orders $order, Warehouse $warehouse = null) {
+        $em = $this->getEntityManager();
+        $variants = $em
+            ->createQuery("SELECT v, o, i, l FROM OrderBundle\Entity\OrdersProductVariant v JOIN v.order o JOIN v.warehouse_info i JOIN i.warehouse w JOIN i.shipping_labels l WHERE o.id = :order AND w.id = :warehouse")
+            ->setParameter('order', $order)
+            ->setParameter('warehouse', $warehouse)
+            ->getResult();
+
+        return $variants;
+
+//        foreach($orders as $order) {
+//            foreach($order->getProductVariants() as $variant) {
+//                foreach($variant->getWarehouseInfo() as $info) {
+//                    $warehouses->add($info->getWarehouse());
+//                }
+//            }
+//        }
+//
+//        return $warehouses;
+    }
+
     /**
      * @param Orders $order
      * @param Warehouse|null $warehouse If the warehouse is specified it will only return the data for that warehouse.
