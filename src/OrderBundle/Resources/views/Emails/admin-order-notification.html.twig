@@ -348,8 +348,9 @@
                                                                     </tr><tr>
                                                                         <!-- == SIGNATURE TEXT = 150 X 80 ==-->
                                                                         <td class="RegularText5TD" style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
+                                                                            <br />
                                                                             {% for label in order.shippinglabels %}
-                                                                                <a href="{{ order.channel.backendurl }}/{{ label.path }}">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
+                                                                                <a href="{{ order.channel.backendurl }}/{{ label.path }}"  style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
                                                                             {% endfor %}
                                                                         </td>
                                                                     </tr></table>
