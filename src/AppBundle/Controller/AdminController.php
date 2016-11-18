@@ -128,6 +128,7 @@ class AdminController extends Controller
                return $this->redirectToRoute('view_users');
            }
        }
+
        return $this->render('AppBundle:admin:new-user-creation.html.twig', array(
            'form' => $form->createView(),
            'user' =>$user
