@@ -91,6 +91,11 @@ class PopItem
     public $path;
 
     /**
+     * @ORM\Column(name="hide_order", type="boolean", nullable=true)
+     */
+    public $hide_order;
+
+    /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="pop_item")
      */
     private $orders_pop_item;
@@ -576,6 +581,40 @@ class PopItem
     }
 
     /**
+     * Get promoKitAvailable
+     *
+     * @return boolean
+     */
+    public function getPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * Set hideOrder
+     *
+     * @param \bool $hideOrder
+     *
+     * @return PopItem
+     */
+    public function setHideOrder($hideOrder)
+    {
+        $this->hide_order = $hideOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get hideOrder
+     *
+     * @return \bool
+     */
+    public function getHideOrder()
+    {
+        return $this->hide_order;
+    }
+
+    /**
      * @return mixed
      */
     public function getPromoKitOrders()
@@ -589,16 +628,6 @@ class PopItem
     public function setPromoKitOrders($promo_kit_orders)
     {
         $this->promo_kit_orders = $promo_kit_orders;
-    }
-
-    /**
-     * Get promoKitAvailable
-     *
-     * @return boolean
-     */
-    public function getPromoKitAvailable()
-    {
-        return $this->promo_kit_available;
     }
 
     /**
