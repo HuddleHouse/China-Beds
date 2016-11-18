@@ -31,6 +31,8 @@ class StockTransferController extends Controller
         $status = $em->getRepository('WarehouseBundle:Status')->find($status_id['id']);
 
         $cart = $request->request->get('cart');
+        $cart_total_before = $cart[0]["departing_warehouse_quantity"] + $cart[0]["quantity"];
+
         $due_date = new \DateTime($request->request->get('transfer_date'));
         $message = $request->request->get('message');
         $receiving_warehouse_id = $request->request->get('receiving_warehouse_id');
