@@ -225,7 +225,9 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannels(array($this->getUser()->getActiveChannel()));
         $warehouseArray = array();
+        $popWarehouseArray = array();
         $productArray = array();
+        $popItemArray = array();
         foreach($warehouses as $warehouse) {
             /** @var \WarehouseBundle\Entity\Warehouse $warehouse */
             /** @var \WarehouseBundle\Entity\WarehouseInventory $inventory */
@@ -239,10 +241,19 @@ select coalesce(sum(i.quantity), 0) as quantity
                     'variant' => $inventory->getProductVariant()->getName(),
                     'quantity' => $inventory->getQuantity()
                 );
+                if(!$warehouse->getPopItems()->isEmpty()) {
+                    $popWarehouseArray[$wid]['id'] = $wid;
+                    $popWarehouseArray[$wid]['name'] = $warehouse->getName();
+                    foreach($warehouse->getPopItems() as $popItem) {
+                        /** @var \InventoryBundle\Entity\PopItem $popItem */
+                        $popItemArray[$wid][$popItem->getId()] = array(
+                            'id' => $popItem->getId(),
+                            'product' => $popItem->getName(),
+                        );
+                    }
+                }
             }
         }
-
-//        $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($channel);
 
         $distributors = $em->getRepository('AppBundle:User')->getAllDistributorsArray($this->getUser()->getActiveChannel());
         $retailers = $em->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel());
@@ -277,6 +288,8 @@ select coalesce(sum(i.quantity), 0) as quantity
             'channel' => $channel,
             'warehouses' => $warehouseArray,
             'products' => $productArray,
+            'popWarehouses' => $popWarehouseArray,
+            'popItems' => $popItemArray,
             'distributors' => $distributors,
             'retailers' => $retailers,
             'users' => $users

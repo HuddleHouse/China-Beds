@@ -17,15 +17,20 @@
 {% block footer %}
     <script>
         var index = 1;
-
-        var warehouses = {{ warehouses | json_encode | raw }};
+        var subtotal = 0;
+        var total = 0;
         var products = {{ products | json_encode | raw }};
-
+        var popItems = {{ popItems | json_encode | raw }};
         var warehouse_opts = '{% for warehouse in warehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
+        var pop_warehouse_opts = '{% for warehouse in popWarehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
+        $('#products-warehouse-0').html(warehouse_opts);
+        $('#pop-warehouse-0').html(pop_warehouse_opts);
+
         $(document).ready(function () {
             $('#add_product').on('click', addProductHandler);
             $('#add_pop_item').on('click', addPopHandler);
             getProductOptions(0);
+            getPopOptions(0);
         });
 
         function getProductOptions(index) {
@@ -45,13 +50,49 @@
             }
         }
 
+        function getPopOptions(index) {
+            var wid = $('#pop-warehouse-'+index).val();
+            $('#pop-product-'+index).html('');
+            $.each(popItems[wid], function(key, val) {
+                $('#pop-product-'+index).append('<option value="' + key + '">' + val.product + '</option>');
+            });
+        }
+
+        function calculatePopSubtotal(index) {
+            var qty = $('#pop-qty-'+ index).val();
+            var unit_cost = $('#pop-unit_cost-'+ index).val();
+            if(qty != '' && unit_cost != '') {
+                $('#pop-subtotal-'+ index).val((qty*unit_cost).toFixed(2));
+                calculateSubtotal();
+            }
+        }
+
         function calculateSubtotal() {
-            var subtotal = 0;
+            subtotal = 0;
             $.each($("#product-table tr td:nth-child(5) div input"), function(key, value) {
                 subtotal += Number($(value).val());
             });
-
+            $.each($("#pop-table tr td:nth-child(5) div input"), function(key, value) {
+                subtotal += Number($(value).val());
+            });
             $('#subtotal').html(subtotal.toFixed(2));
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            total = 0;
+            if($('#isPickup').val() == 'true') {
+                total = Number(subtotal);
+            }
+            else {
+                if($('#isFedex').val() == 'true') {
+                    total += Number($('#fedex_cost').val());
+                }
+                else {
+                    total += Number($('#other_shipping_cost').val());
+                }
+            }
+            $('#total').html(total.toFixed(2));
         }
 
         function addProductHandler() {
@@ -82,10 +123,10 @@
             $('#pop-table tr:last').remove();
             $('#pop-table').append(
                     '<tr id="pop-'+ index + '">' +
-                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]">' + warehouse_opts + '</select></td>' +
+                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]" onchange="getPopOptions('+ index + ')">' + pop_warehouse_opts + '</select></td>' +
                     '<td><select class="form-control" id="pop-product-'+ index + '" name="pop['+ index + '][product]"></select></td>' +
-                    '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00"></td>' +
-                    '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]"></td>' +
+                    '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal('+ index + ')"></td>' +
+                    '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]" onchange="calculatePopSubtotal('+ index + ')"></td>' +
                     '<td><input type="text" class="form-control" id="pop-subtotal-'+ index + '" name="pop['+ index + '][subtotal]" placeholder="0.00"></td>' +
                     '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
                     '</tr>' +
@@ -93,6 +134,7 @@
                     '<td colspan="6" style="text-align:center"><a id="add_product" onclick="addPopHandler()" class="stretch">Add Another Pop Item</a></td>' +
                     '</tr>'
             );
+            getPopOptions(index);
             $.material.init();
             index++;
         }
@@ -188,29 +230,15 @@
             $scope.cart = [];
             $scope.payment_type = '';
             $scope.cc = {};
-            {#$scope.ledgerTotal = {{ user.getLedgerTotal }};#}
             $scope.cart_total = 0.00;
-            $scope.is_paid = 0
-            {#{{ is_paid }}#}
-            ;
+            $scope.is_paid = 0;
             $scope.admin_paid = 0;
             self.users = {{ users | json_encode | raw }};
-
-            {#{% if order.status.name == 'Pending' %}#}
-            {#$scope.admin_paid = 1;#}
-            {#{% endif %}#}
 
             $scope.isPickup = false;
             $scope.isFedex = true;
             $scope.min_date = new Date();
             $scope.user = null;
-
-            {#$(document).ready(function () {#}
-            {#if ($scope.is_paid == 1) {#}
-            {#$('#payment-type').val('{{ order.paymentType }}');#}
-            {#}#}
-            {#console.log("{{ is_paid }}");#}
-            {#});#}
 
             $scope.populateUserInfo = function() {
                 var user = self.users[$scope.user];
@@ -290,33 +318,6 @@
                     {#}#}
                     {#});#}
                 }
-            };
-
-
-            //not
-            $scope.updateCart = function (variantId, cost, max) {
-                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
-                    $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
-                }
-                else {
-                    $scope.cart[variantId] = {
-                        variant_id: variantId,
-                        quantity: $scope.product_variant_order_quan[variantId],
-                        cost: cost
-                    };
-                }
-                if($scope.product_variant_order_quan[variantId] > max) {
-                    $('#'+variantId).addClass('error');
-                    $('#submit-button').prop('disabled', true);
-                    $('#submit-button').addClass('button-error');
-                    console.log('error');
-                }
-                else {
-                    $('#'+variantId).removeClass('error', 300);
-                    $('#submit-button').prop('disabled', false);
-                    $('#submit-button').removeClass('button-error');
-                }
-                $scope.calculateCart();
             };
         }]);
     </script>
@@ -408,7 +409,6 @@
     <form id="form">
         <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
             <div class="table"  style="min-height: 100vh;">
-                {#{% if order.status.name == 'Draft' %}#}
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="color-block">
@@ -417,27 +417,14 @@
                     </div>
                     <!-- /.col -->
                 </div>
-                {#{% elseif order.status.name == 'Paid' %}#}
-                {#<div class="row">#}
-                {#<div class="col-xs-12">#}
-                {#<div class="color-block-paid">#}
-                {#Order Placed#}
-                {#</div>#}
-                {#</div>#}
-                {#<!-- /.col -->#}
-                {#</div>#}
-                {#{% endif %}#}
                 <div class="row" style="margin-top: 20px;">
                     <div class="col-xs-12">
                         <h2 class="page-header" style="margin-bottom: -30px!important;">
                             <div class="pull-right">Date: {{ 'now' | date('m/d/y') }}</div>
-                            {#<div class="pull-right">Date: {{ order.submitDate | date }}</div>#}
-                            <span class="mdl-chip mdl-chip--contact" >
-                            {#<span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>#}
+                            <span class="mdl-chip mdl-chip--contact">
                                 <span class="mdl-chip__contact mdl-color-text--white" style="background-color: #FB8C00;">D</span>
                             <span class="mdl-chip__text">
                                 Draft
-                                {#{{ order.status.name }}#}
                             </span>
                         </span>
                         </h2>
@@ -455,13 +442,13 @@
                     <div class="col-md-2 invoice-col">
                         <div class="radio">
                             <label class="not-dumb">
-                                <input type="radio" id="isPickup" name="isPickup" ng-value="false" value="false" ng-model="isPickup" checked>
+                                <input type="radio" id="isPickup" name="isPickup" ng-value="false" value="false" ng-model="isPickup" onclick="calculateTotal()" checked>
                                 Ship
                             </label>
                         </div>
                         <div class="radio">
                             <label class="not-dumb">
-                                <input type="radio" id="isPickup" name="isPickup" ng-value="true" value="true" ng-model="isPickup">
+                                <input type="radio" id="isPickup" name="isPickup" ng-value="true" value="true" ng-model="isPickup" onclick="calculateTotal()">
                                 For Pickup
                             </label>
                         </div>
@@ -494,8 +481,6 @@
                             <label for="containerNumber" class="control-label">Container #</label>
                             <input type="text" class="form-control" id="containerNumber" name="containerNumber" ng-model="containerNumber">
                         </div>
-                        {#<b>PO #{{ order.orderNumber }}</b><br>#}
-                        {#<br>#}
                     </div>
                     <div id="pickup-info" class="col-md-3 invoice-col move-up" ng-show="isPickup">
                         <div class="form-group label-floating">
@@ -560,13 +545,8 @@
                             </thead>
                             <tbody>
                             <tr id="product-0">
-                                <td><select class="form-control" id="products-warehouse-0" name="products[0][warehouse]" onchange="getProductOptions(0)">
-                                        {% for warehouse in warehouses %}
-                                            <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
-                                        {% endfor %}
-                                    </select></td>
-                                <td><select class="form-control" id="products-product-0" name="products[0][product]">
-                                    </select></td>
+                                <td><select class="form-control" id="products-warehouse-0" name="products[0][warehouse]" onchange="getProductOptions(0)"></select></td>
+                                <td><select class="form-control" id="products-product-0" name="products[0][product]"></select></td>
                                 <td><input type="text" class="form-control" id="products-unit_cost-0" name="products[0][unit_cost]" placeholder="0.00" onchange="calculateProductSubtotal(0)"></td>
                                 <td><input type="number" class="form-control" id="products-qty-0" name="products[0][qty]" onchange="calculateProductSubtotal(0)"></td>
                                 <td><input type="text" class="form-control" id="products-subtotal-0" name="products[0][subtotal]" placeholder="0.00"></td>
@@ -598,19 +578,10 @@
                             </thead>
                             <tbody>
                             <tr id="pop-0">
-                                <td><input type="number" class="form-control" id="pop-qty-0" name="pop[0][qty]"></td>
-                                <td><select class="form-control" id="pop-warehouse-0" name="pop[0][warehouse]">
-                                        {#{% for warehouse in warehouses %}#}
-                                        {#<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>#}
-                                        {#{% endfor %}#}
-                                    </select></td>
-                                <td><select class="form-control" id="pop-pop-0" name="pop[0][product]">
-                                        {#{% for product in warehouses[0].inventory %}#}
-                                        {#&#123;&#35;{{ dump(product) }}&#35;&#125;#}
-                                        {#&#123;&#35;<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>&#35;&#125;#}
-                                        {#{% endfor %}#}
-                                    </select></td>
-                                <td><input type="text" class="form-control" id="pop-unit_cost-0" name="pop[0][unit_cost]" placeholder="0.00"></td>
+                                <td><select class="form-control" id="pop-warehouse-0" name="pop[0][warehouse]" onchange="getPopOptions(0)"></select></td>
+                                <td><select class="form-control" id="pop-product-0" name="pop[0][product]"></select></td>
+                                <td><input type="text" class="form-control" id="pop-unit_cost-0" name="pop[0][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal(0)"></td>
+                                <td><input type="number" class="form-control" id="pop-qty-0" name="pop[0][qty]" onchange="calculatePopSubtotal(0)"></td>
                                 <td><input type="text" class="form-control" id="pop-subtotal-0" name="pop[0][subtotal]" placeholder="0.00"></td>
                                 <td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
                             </tr>
@@ -627,152 +598,38 @@
                 <div class="row" style="padding-top: 40px;">
                     <!-- accepted payments column -->
                     <div class="col-md-6">
-                        <fieldset style="margin-top: 20px;margin-bottom: 50px;" ng-show="is_admin == 0">
-                            <legend>Payment</legend>
-                            <div id="payment" class="form-group" style="margin-top: 0px;">
-                                <label for="payment-type">Payment Type</label>
-                                <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" ng-disabled="is_paid == 1" required>
-                                    <option value="cc">Pay with a Credit Card</option>
-                                    {% if app.user.hasLedger %}
-                                        <option value="ledger">Ledger</option>
-                                    {% endif %}
-                                </select>
-                            </div>
-                            <div id="cc" style="display: none;">
-                                <div id="cc-name" class="form-group">
-                                    <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" ng-model="cc['name']" name="card-holder-name" id="card-holder-name" placeholder="Card Holder's Name">
-                                    </div>
-                                </div>
-                                <div id="cc-number" class="form-group">
-                                    <label class="col-sm-3 control-label" for="card-number">Card Number</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" ng-model="cc['number']" name="card-number" id="card-number" placeholder="Debit/Credit Card Number">
-                                    </div>
-                                </div>
-                                <div id="cc-date" class="form-group">
-                                    <label class="col-sm-3 control-label" for="expiry-month">Expiration Date</label>
-                                    <div class="col-sm-9">
-                                        <div class="row">
-                                            <div class="col-xs-3">
-                                                <select class="form-control col-sm-2" ng-model="cc['expiry-month']" name="expiry-month" id="expiry-month">
-                                                    <option selected value="">Month</option>
-                                                    <option value="01">Jan (01)</option>
-                                                    <option value="02">Feb (02)</option>
-                                                    <option value="03">Mar (03)</option>
-                                                    <option value="04">Apr (04)</option>
-                                                    <option value="05">May (05)</option>
-                                                    <option value="06">June (06)</option>
-                                                    <option value="07">July (07)</option>
-                                                    <option value="08">Aug (08)</option>
-                                                    <option value="09">Sep (09)</option>
-                                                    <option value="10">Oct (10)</option>
-                                                    <option value="11">Nov (11)</option>
-                                                    <option value="12">Dec (12)</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-xs-3">
-                                                <select class="form-control" name="expiry-year" ng-model="cc['expiry-year']">
-                                                    <option selected value="">Year</option>
-                                                    <option value="13">2013</option>
-                                                    <option value="14">2014</option>
-                                                    <option value="15">2015</option>
-                                                    <option value="16">2016</option>
-                                                    <option value="17">2017</option>
-                                                    <option value="18">2018</option>
-                                                    <option value="19">2019</option>
-                                                    <option value="20">2020</option>
-                                                    <option value="21">2021</option>
-                                                    <option value="22">2022</option>
-                                                    <option value="23">2023</option>
-                                                    <option value="24">2024</option>
-                                                    <option value="25">2025</option>
-                                                    <option value="26">2026</option>
-                                                    <option value="27">2027</option>
-                                                    <option value="28">2028</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="cc-cvv" class="form-group">
-                                    <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control" ng-model="cc['cvv']" name="cvv" id="cvv" placeholder="Security Code">
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
                         <h5 style="margin: -14px 0 16px;">Comments</h5>
-                        <textarea class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 140px; width: 100%" ng-model="comments"></textarea>
+                        <textarea name="comments" id="comments" class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 140px; width: 100%" ng-model="comments"></textarea>
                     </div>
                     <div class="col-md-6">
-                        {#{% if order.status.name == 'Paid' or order.status.name == 'Shipped' %}#}
-                        {#<h4>Shipping Info/Tracking Numbers</h4>#}
-                        {#<ul>#}
-                        {#{% for label in order.shippingLabels %}#}
-                        {#<li>Tracking:#}
-                        {#<a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">#}
-                        {#{{ label.trackingNumber }}#}
-                        {#</a>#}
-                        {#{% if is_granted('ROLE_ADMIN') ==1  %}#}
-                        {#-#}
-                        {#<a class="btn btn-raised btn-default btn-sm" href="/{{ label.webPath }}" download>#}
-                        {#<i class="fa fa-download" aria-hidden="true"></i>#}
-                        {#Download Label#}
-                        {#</a>#}
-                        {#{% endif %}#}
-                        {#</li>#}
-
-                        {#{% endfor %}#}
-                        {#</ul>#}
-                        {#{% endif %}#}
-
-
-                        {#{% if order.isPickUp == 0 and is_granted('ROLE_ADMIN') == 0 and is_granted('ROLE_SALES_MANAGER') == 0 and is_granted('ROLE_SALES_REP') == 0 %}#}
-                        {#{% if order.status.name != 'Paid' %}#}
-                        {#<label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>#}
-                        {#{% endif %}#}
-                        {#{% elseif order.isPickUp == 1 %}#}
-                        {#{% endif %}#}
                         <div class="table-responsive">
                             <table class="table">
                                 <tbody>
                                 <tr>
                                     <th>Subtotal:</th>
                                     <td>$<span id="subtotal">0.00</span></td>
-                                    {#<td>${{ order.getSubTotal | number_format(2, '.', ',') }}</td>#}
                                 </tr>
-                                {#<tr>#}
-                                {#<th>Tax (9.3%)</th>#}
-                                {#<td>$0.00</td>#}
-                                {#</tr>#}
                                 <tr ng-show="!isPickup">
-                                    {#<th>Shipping: {{ order.getShipDescription }}</th>#}
                                     <th><div class="radio">
                                             <label class="not-dumb">
-                                                <input type="radio" id="isFedex" name="isFedex" ng-value="true" value="true" ng-model="isFedex" checked>
+                                                <input type="radio" id="isFedex" name="isFedex" ng-value="true" value="true" ng-model="isFedex" onclick="calculateTotal()" checked>
                                                 Shipping: Fedex
                                             </label>
                                         </div></th>
-                                    <td><input type="text" class="form-control" id="fedex_cost" name="fedex_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;"></td>
-                                    {#<td>${{ order.getShipping | number_format(2, '.', ',') }}</td>#}
+                                    <td><input type="text" class="form-control" id="fedex_cost" name="fedex_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;" onchange="calculateTotal()"></td>
                                 </tr>
                                 <tr ng-show="!isPickup">
                                     <th><div class="radio">
                                             <label class="not-dumb">
-                                                <input type="radio" id="isFedex" name="isFedex" ng-value="false" value="false" ng-model="isFedex" checked>
+                                                <input type="radio" id="isFedex" name="isFedex" ng-value="false" value="false" ng-model="isFedex" onclick="calculateTotal()" checked>
                                                 Shipping: OTHER
                                             </label>
                                         </div></th>
-                                    <td><input type="text" class="form-control" id="other_shipping_cost" name="other_shipping_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;"></td>
-                                    {#<td>${{ order.getShipping | number_format(2, '.', ',') }}</td>#}
+                                    <td><input type="text" class="form-control" id="other_shipping_cost" name="other_shipping_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;" onchange="calculateTotal()"></td>
                                 </tr>
                                 <tr>
                                     <th>Total:</th>
                                     <td>$<span id="total">0.00</span></td>
-                                    {#<td>${{ order.getTotal | number_format(2, '.', ',') }}</td>#}
                                 </tr>
                                 </tbody>
                             </table>
@@ -808,6 +665,4 @@
             </div>
         </div>
     </form>
-
-
 {% endblock %}
