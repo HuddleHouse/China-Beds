@@ -29,6 +29,7 @@
                     <thead>
                     <tr>
                         <th>Order #</th>
+                        <th>Date</th>
                         <th>Status</th>
                         <th>Warehouse</th>
                         <th style="width: 150px;">Actions</th>
@@ -38,6 +39,7 @@
                     {% for stockAdjustment in stockAdjustments %}
                         <tr>
                             <td><a href="{{ path('stockadjustment_show', { 'id': stockAdjustment.id }) }}">{{ stockAdjustment.orderNumber }}</a></td>
+                            <td>{{ stockAdjustment.date|date("m/d/Y") }}</td>
                             <td>
                                 <span class="mdl-chip mdl-chip--contact" >
                                     <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ stockAdjustment.status.color }};">{{ stockAdjustment.status.nameFirstLetter }}</span>
@@ -58,10 +60,12 @@
         </div>
     </div>
 
+{% if isGrantedRoute(app.user, 'stockadjustment_new') %}
     <a id="new-button" href="{{ path('stockadjustment_new') }}" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons">add</i>
     </a>
     <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
         Adjust Stock
     </div>
+{% endif %}
 {% endblock %}

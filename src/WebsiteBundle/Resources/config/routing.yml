@@ -43,6 +43,15 @@ web_warranty:
 web_terms:
     path: /mlily-advertising-policy-terms-and-conditions
     defaults: { _controller: WebsiteBundle:Website:termsIndex }
+
+fix_fedex:
+    path: /model/fedex_label/img/{filename}
+    defaults: { _controller: WebsiteBundle:Website:fixFedex }
+
 api_submit_contact_form:
     path: /api/api_submit_contact_form
     defaults: {_controller: AppBundle:API/Website:submitContactForm }
+
+api_front_retailer_form:
+    path: /api/api_front_retailer_form
+    defaults: { _controller: WebsiteBundle:API/Website:retailerForm }

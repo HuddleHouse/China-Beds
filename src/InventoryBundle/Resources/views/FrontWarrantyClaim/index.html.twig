@@ -1,0 +1,122 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Warranty Claim{% endblock %}
+{% block page_title %}
+    Warranty Claim
+{% endblock page_title %}
+
+{% block page_name %}
+    Listings
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function (oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                    }
+                }, order: [[2, "desc"]]
+            });
+            $('#claimModal').on('hidden.bs.modal', function (e) {
+                $('#claim-modal-content').addClass('expand');
+                $('#claim-modal-body').html('');
+            });
+        });
+
+        function spinModal(id) {
+            var target = document.getElementById(id);
+            var spinner = new Spinner(opts).spin(target);
+            target.appendChild(spinner.el);
+        }
+
+
+        function showModal(id){
+            $('#claimModal').modal('show');
+            spinModal('claim-modal-content');
+            $.ajax({
+                type: 'POST',
+                url: "{{ path('show_front_warranty_claim') }}",
+                dataType: 'json',
+                data: { claim_id: id },
+                success: function (data) {
+                    //console.log(JSON.stringify(data,null,4));
+                    $('.spinner').hide();
+                    if(!data[0]) {
+                        $('#claimModal').modal('hide');
+                        showErrorModal('Error: ' + data[1]);
+                    }
+                    else {
+                        $('#claim-modal-content').removeClass('expand');
+                        $('#claim-modal-body').html(data[1]);
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Warranty ID</th>
+                        <th>Submitted By</th>
+                        <th>Date of Claim</th>
+                        <th>Product</th>
+                        <th>Channel</th>
+                        <th>Archived</th>
+                        <th>Resolution</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if id == 1 %}
+                        {% set channel = 'mlily' %}
+                    {% elseif id == 2 %}
+                        {% set channel = 'bedboss' %}
+                    {% endif %}
+                    {% for claim in fwc %}
+
+                        {% if claim.channel == channel %}
+                        <tr>
+                            <td>{{ claim.id }}</td>
+                            <td>{{ claim.name }}</td>
+                            <td>{{ claim.dateOfClaim | date("m/d/Y")}}</td>
+                            <td>{{ claim.mattressModel }} {{ claim.mattressSize }}</td>
+                            <td>{{ claim.channel }}</td>
+                            <td>{% if claim.archived == 1 %}Yes{% else %}No{% endif %}</td>
+                            <td>{{ claim.resolution }}</td>
+                            <td><input type="button" value="show" class="btn btn-raised btn-default btn-xs purple" onclick="showModal({{ claim.id }})">
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="claimModal" tabindex="-1" role="dialog" aria-labelledby="claimModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content expand" id="claim-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="claimModalLabel">Approve/Deny Warranty Claim</h4>
+                </div>
+                <div id="claim-modal-body" class="modal-body" style="overflow: auto; max-height: 70vh">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

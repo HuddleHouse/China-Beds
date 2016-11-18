@@ -31,10 +31,9 @@
             $scope.cart = [];
             $scope.form_info = {};
             $scope.form_info.pick_up_date = new Date();
-            $scope.future_pick_up_date = new Date({{ order.pickUpDate | date('Y,m,d')}});
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
-            $scope.payment_type = '';
+            $scope.payment_type = 'cc';
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
@@ -53,11 +52,6 @@
             });
 
             $scope.changePayment = function () {
-                console.log($scope.payment_type);
-                if($scope.payment_type == 'cc')
-                    $('#cc').show();
-                else
-                    $('#cc').hide();
             };
 
             $scope.formValidate = function (type) {
@@ -96,7 +90,7 @@
 
                 if(count > 0)
                     showErrorModal('Please fix the form errors.');
-                else if ($scope.cart_total > $scope.ledgerTotal)
+                else if ($scope.cart_total > $scope.ledgerTotal && $scope.payment_type != 'cc')
                     showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
                 else {
                     showSpinner();
@@ -392,7 +386,7 @@
                                 {% endif %}
                             </select>
                         </div>
-                        <div id="cc" style="display: none;">
+                        <div id="cc" ng-show="payment_type=='cc'">
                             <div id="cc-name" class="form-group">
                                 <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
                                 <div class="col-sm-9">
@@ -484,16 +478,6 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-
-
-                    {% if order.isPickUp == 0 and is_granted('ROLE_ADMIN') == 0 and is_granted('ROLE_SALES_MANAGER') == 0 and is_granted('ROLE_SALES_REP') == 0 %}
-                        {% if order.status.name != 'Paid' %}
-                            <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
-                        {% endif %}
-                    {% elseif order.isPickUp == 1 %}
-                    <label class="control-label" for="pick_up_date">Future Pick Up Date *</label>
-                    <md-datepicker ng-model="future_pick_up_date" ></md-datepicker>
-                    {% endif %}
                     <div class="table-responsive" style="margin-top: 46px;">
                         <table class="table">
                             <tbody>
@@ -528,7 +512,7 @@
                     <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Submit Order for User
                     </button>
-                    <button type="button" ng-show="is_paid == 0 && is_admin == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                    <button type="button" ng-show="is_paid == 0 && is_admin == 0 && payment_type" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Complete Order
                     </button>
                     <a ng-show="is_paid == 0 && admin_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">

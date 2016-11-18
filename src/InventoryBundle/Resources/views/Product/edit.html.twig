@@ -149,6 +149,16 @@
                     }
                 });
             };
+            $scope.updateProductImageAsDetail = function (image_id) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_set_product_image_as_detail') }}",
+                    dataType: 'json',
+                    data: {'id': image_id},
+                    success: function (data) {
+                    }
+                });
+            };
 
             $scope.getAllSpecValue = function () {
 

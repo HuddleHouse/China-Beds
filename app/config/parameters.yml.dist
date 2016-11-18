@@ -14,13 +14,20 @@ parameters:
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
+    mailer_port:       587 # different ports are available, see SES console
+    mailer_encryption: tls # TLS encryption is required
 
-    default_distributor:
-    default_sales_rep:
-    default_sales_manager:
+    default_distributor: 1
+    default_sales_rep: 1
+    default_sales_manager: 1
+
+    warehouse_1: 1
+    warehouse_2: 2
+    warehouse_3: 3
 
     authorize_login_id: 3845HahjteBH
     authorize_tansaction_key: 69872hkT4b7WnQVt
+    authorize_test_mode: 1
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
@@ -33,3 +40,5 @@ parameters:
     nacha.prod.pass:    nacha_prod_pass
 
     channel_upload_directory: '%kernel.root_dir%/../web/uploads/websites'
+    pop_upload_directory: '%kernel.root_dir%/../web/uploads/documents/'
+    retailer_recaptcha_secret: 6LcNZAsUAAAAAExNNxEAqidcHy5oWFZ2DOmFqsd7

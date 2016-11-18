@@ -16,11 +16,12 @@
 
 {% block footer %}
     <script>
+        var buttonGroup = $( buttonGroup );
         $(document).ready(function () {
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
-            buttonGroup.find('.is-checked').removeClass('is-checked');
+            $('.button-group').find('.is-checked').removeClass('is-checked');
             $( this ).addClass('is-checked');
 
             var grid = $('.grid').isotope({
@@ -52,9 +53,8 @@
             });
             // change is-checked class on buttons
             $('.button-group').each( function( i, buttonGroup ) {
-                var buttonGroup = $( buttonGroup );
-                buttonGroup.on( 'click', 'button', function() {
-                    buttonGroup.find('.is-checked').removeClass('is-checked');
+                $(buttonGroup).on( 'click', 'button', function() {
+                    $(buttonGroup).find('.is-checked').removeClass('is-checked');
                     $( this ).addClass('is-checked');
                 });
             });
@@ -370,6 +370,7 @@
                             $scope.$apply(function () {
                                 var po = $scope.form_info['po'];
                                 $scope.form_info = data;
+                                $scope.products = data.products;
                                 $('#state').val(data['state']);
                                 $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
@@ -810,7 +811,7 @@
         </div>
         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
         <div class="row" style="margin-bottom: 30px;" >
-            <div class="col-md-10" >
+            <div class="col-md-12" >
                 <div class="table-responsive" ng-show="hasCustomItem == 1">
                     <table class="table no-margin">
                         <thead>
@@ -840,9 +841,6 @@
 
                     </table>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <button ng-click="addCustomItem()" class="btn btn-raised btn-sm btn-default btn-flat pull-right">Add Custom Item<div class="ripple-container"></div></button>
             </div>
         </div>
         {% endif %}
@@ -923,7 +921,7 @@
                                                onclick="this.select()"
                                                ng-model="pop_order_quan[ item.id ]"
                                                ng-init="pop_order_quan[ item.id ] = 0"
-                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, {{item.inventory}}, '{{item.type}}')"
+                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, 999, '{{item.type}}')"
                                         >
                                 <div class="pop_price" style="text-align: center; padding-bottom:10px;">{{item.cost | currency}}</div>
                             </div>

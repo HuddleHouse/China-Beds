@@ -393,16 +393,6 @@ class ChannelController extends Controller
                     $channel->setRetailFourthPic($retailFourthPicName);
                 }
 
-                $detailMattressFooter = $channel->getDetailMattressFooter();
-                if($detailMattressFooter != NULL && $detailMattressFooter != ''){
-                    $detailMattressFooterName = md5(uniqid()). '.' . $detailMattressFooter->guessExtension();
-                    $detailMattressFooter->move(
-                        $this->getParameter('channel_upload_directory'),
-                        $detailMattressFooterName
-                    );
-                    $channel->setRetailFourthPic($detailMattressFooterName);
-                }
-
                 $em->persist($channel);
                 $em->flush();
 
@@ -845,22 +835,22 @@ class ChannelController extends Controller
                     $channel->setRetailFourthPic($channel_clone->getRetailFourthPic());
                 }
 
-                $detailMattressFooter = $channel->getDetailMattressFooter();
-                if($detailMattressFooter != NULL && $detailMattressFooter != ''){
-                    $detailMattressFooterName = md5(uniqid()). '.' . $detailMattressFooter->guessExtension();
-                    $detailMattressFooter->move(
-                        $this->getParameter('channel_upload_directory'),
-                        $detailMattressFooterName
-                    );
-                    $channel->setDetailMattressFooter($detailMattressFooterName);
-                }
+//                $detailMattressFooter = $channel->getDetailMattressFooter();
+//                if($detailMattressFooter != NULL && $detailMattressFooter != ''){
+//                    $detailMattressFooterName = md5(uniqid()). '.' . $detailMattressFooter->guessExtension();
+//                    $detailMattressFooter->move(
+//                        $this->getParameter('channel_upload_directory'),
+//                        $detailMattressFooterName
+//                    );
+//                    $channel->setDetailMattressFooter($detailMattressFooterName);
+//                }
 
                 $em->persist($channel);
                 $em->flush();
 
                 $this->addFlash('notice', 'Channel updated successfully.');
 
-                return $this->redirectToRoute('admin_channel_edit', array('id' => $channel->getId()));
+                return $this->redirectToRoute('admin_channel_edit', array('id' => $channel->getId(), 'channel' => $channel));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating Channel: ' . $e->getMessage());

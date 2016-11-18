@@ -9,12 +9,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% verbatim %}
-                                <tr ng-repeat="(i, data) in pop_inventory_data track by $index">
+                    {% for data in pop_inventory %}
+                                <tr>
                                     <td>{{ data.name }}</td>
-                                    <td ng-model="data.quantity"><center>{{ data.quantity }}</center></td>
+                                    <td><center>{{ data.quantity }}</center></td>
                                 </tr>
-                    {% endverbatim %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -48,9 +48,9 @@
 
 </div>
 
-    <a id="new-pop-button" data-toggle="modal" data-target="#pop" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons">add</i>
-    </a>
-    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-pop-button">
-        Create a POP item.
-    </div>
+    {#<a id="new-pop-button" data-toggle="modal" data-target="#pop" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">#}
+        {#<i class="material-icons">add</i>#}
+    {#</a>#}
+    {#<div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-pop-button">#}
+        {#Create a POP item.#}
+    {#</div>#}

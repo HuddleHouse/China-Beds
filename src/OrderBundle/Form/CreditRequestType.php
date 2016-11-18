@@ -49,6 +49,19 @@ class CreditRequestType extends AbstractType
         $user = $this->tokenStorage->getToken();
 
         $builder
+//            ->add('submittedForUser', EntityType::class, array(
+//                    'class' => 'AppBundle\Entity\User',
+//                    'label' => 'On Behalf of',
+//                    'placeholder' => 'Select User Requesting Credit',
+//                    'choice_label' => function (User $user) {
+//                        return $user->getFullName();
+//                    },
+//                    'choices' => $this->usersRepository->findByUser($this->tokenStorage->getToken()->getUser()),
+//                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+//                    'required' => true
+//                )
+//            )
+
             ->add('amountRequested', MoneyType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onclick' => 'this.select()'),
                     'label' => 'Amount',
@@ -68,7 +81,7 @@ class CreditRequestType extends AbstractType
 //                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
 //                'label' => 'Phone',
 //            ))
-
+//
 //            ->add('email', EmailType::class, array(
 //                'required' => false,
 //                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
@@ -76,7 +89,8 @@ class CreditRequestType extends AbstractType
 //                'empty_data' => $this->tokenStorage->getToken()->getUser()->getEmail()
 //            ))
 
-            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false));
+//            ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'maxlength' => '255'), 'required' => false))
+        ;
     }
 
     /**

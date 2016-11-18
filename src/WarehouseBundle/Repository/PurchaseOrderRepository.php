@@ -1,6 +1,7 @@
 <?php
 
 namespace WarehouseBundle\Repository;
+use InventoryBundle\Entity\Channel;
 use WarehouseBundle\Entity\PurchaseOrder;
 use WarehouseBundle\Entity\Warehouse;
 
@@ -75,7 +76,8 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
 		left join status s
 			on s.id = p.status_id
 	where w.id = :warehouse_id 
-	and s.name = 'Active'");
+	and s.name = 'Active'
+	order by p.order_date desc");
         $statement->bindValue('warehouse_id', $warehouse->getId());
         $statement->execute();
         return $statement->fetchAll();
@@ -103,6 +105,15 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('po')
             ->andWhere('po.stockDueDate between :today and :tomorrow')
             ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByChannel(Channel $channel) {
+        $qb = $this->createQueryBuilder('po')
+            ->leftJoin('po.warehouse','w')
+            ->leftJoin('w.channels', 'c')
+            ->where('c IN (:channel)')
+            ->setParameter('channel', $channel);
         return $qb->getQuery()->getResult();
     }
 }

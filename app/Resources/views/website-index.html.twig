@@ -27,11 +27,14 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}"/>
 
     <![endif]-->
-    {#<link href="css/font-awesome.css" rel="stylesheet">#}
-    {#<link href="css/custom.css" rel="stylesheet">#}
-    {#<link href="css/responsive.css" rel="stylesheet">#}
     <script src="https://use.typekit.net/hkr5qzv.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <style>
+        .modal-content {
+            border-radius: 0!important;
+        }
+    </style>
 </head>
 <body>
 
@@ -52,11 +55,11 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="{{ path('website_homepage', {}) }}">
-                <img style="max-width: 140px;" src="{{ asset('uploads/websites/' ~ channel.frontLogo) }}" />
+                <img style="" src="{{ asset('uploads/websites/' ~ channel.frontLogo) }}" />
             </a>
             <div class="login-btn">
                 <ul>
-                    <li><a href="">Login</a></li>
+                    <li><a href="https://order.mlilyusa.com/login/form" target="_blank">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -66,6 +69,7 @@
                 <li><a href="{{ path('mattresses', {}) }}">MATTRESSES</a></li>
                 <li><a href="{{ path('pillows', {}) }}">PILLOWS</a></li>
                 <li><a href="{{ path('adjustables', {}) }}">ADJUSTABLE BEDS</a></li>
+                <li><a href="{{ path('web_contact', {}) }}">CONTACT US</a></li>
             </ul>
             <div class="regiter-head"><a href="{{ path('web_retailers', {}) }}"><img style="max-height: 80px;" src="{{ asset('images/web/RegisterButton@2x.png') }}" /></a></div>
         </div><!--/.nav-collapse -->

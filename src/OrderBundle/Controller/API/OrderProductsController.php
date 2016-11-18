@@ -3,6 +3,7 @@
 namespace OrderBundle\Controller\API;
 
 use AppBundle\Services\EmailService;
+use OrderBundle\Entity\OrderPayment;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersManualItem;
 use OrderBundle\Entity\OrdersPopItem;
@@ -129,19 +130,21 @@ class OrderProductsController extends Controller
         }
 
 
-        foreach($pop as $popitem) {
-            $quantity = 0;
-            if(isset($pop_order_quan[$popitem['id']]))
-                $quantity = $pop_order_quan[$popitem['id']];
-            if($quantity > 0) {
-                $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
-                $orders_pop_item = new OrdersPopItem();
-                $orders_pop_item->setOrder($order);
-                $orders_pop_item->setPrice($popitem['cost']);
-                $orders_pop_item->setQuantity($quantity);
-                $orders_pop_item->setPopItem($pop_item);
-                $em->persist($orders_pop_item);
-                $order->getPopItems()->add($orders_pop_item);
+        if($pop != null && !empty($pop)) {
+            foreach ($pop as $popitem) {
+                $quantity = 0;
+                if (isset($pop_order_quan[$popitem['id']]))
+                    $quantity = $pop_order_quan[$popitem['id']];
+                if ($quantity > 0) {
+                    $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
+                    $orders_pop_item = new OrdersPopItem();
+                    $orders_pop_item->setOrder($order);
+                    $orders_pop_item->setPrice($popitem['cost']);
+                    $orders_pop_item->setQuantity($quantity);
+                    $orders_pop_item->setPopItem($pop_item);
+                    $em->persist($orders_pop_item);
+                    $order->getPopItems()->add($orders_pop_item);
+                }
             }
         }
         $shipping = $this->calculateShipping($order);
@@ -167,24 +170,25 @@ class OrderProductsController extends Controller
             $manualCount++;
         }
 
-        $this->container->get('email_service')->sendOrderReceipt($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
-                'channel' => $channel,
-                'order' => $order,
-                'user' => $this->getUser(),
-                'product_data' => $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order),
-                'is_retail' => $is_retail,
-                'is_dis' => $is_dis,
-                'pop_items' => $pop,
-                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'manual_items' => $manualItems,
-                'manual_items_count' => $manualCount
-            )
-        ));
+//        $this->container->get('email_service')->sendOrderReceipt($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
+//                'channel' => $channel,
+//                'order' => $order,
+//                'user' => $this->getUser(),
+//                'product_data' => $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order),
+//                'is_retail' => $is_retail,
+//                'is_dis' => $is_dis,
+//                'pop_items' => $pop,
+//                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+//                'manual_items' => $manualItems,
+//                'manual_items_count' => $manualCount
+//            )
+//        ));
 
         $warehouses = array_unique($warehouses);
 
         foreach($warehouses as $warehouse_id) {
-            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $w);
+            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
             $is_shipped = false;
 
             foreach($product_data as $prod) {
@@ -199,17 +203,17 @@ class OrderProductsController extends Controller
                 $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
 
 
-            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
-            $this->container->get('email_service')->sendWarehouseOrderReceipt($channel, $w, $this->renderView('@Order/OrderProducts/order-email-receipt-warehouse.html.twig', array(
-                'channel' => $channel,
-                'order' => $order,
-                'product_data' => $product_data,
-                'is_retail' => $is_retail,
-                'is_dis' => $is_dis,
-                'pop_items' => $pop,
-                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'shipped_status' => $shipped_status
-            )));
+//            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+//            $this->container->get('email_service')->sendWarehouseOrderReceipt($channel, $w, $this->renderView('@Order/OrderProducts/order-email-receipt-warehouse.html.twig', array(
+//                'channel' => $channel,
+//                'order' => $order,
+//                'product_data' => $product_data,
+//                'is_retail' => $is_retail,
+//                'is_dis' => $is_dis,
+//                'pop_items' => $pop,
+//                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+//                'shipped_status' => $shipped_status
+//            )));
         }
 
         return JsonResponse::create($order->getId());
@@ -257,7 +261,6 @@ class OrderProductsController extends Controller
         else
             $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($channel, $user);
 
-
         return JsonResponse::create($product_data);
     }
 
@@ -279,7 +282,8 @@ class OrderProductsController extends Controller
             'state' => (string)$user->getState()->getId(),
             'zip' => $user->getZip(),
             'phone' => $user->getPhone(),
-            'email' => $user->getEmail()
+            'email' => $user->getEmail(),
+            'products' => $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user, null, null, 1)
             );
 
         return JsonResponse::create($data);
@@ -302,6 +306,10 @@ class OrderProductsController extends Controller
                 $rate->setParameter('toCode', $info->getWarehouse()->getZip());
 
                 $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+                if ( count($dimensions) == 1 ) {
+                    $dimensions = explode('X', $productVariant->getProductVariant()->getFedexDimensions());
+                }
+
                 $package = new \RocketShipIt\Package('fedex');
 
                 $package->setParameter('length', "$dimensions[0]");
@@ -340,41 +348,65 @@ class OrderProductsController extends Controller
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
         $type = $request->request->get('type');
 
+        $order_payment = new OrderPayment();
+        $order_payment->setAmount($order->getTotal());
+        $order->addOrderPayment($order_payment);
 
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
             $order = $this->generateShippingLabels($order);
-            $ledger_service = $this->get('order.ledger');
+            $ledger_service = $this->get('ledger.service');
             $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
+
+            $order_payment->setMethod('ledger');
+            $order_payment->setAmount($order->getTotal());
         }
-        else if($payment_type == 'cc' && $type == 'complete') {
+        elseif($payment_type == 'cc' && $type == 'complete') {
             $order = $this->generateShippingLabels($order);
             $cc = $request->request->get('cc');
             $cc['amount'] = $order->getTotal();
+            $cc['order_id'] = $order->getId();
 
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
             $order->setAmountPaid($order->getTotal());
             // Charge CC here
 
             try {
-                $this->get('authorize.net')->chargeCreditCard($cc);
+                $result = $this->get('authorize.net')->chargeCreditCard($cc);
+                if ( $result['success'] ) {
+                    $order_payment->setMethod('cc');
+                    $order_payment->setGatewayAuthCode($result['auth_code']);
+                    $order_payment->setGatewayTransactionId($result['trans_id']);
+                    $order_payment->setDetail(substr($cc['number'], -4));
+                } else {
+                    JsonResponse::create(new \Exception($result['error_message']));
+                }
             }
             catch(\Exception $e) {
                 return JsonResponse::create($e);
             }
         }
         else if($type == 'admin' && $payment_type == '') {
+            $order = $this->generateShippingLabels($order);
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+            $order->removeOrderPayment($order_payment);
         }
+
+        $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
 
         $order->setStatus($status);
         $order->setPaymentType($payment_type);
         $em->persist($order);
         $em->flush();
 
-        $this->get('email_service')->sendOrderEmails($order);
+        try {
+            $this->get('email_service')->sendAdminOrderNotification($order);
+        } catch (\Exception $e) {
+            // @todo ignore for now.  Need to log
+        }
+
 
         return JsonResponse::create(true);
     }
@@ -398,80 +430,102 @@ class OrderProductsController extends Controller
         $count = 0;
 
         foreach($orders->getProductVariants() as $variant) {
-            foreach($variant->getWarehouseInfo() as $info) {
-                $count++;
-                $shipment = new \RocketShipIt\Shipment('fedex');
+            for($i=0;$i<$variant->getQuantity();$i++) {
+                foreach ($variant->getWarehouseInfo() as $info) {
+                    $count++;
+                    $shipment = new \RocketShipIt\Shipment('fedex');
 
-                $shipment->setParameter('toCompany', $orders->getShipName());
-                $shipment->setParameter('toName', $orders->getShipName());
-                $shipment->setParameter('toPhone', $orders->getShipPhone());
-                $shipment->setParameter('toAddr1', $orders->getShipAddress());
-                if($orders->getShipAddress2() != '')
-                    $shipment->setParameter('toAddr2', $orders->getShipAddress2());
-                $shipment->setParameter('toCity', $orders->getShipCity());
-                $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
-                $shipment->setParameter('toCode', $orders->getShipZip());
+                    $shipment->setParameter('toCompany', $orders->getShipName());
+                    $shipment->setParameter('toName', $orders->getShipName());
+                    $shipment->setParameter('toPhone', $orders->getShipPhone());
+                    $shipment->setParameter('toAddr1', $orders->getShipAddress());
+                    if ($orders->getShipAddress2() != '') {
+                        $shipment->setParameter('toAddr2', $orders->getShipAddress2());
+                    }
+                    $shipment->setParameter('toCity', $orders->getShipCity());
+                    $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
+                    $shipment->setParameter('toCode', $orders->getShipZip());
 
-                /*
-                 * THis needs to change once warehouses have addresses.
-                 *
-                 * They also need to add the fedex numbers of Distributors when applicable..
-                 */
-                $shipment->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
-                $shipment->setParameter('shipCity', $info->getWarehouse()->getCity());
-                $shipment->setParameter('shipState', $info->getWarehouse()->getState()->getAbbreviation());
-                $shipment->setParameter('shipCode', $info->getWarehouse()->getZip());
-                $shipment->setParameter('shipPhone', $info->getWarehouse()->getPhone());
+                    /*
+                     * THis needs to change once warehouses have addresses.
+                     *
+                     * They also need to add the fedex numbers of Distributors when applicable..
+                     */
+                    $shipment->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
+                    $shipment->setParameter('shipCity', $info->getWarehouse()->getCity());
+                    $shipment->setParameter('shipState', $info->getWarehouse()->getState()->getAbbreviation());
+                    $shipment->setParameter('shipCode', $info->getWarehouse()->getZip());
+                    $shipment->setParameter('shipPhone', $info->getWarehouse()->getPhone());
 
-                $shipment->setParameter('packageCount', $numProdVariants);
-                $shipment->setParameter('sequenceNumber', $count);
+                    $shipment->setParameter('packageCount', $numProdVariants);
+                    $shipment->setParameter('sequenceNumber', $count);
 
-                if($count != 1)
-                    $shipment->setParameter('shipmentIdentification', $shipmentId);
+                    if ($count != 1) {
+                        $shipment->setParameter('shipmentIdentification', $shipmentId);
+                    }
 
-                $dimensions = explode('x', $variant->getProductVariant()->getFedexDimensions());
+                    $dimensions = explode('x', $variant->getProductVariant()->getFedexDimensions());
+                    if (count($dimensions) == 1) {
+                        $dimensions = explode('X', $variant->getProductVariant()->getFedexDimensions());
+                    }
 
-                $shipment->setParameter('length', $dimensions[0]);
-                $shipment->setParameter('width', $dimensions[1]);
-                $shipment->setParameter('height', $dimensions[2]);
-                $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
+                    if (isset($dimensions[0])) {
+                        $shipment->setParameter('length', $dimensions[0]);
+                    }
+                    if (isset($dimensions[1])) {
+                        $shipment->setParameter('width', $dimensions[1]);
+                    }
+                    if (isset($dimensions[2])) {
+                        $shipment->setParameter('height', $dimensions[2]);
+                    }
+                    $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
 
 
-                if($orders->getSubmittedForUser()->getDistributorFedexNumber() != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != '') {
-                    $shipment->setParameter('paymentType', 'THIRD_PARTY');
-                    $shipment->setParameter('thirdPartyAccount', $orders->getSubmittedForUser()->getDistributorFedexNumber());
+                    if ($orders->getSubmittedForUser()->getDistributorFedexNumber(
+                        ) != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != ''
+                    ) {
+                        $shipment->setParameter('paymentType', 'THIRD_PARTY');
+                        $shipment->setParameter(
+                            'thirdPartyAccount',
+                            $orders->getSubmittedForUser()->getDistributorFedexNumber()
+                        );
+                    }
+
+                    $response = $shipment->submitShipment();
+
+                    if (isset($response['trk_main'])) {
+                        if ($count == 1) {
+                            $shipmentId = $response['trk_main'];
+                        }
+                    } else {
+                        return $orders;
+
+                    }
+
+                    foreach ($response['pkgs'] as $pkg) {
+                        $path = 'uploads/shipping/' . $pkg['pkg_trk_num'] . '.' . $pkg['label_fmt'];
+                        file_put_contents(
+                            $this->get('kernel')->getRootDir() . '/../web/' . $path,
+                            base64_decode($pkg['label_img'])
+                        );
+
+                        $orderShippingLabel = new OrdersShippingLabel();
+                        $orderShippingLabel->setPath($path);
+                        $orderShippingLabel->setOrder($orders);
+                        $orderShippingLabel->setTrackingNumber($pkg['pkg_trk_num']);
+
+                        $orders->addShippingLabel($orderShippingLabel);
+                        $variant->addShippingLabel($orderShippingLabel);
+                    }
+                    $em->persist($orders);
+
+                    if ($count == $numProdVariants) {
+                        $charges = $response['charges'];
+                        $orders->setEstimatedShipping($orders->getShipping());
+                        $orders->setShipping($charges);
+                    }
+
                 }
-
-                $response = $shipment->submitShipment();
-
-                if(isset($response['trk_main'])) {
-                    if($count == 1)
-                        $shipmentId = $response['trk_main'];
-                }
-                else {
-                    return $orders;
-
-                }
-
-
-                $path = 'uploads/shipping/'.$response['pkgs'][0]['pkg_trk_num'].'.png';
-                file_put_contents($path, base64_decode($response['pkgs'][0]['label_img']));
-
-                $orderShippingLabel = new OrdersShippingLabel();
-                $orderShippingLabel->setPath($path);
-                $orderShippingLabel->setOrder($orders);
-                $orderShippingLabel->setTrackingNumber($response['pkgs'][0]['pkg_trk_num']);
-                $em->persist($orderShippingLabel);
-
-                $orders->getShippingLabels()->add($orderShippingLabel);
-                $em->persist($orders);
-
-                if($count == $numProdVariants) {
-                    $charges = $response['charges'];
-                    $orders->setEstimatedShipping($orders->getShipping());
-                    $orders->setShipping($charges);
-                }
-
             }
         }
 

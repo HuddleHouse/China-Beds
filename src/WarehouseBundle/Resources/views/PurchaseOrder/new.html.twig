@@ -204,7 +204,15 @@
                             type: 'POST',
                             url: "{{ path('api_save_purchase_order') }}",
                             dataType: 'json',
-                            data: {cart: self.cart, due_date: self.due_date, message: self.message, status: draft, warehouse_id: $('#warehouse').val()},
+                            data: {
+                                cart: self.cart,
+                                due_date: self.due_date,
+                                message: self.message,
+                                status: draft,
+                                warehouse_id: $('#warehouse').val(),
+                                physical_container_number: self.physical_container_number,
+                                factory_order_number: self.factory_order_number
+                            },
                             success: function (data) {
                                 window.location.href = Routing.generate('purchaseorder_show', {id: data});
                             }
@@ -286,11 +294,18 @@
 
         <div class="table">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <h5>Stock Due-date <md-datepicker ng-model="ctrl.due_date" md-placeholder="Enter date"></md-datepicker></h5>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
+                    <h5>Order # <input type="text" class="form-control" ng-model="ctrl.factory_order_number" /> </h5>
+                </div>
+                <div class="col-md-2">
+                    <h5>Container # <input type="text" class="form-control" ng-model="ctrl.physical_container_number" /> </h5>
+                </div>
+                <div class="col-md-3">
                     <form id="warehouse-form">
+                        <h5>Warehouse
                         {% verbatim %}
                         <select class="form-control" id="warehouse" style="width: 100%;margin: 24px 0 16px;"
                             ng-model="ctrl.warehouse"
@@ -299,9 +314,10 @@
                             <option value="" disabled selected>Warehouse</option>
                         </select>
                         {% endverbatim %}
+                        </h5>
                     </form>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="" style="margin: 15px 20px 0;">
                         <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">SAVE</a>
                         <a class="btn btn-raised btn-default" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Draft')">SAVE DRAFT</a>
@@ -406,7 +422,7 @@
                 <div class="col-md-9">
                     <p class="text-muted well well-sm no-shadow" >
                         <label for="message">Comments</label>
-                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
+                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;" {% if is_granted('ROLE_WAREHOUSE') %}required{% endif %}></textarea>
                     </p>
 
                 </div>

@@ -25,6 +25,7 @@
                     $('#charNum').text(l);
                 }
             });
+            $('#warranty_claim_order').append($('<option>', {value:'', text:'None/Unknown'}));
         });
 
 
@@ -43,6 +44,26 @@
                 success: function (variants) {
                     el.html(variants);
                     if(variants != '<option>Select Order ID first</option>')
+                        el.prop('disabled', false);
+                }
+            });
+        }
+
+        function getOrders() {
+            $('#warranty_claim_productVariant').html('<option value=0>Select Order First</option>');
+            var el = $('#warranty_claim_order');
+            $.ajax({
+                beforeSend: function() {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_orders_from_user') }}",
+                dataType: 'json',
+                data: {user_id: $('#warranty_claim_user').val()},
+                success: function (orders) {
+                    el.html(orders);
+                    if(orders != '<option>Select User First</option>')
                         el.prop('disabled', false);
                 }
             });
@@ -74,9 +95,7 @@
             <div class="col-md-12">
                 <div class="alert alert-danger">
                     {{ form_errors(form.order) }}
-                    {{ form_errors(form.creditRequested) }}
-                    {{ form_errors(form.productVariant) }}
-                    {{ form_errors(form.description) }}
+                    {#{{ form_errors(form.creditRequested) }}#}
                 </div>
             </div>
         </div>
@@ -85,15 +104,16 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {#<div class="col-md-4 form-group">#}
-                    {#{{ form_label(form.creditRequested) }}#}
-                    {#{{ form_widget(form.creditRequested) }}#}
-                {#</div>#}
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.user) }}
+                    {{ form_widget(form.user) }}
+                </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(form.order) }} <i id="info-icon" class="fa fa-info-circle" aria-hidden="true" onclick="showInfoModal()"></i><div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="info-icon">If you don't know your Order ID, input relevant information in the comments</div>
                     {{ form_widget(form.order) }}
                 </div>
                 <div class="col-md-4 form-group">
+                    {{ form_errors(form.productVariant) }}
                     {{ form_label(form.productVariant) }}
                     {{ form_widget(form.productVariant) }}
                 </div>
@@ -145,6 +165,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
+                    {{ form_errors(form.description) }}
                     {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
                     {{ form_widget(form.description) }}
                 </div>

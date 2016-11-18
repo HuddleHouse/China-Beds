@@ -110,7 +110,6 @@ class PopItem
      */
     private $warehouse_pop_inventory_on_hold;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
      */
@@ -128,12 +127,19 @@ class PopItem
      */
     private $is_hide_on_order;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="pop_items")
+     * @ORM\JoinTable(name="pop_items_warehouses")
+     */
+    private $warehouses;
+
     public function __construct()
     {
         $this->warehouse_pop_inventory = new ArrayCollection();
         $this->warehouse_pop_inventory_on_hold = new ArrayCollection();
         $this->orders_pop_item = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -350,13 +356,14 @@ class PopItem
 
         // move takes the target directory and then the
         // target filename to move to
+        $newName = md5(date('Y-m-d H:i:s:u')) . $this->getFile()->getClientOriginalName();
         $this->getFile()->move(
             $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+            $newName
         );
 
         // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
+        $this->path = $newName;
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
@@ -621,5 +628,55 @@ class PopItem
     public function setPromoKitOrders($promo_kit_orders)
     {
         $this->promo_kit_orders = $promo_kit_orders;
+    }
+
+    /**
+     * Get promoKitAvailable
+     *
+     * @return boolean
+     */
+    public function getPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return PopItem
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getWarehouses()
+    {
+        return $this->warehouses;
+    }
+
+    /**
+     * @param mixed $warehouses
+     */
+    public function setWarehouses($warehouses)
+    {
+        $this->warehouses = $warehouses;
     }
 }

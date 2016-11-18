@@ -53,5 +53,7 @@
             </div>
         </div>
     </div>
+    {% if is_granted('ROLE_ADMIN') %}
     <button type="button" class="btn btn-raised btn-warning" style="margin-top:300px;" data-toggle="modal" data-target="#deleteModal" id="delete-prompt">Delete</button>
+    {% endif %}
 {% endblock %}

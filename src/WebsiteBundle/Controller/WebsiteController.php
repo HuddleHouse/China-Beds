@@ -2,8 +2,11 @@
 
 namespace WebsiteBundle\Controller;
 
+use InventoryBundle\Entity\FrontWarrantyClaim;
 use InventoryBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Request;
 
 class WebsiteController extends BaseController
 {
@@ -46,11 +49,58 @@ class WebsiteController extends BaseController
     }
 
 
-    public function warrantyIndexAction()
+    public function warrantyIndexAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $warranty = new FrontWarrantyClaim();
+
+        $form = $this->createForm('InventoryBundle\Form\FrontWarrantyClaimType', $warranty);
+        $form->handleRequest($request);
+
+
+
+        if($form->isSubmitted()) {
+            $errors = $form->getErrors(true);
+            if (0 !== count($errors)) {
+                $error_msg = 'The following errors have been encountered:\n';
+                foreach ($errors as $e) {
+                    $error_msg .= $e->getMessage() . '\n';
+                }
+                return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
+                    'site' => strtolower($this->getChannel()->getName()),
+                    'channel' => $this->getChannel(),
+                    'form' => $form->createView(),
+                    'submitted' => array(false, $error_msg)
+                ));
+            } elseif ($form->isValid()) {
+                //$warranty->setAddress($warranty->getAddress() . ' ' . $warranty->getCity() . ' ' . $warranty->getState() . ' ' . $warranty->getZip());
+                try {
+                    $warranty->uploadLawCopy();
+                    $warranty->uploadReceipt();
+                    $em->persist($warranty);
+                    $em->flush();
+                    return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
+                        'site' => strtolower($this->getChannel()->getName()),
+                        'channel' => $this->getChannel(),
+                        'form' => $form->createView(),
+                        'submitted' => array(true, '')
+                    ));
+                } catch (Exception $e) {
+                    return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
+                        'site' => strtolower($this->getChannel()->getName()),
+                        'channel' => $this->getChannel(),
+                        'form' => $form->createView(),
+                        'submitted' => array(false, $e)
+                    ));
+                }
+
+            }
+        }
+
         return $this->render('WebsiteBundle:Website:warranty.html.twig', array(
             'site' => strtolower($this->getChannel()->getName()),
-            'channel' => $this->getChannel()
+            'channel' => $this->getChannel(),
+            'form' => $form->createView(),
         ));
     }
 
@@ -117,5 +167,9 @@ class WebsiteController extends BaseController
             'adjustables' => $adjustables,
             'channel' => $this->getChannel()
         ));
+    }
+
+    public function fixFedexAction($filename) {
+        return $this->redirect(sprintf('https://order.mlilyusa.com/model/fedex_label/img/%s', $filename));
     }
 }

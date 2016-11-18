@@ -70,12 +70,13 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function findByChannels($channels = []) {
-        return $this->getEntityManager()
+        $result = $this->getEntityManager()
             ->createQuery(
                 'SELECT w FROM WarehouseBundle:Warehouse w LEFT JOIN w.channels c WHERE c IN (:channels)'
             )
             ->setParameter('channels', $channels)
             ->getResult();
+        return $result;
     }
 
     public function getAllWarehousesArray(Channel $channel = null) {

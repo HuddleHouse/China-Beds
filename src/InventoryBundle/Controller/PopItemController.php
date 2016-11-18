@@ -42,13 +42,14 @@ class PopItemController extends Controller
     public function newAction(Request $request)
     {
         $popItem = new PopItem();
+        $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+        $popItem->setChannel($channel);
         $form = $this->createForm('InventoryBundle\Form\PopItemType', $popItem);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
-            $popItem->setChannel($channel);
             $em = $this->getDoctrine()->getManager();
+            $popItem->upload();
             $em->persist($popItem);
             $em->flush();
             $this->addFlash('notice', 'POP Item created successfully.');

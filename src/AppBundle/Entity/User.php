@@ -348,16 +348,16 @@ class User extends BaseUser
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if($this->hasRole('ROLE_RETAILER')) {
-            $count = 0;
-            foreach($this->getUserChannels() as $channel)
-                $count++;
-            if ($count > 1) {
-                $context->buildViolation('A retailer can only be on one Channel.')
-                    ->atPath('user_channels')
-                    ->addViolation();
-            }
-        }
+//        if($this->hasRole('ROLE_RETAILER')) {
+//            $count = 0;
+//            foreach($this->getUserChannels() as $channel)
+//                $count++;
+//            if ($count > 1) {
+//                $context->buildViolation('A retailer can only be on one Channel.')
+//                    ->atPath('user_channels')
+//                    ->addViolation();
+//            }
+//        }
     }
 
 
@@ -466,7 +466,6 @@ class User extends BaseUser
         }
         return false;
     }
-
     /**
      * @return mixed
      */
@@ -600,7 +599,7 @@ class User extends BaseUser
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = preg_replace("/[^0-9,.]/", "", $phone);
     }
 
     /**
@@ -1726,5 +1725,22 @@ class User extends BaseUser
     public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
     {
         $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * Returns either company name or first/last name if company name is empty.
+     * @return mixed|string
+     */
+    public function getDisplayName() {
+        if ( empty($this->company_name) ) {
+            return $this->getName();
+        } else {
+            return $this->getCompanyName();
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
     }
 }

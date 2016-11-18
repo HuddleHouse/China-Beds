@@ -37,6 +37,9 @@ class PurchaseOrderController extends Controller
         $due_date = new \DateTime($request->request->get('due_date'));
         $message = $request->request->get('message');
         $warehouse_id = $request->request->get('warehouse_id');
+        $physical_container_number = $request->request->get('physical_container_number');
+        $factory_order_number = $request->request->get('factory_order_number');
+
         $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
 
         $purchase_order_id = $request->request->get('purchase_order_id');
@@ -49,6 +52,8 @@ class PurchaseOrderController extends Controller
         $purchase_order->setStockDueDate($due_date);
         $purchase_order->setMessage($message);
         $purchase_order->setStatus($status);
+        $purchase_order->setPhysicalContainerNumber($physical_container_number);
+        $purchase_order->setFactoryOrderNumber($factory_order_number);
 
         foreach($purchase_order->getProductvariants() as $variant) {
             $purchase_order->removeProductVariant($variant);
@@ -68,6 +73,7 @@ class PurchaseOrderController extends Controller
             $purchase_order_variant->setTotalQuantityAfter($item['total_quantity']);
             $purchase_order_variant->setWarehouseQuantityAfter($item['warehouse_quantity']);
             $purchase_order_variant->setOrderedQuantity($item['ordered_quantity']);
+//            $purchase_order_variant->setReceivedQuantity($item['received_quantity']);
             $em->persist($purchase_order_variant);
         }
         $em->persist($purchase_order);
@@ -253,7 +259,7 @@ class PurchaseOrderController extends Controller
         $variant_id = $request->request->get('product_variant_id');
         $em = $this->getDoctrine()->getManager();
         $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant_id);
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findByChannels($this->getUser()->getActiveChannel());
         $data = array();
 
         foreach($warehouses as $warehouse)

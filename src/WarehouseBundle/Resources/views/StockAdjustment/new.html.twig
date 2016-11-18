@@ -10,7 +10,7 @@
     {% if warehouse_id != 'none' %}
         <a href="{{ path('warehouse_show', { 'id': warehouse_id }) }}">< Back to Warehouse</a>
     {% else %}
-        <a href="{{ path('stockadjustment_index') }}">< Back to Stock Adjustments</a>
+        <a href="{{ path('stockadjustment_index') }}"> Back to Stock Adjustments</a>
     {% endif %}
 {% endblock page_name %}
 
@@ -41,7 +41,7 @@
                 self.repos         = loadAll();
                 self.querySearch   = querySearch;
                 self.selectedItemChange = selectedItemChange;
-                self.searchTextChange   = searchTextChange;
+                self.searchTextChange   = searchTextChange;Profile
                 self.warehouseChange = warehouseChange;
                 self.updateCartItem   = updateCartItem;
                 self.save = save;

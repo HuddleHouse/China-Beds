@@ -28,7 +28,7 @@
                         <div class="prod-slider">
                             {% set count = 0 %}
                             {% set path = '' %}
-                            {% for image in product.images %}
+                            {% for image in product.images(true) %}
                                 {% if count == 0 %}
                                     {% set path = image.webPath %}
                                     {% set count = 1 %}
@@ -79,9 +79,11 @@
                     </div>
                 </div>
             </div>
+            {% if product.detailImage %}
             <div class="product-struture">
-                <img src="{{ asset('uploads/websites/' ~ channel.detailMattressFooter) }}" />
+                <img src="/{{ product.detailImage.webPath }}" />
             </div>
+            {% endif %}
         </div>
     </div>
 {% endblock body %}

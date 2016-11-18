@@ -27,8 +27,21 @@ class WarehouseController extends Controller
      */
     public function indexAction()
     {
+        return $this->redirectToRoute('warehouse_channelled', ['channelName' => $this->getUser()->getActiveChannel()->getName()]);
         $em = $this->getDoctrine()->getManager();
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
+
+
+
+        if($this->getUser()->hasRole('ROLE_WAREHOUSE')) {
+            foreach($this->getUser()->getManagedWarehouses() as $warehouse) {
+                if ($warehouse->belongsToChannel($this->getUser()->getActiveChannel())) {
+                    $warehouses[] = $warehouse;
+                }
+            }
+        } else {
+            $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
+        }
+
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(
             'warehouses' => $warehouses,
@@ -52,13 +65,19 @@ class WarehouseController extends Controller
             $warehouses = array();
 
             foreach($warehouseEntities as $warehouse)
-                $warehouses[] = array(
-                    'id' => $warehouse->getId(),
-                    'name' => $warehouse->getName(),
-                    'list_id' => $warehouse->getListId(),
-                    'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory($warehouse),
-                    'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse)
-                );
+                if ( $warehouse->belongsToChannel($user->getActiveChannel()) ) {
+                    $warehouses[] = array(
+                        'id' => $warehouse->getId(),
+                        'name' => $warehouse->getName(),
+                        'list_id' => $warehouse->getListId(),
+                        'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory(
+                            $warehouse
+                        ),
+                        'po_quantity' => $em->getRepository(
+                            'WarehouseBundle:Warehouse'
+                        )->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                    );
+                }
         }
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(

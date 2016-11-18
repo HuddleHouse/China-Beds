@@ -5,12 +5,12 @@
     Warehouse
 {% endblock page_title %}
 
-{% block page_name %}
-    <a href="{{ path('warehouse_index') }}">< Back to the list</a>
-{% endblock page_name %}
+{#{% block page_name %}#}
+    {#<a href="{{ path('warehouse_index') }}">< Back to the list</a>#}
+{#{% endblock page_name %}#}
 
-{% block actions %}
-{% endblock actions %}
+{#{% block actions %}#}
+{#{% endblock actions %}#}
 
 {% block footer %}
     <script>
@@ -23,50 +23,50 @@
         });
 
 
-        var app = angular.module('myApp', ['ngFileUpload']);
-        app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
-            $scope.inventory_data = {{ inventory_data | json_encode | raw }};
-            $scope.pop_inventory_data = {{ pop_inventory | json_encode | raw }};
+        {#var app = angular.module('myApp', ['ngFileUpload']);#}
+        {#app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {#}
+            {#$scope.inventory_data = {{ inventory_data | json_encode | raw }};#}
+            {#$scope.pop_inventory_data = {{ pop_inventory | json_encode | raw }};#}
 
-            $scope.addInventory = function () {
-                var variant_id = $('#variant').val();
-                var quantity = $('#quantity').val();
+            {#$scope.addInventory = function () {#}
+                {#var variant_id = $('#variant').val();#}
+                {#var quantity = $('#quantity').val();#}
 
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ path('api_add_warehouse_inventory') }}",
-                    dataType: 'json',
-                    data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
-                    success: function (data) {
-                        $scope.$apply(function () {
-                            $scope.inventory_data = data['inventory'];
-                            $('#quantity').val('');
-                            $('#inventory-table').DataTable();
-                        });
-                    }
-                });
-            };
+                {#$.ajax({#}
+                    {#type: 'POST',#}
+                    {#url: "{{ path('api_add_warehouse_inventory') }}",#}
+                    {#dataType: 'json',#}
+                    {#data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },#}
+                    {#success: function (data) {#}
+                        {#$scope.$apply(function () {#}
+                            {#$scope.inventory_data = data['inventory'];#}
+                            {#$('#quantity').val('');#}
+                            {#$('#inventory-table').DataTable();#}
+                        {#});#}
+                    {#}#}
+                {#});#}
+            {#};#}
 
-            $scope.addPopInventory = function () {
-                var pop_id = $('#pop-select').val();
-                var quantity = $('#pop-quantity').val();
+            {#$scope.addPopInventory = function () {#}
+                {#var pop_id = $('#pop-select').val();#}
+                {#var quantity = $('#pop-quantity').val();#}
 
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ path('api_add_warehouse_pop_inventory') }}",
-                    dataType: 'json',
-                    data: {pop_id: pop_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
-                    success: function (data) {
-                        $scope.$apply(function () {
-                            $scope.pop_inventory_data = data['pop_inventory'];
-                            $('#pop-quantity').val('');
-                            $('#pop-inventory-table').DataTable();
-                        });
-                    }
-                });
-            };
+                {#$.ajax({#}
+                    {#type: 'POST',#}
+                    {#url: "{{ path('api_add_warehouse_pop_inventory') }}",#}
+                    {#dataType: 'json',#}
+                    {#data: {pop_id: pop_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },#}
+                    {#success: function (data) {#}
+                        {#$scope.$apply(function () {#}
+                            {#$scope.pop_inventory_data = data['pop_inventory'];#}
+                            {#$('#pop-quantity').val('');#}
+                            {#$('#pop-inventory-table').DataTable();#}
+                        {#});#}
+                    {#}#}
+                {#});#}
+            {#};#}
 
-        }]);
+        {#}]);#}
     </script>
 {% endblock footer %}
 
@@ -90,10 +90,18 @@
     <div class="row" style="margin-bottom: 25px;">
         <div class="col-md-12">
             <center>
+                {% if isGrantedRoute(app.user, 'warehouse_new_purchase_order') %}
                 <a href="{{ path('warehouse_new_purchase_order', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Purchase Order</a>
+                {% endif %}
+                {% if isGrantedRoute(app.user, 'warehouse_new_stock_adjustment') %}
                 <a href="{{ path('warehouse_new_stock_adjustment', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Adjustment</a>
+                {% endif %}
+                {% if isGrantedRoute(app.user, 'warehouse_new_stock_transfer') %}
                 <a href="{{ path('warehouse_new_stock_transfer', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Transfer</a>
+                {% endif %}
+                {% if isGrantedRoute(app.user, 'warehouse_edit') %}
                 <a href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}" class="btn btn-raised btn-warning">Edit Warehouse Info</a>
+                {% endif %}
             </center>
         </div>
     </div>

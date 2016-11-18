@@ -13,15 +13,47 @@ use WarehouseBundle\Entity\Warehouse;
 
 class EmailService extends BaseService
 {
+
+
+    /**
+     * Send admin order notification
+     *
+     * @param Orders $order
+     */
+    public function sendAdminOrderNotification(Orders $order) {
+        $body = $this->container->get('twig')->render(
+            '@App/Emails/admin-order-notification.html.twig',
+            ['order' => $order]
+        );
+
+        $this->sendEmail([
+            'subject'   => sprintf('%s Order #%s Received!', $order->getChannel()->getName(), $order->getOrderId()),
+            'from'      => $order->getChannel()->getFromEmailAddress(),
+            'to'        => 'jeremi@245tech.com',
+            'body'      => $body
+        ]);
+
+    }
+
+
+
+
+
+
+
     public function sendEmail($data)
     {
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
-            ->setFrom('matt@245tech.com')
+            ->setFrom($data['from'])
 //            ->setFrom($data['from'])
             //->setTo($data['to'])
-            ->setTo('mthuddleston@gmail.com')
+            ->setTo($data['to'])
             ->setBody($data['body'], 'text/html');
+
+        if ( isset($data['cc']) ) {
+            $message->addCc($data['cc']);
+        }
 
         $this->mailer->send($message);
     }

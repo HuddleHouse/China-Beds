@@ -25,6 +25,7 @@ class Ledger
      ************************************/
 
     const TYPE_CREDIT   = 'Credit';   //default
+    const TYPE_PAYMENT  = 'Payment';
     const TYPE_REBATE   = 'Rebate';
     const TYPE_TRANSFER = 'Transfer';
     const TYPE_CLAIM    = 'Warranty';
@@ -379,7 +380,8 @@ class Ledger
             self::TYPE_CREDIT,
             self::TYPE_REBATE,
             self::TYPE_TRANSFER,
-            self::TYPE_ORDER
+            self::TYPE_ORDER,
+            self::TYPE_PAYMENT
         );
         if (!in_array($type, $types))
             throw new \InvalidArgumentException("Invalid type. Values must be one of the following: " . implode(', ', $types));

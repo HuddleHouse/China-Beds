@@ -13,7 +13,7 @@ use InventoryBundle\Entity\Channel;
 class PopItemRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getAllPopItemsArrayForCart(Channel $channel)
+    public function getAllPopItemsArrayForCart(Channel $channel, $path = null)
     {
         $em = $this->getEntityManager();
         $pop = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $channel, 'is_hide_on_order' => 0, 'active' => 1]);
@@ -35,7 +35,7 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'cost' => $popitem->getPricePer(),
                 'name' => $popitem->getName(),
                 'description' => $popitem->getDescription(),
-                'picture' => 'http://placehold.it/175x150',
+                'picture' => $path . $popitem->getPath(),
                 'type' => 'pop',
                 'inventory' => $quantity //get actually inventory one day
             );

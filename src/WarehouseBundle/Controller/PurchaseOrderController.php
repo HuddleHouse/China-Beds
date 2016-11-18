@@ -27,7 +27,20 @@ class PurchaseOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $purchaseOrders = $em->getRepository('WarehouseBundle:PurchaseOrder')->findAll();
+        if($this->getUser()->hasRole('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SALES_MANAGER') || $this->getUser()->hasRole('ROLE_ACCOUNTING'))
+            $purchaseOrders = $em->getRepository('WarehouseBundle:PurchaseOrder')->findByChannel($this->getUser()->getActiveChannel());
+        elseif($this->getUser()->hasRole('ROLE_WAREHOUSE')) {
+            $id_array = array();
+            foreach($this->getUser()->getManagedWarehouses() as $warehouse) {
+                if ($warehouse->belongsToChannel($this->getUser()->getActiveChannel())) {
+                    $id_array[] = $warehouse->getId();
+                }
+            }
+            $purchaseOrders = $em->getRepository('WarehouseBundle:PurchaseOrder')->findBy(array('warehouse' => $id_array));
+        }
+        else
+            $purchaseOrders = array();
+
 
         return $this->render('@Warehouse/PurchaseOrder/index.html.twig', array(
             'purchaseOrders' => $purchaseOrders,
