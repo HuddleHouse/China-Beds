@@ -22,7 +22,7 @@ class EmailService extends BaseService
      */
     public function sendAdminOrderNotification(Orders $order) {
         $body = $this->container->get('twig')->render(
-            '@App/Emails/admin-order-notification.html.twig',
+            '@Order/Emails/admin-order-notification.html.twig',
             ['order' => $order]
         );
 
