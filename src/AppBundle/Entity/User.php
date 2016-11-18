@@ -8,6 +8,7 @@ use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use InventoryBundle\Entity\Channel;
+use OrderBundle\Entity\Orders;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -392,14 +393,28 @@ class User extends BaseUser
             return true;
     }
 
+    public function getOpenBalanceTotal($channel_id = null) {
+        $total = 0;
+        foreach($this->orders as $order) {
+            if(in_array($order->getStatus()->getName(), [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED])) {
+                if ($channel_id == null) {
+                    $total += $order->getBalance();
+                } elseif ($order->getChannel()->getId() == $channel_id) {
+                    $total += $order->getBalance();
+                }
+            }
+        }
+        return $total;
+    }
+
     public function getPendingOrderTotal($channel_id = null) {
         $total = 0;
         foreach($this->orders as $order) {
-            if(in_array($order->getStatus()->getName(), ['Pending', 'Draft'])) {
+            if(in_array($order->getStatus()->getName(), [Orders::STATUS_PENDING, Orders::STATUS_DRAFT])) {
                 if($channel_id == null)
-                    $total += $order->getTotal();
+                    $total += $order->getBalance();
                 else if($order->getChannel()->getId() == $channel_id)
-                    $total += $order->getTotal();
+                    $total += $order->getBalance();
             }
         }
         return $total;
@@ -408,7 +423,7 @@ class User extends BaseUser
     public function getLedgerTotal($channel_id = null) {
         $total = 0;
         foreach($this->ledgers as $ledger) {
-            if($channel_id == null)
+            if($channel_id == null && $ledger->getChannel()->getId() == $this->getActiveChannel()->getId())
                 $total += $ledger->getAmountCredited();
             else if($ledger->getChannel()->getId() == $channel_id)
                 $total += $ledger->getAmountCredited();

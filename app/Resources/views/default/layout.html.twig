@@ -23,7 +23,9 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>M</b>H</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><img style="width: 190px;" src="/logo-final-nomal.png"></span>
+            <span class="logo-lg">
+                <img src="/images/logo-{{ app.user.activechannel.id }}.png" style="max-height: 90px; width: 100%">
+            </span>
         </a>
 
         <!-- Header Navbar: style can be found in header.less -->
@@ -43,6 +45,18 @@
                                     Ledger Balance: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
                                 </h6>
                             </div>
+                        </li>
+                    {% endif %}
+
+                    {% if app.user.getOpenBalanceTotal > 0 %}
+                        <li id="ledger-total" class="" style="background-color: #ffbd2a;">
+                            <a href="{{ path('my_open_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
+                                <div class="ledger-total-box">
+                                    <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
+                                        Open Orders: ${{ app.user.getOpenBalanceTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                    </h6>
+                                </div>
+                            </a>
                         </li>
                     {% endif %}
 

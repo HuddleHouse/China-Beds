@@ -61,6 +61,24 @@ class OrderProductsController extends Controller
 
     /**
      *
+     * @Route("/open", name="my_open_orders_index")
+     * @Method("GET")
+     */
+    public function getOpenOrdersIndex()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->getUser();
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+
+        return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
+            'orders' => $orders,
+            'pending' => ' Pending'
+        ));
+    }
+
+    /**
+     *
      * @Route("/{id}/products", name="order_products_index", options={"expose"=true})
      * @Method("GET")
      */
