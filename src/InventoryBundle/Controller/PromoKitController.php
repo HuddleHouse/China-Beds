@@ -130,7 +130,7 @@ class PromoKitController extends Controller
                 $promoKitOrder->setChannel($channel);
                 $this->getUser()->getPromoKitOrders()->add($promoKitOrder);
 
-                $warehouse = $this->get('settings_service')->get('default-warehouse')
+                $warehouse = $this->get('settings_service')->get('default-warehouse');
 
                 foreach($promoKitOrder->getProductVariants() as $variant) {
                     if ( $warehouse_inventory = $this->getDoctrine()->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(['product_variant' => $variant, 'warehouse' => $warehouse]) ) {
