@@ -106,6 +106,10 @@ class WarehouseInventory
         $this->warehouse = $warehouse;
     }
 
+    public function modifyQuantityBy($modifier) {
+        $this->quantity += $modifier;
+    }
+
 
 }
 

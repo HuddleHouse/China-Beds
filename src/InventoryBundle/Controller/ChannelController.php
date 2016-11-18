@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,11 +25,12 @@ class ChannelController extends Controller
      * @Route("/switch/{id}", name="admin_channel_switch")
      * @Method("GET")
      */
-    public function switchAction(Channel $channel)
+    public function switchAction(Channel $channel, Request $request)
     {
         $this->get('session')->set('active_channel', $channel);
         $this->getUser()->setActiveChannel($channel);
-        return $this->redirectToRoute('fos_user_profile_show');
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
 
     /**
