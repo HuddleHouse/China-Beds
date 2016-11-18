@@ -263,6 +263,12 @@
                                 </a>
                                 <ul class="treeview-menu">
 
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                            <a href="{{ path('manual_order', {'id_channel': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Manual Order</a>
+                                        </li>
+                                    {% endif %}
+
                                     {% if 'order_products_index' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
                                             <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>New Order</a>
