@@ -582,5 +582,34 @@ class OrderProductsController extends Controller
 
         return JsonResponse::create(true);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @Route("/api_get_user_info_manual_order", name="api_get_user_info_manual_order")
+     * @return JsonResponse
+     */
+    public function userWarehouseInfoAction(Request $request)
+    {
+        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannels(array($this->getUser()->getActiveChannel()));
+        $warehouseArray = array();
+        foreach($warehouses as $warehouse) {
+            /** @var \WarehouseBundle\Entity\Warehouse $warehouse */
+            /** @var \WarehouseBundle\Entity\WarehouseInventory $inventory */
+            $wid = $warehouse->getId();
+            $warehouseArray[$wid]['id'] = $wid;
+            $warehouseArray[$wid]['name'] = $warehouse->getName();
+            foreach ($warehouse->getInventory() as $inventory) {
+                $warehouseArray[$wid][$inventory->getProductVariant()->getId()] = array(
+                    'id' => $inventory->getProductVariant()->getId(),
+                    'product' => $inventory->getProductVariant()->getProduct()->getName(),
+                    'variant' => $inventory->getProductVariant()->getName(),
+                    'quantity' => $inventory->getQuantity()
+                );
+            }
+        }
+
+        return new JsonResponse($warehouseArray);
+    }
 }
 
