@@ -27,13 +27,6 @@ class AttributeType extends AbstractType
                 'label' => 'Picture',
                 'required' => false,
             ))
-            ->add('channels', EntityType::class, array('attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
-                'required' => false,
-                'class' => 'InventoryBundle\Entity\Channel',
-                'multiple' => false,
-                'choice_label' => 'name',
-                'label' => 'Channel Assign'
-            ))
         ;
     }
     

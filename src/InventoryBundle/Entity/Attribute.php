@@ -59,7 +59,7 @@ class Attribute
     private $product_attributes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="attributes")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="attributes", cascade={"all"})
      */
     private $channels;
 
