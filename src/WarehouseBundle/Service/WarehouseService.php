@@ -10,25 +10,41 @@ namespace WarehouseBundle\Service;
 
 
 use AppBundle\Services\BaseService;
+use InventoryBundle\Entity\Product;
 use InventoryBundle\Entity\ProductVariant;
 use OrderBundle\Entity\Orders;
 use WarehouseBundle\Entity\Warehouse;
+use WarehouseBundle\Entity\WarehouseInventory;
 
 class WarehouseService extends BaseService
 {
     public function modifyInventoryLevelForOrder(Orders $order) {
-        $em = $this->container->get('doctrine')->getManager();
+
         foreach($order->getProductVariants() as $variant) {
             foreach($variant->getWarehouseInfo() as $warehouse_info) {
-                $inventory = $this->getWarehouseInventoryByWarehouse($warehouse_info->getWarehouse(), $variant->getProductVariant());
-                $inventory->setQuantity( $inventory->getQuantity() - $warehouse_info->getQuantity() );
-                $em->persist($inventory);
+                $this->modifyInventoryLevel($warehouse_info->getWarehouse(), $variant->getProductVariant(), $warehouse_info->getQuantity());
             }
         }
-        $em->flush();
+
     }
 
     private function getWarehouseInventoryByWarehouse(Warehouse $warehouse, ProductVariant $productVariant) {
-        return $this->container->get('doctrine')->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(['warehouse' => $warehouse, 'product_variant' => $productVariant]);
+        if ( $result = $this->container->get('doctrine')->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(['warehouse' => $warehouse, 'product_variant' => $productVariant]) ) {
+            return $result;
+        } else {
+            $result = new WarehouseInventory();
+            $result->setQuantity(0);
+            $result->setWarehouse($warehouse);
+            $result->setProductVariant($productVariant);
+            return $result;
+        }
+    }
+
+    public function modifyInventoryLevel(Warehouse $warehouse, ProductVariant $variant, $modifier = 0) {
+        $em = $this->container->get('doctrine')->getManager();
+        $inventory = $this->getWarehouseInventoryByWarehouse($warehouse, $variant);
+        $inventory->setQuantity( $inventory->getQuantity() + $modifier );
+        $em->persist($inventory);
+        $em->flush();
     }
 }

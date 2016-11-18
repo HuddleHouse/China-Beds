@@ -26,7 +26,7 @@ class WarehouseInventory
      *
      * @ORM\Column(name="quantity", type="integer", nullable=true)
      */
-    private $quantity;
+    private $quantity = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse_inventory")
