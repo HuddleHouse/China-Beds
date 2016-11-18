@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
-class UserType extends AbstractType
+class CreateUserType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -24,7 +24,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px') ))
+            ->add('username', TextType::class,  array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('plain_password', PasswordType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('first_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('last_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))

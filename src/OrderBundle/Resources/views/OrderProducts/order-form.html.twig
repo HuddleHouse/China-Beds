@@ -1,4 +1,4 @@
-<div class="table" style="background-color: #EFEFEF;">
+ <div class="table" style="background-color: #EFEFEF;">
     <center><h2>{%  if is_granted('ROLE_DISTRIBUTOR') %}Distributor{% elseif is_granted('ROLE_RETAILER') %}Retailer{% endif %} Order Form</h2></center>
     <form class="form-horizontal">
         <fieldset>
@@ -28,7 +28,7 @@
                     <div id="pick_up_date" style="display: none;">
                         <label class="control-label" for="pick_up_date">Pick Up Date *</label>
                         {#<md-datepicker ng-model="form_info['pick_up_date']" md-min-date="min_date()"></md-datepicker>#}
-                        <md-datepicker ng-model="min_date" md-min-date="min_date"></md-datepicker>
+                        <md-datepicker ng-model="min_date" md-min-date="min_date" md-max-date="max_date"></md-datepicker>
                     </div>
                 </div>
             </div>

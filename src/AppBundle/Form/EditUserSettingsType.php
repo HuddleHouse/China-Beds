@@ -13,9 +13,17 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class EditUserSettingsType extends AbstractType
 {
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+
+    }
+
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -40,9 +48,13 @@ class EditUserSettingsType extends AbstractType
             ))
 
             ->add('ach_routing_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
-            ->add('ach_account_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
-            ->add('distributor_fedex_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'label' => 'FedEx Number'), 'required' => false))
+            ->add('ach_account_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false));
+        if ( $this->tokenStorage->getToken()->getUser()->hasRole('ROLE_ADMIN') ) {
+            $builder->add('distributor_fedex_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'label' => 'FedEx Number'), 'required' => false));
 
+        }
+
+        $builder
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 array($this, 'onPreSetData')

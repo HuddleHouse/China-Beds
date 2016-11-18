@@ -73,6 +73,7 @@ class PurchaseOrderController extends Controller
             $purchase_order_variant->setTotalQuantityAfter($item['total_quantity']);
             $purchase_order_variant->setWarehouseQuantityAfter($item['warehouse_quantity']);
             $purchase_order_variant->setOrderedQuantity($item['ordered_quantity']);
+//            $purchase_order_variant->setReceivedQuantity($item['received_quantity']);
             $em->persist($purchase_order_variant);
         }
         $em->persist($purchase_order);

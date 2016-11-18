@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller\API;
 
+use AppBundle\Entity\User;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Form\WarrantyApprovalType;
 use OrderBundle\Services\LedgerService;
@@ -47,6 +48,29 @@ class WarrantyClaimController extends Controller
                 $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
         }
 
+
+        return new JsonResponse($rtn);
+    }
+
+    /**
+     * Get Orders associated with a User
+     *
+     * @Route("/api_get_orders_from_user", name="api_get_orders_from_user")
+     * @Method({"GET", "POST"})
+     */
+    public function getOrdersFromUser(Request $request)
+    {
+//        if($request->get('order_id') == '')
+//            return new JsonResponse('<option>Select Order ID first</option>');
+
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($request->get('user_id'));
+
+        $rtn = array();
+        foreach($user->getOrders() as $order) {
+            if ( $order->getChannel()->getId() == $this->getUser()->getActiveChannel()->getId() ) {
+                $rtn[] = sprintf('<option value="%d">%s</option>', $order->getId(), $order->getOrderId());
+            }
+        }
 
         return new JsonResponse($rtn);
     }

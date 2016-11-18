@@ -105,7 +105,6 @@ class PopItem
      */
     private $warehouse_pop_inventory_on_hold;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
      */
@@ -123,12 +122,19 @@ class PopItem
      */
     private $is_hide_on_order;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="pop_items")
+     * @ORM\JoinTable(name="pop_items_warehouses")
+     */
+    private $warehouses;
+
     public function __construct()
     {
         $this->warehouse_pop_inventory = new ArrayCollection();
         $this->warehouse_pop_inventory_on_hold = new ArrayCollection();
         $this->orders_pop_item = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -617,5 +623,55 @@ class PopItem
     public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
     {
         $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getWarehouses()
+    {
+        return $this->warehouses;
+    }
+
+    /**
+     * @param mixed $warehouses
+     */
+    public function setWarehouses($warehouses)
+    {
+        $this->warehouses = $warehouses;
+    }
+
+    /**
+     * Get isHideOnOrder
+     *
+     * @return boolean
+     */
+    public function getIsHideOnOrder()
+    {
+        return $this->is_hide_on_order;
+    }
+
+    /**
+     * Add warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     *
+     * @return PopItem
+     */
+    public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses[] = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     */
+    public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses->removeElement($warehouse);
     }
 }

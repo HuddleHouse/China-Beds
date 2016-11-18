@@ -16,6 +16,7 @@
 
 {% block footer %}
     <script>
+        var grid;
         var buttonGroup = $( buttonGroup );
         $(document).ready(function () {
             $('#part-table').DataTable({
@@ -24,7 +25,7 @@
             $('.button-group').find('.is-checked').removeClass('is-checked');
             $( this ).addClass('is-checked');
 
-            var grid = $('.grid').isotope({
+            grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
             });
@@ -183,8 +184,10 @@
             $scope.ship_to_id = {{ app.user.id }};
 
             $scope.due_date = new Date();
-            $scope.date = ($scope.due_date.getTime() + 86400000);
-            $scope.min_date = new Date($scope.date);
+            $scope.date_for_min = ($scope.due_date.getTime() + 60480000);
+            $scope.date_for_max = ($scope.due_date.getTime() + 604800000);
+            $scope.min_date = new Date($scope.date_for_min);
+            $scope.max_date = new Date($scope.date_for_max);
 
             $('body').addClass('sidebar-collapse');
 
@@ -359,6 +362,7 @@
                 if(user_id == undefined)
                     user_id = {{ app.user.id }};
                 $scope.ship_to_id = user_id;
+                showSpinner();
                 $.ajax({
                         type: 'POST',
                         url: "{{ path('api_get_user_info_for_order_form') }}",
@@ -368,9 +372,12 @@
                             $scope.$apply(function () {
                                 var po = $scope.form_info['po'];
                                 $scope.form_info = data;
+                                $scope.products = data.products;
                                 $('#state').val(data['state']);
                                 $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
+                                $('.grid').isotope( 'reloadItems' ).isotope();
+                                hideSpinner();
                             });
                         }
                     });
@@ -440,6 +447,7 @@
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                             $scope.cart['pick_up_warehouse'] = warehouse;
                             $scope.validate();
                         });
@@ -471,6 +479,7 @@
                         $scope.$apply(function () {
                             $scope.cart = [];
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                         });
                     }
                 });
@@ -759,6 +768,16 @@
             list-style-type: none;
             color: #AAAAAA;
         }
+        .order_product .product_image {
+            padding-top:150px;
+        }
+        .order_product .product_image img {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            margin:auto;
+        }
     </style>
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
@@ -847,7 +866,7 @@
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
+                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }} order_product">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
@@ -902,7 +921,7 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px; margin-top:45px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">

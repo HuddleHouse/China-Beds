@@ -152,6 +152,11 @@ class User extends BaseUser
     protected $is_online_intentions = false;
 
     /**
+     * @ORM\Column(name="hide_rebate", type="boolean")
+     */
+    protected $hideRebate;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      */
@@ -461,7 +466,6 @@ class User extends BaseUser
         }
         return false;
     }
-
     /**
      * @return mixed
      */
@@ -1649,5 +1653,94 @@ class User extends BaseUser
     public function setPromoKitOrders($promo_kit_orders)
     {
         $this->promo_kit_orders = $promo_kit_orders;
+    }
+
+    /**
+     * Set hideRebate
+     *
+     * @param boolean $hideRebate
+     *
+     * @return User
+     */
+    public function setHideRebate($hideRebate)
+    {
+        $this->hideRebate = $hideRebate;
+
+        return $this;
+    }
+
+    /**
+     * Get hideRebate
+     *
+     * @return boolean
+     */
+    public function getHideRebate()
+    {
+        return $this->hideRebate;
+    }
+
+    /**
+     * Add managedWarehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $managedWarehouse
+     *
+     * @return User
+     */
+    public function addManagedWarehouse(\WarehouseBundle\Entity\Warehouse $managedWarehouse)
+    {
+        $this->managed_warehouses[] = $managedWarehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove managedWarehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $managedWarehouse
+     */
+    public function removeManagedWarehouse(\WarehouseBundle\Entity\Warehouse $managedWarehouse)
+    {
+        $this->managed_warehouses->removeElement($managedWarehouse);
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return User
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * Returns either company name or first/last name if company name is empty.
+     * @return mixed|string
+     */
+    public function getDisplayName() {
+        if ( empty($this->company_name) ) {
+            return $this->getName();
+        } else {
+            return $this->getCompanyName();
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
     }
 }

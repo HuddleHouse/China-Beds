@@ -67,9 +67,9 @@ class FrontWarrantyClaim
     private $state;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="zip", type="integer", nullable=true)
+     * @ORM\Column(name="zip", type="string", nullable=true)
      */
     private $zip;
 
@@ -95,7 +95,7 @@ class FrontWarrantyClaim
     private $retailerName;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="mattress_model", type="string", length=255, nullable=true)
      */
@@ -109,14 +109,14 @@ class FrontWarrantyClaim
     private $mattressSize;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="purchase_price", type="integer", length=255, nullable=true)
+     * @ORM\Column(name="purchase_price", type="string", length=255, nullable=true)
      */
     private $purchasePrice;
 
     /**
-     * @var bool
+     * @var boolean
      *
      * @ORM\Column(name="contacted_retailer", type="boolean", nullable=true)
      */
@@ -181,8 +181,7 @@ class FrontWarrantyClaim
     /**
      * @ORM\Column(name="receipt_copy", type="string", nullable=true)
      *
-     * @Assert\NotBlank(message="Please, include in this submission a copy of the receipt")
-     * @Assert\File(mimeTypes={"application/pdf", "image/*"})
+     * @Assert\NotBlank(message="You must include in this submission a copy of the receipt")
      */
     private $receiptCopy;
 
@@ -194,8 +193,7 @@ class FrontWarrantyClaim
     /**
      * @ORM\Column(name="law_copy", type="string", nullable=true)
      *
-     * @Assert\NotBlank(message="Please, include in this submission a copy of the receipt")
-     * @Assert\File(mimeTypes={"application/pdf", "image/*"})
+     * @Assert\NotBlank(message="You must include in this submission a copy of the law label")
      */
     private $lawCopy;
 
@@ -982,4 +980,14 @@ class FrontWarrantyClaim
 
 
 
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
+    }
 }

@@ -117,7 +117,7 @@
             {% endif %}
         {% endfor %}
         {% set sidebar_user_group = ['fos_user_group_list', 'fos_user_group_edit', 'fos_user_group_new', 'fos_user_group_show'] %}
-        {% set sidebar_users = ['view_users', 'admin_edit_user'] %}
+        {% set sidebar_users = ['view_users', 'admin_edit_user','admin_add_user'] %}
         {% set sidebar_access_restriction = ['access_restriction'] %}
         {% set sidebar_offices = ['office_index', 'office_edit', 'office_show', 'office_new'] %}
         {% set sidebar_price_groups = ['admin_price_group_index', 'admin_price_group_new', 'admin_price_group_edit', 'admin_price_group_show', 'admin_price_group_edit_prices'] %}
@@ -146,6 +146,7 @@
         {% set sidebar_order = ['order_products_index', 'order_pop_index', 'order_products_review', 'order_products_edit'] %}
         {% set sidebar_credit_index = ['ledger_index', 'ledger_edit'] %}
         {% set sidebar_credit_request = ['ledger_new', 'ledger_credit_new'] %}
+        {% set sidebar_reports = [] %}
 
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar no-print" style="margin-top: 10px;">
@@ -169,6 +170,9 @@
                         or 'attribute_index' in route_names
                         or 'admin_product_index' in route_names
                         or 'specification_index' in route_names
+                        or 'attribute_index' in route_names
+                        or 'promokit_index' in route_names
+                        or 'promokit_orders_index' in route_names
                         %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_assortment) %} active
                         {% elseif (app.request.get('_route') in sidebar_manage_options) %} active
@@ -185,30 +189,46 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                {% if isGrantedRoute(app.user, 'admin_product_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_admin_products) %} class="active"{% endif %}>
                                     <a href="{{ path('admin_product_index') }}"><i class="fa fa-circle-o"></i>Products</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'admin_product_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_pop_item_edit) %} class="active"{% endif %}>
                                     <a href="{{ path('pop_item_index') }}"><i class="fa fa-circle-o"></i>POP Items</a>
                                 </li>
+                                {% endif %}
+                        {% if isGrantedRoute(app.user, 'category_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
                                     <a href="{{ path('category_index') }}"><i class="fa fa-circle-o"></i>Categories</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'manage_options_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_manage_options) %} class="active"{% endif %}>
                                     <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Options</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'specification_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_specification) %} class="active"{% endif %}>
                                     <a href="{{ path('specification_index') }}"><i class="fa fa-circle-o"></i>Specifications</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'attribute_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
                                     <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Image Attributes</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'promokit_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_promokit) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Items</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'promokit_orders_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_promokit_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_orders_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Orders</a>
                                 </li>
+                            {% endif %}
                             </ul>
                         </li>
                     {% endif %}
@@ -231,28 +251,13 @@
 
                                     {% if 'order_products_index' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
-                                            <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Order Products</a>
+                                            <a href="{{ path('order_products_index', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>New Order</a>
                                         </li>
                                     {% endif %}
 
                                     {% if 'my_orders_index' in route_names %}
                                         <li {% if (app.request.get('_route') in ['my_orders_index']) %} class="active"{% endif %}>
-                                            <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>My Orders</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'order_products_index' in ['order_products_index'] %}
-                                        <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                            <a href=""><i class="fa fa-circle-o"></i>Shipments</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'order_products_index' in ['order_products_index'] %}
-                                        <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                            <a href=""><i class="fa fa-circle-o"></i>Payments</a>
-                                        </li>
-                                    {% endif %}
-                                    {% if 'order_products_index' in ['order_products_index'] %}
-                                        <li {% if (app.request.get('_route') in ['matt']) %} class="active"{% endif %}>
-                                            <a href=""><i class="fa fa-circle-o"></i>Reports</a>
+                                            <a href="{{ path('my_orders_index') }}"><i class="fa fa-circle-o"></i>Order History</a>
                                         </li>
                                     {% endif %}
                                 </ul>
@@ -267,6 +272,7 @@
                             or 'fos_user_group_list' in route_names
                             or 'access_restriction' in route_names
                             or 'admin_channel_index' in route_names
+                            or 'admin_add_user' in route_names
                         %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_user_group) %} active
                             {% elseif (app.request.get('_route') in sidebar_users) %} active
@@ -282,6 +288,12 @@
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
+                                    {# if 'admin_add_user' in route_names #}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li {% if (app.request.get('_route') in sidebar_users) %} class="active"{% endif %}>
+                                            <a href="{{ path('admin_add_user') }}"><i class="fa fa-circle-o"></i>Add User</a>
+                                        </li>
+                                    {% endif %}
                                     {% if 'office_index' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_offices) %} class="active"{% endif %}>
                                             <a href="{{ path('office_index') }}"><i class="fa fa-circle-o"></i>Offices</a>
@@ -339,21 +351,15 @@
                                 <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_index" and ((app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name != referer_array|last) or (app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name == referer_array|last) or (app.user.activechannel.name == referer_array|last and app.request.get('_route_params').id ?? false))) %} class="active"{% endif %}>
                                     <a href="{{ path('warehouse_channelled', {'channelName': app.user.activechannel.name}) }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                 </li>
-                                {% if isGrantedRoute(app.user, 'purchaseorder_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Receiving Stock</a>
                                 </li>
-                                {% endif %}
-                                {% if isGrantedRoute(app.user, 'stocktransfer_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_stock_transfer) %} class="active"{% endif %}>
                                     <a href="{{ path('stocktransfer_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
                                 </li>
-                                {% endif %}
-                                {% if isGrantedRoute(app.user, 'stockadjustment_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_stock_adjustment) %} class="active"{% endif %}>
                                     <a href="{{ path('stockadjustment_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
                                 </li>
-                                {% endif %}
                             </ul>
                         </li>
                 {% endif %}
@@ -398,15 +404,15 @@
                                 <li {% if (app.request.get('_route') in sidebar_warranty and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
                                     <a href="{{ path('warrantyclaim_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>New Warranty Claim</a>
                                 </li>
+                                {% if isGrantedRoute(app.user, 'front_warranty_claim') %}
                                 <li {% if (app.request.get('_route') in sidebar_front_warranty and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
                                     <a href="{{ path('front_warranty_claim', {'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>Site Warranty Claims</a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </li>
                         {% endif %}
 
-                        {% if(is_granted('ROLE_WAREHOUSE')) %}
-                            {% else %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
@@ -438,10 +444,8 @@
                             {% endif %}
                             </ul>
                         </li>
-                                {% endif %}
 
-                        {% if(is_granted('ROLE_WAREHOUSE')) %}
-                        {% else %}
+                        {% if(isGrantedRoute(app.user, 'ledger_index') or isGrantedRoute(app.user, 'ledger_new')) %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
@@ -452,12 +456,16 @@
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
+                                    {% if isGrantedRoute(app.user, 'ledger_index') %}
                                     <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
                                         <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Transactions</a>
                                     </li>
+                                    {% endif %}
+                                    {% if isGrantedRoute(app.user, 'ledger_new') %}
                                     <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
                                         <a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Fund</a>
                                     </li>
+                                    {% endif %}
                                     {% if (is_granted('ROLE_ADMIN')) %}
                                         <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
                                             <a href="{{ path('ledger_credit_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Assign Credit</a>
@@ -467,7 +475,30 @@
                             </li>
                         {% endif %}
 
-                        {% if not is_granted('ROLE_WAREHOUSE') %}
+                        <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
+                            {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
+                            {% endif %}">
+
+                            <a href="#">
+                                <i class="fa fa-usd"></i>
+                                <span>Reports</span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+                                    <a href="{{ path('daily_order') }}"><i class="fa fa-circle-o"></i>Daily Orders</a>
+                                </li>
+                                <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+                                    <a href="{{ path('monthly_order', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Monthly Orders</a>
+                                </li>
+                                {% if (is_granted('ROLE_ADMIN')) %}
+                                    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+                                        <a href="{{ path('recent_orders', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Recent Orders</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
                         <li class="header">LINKS</li>
                         <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
                             <a href="{{ path('resource_index') }}">
@@ -475,7 +506,6 @@
                                 <span>Resources</span>
                             </a>
                         </li>
-                        {% endif %}
                         {#<li>#}
                             {#<a href="#">#}
                                 {#<i class="fa fa-circle-o" style="color: #4caf50;"></i>#}
