@@ -432,7 +432,7 @@
                             </ul>
                         </li>
                         {% endif %}
-
+                        {% if ( not is_granted('ROLE_WAREHOUSE') ) %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
@@ -464,7 +464,7 @@
                             {% endif %}
                             </ul>
                         </li>
-
+                        {% endif %}
                         {% if(isGrantedRoute(app.user, 'ledger_index') or isGrantedRoute(app.user, 'ledger_new')) %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
@@ -494,7 +494,7 @@
                                 </ul>
                             </li>
                         {% endif %}
-
+                        {% if ( not is_granted('ROLE_WAREHOUSE') ) %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
@@ -518,7 +518,7 @@
                                 {% endif %}
                             </ul>
                         </li>
-
+                        {% endif %}
                         <li class="header">LINKS</li>
                         <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
                             <a href="{{ path('resource_index') }}">
