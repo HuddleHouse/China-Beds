@@ -347,7 +347,7 @@ class WarehouseController extends Controller
     {
         $inventory_data = array();
         $em = $this->getDoctrine()->getManager();
-        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray();
+        $products = $em->getRepository('InventoryBundle:Product')->getAllProductsArray($this->getUser());
 
         return $this->render('@Warehouse/Warehouse/inventory.html.twig', array(
             'warehouse' => $warehouse,

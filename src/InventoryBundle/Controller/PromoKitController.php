@@ -3,6 +3,7 @@
 namespace InventoryBundle\Controller;
 
 use InventoryBundle\Entity\PromoKitOrders;
+use InventoryBundle\Form\PromoKitOrderType;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,7 +118,7 @@ class PromoKitController extends Controller
     public function newOrderAction(Request $request)
     {
         $promoKitOrder = new PromoKitOrders();
-        $form = $this->createForm('InventoryBundle\Form\PromoKitOrderType', $promoKitOrder);
+        $form = $this->createForm(PromoKitOrderType::class, $promoKitOrder);
         $form->handleRequest($request);
 
         $channel = $this->getDoctrine()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
@@ -128,6 +129,16 @@ class PromoKitController extends Controller
                 $promoKitOrder->setSubmittedByUser($this->getUser());
                 $promoKitOrder->setChannel($channel);
                 $this->getUser()->getPromoKitOrders()->add($promoKitOrder);
+
+                $warehouse = $this->get('settings_service')->get('default-warehouse');
+
+                foreach($promoKitOrder->getProductVariants() as $variant) {
+                    if ( $warehouse_inventory = $this->getDoctrine()->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(['product_variant' => $variant, 'warehouse' => $warehouse]) ) {
+                        $warehouse_inventory->modifyQuantityBy(-1);
+                        $em->persist($warehouse_inventory);
+                    }
+                }
+
                 $em->persist($promoKitOrder);
                 $em->flush();
                 $this->addFlash('notice', 'Promo Kit Order successfully submitted.');

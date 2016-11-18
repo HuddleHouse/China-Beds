@@ -20,6 +20,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Orders
 {
+    const STATUS_ACTIVE             = 'Active';
+    const STATUS_RECEIVED           = 'Received';
+    const STATUS_COMPLETED          = 'Completed';
+    const STATUS_VOIDED             = 'Voided';
+    const STATUS_DRAFT              = 'Draft';
+    const STATUS_ARCHIVED           = 'Archived';
+    const STATUS_PAID               = 'Paid';
+    const STATUS_SHIPPED            = 'Shipped';
+    const STATUS_READY_TO_SHIP      = 'Ready to Ship';
+    const STATUS_PENDING            = 'Pending';
     /**
      * @var int
      *
@@ -167,10 +177,10 @@ class Orders
      */
     private $product_variants;
 
-    /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order", cascade={"persist"})
-     */
-    private $shipping_labels;
+//    /**
+//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order", cascade={"persist"})
+//     */
+//    private $shipping_labels;
 
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist"})
@@ -887,23 +897,15 @@ class Orders
      */
     public function getShippingLabels()
     {
-        return $this->shipping_labels;
-    }
-
-    /**
-     * @param mixed $shipping_labels
-     */
-    public function setShippingLabels($shipping_labels)
-    {
-        $this->shipping_labels = $shipping_labels;
-    }
-
-    /**
-     * @param mixed $shipping_labels
-     */
-    public function addShippingLabel($shipping_label)
-    {
-        $this->shipping_labels[] = $shipping_label;
+        $shipping_labels = new ArrayCollection();
+        foreach($this->getProductVariants() as $variant) {
+            foreach($variant->getWarehouseInfo() as $info) {
+                foreach($info->getShippingLabels() as $label) {
+                    $shipping_labels->add($label);
+                }
+            }
+        }
+        return $shipping_labels;
     }
 
     /**
@@ -1213,6 +1215,30 @@ class Orders
     public function getOrderPayments()
     {
         return $this->order_payments;
+    }
+
+    public function getPaidTotal() {
+        $total = 0;
+        foreach($this->getOrderPayments() as $payment) {
+            $total += $payment->getAmount();
+        }
+        return $total;
+    }
+
+    public function getItemTotal() {
+        $total = 0;
+        foreach($this->getProductVariants() as $variant) {
+            $total += $variant->getTotal();
+        }
+        return $total;
+    }
+
+    public function getOrderTotal() {
+        return $this->getItemTotal() + $this->getShipping();
+    }
+
+    public function getBalance() {
+        return $this->getOrderTotal() - $this->getPaidTotal();
     }
 
     /**

@@ -387,6 +387,11 @@ class Channel
     private $resources;
 
     /**
+     * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Attribute", mappedBy="channels")
+     */
+    public $attributes;
+
+    /**
      * Channel constructor.
      */
     public function __construct() {
@@ -397,6 +402,7 @@ class Channel
         $this->rebates = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->resources = new ArrayCollection();
+        $this->attributes = new ArrayCollection();
     }
 
     /**

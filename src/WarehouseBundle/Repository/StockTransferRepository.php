@@ -138,9 +138,8 @@ select p.*, s.color, s.name as status_name, w.name as warehouse_name, 'stock_tra
             if ( $show ) {
                 $results[] = $transfer;
             }
-
-            return $results;
         }
+        return $results;
     }
 
 }

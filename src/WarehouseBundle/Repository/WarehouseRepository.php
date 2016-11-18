@@ -1,9 +1,11 @@
 <?php
 
 namespace WarehouseBundle\Repository;
+use Doctrine\Common\Collections\ArrayCollection;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Entity\Product;
 use InventoryBundle\Entity\ProductVariant;
+use OrderBundle\Entity\Orders;
 use WarehouseBundle\Entity\Warehouse;
 use WarehouseBundle\Entity\WarehouseInventory;
 
@@ -209,5 +211,25 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
             return 0;
         else
             return $quantity['quantity'];
+    }
+
+    public function getWarehousesForOrder(Orders $order) {
+        $warehouses = new ArrayCollection();
+
+        $em = $this->getEntityManager();
+        $orders = $em
+            ->createQuery("SELECT o, v, i FROM OrderBundle\Entity\Orders o JOIN o.product_variants v JOIN v.warehouse_info i WHERE o.id = :id")
+            ->setParameter('id', $order)
+            ->getResult();
+
+        foreach($orders as $order) {
+            foreach($order->getProductVariants() as $variant) {
+                foreach($variant->getWarehouseInfo() as $info) {
+                    $warehouses->add($info->getWarehouse());
+                }
+            }
+        }
+
+        return $warehouses;
     }
 }

@@ -83,6 +83,11 @@ class PromoKitOrderType extends AbstractType
                     'choice_label' => function (PopItem $p) {
                         return $p->getName() . ': ' . $p->getDescription();
                     },
+                    'query_builder' => function(EntityRepository $er ) {
+                        return $er->createQueryBuilder('w')
+                            ->where('w.channel = :channel')
+                            ->setParameter('channel', $this->tokenStorageInterface->getToken()->getUser()->getActiveChannel());
+                    },
                     'expanded' => false,
                     'multiple' => true,
                     'attr' => array('class' => 'form-group select2', 'style' => 'margin-bottom: 10px'),

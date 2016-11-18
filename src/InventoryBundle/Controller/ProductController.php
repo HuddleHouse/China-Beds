@@ -116,7 +116,8 @@ class ProductController extends Controller
 
         $specs = $em->getRepository('InventoryBundle:Specification')->findAll();
         $cats = $em->getRepository('InventoryBundle:Category')->findAll();
-        $image_attributes = $em->getRepository('InventoryBundle:Attribute')->findAll();
+        $channel = $this->getUser()->getActiveChannel()->getId();
+        $image_attributes = $em->getRepository('InventoryBundle:Attribute')->findByChannels($channel);
         $channels = $em->getRepository('InventoryBundle:Channel')->findAll();
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

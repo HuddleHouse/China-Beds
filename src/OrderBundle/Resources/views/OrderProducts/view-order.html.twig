@@ -5,11 +5,11 @@
     Order {{ channel.name }} Products
 {% endblock page_title %}
 
-{% block page_name %}
-    <div class="">
-        <img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">
-    </div>
-{% endblock page_name %}
+{#{% block page_name %}#}
+    {#<div class="">#}
+        {#<img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">#}
+    {#</div>#}
+{#{% endblock page_name %}#}
 
 {% block actions %}
 {% endblock actions %}
@@ -33,12 +33,13 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
-            $scope.payment_type = 'cc';
+            $scope.payment_type = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}''{% else %}'cc'{% endif %};
             $scope.cc = {};
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
             $scope.is_paid = {{ is_paid }};
             $scope.admin_paid = 0;
+            $scope.order_status = '{{ order.status.name }}';
 
             {% if order.status.name == 'Pending' %}
                 $scope.admin_paid = 1;
@@ -382,11 +383,11 @@
                             <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" ng-disabled="is_paid == 1" required>
                                 <option value="cc">Pay with a Credit Card</option>
                                 {% if app.user.hasLedger %}
-                                    <option value="ledger">Ledger</option>
+                                    <option value="ledger">Ledger - Balance ${{ user.getLedgerTotal|number_format(2, '.', ',') }}</option>
                                 {% endif %}
                             </select>
                         </div>
-                        <div id="cc" ng-show="payment_type=='cc'">
+                        <div id="cc" ng-show="payment_type=='cc'" ng-hide="is_paid">
                             <div id="cc-name" class="form-group">
                                 <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
                                 <div class="col-sm-9">
@@ -515,7 +516,7 @@
                     <button type="button" ng-show="is_paid == 0 && is_admin == 0 && payment_type" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                         Complete Order
                     </button>
-                    <a ng-show="is_paid == 0 && admin_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
+                    <a ng-show="order_status=='Draft'" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
                         Edit Order
                     </a>
                 </div>

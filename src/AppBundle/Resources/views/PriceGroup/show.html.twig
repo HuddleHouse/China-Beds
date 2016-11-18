@@ -37,7 +37,7 @@
         <tbody>
         {% for user in users %}
             <tr role="row" class="odd">
-                <td><a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a></td>
+                <td><a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.displayName }}</a></td>
                 <td><a href="{{ path('office_show', {'id': user.office ? user.office.id : '1' }) }}">{{ user.office ? user.office.name : '' }}</a></td>
                 <td>{{ user.city ? user.city : ''  }}</td>
                 <td>{{ user.state ? user.state.name : ''  }}</td>

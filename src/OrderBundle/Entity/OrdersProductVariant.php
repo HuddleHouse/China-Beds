@@ -53,11 +53,11 @@ class OrdersProductVariant
      */
     private $warehouse_info;
 
-    /**
-     * OrdersProductVariant constructor.
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="orders_product_variant", cascade={"persist"})
-     */
-    private $shipping_labels;
+//    /**
+//     * OrdersProductVariant constructor.
+//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="orders_product_variant", cascade={"persist"})
+//     */
+//    private $shipping_labels;
 
 
     /**
@@ -223,5 +223,9 @@ class OrdersProductVariant
     public function getShippingLabels()
     {
         return $this->shipping_labels;
+    }
+
+    public function getTotal() {
+        return $this->getQuantity() * $this->getPrice();
     }
 }

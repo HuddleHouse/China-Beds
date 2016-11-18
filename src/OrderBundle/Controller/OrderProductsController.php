@@ -50,7 +50,25 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Pending'));
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+
+        return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
+            'orders' => $orders,
+            'pending' => ' Pending'
+        ));
+    }
+
+    /**
+     *
+     * @Route("/open", name="my_open_orders_index")
+     * @Method("GET")
+     */
+    public function getOpenOrdersIndex()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $this->getUser();
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
@@ -81,11 +99,6 @@ class OrderProductsController extends Controller
         else
             $this->redirectToRoute('404');
 
-
-        //$pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($channel,);
-
-
-        //
 
         $pop = $em->getRepository('InventoryBundle:PopItem')->findBy(['channel' => $channel, 'is_hide_on_order' => 0, 'active' => 1]);
         $data = array();
@@ -188,11 +201,6 @@ select coalesce(sum(i.quantity), 0) as quantity
                 $is_dis = 1;
             $pop = $order->getPopItems();
 
-            $manualItems = $order->getManualItems();
-            $manualCount = 0;
-            foreach($manualItems as $manualItem) {
-                $manualCount++;
-            }
 
             return $this->render('@Order/OrderProducts/view-order.html.twig', array(
                 'channel' => $channel,
@@ -203,8 +211,8 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
                 'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'manual_items' => $manualItems,
-                'manual_items_count' => $manualCount
+                'manual_items' => $manualItems = $order->getManualItems(),
+                'manual_items_count' => count($manualItems = $order->getManualItems())
             ));
         }
         else
@@ -339,7 +347,7 @@ select coalesce(sum(i.quantity), 0) as quantity
             else
                 $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
 
-            return $this->render('@Order/OrderProducts/view-order.html.twig', array(
+            return $this->render('@Order/OrderProducts/warehouse-review.html.twig', array(
                 'channel' => $channel,
                 'order' => $order,
                 'user' => $user,
@@ -348,7 +356,9 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
                 'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'shipped_status' => $shipped_status
+                'shipped_status' => $shipped_status,
+                'manual_items' => $manualItems = $order->getManualItems(),
+                'manual_items_count' => count($manualItems = $order->getManualItems())
             ));
         }
         else
