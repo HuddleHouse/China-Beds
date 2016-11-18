@@ -57,7 +57,7 @@
     <div class="row">
         <div class="col-md-12">
             <label class="control-label" for="ship_name">Name *</label>
-            <input id="ship_name" name="ship_name" ng-model="form_info['ship_name']" ng-init="form_info['ship_name']= '{{ app.user.firstName }} {{ app.user.lastName }}'" type="text" class="form_field input-md">
+            <input id="ship_name" name="ship_name" ng-model="form_info['ship_name']" ng-init="form_info['ship_name']= '{{ app.user.displayName }}'" type="text" class="form_field input-md">
         </div>
         <div class="col-md-12">
             <label class="control-label" for="address">Address *</label>

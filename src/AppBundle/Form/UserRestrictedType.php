@@ -38,73 +38,9 @@ class UserRestrictedType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
-            ->add('enabled', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Account Enabled',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
             ->add('is_residential', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                 'label' => 'Residential Address?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('is_show_credit', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Hide Credit Form/Status?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('is_show_warranty', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Hide Warranty Form/Status?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('is_volume_discount', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Grant volume discount?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('is_charge_shipping', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Charge Shipping?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('sent_retail_kit', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Retailer Kit Sent?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('is_current_retailer', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Current?',
-                'choices' => array(
-                    'Yes' => 1,
-                    'No' => 0,
-                ),
-            ))
-            ->add('is_online_intentions', ChoiceType::class, array(
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Online Intentions?',
                 'choices' => array(
                     'Yes' => 1,
                     'No' => 0,
@@ -157,38 +93,6 @@ class UserRestrictedType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
-            ));
-        }
-        if ($user->hasRole('ROLE_SALES_REP')) {
-            $form->add('distributors', EntityType::class, array(
-                'class' => 'AppBundle\Entity\User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 3');
-                },
-                'label' => 'Distributors',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; '),
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true
-            ));
-        }
-        if ($user->hasRole('ROLE_SALES_MANAGER')) {
-            $form->add('sales_reps', null, array(
-                'class' => 'AppBundle\Entity\User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 6');
-                },
-                'label' => 'Sales Reps',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true
             ));
         }
     }

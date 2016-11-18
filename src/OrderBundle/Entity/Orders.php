@@ -17,6 +17,16 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class Orders
 {
+    const STATUS_ACTIVE             = 'Active';
+    const STATUS_RECEIVED           = 'Received';
+    const STATUS_COMPLETED          = 'Completed';
+    const STATUS_VOIDED             = 'Voided';
+    const STATUS_DRAFT              = 'Draft';
+    const STATUS_ARCHIVED           = 'Archived';
+    const STATUS_PAID               = 'Paid';
+    const STATUS_SHIPPED            = 'Shipped';
+    const STATUS_READY_TO_SHIP      = 'Ready to Ship';
+    const STATUS_PENDING            = 'Pending';
     /**
      * @var int
      *
@@ -1190,5 +1200,29 @@ class Orders
     public function getOrderPayments()
     {
         return $this->order_payments;
+    }
+
+    public function getPaidTotal() {
+        $total = 0;
+        foreach($this->getOrderPayments() as $payment) {
+            $total += $payment->getAmount();
+        }
+        return $total;
+    }
+
+    public function getItemTotal() {
+        $total = 0;
+        foreach($this->getProductVariants() as $variant) {
+            $total += $variant->getTotal();
+        }
+        return $total;
+    }
+
+    public function getOrderTotal() {
+        return $this->getItemTotal() + $this->getShipping();
+    }
+
+    public function getBalance() {
+        return $this->getOrderTotal() - $this->getPaidTotal();
     }
 }

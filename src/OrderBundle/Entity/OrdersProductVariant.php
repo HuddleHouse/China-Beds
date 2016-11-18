@@ -224,4 +224,8 @@ class OrdersProductVariant
     {
         return $this->shipping_labels;
     }
+
+    public function getTotal() {
+        return $this->getQuantity() * $this->getPrice();
+    }
 }

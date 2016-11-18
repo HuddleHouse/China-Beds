@@ -176,10 +176,12 @@
                     {{ form_widget(form.company_name) }}
 
                 </div>
+    {% if is_granted('ROLE_ADMIN') %}
                 <div class="col-md-6 form-group">
                     {{ form_label(form.enabled) }}
                     {{ form_widget(form.enabled) }}
                 </div>
+        {% endif %}
                 <div class="col-md-6 form-group">
                     {{ form_label(form.email) }}
                     {{ form_widget(form.email) }}
@@ -360,6 +362,7 @@
                     {{ form_widget(form.is_residential) }}
                 </div>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Retailer Info</h2>
@@ -402,7 +405,7 @@
                 <div class="col-md-4">
                 </div>
             </div>
-    {% if is_granted('ROLE_ADMIN') %}
+
             <div class="row">
                 <div class="col-md-12">
                     <h1>Order Information</h1>

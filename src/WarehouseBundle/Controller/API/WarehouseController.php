@@ -57,6 +57,8 @@ class WarehouseController extends Controller
         $po = $em->getRepository('WarehouseBundle:PurchaseOrder')->find($poId);
         $po->setFactoryOrderNumber($factoryOrderNumber);
         $po->setPhysicalContainerNumber($physicalContainerNumber);
+        $po->setPortEta(new \DateTime($request->request->get('portEta')));
+        $po->setStockDueDate(new \DateTime($request->request->get('due_date')));
         $em->persist($po);
         $em->flush();
 

@@ -102,6 +102,7 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
 		left join orders o
 			on o.id = v.order_id
 	where o.id = :order_id
+	and i.quantity > 0
 	order by i.warehouse_id");
         $statement->bindValue('order_id', $order->getId());
         $statement->execute();

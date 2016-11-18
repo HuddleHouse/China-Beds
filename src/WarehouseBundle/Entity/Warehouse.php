@@ -1192,7 +1192,7 @@ class Warehouse
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getPopItems()
     {

@@ -16,6 +16,7 @@
 
 {% block footer %}
     <script>
+        var grid;
         var buttonGroup = $( buttonGroup );
         $(document).ready(function () {
             $('#part-table').DataTable({
@@ -24,7 +25,7 @@
             $('.button-group').find('.is-checked').removeClass('is-checked');
             $( this ).addClass('is-checked');
 
-            var grid = $('.grid').isotope({
+            grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
             });
@@ -315,6 +316,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
+                            $scope.product_variant_order_quan[variantId] = max;
                             showErrorModal('Only '+max+' available.');
                         }
                     }
@@ -337,6 +339,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
+                            $scope.pop_order_quan[variantId] = max;
                             showErrorModal('Only '+max+' available.');
                         }
                     }
@@ -361,6 +364,7 @@
                 if(user_id == undefined)
                     user_id = {{ app.user.id }};
                 $scope.ship_to_id = user_id;
+                showSpinner();
                 $.ajax({
                         type: 'POST',
                         url: "{{ path('api_get_user_info_for_order_form') }}",
@@ -374,6 +378,8 @@
                                 $('#state').val(data['state']);
                                 $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
+                                $('.grid').isotope( 'reloadItems' ).isotope();
+                                hideSpinner();
                             });
                         }
                     });
@@ -443,6 +449,7 @@
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                             $scope.cart['pick_up_warehouse'] = warehouse;
                             $scope.validate();
                         });
@@ -474,6 +481,7 @@
                         $scope.$apply(function () {
                             $scope.cart = [];
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                         });
                     }
                 });
@@ -762,6 +770,16 @@
             list-style-type: none;
             color: #AAAAAA;
         }
+        .order_product .product_image {
+            padding-top:150px;
+        }
+        .order_product .product_image img {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            margin:auto;
+        }
     </style>
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
@@ -850,7 +868,7 @@
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
+                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }} order_product">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
@@ -860,7 +878,7 @@
 
                         <div class="price_box_row " style="font-size: smaller;">
 
-                                <div ng-repeat="variant in product.variants track by $index" class="price_box">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box"  ng-hide="!form_info['pick_up']&&variant.open_item">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
@@ -905,7 +923,7 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px; margin-top:45px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">

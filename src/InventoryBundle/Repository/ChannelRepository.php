@@ -143,6 +143,7 @@ select i.quantity, i.warehouse_id
 
                     $variants[$key]['inventory'] = $quantity;
                     $variants[$key]['warehouse_data'] = $warehouse_data;
+                    $variants[$key]['open_item'] = (strtoupper($variant['fedex_dimensions']) == 'OPEN');
                 }
 
                 $product_array['variants'] = $variants;
@@ -300,7 +301,7 @@ select *, v.id as variant_id, TRUNCATE(min(p.price/100), 2) as cost, 0 as invent
 			on p.product_variant_id = v.id
 		where v.product_id = :product_id
 			and p.price_group_id in (".$user_price_groups.")
-		group by variant_id;");
+		group by variant_id");
                 $statement->bindValue('product_id', $product->getId());
                 $statement->execute();
                 $variants = $statement->fetchAll();

@@ -27,7 +27,7 @@ class OrderPayment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=5, nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $method;
 

@@ -19,6 +19,6 @@ services:
             - { name: form.type, alias: promokitorder_type }
   form.type.popitem:
         class: InventoryBundle\Form\PopItemType
-        arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
+        arguments: ["@security.token_storage"]
         tags:
             - { name: form.type, alias: popitem_type }

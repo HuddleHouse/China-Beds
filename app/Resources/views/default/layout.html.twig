@@ -23,7 +23,9 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>M</b>H</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><img style="width: 190px;" src="/logo-final-nomal.png"></span>
+            <span class="logo-lg">
+                <img src="/images/logo-{{ app.user.activechannel.id }}.png" style="max-height: 90px; width: 100%">
+            </span>
         </a>
 
         <!-- Header Navbar: style can be found in header.less -->
@@ -43,6 +45,18 @@
                                     Ledger Balance: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
                                 </h6>
                             </div>
+                        </li>
+                    {% endif %}
+
+                    {% if app.user.getOpenBalanceTotal > 0 %}
+                        <li id="ledger-total" class="" style="background-color: #ffbd2a;">
+                            <a href="{{ path('my_open_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
+                                <div class="ledger-total-box">
+                                    <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
+                                        Open Orders: ${{ app.user.getOpenBalanceTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                    </h6>
+                                </div>
+                            </a>
                         </li>
                     {% endif %}
 
@@ -170,6 +184,9 @@
                         or 'attribute_index' in route_names
                         or 'admin_product_index' in route_names
                         or 'specification_index' in route_names
+                        or 'attribute_index' in route_names
+                        or 'promokit_index' in route_names
+                        or 'promokit_orders_index' in route_names
                         %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_assortment) %} active
                         {% elseif (app.request.get('_route') in sidebar_manage_options) %} active
@@ -186,30 +203,46 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                {% if isGrantedRoute(app.user, 'admin_product_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_admin_products) %} class="active"{% endif %}>
                                     <a href="{{ path('admin_product_index') }}"><i class="fa fa-circle-o"></i>Products</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'admin_product_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_pop_item_edit) %} class="active"{% endif %}>
                                     <a href="{{ path('pop_item_index') }}"><i class="fa fa-circle-o"></i>POP Items</a>
                                 </li>
+                                {% endif %}
+                        {% if isGrantedRoute(app.user, 'category_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_assortment) %} class="active"{% endif %}>
                                     <a href="{{ path('category_index') }}"><i class="fa fa-circle-o"></i>Categories</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'manage_options_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_manage_options) %} class="active"{% endif %}>
                                     <a href="{{ path('manage_options_index') }}"><i class="fa fa-circle-o"></i>Options</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'specification_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_specification) %} class="active"{% endif %}>
                                     <a href="{{ path('specification_index') }}"><i class="fa fa-circle-o"></i>Specifications</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'attribute_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_attribute) %} class="active"{% endif %}>
                                     <a href="{{ path('attribute_index') }}"><i class="fa fa-circle-o"></i>Image Attributes</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'promokit_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_promokit) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Items</a>
                                 </li>
+                        {% endif %}
+                        {% if isGrantedRoute(app.user, 'promokit_orders_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_promokit_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('promokit_orders_index') }}"><i class="fa fa-circle-o"></i>Promo Kit Orders</a>
                                 </li>
+                            {% endif %}
                             </ul>
                         </li>
                     {% endif %}
@@ -229,6 +262,12 @@
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
+
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                            <a href="{{ path('manual_order', {'id_channel': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Manual Order</a>
+                                        </li>
+                                    {% endif %}
 
                                     {% if 'order_products_index' in route_names %}
                                         <li {% if (app.request.get('_route') in sidebar_order and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
@@ -329,18 +368,26 @@
                                         {#<a href="{{ path('warehouse_index') }}"><i class="fa fa-circle-o"></i>Warehouses</a>#}
                                     {#</li>#}
                                 {#{% endif %}#}
+                                {% if isGrantedRoute(app.user, 'warehouse_channelled') %}
                                 <li {% if (app.request.get('_route') in sidebar_warehouse and app.request.get('_route') != "warehouse_index" and ((app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name != referer_array|last) or (app.user.activechannel.name == app.request.get('_route_params').channelName ?? false and app.user.activechannel.name == referer_array|last) or (app.user.activechannel.name == referer_array|last and app.request.get('_route_params').id ?? false))) %} class="active"{% endif %}>
                                     <a href="{{ path('warehouse_channelled', {'channelName': app.user.activechannel.name}) }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'purchaseorder_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Receiving Stock</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'stocktransfer_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_stock_transfer) %} class="active"{% endif %}>
                                     <a href="{{ path('stocktransfer_index') }}"><i class="fa fa-circle-o"></i>Stock Transfer</a>
                                 </li>
+                                {% endif %}
+                                {% if isGrantedRoute(app.user, 'stockadjustment_index') %}
                                 <li {% if (app.request.get('_route') in sidebar_stock_adjustment) %} class="active"{% endif %}>
                                     <a href="{{ path('stockadjustment_index') }}"><i class="fa fa-circle-o"></i>Stock Adjustments</a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </li>
                 {% endif %}
@@ -393,7 +440,7 @@
                             </ul>
                         </li>
                         {% endif %}
-
+                        {% if ( not is_granted('ROLE_WAREHOUSE') ) %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_rebate_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit_new) %} active
                             {% elseif (app.request.get('_route') in sidebar_rebate_submit) %} active
@@ -425,7 +472,7 @@
                             {% endif %}
                             </ul>
                         </li>
-
+                        {% endif %}
                         {% if(isGrantedRoute(app.user, 'ledger_index') or isGrantedRoute(app.user, 'ledger_new')) %}
                             <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
@@ -455,7 +502,7 @@
                                 </ul>
                             </li>
                         {% endif %}
-
+                        {% if ( not is_granted('ROLE_WAREHOUSE') ) %}
                         <li class="treeview {% if (app.request.get('_route') in sidebar_credit_index) %} active
                             {% elseif (app.request.get('_route') in sidebar_credit_request) %} active
                             {% endif %}">
@@ -479,7 +526,7 @@
                                 {% endif %}
                             </ul>
                         </li>
-
+                        {% endif %}
                         <li class="header">LINKS</li>
                         <li {% if (app.request.get('_route') == 'resource_index') %} class="active"{% endif %}>
                             <a href="{{ path('resource_index') }}">

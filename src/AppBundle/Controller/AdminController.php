@@ -32,6 +32,7 @@ class AdminController extends Controller
      */
     public function viewAllUsersAction(Request $request)
     {
+        $users = [];
         $em = $this->getDoctrine()->getManager();
         if ( $this->getUser()->hasRole('ROLE_ADMIN') ) {
             $users = $em->getRepository('AppBundle:User')->findAll();
@@ -49,6 +50,12 @@ class AdminController extends Controller
             }
             foreach($this->getUser()->getRetailers() as $user) {
                 $users[] = $user;
+            }
+
+            if ( $this->getUser()->hasRole('ROLE_SALES_MANAGER') ) {
+                foreach($this->getUser()->getSalesReps() as $user) {
+                    $users[] = $user;
+                }
             }
         }
 
