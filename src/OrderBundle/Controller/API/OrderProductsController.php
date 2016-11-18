@@ -611,6 +611,28 @@ class OrderProductsController extends Controller
     }
 
     /**
+     * @Route("/api_save_manual_order_form_pdf", name="api_save_manual_order_form_pdf")
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function saveManualOrderFormPDF(Request $request)
+    {
+        try {
+            $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
+            $file = $request->files->get('pdf');
+            $order->setFile($file);
+            $order->upload();
+            $this->getDoctrine()->getEntityManager()->persist($order);
+            $this->getDoctrine()->getEntityManager()->flush();
+            return new JsonResponse(array(true));
+        }
+        catch(\Exception $e) {
+            return new JsonResponse(array(false, $e->getMessage()));
+        }
+    }
+
+    /**
      * @Route("/api_save_manual_order_form", name="api_save_manual_order_form")
      *
      * @param Request $request
@@ -618,76 +640,75 @@ class OrderProductsController extends Controller
      */
     public function saveManualOrderForm(Request $request)
     {
-        //initialize things
-        $em = $this->getDoctrine()->getManager();
-        $channel = $this->getUser()->getActiveChannel();
-        $products = array();
-        $pop = array();
-        $warehouses = array();
-        $info = array();
-        $product_index = 0;
-        $pop_index = 0;
+        try {
+            //initialize things
+            $em = $this->getDoctrine()->getManager();
+            $channel = $this->getUser()->getActiveChannel();
+            $products = array();
+            $pop = array();
+            $warehouses = array();
+            $info = array();
+            $product_index = 0;
+            $pop_index = 0;
 
-        /*
-         * organize the data from the form....just go with it
-         * we'll have arrays for products, pop items, and the rest of the info
-         * the exceptions to the rule are eta date and pickup date
-         */
-        foreach($request->get('form') as $item) {
-            if(strpos($item['name'], 'products[') !== false) {
-                if(strpos($item['name'], '[warehouse]') !== false)
-                    $products[$product_index]['warehouse'] = $em->getRepository('WarehouseBundle:Warehouse')->find($item['value']);
-                elseif(strpos($item['name'], '[product]') !== false)
-                    $products[$product_index]['product'] = $em->getRepository('InventoryBundle:ProductVariant')->find($item['value']);
-                elseif(strpos($item['name'], '[unit_cost]') !== false)
-                    $products[$product_index]['unit_cost'] = $item['value'];
-                elseif(strpos($item['name'], '[qty]') !== false)
-                    $products[$product_index]['qty'] = $item['value'];
-                elseif(strpos($item['name'], '[subtotal]') !== false) {
-                    $products[$product_index]['subtotal'] = $item['value'];
-                    $product_index++;
+            /*
+             * organize the data from the form....just go with it
+             * we'll have arrays for products, pop items, and the rest of the info
+             * the exceptions to the rule are eta date and pickup date
+             */
+            foreach ($request->get('form') as $item) {
+                if (strpos($item['name'], 'products[') !== false) {
+                    if (strpos($item['name'], '[warehouse]') !== false)
+                        $products[$product_index]['warehouse'] = $em->getRepository('WarehouseBundle:Warehouse')->find($item['value']);
+                    elseif (strpos($item['name'], '[product]') !== false)
+                        $products[$product_index]['product'] = $em->getRepository('InventoryBundle:ProductVariant')->find($item['value']);
+                    elseif (strpos($item['name'], '[unit_cost]') !== false)
+                        $products[$product_index]['unit_cost'] = $item['value'];
+                    elseif (strpos($item['name'], '[qty]') !== false)
+                        $products[$product_index]['qty'] = $item['value'];
+                    elseif (strpos($item['name'], '[subtotal]') !== false) {
+                        $products[$product_index]['subtotal'] = $item['value'];
+                        $product_index++;
+                    }
+                } elseif (strpos($item['name'], 'pop[') !== false) {
+                    if (strpos($item['name'], '[warehouse]') !== false)
+                        $pop[$pop_index]['warehouse'] = $em->getRepository('WarehouseBundle:Warehouse')->find($item['value']);
+                    elseif (strpos($item['name'], '[product]') !== false)
+                        $pop[$pop_index]['product'] = $em->getRepository('InventoryBundle:PopItem')->find($item['value']);
+                    elseif (strpos($item['name'], '[unit_cost]') !== false)
+                        $pop[$pop_index]['unit_cost'] = $item['value'];
+                    elseif (strpos($item['name'], '[qty]') !== false)
+                        $pop[$pop_index]['qty'] = $item['value'];
+                    elseif (strpos($item['name'], '[subtotal]') !== false) {
+                        $pop[$pop_index]['subtotal'] = $item['value'];
+                        $pop_index++;
+                    }
+                } else {
+                    $info[$item['name']] = $item['value'];
                 }
             }
-            elseif(strpos($item['name'], 'pop[') !== false) {
-                if(strpos($item['name'], '[warehouse]') !== false)
-                    $pop[$pop_index]['warehouse'] = $em->getRepository('WarehouseBundle:Warehouse')->find($item['value']);
-                elseif(strpos($item['name'], '[product]') !== false)
-                    $pop[$pop_index]['product'] = $em->getRepository('InventoryBundle:PopItem')->find($item['value']);
-                elseif(strpos($item['name'], '[unit_cost]') !== false)
-                    $pop[$pop_index]['unit_cost'] = $item['value'];
-                elseif(strpos($item['name'], '[qty]') !== false)
-                    $pop[$pop_index]['qty'] = $item['value'];
-                elseif(strpos($item['name'], '[subtotal]') !== false) {
-                    $pop[$pop_index]['subtotal'] = $item['value'];
-                    $pop_index++;
-                }
-            }
-            else {
-                $info[$item['name']] = $item['value'];
-            }
-        }
 
-        if($info['isPickup'] == 'false')
-            $order = new Orders(array(
-                'po' => $info['poNumber'],
-                'comments' => $info['comments'],
-                'ship' => 'true',
-                'ship_name' => $info['shipName'],
-                'address' => $info['shipAddress'],
-                'address2' => $info['shipAddress2'],
-                'city' => $info['shipCity'],
-                'zip' => $info['shipZip'],
-                'phone' => $info['shipPhone'],
-                'email' => $info['shipEmail']
-            ));
-        else
-            $order = new Orders(array(
-                'po' => $info['poNumber'],
-                'comments' => $info['comments'],
-                'pick_up' => 'true',
-                'pick_up_date' => $request->get('pickupDate'),
-                'agent_name' => $info['pickupAgent']
-            ));
+            if ($info['isPickup'] == 'false')
+                $order = new Orders(array(
+                    'po' => $info['poNumber'],
+                    'comments' => $info['comments'],
+                    'ship' => 'true',
+                    'ship_name' => $info['shipName'],
+                    'address' => $info['shipAddress'],
+                    'address2' => $info['shipAddress2'],
+                    'city' => $info['shipCity'],
+                    'zip' => $info['shipZip'],
+                    'phone' => $info['shipPhone'],
+                    'email' => $info['shipEmail']
+                ));
+            else
+                $order = new Orders(array(
+                    'po' => $info['poNumber'],
+                    'comments' => $info['comments'],
+                    'pick_up' => 'true',
+                    'pick_up_date' => $request->get('pickupDate'),
+                    'agent_name' => $info['pickupAgent']
+                ));
 
 //        else /* if not a new order */ {
 //            $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
@@ -702,85 +723,85 @@ class OrderProductsController extends Controller
 //            $order->setData($info);
 //        }
 
+            $em->persist($order);
+            $em->flush();
 
-        $em->persist($order);
-        $em->flush();
+            $order->setOrderId('O-' . str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
+            /** @var \AppBundle\Entity\User $user */
+            $user = $em->getRepository('AppBundle:User')->find($info['user']);
+            $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
 
-        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
-        $user = $em->getRepository('AppBundle:User')->find($info['user']);
-        $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
+            $order->setStatus($status);
+            $order->setChannel($channel);
+            $order->setSubmittedByUser($this->getUser());
+            $order->setSubmittedForUser($user);
+            $order->setState($em->getRepository('AppBundle:State')->find($info['shipState']));
+            $channel->getOrders()->add($order);
+            $this->getUser()->getSubmittedOrders()->add($order);
+            $user->getOrders()->add($order);
 
-        $order->setStatus($status);
-        $order->setChannel($channel);
-        $order->setSubmittedByUser($this->getUser());
-        $order->setSubmittedForUser($user);
-        $order->setState($em->getRepository('AppBundle:State')->find($info['shipState']));
+            if ($products != null) {
+                foreach ($products as $product) {
+                    $quantity = intval($product['qty']);
+                    if ($quantity != null && $quantity > 0) {
+                        $orders_product_variant = new OrdersProductVariant();
+                        $orders_product_variant->setOrder($order);
+                        $orders_product_variant->setPrice($product['unit_cost']);
+                        $orders_product_variant->setQuantity($quantity);
+                        $orders_product_variant->setProductVariant($product['product']);
 
-        if($products != null) {
-            foreach($products as $product) {
-                $quantity = intval($product['qty']);
-                if($quantity != null && $quantity > 0) {
-                    $orders_product_variant = new OrdersProductVariant();
-                    $orders_product_variant->setOrder($order);
-                    $orders_product_variant->setPrice($product['unit_cost']);
-                    $orders_product_variant->setQuantity($quantity);
-                    $orders_product_variant->setProductVariant($product['product']);
-                    $em->persist($orders_product_variant);
-                    $em->flush();
+                        $warehouses[] = $product['warehouse'];
+                        $warehouseQuantity = $em->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(array('warehouse' => $product['warehouse'], 'product_variant' => $product['product']));
+                        if ($quantity <= $warehouseQuantity->getQuantity())
+                            $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $product['warehouse']);
+                        else //$quantity > $warehouseQuantity->getQuantity()
+                            $orders_warehouse_info = new OrdersWarehouseInfo($warehouseQuantity->getQuantity(), $orders_product_variant, $product['warehouse']);
 
-                    $warehouses[] = $product['warehouse'];
-                    $warehouseQuantity = $em->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(array('warehouse' => $product['warehouse'], 'product_variant' => $product['product']));
-                    if($quantity <= $warehouseQuantity)
-                        $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouseQuantity);
-                    else //$quantity > $warehouseQuantity
-                        $orders_warehouse_info = new OrdersWarehouseInfo($warehouseQuantity, $orders_product_variant, $warehouseQuantity);
-
-                    $em->persist($orders_warehouse_info);
-                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
-                    $em->persist($orders_product_variant);
-
-                    $order->addProductVariants($orders_product_variant);
+                        $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+                        $order->addProductVariants($orders_product_variant);
+                        $em->persist($orders_product_variant);
+                        $em->persist($orders_warehouse_info);
+                    }
                 }
             }
-        }
 
-        if($pop != null && !empty($pop)) {
-            foreach ($pop as $popitem) {
-                $quantity = intval($popitem['qty']);
-                if ($quantity != null && $quantity > 0) {
-                    $orders_pop_item = new OrdersPopItem();
-                    $orders_pop_item->setOrder($order);
-                    $orders_pop_item->setPrice($popitem['unit_cost']);
-                    $orders_pop_item->setQuantity($quantity);
-                    $orders_pop_item->setPopItem($popitem['product']);
-                    $em->persist($orders_pop_item);
-                    $order->getPopItems()->add($orders_pop_item);
+            if ($pop != null && !empty($pop)) {
+                foreach ($pop as $popitem) {
+                    $quantity = intval($popitem['qty']);
+                    if ($quantity != null && $quantity > 0) {
+                        $orders_pop_item = new OrdersPopItem();
+                        $orders_pop_item->setOrder($order);
+                        $orders_pop_item->setPrice($popitem['unit_cost']);
+                        $orders_pop_item->setQuantity($quantity);
+                        $orders_pop_item->setPopItem($popitem['product']);
+                        $order->getPopItems()->add($orders_pop_item);
+                        $em->persist($orders_pop_item);
+                    }
                 }
             }
-        }
 
-        if($info['isFedex'] == 'true') {
-            $order->setShipping($info['fedex_cost']);
-            $order->setShipCode('FEDEX_GROUND');
-            $order->setShipDescription('FedEx Ground');
-        }
-        else {
-            $order->setShipping($info['other_shipping_cost']);
-            $order->setShipCode('OTHER');
-            $order->setShipDescription('Other Shipping');
-        }
+            if ($info['isFedex'] == 'true') {
+                $order->setShipping($info['fedex_cost']);
+                $order->setShipCode('FEDEX_GROUND');
+                $order->setShipDescription('FedEx Ground');
+            } else {
+                $order->setShipping($info['other_shipping_cost']);
+                $order->setShipCode('OTHER');
+                $order->setShipDescription('Other Shipping');
+            }
 
-        $em->persist($order);
-        $em->flush();
+            $em->persist($channel);
+            $em->persist($order);
+            $em->flush();
 
-        $groups = $user->getGroupsArray();
-        $is_dis = $is_retail = 0;
+            $groups = $user->getGroupsArray();
+            $is_dis = $is_retail = 0;
 
-        if(isset($groups['Retailer']))
-            $is_retail = 1;
-        if(isset($groups['Distributor']))
-            $is_dis = 1;
-        $pop = $order->getPopItems();
+            if (isset($groups['Retailer']))
+                $is_retail = 1;
+            if (isset($groups['Distributor']))
+                $is_dis = 1;
+            $pop = $order->getPopItems();
 
 //        $this->container->get('email_service')->sendOrderReceipt($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
 //                'channel' => $channel,
@@ -794,24 +815,22 @@ class OrderProductsController extends Controller
 //            )
 //        ));
 
-        $warehouses = array_unique($warehouses);
+            $warehouses = array_unique($warehouses);
 
-        foreach($warehouses as $warehouse) {
-            $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
-            $is_shipped = false;
+            foreach ($warehouses as $warehouse) {
+                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
+                $is_shipped = false;
 
-            foreach($product_data as $prod) {
-                foreach($prod as $item)
-                    if($item['shipped'] == true) {
+                foreach ($product_data as $prod) foreach ($prod as $item)
+                    if ($item['shipped'] == true) {
                         $is_shipped = true;
                         break;
                     }
-            }
 
-            if($is_shipped == true)
-                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
-            else
-                $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
+                if ($is_shipped == true)
+                    $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
+                else
+                    $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
 
 
 //            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
@@ -825,9 +844,12 @@ class OrderProductsController extends Controller
 //                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
 //                'shipped_status' => $shipped_status
 //            )));
+            }
+            return JsonResponse::create(array(true, $order->getId()));
         }
-
-        return JsonResponse::create($order->getId());
+        catch(\Exception $e) {
+            return JsonResponse::create(array(false, $e->getMessage()));
+        }
     }
 }
 

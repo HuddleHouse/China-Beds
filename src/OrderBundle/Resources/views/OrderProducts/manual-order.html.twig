@@ -16,8 +16,7 @@
 
 {% block footer %}
     <script>
-        showSpinner();
-        var index = 1;
+        var index = 0;
         var subtotal = 0;
         var total = 0;
         var isFedex = true;
@@ -32,10 +31,16 @@
         $(document).ready(function () {
             $('#add_product').on('click', addProductHandler);
             $('#add_pop_item').on('click', addPopHandler);
-            getProductOptions(0);
-            getPopOptions(0);
-            hideSpinner();
         });
+
+        function openFileBrowser() {
+            $('#pdf').click();
+        }
+
+        function autoFillName() {
+            var fname = $('#pdf')[0].files[0].name;
+            $('#pdf_path').val(fname.substr(0, fname.indexOf('.')));
+        }
 
         function getProductOptions(index) {
             var wid = $('#products-warehouse-'+index).val();
@@ -180,6 +185,8 @@
 
             $scope.submitOrder = function () {
                 showSpinner();
+                var fileData = new FormData();
+                fileData.append('pdf', $('#pdf')[0].files[0]);
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_save_manual_order_form') }}",
@@ -190,6 +197,27 @@
                         pickUpDate: $scope.pickUpDate
                     },
                     success: function (data) {
+                        if(data[0] == true) {
+                            fileData.append('order_id', data[1]);
+                            $.ajax({
+                                url: '{{ path('api_save_manual_order_form_pdf') }}',
+                                type: 'POST',
+                                data: fileData,
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    if (!data[0]) {
+                                        showErrorModal('Error: ' + data[1]);
+                                    }
+                                    else {
+                                        showSuccessModal('Order successfully placed.');
+                                    }
+                                }
+                            });
+                        }
+                        else {
+
+                        }
                         console.log(data);
 //                        $scope.$apply(function () {
 //                            location.reload();
@@ -506,16 +534,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id="product-0">
-                                <td><select class="form-control" id="products-warehouse-0" name="products[0][warehouse]" onchange="getProductOptions(0)"></select></td>
-                                <td><select class="form-control" id="products-product-0" name="products[0][product]"></select></td>
-                                <td><input type="text" class="form-control" id="products-unit_cost-0" name="products[0][unit_cost]" placeholder="0.00" onchange="calculateProductSubtotal(0)"></td>
-                                <td><input type="number" class="form-control" id="products-qty-0" name="products[0][qty]" onchange="calculateProductSubtotal(0)"></td>
-                                <td><input type="text" class="form-control" id="products-subtotal-0" name="products[0][subtotal]" placeholder="0.00"></td>
-                                <td><a class="btn btn-raised btn-danger rich-btn" onclick="removeProductRow(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-                            </tr>
                             <tr>
-                                <td colspan="6" style="text-align: center"><a href id="add_product" class="stretch">Add Another Product</a></td>
+                                <td colspan="6" style="text-align: center"><a href id="add_product" class="stretch">Add a Product</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -539,16 +559,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id="pop-0">
-                                <td><select class="form-control" id="pop-warehouse-0" name="pop[0][warehouse]" onchange="getPopOptions(0)"></select></td>
-                                <td><select class="form-control" id="pop-product-0" name="pop[0][product]"></select></td>
-                                <td><input type="text" class="form-control" id="pop-unit_cost-0" name="pop[0][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal(0)"></td>
-                                <td><input type="number" class="form-control" id="pop-qty-0" name="pop[0][qty]" onchange="calculatePopSubtotal(0)"></td>
-                                <td><input type="text" class="form-control" id="pop-subtotal-0" name="pop[0][subtotal]" placeholder="0.00"></td>
-                                <td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-                            </tr>
                             <tr>
-                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add Another Pop Item</a></td>
+                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -560,8 +572,18 @@
                 <div class="row" style="padding-top: 40px;">
                     <!-- accepted payments column -->
                     <div class="col-md-6">
+                        <h5 style="margin: -14px 0 16px;">Invoice PDF Upload</h5>
+                        <div class="input-group">
+                            <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse… <input type="file" id="pdf" name="pdf" accept="application/pdf,application/x-pdf" onchange="autoFillName()">
+                    </span>
+                            </label>
+                            <input type="text" id="pdf_path" name="pdf_path" class="form-control" style="margin-bottom: 10px; margin-left: 10px;" onclick="openFileBrowser()" readonly="readonly">
+                        </div>
+                        <br>
                         <h5 style="margin: -14px 0 16px;">Comments</h5>
-                        <textarea name="comments" id="comments" class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 140px; width: 100%" ng-model="comments"></textarea>
+                        <textarea name="comments" id="comments" class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 70px; width: 100%" ng-model="comments"></textarea>
                     </div>
                     <div class="col-md-6">
                         <div class="table-responsive">

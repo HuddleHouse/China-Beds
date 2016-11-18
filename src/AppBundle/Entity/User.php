@@ -507,7 +507,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getOrders()
     {
@@ -1175,7 +1175,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedOrders()
     {
