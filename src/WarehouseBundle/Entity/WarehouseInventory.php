@@ -75,7 +75,7 @@ class WarehouseInventory
     }
 
     /**
-     * @return mixed
+     * @return \InventoryBundle\Entity\ProductVariant
      */
     public function getProductVariant()
     {
