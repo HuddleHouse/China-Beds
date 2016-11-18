@@ -111,6 +111,9 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         $product_data = array();
         $id = 0;
         foreach($products as $product) {
+            $stmt = $connection->prepare('select * from orders_shipping_labels where orders_warehouse_info_id = :id');
+            $stmt->execute(['id' => $product['id']]);
+            $product['tracking_numbers'] = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             if($id == 0)
                 $id = $product['warehouse_id'];
 
@@ -123,7 +126,6 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
             else
                 $product_data[$id][] = $product;
         }
-
         return $product_data;
     }
 

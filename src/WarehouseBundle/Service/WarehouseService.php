@@ -22,7 +22,7 @@ class WarehouseService extends BaseService
 
         foreach($order->getProductVariants() as $variant) {
             foreach($variant->getWarehouseInfo() as $warehouse_info) {
-                $this->modifyInventoryLevel($warehouse_info->getWarehouse(), $variant->getProductVariant(), $warehouse_info->getQuantity());
+                $this->modifyInventoryLevel($warehouse_info->getWarehouse(), $variant->getProductVariant(), $warehouse_info->getQuantity()*-1);
             }
         }
 

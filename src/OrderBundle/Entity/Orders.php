@@ -167,10 +167,10 @@ class Orders
      */
     private $product_variants;
 
-    /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order", cascade={"persist"})
-     */
-    private $shipping_labels;
+//    /**
+//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order", cascade={"persist"})
+//     */
+//    private $shipping_labels;
 
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist"})
@@ -874,24 +874,17 @@ class Orders
      */
     public function getShippingLabels()
     {
-        return $this->shipping_labels;
+        $shipping_labels = new ArrayCollection();
+        foreach($this->getProductVariants() as $variant) {
+            foreach($variant->getWarehouseInfo() as $info) {
+                foreach($info->getShippingLabels() as $label) {
+                    $shipping_labels->add($label);
+                }
+            }
+        }
+        return $shipping_labels;
     }
 
-    /**
-     * @param mixed $shipping_labels
-     */
-    public function setShippingLabels($shipping_labels)
-    {
-        $this->shipping_labels = $shipping_labels;
-    }
-
-    /**
-     * @param mixed $shipping_labels
-     */
-    public function addShippingLabel($shipping_label)
-    {
-        $this->shipping_labels[] = $shipping_label;
-    }
 
     /**
      * @param int $amount_paid

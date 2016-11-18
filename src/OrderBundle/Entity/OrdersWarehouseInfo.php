@@ -47,6 +47,12 @@ class OrdersWarehouseInfo
      */
     private $warehouse;
 
+    /**
+     * OrdersProductVariant constructor.
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="orders_warehouse_info", cascade={"persist"})
+     */
+    private $shipping_labels;
+
     public function __construct($quantity, $orders_product_variant, $warehouse)
     {
         $this->quantity = $quantity;
@@ -137,4 +143,39 @@ class OrdersWarehouseInfo
     }
 
 
+
+    /**
+     * Add shippingLabel
+     *
+     * @param \OrderBundle\Entity\OrdersShippingLabel $shippingLabel
+     *
+     * @return OrdersWarehouseInfo
+     */
+    public function addShippingLabel(\OrderBundle\Entity\OrdersShippingLabel $shippingLabel)
+    {
+        $shippingLabel->setOrdersWarehouseInfo($this);
+        $this->shipping_labels[] = $shippingLabel;
+
+        return $this;
+    }
+
+    /**
+     * Remove shippingLabel
+     *
+     * @param \OrderBundle\Entity\OrdersShippingLabel $shippingLabel
+     */
+    public function removeShippingLabel(\OrderBundle\Entity\OrdersShippingLabel $shippingLabel)
+    {
+        $this->shipping_labels->removeElement($shippingLabel);
+    }
+
+    /**
+     * Get shippingLabels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getShippingLabels()
+    {
+        return $this->shipping_labels;
+    }
 }
