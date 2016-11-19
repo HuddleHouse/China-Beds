@@ -27,9 +27,11 @@ class AttributeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $attributes = $em->getRepository('InventoryBundle:Attribute')->findAll();
+        $channel = $this->getUser()->getActiveChannel();
 
         return $this->render('@Inventory/Attribute/index.html.twig', array(
             'attributes' => $attributes,
+            'channel' => $channel->getName()
         ));
     }
 
@@ -44,9 +46,12 @@ class AttributeController extends Controller
         $attribute = new Attribute();
         $form = $this->createForm('InventoryBundle\Form\AttributeType', $attribute);
         $form->handleRequest($request);
+        $channel_id = $this->getUser()->getActiveChannel()->getId();
+        $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($channel_id);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $attribute->setChannels($channel);
                 $em = $this->getDoctrine()->getManager();
                 $attribute->upload();
                 $em->persist($attribute);

@@ -25,34 +25,14 @@ class WarehouseInventoryController extends Controller
         $quantity = (int)$request->request->get('quantity');
         $warehouse_id = $request->request->get('warehouse_id');
 
-        $connection = $em->getConnection();
-        $statement = $connection->prepare("select quantity from warehouse_inventory where product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-        $statement->bindValue('product_variant_id', $variant_id);
-        $statement->bindValue('warehouse_id', $warehouse_id);
-
         try {
-            $statement->execute();
-            $price = $statement->fetch();
+            $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant_id);
+            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
 
-            if($price == false) {
-                $statement = $connection->prepare("insert into warehouse_inventory (quantity, product_variant_id, warehouse_id) values (:quantity, :product_variant_id, :warehouse_id)");
-                $statement->bindValue('quantity', $quantity);
-                $statement->bindValue('product_variant_id', $variant_id);
-                $statement->bindValue('warehouse_id', $warehouse_id);
-                $statement->execute();
-            }
-            else {
-                $quantity = (int)$quantity + $price['quantity'];
-                $statement = $connection->prepare("update warehouse_inventory set quantity = :quantity where product_variant_id = :product_variant_id and warehouse_id = :warehouse_id");
-                $statement->bindValue('quantity', $quantity);
-                $statement->bindValue('product_variant_id', $variant_id);
-                $statement->bindValue('warehouse_id', $warehouse_id);
-                $statement->execute();
-            }
+            $this->get('warehouse.warehouse_service')->modifyInventoryLevel($warehouse, $variant, $quantity);
 
             return $this->getValuesAction($request);
-        }
-        catch(\Exception $e) {
+        } catch(\Exception $e) {
             return JsonResponse::create(false);
         }
     }

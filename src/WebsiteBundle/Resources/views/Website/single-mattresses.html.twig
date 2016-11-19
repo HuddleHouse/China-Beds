@@ -79,9 +79,11 @@
                     </div>
                 </div>
             </div>
+            {% if product.detailImage %}
             <div class="product-struture">
                 <img src="/{{ product.detailImage.webPath }}" />
             </div>
+            {% endif %}
         </div>
     </div>
 {% endblock body %}

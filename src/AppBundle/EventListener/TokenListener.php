@@ -73,7 +73,11 @@ class TokenListener
                 }
                 $route_names = $user->getRouteNames();
                 $user_channels = $user->getUserChannelsArray();
-                $this->session->set('user_channels', implode(',', $user_channels));
+                $user_channels_ids = [];
+                foreach($user_channels as $id => $channel) {
+                    $user_channels_ids[] = $id;
+                }
+                $this->session->set('user_channels', implode(',', $user_channels_ids));
                 $this->session->set('route_names', implode(',', $route_names));
             }
 

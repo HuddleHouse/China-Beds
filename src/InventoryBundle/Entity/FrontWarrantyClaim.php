@@ -67,16 +67,16 @@ class FrontWarrantyClaim
     private $state;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="zip", type="integer", nullable=true)
+     * @ORM\Column(name="zip", type="string", nullable=true)
      */
     private $zip;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="phone", type="integer", nullable=true)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
@@ -95,7 +95,7 @@ class FrontWarrantyClaim
     private $retailerName;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="mattress_model", type="string", length=255, nullable=true)
      */
@@ -109,14 +109,14 @@ class FrontWarrantyClaim
     private $mattressSize;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="purchase_price", type="integer", length=255, nullable=true)
+     * @ORM\Column(name="purchase_price", type="string", length=255, nullable=true)
      */
     private $purchasePrice;
 
     /**
-     * @var bool
+     * @var boolean
      *
      * @ORM\Column(name="contacted_retailer", type="boolean", nullable=true)
      */
@@ -181,8 +181,7 @@ class FrontWarrantyClaim
     /**
      * @ORM\Column(name="receipt_copy", type="string", nullable=true)
      *
-     * @Assert\NotBlank(message="Please, include in this submission a copy of the receipt")
-     * @Assert\File(mimeTypes={"application/pdf", "image/*"})
+     * @Assert\NotBlank(message="You must include in this submission a copy of the receipt")
      */
     private $receiptCopy;
 
@@ -194,8 +193,7 @@ class FrontWarrantyClaim
     /**
      * @ORM\Column(name="law_copy", type="string", nullable=true)
      *
-     * @Assert\NotBlank(message="Please, include in this submission a copy of the receipt")
-     * @Assert\File(mimeTypes={"application/pdf", "image/*"})
+     * @Assert\NotBlank(message="You must include in this submission a copy of the law label")
      */
     private $lawCopy;
 
@@ -203,6 +201,27 @@ class FrontWarrantyClaim
      * @ORM\Column(type="string", length=510, nullable=true)
      */
     public $lawPath;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="resolution", type="text", nullable=true)
+     */
+    private $resolution;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="archived", type="boolean", nullable=true, options={"default" : false})
+     */
+    private $archived;
 
     /**
      * FrontWarrantyClaim constructor.
@@ -909,5 +928,66 @@ class FrontWarrantyClaim
     public function setLawPath($lawPath)
     {
         $this->lawPath = $lawPath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResolution()
+    {
+        return $this->resolution;
+    }
+
+    /**
+     * @param mixed $resolution
+     */
+    public function setResolution($resolution)
+    {
+        $this->resolution = $resolution;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
+     * @param boolean $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+
+
+
+    /**
+     * Get archived
+     *
+     * @return boolean
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 }

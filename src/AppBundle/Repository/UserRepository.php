@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 use AppBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 
@@ -13,7 +14,42 @@ use OrderBundle\Entity\Orders;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getAllDistributorsArray() {
+    public function findUsersForUser(User $user) {
+        $users = [];
+
+        if ( $user->hasRole('ROLE_ADMIN') ) {
+            return $this->getEntityManager()
+                ->createQuery(
+                    'SELECT u 
+                       FROM AppBundle\Entity\User u
+                       LEFT JOIN u.user_channels c
+                       WHERE c IN (:channel)
+                      ORDER BY u.company_name ASC'
+                )
+                ->setParameter('channel', $user->getActiveChannel())
+                ->getResult();
+        }
+
+        foreach($user->getSalesReps() as $salesRep) {
+            $users[$salesRep->getId()] = $salesRep;
+        }
+
+        foreach($user->getRetailers() as $retailer) {
+            $users[$retailer->getId()] = $retailer;
+        }
+
+        foreach($user->getDistributors() as $distributor) {
+            $users[$distributor->getId()] = $distributor;
+        }
+
+        $return = new ArrayCollection();
+        foreach($users as $user) {
+            $return->add($user);
+        }
+        return $return;
+    }
+
+    public function getAllDistributorsArray(Channel $channel = null) {
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $statement = $connection->prepare("select u.*
@@ -28,8 +64,11 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
         $distributors = array();
         foreach($data as $d) {
-            $dist = $em->getRepository('AppBundle:User')->find($d['id']);
-            $distributors[] = $dist;
+            if ( $dist = $em->getRepository('AppBundle:User')->find($d['id']) ) {
+                if ($dist->belongsToChannel($channel)) {
+                    $distributors[] = $dist;
+                }
+            }
         }
         return $distributors;
     }
@@ -81,6 +120,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function canViewOrder(Orders $order, User $user) {
+        $em = $this->getEntityManager();
         $is_allowed = 0;
         if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_WAREHOUSE'))
             return 1;
@@ -96,7 +136,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                     $user_ids[$item->getId()] = $item->getId();
                     $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item));
                     foreach($data as $item)
-                        if($item->getId() == $user->getId())
+                        if($item->getId() == $order->getId())
                             return 1;
                 }
             }
@@ -107,7 +147,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                     $user_ids[$distributor->getId()] = $distributor->getId();
                     $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
                     foreach($data as $item)
-                        if($item->getId() == $user->getId())
+                        if($item->getId() == $order->getId())
                             return 1;
                 }
                 foreach($distributor->getRetailers() as $retailer) {
@@ -115,7 +155,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                         $user_ids[$retailer->getId()] = $retailer->getId();
                         $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
                         foreach($data as $item)
-                            if($item->getId() == $user->getId())
+                            if($item->getId() == $order->getId())
                                 return 1;
                     }
                 }
@@ -127,7 +167,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                     $user_ids[$salesRep->getId()] = $salesRep->getId();
                     $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $salesRep));
                     foreach($data as $item)
-                        if($item->getId() == $user->getId())
+                        if($item->getId() == $order->getId())
                             return 1;
                 }
                 foreach($salesRep->getDistributors() as $distributor) {
@@ -135,7 +175,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                         $user_ids[$distributor->getId()] = $distributor->getId();
                         $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $distributor));
                         foreach($data as $item)
-                            if($item->getId() == $user->getId())
+                            if($item->getId() == $order->getId())
                                 return 1;
                     }
                     foreach($distributor->getRetailers() as $retailer) {
@@ -143,7 +183,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                             $user_ids[$retailer->getId()] = $retailer->getId();
                             $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer));
                             foreach($data as $item)
-                                if($item->getId() == $user->getId())
+                                if($item->getId() == $order->getId())
                                     return 1;
                         }
                     }

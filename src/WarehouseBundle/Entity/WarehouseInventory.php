@@ -26,7 +26,7 @@ class WarehouseInventory
      *
      * @ORM\Column(name="quantity", type="integer", nullable=true)
      */
-    private $quantity;
+    private $quantity = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="warehouse_inventory")
@@ -75,7 +75,7 @@ class WarehouseInventory
     }
 
     /**
-     * @return mixed
+     * @return \InventoryBundle\Entity\ProductVariant
      */
     public function getProductVariant()
     {
@@ -104,6 +104,10 @@ class WarehouseInventory
     public function setWarehouse($warehouse)
     {
         $this->warehouse = $warehouse;
+    }
+
+    public function modifyQuantityBy($modifier) {
+        $this->quantity += $modifier;
     }
 
 

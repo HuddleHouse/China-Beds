@@ -130,6 +130,7 @@
     {% if not form.vars.valid %}
         <div class="row">
             <div class="col-md-12">
+
                 <div class="alert alert-danger ">
                     {{ form_errors(form.user_channels) }}
                 </div>
@@ -140,8 +141,22 @@
     <div class="wrapper" ng-controller="MyCtrl">
     <div class="table">
         <div class="form-body">
-            {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
-
+        {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
+        {% if is_granted("ROLE_ADMIN") %}
+            <div class="row">
+                    <div class="col-md-12">
+                        <h2>Username and Password</h2>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.username) }}
+                        {{ form_widget(form.username) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.plain_password) }}
+                        {{ form_widget(form.plain_password) }}
+                    </div>
+            </div>
+        {% endif %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Information</h2>
@@ -161,10 +176,12 @@
                     {{ form_widget(form.company_name) }}
 
                 </div>
+    {% if is_granted('ROLE_ADMIN') %}
                 <div class="col-md-6 form-group">
                     {{ form_label(form.enabled) }}
                     {{ form_widget(form.enabled) }}
                 </div>
+        {% endif %}
                 <div class="col-md-6 form-group">
                     {{ form_label(form.email) }}
                     {{ form_widget(form.email) }}
@@ -174,6 +191,7 @@
                     {{ form_widget(form.phone) }}
                 </div>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Admin</h2>
@@ -188,19 +206,25 @@
                     {{ form_label(form.my_sales_rep) }}
                     {{ form_widget(form.my_sales_rep) }}
                 </div>
+            </div>
+            <div class="row" >
                 <div class="col-md-6 form-group">
                     {{ form_label(form.my_sales_manager) }}
                     {{ form_widget(form.my_sales_manager) }}
                 </div>
-            </div>
-            <div class="row" >
                 <div class="col-md-6" style="display: block;">
                     {{ form_label(form.groups) }}
                     {{ form_widget(form.groups) }}
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6" style="display: block;min-height: 360px;">
                     {{ form_label(form.price_groups) }}
                     {{ form_widget(form.price_groups) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.hide_rebate) }}
+                    {{ form_widget(form.hide_rebate) }}
                 </div>
             </div>
             <br>
@@ -304,6 +328,7 @@
                 <br>
                 <br>
             {% endif %}
+                {% endif %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Address</h2>
@@ -337,6 +362,7 @@
                     {{ form_widget(form.is_residential) }}
                 </div>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
             <div class="row">
                 <div class="col-md-12">
                     <h2>Retailer Info</h2>
@@ -379,6 +405,7 @@
                 <div class="col-md-4">
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <h1>Order Information</h1>
@@ -390,6 +417,7 @@
                 <div class="col-md-6">
                 </div>
             </div>
+            <fieldset>
             <div class="row">
                 <div class="col-md-4 form-group">
                     {{ form_label(form.warehouse_1) }}
@@ -404,7 +432,8 @@
                     {{ form_widget(form.warehouse_3) }}
                 </div>
             </div>
-
+            </fieldset>
+        {% endif %}
             <div class="row">
                 <div class="col-md-8">
                 </div>

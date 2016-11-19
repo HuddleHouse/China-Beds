@@ -1,0 +1,653 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Manual Order Products{% endblock %}
+{% block page_title %}
+    Manual Order {{ channel.name }} Products
+{% endblock page_title %}
+
+{% block page_name %}
+    <div class="">
+        <img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">
+    </div>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        var index = 0;
+        var subtotal = 0;
+        var total = 0;
+        var isFedex = true;
+        var isPickup = false;
+        var products = {{ products | json_encode | raw }};
+        var popItems = {{ popItems | json_encode | raw }};
+        var warehouse_opts = '{% for warehouse in warehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
+        var pop_warehouse_opts = '{% for warehouse in popWarehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
+        $('#products-warehouse-0').html(warehouse_opts);
+        $('#pop-warehouse-0').html(pop_warehouse_opts);
+
+        $(document).ready(function () {
+            $('#add_product').on('click', addProductHandler);
+            $('#add_pop_item').on('click', addPopHandler);
+        });
+
+        function openFileBrowser() {
+            $('#pdf').click();
+        }
+
+        function autoFillName() {
+            var fname = $('#pdf')[0].files[0].name;
+            $('#pdf_path').val(fname.substr(0, fname.indexOf('.')));
+        }
+
+        function getProductOptions(index) {
+            var wid = $('#products-warehouse-'+index).val();
+            $('#products-product-'+index).html('');
+            $.each(products[wid], function(key, val) {
+                $('#products-product-'+index).append('<option value="' + key + '">' + val.product + ' ' + val.variant + ': ' +  val.quantity + ' available' + '</option>');
+            });
+        }
+
+        function calculateProductSubtotal(index) {
+            var qty = $('#products-qty-'+ index).val();
+            var unit_cost = $('#products-unit_cost-'+ index).val();
+            if(qty != '' && unit_cost != '') {
+                $('#products-subtotal-'+ index).val((qty*unit_cost).toFixed(2));
+                calculateSubtotal();
+            }
+        }
+
+        function getPopOptions(index) {
+            var wid = $('#pop-warehouse-'+index).val();
+            $('#pop-product-'+index).html('');
+            $.each(popItems[wid], function(key, val) {
+                $('#pop-product-'+index).append('<option value="' + key + '">' + val.product + '</option>');
+            });
+        }
+
+        function calculatePopSubtotal(index) {
+            var qty = $('#pop-qty-'+ index).val();
+            var unit_cost = $('#pop-unit_cost-'+ index).val();
+            if(qty != '' && unit_cost != '') {
+                $('#pop-subtotal-'+ index).val((qty*unit_cost).toFixed(2));
+                calculateSubtotal();
+            }
+        }
+
+        function calculateSubtotal() {
+            subtotal = 0;
+            $.each($("#product-table tr td:nth-child(5) div input"), function(key, value) {
+                subtotal += Number($(value).val());
+            });
+            $.each($("#pop-table tr td:nth-child(5) div input"), function(key, value) {
+                subtotal += Number($(value).val());
+            });
+            $('#subtotal').html(subtotal.toFixed(2));
+            $('#subtotalInput').val(subtotal.toFixed(2));
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            total = Number(subtotal);
+            if($('#isPickup-t').prop('checked') == true) {
+                //nothing
+            }
+            else {
+                if($('#isFedex-t').prop('checked') == true) {
+                    total += Number($('#fedex_cost').val());
+                }
+                if($('#isFedex-f').prop('checked') == true) {
+                    total += Number($('#other_shipping_cost').val());
+                }
+            }
+            $('#total').html(total.toFixed(2));
+            $('#totalInput').val(total.toFixed(2));
+        }
+
+        function addProductHandler() {
+            $('#product-table tr:last').remove();
+            $('#product-table').append(
+                    '<tr id="product-'+ index + '">' +
+                    '<td><select class="form-control" id="products-warehouse-'+ index + '" name="products['+ index + '][warehouse]" onchange="getProductOptions('+ index + ')">' + warehouse_opts + '</select></td>' +
+                    '<td><select class="form-control" id="products-product-'+ index + '" name="products['+ index + '][product]"></select></td>' +
+                    '<td><input type="text" class="form-control" id="products-unit_cost-'+ index + '" name="products['+ index + '][unit_cost]" placeholder="0.00" onchange="calculateProductSubtotal('+ index + ')"></td>' +
+                    '<td><input type="number" class="form-control" id="products-qty-'+ index + '" name="products['+ index + '][qty]" onchange="calculateProductSubtotal('+ index + ')"></td>' +
+                    '<td><input type="text" class="form-control" id="products-subtotal-'+ index + '" name="products['+ index + '][subtotal]" placeholder="0.00"></td>' +
+                    '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removeProductRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td colspan="6" style="text-align:center"><a id="add_product" onclick="addProductHandler()" class="stretch">Add Another Product</a></td>' +
+                    '</tr>'
+            );
+            getProductOptions(index);
+            $.material.init();
+            index++;
+        }
+
+        function removeProductRow(index) {
+            $('#product-'+index).remove();
+        }
+
+        function addPopHandler() {
+            $('#pop-table tr:last').remove();
+            $('#pop-table').append(
+                    '<tr id="pop-'+ index + '">' +
+                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]" onchange="getPopOptions('+ index + ')">' + pop_warehouse_opts + '</select></td>' +
+                    '<td><select class="form-control" id="pop-product-'+ index + '" name="pop['+ index + '][product]"></select></td>' +
+                    '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal('+ index + ')"></td>' +
+                    '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]" onchange="calculatePopSubtotal('+ index + ')"></td>' +
+                    '<td><input type="text" class="form-control" id="pop-subtotal-'+ index + '" name="pop['+ index + '][subtotal]" placeholder="0.00"></td>' +
+                    '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td colspan="6" style="text-align:center"><a id="add_product" onclick="addPopHandler()" class="stretch">Add Another Pop Item</a></td>' +
+                    '</tr>'
+            );
+            getPopOptions(index);
+            $.material.init();
+            index++;
+        }
+
+        function removePopRow(index) {
+            $('#pop-'+index).remove();
+        }
+
+        var app = angular.module('myApp', ['ngMaterial']);
+
+        app.controller('myCtrl', ['$scope', function($scope) {
+            var self = this;
+            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
+            $scope.is_paid = 0;
+            $scope.admin_paid = 0;
+            self.users = {{ users | json_encode | raw }};
+
+            $scope.isPickup = false;
+            $scope.isFedex = true;
+            $scope.min_date = new Date();
+            $scope.user = null;
+
+            $scope.populateUserInfo = function() {
+                var user = self.users[$scope.user];
+
+                $scope.shipName = user.name;
+                $scope.shipEmail = user.email;
+                $scope.shipPhone = user.phone;
+                $scope.shipZip = user.zip;
+                $scope.shipAddress = user.address;
+                $scope.shipAddress2 = user.address2;
+                $scope.shipCity = user.city;
+                $scope.shipState = user.state;
+                $('#ship-info-left div.form-group').removeClass('is-empty');
+                $('#ship-info-right div.form-group').removeClass('is-empty');
+            };
+
+            $scope.submitOrder = function () {
+                showSpinner();
+                var fileData = new FormData();
+                fileData.append('pdf', $('#pdf')[0].files[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_save_manual_order_form') }}",
+                    dataType: 'json',
+                    data: {
+                        form: $('#form').serializeArray(),
+                        eta: $scope.eta,
+                        pickUpDate: $scope.pickUpDate
+                    },
+                    success: function (data) {
+                        if(data[0] == true) {
+                            fileData.append('order_id', data[1]);
+                            $.ajax({
+                                url: '{{ path('api_save_manual_order_form_pdf') }}',
+                                type: 'POST',
+                                data: fileData,
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    if (!data[0]) {
+                                        showErrorModal('Error: ' + data[1]);
+                                    }
+                                    else {
+                                        showSuccessModal('Order successfully placed.');
+                                    }
+                                }
+                            });
+                        }
+                        else {
+
+                        }
+                        console.log(data);
+//                        $scope.$apply(function () {
+//                            location.reload();
+//                        });
+                    }
+                });
+                hideSpinner();
+            };
+        }]);
+
+        app.directive('phoneInput', function($filter, $browser) {
+            return {
+                require: 'ngModel',
+                link: function($scope, $element, $attrs, ngModelCtrl) {
+                    var listener = function() {
+                        var value = $element.val().replace(/[^0-9]/g, '');
+                        $element.val($filter('tel')(value, false));
+                    };
+
+                    // This runs when we update the text field
+                    ngModelCtrl.$parsers.push(function(viewValue) {
+                        return viewValue.replace(/[^0-9]/g, '').slice(0,10);
+                    });
+
+                    // This runs when the model gets updated on the scope directly and keeps our view in sync
+                    ngModelCtrl.$render = function() {
+                        $element.val($filter('tel')(ngModelCtrl.$viewValue, false));
+                    };
+
+                    $element.bind('change', listener);
+                    $element.bind('keydown', function(event) {
+                        var key = event.keyCode;
+                        // If the keys include the CTRL, SHIFT, ALT, or META keys, or the arrow keys, do nothing.
+                        // This lets us support copy and paste too
+                        if (key == 91 || (15 < key && key < 19) || (37 <= key && key <= 40)){
+                            return;
+                        }
+                        $browser.defer(listener); // Have to do this or changes don't get picked up properly
+                    });
+
+                    $element.bind('paste cut', function() {
+                        $browser.defer(listener);
+                    });
+                }
+
+            };
+        });
+
+        app.filter('tel', function () {
+            return function (tel) {
+                if (!tel) { return ''; }
+
+                var value = tel.toString().trim().replace(/^\+/, '');
+
+                if (value.match(/[^0-9]/)) {
+                    return tel;
+                }
+
+                var country, city, number;
+
+                switch (value.length) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        city = value;
+                        break;
+
+                    default:
+                        city = value.slice(0, 3);
+                        number = value.slice(3);
+                }
+
+                if(number){
+                    if(number.length>3){
+                        number = number.slice(0, 3) + '-' + number.slice(3,7);
+                    }
+                    else{
+                        number = number;
+                    }
+
+                    return ("(" + city + ") " + number).trim();
+                }
+                else{
+                    return "(" + city;
+                }
+
+            };
+        });
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <style>
+        .left-side{
+            display: inline-block;
+            width: 50%;
+            float: left;
+        }
+        .right-side{
+            display: inline-block;
+            width: 50%;
+            float: right;
+        }
+        .form-group label.control-label {
+            /*font-size: 15px !important;*/
+        }
+        .my-stripe-button {
+            height: 37px;
+        }
+        .cart_info {
+            background-color: #fff !important;
+            text-align: center;
+            color: #078BB2;
+            font-size: large;
+        }
+        .review_cart_button {
+            padding-left: 6px;
+            padding-right: 6px;
+            margin-left: -13px;
+            margin-top: 20px;
+            -webkit-box-shadow: 0 0 0 0 !important;
+            height: 38px !important;
+        }
+        .button {
+            display: inline-block;
+            margin-bottom: 10px;
+            background: #EEE;
+            border: none;
+            border-radius: 7px;
+            color: #222;
+            font-family: sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .button:hover {
+            color: #02B1F2;
+        }
+        .button:active,
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button:active {
+            box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+        }
+        button.btn.btn-raised.review_cart_button.disabled, .button-error {
+            color: antiquewhite !important;
+            background-color: lightcoral !important;
+        }
+        .error {
+            border: 2px solid lightcoral;
+        }
+        address {
+            line-height: 1.5 !important;
+        }
+        .stretch {
+            display: block;
+            width: 100%;
+        }
+        .not-dumb {
+            color:#000000!important;
+        }
+        .move-up {
+            top:15px;
+        }
+    </style>
+
+    <div id="error-message">
+
+    </div>
+    {#{{ dump() }}#}
+    <form id="form">
+        <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+            <div class="table"  style="min-height: 100vh;">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="color-block">
+                            Preview Only! Must confirm order to complete the process.
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-xs-12">
+                        <h2 class="page-header" style="margin-bottom: -30px!important;">
+                            <div class="pull-right">Date: {{ 'now' | date('m/d/y') }}</div>
+                            <span class="mdl-chip mdl-chip--contact">
+                                <span class="mdl-chip__contact mdl-color-text--white" style="background-color: #FB8C00;">D</span>
+                            <span class="mdl-chip__text">
+                                Draft
+                            </span>
+                        </span>
+                        </h2>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- info row -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="page-header"><b>Shipping Info</b></h4>
+                    </div>
+                </div>
+                <div class="row invoice-info">
+                    <!-- /.col -->
+                    <div class="col-md-2 invoice-col">
+                        <div class="radio">
+                            <label class="not-dumb">
+                                <input type="radio" id="isPickup-f" name="isPickup" ng-value="false" value="false" ng-model="isPickup" onclick="calculateTotal()">
+                                Ship
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label class="not-dumb">
+                                <input type="radio" id="isPickup-t" name="isPickup" ng-value="true" value="true" ng-model="isPickup" onclick="calculateTotal()">
+                                For Pickup
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="user">Customer</label>
+                            <select class="form-control" id="user" name="user" ng-model="user" ng-change="populateUserInfo()">
+                                <optgroup label="Retailers">
+                                    {% for retailer in retailers %}
+                                        <option value="{{ retailer.id }}">{{ retailer.fullName }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="Distributors">
+                                    {% for distributor in distributors %}
+                                        <option value="{{ distributor.id }}">{{ distributor.fullName }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="eta">ETA</label>
+                            <md-datepicker style="float: right" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
+                        </div>
+                    </div>
+                    <div id="other-stuff" class="col-md-2 invoice-col move-up">
+                        <div class="form-group label-floating">
+                            <label for="poNumber" class="control-label">PO #</label>
+                            <input type="text" class="form-control" id="poNumber" name="poNumber" ng-model="poNumber">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="containerNumber" class="control-label">Container #</label>
+                            <input type="text" class="form-control" id="containerNumber" name="containerNumber" ng-model="containerNumber">
+                        </div>
+                    </div>
+                    <div id="pickup-info" class="col-md-3 invoice-col move-up" ng-show="isPickup">
+                        <div class="form-group label-floating">
+                            <label for="pickupAgent" class="control-label">Pickup Agent</label>
+                            <input type="text" class="form-control" id="pickupAgent" name="pickupAgent" ng-model="pickupAgent">
+                        </div>
+                        <div class="form-group">
+                            <label for="pickupDate">Pickup Date</label>
+                            <md-datepicker style="float: right" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
+                        </div>
+                    </div>
+                    <div id="ship-info-left" class="col-md-2 invoice-col move-up" ng-show="!isPickup">
+                        <div class="form-group label-floating">
+                            <label for="shipName" class="control-label">Name</label>
+                            <input type="text" class="form-control" id="shipName" name="shipName" ng-model="shipName">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="shipEmail" class="control-label">Email</label>
+                            <input type="email" class="form-control" id="shipEmail" name="shipEmail" ng-model="shipEmail">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="shipPhone" class="control-label">Phone</label>
+                            <input type="text" class="form-control" phone-input id="shipPhone" name="shipPhone" ng-model="shipPhone">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="shipZip" class="control-label">Zip</label>
+                            <input type="text" class="form-control" id="shipZip" name="shipZip" ng-model="shipZip">
+                        </div>
+                    </div>
+                    <div id="ship-info-right" class="col-md-4 invoice-col move-up" ng-show="!isPickup">
+                        <div class="form-group label-floating">
+                            <label for="shipAddress" class="control-label">Address</label>
+                            <input type="text" class="form-control" id="shipAddress" name="shipAddress" ng-model="shipAddress">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="shipAddress2" class="control-label">Address 2</label>
+                            <input type="text" class="form-control" id="shipAddress2" name="shipAddress2" ng-model="shipAddress2">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="shipCity" class="control-label">City</label>
+                            <input type="text" class="form-control" id="shipCity" name="shipCity" ng-model="shipCity">
+                        </div>
+                        <div class="form-group label-floating">
+                            <label for="shipState" class="control-label">State</label>
+                            <select class="form-control" id="shipState" name="shipState" ng-model="shipState">{% for state in states %}<option value="{{ state.id }}">{{ state.name }}</option>{% endfor %}</select>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <hr>
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header"><b>Products</b></h4>
+                        <table id="product-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th style="width: 20%;">Warehouse</th>
+                                <th style="width: 40%;">Product</th>
+                                <th style="width: 15%;">Unit Cost</th>
+                                <th style="width: 6%;">Qty</th>
+                                <th style="width: 15%;">Subtotal</th>
+                                <th style="width: 4%;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center"><a href id="add_product" class="stretch">Add a Product</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header"><b>Pop Items</b></h4>
+                        <table id="pop-table" class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th style="width: 20%;">Warehouse</th>
+                                <th style="width: 40%;">Product</th>
+                                <th style="width: 15%;">Unit Cost</th>
+                                <th style="width: 6%;">Qty</th>
+                                <th style="width: 15%;">Subtotal</th>
+                                <th style="width: 4%;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row" style="padding-top: 40px;">
+                    <!-- accepted payments column -->
+                    <div class="col-md-6">
+                        <h5 style="margin: -14px 0 16px;">Invoice PDF Upload</h5>
+                        <div class="input-group">
+                            <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse… <input type="file" id="pdf" name="pdf" accept="application/pdf,application/x-pdf" onchange="autoFillName()">
+                    </span>
+                            </label>
+                            <input type="text" id="pdf_path" name="pdf_path" class="form-control" style="margin-bottom: 10px; margin-left: 10px;" onclick="openFileBrowser()" readonly="readonly">
+                        </div>
+                        <br>
+                        <h5 style="margin: -14px 0 16px;">Comments</h5>
+                        <textarea name="comments" id="comments" class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 70px; width: 100%" ng-model="comments"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th>Subtotal:</th>
+                                    <td>$<span id="subtotal">0.00</span></td>
+                                    <input type="hidden" name="subtotal" id="subtotalInput" value="0.00" />
+                                </tr>
+                                <tr ng-show="!isPickup">
+                                    <th><div class="radio" onclick="calculateTotal()">
+                                            <label class="not-dumb">
+                                                <input type="radio" id="isFedex-t" name="isFedex" ng-value="true" value="true" ng-model="isFedex">
+                                                Shipping: Fedex
+                                            </label>
+                                        </div></th>
+                                    <td><input type="text" class="form-control" id="fedex_cost" name="fedex_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;" onchange="calculateTotal()"></td>
+                                </tr>
+                                <tr ng-show="!isPickup">
+                                    <th><div class="radio" onclick="calculateTotal()">
+                                            <label class="not-dumb">
+                                                <input type="radio" id="isFedex-f" name="isFedex" ng-value="false" value="false" ng-model="isFedex">
+                                                Shipping: OTHER
+                                            </label>
+                                        </div></th>
+                                    <td><input type="text" class="form-control" id="other_shipping_cost" name="other_shipping_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;" onchange="calculateTotal()"></td>
+                                </tr>
+                                <tr>
+                                    <th>Total:</th>
+                                    <td>$<span id="total">0.00</span></td>
+                                    <input type="hidden" name="total" id="totalInput" value="0.00" />
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <!-- this row will not appear when printing -->
+                <div class="row no-print">
+                    <div class="col-md-6">
+
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        {#<button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>#}
+
+                        <button type="button" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;" ng-click="submitOrder()">
+                            Submit Order for User
+                        </button>
+                        {#<button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">#}
+                        {#Submit Order for User#}
+                        {#</button>#}
+                        {#<button type="button" ng-show="is_paid == 0 && is_admin == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">#}
+                        {#Complete Order#}
+                        {#</button>#}
+                        {#<a ng-show="is_paid == 0 && admin_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">#}
+                        {#Edit Order#}
+                        {#</a>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

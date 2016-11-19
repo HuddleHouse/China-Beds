@@ -148,6 +148,16 @@ class WarrantyClaim
     public $path3;
 
     /**
+     * @ORM\Column(name="law_label", type="string", nullable=true)
+     */
+    private $lawLabel;
+
+    /**
+     * @ORM\Column(name="fr_label", type="string", nullable=true)
+     */
+    private $frLabel;
+
+    /**
      * WarrantyClaim constructor.
      */
     public function __construct()
@@ -716,5 +726,53 @@ class WarrantyClaim
 
     public function getWarrantyClaimId() {
         return sprintf('W-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
+    }
+
+    /**
+     * Set lawLabel
+     *
+     * @param string $lawLabel
+     *
+     * @return WarrantyClaim
+     */
+    public function setLawLabel($lawLabel)
+    {
+        $this->lawLabel = $lawLabel;
+
+        return $this;
+    }
+
+    /**
+     * Get lawLabel
+     *
+     * @return string
+     */
+    public function getLawLabel()
+    {
+        return $this->lawLabel;
+    }
+
+    /**
+     * Set frLabel
+     *
+     * @param string $frLabel
+     *
+     * @return WarrantyClaim
+     */
+    public function setFrLabel($frLabel)
+    {
+        $this->frLabel = $frLabel;
+
+        return $this;
+    }
+
+    /**
+     * Get frLabel
+     *
+     * @return string
+     */
+    public function getFrLabel()
+    {
+        return $this->frLabel;
     }
 }

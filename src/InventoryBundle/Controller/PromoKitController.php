@@ -3,7 +3,9 @@
 namespace InventoryBundle\Controller;
 
 use InventoryBundle\Entity\PromoKitOrders;
+use InventoryBundle\Form\PromoKitOrderType;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -49,10 +51,10 @@ class PromoKitController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($this->getUser()->hasRole('ROLE_ADMIN')) {
-            $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findAll();
+            $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findBy(['channel' => $this->getUser()->getActiveChannel()]);
         } else {
             $promoKitOrders = $em->getRepository('InventoryBundle:PromoKitOrders')->findBy(
-                array('submittedByUser' => $this->getUser())
+                array('submittedByUser' => $this->getUser(), 'channel' => $this->getUser()->getActiveChannel())
             );
         }
 
@@ -116,14 +118,27 @@ class PromoKitController extends Controller
     public function newOrderAction(Request $request)
     {
         $promoKitOrder = new PromoKitOrders();
-        $form = $this->createForm('InventoryBundle\Form\PromoKitOrderType', $promoKitOrder);
+        $form = $this->createForm(PromoKitOrderType::class, $promoKitOrder);
         $form->handleRequest($request);
+
+        $channel = $this->getDoctrine()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
                 $promoKitOrder->setSubmittedByUser($this->getUser());
+                $promoKitOrder->setChannel($channel);
                 $this->getUser()->getPromoKitOrders()->add($promoKitOrder);
+
+                $warehouse = $this->get('settings_service')->get('default-warehouse');
+
+                foreach($promoKitOrder->getProductVariants() as $variant) {
+                    if ( $warehouse_inventory = $this->getDoctrine()->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(['product_variant' => $variant, 'warehouse' => $warehouse]) ) {
+                        $warehouse_inventory->modifyQuantityBy(-1);
+                        $em->persist($warehouse_inventory);
+                    }
+                }
+
                 $em->persist($promoKitOrder);
                 $em->flush();
                 $this->addFlash('notice', 'Promo Kit Order successfully submitted.');
@@ -270,4 +285,29 @@ class PromoKitController extends Controller
             ->setMethod('DELETE')
             ->getForm();
     }
+
+    /**
+     * Deletes Entity for Index listing
+     *
+     * @Route("/delete/{id}", name="delete_promokit")
+     * @Method({"GET", "POST"})
+     */
+    public function deletePromoAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $promo = $em->getRepository('InventoryBundle:PromoKit')->find($id);
+        $promo_kits = $em->getRepository('InventoryBundle:PromoKit')->findAll();
+
+        try {
+            $em->remove($promo);
+            $em->flush();
+            $this->addFlash('notice', 'Successfuly deleted promo item ');
+            return $this->redirectToRoute('promokit_index');
+        }catch(Exception $e) {
+            $this->addFlash('notice', 'error deleting promo kit item' . $e);
+            return $this->redirectToRoute('promokit_index');
+        }
+
+
+    }
+
 }

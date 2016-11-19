@@ -44,12 +44,21 @@ class OrdersShippingLabel
      */
     protected $tracking_number;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="shipping_labels")
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
-     */
-    private $order;
+//    /**
+//     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="shipping_labels")
+//     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+//     */
+//    private $order;
+//
+//    /**
+//     * @ORM\ManyToOne(targetEntity="OrdersProductVariant", inversedBy="shipping_labels")
+//     */
+//    private $orders_product_variant;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="OrdersWarehouseInfo", inversedBy="shipping_labels")
+     */
+    private $orders_warehouse_info;
 
 
     /**
@@ -183,5 +192,52 @@ class OrdersShippingLabel
         $this->order = $order;
     }
 
-}
 
+    /**
+     * Set orderProductVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $orderProductVariant
+     *
+     * @return OrdersShippingLabel
+     */
+    public function setOrdersProductVariant(\OrderBundle\Entity\OrdersProductVariant $orderProductVariant = null)
+    {
+        $this->orders_product_variant = $orderProductVariant;
+
+        return $this;
+    }
+
+    /**
+     * Get orderProductVariant
+     *
+     * @return \OrderBundle\Entity\OrdersProductVariant
+     */
+    public function getOrdersProductVariant()
+    {
+        return $this->orders_product_variant;
+    }
+
+    /**
+     * Set ordersWarehouseInfo
+     *
+     * @param \OrderBundle\Entity\OrdersWarehouseInfo $ordersWarehouseInfo
+     *
+     * @return OrdersShippingLabel
+     */
+    public function setOrdersWarehouseInfo(\OrderBundle\Entity\OrdersWarehouseInfo $ordersWarehouseInfo = null)
+    {
+        $this->orders_warehouse_info = $ordersWarehouseInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get ordersWarehouseInfo
+     *
+     * @return \OrderBundle\Entity\OrdersWarehouseInfo
+     */
+    public function getOrdersWarehouseInfo()
+    {
+        return $this->orders_warehouse_info;
+    }
+}

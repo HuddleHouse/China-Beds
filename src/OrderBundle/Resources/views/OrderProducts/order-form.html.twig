@@ -1,4 +1,4 @@
-<div class="table" style="background-color: #EFEFEF;">
+ <div class="table" style="background-color: #EFEFEF;">
     <center><h2>{%  if is_granted('ROLE_DISTRIBUTOR') %}Distributor{% elseif is_granted('ROLE_RETAILER') %}Retailer{% endif %} Order Form</h2></center>
     <form class="form-horizontal">
         <fieldset>
@@ -28,7 +28,7 @@
                     <div id="pick_up_date" style="display: none;">
                         <label class="control-label" for="pick_up_date">Pick Up Date *</label>
                         {#<md-datepicker ng-model="form_info['pick_up_date']" md-min-date="min_date()"></md-datepicker>#}
-                        <md-datepicker ng-model="min_date" md-min-date="min_date"></md-datepicker>
+                        <md-datepicker ng-model="min_date" md-min-date="min_date" md-max-date="max_date"></md-datepicker>
                     </div>
                 </div>
             </div>
@@ -60,9 +60,9 @@
     <div class="row" id="pick_up_warehouse" style="margin-bottom: 10px;">
         <div class="col-md-12">
             <select class="" id="dist_ship" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart['dist_ship']" ng-change="updateShipForm()" required>
-            <option value="">Ship to: {{ app.user.firstName }} {{ app.user.lastName }}</option>
+            <option value="">Ship to: {{ app.user.displayName }}</option>
             {% for retailer in user_retailers %}
-                <option value="{{ retailer.id }}">{{ retailer.firstName }} {{ retailer.lastName }}</option>
+                <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>
             {% endfor %}
             </select>
         </div>
@@ -71,7 +71,7 @@
     <div class="row">
         <div class="col-md-12">
             <label class="control-label" for="ship_name">Name *</label>
-            <input id="ship_name" name="ship_name" ng-model="form_info['ship_name']" ng-init="form_info['ship_name']= '{{ app.user.firstName }} {{ app.user.lastName }}'" type="text" class="form_field input-md">
+            <input id="ship_name" name="ship_name" ng-model="form_info['ship_name']" ng-init="form_info['ship_name']= '{{ app.user.displayName }}'" type="text" class="form_field input-md">
         </div>
         <div class="col-md-12">
             <label class="control-label" for="address">Address *</label>

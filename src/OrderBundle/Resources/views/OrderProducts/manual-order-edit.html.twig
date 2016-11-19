@@ -1,0 +1,503 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Order Products{% endblock %}
+{% block page_title %}
+    Order {{ channel.name }} Products
+{% endblock page_title %}
+
+{% block page_name %}
+    <div class="">
+        <img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">
+    </div>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        var app = angular.module('myApp', ['ngMaterial']);
+        app.controller('myCtrl', ['$scope', function($scope) {
+            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
+            $scope.product_variant_order_quan = [];
+            $scope.cart = [];
+            $scope.payment_type = '';
+            $scope.cc = {};
+            $scope.ledgerTotal = {{ user.getLedgerTotal }};
+            $scope.cart_total = {{ order.getTotal }};
+            $scope.is_paid = 0
+            {#{{ is_paid }}#}
+            ;
+            $scope.admin_paid = 0;
+
+            {% if order.status.name == 'Pending' %}
+                $scope.admin_paid = 1;
+            {% endif %}
+
+            $(document).ready(function () {
+                if ($scope.is_paid == 1) {
+                    $('#payment-type').val('{{ order.paymentType }}');
+                }
+                {#console.log("{{ is_paid }}");#}
+            });
+
+            $scope.changePayment = function () {
+                console.log($scope.payment_type);
+                if($scope.payment_type == 'cc')
+                    $('#cc').show();
+                else
+                    $('#cc').hide();
+            };
+
+            $scope.formValidate = function (type) {
+                var count = 0;
+                if($scope.payment_type == '') {
+                    $('#payment').addClass('has-error');
+                    count++;
+                }
+                else
+                    $('#payment').removeClass('has-error');
+
+                console.log(type);
+
+                if($scope.payment_type == 'cc') {
+                    if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
+                    else
+                        $('#cc-name').removeClass('has-error');
+
+                    if($scope.cc['number'] == undefined) {$('#cc-number').addClass('has-error');count++;}
+                    else
+                        $('#cc-number').removeClass('has-error');
+
+                    if($scope.cc['expiry-month'] == undefined || $scope.cc['expiry-year'] == undefined) {$('#cc-date').addClass('has-error');count++;}
+                    else
+                        $('#cc-date').removeClass('has-error');
+
+                    if($scope.cc['cvv'] == undefined) {$('#cc-cvv').addClass('has-error');count++;}
+                    else
+                        $('#cc-cvv').removeClass('has-error');
+                }
+
+                if($scope.is_admin == 1) {
+                    count = 0;
+                    $scope.ledgerTotal = $scope.cart_total;
+                }
+
+                if(count > 0)
+                    showErrorModal('Please fix the form errors.');
+                else if ($scope.cart_total > $scope.ledgerTotal)
+                    showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
+                else {
+                    showSpinner();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_pay_for_order') }}",
+                        dataType: 'json',
+                        data: {cc: $scope.cc,
+                            payment_type: $scope.payment_type,
+                            order_id: {{ order.id }},
+                            type: type
+                        },
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                hideSpinner();
+                                location.reload();
+                            });
+                        }
+                    });
+                }
+
+            };
+
+
+            //not
+            $scope.updateCart = function (variantId, cost, max) {
+                if(typeof($scope.cart[variantId]) != "undefined" && $scope.cart[variantId] !== null) {
+                    $scope.cart[variantId].quantity = $scope.product_variant_order_quan[variantId];
+                }
+                else {
+                    $scope.cart[variantId] = {
+                        variant_id: variantId,
+                        quantity: $scope.product_variant_order_quan[variantId],
+                        cost: cost
+                    };
+                }
+                if($scope.product_variant_order_quan[variantId] > max) {
+                    $('#'+variantId).addClass('error');
+                    $('#submit-button').prop('disabled', true);
+                    $('#submit-button').addClass('button-error');
+                    console.log('error');
+                }
+                else {
+                    $('#'+variantId).removeClass('error', 300);
+                    $('#submit-button').prop('disabled', false);
+                    $('#submit-button').removeClass('button-error');
+                }
+                $scope.calculateCart();
+            };
+        }]);
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <style>
+        .form-group label.control-label {
+            font-size: 15px !important;
+        }
+        .my-stripe-button {
+            height: 37px;
+        }
+        .cart_info {
+            background-color: #fff !important;
+            text-align: center;
+            color: #078BB2;
+            font-size: large;
+        }
+        .review_cart_button {
+            padding-left: 6px;
+            padding-right: 6px;
+            margin-left: -13px;
+            margin-top: 20px;
+            -webkit-box-shadow: 0 0 0 0 !important;
+            height: 38px !important;
+        }
+        .button {
+            display: inline-block;
+            margin-bottom: 10px;
+            background: #EEE;
+            border: none;
+            border-radius: 7px;
+            color: #222;
+            font-family: sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .button:hover {
+            color: #02B1F2;
+        }
+        .button:active,
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button:active {
+            box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+        }
+        button.btn.btn-raised.review_cart_button.disabled, .button-error {
+            color: antiquewhite !important;
+            background-color: lightcoral !important;
+        }
+        .error {
+            border: 2px solid lightcoral;
+        }
+        address {
+            line-height: 1.5 !important;
+        }
+    </style>
+
+    <div id="error-message">
+
+    </div>
+    <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+        <div class="table"  style="min-height: 100vh;">
+            {% if order.status.name == 'Draft' %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="color-block">
+                            Preview Only! Must confirm order to complete the process.
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            {% elseif order.status.name == 'Paid' %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="color-block-paid">
+                           Order Placed
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            {% endif %}
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
+                        <span class="mdl-chip mdl-chip--contact" >
+                            <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
+                            <span class="mdl-chip__text">
+                                {{ order.status.name }}
+                            </span>
+                        </span>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+
+                    {% if order.isPickUp == 0 %}
+                        <address>
+                            <strong>Shipping To</strong>
+                            {{ order.shipName }}<br>
+                            {{ order.shipAddress }}, {{ order.shipAddress2 }}<br>
+                            {{ order.shipCity }},  {{ order.shipZip }}<br>
+                            Phone: {{ order.shipPhone }}<br>
+                            Email: {{ order.shipEmail }}
+                        </address>
+                    {% else %}
+                        <address>
+                            <strong>Pick Up</strong><br>
+                            <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
+                            <strong>Date:</strong> {{ order.pickUpDate | date }}<br>
+
+                        </address>
+                    {% endif %}
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <b>PO #{{ order.orderNumber }}</b><br>
+                    <br>
+                </div>
+                <div class="col-sm-4 invoice-col">
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            {#{% for prod in product_data %}#}
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header"><b>Warehouse Location: </b>
+                            {#{{ prod[0].warehouse_name }}#}
+                        </h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%;">Qty</th>
+                                <th>Product</th>
+                                <th style="width: 24%;">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {#{% for item in prod %}#}
+                                <tr>
+                                    <td>{{ item.quantity | default('') }}</td>
+                                    <td>{{ item.product_name | default('') }}</td>
+                                    <td><h6 style="margin: 0;">$
+                                            {#{{ item.subtotal | number_format(2, '.', ',')  | default(0) }}#}
+                                        </h6></td>
+                                </tr>
+                            {#{% endfor %}#}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            {#{% endfor %}#}
+
+            {#{% if pop_items is not empty %}#}
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header">POP Items</h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%;">Qty</th>
+                                <th>Product</th>
+                                <th style="width: 24%;">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {#{% for item in pop_items %}#}
+                                <tr>
+                                    <td>{{ item.quantity | default('') }}</td>
+                                    <td>{{ item.popItem.name | default('') }}: {{ item.popItem.description | default('') }}</td>
+                                    <td><h6 style="margin: 0;">$
+                                            {#{{ (item.price*item.quantity) |number_format(2, '.', ',') | default('') }}#}
+                                        </h6></td>
+                                </tr>
+                            {#{% endfor %}#}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            {#{% endif %}#}
+
+            <div class="row" style="padding-top: 40px;">
+                <!-- accepted payments column -->
+                <div class="col-md-6">
+                    <fieldset style="margin-top: 20px;margin-bottom: 50px;" ng-show="is_admin == 0">
+                        <legend>Payment</legend>
+                        <div id="payment" class="form-group" style="margin-top: 0px;">
+                            <label for="payment-type">Payment Type</label>
+                            <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" ng-disabled="is_paid == 1" required>
+                                <option value="cc">Pay with a Credit Card</option>
+                                {% if app.user.hasLedger %}
+                                    <option value="ledger">Ledger</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div id="cc" style="display: none;">
+                            <div id="cc-name" class="form-group">
+                                <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" ng-model="cc['name']" name="card-holder-name" id="card-holder-name" placeholder="Card Holder's Name">
+                                </div>
+                            </div>
+                            <div id="cc-number" class="form-group">
+                                <label class="col-sm-3 control-label" for="card-number">Card Number</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" ng-model="cc['number']" name="card-number" id="card-number" placeholder="Debit/Credit Card Number">
+                                </div>
+                            </div>
+                            <div id="cc-date" class="form-group">
+                                <label class="col-sm-3 control-label" for="expiry-month">Expiration Date</label>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <select class="form-control col-sm-2" ng-model="cc['expiry-month']" name="expiry-month" id="expiry-month">
+                                                <option selected value="">Month</option>
+                                                <option value="01">Jan (01)</option>
+                                                <option value="02">Feb (02)</option>
+                                                <option value="03">Mar (03)</option>
+                                                <option value="04">Apr (04)</option>
+                                                <option value="05">May (05)</option>
+                                                <option value="06">June (06)</option>
+                                                <option value="07">July (07)</option>
+                                                <option value="08">Aug (08)</option>
+                                                <option value="09">Sep (09)</option>
+                                                <option value="10">Oct (10)</option>
+                                                <option value="11">Nov (11)</option>
+                                                <option value="12">Dec (12)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <select class="form-control" name="expiry-year" ng-model="cc['expiry-year']">
+                                                <option selected value="">Year</option>
+                                                <option value="13">2013</option>
+                                                <option value="14">2014</option>
+                                                <option value="15">2015</option>
+                                                <option value="16">2016</option>
+                                                <option value="17">2017</option>
+                                                <option value="18">2018</option>
+                                                <option value="19">2019</option>
+                                                <option value="20">2020</option>
+                                                <option value="21">2021</option>
+                                                <option value="22">2022</option>
+                                                <option value="23">2023</option>
+                                                <option value="24">2024</option>
+                                                <option value="25">2025</option>
+                                                <option value="26">2026</option>
+                                                <option value="27">2027</option>
+                                                <option value="28">2028</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="cc-cvv" class="form-group">
+                                <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" ng-model="cc['cvv']" name="cvv" id="cvv" placeholder="Security Code">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <h5 style="margin: -14px 0 16px;">Comments</h5>
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 50px;">
+                        {{ order.comments }}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    {% if order.status.name == 'Paid' or order.status.name == 'Shipped' %}
+                        <h4>Shipping Info/Tracking Numbers</h4>
+                        <ul>
+                            {% for label in order.shippingLabels %}
+                                <li>Tracking:
+                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
+                                        {{ label.trackingNumber }}
+                                    </a>
+                                    {% if is_granted('ROLE_ADMIN') ==1  %}
+                                    -
+                                    <a class="btn btn-raised btn-default btn-sm" href="/{{ label.webPath }}" download>
+                                        <i class="fa fa-download" aria-hidden="true"></i>
+                                        Download Label
+                                    </a>
+                                    {% endif %}
+                                </li>
+
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+
+                    {% if order.isPickUp == 0 and is_granted('ROLE_ADMIN') == 0 and is_granted('ROLE_SALES_MANAGER') == 0 and is_granted('ROLE_SALES_REP') == 0 %}
+                        {% if order.status.name != 'Paid' %}
+                            <label><input type="checkbox" id="confirm-shipping"/> Confirm immediate shipping.</label><br>
+                        {% endif %}
+                    {% elseif order.isPickUp == 1 %}
+                    {% endif %}
+                    <div class="table-responsive" style="margin-top: 46px;">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th >Subtotal:</th>
+                                <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
+                            </tr>
+                            {#<tr>#}
+                                {#<th>Tax (9.3%)</th>#}
+                                {#<td>$0.00</td>#}
+                            {#</tr>#}
+                            <tr>
+                                <th>Shipping: {{ order.getShipDescription }}</th>
+                                <td>${{ order.getShipping | number_format(2, '.', ',') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td>${{ order.getTotal | number_format(2, '.', ',') }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- this row will not appear when printing -->
+            <div class="row no-print">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
+
+                    <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                        Submit Order for User
+                    </button>
+                    <button type="button" ng-show="is_paid == 0 && is_admin == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                        Complete Order
+                    </button>
+                    <a ng-show="is_paid == 0 && admin_paid == 0" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
+                        Edit Order
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

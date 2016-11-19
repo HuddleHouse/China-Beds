@@ -13,15 +13,90 @@ use WarehouseBundle\Entity\Warehouse;
 
 class EmailService extends BaseService
 {
+
+
+    /**
+     * Send admin order notification
+     *
+     * @param Orders $order
+     */
+    public function sendAdminOrderNotification(Orders $order) {
+        $body = $this->container->get('twig')->render(
+            '@Order/Emails/admin-order-notification.html.twig',
+            ['order' => $order]
+        );
+
+        $this->sendEmail([
+            'subject'   => sprintf('%s Order #%s Received!', $order->getChannel()->getName(), $order->getOrderId()),
+            'from'      => $order->getChannel()->getFromEmailAddress(),
+            'to'        => $order->getChannel()->getSupportEmailAddress(),
+            'body'      => $body
+        ]);
+    }
+
+    public function sendCustomerOrderNotification(Orders $order) {
+        $body = $this->container->get('twig')->render(
+            '@Order/Emails/customer-order-notification.html.twig',
+            ['order' => $order]
+        );
+
+        $this->sendEmail([
+            'subject'   => sprintf('%s Order #%s Received!', $order->getChannel()->getName(), $order->getOrderId()),
+            'from'      => $order->getChannel()->getFromEmailAddress(),
+            'to'        => $order->getSubmittedForUser()->getEmail(),
+            'body'      => $body
+        ]);
+    }
+
+
+    public function sendWarehouseOrderNotification(Orders $order) {
+        $em = $this->container->get('doctrine')->getManager();
+
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getWarehousesForOrder($order);
+
+        foreach($warehouses as $warehouse) {
+
+            $products = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouse($order, $warehouse);
+
+            foreach($warehouse->getManagers() as $manager) {
+                $body = $this->container->get('twig')->render(
+                    '@Order/Emails/warehouse-order-notification.html.twig',
+                    ['order' => $order, 'products' => $products, 'manager' => $manager]
+                );
+
+                $this->sendEmail(
+                    [
+                        'subject' => sprintf(
+                            '%s Order #%s Received!',
+                            $order->getChannel()->getName(),
+                            $order->getOrderId()
+                        ),
+                        'from' => $order->getChannel()->getFromEmailAddress(),
+                        'to' => $order->getSubmittedForUser()->getEmail(),
+                        'body' => $body
+                    ]
+                );
+            }
+        }
+    }
+
+
+
+
+
+
+
     public function sendEmail($data)
     {
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
             ->setFrom($data['from'])
-//            ->setFrom($data['from'])
-            //->setTo($data['to'])
             ->setTo($data['to'])
             ->setBody($data['body'], 'text/html');
+
+        if ( isset($data['cc']) ) {
+            $message->addCc($data['cc']);
+        }
 
         $this->mailer->send($message);
     }

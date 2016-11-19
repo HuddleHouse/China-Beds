@@ -19,7 +19,7 @@
         var app = angular.module('myApp', ['ngFileUpload']);
         app.controller('myCtrl', ['$scope', 'Upload', function($scope, Upload) {
             $scope.inventory_data = [];
-
+            showSpinner();
             $.ajax({
                 beforeSend: function () {
                 },
@@ -28,15 +28,16 @@
                 data: {warehouse_id: {{ warehouse.id }}},
                 success: function (data) {
                     $scope.$apply(function () {
-                        $scope.inventory_data = data;
+                        $scope.inventory_data = data.inventory;
                     });
+                    hideSpinner();
                 }
             });
 
             $scope.addInventory = function () {
                 var variant_id = $('#variant').val();
                 var quantity = $('#quantity').val();
-
+                showSpinner();
                 $.ajax({
                     type: 'POST',
                     url: "{{ path('api_add_warehouse_inventory') }}",
@@ -44,8 +45,9 @@
                     data: {variant_id: variant_id, quantity: quantity, warehouse_id: {{ warehouse.id }} },
                     success: function (data) {
                         $scope.$apply(function () {
-                            $scope.inventory_data = data;
+                            $scope.inventory_data = data.inventory;
                             $('#quantity').val('');
+                            hideSpinner();
                         });
                     }
                 });
@@ -115,10 +117,12 @@
     </div>
 
 </div>
+    {% if is_granted('ROLE_ADMIN') %}
     <a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons">add</i>
     </a>
     <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
         Create an inventory item.
     </div>
+    {% endif %}
 {% endblock %}

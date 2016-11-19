@@ -1,0 +1,279 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Order Products{% endblock %}
+{% block page_title %}
+    Order #{{ order.orderId }}
+{% endblock page_title %}
+
+{#{% block page_name %}#}
+    {#<div class="">#}
+        {#<img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">#}
+    {#</div>#}
+{#{% endblock page_name %}#}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+        });
+
+        function updateShippedQuantity(id, item) {
+            $.post('{{ path('api_update_shipped_quantity') }}', {
+                    'id': id,
+                    'quantity': item.value
+            });
+        }
+
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <style>
+        .form-group label.control-label {
+            font-size: 15px !important;
+        }
+        .my-stripe-button {
+            height: 37px;
+        }
+        .cart_info {
+            background-color: #fff !important;
+            text-align: center;
+            color: #078BB2;
+            font-size: large;
+        }
+        .review_cart_button {
+            padding-left: 6px;
+            padding-right: 6px;
+            margin-left: -13px;
+            margin-top: 20px;
+            -webkit-box-shadow: 0 0 0 0 !important;
+            height: 38px !important;
+        }
+        .button {
+            display: inline-block;
+            margin-bottom: 10px;
+            background: #EEE;
+            border: none;
+            border-radius: 7px;
+            color: #222;
+            font-family: sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .button:hover {
+            color: #02B1F2;
+        }
+        .button:active,
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button.is-checked {
+            color: #02B1F2;
+        }
+        .button:active {
+            box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+        }
+        button.btn.btn-raised.review_cart_button.disabled, .button-error {
+            color: antiquewhite !important;
+            background-color: lightcoral !important;
+        }
+        .error {
+            border: 2px solid lightcoral;
+        }
+        address {
+            line-height: 1.5 !important;
+        }
+    </style>
+
+    <div id="error-message">
+
+    </div>
+    <div>
+        <div class="table"  style="min-height: 100vh;">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="color-block-paid">
+                        Order {{ order.status.name }}
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
+                        <span class="mdl-chip mdl-chip--contact" >
+                            <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
+                            <span class="mdl-chip__text">
+                                {{ order.status.name }}
+                            </span>
+                        </span>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+
+                    {% if order.isPickUp == 0%}
+                        <address>
+                            <strong>Shipping To</strong>
+                            {{ order.shipName }}<br>
+                            {{ order.shipAddress }}, {{ order.shipAddress2 }}<br>
+                            {{ order.shipCity }},  {{ order.shipZip }}<br>
+                            Phone: {{ order.shipPhone }}<br>
+                            Email: {{ order.shipEmail }}
+                        </address>
+                    {% else %}
+                        <address>
+                            <strong>Pick Up</strong><br>
+                            <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
+                            <strong>Date:</strong> {{ order.pickUpDate | date }}<br>
+
+                        </address>
+                    {% endif %}
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <b>PO #{{ order.orderNumber }}</b><br>
+                    <br>
+                </div>
+                <div class="col-sm-4 invoice-col">
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            {% for prod in product_data %}
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header"><b>Warehouse Location: </b>{{ prod[0].warehouse_name }}</h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%;">Qty</th>
+                                <th style="width: 10%;">Shipped Qty</th>
+                                <th>Product</th>
+                                {#<th style="width: 24%;">Subtotal</th>#}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in prod %}
+                                <tr>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>
+                                        <select onchange="updateShippedQuantity({{ item.id }}, this);">
+                                            {% for i in 0..item.quantity %}
+                                                <option value="{{ i }}" {% if item.shipped == i %}selected{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        {{ item.product_name }}
+                                        {% if item.tracking_numbers|length > 0 %}
+                                            <br />
+                                            {% for label in item.tracking_numbers %}
+                                                <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.tracking_number }}">
+                                                    {{ label.tracking_number }}
+                                                    <a href="{{ asset(label.path) }}" download><i class="fa fa-print"></i></a>
+                                                    <a href="" ><i class="fa fa-times"></i></a>
+                                                </a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                    {#<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>#}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            {% endfor %}
+
+            {% if pop_items is not empty %}
+                <!-- Table row -->
+                <div class="row" style="">
+                    <div class="col-xs-12 table-responsive">
+                        <h4 class="page-header">POP Items</h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%;">Qty</th>
+                                <th style="width: 10%;">Shipped Qty</th>
+                                <th>Product</th>
+                                <th style="width: 24%;">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in pop_items %}
+                                <tr>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>
+                                        <select>
+                                            {% for i in 0..item.quantity %}
+                                                <option value="{{ i }}" {% if item.shipped == i %}selected{% endif %}>{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        {{ item.popItem.name }}: {{ item.popItem.description }}
+                                    </td>
+                                    <td><h6 style="margin: 0;">${{ (item.price*item.quantity) |number_format(2, '.', ',') }}</h6></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            {% endif %}
+
+            {% if manual_items_count != 0 %}
+                <div class="row" style="margin-bottom: 30px;" >
+                    <div class="col-md-12" >
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <center><h4>Manual Items</h4></center>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in manual_items %}
+                                <tr>
+                                    <td>
+                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                            {{ item.description }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group is-empty" style="margin: 0px 0 0 0;">
+                                            ${{ item.price | number_format(2, '.', ',') }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}

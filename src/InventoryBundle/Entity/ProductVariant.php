@@ -186,7 +186,7 @@ class ProductVariant
     }
 
     /**
-     * @return mixed
+     * @return Product
      */
     public function getProduct()
     {

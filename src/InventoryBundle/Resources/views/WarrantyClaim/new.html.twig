@@ -49,6 +49,26 @@
             });
         }
 
+        function getOrders() {
+            $('#warranty_claim_productVariant').html('<option value=0>Select Order First</option>');
+            var el = $('#warranty_claim_order');
+            $.ajax({
+                beforeSend: function() {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_orders_from_user') }}",
+                dataType: 'json',
+                data: {user_id: $('#warranty_claim_user').val()},
+                success: function (orders) {
+                    el.html(orders);
+                    if(orders != '<option>Select User First</option>')
+                        el.prop('disabled', false);
+                }
+            });
+        }
+
         function moneyFormat(value) {
             var m_strOut = String(value);
             m_strOut = m_strOut.replace(/[^0-9.]/g, '');
@@ -84,10 +104,10 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {#<div class="col-md-4 form-group">#}
-                    {#{{ form_label(form.creditRequested) }}#}
-                    {#{{ form_widget(form.creditRequested) }}#}
-                {#</div>#}
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.user) }}
+                    {{ form_widget(form.user) }}
+                </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(form.order) }} <i id="info-icon" class="fa fa-info-circle" aria-hidden="true" onclick="showInfoModal()"></i><div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="info-icon">If you don't know your Order ID, input relevant information in the comments</div>
                     {{ form_widget(form.order) }}
@@ -131,6 +151,16 @@
                         </label>
                         {{ form_widget(form.path3) }}
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(form.lawLabel) }}
+                    {{ form_widget(form.lawLabel) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(form.frLabel) }}
+                    {{ form_widget(form.frLabel) }}
                 </div>
             </div>
             <div class="row">

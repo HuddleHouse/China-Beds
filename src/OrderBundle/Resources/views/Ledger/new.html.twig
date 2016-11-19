@@ -1,7 +1,7 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}New Payment Request{% endblock %}
-{% block page_title %}New Payment Request{% endblock page_title %}
+{% block title %}New Ledger Fund Request{% endblock %}
+{% block page_title %}New Ledger Fund Request{% endblock page_title %}
 
 {% block page_name %}
     <a href="{{ path('ledger_index') }}">< Back to the list</a>
@@ -44,14 +44,6 @@
         <div class="form-body">
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
-                {#{% if app.user.hasRole('ROLE_RETAILER') %}#}
-                {#{% do form.submittedForUser.setRendered %}#}
-                {#{% else %}#}
-                {#<div class="col-md-3 form-group">#}
-                {#{{ form_label(form.submittedForUser) }}#}
-                {#{{ form_widget(form.submittedForUser) }}#}
-                {#</div>#}
-                {#{% endif %}#}
                 <div class="col-md-3 form-group">
                     {{ form_label(form.amountRequested) }}
                     {{ form_widget(form.amountRequested) }}

@@ -94,12 +94,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 form-group">
-                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
-                    {{ form_widget(edit_form.description) }}
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.file1) }}
                     <div class="input-group">
@@ -132,6 +126,22 @@
                         </label>
                         {{ form_widget(edit_form.path3) }}
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_label(edit_form.lawLabel) }}
+                    {{ form_widget(edit_form.lawLabel) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_label(edit_form.frLabel) }}
+                    {{ form_widget(edit_form.frLabel) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;"></span>
+                    {{ form_widget(edit_form.description) }}
                 </div>
             </div>
             {% if warranty_claim.isArchived %}

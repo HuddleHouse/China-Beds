@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,10 +25,12 @@ class ChannelController extends Controller
      * @Route("/switch/{id}", name="admin_channel_switch")
      * @Method("GET")
      */
-    public function switchAction(Channel $channel)
+    public function switchAction(Channel $channel, Request $request)
     {
         $this->get('session')->set('active_channel', $channel);
         $this->getUser()->setActiveChannel($channel);
+//        $referer = $request->headers->get('referer');
+//        return new RedirectResponse($referer);
         return $this->redirectToRoute('fos_user_profile_show');
     }
 
@@ -850,7 +853,7 @@ class ChannelController extends Controller
 
                 $this->addFlash('notice', 'Channel updated successfully.');
 
-                return $this->redirectToRoute('admin_channel_edit', array('id' => $channel->getId()));
+                return $this->redirectToRoute('admin_channel_edit', array('id' => $channel->getId(), 'channel' => $channel));
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error updating Channel: ' . $e->getMessage());

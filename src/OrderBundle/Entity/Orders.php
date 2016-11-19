@@ -8,15 +8,28 @@ use Doctrine\ORM\Mapping as ORM;
 use InventoryBundle\Entity\ProductVariant;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Orders
  *
  * @ORM\Table(name="orders")
  * @ORM\Entity(repositoryClass="OrderBundle\Repository\OrdersRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Orders
 {
+    const STATUS_ACTIVE             = 'Active';
+    const STATUS_RECEIVED           = 'Received';
+    const STATUS_COMPLETED          = 'Completed';
+    const STATUS_VOIDED             = 'Voided';
+    const STATUS_DRAFT              = 'Draft';
+    const STATUS_ARCHIVED           = 'Archived';
+    const STATUS_PAID               = 'Paid';
+    const STATUS_SHIPPED            = 'Shipped';
+    const STATUS_READY_TO_SHIP      = 'Ready to Ship';
+    const STATUS_PENDING            = 'Pending';
     /**
      * @var int
      *
@@ -74,6 +87,13 @@ class Orders
      * @ORM\Column(name="is_pick_up", type="boolean", nullable=true)
      */
     private $isPickUp;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_manual", type="boolean")
+     */
+    private $isManual = false;
 
     /**
      * @var string
@@ -153,22 +173,22 @@ class Orders
     private $shipEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order", cascade={"persist"})
      */
     private $product_variants;
 
-    /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order")
-     */
-    private $shipping_labels;
+//    /**
+//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="order", cascade={"persist"})
+//     */
+//    private $shipping_labels;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist"})
      */
     private $pop_items;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order", cascade={"persist"})
      */
     private $manual_items;
 
@@ -237,6 +257,25 @@ class Orders
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\RebateSubmission", mappedBy="order")
      */
     private $rebate_submissions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderPayment", mappedBy="order", cascade={"persist"})
+     */
+    private $order_payments;
+
+    /**
+     * @Assert\File(
+     *     maxSize="6M",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Please upload a valid PDF"
+     * )
+     */
+    private $file;
+
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $path;
 
     /**
      * Orders constructor.
@@ -850,7 +889,7 @@ class Orders
      */
     public function getAmountPaid()
     {
-        return $this->amount_paid;
+        return $this->amount_paid / 100;
     }
 
     /**
@@ -858,23 +897,15 @@ class Orders
      */
     public function getShippingLabels()
     {
-        return $this->shipping_labels;
-    }
-
-    /**
-     * @param mixed $shipping_labels
-     */
-    public function setShippingLabels($shipping_labels)
-    {
-        $this->shipping_labels = $shipping_labels;
-    }
-
-    /**
-     * @param mixed $shipping_labels
-     */
-    public function addShippingLabel($shipping_label)
-    {
-        $this->shipping_labels[] = $shipping_label;
+        $shipping_labels = new ArrayCollection();
+        foreach($this->getProductVariants() as $variant) {
+            foreach($variant->getWarehouseInfo() as $info) {
+                foreach($info->getShippingLabels() as $label) {
+                    $shipping_labels->add($label);
+                }
+            }
+        }
+        return $shipping_labels;
     }
 
     /**
@@ -882,7 +913,7 @@ class Orders
      */
     public function setAmountPaid($amount_paid)
     {
-        $this->amount_paid = $amount_paid;
+        $this->amount_paid = $amount_paid * 100;
     }
 
     /**
@@ -996,5 +1027,333 @@ class Orders
     }
 
 
-}
 
+    /**
+     * Add productVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $productVariant
+     *
+     * @return Orders
+     */
+    public function addProductVariant(\OrderBundle\Entity\OrdersProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove productVariant
+     *
+     * @param \OrderBundle\Entity\OrdersProductVariant $productVariant
+     */
+    public function removeProductVariant(\OrderBundle\Entity\OrdersProductVariant $productVariant)
+    {
+        $this->product_variants->removeElement($productVariant);
+    }
+
+    /**
+     * Remove shippingLabel
+     *
+     * @param \OrderBundle\Entity\OrdersShippingLabel $shippingLabel
+     */
+    public function removeShippingLabel(\OrderBundle\Entity\OrdersShippingLabel $shippingLabel)
+    {
+        $this->shipping_labels->removeElement($shippingLabel);
+    }
+
+    /**
+     * Add popItem
+     *
+     * @param \OrderBundle\Entity\OrdersPopItem $popItem
+     *
+     * @return Orders
+     */
+    public function addPopItem(\OrderBundle\Entity\OrdersPopItem $popItem)
+    {
+        $this->pop_items[] = $popItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove popItem
+     *
+     * @param \OrderBundle\Entity\OrdersPopItem $popItem
+     */
+    public function removePopItem(\OrderBundle\Entity\OrdersPopItem $popItem)
+    {
+        $this->pop_items->removeElement($popItem);
+    }
+
+    /**
+     * Add manualItem
+     *
+     * @param \OrderBundle\Entity\OrdersManualItem $manualItem
+     *
+     * @return Orders
+     */
+    public function addManualItem(\OrderBundle\Entity\OrdersManualItem $manualItem)
+    {
+        $this->manual_items[] = $manualItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove manualItem
+     *
+     * @param \OrderBundle\Entity\OrdersManualItem $manualItem
+     */
+    public function removeManualItem(\OrderBundle\Entity\OrdersManualItem $manualItem)
+    {
+        $this->manual_items->removeElement($manualItem);
+    }
+
+    /**
+     * Add ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return Orders
+     */
+    public function addLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers[] = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Remove ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     */
+    public function removeLedger(\OrderBundle\Entity\Ledger $ledger)
+    {
+        $this->ledgers->removeElement($ledger);
+    }
+
+    /**
+     * Add warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     *
+     * @return Orders
+     */
+    public function addWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims[] = $warrantyClaim;
+
+        return $this;
+    }
+
+    /**
+     * Remove warrantyClaim
+     *
+     * @param \InventoryBundle\Entity\WarrantyClaim $warrantyClaim
+     */
+    public function removeWarrantyClaim(\InventoryBundle\Entity\WarrantyClaim $warrantyClaim)
+    {
+        $this->warranty_claims->removeElement($warrantyClaim);
+    }
+
+    /**
+     * Add rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     *
+     * @return Orders
+     */
+    public function addRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions[] = $rebateSubmission;
+
+        return $this;
+    }
+
+    /**
+     * Remove rebateSubmission
+     *
+     * @param \InventoryBundle\Entity\RebateSubmission $rebateSubmission
+     */
+    public function removeRebateSubmission(\InventoryBundle\Entity\RebateSubmission $rebateSubmission)
+    {
+        $this->rebate_submissions->removeElement($rebateSubmission);
+    }
+
+    /**
+     * Add orderPayment
+     *
+     * @param \OrderBundle\Entity\OrderPayment $orderPayment
+     *
+     * @return Orders
+     */
+    public function addOrderPayment(\OrderBundle\Entity\OrderPayment $orderPayment)
+    {
+        $orderPayment->setOrder($this);
+        $this->order_payments[] = $orderPayment;
+
+        return $this;
+    }
+
+    /**
+     * Remove orderPayment
+     *
+     * @param \OrderBundle\Entity\OrderPayment $orderPayment
+     */
+    public function removeOrderPayment(\OrderBundle\Entity\OrderPayment $orderPayment)
+    {
+        $this->order_payments->removeElement($orderPayment);
+    }
+
+    /**
+     * Get orderPayments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrderPayments()
+    {
+        return $this->order_payments;
+    }
+
+    public function getPaidTotal() {
+        $total = 0;
+        foreach($this->getOrderPayments() as $payment) {
+            $total += $payment->getAmount();
+        }
+        return $total;
+    }
+
+    public function getItemTotal() {
+        $total = 0;
+        foreach($this->getProductVariants() as $variant) {
+            $total += $variant->getTotal();
+        }
+        return $total;
+    }
+
+    public function getOrderTotal() {
+        return $this->getItemTotal() + $this->getShipping();
+    }
+
+    public function getBalance() {
+        return $this->getOrderTotal() - $this->getPaidTotal();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isManual()
+    {
+        return $this->isManual;
+    }
+
+    /**
+     * @param boolean $isManual
+     */
+    public function setIsManual($isManual)
+    {
+        $this->isManual = $isManual;
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile()->getClientOriginalName()) . '-' . $this->getFile()->getClientOriginalName();
+
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir() . '/' . $this->path;
+    }
+
+    public function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
+        return $tmp;
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/manual_order_pdfs';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function removeUpload()
+    {
+        $file_path = $this->getAbsolutePath();
+        if(file_exists($file_path)) unlink($file_path);
+    }
+}

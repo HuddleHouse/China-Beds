@@ -73,6 +73,7 @@ class PurchaseOrderController extends Controller
             $purchase_order_variant->setTotalQuantityAfter($item['total_quantity']);
             $purchase_order_variant->setWarehouseQuantityAfter($item['warehouse_quantity']);
             $purchase_order_variant->setOrderedQuantity($item['ordered_quantity']);
+//            $purchase_order_variant->setReceivedQuantity($item['received_quantity']);
             $em->persist($purchase_order_variant);
         }
         $em->persist($purchase_order);
@@ -258,7 +259,7 @@ class PurchaseOrderController extends Controller
         $variant_id = $request->request->get('product_variant_id');
         $em = $this->getDoctrine()->getManager();
         $variant = $em->getRepository('InventoryBundle:ProductVariant')->find($variant_id);
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findAll();
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findByChannels($this->getUser()->getActiveChannel());
         $data = array();
 
         foreach($warehouses as $warehouse)

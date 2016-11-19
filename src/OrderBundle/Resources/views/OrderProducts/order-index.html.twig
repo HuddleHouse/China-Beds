@@ -16,14 +16,16 @@
 
 {% block footer %}
     <script>
+        var grid;
+        var buttonGroup = $( buttonGroup );
         $(document).ready(function () {
             $('#part-table').DataTable({
             "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 
-            buttonGroup.find('.is-checked').removeClass('is-checked');
+            $('.button-group').find('.is-checked').removeClass('is-checked');
             $( this ).addClass('is-checked');
 
-            var grid = $('.grid').isotope({
+            grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
             });
@@ -52,9 +54,8 @@
             });
             // change is-checked class on buttons
             $('.button-group').each( function( i, buttonGroup ) {
-                var buttonGroup = $( buttonGroup );
-                buttonGroup.on( 'click', 'button', function() {
-                    buttonGroup.find('.is-checked').removeClass('is-checked');
+                $(buttonGroup).on( 'click', 'button', function() {
+                    $(buttonGroup).find('.is-checked').removeClass('is-checked');
                     $( this ).addClass('is-checked');
                 });
             });
@@ -183,8 +184,10 @@
             $scope.ship_to_id = {{ app.user.id }};
 
             $scope.due_date = new Date();
-            $scope.date = ($scope.due_date.getTime() + 86400000);
-            $scope.min_date = new Date($scope.date);
+            $scope.date_for_min = ($scope.due_date.getTime() + 60480000);
+            $scope.date_for_max = ($scope.due_date.getTime() + 604800000);
+            $scope.min_date = new Date($scope.date_for_min);
+            $scope.max_date = new Date($scope.date_for_max);
 
             $('body').addClass('sidebar-collapse');
 
@@ -313,6 +316,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
+                            $scope.product_variant_order_quan[variantId] = max;
                             showErrorModal('Only '+max+' available.');
                         }
                     }
@@ -335,6 +339,7 @@
                             $('#submit-button').prop('disabled', true);
                             $('#submit-button').addClass('button-error');
                             $scope.hasError.push(variantId);
+                            $scope.pop_order_quan[variantId] = max;
                             showErrorModal('Only '+max+' available.');
                         }
                     }
@@ -359,6 +364,7 @@
                 if(user_id == undefined)
                     user_id = {{ app.user.id }};
                 $scope.ship_to_id = user_id;
+                showSpinner();
                 $.ajax({
                         type: 'POST',
                         url: "{{ path('api_get_user_info_for_order_form') }}",
@@ -368,9 +374,12 @@
                             $scope.$apply(function () {
                                 var po = $scope.form_info['po'];
                                 $scope.form_info = data;
+                                $scope.products = data.products;
                                 $('#state').val(data['state']);
                                 $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
+                                $('.grid').isotope( 'reloadItems' ).isotope();
+                                hideSpinner();
                             });
                         }
                     });
@@ -440,6 +449,7 @@
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                             $scope.cart['pick_up_warehouse'] = warehouse;
                             $scope.validate();
                         });
@@ -471,6 +481,7 @@
                         $scope.$apply(function () {
                             $scope.cart = [];
                             $scope.products = data;
+                            $('.grid').isotope( 'reloadItems' ).isotope();
                         });
                     }
                 });
@@ -759,6 +770,16 @@
             list-style-type: none;
             color: #AAAAAA;
         }
+        .order_product .product_image {
+            padding-top:150px;
+        }
+        .order_product .product_image img {
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            margin:auto;
+        }
     </style>
 
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
@@ -808,7 +829,7 @@
         </div>
         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
         <div class="row" style="margin-bottom: 30px;" >
-            <div class="col-md-10" >
+            <div class="col-md-12" >
                 <div class="table-responsive" ng-show="hasCustomItem == 1">
                     <table class="table no-margin">
                         <thead>
@@ -839,9 +860,6 @@
                     </table>
                 </div>
             </div>
-            <div class="col-md-2">
-                <button ng-click="addCustomItem()" class="btn btn-raised btn-sm btn-default btn-flat pull-right">Add Custom Item<div class="ripple-container"></div></button>
-            </div>
         </div>
         {% endif %}
 
@@ -850,7 +868,7 @@
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }}">
+                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }} order_product">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="border: 1px solid #95989A;max-width: 350px; max-height: 150px;">
                             <div class="product_name">
@@ -860,7 +878,7 @@
 
                         <div class="price_box_row " style="font-size: smaller;">
 
-                                <div ng-repeat="variant in product.variants track by $index" class="price_box">
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box"  ng-hide="!form_info['pick_up']&&variant.open_item">
                                     <div class="variant_name gray_box">
                                         {{ variant.name }}
                                     </div>
@@ -905,7 +923,7 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11" style="margin-bottom: 25px; margin-top:45px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">
@@ -921,7 +939,7 @@
                                                onclick="this.select()"
                                                ng-model="pop_order_quan[ item.id ]"
                                                ng-init="pop_order_quan[ item.id ] = 0"
-                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, {{item.inventory}}, '{{item.type}}')"
+                                               ng-change="updateCart({{ item.id }}, {{ item.cost }}, 999, '{{item.type}}')"
                                         >
                                 <div class="pop_price" style="text-align: center; padding-bottom:10px;">{{item.cost | currency}}</div>
                             </div>

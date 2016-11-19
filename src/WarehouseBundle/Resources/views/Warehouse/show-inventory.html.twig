@@ -10,13 +10,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% verbatim %}
-                                <tr ng-repeat="(i, data) in inventory_data track by $index">
-                                    <td>{{ data.name }}</td>
-                                    <td ng-model="data.quantity"><center>{{ data.quantity }}</center></td>
-                                    <td ng-model="data.po_quantity"><center>{{ data.po_quantity }}</center></td>
-                                </tr>
-                    {% endverbatim %}
+                {% for data in inventory_data %}
+                    <tr>
+                        <td>{{ data.name }}</td>
+                        <td><center>{{ data.quantity }}</center></td>
+                        <td><center>{{ data.po_quantity }}</center></td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -50,9 +50,9 @@
 
 </div>
 
-    <a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons">add</i>
-    </a>
-    <div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">
-        Create an inventory item.
-    </div>
+    {#<a id="new-button" data-toggle="modal" data-target="#product" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">#}
+        {#<i class="material-icons">add</i>#}
+    {#</a>#}
+    {#<div class="mdl-tooltip mdl-tooltip--top mdl-tooltip--large" for="new-button">#}
+        {#Create an inventory item.#}
+    {#</div>#}

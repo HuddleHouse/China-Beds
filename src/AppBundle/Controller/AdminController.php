@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Form\CreateUserType;
+use AppBundle\Form\UserRestrictedType;
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,6 +20,7 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use WarehouseBundle\Entity\Warehouse;
+use AppBundle\Entity\ContactUs;
 
 /**
  * @Route("/admin")
@@ -29,8 +32,32 @@ class AdminController extends Controller
      */
     public function viewAllUsersAction(Request $request)
     {
+        $users = [];
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:User')->findAll();
+        if ( $this->getUser()->hasRole('ROLE_ADMIN') ) {
+            $users = $em->getRepository('AppBundle:User')->findAll();
+        } elseif ( $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
+            $users = [];
+            foreach($this->getUser()->getRetailers() as $user) {
+                $users[] = $user;
+            }
+        } elseif ( $this->getUser()->hasRole('ROLE_SALES_REP') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
+            foreach($this->getUser()->getDistributors() as $user) {
+                $users[] = $user;
+                foreach($user->getRetailers() as $user) {
+                    $users[] = $user;
+                }
+            }
+            foreach($this->getUser()->getRetailers() as $user) {
+                $users[] = $user;
+            }
+
+            if ( $this->getUser()->hasRole('ROLE_SALES_MANAGER') ) {
+                foreach($this->getUser()->getSalesReps() as $user) {
+                    $users[] = $user;
+                }
+            }
+        }
 
         return $this->render('AppBundle:Admin:view_users.html.twig', array(
             'users' => $users
@@ -45,15 +72,23 @@ class AdminController extends Controller
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $user_id));
+        $user_clone = clone $user;
 
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm($this->getUser()->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
         $form->handleRequest($request);
 
         if($form->isValid()) {
             try {
                 $event = new FormEvent($form, $request);
+
+                if($user->getPlainPassword() == '' || $user->getPlainPassword() == null){
+                    $user->setPlainPassword($user_clone->getPlainPassword());
+                }else{
+                    $user->setPlainPassword($user->getPlainPassword());
+                }
+
                 $userManager->updateUser($user);
-                $successMessage = "User information updated succesfully.";
+                $successMessage = "User information updated successfully.";
                 $this->addFlash('notice', $successMessage);
 
                 return $this->redirectToRoute('admin_edit_user', array('user_id' => $user_id));
@@ -75,6 +110,38 @@ class AdminController extends Controller
         ));
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Route("/add-user", name="admin_add_user")
+     */
+   public function adminAddUserAction(Request $request){
+       $userManager = $this->get('fos_user.user_manager');
+       $user = $userManager->createUser();
+
+       $form = $this->createForm(CreateUserType::class, $user);
+       $form->handleRequest($request);
+
+       if($form->isValid()) {
+           try {
+               $event = new FormEvent($form, $request);
+               $userManager->updateUser($user);
+               $successMessage = "User information updated successfully.";
+               $this->addFlash('notice', $successMessage);
+
+               return $this->redirectToRoute('view_users');
+           } catch (\Exception $e) {
+               $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+               return $this->redirectToRoute('view_users');
+           }
+       }
+
+       return $this->render('AppBundle:admin:new-user-creation.html.twig', array(
+           'form' => $form->createView(),
+           'user' =>$user
+       ));
+
+   }
 
     /**
      * @Route("/add-user", name="send_invitation")
@@ -255,7 +322,31 @@ class AdminController extends Controller
             $statement->execute();
         }
         return JsonResponse::create(true);
-}
+    }
+
+    /**
+     * @Route("/contact_us", name="contact_us")
+     */
+    public function contactUsAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $contact = new ContactUs();
+        $form = $this->createForm(ContactUsType::class, $contact);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            try {
+                $em->persist($contact);
+                $em->flush();
+                $this->addFlash('notice','Thank you for your submission. We will be in contact with you shortly');
+                return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+            }catch(\Exception $e){
+                $this->addFlash('notice','We\'re sorry but there seems to have been an issue with your submission: ' . $e->getCode() . $e->getMessage());
+                return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+            }
+        }
+
+        return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+    }
 
 
 }

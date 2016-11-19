@@ -53,14 +53,24 @@ class WarrantyClaimType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('user', EntityType::class, array(
+                    'class' => 'AppBundle\Entity\User',
+                    'label' => 'User',
+                    'placeholder' => 'Select User',
+                    'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
+                    'choice_label' => function (User $user) {
+                        return $user->getDisplayName();
+                    },
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
+                    'required' => false,
+                    'mapped'    => false
+                )
+            )
             ->add('order', EntityType::class, array(
                     'class' => 'OrderBundle\Entity\Orders',
                     'label' => 'Order ID',
                     'placeholder' => 'Select Order ID',
-                    'choices' => $this->ordersRepository->getLatestOrdersForUser($this->tokenStorage->getToken()->getUser()),
-                    'choice_label' => function (Orders $order) {
-                        return $order->getOrderId();
-                    },
+                    'choices' => [],
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
                     'required' => false
                 )
@@ -121,6 +131,16 @@ class WarrantyClaimType extends AbstractType
             ->add('path3', TextType::class, array(
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser3()', 'readonly' => 'readonly'),
                     'required' => false,
+                )
+            )
+            ->add('lawLabel', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;'),
+                    'required' => true,
+                )
+            )
+            ->add('frLabel', TextType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;'),
+                    'required' => true,
                 )
             );
     }

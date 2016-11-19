@@ -35,11 +35,11 @@
                 <tbody>
                 {% for retailer in retailers %}
                 <tr role="row">
-                    <td><a href="{{ path('edit_child_user', { 'id': retailer.id }) }}">{{ retailer.firstName }} {{ retailer.lastName }}</a></td>
+                    <td><a href="{{ path('admin_edit_user', { 'user_id': retailer.id }) }}">{{ retailer.displayname }}</a></td>
                     <td>{{ retailer.state.name }}</td>
                     <td>
-                        {% if retailer.myDistributor.firstName is defined %}
-                        <a href="{{ path('edit_child_user', { 'id': retailer.myDistributor.id }) }}">{{ retailer.myDistributor.firstName }} {{ retailer.myDistributor.lastName }}</a>
+                        {% if retailer.myDistributor %}
+                        <a href="{{ path('admin_edit_user', { 'user_id': retailer.myDistributor.id }) }}">{{ retailer.myDistributor.displayname }}</a>
                         {% else %}
                         None
                         {% endif %}

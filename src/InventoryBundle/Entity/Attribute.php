@@ -58,6 +58,11 @@ class Attribute
      */
     private $product_attributes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="attributes", cascade={"all"})
+     */
+    private $channels;
+
 
     public function __construct() {
         $this->product_attributes = new ArrayCollection();
@@ -268,5 +273,29 @@ class Attribute
     public function removeProductAttribute(\InventoryBundle\Entity\ProductAttribute $productAttribute)
     {
         $this->product_attributes->removeElement($productAttribute);
+    }
+
+    /**
+     * Set channels
+     *
+     * @param \InventoryBundle\Entity\Channel $channels
+     *
+     * @return Attribute
+     */
+    public function setChannels(\InventoryBundle\Entity\Channel $channels = null)
+    {
+        $this->channels = $channels;
+
+        return $this;
+    }
+
+    /**
+     * Get channels
+     *
+     * @return \InventoryBundle\Entity\Channel
+     */
+    public function getChannels()
+    {
+        return $this->channels;
     }
 }

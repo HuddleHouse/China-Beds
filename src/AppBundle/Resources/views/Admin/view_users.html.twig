@@ -22,8 +22,6 @@ All Registered Users
                         <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Admin</th>
-                        <th>Enabled</th>
                         <th>Last Login</th>
                         <th>Actions</th>
                     </tr>
@@ -32,20 +30,13 @@ All Registered Users
                     {% for user in users %}
                         <tr role="row" class="odd">
                             <td>
-                                <a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.firstName ? user.firstName : ' ' }} {{ user.lastName ? user.lastName : ' ' }}</a>
+                                <a href="{{ path('admin_edit_user', {'user_id': user.id}) }}">{{ user.displayName }}</a>
                             </td>
                             <td>
                                 {{ user.username }}
                             </td>
                             <td>
                                 {{ user.email |e }}
-                            </td>
-
-                            <td>
-                                {{ user.hasRole('ROLE_ADMIN') ? 'Yes' : 'No' }}
-                            </td>
-                            <td>
-                                {{ user.enabled ? 'Yes' : 'No' }}
                             </td>
                             <td>
                                 {{ user.lastLogin |date("F jS \\a\\t g:ia") }}

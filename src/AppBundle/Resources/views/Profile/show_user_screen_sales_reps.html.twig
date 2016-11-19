@@ -29,7 +29,7 @@
                     <tbody>
                     {% for sales_rep in sales_reps %}
                         <tr role="row">
-                            <td><a href="{{ path('edit_child_user', { 'id': sales_rep.id }) }}">{{ sales_rep.firstName }} {{ sales_rep.lastName }}</a></td>
+                            <td><a href="{{ path('admin_edit_user', { 'user_id': sales_rep.id }) }}">{{ sales_rep.displayname }}</a></td>
                             <td>{{ sales_rep.state.name }}</td>
                         </tr>
                     {% endfor %}

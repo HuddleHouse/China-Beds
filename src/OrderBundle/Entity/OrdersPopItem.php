@@ -170,5 +170,14 @@ class OrdersPopItem
     {
         $this->warehouse_info[] = $warehouse_info;
     }
-}
 
+    /**
+     * Remove warehouseInfo
+     *
+     * @param \OrderBundle\Entity\OrdersWarehouseInfo $warehouseInfo
+     */
+    public function removeWarehouseInfo(\OrderBundle\Entity\OrdersWarehouseInfo $warehouseInfo)
+    {
+        $this->warehouse_info->removeElement($warehouseInfo);
+    }
+}

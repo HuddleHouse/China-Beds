@@ -91,6 +91,11 @@ class PopItem
     public $path;
 
     /**
+     * @ORM\Column(name="hide_order", type="boolean", nullable=true)
+     */
+    public $hide_order;
+
+    /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="pop_item")
      */
     private $orders_pop_item;
@@ -104,7 +109,6 @@ class PopItem
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\WarehousePopInventoryOnHold", mappedBy="pop_item")
      */
     private $warehouse_pop_inventory_on_hold;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
@@ -123,12 +127,19 @@ class PopItem
      */
     private $is_hide_on_order;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="pop_items")
+     * @ORM\JoinTable(name="pop_items_warehouses")
+     */
+    private $warehouses;
+
     public function __construct()
     {
         $this->warehouse_pop_inventory = new ArrayCollection();
         $this->warehouse_pop_inventory_on_hold = new ArrayCollection();
         $this->orders_pop_item = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -345,13 +356,14 @@ class PopItem
 
         // move takes the target directory and then the
         // target filename to move to
+        $newName = md5(date('Y-m-d H:i:s:u')) . $this->getFile()->getClientOriginalName();
         $this->getFile()->move(
             $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+            $newName
         );
 
         // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
+        $this->path = $newName;
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
@@ -569,6 +581,40 @@ class PopItem
     }
 
     /**
+     * Get promoKitAvailable
+     *
+     * @return boolean
+     */
+    public function getPromoKitAvailable()
+    {
+        return $this->promo_kit_available;
+    }
+
+    /**
+     * Set hideOrder
+     *
+     * @param \bool $hideOrder
+     *
+     * @return PopItem
+     */
+    public function setHideOrder($hideOrder)
+    {
+        $this->hide_order = $hideOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get hideOrder
+     *
+     * @return \bool
+     */
+    public function getHideOrder()
+    {
+        return $this->hide_order;
+    }
+
+    /**
      * @return mixed
      */
     public function getPromoKitOrders()
@@ -582,26 +628,6 @@ class PopItem
     public function setPromoKitOrders($promo_kit_orders)
     {
         $this->promo_kit_orders = $promo_kit_orders;
-    }
-
-    /**
-     * Get promoKitAvailable
-     *
-     * @return boolean
-     */
-    public function getPromoKitAvailable()
-    {
-        return $this->promo_kit_available;
-    }
-
-    /**
-     * Get isHideOnOrder
-     *
-     * @return boolean
-     */
-    public function getIsHideOnOrder()
-    {
-        return $this->is_hide_on_order;
     }
 
     /**
@@ -626,5 +652,55 @@ class PopItem
     public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
     {
         $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getWarehouses()
+    {
+        return $this->warehouses;
+    }
+
+    /**
+     * @param mixed $warehouses
+     */
+    public function setWarehouses($warehouses)
+    {
+        $this->warehouses = $warehouses;
+    }
+
+    /**
+     * Get isHideOnOrder
+     *
+     * @return boolean
+     */
+    public function getIsHideOnOrder()
+    {
+        return $this->is_hide_on_order;
+    }
+
+    /**
+     * Add warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     *
+     * @return PopItem
+     */
+    public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses[] = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     */
+    public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses->removeElement($warehouse);
     }
 }

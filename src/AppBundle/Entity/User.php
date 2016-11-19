@@ -8,6 +8,7 @@ use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use InventoryBundle\Entity\Channel;
+use OrderBundle\Entity\Orders;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -150,6 +151,11 @@ class User extends BaseUser
      * @ORM\Column(type="boolean")
      */
     protected $is_online_intentions = false;
+
+    /**
+     * @ORM\Column(name="hide_rebate", type="boolean")
+     */
+    protected $hideRebate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -343,16 +349,16 @@ class User extends BaseUser
      */
     public function validate(ExecutionContextInterface $context, $payload)
     {
-        if($this->hasRole('ROLE_RETAILER')) {
-            $count = 0;
-            foreach($this->getUserChannels() as $channel)
-                $count++;
-            if ($count > 1) {
-                $context->buildViolation('A retailer can only be on one Channel.')
-                    ->atPath('user_channels')
-                    ->addViolation();
-            }
-        }
+//        if($this->hasRole('ROLE_RETAILER')) {
+//            $count = 0;
+//            foreach($this->getUserChannels() as $channel)
+//                $count++;
+//            if ($count > 1) {
+//                $context->buildViolation('A retailer can only be on one Channel.')
+//                    ->atPath('user_channels')
+//                    ->addViolation();
+//            }
+//        }
     }
 
 
@@ -376,7 +382,7 @@ class User extends BaseUser
     public function hasPendingOrders() {
         $count = 0;
         foreach($this->orders as $order) {
-            if($order->getStatus()->getName() == 'Pending') {
+            if(in_array($order->getStatus()->getName(), ['Pending', 'Draft'])) {
                 $count++;
                 break;
             }
@@ -387,14 +393,28 @@ class User extends BaseUser
             return true;
     }
 
+    public function getOpenBalanceTotal($channel_id = null) {
+        $total = 0;
+        foreach($this->orders as $order) {
+            if(in_array($order->getStatus()->getName(), [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED])) {
+                if ($channel_id == null) {
+                    $total += $order->getBalance();
+                } elseif ($order->getChannel()->getId() == $channel_id) {
+                    $total += $order->getBalance();
+                }
+            }
+        }
+        return $total;
+    }
+
     public function getPendingOrderTotal($channel_id = null) {
         $total = 0;
         foreach($this->orders as $order) {
-            if($order->getStatus()->getName() == 'Pending') {
+            if(in_array($order->getStatus()->getName(), [Orders::STATUS_PENDING, Orders::STATUS_DRAFT])) {
                 if($channel_id == null)
-                    $total += $order->getTotal();
+                    $total += $order->getBalance();
                 else if($order->getChannel()->getId() == $channel_id)
-                    $total += $order->getTotal();
+                    $total += $order->getBalance();
             }
         }
         return $total;
@@ -403,7 +423,7 @@ class User extends BaseUser
     public function getLedgerTotal($channel_id = null) {
         $total = 0;
         foreach($this->ledgers as $ledger) {
-            if($channel_id == null)
+            if($channel_id == null && $ledger->getChannel()->getId() == $this->getActiveChannel()->getId())
                 $total += $ledger->getAmountCredited();
             else if($ledger->getChannel()->getId() == $channel_id)
                 $total += $ledger->getAmountCredited();
@@ -461,7 +481,6 @@ class User extends BaseUser
         }
         return false;
     }
-
     /**
      * @return mixed
      */
@@ -503,7 +522,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getOrders()
     {
@@ -595,7 +614,7 @@ class User extends BaseUser
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = preg_replace("/[^0-9,.]/", "", $phone);
     }
 
     /**
@@ -1171,7 +1190,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSubmittedOrders()
     {
@@ -1649,5 +1668,94 @@ class User extends BaseUser
     public function setPromoKitOrders($promo_kit_orders)
     {
         $this->promo_kit_orders = $promo_kit_orders;
+    }
+
+    /**
+     * Set hideRebate
+     *
+     * @param boolean $hideRebate
+     *
+     * @return User
+     */
+    public function setHideRebate($hideRebate)
+    {
+        $this->hideRebate = $hideRebate;
+
+        return $this;
+    }
+
+    /**
+     * Get hideRebate
+     *
+     * @return boolean
+     */
+    public function getHideRebate()
+    {
+        return $this->hideRebate;
+    }
+
+    /**
+     * Add managedWarehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $managedWarehouse
+     *
+     * @return User
+     */
+    public function addManagedWarehouse(\WarehouseBundle\Entity\Warehouse $managedWarehouse)
+    {
+        $this->managed_warehouses[] = $managedWarehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove managedWarehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $managedWarehouse
+     */
+    public function removeManagedWarehouse(\WarehouseBundle\Entity\Warehouse $managedWarehouse)
+    {
+        $this->managed_warehouses->removeElement($managedWarehouse);
+    }
+
+    /**
+     * Add promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     *
+     * @return User
+     */
+    public function addPromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders[] = $promoKitOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove promoKitOrder
+     *
+     * @param \InventoryBundle\Entity\PromoKitOrders $promoKitOrder
+     */
+    public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
+    {
+        $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * Returns either company name or first/last name if company name is empty.
+     * @return mixed|string
+     */
+    public function getDisplayName() {
+        if ( empty($this->company_name) ) {
+            return $this->getName();
+        } else {
+            return $this->getCompanyName();
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
     }
 }

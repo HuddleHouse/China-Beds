@@ -10,3 +10,8 @@ services:
         arguments: ["@service_container"]
         tags:
             - { name: twig.extension  }
+    form.type.edituser:
+        class: AppBundle\Form\EditUserSettingsType
+        arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
+        tags:
+            - { name: form.type, alias: edituser_type }
