@@ -454,16 +454,24 @@
                             <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
                                     {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                    {% if app.user.hideRebate == 0  %}
                                         <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates</a>
+                                    {% endif %}
                                     {% else %}
+                                        {% if app.user.hideRebate == 0  %}
                                         <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
+                                    {% endif %}
                                     {% endif %}
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit_new and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
+                                {% if app.user.hideRebate == 0  %}
                                     <a href="{{ path('rebate_submit_new', { 'id': app.user.activechannel.id }) }}"><i class="fa fa-circle-o"></i>Submit Rebate</a>
+                                {% endif %}
                                 </li>
                                 <li {% if (app.request.get('_route') in sidebar_rebate_submit) %} class="active"{% endif %}>
-                                    <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
+                            {% if app.user.hideRebate == 0  %}
+                                <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
+                                {% endif %}
                                 </li>
                             {% if (app.request.get('_route') in ['retailer_affiliates']) %}
                                 <li {% if (app.request.get('_route') =='retailer_affiliates') %} class="active"{% endif %}>
