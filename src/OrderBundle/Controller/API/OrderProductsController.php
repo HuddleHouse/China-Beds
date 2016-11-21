@@ -721,6 +721,7 @@ class OrderProductsController extends Controller
 //            $order->setData($info);
 //        }
 
+            $order->setIsManual(true);
             $em->persist($order);
             $em->flush();
 
