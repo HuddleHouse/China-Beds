@@ -21,6 +21,7 @@
                     <tr>
                         <th>Order Number</th>
                         <th>Date</th>
+                        {%  if is_granted("ROLE_SALES_REP") or is_granted("ROLE_SALES_MANAGER") %}<th>Company</th>{% endif %}
                         <th>Total</th>
                         <th>Shipping</th>
                         <th>Status</th>
@@ -34,6 +35,7 @@
                                 <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderId }}: {{ order.orderNumber }}</a>
                             </td>
                             <td>{{ order.submitDate | date("m/d/Y")}}</td>
+                            {%  if is_granted("ROLE_SALES_REP") or is_granted("ROLE_SALES_MANAGER") %}<td>{{ order.submittedForUser.companyName | default('Not Given') }}</td>{% endif %}
                             <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
                             <td>${{ order.shipping |number_format(2, '.', ',') }}</td>
                             <td>
