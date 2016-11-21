@@ -35,7 +35,6 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
         $channel = $this->getUser()->getActiveChannel();
-
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
             'pending' => '',
