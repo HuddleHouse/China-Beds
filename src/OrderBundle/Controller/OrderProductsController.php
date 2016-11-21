@@ -34,10 +34,12 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
+        $channel = $this->getUser()->getActiveChannel();
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
-            'pending' => ''
+            'pending' => '',
+            'channel' => $channel->getName()
         ));
     }
 
@@ -55,7 +57,8 @@ class OrderProductsController extends Controller
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
-            'pending' => ' Pending'
+            'pending' => ' Pending',
+            'channel' => $channel
         ));
     }
 
@@ -205,6 +208,11 @@ select coalesce(sum(i.quantity), 0) as quantity
                 $is_dis = 1;
             $pop = $order->getPopItems();
 
+            $manualItems = $order->getManualItems();
+            $manualCount = 0;
+            foreach($manualItems as $manualItem) {
+                $manualCount++;
+            }
 
             return $this->render('@Order/OrderProducts/view-order.html.twig', array(
                 'channel' => $channel,

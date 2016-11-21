@@ -98,7 +98,7 @@ class ProfileController extends Controller
             'retailers' => $retailers,
             'sales_reps' => $sales_reps,
             'distributors' => $distributors,
-            'orders' => $orders
+            'orders' => $orders,
         ));
     }
 
