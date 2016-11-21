@@ -51,7 +51,7 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
@@ -69,7 +69,7 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
@@ -79,12 +79,15 @@ class OrderProductsController extends Controller
 
     /**
      *
-     * @Route("/{id}/products", name="order_products_index", options={"expose"=true})
+     * @Route("/products", name="order_products_index", options={"expose"=true})
      * @Method("GET")
      */
-    public function orderProductsAction(Channel $channel)
+    public function orderProductsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
         if(count($user->getPriceGroups()) != 0)
