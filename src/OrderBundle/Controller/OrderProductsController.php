@@ -80,6 +80,7 @@ class OrderProductsController extends Controller
     /**
      *
      * @Route("/products", name="order_products_index", options={"expose"=true})
+     * @Route("/{id}/products", name="order_products_index_old")
      * @Method("GET")
      */
     public function orderProductsAction()
