@@ -23,7 +23,6 @@
                         <th>Date</th>
                         <th>Total</th>
                         <th>Shipping</th>
-                        <th>Channel</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -37,9 +36,6 @@
                             <td>{{ order.submitDate | date("m/d/Y")}}</td>
                             <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
                             <td>${{ order.shipping |number_format(2, '.', ',') }}</td>
-                            <td>
-                                {{ order.channel.name }}
-                            </td>
                             <td>
                                 <span class="mdl-chip mdl-chip--contact" >
                                     <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>

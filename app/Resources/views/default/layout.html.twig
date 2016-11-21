@@ -473,7 +473,7 @@
                                 <a href="{{ path('rebate_submit_index') }}"><i class="fa fa-circle-o"></i>Rebate Submissions</a>
                                 {% endif %}
                                 </li>
-                            {% if (app.request.get('_route') in ['retailer_affiliates']) %}
+                                {% if isGrantedRoute(app.user, 'retailer_affiliates') %}
                                 <li {% if (app.request.get('_route') =='retailer_affiliates') %} class="active"{% endif %}>
                                     <a href="{{ path('retailer_affiliates') }}"><i class="fa fa-circle-o"></i>Affiliates Map</a>
                                 </li>
