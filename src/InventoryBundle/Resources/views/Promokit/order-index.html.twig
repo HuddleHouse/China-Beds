@@ -125,10 +125,11 @@
                             <td>{{ order.shipZip }}</td>
                             <td id="description">{% if order.description is not null %}<span>Click to expand</span>{% else %}--{% endif %}</td>
                             <td>
-                                <a class="btn btn-raised btn-xs" href="{{ path('promokit_edit_order', { 'id': order.id }) }}">Edit</a>
                                 {% if(is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                    <a class="btn btn-raised btn-xs" href="{{ path('promokit_edit_order', { 'id': order.id }) }}">Edit</a>
                                     <button class="btn btn-raised btn-xs" onclick="showPromoKitOrder({{ order.id }})">Show</button>
-                                {% endif %}</td>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
