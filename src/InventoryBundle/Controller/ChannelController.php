@@ -29,8 +29,9 @@ class ChannelController extends Controller
     {
         $this->get('session')->set('active_channel', $channel);
         $this->getUser()->setActiveChannel($channel);
-        $referer = $request->headers->get('referer');
-        return new RedirectResponse($referer);
+//        $referer = $request->headers->get('referer');
+//        return new RedirectResponse($referer);
+        return $this->redirectToRoute('fos_user_profile_show');
     }
 
     /**

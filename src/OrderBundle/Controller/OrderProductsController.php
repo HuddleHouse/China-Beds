@@ -53,8 +53,7 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
-        $channel = $this->getUser()->getActiveChannel();
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
@@ -73,7 +72,7 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
@@ -83,12 +82,15 @@ class OrderProductsController extends Controller
 
     /**
      *
-     * @Route("/{id}/products", name="order_products_index", options={"expose"=true})
+     * @Route("/products", name="order_products_index", options={"expose"=true})
      * @Method("GET")
      */
-    public function orderProductsAction(Channel $channel)
+    public function orderProductsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
         if(count($user->getPriceGroups()) != 0)
@@ -220,8 +222,8 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
                 'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'manual_items' => $manualItems,
-                'manual_items_count' => $manualCount
+                'manual_items' => $manualItems = $order->getManualItems(),
+                'manual_items_count' => count($manualItems = $order->getManualItems())
             ));
         }
         else
@@ -353,7 +355,7 @@ select coalesce(sum(i.quantity), 0) as quantity
             else
                 $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
 
-            return $this->render('@Order/OrderProducts/view-order.html.twig', array(
+            return $this->render('@Order/OrderProducts/warehouse-review.html.twig', array(
                 'channel' => $channel,
                 'order' => $order,
                 'user' => $user,
@@ -362,7 +364,9 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'is_dis' => $is_dis,
                 'pop_items' => $pop,
                 'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-                'shipped_status' => $shipped_status
+                'shipped_status' => $shipped_status,
+                'manual_items' => $manualItems = $order->getManualItems(),
+                'manual_items_count' => count($manualItems = $order->getManualItems())
             ));
         }
         else

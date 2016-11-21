@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Controller\API;
 
+use OrderBundle\Entity\OrdersWarehouseInfo;
 use WarehouseBundle\Entity\PurchaseOrder;
 use WarehouseBundle\Entity\PurchaseOrderProductVariant;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,6 +86,25 @@ class WarehouseController extends Controller
             return JsonResponse::create(0);
         else
             return JsonResponse::create($quantity['quantity']);
+    }
+
+    /**
+     * @param OrdersWarehouseInfo $info
+     * @Route("/update-shipped-quantity", name="api_update_shipped_quantity")
+     */
+    public function updateWarehouseInfoAction(Request $request) {
+
+        if ( !($info = $this->getDoctrine()->getRepository('OrderBundle:OrdersWarehouseInfo')->find($request->get('id'))) ) {
+            return new JsonResponse(['success' => false, 'error_message' => 'Invalid warehouse info entity.']);
+        }
+        try {
+            $info->setShipped($request->get('quantity'));
+            $this->getDoctrine()->getManager()->persist($info);
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(['success' => true]);
+        }catch(\Exception $e) {
+            return new JsonResponse(['success' => false, 'error_message' => $e->getMessage()]);
+        }
     }
 }
 
