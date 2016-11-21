@@ -513,9 +513,7 @@ class OrderProductsController extends Controller
                         $orderShippingLabel->setPath($path);
                         $orderShippingLabel->setOrder($orders);
                         $orderShippingLabel->setTrackingNumber($pkg['pkg_trk_num']);
-
-                        $orders->addShippingLabel($orderShippingLabel);
-                        $variant->addShippingLabel($orderShippingLabel);
+                        $info->addShippingLabel($orderShippingLabel);
                     }
                     $em->persist($orders);
 
