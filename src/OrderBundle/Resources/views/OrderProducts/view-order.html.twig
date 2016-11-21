@@ -464,7 +464,7 @@
                         <ul>
                             {% for label in order.shippingLabels %}
                                 <li>Tracking:
-                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
+                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}" target="_blank">
                                         {{ label.trackingNumber }}
                                     </a>
                                     {% if is_granted('ROLE_ADMIN') ==1  %}
