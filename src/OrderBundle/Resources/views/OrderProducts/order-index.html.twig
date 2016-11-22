@@ -860,6 +860,7 @@
                                                min="0"
                                                onclick="this.select()"
                                                style="text-align: center; width: 100%;    border: none;"
+                                               ng-disabled="variant.inventory<=0"
                                                ng-model="product_variant_order_quan[ variant.variant_id ]"
                                                ng-init="product_variant_order_quan[ variant.variant_id ] = 0"
                                                ng-change="updateCart({{ variant.variant_id }}, {{ variant.cost }}, {{ variant.inventory}}, '{{variant.type}}')"
@@ -886,7 +887,10 @@
                                     {% endif %}
                 {% verbatim %}
 
-                                    <div ng-if="variant.inventory < 10" class="variant_inventory">
+                                    <div ng-if="variant.inventory < 0" class="variant_inventory">
+                                        0 Avail
+                                    </div>
+                                    <div ng-if="variant.inventory < 10 and variant.inventory >= 0" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
                                     </div>
                                     <div ng-if="variant.inventory >= 10" class="variant_inventory">
