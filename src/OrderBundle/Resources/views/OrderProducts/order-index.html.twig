@@ -827,48 +827,13 @@
                 </div>
             </div>
         </div>
-        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
-        <div class="row" style="margin-bottom: 30px;" >
-            <div class="col-md-12" >
-                <div class="table-responsive" ng-show="hasCustomItem == 1">
-                    <table class="table no-margin">
-                        <thead>
-                        <center><h4>Manual Items</h4></center>
-                        <tr>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="item in cart['customItems']">
-                            <td>
-                                <div class="form-group is-empty" style="margin: 0px 0 0 0;">
-                                    <textarea class="form-control" ng-model="item.description">This is the description Yoyoyoyoyo.</textarea>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group is-empty" style="margin: 0px 0 0 0;">
-                                    <input type="number" class="form-control" ng-change="calculateCart()" ng-model="item.price">
-                                </div>
-                            </td>
-                            <td>
-                                <button ng-click="removeCustomItem(item)" class="btn btn-raised btn-sm btn-warning btn-flat">X</button>
-                            </td>
-                        </tr>
-
-                    </table>
-                </div>
-            </div>
-        </div>
-        {% endif %}
 
         <div class="row">
             <div class="grid md-col-12 col-lg-10">
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products track by product.id" class="col-md-5 element-item {{ product.cat_ids }} order_product">
+                    <div ng-repeat="product in products  | orderBy:['cat_name', 'name']" class="col-md-5 element-item {{ product.cat_ids }} order_product">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="max-width: 350px; max-height: 150px;">
                             <div class="product_name">

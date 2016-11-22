@@ -64,6 +64,7 @@ class ChannelRepository extends \Doctrine\ORM\EntityRepository
                 'sku' => $product->getSku(),
                 'cat_ids' => $cat_ids,
                 'path' => $image_url,
+                'cat_name' => $cat_name,
                 'quantity' => 0
             );
 
