@@ -104,11 +104,14 @@
                             order_id: {{ order.id}},
                             type: type
                         },
-                        success: function (data) {
-                            $scope.$apply(function () {
-                                hideSpinner();
+                        success: function (result) {
+                            hideSpinner();
+                            if ( !result.success ) {
+                                showErrorModal('Error processing order:<br />' + result.error_message);
+                            } else {
+                                showSuccessModal('Order submitted successfully...Please wait.');
                                 location.reload();
-                            });
+                            }
                         }
                     });
                 }
@@ -510,6 +513,7 @@
 
                 </div>
                 <div class="col-xs-12 col-md-6">
+                    <div class="alert alert-error hide" id="process-error">Test</div>
                     <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
                     <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">

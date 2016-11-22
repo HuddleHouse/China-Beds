@@ -231,6 +231,15 @@ class User extends BaseUser
     private $stock_transfers;
 
     /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\JoinTable(name="user_warehouses",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")}
+     * )
+     */
+    protected $warehouses;
+
+    /**
      * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="managers")
      * @ORM\JoinTable(name="user_managed_warehouses",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -342,6 +351,7 @@ class User extends BaseUser
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -937,6 +947,19 @@ class User extends BaseUser
     public function setWarehouse3($warehouse_3)
     {
         $this->warehouse_3 = $warehouse_3;
+    }
+
+    public function getWarehouses(Channel $channel = null) {
+        if ( $this->getWarehouse1() && !$this->warehouses->contains($this->getWarehouse1()) && ($channel == null || $channel->getId() == $this->getWarehouse1()->getChannel()->getId()) ) {
+            $this->warehouses->add($this->getWarehouse1());
+        }
+        if ( $this->getWarehouse2() && !$this->warehouses->contains($this->getWarehouse2()) && ($channel == null || $channel->getId() == $this->getWarehouse2()->getChannel()->getId()) ) {
+            $this->warehouses->add($this->getWarehouse2());
+        }
+        if ( $this->getWarehouse3() && !$this->warehouses->contains($this->getWarehouse3()) && ($channel == null || $channel->getId() == $this->getWarehouse3()->getChannel()->getId()) ) {
+            $this->warehouses->add($this->getWarehouse3());
+        }
+        return $this->warehouses;
     }
 
     /**
@@ -1757,5 +1780,29 @@ class User extends BaseUser
     public function __toString()
     {
         return $this->getDisplayName();
+    }
+
+    /**
+     * Add warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     *
+     * @return User
+     */
+    public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses[] = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     */
+    public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses->removeElement($warehouse);
     }
 }

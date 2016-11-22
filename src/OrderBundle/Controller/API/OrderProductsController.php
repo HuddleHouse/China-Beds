@@ -278,6 +278,14 @@ class OrderProductsController extends Controller
         $user_id = $request->request->get('user_id');
         $user = $em->getRepository('AppBundle:User')->find($user_id);
 
+        $warehouses = [];
+        foreach($user->getWarehouses($this->getUser()->getActiveChannel()) as $warehouse) {
+            $warehouses[] = [
+                'name'  => $warehouse->getName(),
+                'id'    =>  $warehouse->getId()
+            ];
+        }
+
         $data = array(
             'ship_name' => $user->getFullName(),
             'address' => $user->getAddress1(),
@@ -287,7 +295,8 @@ class OrderProductsController extends Controller
             'zip' => $user->getZip(),
             'phone' => $user->getPhone(),
             'email' => $user->getEmail(),
-            'products' => $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user, null, null, 1)
+            'products' => $product_data = $em->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user, null, null, 1),
+            'warehouses' => $warehouses
             );
 
         return JsonResponse::create($data);
@@ -354,7 +363,7 @@ class OrderProductsController extends Controller
 
         $order_payment = new OrderPayment();
         $order_payment->setAmount($order->getTotal());
-        $order->addOrderPayment($order_payment);
+
 
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
@@ -368,13 +377,12 @@ class OrderProductsController extends Controller
             $order_payment->setAmount($order->getTotal());
         }
         elseif($payment_type == 'cc' && $type == 'complete') {
-            $order = $this->generateShippingLabels($order);
             $cc = $request->request->get('cc');
             $cc['amount'] = $order->getTotal();
             $cc['order_id'] = $order->getId();
 
             $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
-            $order->setAmountPaid($order->getTotal());
+
             // Charge CC here
 
             try {
@@ -385,12 +393,17 @@ class OrderProductsController extends Controller
                     $order_payment->setGatewayTransactionId($result['trans_id']);
                     $order_payment->setDetail(substr($cc['number'], -4));
                 } else {
-                    JsonResponse::create(new \Exception($result['error_message']));
+                    return new JsonResponse(['success' => false, 'error_message' => $result['error_message']]);
                 }
+                $order = $this->generateShippingLabels($order);
+                $order->setAmountPaid($order->getTotal());
             }
             catch(\Exception $e) {
+                $order->removeOrderPayment($order_payment);
                 return JsonResponse::create($e);
             }
+
+
         }
         else if($type == 'admin' && $payment_type == '') {
             $order = $this->generateShippingLabels($order);
@@ -398,6 +411,7 @@ class OrderProductsController extends Controller
             $order->removeOrderPayment($order_payment);
         }
 
+        $order->addOrderPayment($order_payment);
         $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
 
         $order->setStatus($status);
@@ -412,7 +426,7 @@ class OrderProductsController extends Controller
         }
 
 
-        return JsonResponse::create(true);
+        return new JsonResponse(['success' => true, 'error_message' => null]);
     }
 
     /**

@@ -154,4 +154,3 @@ class StockTransferProductVariant
         $this->receiving_warehouse_quantity_after = $receiving_warehouse_quantity_after;
     }
 }
-

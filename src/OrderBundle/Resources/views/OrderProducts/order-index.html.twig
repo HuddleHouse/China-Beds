@@ -311,6 +311,8 @@
                 }
                 if(type == 'variant') {
                     if($scope.product_variant_order_quan[variantId] > max) {
+                        $scope.product_variant_order_quan[variantId] = max;
+                        $scope.cart[type][variantId].quantity = $scope.product_variant_order_quan[variantId];
                         if(jQuery.inArray(variantId, $scope.hasError) == -1) {
                             $('#variant-'+variantId).addClass('error');
                             $('#submit-button').prop('disabled', true);
@@ -334,6 +336,8 @@
                 }
                 if(type == 'pop') {
                     if($scope.pop_order_quan[variantId] > max) {
+                        $scope.pop_order_quan[variantId]
+                        $scope.cart[type][variantId].quantity = $scope.pop_order_quan[variantId];
                         if(jQuery.inArray(variantId, $scope.hasError) == -1) {
                             $('#pop-'+variantId).addClass('error');
                             $('#submit-button').prop('disabled', true);
@@ -373,11 +377,15 @@
                         success: function (data) {
                             $scope.$apply(function () {
                                 var po = $scope.form_info['po'];
-                                $scope.form_info = data;
+                                var ship = $scope.form_info['ship'];
+                                var pick_up = $scope.form_info['pick_up'];
+                                $scope.form_info = data; //@todo why are we overwriting everything
                                 $scope.products = data.products;
+                                $scope.user_warehouses = data.warehouses;
                                 $('#state').val(data['state']);
-                                $scope.form_info['ship'] = true;
                                 $scope.form_info['po'] = po;
+                                $scope.form_info['ship'] = ship;
+                                $scope.form_info['pick_up'] = pick_up;
                                 $('.grid').isotope( 'reloadItems' ).isotope();
                                 hideSpinner();
                             });

@@ -192,4 +192,3 @@ class Settings
         $this->choices = $choices;
     }
 }
-

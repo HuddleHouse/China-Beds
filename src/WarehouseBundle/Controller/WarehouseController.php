@@ -23,65 +23,37 @@ class WarehouseController extends Controller
      * Lists all Warehouse entities.
      *
      * @Route("/", name="warehouse_index")
+     * @Route("/", name="warehouse_channelled")
      * @Method("GET")
      */
     public function indexAction()
-    {
-        return $this->redirectToRoute('warehouse_channelled', ['channelName' => $this->getUser()->getActiveChannel()->getName()]);
-        $em = $this->getDoctrine()->getManager();
-
-
-
-        if($this->getUser()->hasRole('ROLE_WAREHOUSE')) {
-            foreach($this->getUser()->getManagedWarehouses() as $warehouse) {
-                if ($warehouse->belongsToChannel($this->getUser()->getActiveChannel())) {
-                    $warehouses[] = $warehouse;
-                }
-            }
-        } else {
-            $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
-        }
-
-
-        return $this->render('@Warehouse/Warehouse/index.html.twig', array(
-            'warehouses' => $warehouses,
-        ));
-    }
-
-    /**
-     * Shows Warehouses in a Channel
-     *
-     * @Route("/channel/{channelName}", name="warehouse_channelled")
-     */
-    public function channelledIndexAction($channelName)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
         if(!$user->hasRole('ROLE_WAREHOUSE'))
-            $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesInChannelArray($channelName);
+            $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->findBy(['channel' => $user->getActiveChannel()]);
         else {
-            $warehouseEntities = $user->getManagedWarehouses();
-            $warehouses = array();
-
-            foreach($warehouseEntities as $warehouse)
-                if ( $warehouse->belongsToChannel($user->getActiveChannel()) ) {
-                    $warehouses[] = array(
-                        'id' => $warehouse->getId(),
-                        'name' => $warehouse->getName(),
-                        'list_id' => $warehouse->getListId(),
-                        'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory(
-                            $warehouse
-                        ),
-                        'po_quantity' => $em->getRepository(
-                            'WarehouseBundle:Warehouse'
-                        )->getWarehouseInventoryOnPurchaseOrder($warehouse)
-                    );
+            foreach($user->getManagedWarehouses() as $warehouse) {
+                if ( $warehouse->getChannel()->getId() == $user->getActiveChannel()->getId() ) {
+                    $warehouses[] = $warehouse;
                 }
+            }
+        }
+
+        $data = [];
+        foreach($warehouses as $warehouse) {
+            $data[] = array(
+                'id' => $warehouse->getId(),
+                'name' => $warehouse->getName(),
+                'list_id' => $warehouse->getListId(),
+                'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory($warehouse),
+                'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse)
+            );
         }
 
         return $this->render('@Warehouse/Warehouse/index.html.twig', array(
-            'warehouses' => $warehouses,
+            'warehouses' => $data,
         ));
     }
 

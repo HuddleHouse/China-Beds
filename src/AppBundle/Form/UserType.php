@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\PriceGroup;
 use Doctrine\ORM\EntityRepository;
 use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\Form\AbstractType;
@@ -14,9 +15,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use WarehouseBundle\Entity\Warehouse;
 
 class UserType extends AbstractType
 {
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -25,7 +33,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px') ))
-            ->add('plain_password', PasswordType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('plain_password', PasswordType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('first_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('last_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('address_1', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
@@ -34,33 +42,12 @@ class UserType extends AbstractType
             ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
-            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'phone-input' => '', 'ng-model' => 'phone_val')))
+            ->add('phone', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'phone-input' => '')))
             ->add('state', EntityType::class, array(
                 'class' => 'AppBundle:State',
                 'label' => 'State',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-            ))
-            ->add('warehouse_1', EntityType::class, array(
-                'class' => 'WarehouseBundle\Entity\Warehouse',
-                'label' => 'Warehouse #1',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('warehouse_2', EntityType::class, array(
-                'class' => 'WarehouseBundle\Entity\Warehouse',
-                'label' => 'Warehouse #2',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
-            ))
-            ->add('warehouse_3', EntityType::class, array(
-                'class' => 'WarehouseBundle\Entity\Warehouse',
-                'label' => 'Warehouse #3',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'required' => false
             ))
             ->add('groups', EntityType::class, array(
                 'class' => 'AppBundle:Role',
@@ -73,7 +60,29 @@ class UserType extends AbstractType
             ->add('price_groups', EntityType::class, array(
                 'class' => 'AppBundle:PriceGroup',
                 'label' => 'Price Groups',
-                'choice_label' => 'name',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('g')
+                        ->where('g.channel in (:channel)')
+                        ->setParameter('channel',  $options['data']->getUserChannels());
+                },
+                'choice_label' => function (PriceGroup $group) {
+                    return sprintf('[%s] %s', $group->getChannel()->getName(), $group->getName());
+                },
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
+                'multiple' => true,
+                'required' => false
+            ))
+            ->add('warehouses', EntityType::class, array(
+                'class' => 'WarehouseBundle\Entity\Warehouse',
+                'label' => 'Warehouses',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('w')
+                        ->where('w.channel in (:channel)')
+                        ->setParameter('channel',  $options['data']->getUserChannels());
+                },
+                'choice_label' => function (Warehouse $warehouse) {
+                    return sprintf('[%s] %s', $warehouse->getChannel()->getName(), $warehouse->getName());
+                },
                 'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                 'multiple' => true,
                 'required' => false

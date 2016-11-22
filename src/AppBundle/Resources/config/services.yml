@@ -15,3 +15,13 @@ services:
         arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: edituser_type }
+    form.type.user:
+        class: AppBundle\Form\UserType
+        arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
+        tags:
+            - { name: form.type, alias: edituser_type }
+    form.type.pricegroup:
+        class: AppBundle\Form\PriceGroupType
+        arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
+        tags:
+            - { name: form.type, alias: edituser_type }

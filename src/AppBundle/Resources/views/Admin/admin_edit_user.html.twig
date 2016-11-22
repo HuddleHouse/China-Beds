@@ -9,100 +9,6 @@
     <a href="{{ path('view_users') }}">< Back to the list</a>
 {% endblock page_name %}
 
-{% block actions %}
-{% endblock actions %}
-
-{% block footer %}
-<script>
-    var app = angular.module('myApp', ['ngMaterial']);
-
-    app.directive('phoneInput', function($filter, $browser) {
-        return {
-            require: 'ngModel',
-            link: function($scope, $element, $attrs, ngModelCtrl) {
-                var listener = function() {
-                    var value = $element.val().replace(/[^0-9]/g, '');
-                    $element.val($filter('tel')(value, false));
-                };
-
-                // This runs when we update the text field
-                ngModelCtrl.$parsers.push(function(viewValue) {
-                    return viewValue.replace(/[^0-9]/g, '').slice(0,10);
-                });
-
-                // This runs when the model gets updated on the scope directly and keeps our view in sync
-                ngModelCtrl.$render = function() {
-                    $element.val($filter('tel')(ngModelCtrl.$viewValue, false));
-                };
-
-                $element.bind('change', listener);
-                $element.bind('keydown', function(event) {
-                    var key = event.keyCode;
-                    // If the keys include the CTRL, SHIFT, ALT, or META keys, or the arrow keys, do nothing.
-                    // This lets us support copy and paste too
-                    if (key == 91 || (15 < key && key < 19) || (37 <= key && key <= 40)){
-                        return;
-                    }
-                    $browser.defer(listener); // Have to do this or changes don't get picked up properly
-                });
-
-                $element.bind('paste cut', function() {
-                    $browser.defer(listener);
-                });
-            }
-
-        };
-    });
-
-    app.filter('tel', function () {
-        return function (tel) {
-            console.log(tel);
-            if (!tel) { return ''; }
-
-            var value = tel.toString().trim().replace(/^\+/, '');
-
-            if (value.match(/[^0-9]/)) {
-                return tel;
-            }
-
-            var country, city, number;
-
-            switch (value.length) {
-                case 1:
-                case 2:
-                case 3:
-                    city = value;
-                    break;
-
-                default:
-                    city = value.slice(0, 3);
-                    number = value.slice(3);
-            }
-
-            if(number){
-                if(number.length>3){
-                    number = number.slice(0, 3) + '-' + number.slice(3,7);
-                }
-                else{
-                    number = number;
-                }
-
-                return ("(" + city + ") " + number).trim();
-            }
-            else{
-                return "(" + city;
-            }
-
-        };
-    });
-
-    app.controller('MyCtrl', ['$scope', function($scope) {
-        $scope.cart_num_items = 0;
-        $scope.cart_total = 0.00;
-    }]);
-
-</script>
-{% endblock footer %}
 
 {% block content %}
     <style>
@@ -119,8 +25,10 @@
             top: 0;
             z-index: 1;
         }
+
         input#user_groups_3 {
         }
+
         input[type=checkbox], input[type=radio] {
             display: inline !important;
             margin-left: 10px;
@@ -137,202 +45,175 @@
             </div>
         </div>
     {% endif %}
-    <div class="body" ng-app="myApp">
-    <div class="wrapper" ng-controller="MyCtrl">
-    <div class="table">
-        <div class="form-body">
-        {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
-        {% if is_granted("ROLE_ADMIN") %}
-            <div class="row">
-                    <div class="col-md-12">
-                        <h2>Username and Password</h2>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        {{ form_label(form.username) }}
-                        {{ form_widget(form.username) }}
-                    </div>
-                    <div class="col-md-6 form-group">
-                        {{ form_label(form.plain_password) }}
-                        {{ form_widget(form.plain_password) }}
-                    </div>
-            </div>
-        {% endif %}
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Information</h2>
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.first_name) }}
-                    {{ form_widget(form.first_name) }}
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.last_name) }}
-                    {{ form_widget(form.last_name) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.company_name) }}
-                    {{ form_widget(form.company_name) }}
 
-                </div>
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') %}
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.enabled) }}
-                    {{ form_widget(form.enabled) }}
-                </div>
-        {% endif %}
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.email) }}
-                    {{ form_widget(form.email) }}
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.phone) }}
-                    {{ form_widget(form.phone) }}
-                </div>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Admin</h2>
-                </div>
-            </div>
-            <div class="row" style="display: block;">
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.my_distributor) }}
-                    {{ form_widget(form.my_distributor) }}
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.my_sales_rep) }}
-                    {{ form_widget(form.my_sales_rep) }}
-                </div>
-            </div>
-            <div class="row" >
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.my_sales_manager) }}
-                    {{ form_widget(form.my_sales_manager) }}
-                </div>
-                <div class="col-md-6" style="display: block;">
-                    {{ form_label(form.groups) }}
-                    {{ form_widget(form.groups) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6" style="display: block;min-height: 360px;">
-                    {{ form_label(form.price_groups) }}
-                    {{ form_widget(form.price_groups) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_label(form.hide_rebate) }}
-                    {{ form_widget(form.hide_rebate) }}
-                </div>
-            </div>
-            <br>
-            <br>
-            {% if user.hasRole('ROLE_DISTRIBUTOR') %}
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Assign Retailers</button>
 
-            <div id="myModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
+    {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
+    <div class="row">
+        <div class="col-md-12">
+            <input class="btn btn-raised btn-success" type="submit" value="Update"/>
+        </div>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">User</a></li>
+            <li><a href="#tab_3" data-toggle="tab">Address</a></li>
+            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Permissions</a></li>
 
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Assign Retailers</h4>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                {% if is_granted("ROLE_ADMIN") %}
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            {{ form_label(form.username) }}
+                            {{ form_widget(form.username) }}
                         </div>
-                        <div class="modal-body">
-
-                                <div class="row" style="display: block;">
-                                    <div class="col-md-12">
-                                        {#{{ form_label(form.retailers) }}#}
-                                        {#{{ form_widget(form.retailers) }}#}
-
-                                        <table class="table table-hover table-condensed">
-                                            <tbody style="border:none">
-
-                                            {% for retailer in form.retailers.children %}
-                                                <tr>
-                                                   <td style="border:none">{{ form_label(retailer) }}</td><td style="padding-left:0px; border:none">{{ form_widget(retailer) }}</td>
-                                                </tr>
-                                            {% endfor %}
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <br>
-                                <br>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" data-dismiss="modal">Accept</button>
-                            <button type="button" class="btn btn-danger" id="clear-retailers">Clear All</button>
-                            <button type="button" class="btn btn-primary" id="check-retailers">Check All</button>
+                        <div class="col-md-6 form-group">
+                            {{ form_label(form.plain_password) }}
+                            {{ form_widget(form.plain_password) }}
                         </div>
                     </div>
-
-                </div>
-            </div>
-            {% endif %}
-            <script>
-                $(document).ready(function(){
-                    $("#clear-retailers").click(function()
-                    {
-                        $(".modal-body input:checkbox").removeAttr('checked');
-                    });
-                    $("#check-retailers").click(function()
-                    {
-                        $(".modal-body input:checkbox").attr('checked', true);
-                    });
-                    $(".modal-body tr").click(function()
-                    {
-
-                        if($(this).find('input:checkbox').attr('checked'))
-                        {
-                            $(this).find('input:checkbox').removeAttr('checked');
-                        }else
-                        {
-                            $(this).find('input:checkbox').attr('checked', true);
-                        }
-                    });
-                });
-            </script>
-
-            {% if user.hasRole('ROLE_SALES_REP') %}
-                <div class="row" style="display: block;">
-                    <div class="col-md-12">
-                        {{ form_label(form.distributors) }}
-                        {{ form_widget(form.distributors) }}
-                    </div>
-                </div>
-                <br>
-                <br>
-            {% endif %}
-            {% if user.hasRole('ROLE_SALES_MANAGER') %}
-                <div class="row" style="display: block;">
-                    <div class="col-md-12">
-                        {{ form_label(form.sales_reps) }}
-                        {{ form_widget(form.sales_reps) }}
-                    </div>
-                </div>
-                <br>
-                <br>
-            {% endif %}
-            {% if user.hasRole('ROLE_WAREHOUSE') %}
-                <div class="row" style="display: block;">
-                    <div class="col-md-12">
-                        {{ form_label(form.managed_warehouses) }}
-                        {{ form_widget(form.managed_warehouses) }}
-                    </div>
-                </div>
-                <br>
-                <br>
-            {% endif %}
                 {% endif %}
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Address</h2>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.first_name) }}
+                        {{ form_widget(form.first_name) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.last_name) }}
+                        {{ form_widget(form.last_name) }}
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.company_name) }}
+                        {{ form_widget(form.company_name) }}
+
+                    </div>
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') %}
+                        <div class="col-md-6 form-group">
+                            {{ form_label(form.enabled) }}
+                            {{ form_widget(form.enabled) }}
+                        </div>
+                    {% endif %}
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.phone) }}
+                        {{ form_widget(form.phone) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.user_channels) }}
+                        {{ form_widget(form.user_channels) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.price_groups) }}
+                        {{ form_widget(form.price_groups) }}
+                    </div>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            {{ form_label(form.warehouses) }}
+                            {{ form_widget(form.warehouses) }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="tab-pane" id="tab_2">
+                <div class="row" style="display: block;">
+                    <div class="col-md-6">
+                        {{ form_label(form.groups) }}
+                        {{ form_widget(form.groups) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.my_sales_manager) }}
+                        {{ form_widget(form.my_sales_manager) }}
+                    </div>
+                </div>
+                {% if user.hasRole('ROLE_SALES_REP') %}
+                    <div class="row" style="display: block;">
+                        <div class="col-md-12">
+                            {{ form_label(form.distributors) }}
+                            {{ form_widget(form.distributors) }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if user.hasRole('ROLE_SALES_MANAGER') %}
+                    <div class="row" style="display: block;">
+                        <div class="col-md-12">
+                            {{ form_label(form.sales_reps) }}
+                            {{ form_widget(form.sales_reps) }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row" style="display: block;">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.my_distributor) }}
+                        {{ form_widget(form.my_distributor) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.my_sales_rep) }}
+                        {{ form_widget(form.my_sales_rep) }}
+                    </div>
+                </div>
+                {% if user.hasRole('ROLE_WAREHOUSE') %}
+                    <div class="row" style="display: block;">
+                        <div class="col-md-12">
+                            {{ form_label(form.managed_warehouses) }}
+                            {{ form_widget(form.managed_warehouses) }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.is_show_credit) }}
+                        {{ form_widget(form.is_show_credit) }}
+                    </div>
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.is_volume_discount) }}
+                        {{ form_widget(form.is_volume_discount) }}
+                    </div>
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.is_charge_shipping) }}
+                        {{ form_widget(form.is_charge_shipping) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.is_show_warranty) }}
+                        {{ form_widget(form.is_show_warranty) }}
+                    </div>
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.sent_retail_kit) }}
+                        {{ form_widget(form.sent_retail_kit) }}
+                    </div>
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.is_current_retailer) }}
+                        {{ form_widget(form.is_current_retailer) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.is_online_intentions) }}
+                        {{ form_widget(form.is_online_intentions) }}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-6">
+                            {{ form_label(form.hide_rebate) }}
+                            {{ form_widget(form.hide_rebate) }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_3">
                 <div class="col-md-6 form-group">
                     {{ form_label(form.address_1) }}
                     {{ form_widget(form.address_1) }}
@@ -341,112 +222,29 @@
                     {{ form_label(form.address_2) }}
                     {{ form_widget(form.address_2) }}
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.city) }}
-                    {{ form_widget(form.city) }}
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.city) }}
+                        {{ form_widget(form.city) }}
+                    </div>
+                    <div class="col-md-2 form-group">
+                        {{ form_label(form.state) }}
+                        {{ form_widget(form.state) }}
+                    </div>
+                    <div class="col-md-4 form-group">
+                        {{ form_label(form.zip) }}
+                        {{ form_widget(form.zip) }}
+                    </div>
                 </div>
-                <div class="col-md-2 form-group">
-                    {{ form_label(form.state) }}
-                    {{ form_widget(form.state) }}
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        {{ form_label(form.is_residential) }}
+                        {{ form_widget(form.is_residential) }}
+                    </div>
                 </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.zip) }}
-                    {{ form_widget(form.zip) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 form-group">
-                    {{ form_label(form.is_residential) }}
-                    {{ form_widget(form.is_residential) }}
-                </div>
-            </div>
-            {% if is_granted('ROLE_ADMIN') %}
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Retailer Info</h2>
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.is_show_credit) }}
-                    {{ form_widget(form.is_show_credit) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.is_volume_discount) }}
-                    {{ form_widget(form.is_volume_discount) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.is_charge_shipping) }}
-                    {{ form_widget(form.is_charge_shipping) }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.is_show_warranty) }}
-                    {{ form_widget(form.is_show_warranty) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.sent_retail_kit) }}
-                    {{ form_widget(form.sent_retail_kit) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.is_current_retailer) }}
-                    {{ form_widget(form.is_current_retailer) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.is_online_intentions) }}
-                    {{ form_widget(form.is_online_intentions) }}
-                </div>
-                <div class="col-md-4">
-                </div>
-                <div class="col-md-4">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Order Information</h1>
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form_label(form.user_channels) }}
-                    {{ form_widget(form.user_channels) }}
-                </div>
-                <div class="col-md-6">
-                </div>
-            </div>
-            <fieldset>
-            <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.warehouse_1) }}
-                    {{ form_widget(form.warehouse_1) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.warehouse_2) }}
-                    {{ form_widget(form.warehouse_2) }}
-                </div>
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.warehouse_3) }}
-                    {{ form_widget(form.warehouse_3) }}
-                </div>
-            </div>
-            </fieldset>
-        {% endif %}
-            <div class="row">
-                <div class="col-md-8">
-                </div>
-            </div>
-            <div style="padding-top: 20px;">
-                <input class="btn btn-raised btn-success" type="submit" value="Update"/>
             </div>
         </div>
-
-    </div>
-    </div>
     </div>
 
     {{ form_end(form) }}
-
 {% endblock content %}

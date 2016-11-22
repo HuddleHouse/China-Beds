@@ -155,6 +155,7 @@ select coalesce(sum(i.quantity), 0) as quantity
             $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
         }
 
+
         $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
@@ -162,7 +163,11 @@ select coalesce(sum(i.quantity), 0) as quantity
         else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
             $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
         else
-            $user_retailers = null;
+            $user_retailers = [];
+
+        usort($user_retailers, function($a, $b) {
+            return $a->getDisplayName() - $b->getDisplayName();
+        });
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,

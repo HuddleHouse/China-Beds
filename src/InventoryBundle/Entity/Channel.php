@@ -390,6 +390,10 @@ class Channel
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Attribute", mappedBy="channels")
      */
     public $attributes;
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\Warehouse", mappedBy="channel")
+     */
+    public $channels;
 
     /**
      * Channel constructor.
@@ -1833,5 +1837,73 @@ class Channel
     public function removeResource(\AppBundle\Entity\Resource $resource)
     {
         $this->resources->removeElement($resource);
+    }
+
+    /**
+     * Add attribute
+     *
+     * @param \InventoryBundle\Entity\Attribute $attribute
+     *
+     * @return Channel
+     */
+    public function addAttribute(\InventoryBundle\Entity\Attribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param \InventoryBundle\Entity\Attribute $attribute
+     */
+    public function removeAttribute(\InventoryBundle\Entity\Attribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Add channel
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $channel
+     *
+     * @return Channel
+     */
+    public function addChannel(\WarehouseBundle\Entity\Warehouse $channel)
+    {
+        $this->channels[] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Remove channel
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $channel
+     */
+    public function removeChannel(\WarehouseBundle\Entity\Warehouse $channel)
+    {
+        $this->channels->removeElement($channel);
+    }
+
+    /**
+     * Get channels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChannels()
+    {
+        return $this->channels;
     }
 }
