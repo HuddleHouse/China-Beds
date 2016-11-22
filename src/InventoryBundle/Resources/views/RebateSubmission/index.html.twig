@@ -112,13 +112,13 @@
                                 {% endif %}
                             {% endif %}
                             <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a> Submission (PDF)</td>
-                            {% if is_granted("ROLE_WAREHOUSE") or is_granted("ROLE_ADMIN") or is_granted("ROLE_DISTRIBUTOR") or is_granted("ROLE_RETAILER") or is_granted("ROLE_ACCOUNTING") or is_granted("ROLE_OPERATIONS") or is_granted("ROLE_BETA_TESTING")  %}
+                            {% if not is_granted("ROLE_USER")  %}
                             <td>
-                                {% if(rebateSubmission.creditIssued is null) %}
+                                {% if(rebateSubmission.creditIssued is null and is_granted('ROLE_ADMIN') ) %}
                                 <a class="btn btn-raised btn-xs" href="{{ path('rebate_submit_edit', { 'id': rebateSubmission.id }) }}">Edit</a>
                                 <button class="btn btn-raised btn-xs" onclick="deleteSubmission({{ rebateSubmission.id }})">Delete</button>
                                 {% endif %}
-                                {% if(is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
+                                {% if(is_granted('ROLE_ADMIN') ) %}
                                     <button class="btn btn-raised btn-xs" onclick="showSubmission({{ rebateSubmission.id }})">Show</button>
                                 {% endif %}
                             </td>

@@ -176,7 +176,7 @@
                     {{ form_widget(form.company_name) }}
 
                 </div>
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') %}
                 <div class="col-md-6 form-group">
                     {{ form_label(form.enabled) }}
                     {{ form_widget(form.enabled) }}

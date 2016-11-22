@@ -145,10 +145,16 @@ class OrderProductsController extends Controller
                 }
             }
         }
-        $shipping = $this->calculateShipping($order);
-        $order->setShipping($shipping['rate']);
-        $order->setShipCode($shipping['service_code']);
-        $order->setShipDescription($shipping['desc']);
+        if ( !$order->getIsPickUp()) {
+            $shipping = $this->calculateShipping($order);
+            $order->setShipping($shipping['rate']);
+            $order->setShipCode($shipping['service_code']);
+            $order->setShipDescription($shipping['desc']);
+        } else {
+            $order->setShipping(null);
+            $order->setShipCode(null);
+            $order->setShipDescription(null);
+        }
 
         $em->persist($order);
         $em->flush();
