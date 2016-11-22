@@ -40,6 +40,7 @@
                     <tbody>
                     {% for order in orders %}
                         {% if order.channel.name == channel %}
+                            {% if order.status.id == 7 %}
                         <tr role="row" class="odd">
                             <td>
                                 <a href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}">{{ order.orderId }}-{{ order.orderNumber }}</a>
@@ -63,6 +64,7 @@
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> View</a>
                             </td>
                         </tr>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                     </tbody>

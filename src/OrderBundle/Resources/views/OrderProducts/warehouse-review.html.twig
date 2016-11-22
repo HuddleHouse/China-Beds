@@ -185,10 +185,11 @@
                                                 <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.tracking_number }}">
                                                     {{ label.tracking_number }}
                                                     <a href="{{ asset(label.path) }}" download><i class="fa fa-print"></i></a>
-                                                    <a href="" ><i class="fa fa-times"></i></a>
+                                                    <a href="" onclick="removeTracking()"><i class="fa fa-times"></i></a>
                                                 </a>
                                             {% endfor %}
                                         {% endif %}
+                                        {{ dump(item) }}
                                     </td>
                                     {#<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>#}
                                 </tr>
