@@ -8,12 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 use InventoryBundle\Entity\ProductVariant;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Orders
  *
  * @ORM\Table(name="orders")
  * @ORM\Entity(repositoryClass="OrderBundle\Repository\OrdersRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Orders
 {
@@ -84,6 +87,13 @@ class Orders
      * @ORM\Column(name="is_pick_up", type="boolean", nullable=true)
      */
     private $isPickUp;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_manual", type="boolean")
+     */
+    private $isManual = false;
 
     /**
      * @var string
@@ -248,11 +258,24 @@ class Orders
      */
     private $rebate_submissions;
 
-
     /**
      * @ORM\OneToMany(targetEntity="OrderPayment", mappedBy="order", cascade={"persist"})
      */
     private $order_payments;
+
+    /**
+     * @Assert\File(
+     *     maxSize="6M",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Please upload a valid PDF"
+     * )
+     */
+    private $file;
+
+    /**
+     * @ORM\Column(type="string", length=510, nullable=true)
+     */
+    public $path;
 
     /**
      * Orders constructor.
@@ -885,7 +908,6 @@ class Orders
         return $shipping_labels;
     }
 
-
     /**
      * @param int $amount_paid
      */
@@ -1217,5 +1239,121 @@ class Orders
 
     public function getBalance() {
         return $this->getOrderTotal() - $this->getPaidTotal();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isManual()
+    {
+        return $this->isManual;
+    }
+
+    /**
+     * @param boolean $isManual
+     */
+    public function setIsManual($isManual)
+    {
+        $this->isManual = $isManual;
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile()->getClientOriginalName()) . '-' . $this->getFile()->getClientOriginalName();
+
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir() . '/' . $this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir() . '/' . $this->path;
+    }
+
+    public function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        $tmp = __DIR__ . '/../../../web/' . $this->getUploadDir();
+        return $tmp;
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/manual_order_pdfs';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function removeUpload()
+    {
+        $file_path = $this->getAbsolutePath();
+        if(file_exists($file_path)) unlink($file_path);
     }
 }

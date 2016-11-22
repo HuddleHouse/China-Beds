@@ -16,9 +16,11 @@
 
 {% block footer %}
     <script>
-        var index = 1;
+        var index = 0;
         var subtotal = 0;
         var total = 0;
+        var isFedex = true;
+        var isPickup = false;
         var products = {{ products | json_encode | raw }};
         var popItems = {{ popItems | json_encode | raw }};
         var warehouse_opts = '{% for warehouse in warehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
@@ -29,9 +31,16 @@
         $(document).ready(function () {
             $('#add_product').on('click', addProductHandler);
             $('#add_pop_item').on('click', addPopHandler);
-            getProductOptions(0);
-            getPopOptions(0);
         });
+
+        function openFileBrowser() {
+            $('#pdf').click();
+        }
+
+        function autoFillName() {
+            var fname = $('#pdf')[0].files[0].name;
+            $('#pdf_path').val(fname.substr(0, fname.indexOf('.')));
+        }
 
         function getProductOptions(index) {
             var wid = $('#products-warehouse-'+index).val();
@@ -76,23 +85,25 @@
                 subtotal += Number($(value).val());
             });
             $('#subtotal').html(subtotal.toFixed(2));
+            $('#subtotalInput').val(subtotal.toFixed(2));
             calculateTotal();
         }
 
         function calculateTotal() {
-            total = 0;
-            if($('#isPickup').val() == 'true') {
-                total = Number(subtotal);
+            total = Number(subtotal);
+            if($('#isPickup-t').prop('checked') == true) {
+                //nothing
             }
             else {
-                if($('#isFedex').val() == 'true') {
+                if($('#isFedex-t').prop('checked') == true) {
                     total += Number($('#fedex_cost').val());
                 }
-                else {
+                if($('#isFedex-f').prop('checked') == true) {
                     total += Number($('#other_shipping_cost').val());
                 }
             }
             $('#total').html(total.toFixed(2));
+            $('#totalInput').val(total.toFixed(2));
         }
 
         function addProductHandler() {
@@ -144,6 +155,79 @@
         }
 
         var app = angular.module('myApp', ['ngMaterial']);
+
+        app.controller('myCtrl', ['$scope', function($scope) {
+            var self = this;
+            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
+            $scope.is_paid = 0;
+            $scope.admin_paid = 0;
+            self.users = {{ users | json_encode | raw }};
+
+            $scope.isPickup = false;
+            $scope.isFedex = true;
+            $scope.min_date = new Date();
+            $scope.user = null;
+
+            $scope.populateUserInfo = function() {
+                var user = self.users[$scope.user];
+
+                $scope.shipName = user.name;
+                $scope.shipEmail = user.email;
+                $scope.shipPhone = user.phone;
+                $scope.shipZip = user.zip;
+                $scope.shipAddress = user.address;
+                $scope.shipAddress2 = user.address2;
+                $scope.shipCity = user.city;
+                $scope.shipState = user.state;
+                $('#ship-info-left div.form-group').removeClass('is-empty');
+                $('#ship-info-right div.form-group').removeClass('is-empty');
+            };
+
+            $scope.submitOrder = function () {
+                showSpinner();
+                var fileData = new FormData();
+                fileData.append('pdf', $('#pdf')[0].files[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ path('api_save_manual_order_form') }}",
+                    dataType: 'json',
+                    data: {
+                        form: $('#form').serializeArray(),
+                        eta: $scope.eta,
+                        pickUpDate: $scope.pickUpDate
+                    },
+                    success: function (data) {
+                        if(data[0] == true) {
+                            fileData.append('order_id', data[1]);
+                            $.ajax({
+                                url: '{{ path('api_save_manual_order_form_pdf') }}',
+                                type: 'POST',
+                                data: fileData,
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    if (!data[0]) {
+                                        showErrorModal('Error: ' + data[1]);
+                                    }
+                                    else {
+                                        showSuccessModal('Order successfully placed.');
+                                    }
+                                }
+                            });
+                        }
+                        else {
+
+                        }
+                        console.log(data);
+//                        $scope.$apply(function () {
+//                            location.reload();
+//                        });
+                    }
+                });
+                hideSpinner();
+            };
+        }]);
+
         app.directive('phoneInput', function($filter, $browser) {
             return {
                 require: 'ngModel',
@@ -222,104 +306,6 @@
 
             };
         });
-
-        app.controller('myCtrl', ['$scope', function($scope) {
-            var self = this;
-            $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
-            $scope.product_variant_order_quan = [];
-            $scope.cart = [];
-            $scope.payment_type = '';
-            $scope.cc = {};
-            $scope.cart_total = 0.00;
-            $scope.is_paid = 0;
-            $scope.admin_paid = 0;
-            self.users = {{ users | json_encode | raw }};
-
-            $scope.isPickup = false;
-            $scope.isFedex = true;
-            $scope.min_date = new Date();
-            $scope.user = null;
-
-            $scope.populateUserInfo = function() {
-                var user = self.users[$scope.user];
-                $scope.shipName = user.name;
-                $scope.shipEmail = user.email;
-                $scope.shipPhone = user.phone;
-                $scope.shipZip = user.zip;
-                $scope.shipAddress = user.address;
-                $scope.shipAddress2 = user.address2;
-                $scope.shipCity = user.city;
-                $('#ship-info-left div.form-group').removeClass('is-empty');
-                $('#ship-info-right div.form-group').removeClass('is-empty');
-            };
-
-            $scope.changePayment = function () {
-                console.log($scope.payment_type);
-                if($scope.payment_type == 'cc')
-                    $('#cc').show();
-                else
-                    $('#cc').hide();
-            };
-
-            $scope.formValidate = function (type) {
-                var count = 0;
-                if($scope.payment_type == '') {
-                    $('#payment').addClass('has-error');
-                    count++;
-                }
-                else
-                    $('#payment').removeClass('has-error');
-
-                console.log(type);
-
-                if($scope.payment_type == 'cc') {
-                    if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
-                    else
-                        $('#cc-name').removeClass('has-error');
-
-                    if($scope.cc['number'] == undefined) {$('#cc-number').addClass('has-error');count++;}
-                    else
-                        $('#cc-number').removeClass('has-error');
-
-                    if($scope.cc['expiry-month'] == undefined || $scope.cc['expiry-year'] == undefined) {$('#cc-date').addClass('has-error');count++;}
-                    else
-                        $('#cc-date').removeClass('has-error');
-
-                    if($scope.cc['cvv'] == undefined) {$('#cc-cvv').addClass('has-error');count++;}
-                    else
-                        $('#cc-cvv').removeClass('has-error');
-                }
-
-                if($scope.is_admin == 1) {
-                    count = 0;
-                    $scope.ledgerTotal = $scope.cart_total;
-                }
-
-                if(count > 0)
-                    showErrorModal('Please fix the form errors.');
-                else if ($scope.cart_total > $scope.ledgerTotal)
-                    showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
-                else {
-                    showSpinner();
-                    {#$.ajax({#}
-                    {#type: 'POST',#}
-                    {#url: "{{ path('api_pay_for_order') }}",#}
-                    {#dataType: 'json',#}
-                    {#data: {cc: $scope.cc,#}
-                    {#payment_type: $scope.payment_type,#}
-                    {#order_id: {{ order.id }},#}
-                    {#type: type#}
-                    {#},#}
-                    {#success: function (data) {#}
-                    {#$scope.$apply(function () {#}
-                    {#hideSpinner();#}
-                    {#location.reload();#}
-                    {#});#}
-                    {#}#}
-                    {#});#}
-                }
-            };
-        }]);
     </script>
 {% endblock footer %}
 
@@ -405,7 +391,7 @@
     <div id="error-message">
 
     </div>
-    {{ dump() }}
+    {#{{ dump() }}#}
     <form id="form">
         <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
             <div class="table"  style="min-height: 100vh;">
@@ -442,13 +428,13 @@
                     <div class="col-md-2 invoice-col">
                         <div class="radio">
                             <label class="not-dumb">
-                                <input type="radio" id="isPickup" name="isPickup" ng-value="false" value="false" ng-model="isPickup" onclick="calculateTotal()" checked>
+                                <input type="radio" id="isPickup-f" name="isPickup" ng-value="false" value="false" ng-model="isPickup" onclick="calculateTotal()">
                                 Ship
                             </label>
                         </div>
                         <div class="radio">
                             <label class="not-dumb">
-                                <input type="radio" id="isPickup" name="isPickup" ng-value="true" value="true" ng-model="isPickup" onclick="calculateTotal()">
+                                <input type="radio" id="isPickup-t" name="isPickup" ng-value="true" value="true" ng-model="isPickup" onclick="calculateTotal()">
                                 For Pickup
                             </label>
                         </div>
@@ -488,7 +474,7 @@
                             <input type="text" class="form-control" id="pickupAgent" name="pickupAgent" ng-model="pickupAgent">
                         </div>
                         <div class="form-group">
-                            <label for="eta">Pickup Date</label>
+                            <label for="pickupDate">Pickup Date</label>
                             <md-datepicker style="float: right" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
@@ -523,6 +509,10 @@
                             <label for="shipCity" class="control-label">City</label>
                             <input type="text" class="form-control" id="shipCity" name="shipCity" ng-model="shipCity">
                         </div>
+                        <div class="form-group label-floating">
+                            <label for="shipState" class="control-label">State</label>
+                            <select class="form-control" id="shipState" name="shipState" ng-model="shipState">{% for state in states %}<option value="{{ state.id }}">{{ state.name }}</option>{% endfor %}</select>
+                        </div>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -544,16 +534,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id="product-0">
-                                <td><select class="form-control" id="products-warehouse-0" name="products[0][warehouse]" onchange="getProductOptions(0)"></select></td>
-                                <td><select class="form-control" id="products-product-0" name="products[0][product]"></select></td>
-                                <td><input type="text" class="form-control" id="products-unit_cost-0" name="products[0][unit_cost]" placeholder="0.00" onchange="calculateProductSubtotal(0)"></td>
-                                <td><input type="number" class="form-control" id="products-qty-0" name="products[0][qty]" onchange="calculateProductSubtotal(0)"></td>
-                                <td><input type="text" class="form-control" id="products-subtotal-0" name="products[0][subtotal]" placeholder="0.00"></td>
-                                <td><a class="btn btn-raised btn-danger rich-btn" onclick="removeProductRow(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-                            </tr>
                             <tr>
-                                <td colspan="6" style="text-align: center"><a href id="add_product" class="stretch">Add Another Product</a></td>
+                                <td colspan="6" style="text-align: center"><a href id="add_product" class="stretch">Add a Product</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -577,16 +559,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr id="pop-0">
-                                <td><select class="form-control" id="pop-warehouse-0" name="pop[0][warehouse]" onchange="getPopOptions(0)"></select></td>
-                                <td><select class="form-control" id="pop-product-0" name="pop[0][product]"></select></td>
-                                <td><input type="text" class="form-control" id="pop-unit_cost-0" name="pop[0][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal(0)"></td>
-                                <td><input type="number" class="form-control" id="pop-qty-0" name="pop[0][qty]" onchange="calculatePopSubtotal(0)"></td>
-                                <td><input type="text" class="form-control" id="pop-subtotal-0" name="pop[0][subtotal]" placeholder="0.00"></td>
-                                <td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow(0)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-                            </tr>
                             <tr>
-                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add Another Pop Item</a></td>
+                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -598,8 +572,18 @@
                 <div class="row" style="padding-top: 40px;">
                     <!-- accepted payments column -->
                     <div class="col-md-6">
+                        <h5 style="margin: -14px 0 16px;">Invoice PDF Upload</h5>
+                        <div class="input-group">
+                            <label class="input-group-btn" style="padding: 0;">
+                    <span class="btn btn-file btn-raised">
+                        Browse… <input type="file" id="pdf" name="pdf" accept="application/pdf,application/x-pdf" onchange="autoFillName()">
+                    </span>
+                            </label>
+                            <input type="text" id="pdf_path" name="pdf_path" class="form-control" style="margin-bottom: 10px; margin-left: 10px;" onclick="openFileBrowser()" readonly="readonly">
+                        </div>
+                        <br>
                         <h5 style="margin: -14px 0 16px;">Comments</h5>
-                        <textarea name="comments" id="comments" class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 140px; width: 100%" ng-model="comments"></textarea>
+                        <textarea name="comments" id="comments" class="text-muted well well-sm no-shadow" style="margin-top: 10px; min-height: 70px; width: 100%" ng-model="comments"></textarea>
                     </div>
                     <div class="col-md-6">
                         <div class="table-responsive">
@@ -608,20 +592,21 @@
                                 <tr>
                                     <th>Subtotal:</th>
                                     <td>$<span id="subtotal">0.00</span></td>
+                                    <input type="hidden" name="subtotal" id="subtotalInput" value="0.00" />
                                 </tr>
                                 <tr ng-show="!isPickup">
-                                    <th><div class="radio">
+                                    <th><div class="radio" onclick="calculateTotal()">
                                             <label class="not-dumb">
-                                                <input type="radio" id="isFedex" name="isFedex" ng-value="true" value="true" ng-model="isFedex" onclick="calculateTotal()" checked>
+                                                <input type="radio" id="isFedex-t" name="isFedex" ng-value="true" value="true" ng-model="isFedex">
                                                 Shipping: Fedex
                                             </label>
                                         </div></th>
                                     <td><input type="text" class="form-control" id="fedex_cost" name="fedex_cost" placeholder="0.00" style="margin-top: -30px; margin-bottom: 0;" onchange="calculateTotal()"></td>
                                 </tr>
                                 <tr ng-show="!isPickup">
-                                    <th><div class="radio">
+                                    <th><div class="radio" onclick="calculateTotal()">
                                             <label class="not-dumb">
-                                                <input type="radio" id="isFedex" name="isFedex" ng-value="false" value="false" ng-model="isFedex" onclick="calculateTotal()" checked>
+                                                <input type="radio" id="isFedex-f" name="isFedex" ng-value="false" value="false" ng-model="isFedex">
                                                 Shipping: OTHER
                                             </label>
                                         </div></th>
@@ -630,6 +615,7 @@
                                 <tr>
                                     <th>Total:</th>
                                     <td>$<span id="total">0.00</span></td>
+                                    <input type="hidden" name="total" id="totalInput" value="0.00" />
                                 </tr>
                                 </tbody>
                             </table>
@@ -647,7 +633,7 @@
                     <div class="col-xs-12 col-md-6">
                         {#<button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>#}
 
-                        <button type="button" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                        <button type="button" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;" ng-click="submitOrder()">
                             Submit Order for User
                         </button>
                         {#<button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">#}
@@ -661,7 +647,6 @@
                         {#</a>#}
                     </div>
                 </div>
-
             </div>
         </div>
     </form>
