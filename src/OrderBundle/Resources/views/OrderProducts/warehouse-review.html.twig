@@ -16,9 +16,14 @@
 
 {% block footer %}
     <script>
+        var table = null;
         $(document).ready(function () {
-            $('#part-table').DataTable({
+            table = $('#part-table').DataTable({
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+
+            $("#tracking-return").on('hidden.bs.modal', function(){
+                window.location.reload();
+            });
         });
 
         function updateShippedQuantity(id, item) {
@@ -27,6 +32,26 @@
                     'quantity': item.value
             });
         }
+
+        function showTrackingModal(trackingNumber, trackingId){
+            $("#tracking-cancel").modal("show");
+            $("#tracking-id").html( trackingId );
+        }
+
+        function removeTracking() {
+            var tracknum = $("#tracking-id").html();
+            $.ajax({
+                type: "GET",
+                url: "{{ path('api-delete-tracking') }}",
+                data: {'track-id': tracknum},
+                success: function (data) {
+                    $("#tracking-return").modal("show");
+                    $("#tracking-return .modal-body p").empty();
+                    $("#tracking-return .modal-body p").html(data[1]);
+                }
+            })
+        }
+
 
     </script>
 {% endblock footer %}
@@ -182,14 +207,13 @@
                                         {% if item.tracking_numbers|length > 0 %}
                                             <br />
                                             {% for label in item.tracking_numbers %}
-                                                <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.tracking_number }}">
+                                                <span href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.tracking_number }}">
                                                     {{ label.tracking_number }}
                                                     <a href="{{ asset(label.path) }}" download><i class="fa fa-print"></i></a>
-                                                    <a href="" onclick="removeTracking()"><i class="fa fa-times"></i></a>
-                                                </a>
+                                                    <span onclick="showTrackingModal({{ label.tracking_number }}, {{ label.id }})" style="color:orangered; cursor: pointer;"><i class="fa fa-times"></i></span>
+                                                </span>
                                             {% endfor %}
                                         {% endif %}
-                                        {{ dump(item) }}
                                     </td>
                                     {#<td><h6 style="margin: 0;">${{ (item.subtotal) |number_format(2, '.', ',') }}</h6></td>#}
                                 </tr>
@@ -275,6 +299,37 @@
             {% endif %}
         </div>
     </div>
+    <div class="modal fade" id="tracking-cancel" role="dialog">
+        <div class="modal-dialog" style="margin-top:400px;">
 
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p id="tracking-id" style="display:none"></p>
+                    <p>Removing the tracking number is permanent. Would you like to delete?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success"  onclick="removeTracking()" data-dismiss="modal">Accept</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="tracking-return" role="dialog">
+        <div class="modal-dialog" style="margin-top:400px;">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 {% endblock %}

@@ -609,5 +609,25 @@ class OrderProductsController extends Controller
 
         return new JsonResponse($warehouseArray);
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/api-delete-tracking", name="api-delete-tracking")
+     */
+    public function deleteTrackingAction(Request $request){
+        $trackingId = $request->get('track-id');
+        $em = $this->getDoctrine()->getManager();
+
+        try {
+            $shippingLabel = $em->getRepository('OrderBundle:OrdersShippingLabel')->find($trackingId);
+            $em->remove($shippingLabel);
+            $em->flush();
+
+            return JsonResponse::create(array(true, 'Shipping Label Deleted'));
+        }catch(\Exception $e){
+            return JsonResponse::create(array(false, $e));
+        }
+    }
 }
 

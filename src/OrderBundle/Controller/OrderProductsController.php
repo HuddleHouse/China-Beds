@@ -34,11 +34,11 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
-        $channel = $this->getUser()->getActiveChannel();
+
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
             'pending' => '',
-            'channel' => $channel->getName()
+
         ));
     }
 
@@ -53,6 +53,7 @@ class OrderProductsController extends Controller
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
+        $channel = $this->getUser()->getActiveChannel();
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,

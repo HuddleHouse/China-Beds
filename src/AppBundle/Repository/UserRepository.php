@@ -222,10 +222,11 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         else {
 
             if($user->hasRole('ROLE_DISTRIBUTOR')) {
+                $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
                 foreach($user->getRetailers() as $item) {
                     if(!isset($user_ids[$item->getId()])) {
                         $user_ids[$item->getId()] = $item->getId();
-                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item, 'channel' => $user->getActiveChannel()));
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item, 'channel' => $user->getActiveChannel(), 'status'=> $status));
                         foreach($data as $item)
                             $orders[] = $item;
                     }
