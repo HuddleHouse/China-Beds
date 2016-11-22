@@ -454,11 +454,11 @@
                             <ul class="treeview-menu">
                                 <li {% if (app.request.get('_route') in sidebar_rebate_index) %} class="active"{% endif %}>
                                     {% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
-                                    {% if app.user.hideRebate == 0  %}
+                                        {% if isGrantedRoute(app.user, 'rebate_index')  %}
                                         <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates</a>
                                     {% endif %}
                                     {% else %}
-                                        {% if app.user.hideRebate == 0  %}
+                                        {% if isGrantedRoute(app.user, 'rebate_index')  %}
                                         <a href="{{ path('rebate_index') }}"><i class="fa fa-circle-o"></i>Rebates Available</a>
                                     {% endif %}
                                     {% endif %}
