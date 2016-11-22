@@ -26,7 +26,7 @@ class PriceGroupController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $priceGroups = $em->getRepository('AppBundle:PriceGroup')->findBy(['channel' => $this->getActiveUser()->getId()]);
+        $priceGroups = $em->getRepository('AppBundle:PriceGroup')->findBy(['channel' => $this->getUser()->getActiveChannel()->getId()]);
         $data = array();
 
         foreach($priceGroups as $group) {
