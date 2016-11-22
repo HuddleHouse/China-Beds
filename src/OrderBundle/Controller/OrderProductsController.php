@@ -57,7 +57,6 @@ class OrderProductsController extends Controller
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
             'pending' => ' Pending',
-            'channel' => $channel
         ));
     }
 
@@ -70,12 +69,19 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED]));
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
 
+        $the_orders = [];
+        foreach($orders as $order) {
+            if ( $order->getBalance() > 0 ) {
+                $the_orders[] = $order;
+            }
+        }
+
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
-            'orders' => $orders,
-            'pending' => ' Pending'
+            'orders' => $the_orders,
+            'pending' => ' Open'
         ));
     }
 
@@ -247,7 +253,7 @@ select coalesce(sum(i.quantity), 0) as quantity
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannels(array($this->getUser()->getActiveChannel()));
+        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannel(array($this->getUser()->getActiveChannel()));
         $warehouseArray = array();
         $popWarehouseArray = array();
         $productArray = array();
@@ -286,7 +292,7 @@ select coalesce(sum(i.quantity), 0) as quantity
         /** @var User $user */
         foreach($distributors as $user) {
             $users[$user->getId()] = array(
-                'name' => $user->getFullName(),
+                'name' => $user->getDisplayName(),
                 'email' => $user->getEmail(),
                 'phone' => $user->getPhone(),
                 'zip' => $user->getZip(),
@@ -299,7 +305,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         foreach($retailers as $user) {
             $users[$user->getId()] = array(
-                'name' => $user->getFullName(),
+                'name' => $user->getDisplayName(),
                 'email' => $user->getEmail(),
                 'phone' => $user->getPhone(),
                 'zip' => $user->getZip(),

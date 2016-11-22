@@ -114,7 +114,7 @@
                     '<td><select class="form-control" id="products-product-'+ index + '" name="products['+ index + '][product]"></select></td>' +
                     '<td><input type="text" class="form-control" id="products-unit_cost-'+ index + '" name="products['+ index + '][unit_cost]" placeholder="0.00" onchange="calculateProductSubtotal('+ index + ')"></td>' +
                     '<td><input type="number" class="form-control" id="products-qty-'+ index + '" name="products['+ index + '][qty]" onchange="calculateProductSubtotal('+ index + ')"></td>' +
-                    '<td><input type="text" class="form-control" id="products-subtotal-'+ index + '" name="products['+ index + '][subtotal]" placeholder="0.00"></td>' +
+                    '<td><input type="text" class="form-control" id="products-subtotal-'+ index + '" name="products['+ index + '][subtotal]" placeholder="0.00" readonly></td>' +
                     '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removeProductRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
                     '</tr>' +
                     '<tr>' +
@@ -138,7 +138,7 @@
                     '<td><select class="form-control" id="pop-product-'+ index + '" name="pop['+ index + '][product]"></select></td>' +
                     '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal('+ index + ')"></td>' +
                     '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]" onchange="calculatePopSubtotal('+ index + ')"></td>' +
-                    '<td><input type="text" class="form-control" id="pop-subtotal-'+ index + '" name="pop['+ index + '][subtotal]" placeholder="0.00"></td>' +
+                    '<td><input type="text" class="form-control" id="pop-subtotal-'+ index + '" name="pop['+ index + '][subtotal]" placeholder="0.00" readonly></td>' +
                     '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
                     '</tr>' +
                     '<tr>' +
@@ -196,9 +196,10 @@
                         eta: $scope.eta,
                         pickUpDate: $scope.pickUpDate
                     },
-                    success: function (data) {
-                        if(data[0] == true) {
-                            fileData.append('order_id', data[1]);
+                    success: function (rdata) {
+                        if(rdata['success'] == true) {
+
+                            fileData.append('order_id', rdata['order_id']);
                             $.ajax({
                                 url: '{{ path('api_save_manual_order_form_pdf') }}',
                                 type: 'POST',
@@ -210,15 +211,14 @@
                                         showErrorModal('Error: ' + data[1]);
                                     }
                                     else {
-                                        showSuccessModal('Order successfully placed.');
+                                        window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: rdata['order_id'] });
                                     }
                                 }
                             });
                         }
                         else {
-
+                            showErrorModal('Error: ' + rdata['error_text']);
                         }
-                        console.log(data);
 //                        $scope.$apply(function () {
 //                            location.reload();
 //                        });

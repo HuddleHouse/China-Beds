@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use RocketShipIt;
+use WarehouseBundle\Entity\Status;
 
 /**
  * Office controller.
@@ -421,6 +422,8 @@ class OrderProductsController extends Controller
 
         try {
             $this->get('email_service')->sendAdminOrderNotification($order);
+            $this->get('email_service')->sendCustomerOrderNotification($order);
+            $this->get('email_service')->sendCustomerOrderNotification($order);
         } catch (\Exception $e) {
             // @todo ignore for now.  Need to log
         }
@@ -661,7 +664,7 @@ class OrderProductsController extends Controller
         try {
             //initialize things
             $em = $this->getDoctrine()->getManager();
-            $channel = $this->getUser()->getActiveChannel();
+            $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
             $products = array();
             $pop = array();
             $warehouses = array();
@@ -748,7 +751,7 @@ class OrderProductsController extends Controller
             $order->setOrderId('O-' . str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
             /** @var \AppBundle\Entity\User $user */
             $user = $em->getRepository('AppBundle:User')->find($info['user']);
-            $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName('Draft');
+            $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName(Orders::STATUS_READY_TO_SHIP);
 
             $order->setStatus($status);
             $order->setChannel($channel);
@@ -771,10 +774,10 @@ class OrderProductsController extends Controller
 
                         $warehouses[] = $product['warehouse'];
                         $warehouseQuantity = $em->getRepository('WarehouseBundle:WarehouseInventory')->findOneBy(array('warehouse' => $product['warehouse'], 'product_variant' => $product['product']));
-                        if ($quantity <= $warehouseQuantity->getQuantity())
-                            $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $product['warehouse']);
-                        else //$quantity > $warehouseQuantity->getQuantity()
-                            $orders_warehouse_info = new OrdersWarehouseInfo($warehouseQuantity->getQuantity(), $orders_product_variant, $product['warehouse']);
+//                        if ($quantity <= $warehouseQuantity->getQuantity())
+                        $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $product['warehouse']);
+//                        else //$quantity > $warehouseQuantity->getQuantity()
+//                            $orders_warehouse_info = new OrdersWarehouseInfo($warehouseQuantity->getQuantity(), $orders_product_variant, $product['warehouse']);
 
                         $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
                         $order->addProductVariants($orders_product_variant);
@@ -809,65 +812,63 @@ class OrderProductsController extends Controller
                 $order->setShipDescription('Other Shipping');
             }
 
-            $em->persist($channel);
+            $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
+
             $em->persist($order);
             $em->flush();
 
-            $groups = $user->getGroupsArray();
-            $is_dis = $is_retail = 0;
-
-            if (isset($groups['Retailer']))
-                $is_retail = 1;
-            if (isset($groups['Distributor']))
-                $is_dis = 1;
-            $pop = $order->getPopItems();
-
-//        $this->container->get('email_service')->sendOrderReceipt($channel, $order, $this->renderView('@Order/OrderProducts/order-email-receipt.html.twig', array(
-//                'channel' => $channel,
-//                'order' => $order,
-//                'user' => $user(),
-//                'product_data' => $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order),
-//                'is_retail' => $is_retail,
-//                'is_dis' => $is_dis,
-//                'pop_items' => $pop,
-//                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0)
-//            )
-//        ));
-
-            $warehouses = array_unique($warehouses);
-
-            foreach ($warehouses as $warehouse) {
-                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
-                $is_shipped = false;
-
-                foreach ($product_data as $prod) foreach ($prod as $item)
-                    if ($item['shipped'] == true) {
-                        $is_shipped = true;
-                        break;
-                    }
-
-                if ($is_shipped == true)
-                    $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
-                else
-                    $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
-
-
-//            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
-//            $this->container->get('email_service')->sendWarehouseOrderReceipt($channel, $w, $this->renderView('@Order/OrderProducts/order-email-receipt-warehouse.html.twig', array(
-//                'channel' => $channel,
-//                'order' => $order,
-//                'product_data' => $product_data,
-//                'is_retail' => $is_retail,
-//                'is_dis' => $is_dis,
-//                'pop_items' => $pop,
-//                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
-//                'shipped_status' => $shipped_status
-//            )));
+            try {
+                $this->get('email_service')->sendAdminOrderNotification($order);
+                $this->get('email_service')->sendCustomerOrderNotification($order);
+                $this->get('email_service')->sendCustomerOrderNotification($order);
+            } catch (\Exception $e) {
+                // @todo ignore for now.  Need to log
             }
-            return JsonResponse::create(array(true, $order->getId()));
+
+//            $groups = $user->getGroupsArray();
+//            $is_dis = $is_retail = 0;
+//
+//            if (isset($groups['Retailer']))
+//                $is_retail = 1;
+//            if (isset($groups['Distributor']))
+//                $is_dis = 1;
+//            $pop = $order->getPopItems();
+//
+//
+//            $warehouses = array_unique($warehouses);
+//
+//            foreach ($warehouses as $warehouse) {
+//                $product_data = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouseArray($order, $warehouse);
+//                $is_shipped = false;
+//
+//                foreach ($product_data as $prod) foreach ($prod as $item)
+//                    if ($item['shipped'] == true) {
+//                        $is_shipped = true;
+//                        break;
+//                    }
+//
+//                if ($is_shipped == true)
+//                    $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Shipped'));
+//                else
+//                    $shipped_status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Ready To Ship'));
+//
+//
+////            $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+////            $this->container->get('email_service')->sendWarehouseOrderReceipt($channel, $w, $this->renderView('@Order/OrderProducts/order-email-receipt-warehouse.html.twig', array(
+////                'channel' => $channel,
+////                'order' => $order,
+////                'product_data' => $product_data,
+////                'is_retail' => $is_retail,
+////                'is_dis' => $is_dis,
+////                'pop_items' => $pop,
+////                'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
+////                'shipped_status' => $shipped_status
+////            )));
+//            }
+            return JsonResponse::create(array('success' => true, 'order_id' => $order->getId()));
         }
         catch(\Exception $e) {
-            return JsonResponse::create(array(false, $e->getMessage()));
+            return JsonResponse::create(array('success' => false, 'error_text' => $e->getMessage()));
         }
     }
 }
