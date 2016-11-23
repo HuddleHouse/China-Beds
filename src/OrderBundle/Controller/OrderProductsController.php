@@ -58,7 +58,6 @@ class OrderProductsController extends Controller
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
             'pending' => ' Pending',
-            'channel' => $channel
         ));
     }
 
@@ -71,18 +70,26 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED]));
         $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
 
+        $the_orders = [];
+        foreach($orders as $order) {
+            if ( $order->getBalance() > 0 ) {
+                $the_orders[] = $order;
+            }
+        }
+
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
-            'orders' => $orders,
-            'pending' => ' Pending'
+            'orders' => $the_orders,
+            'pending' => ' Open'
         ));
     }
 
     /**
      *
      * @Route("/products", name="order_products_index", options={"expose"=true})
+     * @Route("/{id}/products", name="order_products_index_old")
      * @Method("GET")
      */
     public function orderProductsAction()
@@ -155,6 +162,7 @@ select coalesce(sum(i.quantity), 0) as quantity
             $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
         }
 
+
         $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
@@ -162,7 +170,11 @@ select coalesce(sum(i.quantity), 0) as quantity
         else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
             $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
         else
-            $user_retailers = null;
+            $user_retailers = [];
+
+        usort($user_retailers, function($a, $b) {
+            return $a->getDisplayName() - $b->getDisplayName();
+        });
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
@@ -242,7 +254,7 @@ select coalesce(sum(i.quantity), 0) as quantity
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannels(array($this->getUser()->getActiveChannel()));
+        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannel(array($this->getUser()->getActiveChannel()));
         $warehouseArray = array();
         $popWarehouseArray = array();
         $productArray = array();
@@ -281,25 +293,27 @@ select coalesce(sum(i.quantity), 0) as quantity
         /** @var User $user */
         foreach($distributors as $user) {
             $users[$user->getId()] = array(
-                'name' => $user->getFullName(),
+                'name' => $user->getDisplayName(),
                 'email' => $user->getEmail(),
                 'phone' => $user->getPhone(),
                 'zip' => $user->getZip(),
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
-                'city' => $user->getCity()
+                'city' => $user->getCity(),
+                'state' => strval($user->getState()->getId())
             );
         }
 
         foreach($retailers as $user) {
             $users[$user->getId()] = array(
-                'name' => $user->getFullName(),
+                'name' => $user->getDisplayName(),
                 'email' => $user->getEmail(),
                 'phone' => $user->getPhone(),
                 'zip' => $user->getZip(),
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
-                'city' => $user->getCity()
+                'city' => $user->getCity(),
+                'state' => strval($user->getState()->getId())
             );
         }
 
@@ -311,7 +325,8 @@ select coalesce(sum(i.quantity), 0) as quantity
             'popItems' => $popItemArray,
             'distributors' => $distributors,
             'retailers' => $retailers,
-            'users' => $users
+            'users' => $users,
+            'states' => $em->getRepository('AppBundle:State')->findAll()
         ));
     }
 

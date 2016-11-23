@@ -148,6 +148,10 @@ class Warehouse
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="managed_warehouses")
      */
     protected $managers;
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouses")
+     */
+    protected $users;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="warehouse_1")
@@ -210,10 +214,10 @@ class Warehouse
     private $orders_warehouse_info;
 
     /**
-     * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\Channel")
-     * @ORM\JoinTable(name="warehouse_channels")
+     * @var
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="warehouses")
      */
-    private $channels;
+    private $channel;
 
     /**
      * @ORM\ManyToMany(targetEntity="InventoryBundle\Entity\PopItem", mappedBy="warehouses")
@@ -238,29 +242,23 @@ class Warehouse
     }
 
     public function getChannelNamesArray() {
-        $data = array();
-        foreach($this->channels as $channel)
-            $data[] = $channel->getName();
-        return $data;
+        return [
+            $this->getChannel()->getName()
+        ];
     }
 
     public function getChannelsArray() {
-        $data = array();
-        foreach($this->channels as $channel)
-            $data[$channel->getId()] = array(
-                'id' => $channel->getId(),
-                'name' => $channel->getName(),
-                'url' => $channel->getUrl()
-            );
-        return $data;
+        return [ $this->getChannel()->getId() => [
+                    'id' => $this->getChannel()->getId(),
+                    'name' => $this->getChannel()->getName(),
+                    'url' => $this->getChannel()->getUrl(),
+                ]
+            ];
     }
 
     public function addChannel($channel)
     {
-        if(!$this->channels->contains($channel))
-            $this->channels[] = $channel;
-
-        return $this;
+        $this->setChannel($channel);
     }
 
     /**
@@ -270,7 +268,7 @@ class Warehouse
      */
     public function removeChannel($channel)
     {
-        $this->channels->removeElement($channel);
+        $this->removeChannel($channel);
     }
 
     /**
@@ -280,16 +278,11 @@ class Warehouse
      */
     public function getChannels()
     {
-        return $this->channels;
+        return [ $this->getChannel() ];
     }
 
     public function belongsToChannel(Channel $channel) {
-        foreach($this->getChannels() as $chan) {
-            if ( $channel->getId() == $chan->getId() ) {
-                return true;
-            }
-        }
-        return false;
+        return $this->getChannel() == $channel;
     }
 
     /**
@@ -1205,5 +1198,53 @@ class Warehouse
     public function setPopItems($pop_items)
     {
         $this->pop_items = $pop_items;
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \InventoryBundle\Entity\Channel $channel
+     *
+     * @return Warehouse
+     */
+    public function setChannel(\InventoryBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \InventoryBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * Add popItem
+     *
+     * @param \InventoryBundle\Entity\PopItem $popItem
+     *
+     * @return Warehouse
+     */
+    public function addPopItem(\InventoryBundle\Entity\PopItem $popItem)
+    {
+        $this->pop_items[] = $popItem;
+
+        return $this;
+    }
+
+    /**
+     * Remove popItem
+     *
+     * @param \InventoryBundle\Entity\PopItem $popItem
+     */
+    public function removePopItem(\InventoryBundle\Entity\PopItem $popItem)
+    {
+        $this->pop_items->removeElement($popItem);
     }
 }

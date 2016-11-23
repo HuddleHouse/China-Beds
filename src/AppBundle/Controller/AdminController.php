@@ -39,22 +39,25 @@ class AdminController extends Controller
         } elseif ( $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
             $users = [];
             foreach($this->getUser()->getRetailers() as $user) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
             }
         } elseif ( $this->getUser()->hasRole('ROLE_SALES_REP') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
             foreach($this->getUser()->getDistributors() as $user) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
                 foreach($user->getRetailers() as $user) {
-                    $users[] = $user;
+                    $users[$user->getId()] = $user;
                 }
             }
             foreach($this->getUser()->getRetailers() as $user) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
             }
 
             if ( $this->getUser()->hasRole('ROLE_SALES_MANAGER') ) {
                 foreach($this->getUser()->getSalesReps() as $user) {
-                    $users[] = $user;
+                    $users[$user->getId()] = $user;
+                    foreach($user->getRetailers() as $user) {
+                        $users[$user->getId()] = $user;
+                    }
                 }
             }
         }
@@ -74,7 +77,7 @@ class AdminController extends Controller
         $user = $userManager->findUserBy(array('id' => $user_id));
         $user_clone = clone $user;
 
-        $form = $this->createForm($this->getUser()->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
+        $form = $this->createForm(($this->getUser()->hasRole('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) ? UserType::class : UserRestrictedType::class, $user);
         $form->handleRequest($request);
 
         if($form->isValid()) {

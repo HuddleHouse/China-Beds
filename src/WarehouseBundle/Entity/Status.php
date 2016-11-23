@@ -170,5 +170,76 @@ class Status
     }
 
 
-}
 
+    /**
+     * Add purchaseOrder
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrder $purchaseOrder
+     *
+     * @return Status
+     */
+    public function addPurchaseOrder(\WarehouseBundle\Entity\PurchaseOrder $purchaseOrder)
+    {
+        $this->purchase_orders[] = $purchaseOrder;
+
+        return $this;
+    }
+
+    /**
+     * Remove purchaseOrder
+     *
+     * @param \WarehouseBundle\Entity\PurchaseOrder $purchaseOrder
+     */
+    public function removePurchaseOrder(\WarehouseBundle\Entity\PurchaseOrder $purchaseOrder)
+    {
+        $this->purchase_orders->removeElement($purchaseOrder);
+    }
+
+    /**
+     * Add stockTransfer
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransfer
+     *
+     * @return Status
+     */
+    public function addStockTransfer(\WarehouseBundle\Entity\StockTransfer $stockTransfer)
+    {
+        $this->stock_transfers[] = $stockTransfer;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockTransfer
+     *
+     * @param \WarehouseBundle\Entity\StockTransfer $stockTransfer
+     */
+    public function removeStockTransfer(\WarehouseBundle\Entity\StockTransfer $stockTransfer)
+    {
+        $this->stock_transfers->removeElement($stockTransfer);
+    }
+
+    /**
+     * Add stockAdjustment
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustment $stockAdjustment
+     *
+     * @return Status
+     */
+    public function addStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
+    {
+        $this->stock_adjustments[] = $stockAdjustment;
+
+        return $this;
+    }
+
+    /**
+     * Remove stockAdjustment
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustment $stockAdjustment
+     */
+    public function removeStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
+    {
+        $this->stock_adjustments->removeElement($stockAdjustment);
+    }
+}

@@ -221,5 +221,28 @@ class StockAdjustment
 
 
     
-}
 
+    /**
+     * Add productVariant
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustmentProductVariant $productVariant
+     *
+     * @return StockAdjustment
+     */
+    public function addProductVariant(\WarehouseBundle\Entity\StockAdjustmentProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove productVariant
+     *
+     * @param \WarehouseBundle\Entity\StockAdjustmentProductVariant $productVariant
+     */
+    public function removeProductVariant(\WarehouseBundle\Entity\StockAdjustmentProductVariant $productVariant)
+    {
+        $this->product_variants->removeElement($productVariant);
+    }
+}

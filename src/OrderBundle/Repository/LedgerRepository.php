@@ -29,16 +29,6 @@ class LedgerRepository extends EntityRepository
             $ledgers = $this->findBy(['channel' => $user->getActiveChannel()]);
         }
         else {
-            if($user->hasRole('ROLE_DISTRIBUTOR')) {
-                foreach($user->getRetailers() as $retailer) {
-                    if(!isset($user_ids[$retailer->getId()])) {
-                        $user_ids[$retailer->getId()] = $retailer->getId();
-                        $data = $this->findBy(array('submittedForUser' => $retailer, 'channel' => $user->getActiveChannel()));
-                        foreach($data as $item)
-                            $ledgers[] = $item;
-                    }
-                }
-            }
             if($user->hasRole('ROLE_SALES_REP')){
                 foreach($user->getDistributors() as $distributor) {
                     if(!isset($user_ids[$distributor->getId()])) {

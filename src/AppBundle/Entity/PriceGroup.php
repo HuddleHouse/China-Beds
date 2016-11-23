@@ -42,6 +42,11 @@ class PriceGroup
     private $prices;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="price_group")
+     */
+    private $channel;
+
 
     /**
      * Constructor
@@ -148,5 +153,29 @@ class PriceGroup
     public function removePrice(\AppBundle\Entity\PriceGroupPrices $price)
     {
         $this->prices->removeElement($price);
+    }
+
+    /**
+     * Set channel
+     *
+     * @param \InventoryBundle\Entity\Channel $channel
+     *
+     * @return PriceGroup
+     */
+    public function setChannel(\InventoryBundle\Entity\Channel $channel = null)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Get channel
+     *
+     * @return \InventoryBundle\Entity\Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel;
     }
 }
