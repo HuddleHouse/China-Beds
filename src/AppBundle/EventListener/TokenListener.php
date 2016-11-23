@@ -113,7 +113,8 @@ class TokenListener
                     $this->session->set('active_channel', $current_channel);
                     $user->setActiveChannel($current_channel);
                 } else {
-                    $event->setResponse(new RedirectResponse($this->router->generate('401')));
+                    $event->setResponse(new RedirectResponse($this->router->generate('fos_user_security_logout')));
+                    return;
                 }
             }
         }

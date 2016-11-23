@@ -37,7 +37,7 @@
                             <td><a href="{{ path('admin_edit_user', { 'user_id': distributor.id }) }}">{{ distributor.displayname }}</a></td>
                             <td>{{ distributor.state.name }}</td>
                             <td>
-                                {% if distributor.mySalesRep is defined %}
+                                {% if distributor.mySalesRep  %}
                                     <a href="{{ path('admin_edit_user', { 'user_id': distributor.mySalesRep.id }) }}">{{ distributor.mySalesRep.displayname }}</a>
                                 {% else %}
                                     None

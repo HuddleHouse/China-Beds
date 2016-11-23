@@ -36,7 +36,7 @@ class Warehouse
     /**
      * @var int
      *
-     * @ORM\Column(name="phone", type="integer", nullable=true)
+     * @ORM\Column(name="phone", type="bigint", nullable=true)
      */
     private $phone;
 
