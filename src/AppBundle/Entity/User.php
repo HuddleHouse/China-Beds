@@ -16,10 +16,17 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity
  * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="fos_user.username.already_used")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
+ *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
+ * })
  */
 class User extends BaseUser
 {
@@ -155,7 +162,7 @@ class User extends BaseUser
     /**
      * @ORM\Column(name="hide_rebate", type="boolean")
      */
-    protected $hideRebate;
+    protected $hideRebate = false;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -325,6 +332,12 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\PromoKitOrders", mappedBy="submittedByUser")
      */
     private $promo_kit_orders;
+
+    /**
+     * @var
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $old_id;
 
     /**
      * User constructor.
@@ -1791,6 +1804,14 @@ class User extends BaseUser
      */
     public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
     {
+        if ( empty($this->warehouse_1) ) {
+            $this->setWarehouse1($warehouse);
+        } elseif ( !empty($this->warehouse_1) && empty($this->warehouse_2) ) {
+            $this->setWarehouse2($warehouse);
+        } elseif ( !empty($this->warehouse_1) && !empty($this->warehouse_2) && empty($this->warehouse_3) ) {
+            $this->setWarehouse3($warehouse);
+        }
+
         $this->warehouses[] = $warehouse;
 
         return $this;
@@ -1805,4 +1826,22 @@ class User extends BaseUser
     {
         $this->warehouses->removeElement($warehouse);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOldId()
+    {
+        return $this->old_id;
+    }
+
+    /**
+     * @param mixed $old_id
+     */
+    public function setOldId($old_id)
+    {
+        $this->old_id = $old_id;
+    }
+
+
 }
