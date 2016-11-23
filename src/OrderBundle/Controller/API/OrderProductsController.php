@@ -36,7 +36,8 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $channel_id = $request->request->get('channel_id');
-        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);        $products = $request->request->get('products');
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
+        $products = $request->request->get('products');
         $pop = $request->request->get('pop');
         $cart = $request->request->get('cart');
         $total = $request->request->get('total');
