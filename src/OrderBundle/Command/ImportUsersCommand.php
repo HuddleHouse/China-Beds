@@ -102,10 +102,10 @@ class ImportUsersCommand extends ContainerAwareCommand
             $password = $encoder->encodePassword($data[2], $user->getSalt());
             $user->setPassword($password);
         }
-
-        if ( in_array($data[6], $this->users) ) {
-            $data[6] = 'duplicate-' . rand(0,100) . '-' . $data[6];
-        }
+//
+//        if ( in_array($data[6], $this->users) ) {
+//            $data[6] = 'duplicate-' . rand(0,100) . '-' . $data[6];
+//        }
 
 
         $this->users[] = $data[6];
@@ -113,8 +113,10 @@ class ImportUsersCommand extends ContainerAwareCommand
         $user->setOldId($data[0]);
         $user->addUserChannel($this->channel);
         $user->setUsername($data[1]);
-        $user->setFirstName($data[4]);
-        $user->setLastName($data[5]);
+        $user->setCompanyName($data[4]);
+        $pieces = explode(' ', $data[5]);
+        $user->setFirstName($pieces[0]);
+        $user->setLastName($pieces[1]);
         $user->setEmail($data[6]);
         $user->setEmailCanonical($data[6]);
         $user->setAddress1($data[7]);
