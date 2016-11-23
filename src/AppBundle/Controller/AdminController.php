@@ -139,7 +139,7 @@ class AdminController extends Controller
            }
        }
 
-       return $this->render('AppBundle:admin:new-user-creation.html.twig', array(
+       return $this->render('@App/Admin/new-user-creation.html.twig', array(
            'form' => $form->createView(),
            'user' =>$user
        ));
