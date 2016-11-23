@@ -38,6 +38,10 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             $users[$retailer->getId()] = $retailer;
         }
 
+        if($user->hasRole('ROLE_RETAILER')){
+            $users[$user->getId()] = $user;
+        }
+
         foreach($user->getDistributors() as $distributor) {
             $users[$distributor->getId()] = $distributor;
         }

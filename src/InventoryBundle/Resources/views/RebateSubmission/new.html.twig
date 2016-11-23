@@ -17,6 +17,26 @@
         function openFileBrowser() {
             $('#rebate_submission_file').click();
         }
+
+        function getOrders() {
+            var el = $('#rebate_submission_order');
+            $.ajax({
+                beforeSend: function() {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_orders_from_user') }}",
+                dataType: 'json',
+                data: {user_id: $('#rebate_submission_submittedForUser').val()},
+                success: function (orders) {
+                    el.html(orders);
+                    if(orders != '<option>Select User First</option>')
+                        el.prop('disabled', false);
+                }
+            });
+        }
+
     </script>
 {% endblock footer %}
 
@@ -37,6 +57,16 @@
             {{ form_start(form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
                 <div class="col-md-4 form-group">
+                    {{ form_label(form.submittedForUser) }}
+                    {{ form_widget(form.submittedForUser) }}
+                </div>
+                <div class="col-md-4 form-group">
+                    {{ form_label(form.order) }}
+                    {{ form_widget(form.order) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
                     {{ form_label(form.rebate) }}
                     {{ form_widget(form.rebate) }}
                 </div>
@@ -46,10 +76,6 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 form-group">
-                    {{ form_label(form.order) }}
-                    {{ form_widget(form.order) }}
-                </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(form.file) }}
                     <div class="input-group">
