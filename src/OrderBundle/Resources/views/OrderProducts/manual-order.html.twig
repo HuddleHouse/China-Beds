@@ -443,12 +443,12 @@
                             <select class="form-control" id="user" name="user" ng-model="user" ng-change="populateUserInfo()">
                                 <optgroup label="Retailers">
                                     {% for retailer in retailers %}
-                                        <option value="{{ retailer.id }}">{{ retailer.fullName }}</option>
+                                        <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>
                                     {% endfor %}
                                 </optgroup>
                                 <optgroup label="Distributors">
                                     {% for distributor in distributors %}
-                                        <option value="{{ distributor.id }}">{{ distributor.fullName }}</option>
+                                        <option value="{{ distributor.id }}">{{ distributor.displayName }}</option>
                                     {% endfor %}
                                 </optgroup>
                             </select>
