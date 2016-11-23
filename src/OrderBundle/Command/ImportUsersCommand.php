@@ -116,7 +116,10 @@ class ImportUsersCommand extends ContainerAwareCommand
         $user->setCompanyName($data[4]);
         $pieces = explode(' ', $data[5]);
         $user->setFirstName($pieces[0]);
-        $user->setLastName($pieces[1]);
+        if ( isset($pieces[1]) ) {
+            $user->setLastName($pieces[1]);
+        }
+
         $user->setEmail($data[6]);
         $user->setEmailCanonical($data[6]);
         $user->setAddress1($data[7]);
