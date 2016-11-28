@@ -152,6 +152,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         //
 
+        $user_warehouses = [];
         if ( $user->getWarehouse1() ) {
             $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
         }

@@ -86,7 +86,7 @@ select *, v.id as variant_id, TRUNCATE(min(p.price/100), 2) as cost, 0 as invent
                 if($warehouse != null)
                     $warehouse_ids = "(".$warehouse->getId().')';
                 else {
-                    $warehouses = [];
+                    $warehouses = [0];
                     if ( $user->getWarehouse1() ) {
                         $warehouses[] = $user->getWarehouse1()->getId();
                     }
