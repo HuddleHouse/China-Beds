@@ -440,7 +440,7 @@
                         </div>
                         <div class="form-group">
                             <label for="user">Customer</label>
-                            <select class="form-control" id="user" name="user" ng-model="user" ng-change="populateUserInfo()">
+                            <select class="form-control select2" id="user" name="user" ng-model="user" ng-change="populateUserInfo()">
                                 <optgroup label="Retailers">
                                     {% for retailer in retailers %}
                                         <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>

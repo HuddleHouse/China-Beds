@@ -62,7 +62,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			on ru.user_id = u.id
 		left join roles r 
 			on r.id = ru.role_id
-		where r.roles LIKE '%ROLE_DISTRIBUTOR%'");
+		where r.roles LIKE '%ROLE_DISTRIBUTOR%'
+		and u.enabled = TRUE 
+		order by u.company_name asc");
         $statement->execute();
         $data = $statement->fetchAll();
 
@@ -107,7 +109,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			on ru.user_id = u.id
 		left join roles r 
 			on r.id = ru.role_id
-		where r.roles LIKE '%ROLE_RETAILER%'");
+		where r.roles LIKE '%ROLE_RETAILER%'
+		and u.enabled = TRUE 
+		order by u.company_name asc");
         $statement->execute();
         $data = $statement->fetchAll();
 
