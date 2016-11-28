@@ -86,6 +86,7 @@ class PromoKitOrderType extends AbstractType
                     'query_builder' => function(EntityRepository $er ) {
                         return $er->createQueryBuilder('w')
                             ->where('w.channel = :channel')
+                            ->andWhere('w.promo_kit_available = true')
                             ->setParameter('channel', $this->tokenStorageInterface->getToken()->getUser()->getActiveChannel());
                     },
                     'expanded' => false,
