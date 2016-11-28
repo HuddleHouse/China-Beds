@@ -30,7 +30,7 @@
                 layoutMode: 'fitRows'
             });
             // bind filter button click
-            $('.filters-button-group').on( 'click', 'button', function() {
+            $('.filters-button-item').on( 'click', function() {
                 var filterValue = $( this ).attr('data-filter');
                 // use filterFn if matches value
                 filterValue = filterFns[ filterValue ] || filterValue;
@@ -386,7 +386,9 @@
                                 $scope.form_info['po'] = po;
                                 $scope.form_info['ship'] = ship;
                                 $scope.form_info['pick_up'] = pick_up;
-                                $('.grid').isotope( 'reloadItems' ).isotope();
+                                setTimeout(function() {
+                                    $('.grid').isotope( 'reloadItems' ).isotope();
+                                }, 500);
                                 hideSpinner();
                             });
                         }
@@ -457,7 +459,9 @@
                     success: function (data) {
                         $scope.$apply(function () {
                             $scope.products = data;
-                            $('.grid').isotope( 'reloadItems' ).isotope();
+                            setTimeout(function() {
+                                $('.grid').isotope( 'reloadItems' ).isotope();
+                            }, 500);
                             $scope.cart['pick_up_warehouse'] = warehouse;
                             $scope.validate();
                         });
@@ -489,7 +493,9 @@
                         $scope.$apply(function () {
                             $scope.cart = [];
                             $scope.products = data;
-                            $('.grid').isotope( 'reloadItems' ).isotope();
+                            setTimeout(function() {
+                                $('.grid').isotope( 'reloadItems' ).isotope();
+                            }, 500);
                         });
                     }
                 });
@@ -811,7 +817,7 @@
                 <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
                     <button class="button is-checked" data-filter="*">ALL</button>
                     {% for category in categories %}
-                        <button class="button" data-filter=".{{ category.id }}">{{ category.name }}</button>
+                        <button class="button filters-button-item" data-filter=".{{ category.id }}">{{ category.name }}</button>
                     {% endfor %}
                 </div>
             </div>
@@ -890,7 +896,7 @@
                                     <div ng-if="variant.inventory < 0" class="variant_inventory">
                                         0 Avail
                                     </div>
-                                    <div ng-if="variant.inventory < 10 and variant.inventory >= 0" class="variant_inventory">
+                                    <div ng-if="variant.inventory < 10 && variant.inventory >= 0" class="variant_inventory">
                                         {{ variant.inventory > 10 ? '10+' : variant.inventory }} Avail
                                     </div>
                                     <div ng-if="variant.inventory >= 10" class="variant_inventory">
@@ -931,10 +937,10 @@
 
 
         <div id="floaty-box" class="col-lg-2 visible-lg">
-            <ul>
+            <ul class="filters-button-group">
                 <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
                 {% for category in categories %}
-                    <li><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin"></i> {{ category.name }}</h6></li>
+                    <li class="filters-button-item" data-filter=".{{ category.id }}"><h6 style="margin: 0;"><i id="side-{{ category.id }}" class="fa fa-circle-thin"></i> {{ category.name }}</h6></li>
                 {% endfor %}
                 <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
 
