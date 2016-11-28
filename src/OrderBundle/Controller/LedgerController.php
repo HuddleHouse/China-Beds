@@ -35,6 +35,10 @@ class LedgerController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $ledgers = $em->getRepository('OrderBundle:Ledger')->findByUser($this->getUser());
+//        $ledgers = $em->getRepository('OrderBundle:Ledger')->findBy(
+//            array('user' => $this->getUser()),
+//            array('channel' => $this->getUser()->getActiveChannel())
+//        );
         $channel = $this->getUser()->getActiveChannel()->getName();
 
         return $this->render('@Order/Ledger/index.html.twig', array(

@@ -53,7 +53,7 @@ class UserType extends AbstractType
                 'class' => 'AppBundle:Role',
                 'label' => 'Roles',
                 'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px; width:300px;'),
                 'multiple' => true,
                 'required' => false
             ))

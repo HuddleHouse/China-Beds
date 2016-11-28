@@ -22,6 +22,7 @@ All Registered Users
                         <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Roles</th>
                         <th>Last Login</th>
                         <th>Actions</th>
                     </tr>
@@ -37,6 +38,28 @@ All Registered Users
                             </td>
                             <td>
                                 {{ user.email |e }}
+                            </td>
+                            <td>
+                                {% for role in user.roles %}
+                                    {% if role == 'ROLE_ADMIN' %}
+                                        <span>Admin </span>
+                                    {% endif %}
+                                    {% if role == 'ROLE_WAREHOUSE' %}
+                                        <span>Warehouse </span>
+                                    {% endif %}
+                                    {% if role == 'ROLE_RETAILER' %}
+                                        <span>Retailer </span>
+                                    {% endif %}
+                                    {% if role == 'ROLE_DISTRIBUTOR' %}
+                                        <span>Distributor </span>
+                                    {% endif %}
+                                    {% if role == 'ROLE_SALES_REP' %}
+                                        <span>Sales Rep </span>
+                                    {% endif %}
+                                    {% if role == 'ROLE_SALES_MANAGER' %}
+                                        <span>Sales Manager </span>
+                                    {% endif %}
+                                {% endfor %}
                             </td>
                             <td>
                                 {{ user.lastLogin |date("F jS \\a\\t g:ia") }}

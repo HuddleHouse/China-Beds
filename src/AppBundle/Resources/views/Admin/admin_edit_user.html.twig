@@ -6,7 +6,11 @@
 {% endblock page_title %}
 
 {% block page_name %}
+    {%  if referral == 'roles' %}
+    <a href="{{ path('fos_user_group_list') }}">< Back to the list</a>
+    {%  else  %}
     <a href="{{ path('view_users') }}">< Back to the list</a>
+    {%  endif %}
 {% endblock page_name %}
 
 
@@ -126,7 +130,7 @@
             </div>
             <div class="tab-pane" id="tab_2">
                 <div class="row" style="display: block;">
-                    <div class="col-md-6">
+                    <div class="col-md-6 form-group" >
                         {{ form_label(form.groups) }}
                         {{ form_widget(form.groups) }}
                     </div>

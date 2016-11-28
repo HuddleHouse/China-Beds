@@ -17,7 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use RocketShipIt;
-use WarehouseBundle\Entity\Status;
 
 /**
  * Office controller.
@@ -37,7 +36,8 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $channel_id = $request->request->get('channel_id');
-        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);        $products = $request->request->get('products');
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
+        $products = $request->request->get('products');
         $pop = $request->request->get('pop');
         $cart = $request->request->get('cart');
         $total = $request->request->get('total');
@@ -364,7 +364,7 @@ class OrderProductsController extends Controller
 
         $order_payment = new OrderPayment();
         $order_payment->setAmount($order->getTotal());
-
+        $order->addOrderPayment($order_payment);
 
         $payment_type = $request->request->get('payment_type');
         if($payment_type == 'ledger' && $type == 'complete') {
@@ -378,6 +378,7 @@ class OrderProductsController extends Controller
             $order_payment->setAmount($order->getTotal());
         }
         elseif($payment_type == 'cc' && $type == 'complete') {
+            $order = $this->generateShippingLabels($order);
             $cc = $request->request->get('cc');
             $cc['amount'] = $order->getTotal();
             $cc['order_id'] = $order->getId();
@@ -869,6 +870,26 @@ class OrderProductsController extends Controller
         }
         catch(\Exception $e) {
             return JsonResponse::create(array('success' => false, 'error_text' => $e->getMessage()));
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/api-delete-tracking", name="api-delete-tracking")
+     */
+    public function deleteTrackingAction(Request $request){
+        $trackingId = $request->get('track-id');
+        $em = $this->getDoctrine()->getManager();
+
+        try {
+            $shippingLabel = $em->getRepository('OrderBundle:OrdersShippingLabel')->find($trackingId);
+            $em->remove($shippingLabel);
+            $em->flush();
+
+            return JsonResponse::create(array(true, 'Shipping Label Deleted'));
+        }catch(\Exception $e){
+            return JsonResponse::create(array(false, $e));
         }
     }
 }

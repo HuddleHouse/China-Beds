@@ -68,9 +68,9 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/view-users/edit/{user_id}", name="admin_edit_user")
+     * @Route("/view-users/edit/{user_id}/{referral}", name="admin_edit_user")
      */
-    public function viewAdminEditUserAction(Request $request, $user_id)
+    public function viewAdminEditUserAction(Request $request, $user_id, $referral = null)
     {
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
@@ -107,6 +107,7 @@ class AdminController extends Controller
         }
 
         return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+            'referral' => $referral,
             'form' => $form->createView(),
             'user_id' => $user_id,
             'user' =>$user
