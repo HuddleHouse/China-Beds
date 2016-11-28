@@ -6,7 +6,11 @@
 {% endblock page_title %}
 
 {% block page_name %}
+    {%  if referral == 'roles' %}
+    <a href="{{ path('fos_user_group_list') }}">< Back to the list</a>
+    {%  else  %}
     <a href="{{ path('view_users') }}">< Back to the list</a>
+    {%  endif %}
 {% endblock page_name %}
 
 
