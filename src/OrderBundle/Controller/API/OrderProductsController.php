@@ -754,6 +754,7 @@ class OrderProductsController extends Controller
             $user = $em->getRepository('AppBundle:User')->find($info['user']);
             $status = $em->getRepository('WarehouseBundle:Status')->getStatusByName(Orders::STATUS_READY_TO_SHIP);
 
+
             $order->setStatus($status);
             $order->setChannel($channel);
             $order->setSubmittedByUser($this->getUser());
@@ -814,7 +815,7 @@ class OrderProductsController extends Controller
             }
 
             $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
-
+            $order->setSubmitDate(new \DateTime($request->get('orderDate')));
             $em->persist($order);
             $em->flush();
 

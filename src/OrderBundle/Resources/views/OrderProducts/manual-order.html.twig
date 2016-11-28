@@ -167,6 +167,7 @@
             $scope.isFedex = true;
             $scope.min_date = new Date();
             $scope.user = null;
+            $scope.order_date = new Date();
 
             $scope.populateUserInfo = function() {
                 var user = self.users[$scope.user];
@@ -194,6 +195,7 @@
                     data: {
                         form: $('#form').serializeArray(),
                         eta: $scope.eta,
+                        orderDate: $scope.order_date,
                         pickUpDate: $scope.pickUpDate
                     },
                     success: function (rdata) {
@@ -452,6 +454,10 @@
                                     {% endfor %}
                                 </optgroup>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="eta">Order Date</label>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="order_date" name="order_date" ng-model="order_date" md-min-date="min_date"></md-datepicker>
                         </div>
                         <div class="form-group">
                             <label for="eta">ETA</label>

@@ -63,6 +63,12 @@ class Orders
     /**
      * @var \DateTime
      *
+     * @ORM\Column(type="datetime")
+     */
+    private $createdOn;
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="submit_date", type="datetime", nullable=true)
      */
     private $submitDate;
@@ -1356,4 +1362,29 @@ class Orders
         $file_path = $this->getAbsolutePath();
         if(file_exists($file_path)) unlink($file_path);
     }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setPrePersist() {
+        $this->setCreatedOn(new \DateTime());
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * @param \DateTime $createdOn
+     */
+    public function setCreatedOn($createdOn)
+    {
+        $this->createdOn = $createdOn;
+    }
+
+
 }
