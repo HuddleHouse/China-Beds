@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Entity\User;
 use AppBundle\Form\CreateUserType;
 use AppBundle\Form\UserRestrictedType;
 use InventoryBundle\Entity\Channel;
@@ -10,6 +11,7 @@ use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
 use Symfony\Component\Form\FormEvent;
@@ -350,6 +352,27 @@ class AdminController extends Controller
         }
 
         return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
+    }
+
+    /**
+     * @param User $user
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/delete-user/{id}", name="delete-user")
+     * @Method({"GET", "POST"})
+     */
+    public function adminDeleteUserAction(Request $request, User $user) {
+        $em = $this->getDoctrine()->getManager();
+
+        try{
+            $um = $this->get('fos_user.user_manager');
+            $um->deleteUser($user);
+            $this->addFlash('notice', 'User ' . $user->getDisplayName() . ' deleted successfully');
+            return $this->redirectToRoute('view_users');
+        }catch(Exception $e){
+            $this->addFlash('notice', 'Error deleting ' . $user->getDisplayName() . ' : ' . $e);
+            return $this->redirectToRoute('view_users');
+        }
     }
 
 
