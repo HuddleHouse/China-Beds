@@ -51,7 +51,7 @@
     {% endif %}
 
 
-    {{ form_start(form, { 'action': path('admin_edit_user', {'user_id': user_id}), 'attr': { 'class': 'form-horizontal' } }) }}
+    {{ form_start(form, { 'attr': { 'class': 'form-horizontal' } }) }}
     <div class="row">
         <div class="col-md-12">
             <input class="btn btn-raised btn-success" type="submit" value="Update"/>

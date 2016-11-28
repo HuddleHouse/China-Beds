@@ -123,7 +123,7 @@ class AdminController extends Controller
        $userManager = $this->get('fos_user.user_manager');
        $user = $userManager->createUser();
 
-       $form = $this->createForm(CreateUserType::class, $user);
+       $form = $this->createForm(UserType::class, $user);
        $form->handleRequest($request);
 
        if($form->isValid()) {
@@ -140,9 +140,10 @@ class AdminController extends Controller
            }
        }
 
-       return $this->render('@App/Admin/new-user-creation.html.twig', array(
+       return $this->render('@App/Admin/admin_edit_user.html.twig', array(
            'form' => $form->createView(),
-           'user' =>$user
+           'user' =>$user,
+           'referral' => ''
        ));
 
    }
