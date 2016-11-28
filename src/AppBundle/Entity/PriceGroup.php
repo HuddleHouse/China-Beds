@@ -37,7 +37,7 @@ class PriceGroup
     protected $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="price_group")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroupPrices", mappedBy="price_group", cascade={"remove", "persist"})
      */
     private $prices;
 
