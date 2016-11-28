@@ -243,6 +243,7 @@ class PriceGroupController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($priceGroup);
                 $em->flush();
+                $this->addFlash('success', 'Successfully deleted price group');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error deleting Price Group: ' . $e->getMessage());

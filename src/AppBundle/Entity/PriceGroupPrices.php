@@ -36,7 +36,7 @@ class PriceGroupPrices
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PriceGroup", inversedBy="prices")
-     * @ORM\JoinColumn(name="price_group_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="price_group_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $price_group;
 
