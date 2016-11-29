@@ -327,6 +327,19 @@ class User extends BaseUser
     private $promo_kit_orders;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedForUser")
+     */
+    protected $creditRequestFor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedByUser")
+     */
+    protected $creditRequestBy;
+
+
+
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -352,6 +365,8 @@ class User extends BaseUser
         $this->credited_ledgers = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
         $this->warehouses = new ArrayCollection();
+        $this->creditRequestFor = new ArrayCollection();
+        $this->creditRequestBy = new ArrayCollection();
     }
 
     /**
@@ -1804,5 +1819,73 @@ class User extends BaseUser
     public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
     {
         $this->warehouses->removeElement($warehouse);
+    }
+
+    /**
+     * Add creditRequestFor
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestFor
+     *
+     * @return User
+     */
+    public function addCreditRequestFor(\OrderBundle\Entity\CreditRequest $creditRequestFor)
+    {
+        $this->creditRequestFor[] = $creditRequestFor;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequestFor
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestFor
+     */
+    public function removeCreditRequestFor(\OrderBundle\Entity\CreditRequest $creditRequestFor)
+    {
+        $this->creditRequestFor->removeElement($creditRequestFor);
+    }
+
+    /**
+     * Get creditRequestFor
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditRequestFor()
+    {
+        return $this->creditRequestFor;
+    }
+
+    /**
+     * Add creditRequestBy
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestBy
+     *
+     * @return User
+     */
+    public function addCreditRequestBy(\OrderBundle\Entity\CreditRequest $creditRequestBy)
+    {
+        $this->creditRequestBy[] = $creditRequestBy;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequestBy
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestBy
+     */
+    public function removeCreditRequestBy(\OrderBundle\Entity\CreditRequest $creditRequestBy)
+    {
+        $this->creditRequestBy->removeElement($creditRequestBy);
+    }
+
+    /**
+     * Get creditRequestBy
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditRequestBy()
+    {
+        return $this->creditRequestBy;
     }
 }

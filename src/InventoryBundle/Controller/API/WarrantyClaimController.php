@@ -32,18 +32,17 @@ class WarrantyClaimController extends Controller
     {
 //        if($request->get('order_id') == '')
 //            return new JsonResponse('<option>Select Order ID first</option>');
-
         if ( $request->get('order_id') == '' ) {
             $products = $this->getDoctrine()->getRepository('InventoryBundle:Product')->getAllProductsArray($this->getUser());
 
             $rtn = array();
-
+            $rtn[] = "<option selected disabled>Select Product</option>";
             foreach($products as $product)
                 $rtn[] = '<option value="' . $product['id'] . '">'. $product['name'] . '</option>';
         } else {
             $order = $this->getDoctrine()->getRepository('OrderBundle:Orders')->find($request->get('order_id'));
             $rtn = array();
-
+            $rtn[] = "<option selected disabled>Select Product</option>";
             foreach($order->getProductVariants() as $pv)
                 $rtn[] = '<option value="' . $pv->getProductVariant()->getId() . '">'. $pv->getProductVariant()->getProduct()->getName() . ' ' . $pv->getProductVariant()->getName() . '</option>';
         }
@@ -66,6 +65,7 @@ class WarrantyClaimController extends Controller
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($request->get('user_id'));
 
         $rtn = array();
+        $rtn[] = "<option selected disabled>Select Order Id</option>";
         foreach($user->getOrders() as $order) {
             if ( $order->getChannel()->getId() == $this->getUser()->getActiveChannel()->getId() ) {
                 $rtn[] = sprintf('<option value="%d">%s</option>', $order->getId(), $order->getOrderId());

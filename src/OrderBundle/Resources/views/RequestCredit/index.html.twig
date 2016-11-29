@@ -1,0 +1,72 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Credit Requests{% endblock %}
+{% block page_title %}
+    Credit Requests
+{% endblock page_title %}
+
+{% block page_name %}
+    Credit Requests
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            var table = $('#part-table').DataTable({
+                "iDisplayLength": 50, responsive: true, "fnDrawCallback": function (oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                    }
+                }, order: [[2, "desc"]]
+            });
+            $('#claimModal').on('hidden.bs.modal', function (e) {
+                $('#claim-modal-content').addClass('expand');
+                $('#claim-modal-body').html('');
+            });
+        });
+
+
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table">
+                <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Submitted By</th>
+                        <th>Order ID</th>
+                        <th>Date of Request</th>
+                        <th>Product</th>
+                        <th>Amount Requested</th>
+                        <th>Comments</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for creditRequest in creditRequests %}
+                            <tr>
+                                <td>{{ creditRequest.submittedForUser.name }}</td>
+                                <td>{{ creditRequest.order | default('--') }}</td>
+                                <td>{{ creditRequest.submitDate | date('Y-m-d') }}</td>
+                                <td>{{ creditRequest.productVariant.name }}</td>
+                                <td>{{ creditRequest.requestAmount }}</td>
+                                <td>{{ creditRequest.comments}}</td>
+                                <td>
+                                    <a class="btn btn-raised btn-default btn-xs purple " href="{{ path('credit_request_edit', {"id" :creditRequest.id}) }}">Edit</a>
+                                    <a class="btn btn-raised btn-danger btn-xs purple " href="{{ path('credit_request_delete', {"id" :creditRequest.id}) }}">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

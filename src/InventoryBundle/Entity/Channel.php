@@ -370,6 +370,11 @@ class Channel
     protected $warranty_claims;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="channel")
+     */
+    protected $creditRequest;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="channel")
      *
      */
@@ -407,6 +412,7 @@ class Channel
         $this->rebate_submissions = new ArrayCollection();
         $this->resources = new ArrayCollection();
         $this->attributes = new ArrayCollection();
+        $this->creditRequest = new ArrayCollection();
     }
 
     /**
@@ -1905,5 +1911,39 @@ class Channel
     public function getChannels()
     {
         return $this->channels;
+    }
+
+    /**
+     * Add creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     *
+     * @return Channel
+     */
+    public function addCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest[] = $creditRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     */
+    public function removeCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest->removeElement($creditRequest);
+    }
+
+    /**
+     * Get creditRequest
+     *
+     * @return ArrayCollection
+     */
+    public function getCreditRequest()
+    {
+        return $this->creditRequest;
     }
 }
