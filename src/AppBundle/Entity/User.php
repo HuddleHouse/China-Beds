@@ -339,6 +339,17 @@ class User extends BaseUser
      */
     private $old_id;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedForUser", cascade={"remove"})
+     */
+    protected $creditRequestFor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedByUser", cascade={"remove"})
+     */
+    protected $creditRequestBy;
+
     /**
      * User constructor.
      */
