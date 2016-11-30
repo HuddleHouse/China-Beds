@@ -115,10 +115,10 @@ class ProductVariant
      */
     private $promo_kit_orders;
 
-    /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="productVariant")
-     */
-    protected $creditRequest;
+//    /**
+//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="productVariant", cascade={"persist", "remove"})
+//     */
+//    protected $creditRequest;
 
 
     public function __construct() {
@@ -130,7 +130,7 @@ class ProductVariant
         $this->stock_adjustment_product_variant = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
-        $this->creditRequest = new ArrayCollection();
+//        $this->creditRequest = new ArrayCollection();
     }
 
     /**

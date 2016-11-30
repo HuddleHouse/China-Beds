@@ -86,7 +86,6 @@ class CreditRequestController extends Controller
      */
     public function editAction(Request $request, CreditRequest $creditRequest)
     {
-        $deleteForm = $this->createDeleteForm($creditRequest);
         $editForm = $this->createForm(RequestCreditType::class, $creditRequest);
         $editForm->handleRequest($request);
 
@@ -99,7 +98,6 @@ class CreditRequestController extends Controller
         return $this->render('OrderBundle:RequestCredit:edit.html.twig', array(
             'creditRequest' => $creditRequest,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -107,35 +105,22 @@ class CreditRequestController extends Controller
      * Deletes a creditRequest entity.
      *
      * @Route("/{id}", name="credit_request_delete")
-     * @Method("DELETE")
+     * @Method({"POST", "GET"})
      */
     public function deleteAction(Request $request, CreditRequest $creditRequest)
     {
-        $form = $this->createDeleteForm($creditRequest);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        try {
             $em = $this->getDoctrine()->getManager();
             $em->remove($creditRequest);
+
             $em->flush();
+            $this->addFlash('notice', 'Credit request deleted successfully');
+
+            return $this->redirectToRoute('credit_request_index');
+        }catch(\Exception $e){
+            $this->addFlash('error', 'Credit request not deleted : ' . $e);
+            return $this->redirectToRoute('credit_request_index');
         }
 
-        return $this->redirectToRoute('credit_request_index');
-    }
-
-    /**
-     * Creates a form to delete a creditRequest entity.
-     *
-     * @param CreditRequest $creditRequest The creditRequest entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(CreditRequest $creditRequest)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('credit_request_delete', array('id' => $creditRequest->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

@@ -327,12 +327,12 @@ class User extends BaseUser
     private $promo_kit_orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedForUser")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedForUser", cascade={"remove"})
      */
     protected $creditRequestFor;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedByUser")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedByUser", cascade={"remove"})
      */
     protected $creditRequestBy;
 

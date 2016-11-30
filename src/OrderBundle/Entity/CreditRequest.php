@@ -32,7 +32,7 @@ class CreditRequest
     /**
      * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="creditRequestFor", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="creditRequestFor", cascade={"remove"})
      * @ORM\JoinColumn(name="submitted_for_user_id", referencedColumnName="id")
      */
     private $submittedForUser;
@@ -46,13 +46,13 @@ class CreditRequest
     private $submittedByUser;
 
     /**
-     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="creditRequest")
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\Orders", inversedBy="creditRequest", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
      */
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant", inversedBy="creditRequest")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\ProductVariant")
      * @ORM\JoinColumn(name="product_variant_id", referencedColumnName="id")
      */
     private $productVariant;
@@ -65,14 +65,14 @@ class CreditRequest
     private $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="creditRequest")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="creditRequest", cascade={"persist", "remove"})
      */
     private $channel;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="request_amount", type="float", nullable=false )
+     * @ORM\Column(name="request_amount", type="float", nullable=false)
      */
     private $requestAmount;
 

@@ -370,7 +370,7 @@ class Channel
     protected $warranty_claims;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="channel")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="channel", cascade={"persist", "remove"})
      */
     protected $creditRequest;
 
