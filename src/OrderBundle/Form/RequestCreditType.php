@@ -84,7 +84,7 @@ class RequestCreditType extends AbstractType
                 )
             )
 
-            ->add('comments', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 0px', 'maxlength' => '255'), 'required' => true))
+            ->add('comments', TextareaType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 0px', 'maxlength' => '1000'), 'required' => true))
         ;
     }
 
