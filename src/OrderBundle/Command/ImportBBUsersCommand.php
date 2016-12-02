@@ -108,8 +108,6 @@ class ImportBBUsersCommand extends ContainerAwareCommand
 //        }
 
 
-        $this->users[] = $data[6];
-
         $user->setOldId($data[0]);
         $user->addUserChannel($this->channel);
         $user->setUsername($data[1]);
@@ -136,25 +134,25 @@ class ImportBBUsersCommand extends ContainerAwareCommand
 //            }
 //            $user->addRole(['roles' => 'ROLE_DISTRIBUTOR']);
 //        }
-        if ( $data[26] ) {
+        if ( $data[26] == '1' ) {
             if ( !in_array($this->retailer_group, $user->getGroups()->toArray()) ) {
                 $user->addGroup($this->retailer_group);
             }
             $user->addRole(['roles' => 'ROLE_ADMIN']);
         }
-        if ( $data[18] ) {
+        if ( $data[18] == '1' ) {
             if ( !in_array($this->admin_group, $user->getGroups()->toArray()) ) {
                 $user->addGroup($this->admin_group);
             }
             $user->addRole(['roles' => 'ROLE_RETAILER']);
         }
-        if ( $data[39] ) {
+        if ( $data[39] == '1' ) {
             if ( !in_array($this->salesrep_group, $user->getGroups()->toArray()) ) {
                 $user->addGroup($this->salesrep_group);
             }
             $user->addRole(['roles' => 'ROLE_SALES_REP']);
         }
-        if ( $data[40] ) {
+        if ( $data[40] == '1' ) {
             if ( !in_array($this->salesmanager_group, $user->getGroups()->toArray()) ) {
                 $user->addGroup($this->salesmanager_group);
             }
@@ -171,7 +169,7 @@ class ImportBBUsersCommand extends ContainerAwareCommand
         $em->persist($user);
 //        $em->flush();
 
-        $output->writeln(sprintf("User %s updated/added", $user->getUsername()));
+        $output->writeln(sprintf("User %s with password %s updated/added", $user->getUsername(), $data[2]));
     }
 
     private function getWarehouseById($id) {
