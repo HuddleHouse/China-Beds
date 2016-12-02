@@ -77,15 +77,15 @@ class ImportBBUsersCommand extends ContainerAwareCommand
             return;
         }
 
-        if ( $data[26] ) {
+        if ( $data[41] ) {
             $sales_rep = $em->getRepository('AppBundle:User')->findOneBy(['old_id' => $data[26]]);
             $user->setMySalesRep($sales_rep);
         }
 
-        if ( $data[29] ) {
-            $distributor = $em->getRepository('AppBundle:User')->findOneBy(['old_id' => $data[26]]);
-            $user->setMyDistributor($distributor);
-        }
+//        if ( $data[29] ) {
+//            $distributor = $em->getRepository('AppBundle:User')->findOneBy(['old_id' => $data[26]]);
+//            $user->setMyDistributor($distributor);
+//        }
 
         $em->persist($user);
     }
