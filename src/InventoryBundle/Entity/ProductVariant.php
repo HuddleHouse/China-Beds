@@ -115,6 +115,11 @@ class ProductVariant
      */
     private $promo_kit_orders;
 
+//    /**
+//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="productVariant", cascade={"persist", "remove"})
+//     */
+//    protected $creditRequest;
+
 
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
@@ -125,6 +130,7 @@ class ProductVariant
         $this->stock_adjustment_product_variant = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
+//        $this->creditRequest = new ArrayCollection();
     }
 
     /**
@@ -618,5 +624,39 @@ class ProductVariant
     public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
     {
         $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    /**
+     * Add creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     *
+     * @return ProductVariant
+     */
+    public function addCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest[] = $creditRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     */
+    public function removeCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest->removeElement($creditRequest);
+    }
+
+    /**
+     * Get creditRequest
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditRequest()
+    {
+        return $this->creditRequest;
     }
 }

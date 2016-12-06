@@ -1,0 +1,110 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}New Ledger Fund Request{% endblock %}
+{% block page_title %}New Credit Request{% endblock page_title %}
+
+{% block page_name %}
+    <a href="{{ path('credit_request_index') }}">< Back to the list</a>
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+            $('#ledger_description').keyup(function () {
+                var len = $(this).val().length;
+                if (len >= 255) {
+                    $(this).val($(this).val().substring(0, 255));
+                    $('#charNum').text(0);
+                } else {
+                    var l = 255 - len;
+                    $('#charNum').text(l);
+                }
+            });
+        });
+
+        function getProductVariants() {
+            var el = $('#request_credit_productVariant');
+            $.ajax({
+                beforeSend: function () {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_product_variants_from_order') }}",
+                dataType: 'json',
+                data: {order_id: $('#request_credit_order').val()},
+                success: function (variants) {
+                    el.html(variants);
+                    if (variants != '<option>Select Order ID first</option>')
+                        el.prop('disabled', false);
+                }
+            });
+        }
+
+        function getOrders() {
+            $('#request_credit_productVariant').html('<option value=0>Select Order First</option>');
+            var el = $('#request_credit_order');
+            $.ajax({
+                beforeSend: function() {
+                    el.prop('disabled', true);
+                    el.html('<option>Loading...</option>');
+                },
+                type: 'POST',
+                url: "{{ path('api_get_orders_from_user') }}",
+                dataType: 'json',
+                data: {user_id: $('#request_credit_submittedForUser').val()},
+                success: function (orders) {
+                    el.html(orders);
+                    if(orders != '<option>Select User First</option>')
+                        el.prop('disabled', false);
+                }
+            });
+        }
+    </script>
+{% endblock footer %}
+
+{% block content %}
+    {#{% if not form.vars.valid %}#}
+        {#<div class="row">#}
+            {#<div class="col-md-12">#}
+                {#<div class="alert alert-danger">#}
+                    {#{{ form_errors(form.submittedForUser) }}#}
+                    {#{{ form_errors(form.requestAmount) }}#}
+                    {#{{ form_errors(form.comments) }}#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
+    {#{% endif %}#}
+    <div class="table">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-4 form-group">
+                {{ form_label(form.submittedForUser) }}
+                {{ form_widget(form.submittedForUser) }}
+            </div>
+            <div class="col-md-4 form-group">
+                {{ form_label(form.order) }}
+                {{ form_widget(form.order) }}
+            </div>
+            <div class="col-md-4 form-group">
+                {{ form_label(form.productVariant) }}
+                {{ form_widget(form.productVariant) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 form-group">
+                {{ form_label(form.requestAmount) }}
+                {{ form_widget(form.requestAmount) }}
+            </div>
+            <div class="col-md-12 form-group">
+                {{ form_label(form.comments) }}
+                {{ form_widget(form.comments) }}
+            </div>
+        </div>
+        <input class="btn btn-raised btn-success" type="submit" value="Create" />
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
