@@ -104,11 +104,14 @@
                             order_id: {{ order.id}},
                             type: type
                         },
-                        success: function (data) {
-                            $scope.$apply(function () {
-                                hideSpinner();
+                        success: function (result) {
+                            hideSpinner();
+                            if ( !result.success ) {
+                                showErrorModal('Error processing order:<br />' + result.error_message);
+                            } else {
+                                showSuccessModal('Order submitted successfully...Please wait.');
                                 location.reload();
-                            });
+                            }
                         }
                     });
                 }
@@ -464,7 +467,7 @@
                         <ul>
                             {% for label in order.shippingLabels %}
                                 <li>Tracking:
-                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}">
+                                    <a href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.trackingNumber }}" target="_blank">
                                         {{ label.trackingNumber }}
                                     </a>
                                     {% if is_granted('ROLE_ADMIN') ==1  %}
@@ -486,10 +489,12 @@
                                 <th >Subtotal:</th>
                                 <td>${{ order.getSubTotal |number_format(2, '.', ',') }}</td>
                             </tr>
+                            {% if order.isPickUp == 0%}
                             <tr>
                                 <th>Shipping: {{ order.getShipDescription }}</th>
                                 <td>${{ order.getShipping |number_format(2, '.', ',') }}</td>
                             </tr>
+                            {% endif %}
                             <tr>
                                 <th>Total:</th>
                                 <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
@@ -508,6 +513,7 @@
 
                 </div>
                 <div class="col-xs-12 col-md-6">
+                    <div class="alert alert-error hide" id="process-error">Test</div>
                     <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
                     <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">

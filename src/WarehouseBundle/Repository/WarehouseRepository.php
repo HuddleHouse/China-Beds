@@ -82,7 +82,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getAllWarehousesArray(Channel $channel = null) {
-        $warehouses = $this->findByChannels([$channel]);
+        $warehouses = $this->findByChannel($channel);
         $data = array();
 
         foreach($warehouses as $warehouse)

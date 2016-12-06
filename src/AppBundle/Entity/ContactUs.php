@@ -311,4 +311,3 @@ class ContactUs
         return $this->message;
     }
 }
-

@@ -26,7 +26,7 @@ class PriceGroupController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $priceGroups = $em->getRepository('AppBundle:PriceGroup')->findAll();
+        $priceGroups = $em->getRepository('AppBundle:PriceGroup')->findBy(['channel' => $this->getUser()->getActiveChannel()->getId()]);
         $data = array();
 
         foreach($priceGroups as $group) {
@@ -57,6 +57,9 @@ class PriceGroupController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
+                if ( $channel = $this->getDoctrine()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId()) ) {
+                    $priceGroup->setChannel($channel);
+                }
                 $em->persist($priceGroup);
                 $em->flush();
 
@@ -240,6 +243,7 @@ class PriceGroupController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($priceGroup);
                 $em->flush();
+                $this->addFlash('success', 'Successfully deleted price group');
             }
             catch(\Exception $e) {
                 $this->addFlash('error', 'Error deleting Price Group: ' . $e->getMessage());

@@ -16,10 +16,17 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity
  * @ORM\Table(name="users")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="fos_user.username.already_used")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
+ *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
+ * })
  */
 class User extends BaseUser
 {
@@ -155,7 +162,7 @@ class User extends BaseUser
     /**
      * @ORM\Column(name="hide_rebate", type="boolean")
      */
-    protected $hideRebate;
+    protected $hideRebate = false;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -229,6 +236,15 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\StockTransfer", mappedBy="user")
      */
     private $stock_transfers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="users")
+     * @ORM\JoinTable(name="user_warehouses",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="warehouse_id", referencedColumnName="id")}
+     * )
+     */
+    protected $warehouses;
 
     /**
      * @ORM\ManyToMany(targetEntity="WarehouseBundle\Entity\Warehouse", inversedBy="managers")
@@ -318,6 +334,12 @@ class User extends BaseUser
     private $promo_kit_orders;
 
     /**
+     * @var
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $old_id;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -342,6 +364,7 @@ class User extends BaseUser
         $this->submitted_ledgers = new ArrayCollection();
         $this->credited_ledgers = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -937,6 +960,19 @@ class User extends BaseUser
     public function setWarehouse3($warehouse_3)
     {
         $this->warehouse_3 = $warehouse_3;
+    }
+
+    public function getWarehouses(Channel $channel = null) {
+        if ( $this->getWarehouse1() && !$this->warehouses->contains($this->getWarehouse1()) && ($channel == null || $channel->getId() == $this->getWarehouse1()->getChannel()->getId()) ) {
+            $this->warehouses->add($this->getWarehouse1());
+        }
+        if ( $this->getWarehouse2() && !$this->warehouses->contains($this->getWarehouse2()) && ($channel == null || $channel->getId() == $this->getWarehouse2()->getChannel()->getId()) ) {
+            $this->warehouses->add($this->getWarehouse2());
+        }
+        if ( $this->getWarehouse3() && !$this->warehouses->contains($this->getWarehouse3()) && ($channel == null || $channel->getId() == $this->getWarehouse3()->getChannel()->getId()) ) {
+            $this->warehouses->add($this->getWarehouse3());
+        }
+        return $this->warehouses;
     }
 
     /**
@@ -1758,4 +1794,54 @@ class User extends BaseUser
     {
         return $this->getDisplayName();
     }
+
+    /**
+     * Add warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     *
+     * @return User
+     */
+    public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        if ( empty($this->warehouse_1) ) {
+            $this->setWarehouse1($warehouse);
+        } elseif ( !empty($this->warehouse_1) && empty($this->warehouse_2) ) {
+            $this->setWarehouse2($warehouse);
+        } elseif ( !empty($this->warehouse_1) && !empty($this->warehouse_2) && empty($this->warehouse_3) ) {
+            $this->setWarehouse3($warehouse);
+        }
+
+        $this->warehouses[] = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     */
+    public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses->removeElement($warehouse);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOldId()
+    {
+        return $this->old_id;
+    }
+
+    /**
+     * @param mixed $old_id
+     */
+    public function setOldId($old_id)
+    {
+        $this->old_id = $old_id;
+    }
+
+
 }

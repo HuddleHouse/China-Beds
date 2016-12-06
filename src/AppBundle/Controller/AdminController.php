@@ -39,22 +39,25 @@ class AdminController extends Controller
         } elseif ( $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
             $users = [];
             foreach($this->getUser()->getRetailers() as $user) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
             }
         } elseif ( $this->getUser()->hasRole('ROLE_SALES_REP') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
             foreach($this->getUser()->getDistributors() as $user) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
                 foreach($user->getRetailers() as $user) {
-                    $users[] = $user;
+                    $users[$user->getId()] = $user;
                 }
             }
             foreach($this->getUser()->getRetailers() as $user) {
-                $users[] = $user;
+                $users[$user->getId()] = $user;
             }
 
             if ( $this->getUser()->hasRole('ROLE_SALES_MANAGER') ) {
                 foreach($this->getUser()->getSalesReps() as $user) {
-                    $users[] = $user;
+                    $users[$user->getId()] = $user;
+                    foreach($user->getRetailers() as $user) {
+                        $users[$user->getId()] = $user;
+                    }
                 }
             }
         }
@@ -65,16 +68,16 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/view-users/edit/{user_id}", name="admin_edit_user")
+     * @Route("/view-users/edit/{user_id}/{referral}", name="admin_edit_user")
      */
-    public function viewAdminEditUserAction(Request $request, $user_id)
+    public function viewAdminEditUserAction(Request $request, $user_id, $referral = null)
     {
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(array('id' => $user_id));
         $user_clone = clone $user;
 
-        $form = $this->createForm($this->getUser()->hasRole('ROLE_ADMIN') ? UserType::class : UserRestrictedType::class, $user);
+        $form = $this->createForm(($this->getUser()->hasRole('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) ? UserType::class : UserRestrictedType::class, $user);
         $form->handleRequest($request);
 
         if($form->isValid()) {
@@ -104,6 +107,7 @@ class AdminController extends Controller
         }
 
         return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+            'referral' => $referral,
             'form' => $form->createView(),
             'user_id' => $user_id,
             'user' =>$user
@@ -119,7 +123,7 @@ class AdminController extends Controller
        $userManager = $this->get('fos_user.user_manager');
        $user = $userManager->createUser();
 
-       $form = $this->createForm(CreateUserType::class, $user);
+       $form = $this->createForm(UserType::class, $user);
        $form->handleRequest($request);
 
        if($form->isValid()) {
@@ -136,9 +140,10 @@ class AdminController extends Controller
            }
        }
 
-       return $this->render('AppBundle:admin:new-user-creation.html.twig', array(
+       return $this->render('@App/Admin/admin_edit_user.html.twig', array(
            'form' => $form->createView(),
-           'user' =>$user
+           'user' =>$user,
+           'referral' => ''
        ));
 
    }

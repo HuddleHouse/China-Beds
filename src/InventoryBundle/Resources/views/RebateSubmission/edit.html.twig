@@ -50,6 +50,7 @@
                     {{ form_label(edit_form.order) }}
                     {{ form_widget(edit_form.order) }}
                 </div>
+                {% if is_granted("ROLE_WAREHOUSE") or is_granted("ROLE_ADMIN") or is_granted("ROLE_DISTRIBUTOR") or is_granted("ROLE_RETAILER") or is_granted("ROLE_ACCOUNTING") or is_granted("ROLE_OPERATIONS") or is_granted("ROLE_BETA_TESTING")  %}
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.file) }}
                     <div class="input-group">
@@ -64,8 +65,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
-                    {{ form_label(form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
-                    {{ form_widget(form.description) }}
+                    {{ form_label(edit_form.description) }} <span id="charNum" style="font-weight:200;color:#8e8e8e;">255</span>
+                    {{ form_widget(edit_form.description) }}
                 </div>
             </div>
             <input class="btn btn-raised btn-success" type="submit" value="Submit" />

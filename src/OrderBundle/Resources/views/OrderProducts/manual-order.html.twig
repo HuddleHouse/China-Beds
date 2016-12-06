@@ -114,7 +114,7 @@
                     '<td><select class="form-control" id="products-product-'+ index + '" name="products['+ index + '][product]"></select></td>' +
                     '<td><input type="text" class="form-control" id="products-unit_cost-'+ index + '" name="products['+ index + '][unit_cost]" placeholder="0.00" onchange="calculateProductSubtotal('+ index + ')"></td>' +
                     '<td><input type="number" class="form-control" id="products-qty-'+ index + '" name="products['+ index + '][qty]" onchange="calculateProductSubtotal('+ index + ')"></td>' +
-                    '<td><input type="text" class="form-control" id="products-subtotal-'+ index + '" name="products['+ index + '][subtotal]" placeholder="0.00"></td>' +
+                    '<td><input type="text" class="form-control" id="products-subtotal-'+ index + '" name="products['+ index + '][subtotal]" placeholder="0.00" readonly></td>' +
                     '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removeProductRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
                     '</tr>' +
                     '<tr>' +
@@ -138,7 +138,7 @@
                     '<td><select class="form-control" id="pop-product-'+ index + '" name="pop['+ index + '][product]"></select></td>' +
                     '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal('+ index + ')"></td>' +
                     '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]" onchange="calculatePopSubtotal('+ index + ')"></td>' +
-                    '<td><input type="text" class="form-control" id="pop-subtotal-'+ index + '" name="pop['+ index + '][subtotal]" placeholder="0.00"></td>' +
+                    '<td><input type="text" class="form-control" id="pop-subtotal-'+ index + '" name="pop['+ index + '][subtotal]" placeholder="0.00" readonly></td>' +
                     '<td><a class="btn btn-raised btn-danger rich-btn" onclick="removePopRow('+ index + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>' +
                     '</tr>' +
                     '<tr>' +
@@ -167,6 +167,7 @@
             $scope.isFedex = true;
             $scope.min_date = new Date();
             $scope.user = null;
+            $scope.order_date = new Date();
 
             $scope.populateUserInfo = function() {
                 var user = self.users[$scope.user];
@@ -194,11 +195,13 @@
                     data: {
                         form: $('#form').serializeArray(),
                         eta: $scope.eta,
+                        orderDate: $scope.order_date,
                         pickUpDate: $scope.pickUpDate
                     },
-                    success: function (data) {
-                        if(data[0] == true) {
-                            fileData.append('order_id', data[1]);
+                    success: function (rdata) {
+                        if(rdata['success'] == true) {
+
+                            fileData.append('order_id', rdata['order_id']);
                             $.ajax({
                                 url: '{{ path('api_save_manual_order_form_pdf') }}',
                                 type: 'POST',
@@ -210,15 +213,14 @@
                                         showErrorModal('Error: ' + data[1]);
                                     }
                                     else {
-                                        showSuccessModal('Order successfully placed.');
+                                        window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: rdata['order_id'] });
                                     }
                                 }
                             });
                         }
                         else {
-
+                            showErrorModal('Error: ' + rdata['error_text']);
                         }
-                        console.log(data);
 //                        $scope.$apply(function () {
 //                            location.reload();
 //                        });
@@ -440,22 +442,26 @@
                         </div>
                         <div class="form-group">
                             <label for="user">Customer</label>
-                            <select class="form-control" id="user" name="user" ng-model="user" ng-change="populateUserInfo()">
+                            <select class="form-control select2" id="user" name="user" ng-model="user" ng-change="populateUserInfo()">
                                 <optgroup label="Retailers">
                                     {% for retailer in retailers %}
-                                        <option value="{{ retailer.id }}">{{ retailer.fullName }}</option>
+                                        <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>
                                     {% endfor %}
                                 </optgroup>
                                 <optgroup label="Distributors">
                                     {% for distributor in distributors %}
-                                        <option value="{{ distributor.id }}">{{ distributor.fullName }}</option>
+                                        <option value="{{ distributor.id }}">{{ distributor.displayName }}</option>
                                     {% endfor %}
                                 </optgroup>
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="eta">Order Date</label>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="order_date" name="order_date" ng-model="order_date" md-min-date="min_date"></md-datepicker>
+                        </div>
+                        <div class="form-group">
                             <label for="eta">ETA</label>
-                            <md-datepicker style="float: right" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
                     <div id="other-stuff" class="col-md-2 invoice-col move-up">
@@ -475,7 +481,7 @@
                         </div>
                         <div class="form-group">
                             <label for="pickupDate">Pickup Date</label>
-                            <md-datepicker style="float: right" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
                     <div id="ship-info-left" class="col-md-2 invoice-col move-up" ng-show="!isPickup">

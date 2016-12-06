@@ -4,6 +4,7 @@ namespace OrderBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use WarehouseBundle\Entity\WarehouseInventory;
 
 /**
  * OrderProductVariant
@@ -49,7 +50,7 @@ class OrdersProductVariant
     private $order;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersWarehouseInfo", mappedBy="orders_product_variant")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersWarehouseInfo", mappedBy="orders_product_variant", cascade={"persist"})
      */
     private $warehouse_info;
 
@@ -166,8 +167,9 @@ class OrdersProductVariant
         $this->warehouse_info = $warehouse_info;
     }
 
-    public function addWarehouseInfo($warehouse_info)
+    public function addWarehouseInfo(OrdersWarehouseInfo $warehouse_info)
     {
+        $warehouse_info->setOrdersProductVariant($this);
         $this->warehouse_info[] = $warehouse_info;
     }
 

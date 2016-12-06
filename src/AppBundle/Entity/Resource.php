@@ -224,4 +224,3 @@ class Resource
         $this->channel = $channel;
     }
 }
-

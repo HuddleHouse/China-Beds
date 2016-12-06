@@ -95,6 +95,7 @@
                     </thead>
                     <tbody>
                     {% for ledger in ledgers %}
+                        {% if ledger.channel.name == channel %}
                         <tr data-child-value="{{ ledger.description | default('') }}" data-description-expanded="0">
                             <td>{{ ledger.type }}</td>
                             {% if ledger.amountCredited >= 0 %}
@@ -114,6 +115,7 @@
                         {% endif %}
                             </td>
                         </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
