@@ -489,7 +489,7 @@
 
                                 <a href="#">
                                     <i class="fa fa-usd"></i>
-                                    <span>Ledger</span>
+                                    <span>Credits</span>
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </a>
                                 <ul class="treeview-menu">
@@ -498,11 +498,11 @@
                                         <a href="{{ path('ledger_index') }}"><i class="fa fa-circle-o"></i>Transactions</a>
                                     </li>
                                     {% endif %}
-                                    {% if isGrantedRoute(app.user, 'ledger_new') %}
-                                    <li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>
-                                        <a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Fund</a>
-                                    </li>
-                                    {% endif %}
+                                    {#{% if isGrantedRoute(app.user, 'ledger_new') %}#}
+                                    {#<li {% if (app.request.get('_route') in sidebar_credit_request and app.request.get('id') == app.user.activechannel.id) %} class="active"{% endif %}>#}
+                                        {#<a href="{{ path('ledger_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Fund</a>#}
+                                    {#</li>#}
+                                    {#{% endif %}#}
                                     {% if (is_granted('ROLE_ADMIN')) %}
                                         <li {% if (app.request.get('_route') in sidebar_credit_index) %} class="active"{% endif %}>
                                             <a href="{{ path('ledger_credit_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Assign Credit</a>
