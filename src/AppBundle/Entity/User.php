@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -27,6 +28,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
  *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
  * })
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class User extends BaseUser
 {
@@ -89,6 +91,11 @@ class User extends BaseUser
      *
      */
     protected $distributor_fedex_number;
+
+    /**
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * @var int
@@ -1855,4 +1862,88 @@ class User extends BaseUser
     }
 
 
+
+    /**
+     * Add creditRequestFor
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestFor
+     *
+     * @return User
+     */
+    public function addCreditRequestFor(\OrderBundle\Entity\CreditRequest $creditRequestFor)
+    {
+        $this->creditRequestFor[] = $creditRequestFor;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequestFor
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestFor
+     */
+    public function removeCreditRequestFor(\OrderBundle\Entity\CreditRequest $creditRequestFor)
+    {
+        $this->creditRequestFor->removeElement($creditRequestFor);
+    }
+
+    /**
+     * Get creditRequestFor
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditRequestFor()
+    {
+        return $this->creditRequestFor;
+    }
+
+    /**
+     * Add creditRequestBy
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestBy
+     *
+     * @return User
+     */
+    public function addCreditRequestBy(\OrderBundle\Entity\CreditRequest $creditRequestBy)
+    {
+        $this->creditRequestBy[] = $creditRequestBy;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequestBy
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequestBy
+     */
+    public function removeCreditRequestBy(\OrderBundle\Entity\CreditRequest $creditRequestBy)
+    {
+        $this->creditRequestBy->removeElement($creditRequestBy);
+    }
+
+    /**
+     * Get creditRequestBy
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditRequestBy()
+    {
+        return $this->creditRequestBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param mixed $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+    }
 }
