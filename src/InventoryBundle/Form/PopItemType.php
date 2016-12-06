@@ -45,7 +45,7 @@ class PopItemType extends AbstractType
                 'required' => false,
                 'class' => 'WarehouseBundle\Entity\Warehouse',
                 'multiple' => true,
-                'choices' => $this->warehouseRepository->findByChannels([$this->tokenStorage->getToken()->getUser()->getActiveChannel()]),
+                'choices' => $this->warehouseRepository->findByChannel([$this->tokenStorage->getToken()->getUser()->getActiveChannel()]),
                 'choice_label' => 'name'
             ))
             ->add('active', ChoiceType::class, array(
