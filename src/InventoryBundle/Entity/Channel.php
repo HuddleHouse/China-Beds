@@ -342,6 +342,20 @@ class Channel
     private $ach_company_name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="backend_header_pic", type="string")
+     */
+    private $backendHeaderPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="backend_orders_pic", type="string")
+     */
+    private $backendOrdersPic;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="channel")
      */
     private $product_channels;
@@ -1910,5 +1924,71 @@ class Channel
     public function getChannels()
     {
         return $this->channels;
+    }
+
+    /**
+     * Add creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     *
+     * @return Channel
+     */
+    public function addCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest[] = $creditRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     */
+    public function removeCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest->removeElement($creditRequest);
+    }
+
+    /**
+     * Get creditRequest
+     *
+     * @return ArrayCollection
+     */
+    public function getCreditRequest()
+    {
+        return $this->creditRequest;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackendHeaderPic()
+    {
+        return $this->backendHeaderPic;
+    }
+
+    /**
+     * @param string $backendHeaderPic
+     */
+    public function setBackendHeaderPic($backendHeaderPic)
+    {
+        $this->backendHeaderPic = $backendHeaderPic;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackendOrdersPic()
+    {
+        return $this->backendOrdersPic;
+    }
+
+    /**
+     * @param string $backendOrdersPic
+     */
+    public function setBackendOrdersPic($backendOrdersPic)
+    {
+        $this->backendOrdersPic = $backendOrdersPic;
     }
 }
