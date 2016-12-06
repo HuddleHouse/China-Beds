@@ -78,11 +78,14 @@ class CategoryController extends Controller
      */
     public function showAction(Category $category)
     {
-        $deleteForm = $this->createDeleteForm($category);
-
-        return $this->render('@Inventory/Category/index.html.twig', array(
+        $products = array();
+        /** @var \InventoryBundle\Entity\ProductCategory $pc */
+        foreach($category->getProductCategories() as $pc) {
+            $products[] = $pc->getProduct();
+        }
+        return $this->render('@Inventory/Category/show.html.twig', array(
             'category' => $category,
-            'delete_form' => $deleteForm->createView(),
+            'products' => $products,
         ));
     }
 
