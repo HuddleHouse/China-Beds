@@ -399,6 +399,9 @@ class User extends BaseUser
 //        }
     }
 
+    public function getChannel(){
+        $this->getActiveChannel();
+    }
 
 
     public function getFullName() {
