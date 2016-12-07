@@ -165,6 +165,11 @@ class User extends BaseUser
     protected $hideRebate = false;
 
     /**
+     * @ORM\Column(name="hide_cc", type="boolean")
+     */
+    protected $hideCC = false;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      */
@@ -1926,5 +1931,21 @@ class User extends BaseUser
     public function getCreditRequestBy()
     {
         return $this->creditRequestBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHideCC()
+    {
+        return $this->hideCC;
+    }
+
+    /**
+     * @param mixed $hideCC
+     */
+    public function setHideCC($hideCC)
+    {
+        $this->hideCC = $hideCC;
     }
 }
