@@ -24,10 +24,9 @@
             <span class="logo-mini"><b>M</b>H</span>
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg">
-                <img src="/images/logo-{{ app.user.activechannel.id }}.png" style="max-height: 90px;">
+                <img src="{{ asset('uploads/websites/' ~ app.user.activechannel.backendHeaderPic) }}" style="max-height: 45px;">
             </span>
         </a>
-
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
             <!-- Sidebar toggle button-->

@@ -273,10 +273,12 @@
                 <div class="col-md-4 file-wrap">
                     {{ form_label(edit_form.backendHeaderPic) }}
                     {{ form_widget(edit_form.backendHeaderPic) }}
+                    <img src="{{ asset('/uploads/websites/' ~ channel.backendHeaderPic) }}" class="image-uploaded">
                 </div>
                 <div class="col-md-4 file-wrap">
                     {{ form_label(edit_form.backendOrdersPic) }}
                     {{ form_widget(edit_form.backendOrdersPic) }}
+                    <img src="{{ asset('/uploads/websites/' ~ channel.backendOrdersPic) }}" class="image-uploaded">
                 </div>
             </div>
 
