@@ -217,5 +217,28 @@ class StockTransfer
         $this->orderNumber = $orderNumber;
     }
     
-}
 
+    /**
+     * Add productVariant
+     *
+     * @param \WarehouseBundle\Entity\StockTransferProductVariant $productVariant
+     *
+     * @return StockTransfer
+     */
+    public function addProductVariant(\WarehouseBundle\Entity\StockTransferProductVariant $productVariant)
+    {
+        $this->product_variants[] = $productVariant;
+
+        return $this;
+    }
+
+    /**
+     * Remove productVariant
+     *
+     * @param \WarehouseBundle\Entity\StockTransferProductVariant $productVariant
+     */
+    public function removeProductVariant(\WarehouseBundle\Entity\StockTransferProductVariant $productVariant)
+    {
+        $this->product_variants->removeElement($productVariant);
+    }
+}

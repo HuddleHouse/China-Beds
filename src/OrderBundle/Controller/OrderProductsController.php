@@ -37,7 +37,8 @@ class OrderProductsController extends Controller
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
-            'pending' => ''
+            'pending' => '',
+
         ));
     }
 
@@ -51,11 +52,12 @@ class OrderProductsController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
         $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
+        $channel = $this->getUser()->getActiveChannel();
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
             'orders' => $orders,
-            'pending' => ' Pending'
+            'pending' => ' Pending',
         ));
     }
 
@@ -68,23 +70,34 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED    ]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user));
+        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED]));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
+
+        $the_orders = [];
+        foreach($orders as $order) {
+            if ( $order->getBalance() > 0 ) {
+                $the_orders[] = $order;
+            }
+        }
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
-            'orders' => $orders,
-            'pending' => ' Pending'
+            'orders' => $the_orders,
+            'pending' => ' Open'
         ));
     }
 
     /**
      *
-     * @Route("/{id}/products", name="order_products_index", options={"expose"=true})
+     * @Route("/products", name="order_products_index", options={"expose"=true})
+     * @Route("/{id}/products", name="order_products_index_old")
      * @Method("GET")
      */
-    public function orderProductsAction(Channel $channel)
+    public function orderProductsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+
         $user = $this->getUser();
         $user_channels = $user->getUserChannelsArray();
         if(count($user->getPriceGroups()) != 0)
@@ -139,6 +152,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         //
 
+        $user_warehouses = [];
         if ( $user->getWarehouse1() ) {
             $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
         }
@@ -149,6 +163,7 @@ select coalesce(sum(i.quantity), 0) as quantity
             $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
         }
 
+
         $states = $em->getRepository('AppBundle:State')->findAll();
 
         if($user->hasRole('ROLE_DISTRIBUTOR'))
@@ -156,7 +171,11 @@ select coalesce(sum(i.quantity), 0) as quantity
         else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
             $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
         else
-            $user_retailers = null;
+            $user_retailers = [];
+
+        usort($user_retailers, function($a, $b) {
+            return $a->getDisplayName() - $b->getDisplayName();
+        });
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
@@ -201,6 +220,11 @@ select coalesce(sum(i.quantity), 0) as quantity
                 $is_dis = 1;
             $pop = $order->getPopItems();
 
+            $manualItems = $order->getManualItems();
+            $manualCount = 0;
+            foreach($manualItems as $manualItem) {
+                $manualCount++;
+            }
 
             return $this->render('@Order/OrderProducts/view-order.html.twig', array(
                 'channel' => $channel,
@@ -231,7 +255,7 @@ select coalesce(sum(i.quantity), 0) as quantity
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannels(array($this->getUser()->getActiveChannel()));
+        $warehouses = $this->getDoctrine()->getRepository('WarehouseBundle:Warehouse')->findByChannel(array($this->getUser()->getActiveChannel()));
         $warehouseArray = array();
         $popWarehouseArray = array();
         $productArray = array();
@@ -270,7 +294,7 @@ select coalesce(sum(i.quantity), 0) as quantity
         /** @var User $user */
         foreach($distributors as $user) {
             $users[$user->getId()] = array(
-                'name' => $user->getFullName(),
+                'name' => $user->getDisplayName(),
                 'email' => $user->getEmail(),
                 'phone' => $user->getPhone(),
                 'zip' => $user->getZip(),
@@ -283,7 +307,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         foreach($retailers as $user) {
             $users[$user->getId()] = array(
-                'name' => $user->getFullName(),
+                'name' => $user->getDisplayName(),
                 'email' => $user->getEmail(),
                 'phone' => $user->getPhone(),
                 'zip' => $user->getZip(),

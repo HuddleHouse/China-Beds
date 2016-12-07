@@ -1,13 +1,13 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}Office{% endblock %}
+{% block title %}{{ group.name }} Users{% endblock %}
 
 {% block page_title %}
-    Office
+    {{ group.name }} Users
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('fos_user_group_list') }}">< Back to the list</a>
+    <a href="{{ path('fos_user_group_list')}}">< Back to the list</a>
 {% endblock page_name %}
 
 {% block actions %}
@@ -17,7 +17,7 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-            "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+            "iDisplayLength": 50, responsive: true });
         });
     </script>
 {% endblock footer %}

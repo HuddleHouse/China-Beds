@@ -107,5 +107,28 @@ class WarehousePopInventoryOnHold
     }
 
 
-}
 
+    /**
+     * Set popItem
+     *
+     * @param \InventoryBundle\Entity\PopItem $popItem
+     *
+     * @return WarehousePopInventoryOnHold
+     */
+    public function setPopItem(\InventoryBundle\Entity\PopItem $popItem = null)
+    {
+        $this->pop_item = $popItem;
+
+        return $this;
+    }
+
+    /**
+     * Get popItem
+     *
+     * @return \InventoryBundle\Entity\PopItem
+     */
+    public function getPopItem()
+    {
+        return $this->pop_item;
+    }
+}

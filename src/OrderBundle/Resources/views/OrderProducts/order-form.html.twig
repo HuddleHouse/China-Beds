@@ -17,6 +17,19 @@
                 </div>
             </div>
 
+            {% if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
+                <div class="row" id="" style="margin-bottom: 10px; margin-top: 10px;">
+                    <div class="col-md-12">
+                        <select class="select2" id="dist_ship" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart['dist_ship']" ng-change="updateShipForm()" required>
+                            <option value="">Buyer: {{ app.user.displayName }}</option>
+                            {% for retailer in user_retailers %}
+                                <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="row">
                 <div class="col-md-6">
                     <div id="pick_up_agent" style="display: none;">
@@ -56,18 +69,6 @@
     </form>
 </div>
 <div class="table" id='ship' style="background-color: #EFEFEF; display: none;    margin-top: -19px;">
-    {% if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
-    <div class="row" id="pick_up_warehouse" style="margin-bottom: 10px;">
-        <div class="col-md-12">
-            <select class="" id="dist_ship" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart['dist_ship']" ng-change="updateShipForm()" required>
-            <option value="">Ship to: {{ app.user.displayName }}</option>
-            {% for retailer in user_retailers %}
-                <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>
-            {% endfor %}
-            </select>
-        </div>
-    </div>
-{% endif %}
     <div class="row">
         <div class="col-md-12">
             <label class="control-label" for="ship_name">Name *</label>

@@ -38,6 +38,10 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             $users[$retailer->getId()] = $retailer;
         }
 
+        if($user->hasRole('ROLE_RETAILER')){
+            $users[$user->getId()] = $user;
+        }
+
         foreach($user->getDistributors() as $distributor) {
             $users[$distributor->getId()] = $distributor;
         }
@@ -58,7 +62,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			on ru.user_id = u.id
 		left join roles r 
 			on r.id = ru.role_id
-		where r.roles LIKE '%ROLE_DISTRIBUTOR%'");
+		where r.roles LIKE '%ROLE_DISTRIBUTOR%'
+		and u.enabled = TRUE 
+		order by u.company_name asc");
         $statement->execute();
         $data = $statement->fetchAll();
 
@@ -103,7 +109,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 			on ru.user_id = u.id
 		left join roles r 
 			on r.id = ru.role_id
-		where r.roles LIKE '%ROLE_RETAILER%'");
+		where r.roles LIKE '%ROLE_RETAILER%'
+		and u.enabled = TRUE 
+		order by u.company_name asc");
         $statement->execute();
         $data = $statement->fetchAll();
 
@@ -222,10 +230,11 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         else {
 
             if($user->hasRole('ROLE_DISTRIBUTOR')) {
+                $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
                 foreach($user->getRetailers() as $item) {
                     if(!isset($user_ids[$item->getId()])) {
                         $user_ids[$item->getId()] = $item->getId();
-                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item, 'channel' => $user->getActiveChannel()));
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $item, 'channel' => $user->getActiveChannel(), 'status'=> $status));
                         foreach($data as $item)
                             $orders[] = $item;
                     }

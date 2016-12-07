@@ -111,7 +111,7 @@ class PurchaseOrderRepository extends \Doctrine\ORM\EntityRepository
     public function findByChannel(Channel $channel) {
         $qb = $this->createQueryBuilder('po')
             ->leftJoin('po.warehouse','w')
-            ->leftJoin('w.channels', 'c')
+            ->leftJoin('w.channel', 'c')
             ->where('c IN (:channel)')
             ->setParameter('channel', $channel);
         return $qb->getQuery()->getResult();

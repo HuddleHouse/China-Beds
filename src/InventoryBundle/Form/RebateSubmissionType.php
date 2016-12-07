@@ -3,6 +3,7 @@
 namespace InventoryBundle\Form;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,6 +23,7 @@ class RebateSubmissionType extends AbstractType
 {
     private $tokenStorage;
     private $ordersRepository;
+    private $usersRepository;
 
     /**
      * RebateSubmissionType constructor.
@@ -31,7 +33,9 @@ class RebateSubmissionType extends AbstractType
     public function __construct(TokenStorageInterface $tokenStorage, EntityManager $entityManager)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->ordersRepository = $entityManager->getRepository('OrderBundle:Orders');
+        $this->ordersRepository = $this->ordersRepository = $entityManager->getRepository('OrderBundle:Orders');
+        $this->usersRepository = $this->ordersRepository = $entityManager->getRepository('AppBundle:User');
+
     }
     /**
      * @param FormBuilderInterface $builder
@@ -40,18 +44,6 @@ class RebateSubmissionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('order', EntityType::class, array(
-                    'class' => 'OrderBundle\Entity\Orders',
-                    'label' => 'Order ID',
-                    'placeholder' => 'Select Order ID',
-                    'choices' => $this->ordersRepository->getLatestOrdersForUser($this->tokenStorage->getToken()->getUser()),
-                    'choice_label' => function (Orders $order) {
-                        return $order->getOrderId();
-                    },
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                    'required' => true
-                )
-            )
             ->add('rebate', EntityType::class, array(
                     'class' => 'InventoryBundle\Entity\Rebate',
                     'label' => 'Rebate',
@@ -86,6 +78,25 @@ class RebateSubmissionType extends AbstractType
                     'required' => true,
                 )
             )
+            ->add('submittedForUser', EntityType::class, array(
+                'class' => 'AppBundle\Entity\User',
+                'label' => 'Retailer/Distributor submitting for',
+                'placeholder' => 'Retailer/Distributor',
+                'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
+                'choice_label' => 'username',
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
+                'required' => true
+            ))
+            ->add('order', EntityType::class, array(
+                    'class' => 'OrderBundle\Entity\Orders',
+                    'label' => 'Order ID',
+                    'placeholder' => 'Select Order ID',
+                    'choices' => [],
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'required' => true
+                )
+            )
+
         ;
     }
 

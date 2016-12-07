@@ -2,14 +2,21 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\User;
+use AppBundle\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PriceGroupType extends AbstractType
 {
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -21,9 +28,17 @@ class PriceGroupType extends AbstractType
             ->add('users',  EntityType::class, array(
                 'class' => 'AppBundle:User',
                 'label' => 'Users',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control', 'style' => 'padding: 5px;margin-bottom: 50px;'),
-                'expanded'  => true,
+                'choice_label' => function (User $user) {
+                    return $user->getDisplayName();
+                },
+                'query_builder' => function (UserRepository $er) use ($options) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.user_channels', 'c')
+                        ->where('c = :channel')
+                        ->setParameter('channel', $this->tokenStorage->getToken()->getUser()->getActiveChannel());
+                },
+                'attr' => array('class' => 'form-control select2', 'style' => 'padding: 5px;margin-bottom: 50px;'),
+                'expanded'  => false,
                 'multiple' => true))
         ;
     }

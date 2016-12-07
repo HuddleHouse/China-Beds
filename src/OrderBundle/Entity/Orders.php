@@ -63,6 +63,12 @@ class Orders
     /**
      * @var \DateTime
      *
+     * @ORM\Column(type="datetime")
+     */
+    private $createdOn;
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="submit_date", type="datetime", nullable=true)
      */
     private $submitDate;
@@ -264,6 +270,11 @@ class Orders
     private $order_payments;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="order")
+     */
+    private $creditRequest;
+
+    /**
      * @Assert\File(
      *     maxSize="6M",
      *     mimeTypes = {"application/pdf", "application/x-pdf"},
@@ -290,6 +301,7 @@ class Orders
         $this->warranty_claims = new ArrayCollection();
         $this->rebate_submissions = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
+        $this->creditRequest = new ArrayCollection();
         $this->submitDate = new \DateTime();
         if($info != null) {
             if(isset($info['po']))
@@ -1355,5 +1367,74 @@ class Orders
     {
         $file_path = $this->getAbsolutePath();
         if(file_exists($file_path)) unlink($file_path);
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setPrePersist() {
+        $this->setCreatedOn(new \DateTime());
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * @param \DateTime $createdOn
+     */
+    public function setCreatedOn($createdOn)
+    {
+        $this->createdOn = $createdOn;
+    }
+
+
+
+    /**
+     * Get isManual
+     *
+     * @return boolean
+     */
+    public function getIsManual()
+    {
+        return $this->isManual;
+    }
+
+    /**
+     * Add creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     *
+     * @return Orders
+     */
+    public function addCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest[] = $creditRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     */
+    public function removeCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest->removeElement($creditRequest);
+    }
+
+    /**
+     * Get creditRequest
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCreditRequest()
+    {
+        return $this->creditRequest;
     }
 }

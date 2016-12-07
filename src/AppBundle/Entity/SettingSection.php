@@ -88,5 +88,28 @@ class SettingSection
     {
         $this->settings = $settings;
     }
-}
 
+    /**
+     * Add setting
+     *
+     * @param \AppBundle\Entity\Settings $setting
+     *
+     * @return SettingSection
+     */
+    public function addSetting(\AppBundle\Entity\Settings $setting)
+    {
+        $this->settings[] = $setting;
+
+        return $this;
+    }
+
+    /**
+     * Remove setting
+     *
+     * @param \AppBundle\Entity\Settings $setting
+     */
+    public function removeSetting(\AppBundle\Entity\Settings $setting)
+    {
+        $this->settings->removeElement($setting);
+    }
+}

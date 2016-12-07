@@ -66,19 +66,11 @@ class RebateSubmissionController extends Controller
         $form = $this->createForm('InventoryBundle\Form\RebateSubmissionType', $rebateSubmission);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() /*&& $form->isValid()*/) {
             try {
                 $em = $this->getDoctrine()->getManager();
 
-                $channel->getRebateSubmissions()->add($rebateSubmission);
-                $rebateSubmission->getRebate()->getSubmissions()->add($rebateSubmission);
-                $rebateSubmission->getOrder()->getRebateSubmissions()->add($rebateSubmission);
-
                 $rebateSubmission->setSubmittedByUser($this->getUser());
-                $this->getUser()->getSubmittedRebates()->add($rebateSubmission);
-
-                $rebateSubmission->setSubmittedForUser($rebateSubmission->getOrder()->getSubmittedForUser());
-                $rebateSubmission->getSubmittedForUser()->getRebateSubmissions()->add($rebateSubmission);
 
                 $rebateSubmission->upload();
                 $em->persist($rebateSubmission);

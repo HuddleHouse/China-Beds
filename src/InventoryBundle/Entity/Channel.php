@@ -370,6 +370,11 @@ class Channel
     protected $warranty_claims;
 
     /**
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="channel", cascade={"persist", "remove"})
+     */
+    protected $creditRequest;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Rebate", mappedBy="channel")
      *
      */
@@ -387,9 +392,18 @@ class Channel
     private $resources;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroup", mappedBy="channel")
+     */
+    private $price_groups;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Attribute", mappedBy="channels")
      */
     public $attributes;
+    /**
+     * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\Warehouse", mappedBy="channel")
+     */
+    public $warehouses;
 
     /**
      * Channel constructor.
@@ -403,6 +417,9 @@ class Channel
         $this->rebate_submissions = new ArrayCollection();
         $this->resources = new ArrayCollection();
         $this->attributes = new ArrayCollection();
+        $this->creditRequest = new ArrayCollection();
+        $this->price_groups = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -1833,5 +1850,139 @@ class Channel
     public function removeResource(\AppBundle\Entity\Resource $resource)
     {
         $this->resources->removeElement($resource);
+    }
+
+    /**
+     * Add attribute
+     *
+     * @param \InventoryBundle\Entity\Attribute $attribute
+     *
+     * @return Channel
+     */
+    public function addAttribute(\InventoryBundle\Entity\Attribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Remove attribute
+     *
+     * @param \InventoryBundle\Entity\Attribute $attribute
+     */
+    public function removeAttribute(\InventoryBundle\Entity\Attribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Add channel
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $channel
+     *
+     * @return Channel
+     */
+    public function addChannel(\WarehouseBundle\Entity\Warehouse $channel)
+    {
+        $this->channels[] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Remove channel
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $channel
+     */
+    public function removeChannel(\WarehouseBundle\Entity\Warehouse $channel)
+    {
+        $this->channels->removeElement($channel);
+    }
+
+    /**
+     * Get channels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
+
+    /**
+     * Add creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     *
+     * @return Channel
+     */
+    public function addCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest[] = $creditRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     */
+    public function removeCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
+    {
+        $this->creditRequest->removeElement($creditRequest);
+    }
+
+    /**
+     * Get creditRequest
+     *
+     * @return ArrayCollection
+     */
+    public function getCreditRequest()
+    {
+        return $this->creditRequest;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPriceGroups()
+    {
+        return $this->price_groups;
+    }
+
+    /**
+     * @param mixed $price_groups
+     */
+    public function setPriceGroups($price_groups)
+    {
+        $this->price_groups = $price_groups;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouses()
+    {
+        return $this->warehouses;
+    }
+
+    /**
+     * @param mixed $warehouses
+     */
+    public function setWarehouses($warehouses)
+    {
+        $this->warehouses = $warehouses;
     }
 }

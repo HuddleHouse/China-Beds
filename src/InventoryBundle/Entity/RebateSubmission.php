@@ -107,6 +107,7 @@ class RebateSubmission
      * @ORM\Column(type="string", length=510, nullable=true)
      */
     public $path;
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */

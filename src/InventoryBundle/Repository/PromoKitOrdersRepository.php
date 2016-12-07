@@ -1,6 +1,7 @@
 <?php
 
 namespace InventoryBundle\Repository;
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -15,22 +16,55 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PromoKitOrdersRepository extends EntityRepository
 {
-    public function getProductVariants(Channel $channel, $warehouseName) {
-        if ( $warehouse = $this->getEntityManager()->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('name' => $warehouseName)) ) {
-            $products = array();
+    public function getProductVariants(Channel $channel, User $user) {
+        $products = $this->getEntityManager()->getRepository('InventoryBundle:Product')->findBy(array('promo_kit_available' => 1));
+        $rtn = array();
+        foreach($products as $product)
+            foreach($product->getVariants() as $variant)
+                $rtn[] = $variant;
 
-            foreach ($warehouse->getInventory() as $item) {
-                foreach ($item->getProductVariant()->getProduct()->getChannels() as $c) {
-                    if ($c->getId() == $channel->getId()) {
-                        $products[] = $item->getProductVariant();
-                    }
-                }
-            }
-
-            return $products;
-        } else {
-            return [];
-        }
+        return $rtn;
+//        $products = array();
+//
+//        $warehouseName = $user->getWarehouse1();
+//        if ($warehouse = $this->getEntityManager()->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('name' => $warehouseName))) {
+//            /** @var \WarehouseBundle\Entity\WarehouseInventory $item */
+//            foreach ($warehouse->getInventory() as $item) {
+//                if($item->getProductVariant()->getProduct()->isPromoKitAvailable()) {
+//                    foreach ($item->getProductVariant()->getProduct()->getChannels() as $c) {
+//                        if ($c->getId() == $channel->getId()) {
+//                            $products[] = $item->getProductVariant();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        $warehouseName = $user->getWarehouse2();
+//        if ($warehouse = $this->getEntityManager()->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('name' => $warehouseName))) {
+//            foreach ($warehouse->getInventory() as $item) {
+//                if($item->getProductVariant()->getProduct()->isPromoKitAvailable()) {
+//                    foreach ($item->getProductVariant()->getProduct()->getChannels() as $c) {
+//                        if ($c->getId() == $channel->getId()) {
+//                            $products[] = $item->getProductVariant();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        $warehouseName = $user->getWarehouse3();
+//        if ($warehouse = $this->getEntityManager()->getRepository('WarehouseBundle:Warehouse')->findOneBy(array('name' => $warehouseName))) {
+//            foreach ($warehouse->getInventory() as $item) {
+//                if ($item->getProductVariant()->getProduct()->isPromoKitAvailable()) {
+//                    foreach ($item->getProductVariant()->getProduct()->getChannels() as $c) {
+//                        if ($c->getId() == $channel->getId()) {
+//                            $products[] = $item->getProductVariant();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        return $products;
     }
 
     public function getActivePromoKitItems() {
