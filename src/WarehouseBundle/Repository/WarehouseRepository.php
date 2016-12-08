@@ -74,7 +74,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
     public function findByChannels($channels = []) {
         $result = $this->getEntityManager()
             ->createQuery(
-                'SELECT w FROM WarehouseBundle:Warehouse w LEFT JOIN w.channels c WHERE c IN (:channels)'
+                'SELECT w FROM WarehouseBundle:Warehouse w LEFT JOIN w.channel c WHERE c IN (:channels) and w.active = TRUE'
             )
             ->setParameter('channels', $channels)
             ->getResult();
@@ -82,7 +82,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getAllWarehousesArray(Channel $channel = null) {
-        $warehouses = $this->findByChannel($channel);
+        $warehouses = $this->findByChannels($channel);
         $data = array();
 
         foreach($warehouses as $warehouse)
@@ -91,14 +91,16 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
                 'name' => $warehouse->getName(),
                 'list_id' => $warehouse->getListId(),
                 'quantity' => $this->getWarehouseInventory($warehouse),
-                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse),
+                'active' => $warehouse->isActive()
             );
 
         return $data;
     }
 
     public function getAllWarehousesInChannelArray($channelName) {
-        $warehouses = $this->findAll();
+        //$warehouses = $this->findAll();
+        $warehouses = $this->findBy(array('active' => true));
         $data = array();
 
         foreach($warehouses as $warehouse)

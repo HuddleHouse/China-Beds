@@ -261,27 +261,29 @@ select coalesce(sum(i.quantity), 0) as quantity
         $productArray = array();
         $popItemArray = array();
         foreach($warehouses as $warehouse) {
-            /** @var \WarehouseBundle\Entity\Warehouse $warehouse */
-            /** @var \WarehouseBundle\Entity\WarehouseInventory $inventory */
-            $wid = $warehouse->getId();
-            $warehouseArray[$wid]['id'] = $wid;
-            $warehouseArray[$wid]['name'] = $warehouse->getName();
-            foreach ($warehouse->getInventory() as $inventory) {
-                $productArray[$wid][$inventory->getProductVariant()->getId()] = array(
-                    'id' => $inventory->getProductVariant()->getId(),
-                    'product' => $inventory->getProductVariant()->getProduct()->getName(),
-                    'variant' => $inventory->getProductVariant()->getName(),
-                    'quantity' => $inventory->getQuantity()
-                );
-                if(!$warehouse->getPopItems()->isEmpty()) {
-                    $popWarehouseArray[$wid]['id'] = $wid;
-                    $popWarehouseArray[$wid]['name'] = $warehouse->getName();
-                    foreach($warehouse->getPopItems() as $popItem) {
-                        /** @var \InventoryBundle\Entity\PopItem $popItem */
-                        $popItemArray[$wid][$popItem->getId()] = array(
-                            'id' => $popItem->getId(),
-                            'product' => $popItem->getName(),
-                        );
+            if($warehouse->isActive()){
+                /** @var \WarehouseBundle\Entity\Warehouse $warehouse */
+                /** @var \WarehouseBundle\Entity\WarehouseInventory $inventory */
+                $wid = $warehouse->getId();
+                $warehouseArray[$wid]['id'] = $wid;
+                $warehouseArray[$wid]['name'] = $warehouse->getName();
+                foreach ($warehouse->getInventory() as $inventory) {
+                    $productArray[$wid][$inventory->getProductVariant()->getId()] = array(
+                        'id' => $inventory->getProductVariant()->getId(),
+                        'product' => $inventory->getProductVariant()->getProduct()->getName(),
+                        'variant' => $inventory->getProductVariant()->getName(),
+                        'quantity' => $inventory->getQuantity()
+                    );
+                    if(!$warehouse->getPopItems()->isEmpty()) {
+                        $popWarehouseArray[$wid]['id'] = $wid;
+                        $popWarehouseArray[$wid]['name'] = $warehouse->getName();
+                        foreach($warehouse->getPopItems() as $popItem) {
+                            /** @var \InventoryBundle\Entity\PopItem $popItem */
+                            $popItemArray[$wid][$popItem->getId()] = array(
+                                'id' => $popItem->getId(),
+                                'product' => $popItem->getName(),
+                            );
+                        }
                     }
                 }
             }

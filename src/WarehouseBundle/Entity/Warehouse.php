@@ -139,6 +139,13 @@ class Warehouse
     private $orderNumber;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
@@ -1246,5 +1253,21 @@ class Warehouse
     public function removePopItem(\InventoryBundle\Entity\PopItem $popItem)
     {
         $this->pop_items->removeElement($popItem);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }
