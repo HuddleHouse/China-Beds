@@ -15,14 +15,14 @@ fos_js_routing:
     routes_to_expose: ['purchaseorder_show', 'purchaseorder_new', 'stockadjustment_show', 'stockadjustment_new', 'order_products_review', 'api_monthly_report', 'api_submit_contact_form']
 
 
-#stof_doctrine_extensions:
-#    orm:
-#        default:
-#            softdeleteable: true
-#
-#doctrine:
-#    orm:
-#        filters:
-#            softdeleteable:
-#                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
-#                enabled: true
+stof_doctrine_extensions:
+    orm:
+        default:
+            softdeleteable: true
+
+doctrine:
+    orm:
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
