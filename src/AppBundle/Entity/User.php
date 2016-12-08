@@ -286,9 +286,9 @@ class User extends BaseUser
     private $warehouse_3;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"persist"})
      */
-    private $retailers;
+    private $retailers;//cascade previously set to {"all"} if any issues, set back to
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist"})
@@ -297,9 +297,9 @@ class User extends BaseUser
     private $my_distributor;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"persist"})
      */
-    private $distributors;
+    private $distributors;//cascade previously set to {"all"} if any issues, set back to
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist"})
@@ -308,9 +308,9 @@ class User extends BaseUser
     private $my_sales_rep;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"persist"})
      */
-    private $sales_reps;
+    private $sales_reps;//cascade previously set to {"all"} if any issues, set back to
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist"})
