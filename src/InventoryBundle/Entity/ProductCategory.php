@@ -60,7 +60,7 @@ class ProductCategory
     /**
      * Get product
      *
-     * @return int
+     * @return Product
      */
     public function getProduct()
     {
