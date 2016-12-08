@@ -291,7 +291,7 @@ class User extends BaseUser
     private $retailers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist"})
      * @ORM\JoinColumn(name="my_distributor_id", referencedColumnName="id")
      */
     private $my_distributor;
@@ -302,7 +302,7 @@ class User extends BaseUser
     private $distributors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist"})
      * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
      */
     private $my_sales_rep;
@@ -313,7 +313,7 @@ class User extends BaseUser
     private $sales_reps;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist"})
      * @ORM\JoinColumn(name="my_sales_manager_id", referencedColumnName="id")
      */
     private $my_sales_manager;

@@ -353,5 +353,28 @@ class AdminController extends Controller
         return $this->render('@App/contact-us.html.twig', array('form' => $form->createView()));
     }
 
+    /**
+     * @param User $user
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/delete-user/{id}", name="delete-user")
+     * @Method({"GET", "POST"})
+     */
+    public function adminDeleteUserAction(Request $request, User $user) {
+        $em = $this->getDoctrine()->getManager();
+
+        try{
+            //$um = $this->get('fos_user.user_manager');
+            //$um->deleteUser($user);
+            $em->remove($user);
+            $em->flush();
+            $this->addFlash('notice', 'User ' . $user->getDisplayName() . ' deleted successfully');
+            return $this->redirectToRoute('view_users');
+        }catch(Exception $e){
+            $this->addFlash('notice', 'Error deleting ' . $user->getDisplayName() . ' : ' . $e);
+            return $this->redirectToRoute('view_users');
+        }
+    }
+
 
 }
