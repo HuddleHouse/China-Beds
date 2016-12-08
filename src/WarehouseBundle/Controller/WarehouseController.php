@@ -48,7 +48,8 @@ class WarehouseController extends Controller
                 'name' => $warehouse->getName(),
                 'list_id' => $warehouse->getListId(),
                 'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory($warehouse),
-                'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse),
+                'active' => $warehouse->isActive()
             );
         }
 

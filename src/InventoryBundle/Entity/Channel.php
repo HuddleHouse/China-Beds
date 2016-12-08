@@ -412,7 +412,7 @@ class Channel
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\Warehouse", mappedBy="channel")
      */
-    public $channels;
+    public $channel;
 
     /**
      * Channel constructor.
