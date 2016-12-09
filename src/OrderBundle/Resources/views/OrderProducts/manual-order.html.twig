@@ -427,14 +427,14 @@
                 </div>
                 <div class="row invoice-info">
                     <!-- /.col -->
-                    <div class="col-md-2 invoice-col">
-                        <div class="radio">
+                    <div class="col-md-4 invoice-col">
+                        <div class="checkbox-inline">
                             <label class="not-dumb">
                                 <input type="radio" id="isPickup-f" name="isPickup" ng-value="false" value="false" ng-model="isPickup" onclick="calculateTotal()">
                                 Ship
                             </label>
                         </div>
-                        <div class="radio">
+                        <div class="checkbox-inline">
                             <label class="not-dumb">
                                 <input type="radio" id="isPickup-t" name="isPickup" ng-value="true" value="true" ng-model="isPickup" onclick="calculateTotal()">
                                 For Pickup
@@ -457,14 +457,15 @@
                         </div>
                         <div class="form-group">
                             <label for="eta">Order Date</label>
-                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="order_date" name="order_date" ng-model="order_date" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px; margin:0 0 28px; width:100%;" id="order_date" name="order_date" ng-model="order_date" md-min-date="min_date"></md-datepicker>
                         </div>
                         <div class="form-group">
                             <label for="eta">ETA</label>
-                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px; width:100%; margin:0 0 28px;" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
-                    <div id="other-stuff" class="col-md-2 invoice-col move-up">
+                    <div id="other-stuff" class="col-md-4 invoice-col move-up">
+                        <br><br>
                         <div class="form-group label-floating">
                             <label for="poNumber" class="control-label">PO #</label>
                             <input type="text" class="form-control" id="poNumber" name="poNumber" ng-model="poNumber">
@@ -474,17 +475,18 @@
                             <input type="text" class="form-control" id="containerNumber" name="containerNumber" ng-model="containerNumber">
                         </div>
                     </div>
-                    <div id="pickup-info" class="col-md-3 invoice-col move-up" ng-show="isPickup">
+                    <div id="pickup-info" class="col-md-4 invoice-col move-up" ng-show="isPickup">
+                        <br><br>
                         <div class="form-group label-floating">
                             <label for="pickupAgent" class="control-label">Pickup Agent</label>
                             <input type="text" class="form-control" id="pickupAgent" name="pickupAgent" ng-model="pickupAgent">
                         </div>
                         <div class="form-group">
                             <label for="pickupDate">Pickup Date</label>
-                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;width:100%; margin:0 0 28px;" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
-                    <div id="ship-info-left" class="col-md-2 invoice-col move-up" ng-show="!isPickup">
+                    <div id="ship-info-left" class="col-md-6 invoice-col move-up" ng-show="!isPickup" style="clear:left">
                         <div class="form-group label-floating">
                             <label for="shipName" class="control-label">Name</label>
                             <input type="text" class="form-control" id="shipName" name="shipName" ng-model="shipName">
@@ -502,7 +504,7 @@
                             <input type="text" class="form-control" id="shipZip" name="shipZip" ng-model="shipZip">
                         </div>
                     </div>
-                    <div id="ship-info-right" class="col-md-4 invoice-col move-up" ng-show="!isPickup">
+                    <div id="ship-info-right" class="col-md-6 invoice-col move-up" ng-show="!isPickup">
                         <div class="form-group label-floating">
                             <label for="shipAddress" class="control-label">Address</label>
                             <input type="text" class="form-control" id="shipAddress" name="shipAddress" ng-model="shipAddress">
