@@ -95,8 +95,10 @@ class ImportModifiedUsersCommand extends ContainerAwareCommand
         foreach($user->getPriceGroups() as $price_group) {
             $user->removePriceGroup($price_group);
         }
-        if ( $price_group = $em->getRepository('AppBundle:PriceGroup')->find($data[2]) ) {
-            $user->addPriceGroup($price_group);
+        foreach(explode(',', $data[2]) as $pg_id ) {
+            if ($price_group = $em->getRepository('AppBundle:PriceGroup')->find($pg_id)) {
+                $user->addPriceGroup($price_group);
+            }
         }
 
         $user->setEmail($data[3]);
@@ -106,6 +108,7 @@ class ImportModifiedUsersCommand extends ContainerAwareCommand
         $user->setAddress1($data[7]);
         $user->setAddress2($data[8]);
         $user->setCity($data[9]);
+
         if ( $state = $em->getRepository('AppBundle:State')->find($data[11]) ) {
             $user->setState($state);
         }
