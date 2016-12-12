@@ -456,6 +456,13 @@
                             </div>
                         </div>
                     </fieldset>
+                    {% if order.path != '' and order.path != NULL %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            Invoice: <a href="{{ asset('uploads/manual_order_pdfs/' ~ order.path) }}" target="_blank">View</a><a href="{{ asset('uploads/manual_order_pdfs/' ~ order.path) }}" download target="_blank"> / Download</a>
+                        </div>
+                    </div>
+                    {% endif %}
                     <h5 style="margin: -14px 0 16px;">Comments</h5>
                     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;    min-height: 50px;">
                         {{ order.comments }}

@@ -426,6 +426,7 @@ class Channel
         $this->rebate_submissions = new ArrayCollection();
         $this->resources = new ArrayCollection();
         $this->attributes = new ArrayCollection();
+        $this->creditRequest = new ArrayCollection();
     }
 
     /**

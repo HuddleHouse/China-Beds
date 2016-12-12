@@ -160,7 +160,8 @@
         {% set sidebar_credit_index = ['ledger_index', 'ledger_edit'] %}
         {% set sidebar_credit_request = ['ledger_new', 'ledger_credit_new'] %}
         {% set sidebar_reports = [] %}
-
+        {% set sidebar_request_credit = ['credit_request_new', 'credit_request_edit'] %}
+        {% set sidebar_requested_credits = ['credit_request_index'] %}
             <!-- BEGIN SIDEBAR -->
             <aside class="main-sidebar no-print" style="margin-top: 10px;">
                 <section class="sidebar" style="height: auto;">
@@ -506,6 +507,12 @@
                                             <a href="{{ path('ledger_credit_new', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Assign Credit</a>
                                         </li>
                                     {% endif %}
+                                    <li {% if (app.request.get('_route') in sidebar_request_credit) %} class="active"{% endif %}>
+                                        <a href="{{ path('credit_request_new') }}"><i class="fa fa-circle-o"></i>New Credit Request</a>
+                                    </li>
+                                    <li {% if (app.request.get('_route') in sidebar_requested_credits) %} class="active"{% endif %}>
+                                        <a href="{{ path('credit_request_index') }}"><i class="fa fa-circle-o"></i>Credit Requests</a>
+                                    </li>
                                 </ul>
                             </li>
                         {% endif %}

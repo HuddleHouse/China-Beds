@@ -346,7 +346,6 @@ class User extends BaseUser
      */
     private $old_id;
 
-
     /**
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedForUser")
      */
@@ -356,6 +355,9 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="submittedByUser")
      */
     protected $creditRequestBy;
+
+
+
 
     /**
      * User constructor.
@@ -383,6 +385,8 @@ class User extends BaseUser
         $this->credited_ledgers = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
         $this->warehouses = new ArrayCollection();
+        $this->creditRequestFor = new ArrayCollection();
+        $this->creditRequestBy = new ArrayCollection();
     }
 
     /**
@@ -1932,21 +1936,5 @@ class User extends BaseUser
     public function getCreditRequestBy()
     {
         return $this->creditRequestBy;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    /**
-     * @param mixed $deletedAt
-     */
-    public function setDeletedAt($deletedAt)
-    {
-        $this->deletedAt = $deletedAt;
     }
 }

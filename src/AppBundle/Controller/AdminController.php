@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invitation;
+use AppBundle\Entity\User;
 use AppBundle\Form\CreateUserType;
 use AppBundle\Form\UserRestrictedType;
 use InventoryBundle\Entity\Channel;
@@ -10,6 +11,7 @@ use OrderBundle\Entity\Orders;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\UserType;
 use Symfony\Component\Form\FormEvent;
