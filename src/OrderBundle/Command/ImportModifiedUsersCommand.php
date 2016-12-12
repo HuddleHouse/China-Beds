@@ -102,7 +102,7 @@ class ImportModifiedUsersCommand extends ContainerAwareCommand
         $user->setEmail($data[3]);
         $user->setEnabled($data[4]);
         $user->setFirstName($data[5]);
-        $user->setLastName($data[6]);
+//        $user->setLastName($data[6]);
         $user->setAddress1($data[7]);
         $user->setAddress2($data[8]);
         $user->setCity($data[9]);
