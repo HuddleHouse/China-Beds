@@ -870,6 +870,8 @@ class ChannelController extends Controller
                         $backendHeaderName
                     );
                     $channel->setBackendHeaderPic($backendHeaderName);
+                }else{
+                    $channel->setBackendHeaderPic($channel_clone->getBackendHeaderPic());
                 }
 
                 $backendOrders = $channel->getBackendOrdersPic();
@@ -880,6 +882,8 @@ class ChannelController extends Controller
                         $backendOrdersName
                     );
                     $channel->setBackendOrdersPic($backendOrdersName);
+                }else{
+                    $channel->setBackendOrdersPic($channel_clone->getBackendOrdersPic());
                 }
 
 //                $detailMattressFooter = $channel->getDetailMattressFooter();
