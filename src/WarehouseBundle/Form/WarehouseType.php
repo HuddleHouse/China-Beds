@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Form;
 
+use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -37,14 +38,24 @@ class WarehouseType extends AbstractType
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
             ))
-            ->add('channels',  EntityType::class, array(
+            ->add('channel',  EntityType::class, array(
                 'class' => 'InventoryBundle:Channel',
-                'label' => 'Channels',
+                'label' => 'Channel',
                 'choice_label' => 'name',
                 'attr' => array('class' => 'form-control'),
                 'expanded'  => true,
-                'multiple' => true,
+                'multiple' => false,
                 'required' => false
+            ))
+            ->add('active', ChoiceType::class, array(
+                'attr' => array(
+                    'class' => 'form-control',
+                ),
+                'choices' => array(
+                    'Yes' => true,
+                    'No' => false
+                ),
+                'empty_data' => true
             ))
         ;
     }

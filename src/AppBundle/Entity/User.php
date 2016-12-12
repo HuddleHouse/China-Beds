@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -27,7 +28,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
  *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
  * })
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
+// * @ORM\GeneratedValue(fieldName="deletedAt", timeAware=false)
+
 class User extends BaseUser
 {
     /**
@@ -89,6 +93,11 @@ class User extends BaseUser
      *
      */
     protected $distributor_fedex_number;
+
+    /**
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * @var int
@@ -279,34 +288,34 @@ class User extends BaseUser
     private $warehouse_3;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"persist"})
      */
-    private $retailers;
+    private $retailers;//cascade previously set to {"all"} if any issues, set back to
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist"})
      * @ORM\JoinColumn(name="my_distributor_id", referencedColumnName="id")
      */
     private $my_distributor;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"persist"})
      */
-    private $distributors;
+    private $distributors;//cascade previously set to {"all"} if any issues, set back to
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist"})
      * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
      */
     private $my_sales_rep;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"persist"})
      */
-    private $sales_reps;
+    private $sales_reps;//cascade previously set to {"all"} if any issues, set back to
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist"})
      * @ORM\JoinColumn(name="my_sales_manager_id", referencedColumnName="id")
      */
     private $my_sales_manager;
@@ -399,6 +408,9 @@ class User extends BaseUser
 //        }
     }
 
+    public function getChannel(){
+        $this->getActiveChannel();
+    }
 
 
     public function getFullName() {
@@ -1926,5 +1938,21 @@ class User extends BaseUser
     public function getCreditRequestBy()
     {
         return $this->creditRequestBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param mixed $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
     }
 }

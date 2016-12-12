@@ -366,8 +366,10 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         try{
-            $um = $this->get('fos_user.user_manager');
-            $um->deleteUser($user);
+            //$um = $this->get('fos_user.user_manager');
+            //$um->deleteUser($user);
+            $em->remove($user);
+            $em->flush();
             $this->addFlash('notice', 'User ' . $user->getDisplayName() . ' deleted successfully');
             return $this->redirectToRoute('view_users');
         }catch(Exception $e){

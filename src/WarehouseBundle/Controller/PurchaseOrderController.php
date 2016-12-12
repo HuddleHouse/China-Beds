@@ -32,7 +32,7 @@ class PurchaseOrderController extends Controller
         elseif($this->getUser()->hasRole('ROLE_WAREHOUSE')) {
             $id_array = array();
             foreach($this->getUser()->getManagedWarehouses() as $warehouse) {
-                if ($warehouse->belongsToChannel($this->getUser()->getActiveChannel())) {
+                if ($warehouse->belongsToChannel($this->getUser()->getActiveChannel()) && $warehouse->isActive()) {
                     $id_array[] = $warehouse->getId();
                 }
             }

@@ -31,6 +31,7 @@
                         <th>Name</th>
                         <th>Total Inventory</th>
                         <th>P.O. Inventory</th>
+                        <th>Active</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -40,6 +41,7 @@
                             <td><a href="{{ path('warehouse_show', { 'id': warehouse.id }) }}">{{ warehouse.name }}</a></td>
                             <td><center>{{ warehouse.quantity  }}</center></td>
                             <td><center>{{ warehouse.po_quantity  }}</center></td>
+                            <td><center>{% if warehouse.active == true %}true{% else %}false{% endif %}</center></td>
                             <td>
                                 {% if isGrantedRoute(app.user, 'warehouse_show') %}
                                 <a class="btn btn-raised btn-info btn-xs purple" href="{{ path('warehouse_show', { 'id': warehouse.id }) }}"><i class="fa fa-list"></i> view</a>
