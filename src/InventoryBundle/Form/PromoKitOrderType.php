@@ -22,6 +22,7 @@ class PromoKitOrderType extends AbstractType
     private $tokenStorageInterface;
     private $settingsService;
     private $repository;
+    private $channelRepository;
 
     /**
      * PromoKitOrderType constructor.
@@ -34,6 +35,7 @@ class PromoKitOrderType extends AbstractType
         $this->tokenStorageInterface = $tokenStorageInterface;
         $this->settingsService = $settingsService;
         $this->repository = $em->getRepository('InventoryBundle:PromoKitOrders');
+        $this->channelRepository = $em->getRepository('InventoryBundle:Channel');
     }
 
     /**
@@ -70,7 +72,7 @@ class PromoKitOrderType extends AbstractType
                     'choice_label' => function (ProductVariant $pv) {
                         return $pv->getProduct()->getName() . ' ' . $pv->getName();
                     },
-                    'choices' => $this->repository->getProductVariants($this->tokenStorageInterface->getToken()->getUser()->getActiveChannel(), $this->settingsService->get('default-warehouse')),
+                    'choices' => $this->repository->getProductVariants($this->tokenStorageInterface->getToken()->getUser()->getActiveChannel(), $this->tokenStorageInterface->getToken()->getUser()),
                     'expanded' => false,
                     'multiple' => true,
                     'attr' => array('class' => 'form-group select2', 'style' => 'margin-bottom: 10px'),

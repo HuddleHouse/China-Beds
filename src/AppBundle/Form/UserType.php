@@ -205,10 +205,18 @@ class UserType extends AbstractType
             ))
             ->add('hide_rebate', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
-                'label' => 'Hide Rebate form from user',
+                'label' => 'Hide Rebate Form from User',
                 'choices' => array(
-                    'Yes' => 1,
                     'No' => 0,
+                    'Yes' => 1,
+                )
+            ))
+            ->add('hideCC', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                'label' => 'Hide Credit Card Payment Option',
+                'choices' => array(
+                    'No' => 0,
+                    'Yes' => 1,
                 )
             ))
             ->addEventListener(

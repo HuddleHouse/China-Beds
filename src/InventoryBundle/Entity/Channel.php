@@ -406,13 +406,18 @@ class Channel
     private $resources;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PriceGroup", mappedBy="channel")
+     */
+    private $price_groups;
+
+    /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\Attribute", mappedBy="channels")
      */
     public $attributes;
     /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\Warehouse", mappedBy="channel")
      */
-    public $channel;
+    public $warehouses;
 
     /**
      * Channel constructor.
@@ -427,6 +432,8 @@ class Channel
         $this->resources = new ArrayCollection();
         $this->attributes = new ArrayCollection();
         $this->creditRequest = new ArrayCollection();
+        $this->price_groups = new ArrayCollection();
+        $this->warehouses = new ArrayCollection();
     }
 
     /**
@@ -1992,4 +1999,36 @@ class Channel
     {
         $this->backendOrdersPic = $backendOrdersPic;
     }
+    /**
+     * @return mixed
+     */
+    public function getPriceGroups()
+    {
+        return $this->price_groups;
+    }
+
+    /**
+     * @param mixed $price_groups
+     */
+    public function setPriceGroups($price_groups)
+    {
+        $this->price_groups = $price_groups;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarehouses()
+    {
+        return $this->warehouses;
+    }
+
+    /**
+     * @param mixed $warehouses
+     */
+    public function setWarehouses($warehouses)
+    {
+        $this->warehouses = $warehouses;
+    }
 }
+

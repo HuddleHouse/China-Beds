@@ -28,6 +28,11 @@
             grid = $('.grid').isotope({
                 itemSelector: '.element-item',
                 layoutMode: 'fitRows'
+//                layoutMode: 'cellsByRow',
+//                cellsByRow: {
+//                    columnWidth: 640,
+//                    rowHeight: 300
+//                }
             });
             // bind filter button click
             $('.filters-button-item').on( 'click', function() {
@@ -844,7 +849,7 @@
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products  | orderBy:['cat_name', 'name']" class="col-md-5 element-item {{ product.cat_ids }} order_product">
+                    <div ng-repeat="product in products  | orderBy:['cat_name', 'name']" class="col-md-5 element-item {{ product.cat_ids }} order_product" style="padding-bottom:25px">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="max-width: 350px; max-height: 150px;">
                             <div class="product_name">

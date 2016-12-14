@@ -43,7 +43,7 @@ class PriceGroup
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="price_group")
+     * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="price_groups")
      */
     private $channel;
 
