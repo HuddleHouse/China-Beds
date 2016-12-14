@@ -78,6 +78,7 @@ class UserType extends AbstractType
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('w')
                         ->where('w.channel in (:channel)')
+                        ->andWhere('w.active = true')
                         ->setParameter('channel',  $options['data']->getUserChannels());
                 },
                 'choice_label' => function (Warehouse $warehouse) {

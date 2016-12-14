@@ -86,14 +86,16 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         $data = array();
 
         foreach($warehouses as $warehouse)
-            $data[] = array(
-                'id' => $warehouse->getId(),
-                'name' => $warehouse->getName(),
-                'list_id' => $warehouse->getListId(),
-                'quantity' => $this->getWarehouseInventory($warehouse),
-                'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse),
-                'active' => $warehouse->isActive()
-            );
+            if ( $warehouse->getActive() ) {
+                $data[] = array(
+                    'id' => $warehouse->getId(),
+                    'name' => $warehouse->getName(),
+                    'list_id' => $warehouse->getListId(),
+                    'quantity' => $this->getWarehouseInventory($warehouse),
+                    'po_quantity' => $this->getWarehouseInventoryOnPurchaseOrder($warehouse),
+                    'active' => $warehouse->isActive()
+                );
+            }
 
         return $data;
     }
