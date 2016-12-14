@@ -457,6 +457,7 @@ class OrderProductsController extends Controller
                     $count++;
                     $shipment = new \RocketShipIt\Shipment('fedex');
 
+                    $shipment->setParameter('accountNumber', $orders->getChannel()->getFedexNumber());
                     $shipment->setParameter('toCompany', $orders->getShipName());
                     $shipment->setParameter('toName', $orders->getShipName());
                     $shipment->setParameter('toPhone', $orders->getShipPhone());
@@ -503,15 +504,15 @@ class OrderProductsController extends Controller
                     $shipment->setParameter('weight', $variant->getProductVariant()->getWeight());
 
 
-                    if ($orders->getSubmittedForUser()->getDistributorFedexNumber(
-                        ) != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != ''
-                    ) {
-                        $shipment->setParameter('paymentType', 'THIRD_PARTY');
-                        $shipment->setParameter(
-                            'thirdPartyAccount',
-                            $orders->getSubmittedForUser()->getDistributorFedexNumber()
-                        );
-                    }
+//                    if ($orders->getSubmittedForUser()->getDistributorFedexNumber(
+//                        ) != null || $orders->getSubmittedForUser()->getDistributorFedexNumber() != ''
+//                    ) {
+//                        $shipment->setParameter('paymentType', 'THIRD_PARTY');
+//                        $shipment->setParameter(
+//                            'thirdPartyAccount',
+//                            $orders->getSubmittedForUser()->getDistributorFedexNumber()
+//                        );
+//                    }
 
                     $response = $shipment->submitShipment();
 

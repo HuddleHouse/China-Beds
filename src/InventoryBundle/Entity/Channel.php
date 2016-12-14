@@ -39,6 +39,12 @@ class Channel
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
      */
     private $company_name;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fedex_number", type="string", length=255, nullable=true)
+     */
+    private $fedex_number;
 
     /**
      * @var string
@@ -2030,5 +2036,23 @@ class Channel
     {
         $this->warehouses = $warehouses;
     }
+
+    /**
+     * @return string
+     */
+    public function getFedexNumber()
+    {
+        return $this->fedex_number;
+    }
+
+    /**
+     * @param string $fedex_number
+     */
+    public function setFedexNumber($fedex_number)
+    {
+        $this->fedex_number = $fedex_number;
+    }
+
+
 }
 

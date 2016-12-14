@@ -19,6 +19,7 @@ class ChannelType extends AbstractType
         $builder
             ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Site Name', 'required' => false))
             ->add('url', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Site URL'))
+            ->add('fedex_number', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Fedex #'))
             ->add('frontLogo',  FileType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Front Page Logo', 'label_attr' => array('class' => 'file-input'), 'required' => false, 'data_class' => null))
             ->add('fbLink',  TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Facebook Link', 'required' => false))
             ->add('twLink',  TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'label' => 'Twitter Link', 'required' => false))

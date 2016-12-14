@@ -82,6 +82,12 @@
             </div>
             <div class="row">
                 <div class="col-md-4 file-wrap">
+                    {{ form_label(edit_form.fedex_number) }}
+                    {{ form_widget(edit_form.fedex_number) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 file-wrap">
                     {{ form_label(edit_form.frontSliderOne) }}
                     {{ form_widget(edit_form.frontSliderOne) }}
                     <img src="{{ asset('/uploads/websites/' ~ channel.frontSliderOne) }}" class="image-uploaded">
