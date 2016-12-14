@@ -88,14 +88,14 @@
                                             {{ form_widget(form.ach_account_number) }}
                                         </div>
                                     </div>
-                                    {% if is_granted("ROLE_ADMIN") %}
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            {{ form_label(form.distributor_fedex_number) }}
-                                            {{ form_widget(form.distributor_fedex_number) }}
-                                        </div>
-                                    </div>
-                                    {% endif %}
+                                    {#{% if is_granted("ROLE_ADMIN") %}#}
+                                    {#<div class="row">#}
+                                        {#<div class="col-md-6">#}
+                                            {#{{ form_label(form.distributor_fedex_number) }}#}
+                                            {#{{ form_widget(form.distributor_fedex_number) }}#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                    {#{% endif %}#}
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
