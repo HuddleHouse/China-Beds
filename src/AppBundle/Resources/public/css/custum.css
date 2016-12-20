@@ -96,6 +96,9 @@ aside.control-sidebar.control-sidebar-dark.control-sidebar-open {
 input.form-control.input-sm {
     border-bottom: 1px solid black;
 }
+.price_box_row {
+	margin-bottom:20px;
+}
 @media (max-width: 767px) {
 	.main-header {
 		max-height:inherit;
