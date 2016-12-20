@@ -303,7 +303,7 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
                 'city' => $user->getCity(),
-                'state' => strval($user->getState()->getId())
+                'state' => strval($user->getState() ? $user->getState()->getId() : 0)
             );
         }
 
@@ -316,7 +316,7 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
                 'city' => $user->getCity(),
-                'state' => strval($user->getState()->getId())
+                'state' => strval($user->getState() ? $user->getState()->getId() : 0)
             );
         }
 
