@@ -73,10 +73,8 @@ class WarehouseController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                if ($warehouse->getChannels()->isEmpty()) {
-                    $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
-                    $warehouse->addChannel($channel);
-                }
+                $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+                $warehouse->setChannel($channel);
                 $em->persist($warehouse);
                 $em->flush();
                 $this->addFlash('notice', 'Warehouse created successfully.');

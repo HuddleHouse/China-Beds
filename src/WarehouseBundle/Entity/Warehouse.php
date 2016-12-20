@@ -143,7 +143,7 @@ class Warehouse
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    private $active = true;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State")
