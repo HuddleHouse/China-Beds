@@ -46,7 +46,7 @@ class RetailerController extends Controller
                     'address1' => $user->getAddress1(),
                     'address2' => $user->getAddress2(),
                     'city' => $user->getCity(),
-                    'state' => $user->getState()->getAbbreviation(),
+                    'state' => $user->getState() ? $user->getState()->getAbbreviation() : null,
                     'zip' => $user->getZip(),
                     'phone' => $user->getPhone(),
                     'lat' => $user->getAddressLatitude(),
