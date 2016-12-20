@@ -86,7 +86,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         $data = array();
 
         foreach($warehouses as $warehouse)
-            if ( $warehouse->getActive() ) {
+            if ( $warehouse->isActive() ) {
                 $data[] = array(
                     'id' => $warehouse->getId(),
                     'name' => $warehouse->getName(),
