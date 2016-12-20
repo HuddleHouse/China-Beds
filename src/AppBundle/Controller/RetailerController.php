@@ -25,7 +25,7 @@ class RetailerController extends Controller
         return $this->render('AppBundle:Retailer:affiliates.html.twig');
     }
 
-          /**
+     /**
      * @Route("/get/retailer/users", name="retailer_affiliates_get_users")
      */
     public function usersAction(Request $request)
@@ -36,24 +36,22 @@ class RetailerController extends Controller
 
         $userObjects = array();
         foreach ($users as $user) {
-          if($user->hasRole('ROLE_RETAILER')) {
-
-              $latlong = $this->latLongConvert(sprintf('%s, %s %s, %s', $user->getAddress1(), $user->getCity(), $user->getState()->getAbbreviation(), $user->getZip()));
-
-            $userObjects[] = [
-                'company_name' => $user->getCompanyName(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'address1' => $user->getAddress1(),
-                'address2' => $user->getAddress2(),
-                'city' => $user->getCity(),
-                'state' => $user->getState()->getAbbreviation(),
-                'zip' => $user->getZip(),
-                'phone' => $user->getPhone(),
-                'lat' => $latlong['lat'],
-                'long' => $latlong['long']
-            ];
-          }
+            if ( $user->getAddressLatitude() ) {
+                $userObjects[] = [
+                    'id' => $user->getId(),
+                    'company_name' => $user->getCompanyName(),
+                    'first_name' => $user->getFirstName(),
+                    'last_name' => $user->getLastName(),
+                    'address1' => $user->getAddress1(),
+                    'address2' => $user->getAddress2(),
+                    'city' => $user->getCity(),
+                    'state' => $user->getState()->getAbbreviation(),
+                    'zip' => $user->getZip(),
+                    'phone' => $user->getPhone(),
+                    'lat' => $user->getAddressLatitude(),
+                    'long' => $user->getAddressLongitude()
+                ];
+            }
         }
         return new JsonResponse($userObjects, 200);
 

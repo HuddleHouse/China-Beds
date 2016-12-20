@@ -7,6 +7,7 @@ function MedicareDataSource() {
 
   var that = this;
   var url = $('#retaler_user_routing').val();
+
   $.get(url, function(data) {
     that.setStores(that.parse_(data));
   });
@@ -34,31 +35,20 @@ MedicareDataSource.prototype.getFeatures = function() {
  * @return {!Array.<!storeLocator.Store>}
  */
 MedicareDataSource.prototype.parse_ = function(csv) {
-
   var stores = [];
-  var rows = csv.split('\n');
-  var headings = this.parseRow_(rows[0]);
+    var that = this;
+  csv.forEach(function(row) {
+    var position = new google.maps.LatLng(row.lat,row.long);
 
-  for (var i = 1, row; row = rows[i]; i++) {
-    row = this.toObject_(headings, this.parseRow_(row));
-    
-    //console.log(row);
-    var LatLong = row.LatLong;
-    //alert(LatLong);
-    var position = new google.maps.LatLng(row.Lat,row.Long);
-    //var position = new google.maps.LatLng(row.Ycoord, row.Xcoord);
-    //var shop = this.join_([row.Shp_num_an, row.Shp_centre], ', ');
-
-    
-    var shop = this.join_([row.UserName], ', ');
-    var locality = this.join_([row.Locality, row.Postcode], ', ');
+    var shop = row.company_name;
+    var locality = that.join_([row.city, row.state, row.zip], ', ');
     var store = new storeLocator.Store(row.id, position, false, {
-      title: row.Username,
-      address: this.join_([shop, row.Address1, locality], '<br>'),
+      title: row.company_name,
+      address: that.join_([row.address1, locality], '<br>'),
 
     });
     stores.push(store);
-  }
+  });
 
   return stores;
 };
