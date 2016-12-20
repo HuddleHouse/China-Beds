@@ -31,7 +31,7 @@
 {% endblock footer %}
 
 {% block content %}
-	<input type="hidden" value="{{path('retailer_affiliates_get_users')}}" id="retaler_user_routing">
+	<input type="hidden" value="{{path('retailer_affiliates_get_users', {'channel': app.user.activechannel.id})}}" id="retaler_user_routing">
 	<div class="row">
 		<div class="col-md-12">
 			<div id="panel"></div>

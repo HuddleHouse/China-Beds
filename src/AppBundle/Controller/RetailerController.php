@@ -2,6 +2,7 @@
 
 
 namespace AppBundle\Controller;
+use InventoryBundle\Entity\Channel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,12 +27,12 @@ class RetailerController extends Controller
     }
 
      /**
-     * @Route("/get/retailer/users", name="retailer_affiliates_get_users")
+     * @Route("/get/retailer/users/{channel}", name="retailer_affiliates_get_users")
      */
-    public function usersAction(Request $request)
+    public function usersAction(Channel $channel)
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel());
+        $users = $em->getRepository('AppBundle:User')->getAllRetailersArray($channel);
 
 
         $userObjects = array();
