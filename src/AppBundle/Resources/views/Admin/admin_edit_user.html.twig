@@ -105,9 +105,19 @@
                         {{ form_widget(form.email) }}
                     </div>
                     <div class="col-md-6 form-group">
+                        {{ form_label(form.additional_emails) }}
+                        {{ form_widget(form.additional_emails) }}
+                    </div>
+                    <div class="col-md-6 form-group">
                         {{ form_label(form.phone) }}
                         {{ form_widget(form.phone) }}
                     </div>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="col-md-6 form-group">
+                        {{ form_label(form.warehouses) }}
+                        {{ form_widget(form.warehouses) }}
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="col-md-6 form-group">
@@ -118,15 +128,13 @@
                         {{ form_label(form.price_groups) }}
                         {{ form_widget(form.price_groups) }}
                     </div>
-                </div>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            {{ form_label(form.warehouses) }}
-                            {{ form_widget(form.warehouses) }}
+                    {% if form.retailers is defined %}
+                        <div class="col-md-6 form-group">
+                            {{ form_label(form.retailers) }}
+                            {{ form_widget(form.retailers) }}
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
             <div class="tab-pane" id="tab_2">
                 <div class="row" style="display: block;">

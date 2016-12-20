@@ -185,6 +185,23 @@ class User extends BaseUser
     protected $online_web_url;
 
     /**
+     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     */
+    protected $address_latitude;
+
+    /**
+     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     */
+    protected $address_longitude;
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $additional_emails;
+
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
      * @ORM\JoinTable(name="role_users",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -1976,5 +1993,53 @@ class User extends BaseUser
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressLatitude()
+    {
+        return $this->address_latitude;
+    }
+
+    /**
+     * @param mixed $address_latitude
+     */
+    public function setAddressLatitude($address_latitude)
+    {
+        $this->address_latitude = $address_latitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressLongitude()
+    {
+        return $this->address_longitude;
+    }
+
+    /**
+     * @param mixed $address_longitude
+     */
+    public function setAddressLongitude($address_longitude)
+    {
+        $this->address_longitude = $address_longitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalEmails()
+    {
+        return $this->additional_emails;
+    }
+
+    /**
+     * @param mixed $additional_emails
+     */
+    public function setAdditionalEmails($additional_emails)
+    {
+        $this->additional_emails = $additional_emails;
     }
 }
