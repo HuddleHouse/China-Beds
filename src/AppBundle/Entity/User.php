@@ -856,6 +856,39 @@ class User extends BaseUser
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        $roles = $this->roles;
+
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+
+        // we need to make sure to have at least one role
+        if ( count($roles) == 0 ) {
+            $roles[] = static::ROLE_DEFAULT;
+        }
+
+        return array_unique($roles);
+    }
+
+    public function getRoleString() {
+        return implode(', ', $this->friendlyRoleNames($this->getRoles()));
+    }
+
+    private function friendlyRoleNames($strings) {
+        foreach($strings as &$string) {
+            $string = str_replace('ROLE_', '', $string);
+            $string = str_replace('_', ' ', $string);
+
+            $string = ucwords(strtolower($string));
+        }
+        return $strings;
+    }
+
     public function addPriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
     {
         if(!$this->price_groups->contains($priceGroup))
