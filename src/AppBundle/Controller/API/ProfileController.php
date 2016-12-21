@@ -143,5 +143,23 @@ class ProfileController extends Controller
 
     }
 
+
+    ///////////////////////////////////
+    //      TOP RETAILERS BY SALES
+    ///////////////////////////////////
+
+    /**
+     * @Route("/top_retailers", name="get_top_retailer_by_sales")
+     */
+    public function topRetailersBySales()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $connection = $em->getConnection();
+        $statement = $connection->prepare("SELECT user_id FROM role_users WHERE role_id = :roleid");
+        $statement->bindValue('roleid', 5);
+        $statement->execute();
+        $results = $statement->fetchAll();
+        $that = $results;
+    }
 }
 
