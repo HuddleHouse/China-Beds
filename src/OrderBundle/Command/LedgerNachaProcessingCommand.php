@@ -21,8 +21,9 @@ class LedgerNachaProcessingCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $filename = tempnam('/tmp', 'nacha');
-        $this->getContainer()->get('order.ledger')->generatePendingNACHAFile($filename);
-        $this->getContainer()->get('order.ledger')->uploadNACHAFile($filename);
+        $this->getContainer()->get('ledger.service')->generatePendingNACHAFile($filename);
+        die($filename);
+//        $this->getContainer()->get('ledger.service')->uploadNACHAFile($filename);
     }
 
 }

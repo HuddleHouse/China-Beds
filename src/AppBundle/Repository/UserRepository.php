@@ -31,6 +31,12 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         }
 
         foreach($user->getSalesReps() as $salesRep) {
+            foreach($salesRep->getRetailers() as $user) {
+                $users[$user->getId()] = $salesRep;
+            }
+            foreach($salesRep->getDistributors() as $user) {
+                $users[$user->getId()] = $salesRep;
+            }
             $users[$salesRep->getId()] = $salesRep;
         }
 

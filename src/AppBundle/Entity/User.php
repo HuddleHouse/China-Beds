@@ -2058,13 +2058,13 @@ class User extends BaseUser
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function updateLatLong() {
-        if ( $data = file_get_contents(sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyAZBJ_imRRYJyCqWmxrqhAG9aovC56Tdnk", urlencode($this->getOneLineAddress()))) ) {
-            $decoded = json_decode($data, true);
-          if ( $decoded['results'][0]['geometry']['location'] ) {
-              $this->setAddressLatitude($decoded['results'][0]['geometry']['location']['lat']);
-              $this->setAddressLongitude($decoded['results'][0]['geometry']['location']['lng']);
-          }
-        }
-    }
+//    public function updateLatLong() {
+//        if ( $data = file_get_contents(sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyAZBJ_imRRYJyCqWmxrqhAG9aovC56Tdnk", urlencode($this->getOneLineAddress()))) ) {
+//            $decoded = json_decode($data, true);
+//          if ( $decoded['results'][0]['geometry']['location'] ) {
+//              $this->setAddressLatitude($decoded['results'][0]['geometry']['location']['lat']);
+//              $this->setAddressLongitude($decoded['results'][0]['geometry']['location']['lng']);
+//          }
+//        }
+//    }
 }

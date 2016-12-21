@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ee7073fdceef07f0dcb1bf2cd94cbfd6",
-    "content-hash": "6ad67d3f65fa640c053dcab0179d8dd8",
+    "hash": "9be2143f151b1f29267cf4cf8de08b1b",
+    "content-hash": "a6afec6b684c854c28f2b8157244a6ce",
     "packages": [
         {
             "name": "adodb/adodb-php",
@@ -2145,6 +2145,43 @@
                 "psr-3"
             ],
             "time": "2016-07-29 03:23:52"
+        },
+        {
+            "name": "nacha/file-generator",
+            "version": "1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/philipwhitt/nacha-generator.git",
+                "reference": "c3014459877fa4111a5fc253d9dc83deb1eef8a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/philipwhitt/nacha-generator/zipball/c3014459877fa4111a5fc253d9dc83deb1eef8a4",
+                "reference": "c3014459877fa4111a5fc253d9dc83deb1eef8a4",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Nacha": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Philip Whitt",
+                    "email": "philipwhitt88@gmail.com",
+                    "homepage": "http://www.philipwhitt.com"
+                }
+            ],
+            "description": "Easy to use NACHA file generation for PPD/CCD transactions. Modeled using NACHA documentation.",
+            "time": "2016-10-12 20:55:43"
         },
         {
             "name": "paragonie/random_compat",

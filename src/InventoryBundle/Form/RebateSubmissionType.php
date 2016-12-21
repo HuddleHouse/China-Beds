@@ -49,7 +49,7 @@ class RebateSubmissionType extends AbstractType
                     'label' => 'Rebate',
                     'choice_label' => 'name',
                     'choices' => $builder->getData()->getChannel()->getActiveRebates(),
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                     'required' => true,
                 )
             )
@@ -84,7 +84,7 @@ class RebateSubmissionType extends AbstractType
                 'placeholder' => 'Retailer/Distributor',
                 'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
                 'choice_label' => 'username',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
                 'required' => true
             ))
             ->add('order', EntityType::class, array(
@@ -92,7 +92,7 @@ class RebateSubmissionType extends AbstractType
                     'label' => 'Order ID',
                     'placeholder' => 'Select Order ID',
                     'choices' => [],
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                     'required' => true
                 )
             )
