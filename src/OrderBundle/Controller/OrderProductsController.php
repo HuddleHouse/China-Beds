@@ -196,7 +196,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         $user_retailers = $em->getRepository('AppBundle:User')->findUsersForUser($this->getUser());
 
-        return $this->render('@Order/OrderProducts/order-index-new.html.twig', array(
+        return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
             'categories' => $categories,
             'channel' => $channel,
