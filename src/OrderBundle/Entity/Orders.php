@@ -1437,4 +1437,8 @@ class Orders
     {
         return $this->creditRequest;
     }
+
+    public function getIdentifier() {
+        return sprintf('O-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
+    }
 }

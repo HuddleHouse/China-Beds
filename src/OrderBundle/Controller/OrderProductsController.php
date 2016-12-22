@@ -88,6 +88,20 @@ class OrderProductsController extends Controller
 
     /**
      *
+     * @Route("/new", name="order_new", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function newAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        return $this->render('@Order/OrderProducts/order-index-new.html.twig', [
+            'channel'   => $this->getUser()->getActiveChannel(),
+            'states'    => $em->getRepository('AppBundle:State')->findAll()
+        ]);
+    }
+
+    /**
+     *
      * @Route("/products", name="order_products_index", options={"expose"=true})
      * @Route("/{id}/products", name="order_products_index_old")
      * @Method("GET")
@@ -95,11 +109,6 @@ class OrderProductsController extends Controller
     public function orderProductsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        return $this->render('@Order/OrderProducts/order-index-new.html.twig', [
-            'channel'   => $this->getUser()->getActiveChannel(),
-            'states'    => $em->getRepository('AppBundle:State')->findAll()
-        ]);
 
 
         $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());

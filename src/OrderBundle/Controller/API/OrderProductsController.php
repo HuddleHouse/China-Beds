@@ -503,7 +503,7 @@ class OrderProductsController extends Controller
         try {
             $this->get('email_service')->sendAdminOrderNotification($order);
             $this->get('email_service')->sendCustomerOrderNotification($order);
-            $this->get('email_service')->sendCustomerOrderNotification($order);
+            $this->get('email_service')->sendWarehouseOrderNotification($order);
         } catch (\Exception $e) {
             // @todo ignore for now.  Need to log
         }
@@ -902,7 +902,7 @@ class OrderProductsController extends Controller
             try {
                 $this->get('email_service')->sendAdminOrderNotification($order);
                 $this->get('email_service')->sendCustomerOrderNotification($order);
-                $this->get('email_service')->sendCustomerOrderNotification($order);
+                $this->get('email_service')->sendWarehouseOrderNotification($order);
             } catch (\Exception $e) {
                 // @todo ignore for now.  Need to log
             }

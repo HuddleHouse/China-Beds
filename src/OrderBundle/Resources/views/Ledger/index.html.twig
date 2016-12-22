@@ -119,6 +119,7 @@
                                 {% if ledger.creditRequest %}{{ ledger.creditRequest.identifier }}{% endif %}
                                 {% if ledger.warrantyClaim %}{{ ledger.warrantyClaim.identifier }}{% endif %}
                                 {% if ledger.rebateSubmission %}{{ ledger.rebateSubmission.identifier }}{% endif %}
+                                {% if ledger.order %}{{ ledger.order.identifier }}{% endif %}
                             </td>
 
                             {#<td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>#}
