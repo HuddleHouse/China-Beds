@@ -310,7 +310,9 @@
                             <td class="table-form" >
                                 <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
                             </td>
-                            <td><i class="fa fa-trash fa-2x" ng-click="ctrl.remove(item)" ></i> </td>
+                            <td>
+                                 <a class="btn btn-raised btn-danger" ng-click="ctrl.remove(item)">Remove</a>
+                            </td>
                                 {% endverbatim %}
                             </div>
                         </tr>
