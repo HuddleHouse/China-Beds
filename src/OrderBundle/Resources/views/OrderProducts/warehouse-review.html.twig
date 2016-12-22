@@ -24,6 +24,11 @@
             $("#tracking-return").on('hidden.bs.modal', function(){
                 window.location.reload();
             });
+
+            $('#save-qty-btn').on('click', function(ev) {
+                ev.preventDefault();
+                alert('Saved Successfully');
+            });
         });
 
         function updateShippedQuantity(id, item) {
@@ -171,11 +176,15 @@
                     <br>
                 </div>
                 <div class="col-sm-4 invoice-col">
-
                 </div>
                 <!-- /.col -->
             </div>
             <!-- /.row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="pull-right btn btn-success btn-raised" id="save-qty-btn">Confirm Order Shipment</a>
+                </div>
+            </div>
             <hr>
             {% for prod in product_data %}
                 <!-- Table row -->
