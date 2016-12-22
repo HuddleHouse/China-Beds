@@ -463,4 +463,8 @@ class RebateSubmission
     {
         $this->description = $description;
     }
+
+    public function getIdentifier() {
+        return sprintf('R-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
+    }
 }

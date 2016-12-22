@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -618,5 +619,34 @@ class ProductVariant
     public function removePromoKitOrder(\InventoryBundle\Entity\PromoKitOrders $promoKitOrder)
     {
         $this->promo_kit_orders->removeElement($promoKitOrder);
+    }
+
+    public function getTotalInventory(User $user = null) {
+        $total = 0;
+        foreach($this->getWarehouseInventory() as $warehouse_inventory) {
+            if ( $user == null || ($user && in_array($warehouse_inventory->getWarehouse(), $user->getWarehouses()->toArray()))) {
+                $total += $warehouse_inventory->getQuantity();
+            }
+        }
+        return $total;
+    }
+
+    public function toArray(User $user = null) {
+        $inventory = [];
+        foreach($this->getWarehouseInventory() as $warehouse_inventory) {
+            if ( $user == null || ($user && in_array($warehouse_inventory->getWarehouse(), $user->getWarehouses()->toArray()))) {
+                $inventory[] = $warehouse_inventory->toArray();
+            }
+        }
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'product'       => $this->getProduct()->toArray(),
+            'sku'           => $this->getSku(),
+            'weight'        => $this->getWeight(),
+            'dimensions'    => $this->getFedexDimensions(),
+            'total_on_hand' => $this->getTotalInventory($user),
+            'inventory'     => $inventory
+        ];
     }
 }

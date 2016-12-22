@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Form;
 
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InventoryBundle\Entity\Channel;
@@ -83,7 +84,9 @@ class RebateSubmissionType extends AbstractType
                 'label' => 'Retailer/Distributor submitting for',
                 'placeholder' => 'Retailer/Distributor',
                 'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
-                'choice_label' => 'username',
+                'choice_label' => function (User $user) {
+                    return $user->getDisplayName();
+                },
                 'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
                 'required' => true
             ))

@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Controller\API;
 
+use OrderBundle\Entity\Ledger;
 use OrderBundle\Services\LedgerService;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,8 +44,10 @@ class RebateSubmissionController extends Controller
                     $rebateSubmission->getSubmittedByUser(),
                     $rebateSubmission->getChannel(),
                     null,
-                    'Rebate',
-                    $rebateSubmission->getId()
+                    Ledger::TYPE_REBATE,
+                    $rebateSubmission->getId(),
+                    false,
+                    true
                 );
             }
             $em->persist($rebateSubmission);

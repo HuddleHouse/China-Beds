@@ -384,9 +384,14 @@
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
                             <select id="payment-type" class="form-control" ng-model="payment_type" ng-change="changePayment()" ng-disabled="is_paid == 1" required>
-                                <option value="cc">Pay with a Credit Card</option>
+                                {% if not order.submittedForUser.hideCC %}
+                                    <option value="cc">Pay with a Credit Card</option>
+                                {% endif %}
                                 {% if app.user.hasLedger %}
-                                    <option value="ledger">Ledger - Balance ${{ user.getLedgerTotal|number_format(2, '.', ',') }}</option>
+                                    <option value="ledger">Credit Balance ${{ user.getLedgerTotal|number_format(2, '.', ',') }}</option>
+                                {% endif %}
+                                {% if order.submittedForUser.achAccountNumber %}
+                                    <option value="ledger">ACH Account Ending {{ order.submittedForUser.achAccountNumber|slice(-4) }}</option>
                                 {% endif %}
                             </select>
                         </div>
@@ -455,6 +460,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-success btn-raised pull-right">Add Payment</button>
+                            </div>
+                        </div>
+
                     </fieldset>
                     {% if order.path != '' and order.path != NULL %}
                     <div class="row">

@@ -25,10 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="fos_user.username.already_used")
- * @ORM\AttributeOverrides({
- *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
- *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
- * })
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 // * @ORM\GeneratedValue(fieldName="deletedAt", timeAware=false)
@@ -2085,6 +2081,33 @@ class User extends BaseUser
             $this->getState() ? $this->getState()->getAbbreviation() : null,
             $this->getZip()
         ]);
+    }
+
+    public function toArray() {
+        $warehouses = [];
+        foreach($this->getWarehouses() as $warehouse) {
+            $warehouses[] = $warehouse->toArray();
+        }
+        $price_groups = [];
+        foreach($this->getPriceGroups() as $pg) {
+            $price_groups[] = $pg->toArray();
+        }
+        return [
+            'id'                => $this->getId(),
+            'display_name'      => $this->getDisplayName(),
+            'first_name'        => $this->getFirstName(),
+            'last_name'         => $this->getLastName(),
+            'address_1'         => $this->getAddress1(),
+            'address_2'         => $this->getAddress2(),
+            'city'              => $this->getCity(),
+            'zip'               => $this->getZip(),
+            'state'             => $this->getState() ? $this->getState()->getAbbreviation() : null,
+            'state_id'          => $this->getState() ? $this->getState()->getId() : null,
+            'email'             => $this->getEmail(),
+            'phone'             => $this->getPhone(),
+            'warehouses'        => $warehouses,
+            'price_groups'      => $price_groups
+        ];
     }
 
     /**

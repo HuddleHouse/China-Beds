@@ -110,5 +110,13 @@ class WarehouseInventory
         $this->quantity += $modifier;
     }
 
+    public function toArray() {
+        return [
+            'id'        => $this->getId(),
+            'quantity'  => $this->getQuantity(),
+            'warehouse' => $this->getWarehouse()->toArray()
+        ];
+    }
+
 
 }

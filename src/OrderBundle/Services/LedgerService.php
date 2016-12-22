@@ -63,7 +63,7 @@ class LedgerService
      * @return Ledger
      * @throws \Exception if updating the entities fails
      */
-    public function newEntry($amount, User $submittedForUser, User $submittedByUser, Channel $channel, $description = null, $type = 'Credit', $typeId = null, $returnArray = false) {
+    public function newEntry($amount, User $submittedForUser, User $submittedByUser, Channel $channel, $description = null, $type = 'Credit', $typeId = null, $returnArray = false, $approved = false) {
         $em = $this->getDoctrine()->getManager();
 
         $ledger = new Ledger();
@@ -84,6 +84,8 @@ class LedgerService
         $submittedByUser->getSubmittedLedgers()->add($ledger);
         $submittedForUser->getLedgers()->add($ledger);
         $channel->getLedgers()->add($ledger);
+
+        $ledger->setIsApproved($approved);
 
         switch($type) {
             case 'Order':

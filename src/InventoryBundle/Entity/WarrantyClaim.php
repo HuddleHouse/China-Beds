@@ -725,6 +725,10 @@ class WarrantyClaim
     }
 
     public function getWarrantyClaimId() {
+        return $this->getIdentifier();
+    }
+
+    public function getIdentifier() {
         return sprintf('W-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
     }
 

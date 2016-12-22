@@ -146,4 +146,12 @@ class Category
     {
         $this->product_categories->removeElement($productCategory);
     }
+
+    public function toArray() {
+        return [
+            'id'    => $this->getId(),
+            'name'  => $this->getName(),
+            'code'  => $this->getCode()
+        ];
+    }
 }

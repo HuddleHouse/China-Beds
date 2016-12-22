@@ -24,6 +24,7 @@ class Ledger
      ************************************
      ************************************/
 
+    const TYPE_LEDGER   = 'Ledger';   //default
     const TYPE_CREDIT   = 'Credit';   //default
     const TYPE_PAYMENT  = 'Payment';
     const TYPE_REBATE   = 'Rebate';
@@ -107,6 +108,13 @@ class Ledger
     private $isArchived = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_approved", type="boolean")
+     */
+    private $isApproved = false;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
@@ -148,6 +156,10 @@ class Ledger
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\RebateSubmission", inversedBy="ledgers")
      */
     private $rebateSubmission;
+    /**
+     * @ORM\ManyToOne(targetEntity="OrderBundle\Entity\CreditRequest", inversedBy="ledgers")
+     */
+    private $creditRequest;
 
     /**
      * @ORM\ManyToOne(targetEntity="InventoryBundle\Entity\Channel", inversedBy="ledgers")
@@ -534,5 +546,53 @@ class Ledger
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set isApproved
+     *
+     * @param boolean $isApproved
+     *
+     * @return Ledger
+     */
+    public function setIsApproved($isApproved)
+    {
+        $this->isApproved = $isApproved;
+
+        return $this;
+    }
+
+    /**
+     * Get isApproved
+     *
+     * @return boolean
+     */
+    public function getIsApproved()
+    {
+        return $this->isApproved;
+    }
+
+    /**
+     * Set creditRequest
+     *
+     * @param \OrderBundle\Entity\CreditRequest $creditRequest
+     *
+     * @return Ledger
+     */
+    public function setCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest = null)
+    {
+        $this->creditRequest = $creditRequest;
+
+        return $this;
+    }
+
+    /**
+     * Get creditRequest
+     *
+     * @return \OrderBundle\Entity\CreditRequest
+     */
+    public function getCreditRequest()
+    {
+        return $this->creditRequest;
     }
 }

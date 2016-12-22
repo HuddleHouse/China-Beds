@@ -18,9 +18,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $users = [];
 
         if ( $user->hasRole('ROLE_ADMIN') ) {
-            $all_users = $this->getEntityManager()
+            return $this->getEntityManager()
                 ->createQuery(
-                    'SELECT u 
+                    'SELECT u
                        FROM AppBundle\Entity\User u
                        LEFT JOIN u.user_channels c
                        WHERE c IN (:channel)
@@ -33,6 +33,20 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                 $users[$user->getRoleString()][] = $user;
             }
             return $users;
+        } else {
+            return $this->getEntityManager()
+                ->createQuery(
+                    'SELECT u
+                       FROM AppBundle\Entity\User u
+                       LEFT JOIN u.my_sales_rep sr
+                       LEFT JOIN u.user_channels c
+                       WHERE c IN (:channel)
+                       AND (u = :user_id OR u.my_distributor = :user_id OR u.my_sales_rep = :user_id OR u.my_sales_manager = :user_id OR sr.my_sales_manager = :user_id)
+                      ORDER BY u.company_name ASC, u.first_name ASC, u.last_name ASC'
+                )
+                ->setParameter('channel', $user->getActiveChannel())
+                ->setParameter('user_id', $user->getId())
+                ->getResult();
         }
 
         foreach($user->getSalesReps() as $salesRep) {

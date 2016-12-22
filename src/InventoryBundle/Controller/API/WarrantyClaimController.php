@@ -5,6 +5,7 @@ namespace InventoryBundle\Controller\API;
 use AppBundle\Entity\User;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Form\WarrantyApprovalType;
+use OrderBundle\Entity\Ledger;
 use OrderBundle\Services\LedgerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,8 +98,10 @@ class WarrantyClaimController extends Controller
                     $warrantyClaim->getSubmittedByUser(),
                     $warrantyClaim->getChannel(),
                     null,
-                    'Warranty',
-                    $warrantyClaim->getId()
+                    Ledger::TYPE_CLAIM,
+                    $warrantyClaim->getId(),
+                    false,
+                    true
                 );
             }
             $warrantyClaim->setIsArchived(true);

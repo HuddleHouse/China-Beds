@@ -20,7 +20,7 @@ use OrderBundle\Form\NewCreditType;
 /**
  * Ledger controller.
  *
- * @Route("/ledger")
+ * @Route("/credits")
  */
 class LedgerController extends Controller
 {
@@ -71,7 +71,7 @@ class LedgerController extends Controller
                 $ledger->setAmountCredited($ledger->getAmountRequested());
                 $ledger->setDatePosted(new \DateTime());
                 $ledger->setChannel($channel);
-                $ledger->setType(Ledger::TYPE_PAYMENT);
+                $ledger->setType(Ledger::TYPE_LEDGER);
                 //add the opposite side of the relations
                 $ledger->getSubmittedForUser()->getLedgers()->add($ledger);
                 $this->getUser()->getSubmittedLedgers()->add($ledger);
@@ -127,6 +127,7 @@ class LedgerController extends Controller
                 $ledger->setDatePosted(new \DateTime());
                 $ledger->setChannel($channel);
                 $ledger->getSubmittedForUser()->getLedgers()->add($ledger);
+                $ledger->setIsApproved(true);
                 $channel->getLedgers()->add($ledger);
                 $em->persist($ledger);
                 $em->flush();

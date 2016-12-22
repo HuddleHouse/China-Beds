@@ -3,6 +3,7 @@
 namespace OrderBundle\Form;
 
 
+use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use AppBundle\Entity\User;
 use OrderBundle\Entity\Orders;
@@ -50,7 +51,7 @@ class RequestCreditType extends AbstractType
                     'choice_label' => function (User $user) {
                         return $user->getDisplayName();
                     },
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
                     'required' => true,
                 )
             )
@@ -59,14 +60,14 @@ class RequestCreditType extends AbstractType
                     'label' => 'Order ID',
                     'placeholder' => 'Select Order ID',
                     'choices' => [],
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
                     'required' => true
                 )
             )
             ->add('productVariant', EntityType::class, array(
                     'class' => 'InventoryBundle\Entity\ProductVariant',
                     'label' => 'Product',
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
                     'placeholder' => 'Select Order ID first',
                     'choice_label' => function(ProductVariant $productVariant) {
                         return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();

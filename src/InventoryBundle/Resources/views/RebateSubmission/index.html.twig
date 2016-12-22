@@ -75,20 +75,31 @@
                     <thead>
                     <tr>
                         <th>Rebate</th>
+                        <th>Approved</th>
                         <th>Submission Date</th>
                         <th>Amount Requested</th>
                         <th>For Whom</th>
                         <th>Date Posted</th>
                         <th>Amount Issued</th>
-                        <th>Status</th>
                         <th>Invoice PDF</th>
+                        {% if is_granted("ROLE_ADMIN")  %}
                         <th>Actions</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
                     {% for rebateSubmission in rebateSubmissions %}
                         <tr>
                             <td>{{ rebateSubmission.rebate.name | default('No Longer Available') }}</td>
+                            {% if(rebateSubmission.creditIssued is null) %}
+                                <td><span class="label label-info">Pending</span></td>
+                            {% else %}
+                                {% if(rebateSubmission.creditIssued == 1) %}
+                                    <td><span class="label label-success">Yes</span></td>
+                                {% else %}
+                                    <td><span class="label label-warning">No</span></td>
+                                {% endif %}
+                            {% endif %}
                             <td>{{ rebateSubmission.dateCreated | date('m/d/y') }}</td>
                             <td>${{ rebateSubmission.amountRequested | number_format(2) }}</td>
                             <td>{{ rebateSubmission.submittedforuser.name }}</td>
@@ -102,17 +113,8 @@
                             {% else %}
                                 <td>--</td>
                             {% endif %}
-                            {% if(rebateSubmission.creditIssued is null) %}
-                                <td>Pending</td>
-                            {% else %}
-                                {% if(rebateSubmission.creditIssued == 1) %}
-                                    <td>Yes</td>
-                                {% else %}
-                                    <td>No</td>
-                                {% endif %}
-                            {% endif %}
-                            <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a> Submission (PDF)</td>
-                            {% if not is_granted("ROLE_USER")  %}
+                            <td><a href="{{ asset(rebateSubmission.webpath) }}" target="_blank">View</a>/<a download href="{{ asset(rebateSubmission.webpath) }}">Download</a></td>
+                            {% if is_granted("ROLE_ADMIN")  %}
                             <td>
                                 {% if(rebateSubmission.creditIssued is null and is_granted('ROLE_ADMIN') ) %}
                                 <a class="btn btn-raised btn-xs" href="{{ path('rebate_submit_edit', { 'id': rebateSubmission.id }) }}">Edit</a>

@@ -2,7 +2,9 @@
 
 namespace OrderBundle\Controller\API;
 
+use AppBundle\Entity\User;
 use AppBundle\Services\EmailService;
+use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\OrderPayment;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersManualItem;
@@ -25,6 +27,83 @@ use RocketShipIt;
  */
 class OrderProductsController extends Controller
 {
+
+    /**
+     * @Route("/api_get_data_for_order_form", name="api_get_data_for_order_form")
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response|static
+     */
+    public function getDataForOrderForm(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $user_id = $request->get('user_id');
+
+        $warehouse_id = $request->get('warehouse_id');
+
+        $return = [];
+        if ( $user = $em->getRepository('AppBundle:User')->find($user_id) ) {
+            $user_users = $em->getRepository('AppBundle:User')->findUsersForUser($user);
+
+
+            $return = $user->toArray();
+            $return['products'] = $this->getProductsForOrderFormByUser($user, $this->getUser()->getActiveChannel());
+            foreach ($user_users as $user) {
+                $user_data = $user->toArray();
+//                $user_data['products'] = $this->getProductsForOrderFormByUser($user, $this->getUser()->getActiveChannel());
+                $return['users'][$user->getRoleString()][] = $user_data;
+            }
+        }
+
+        return new JsonResponse($return, 200);
+
+    }
+
+    private function getProductsForOrderFormByUser(User $user, Channel $channel) {
+        $em = $this->getDoctrine()->getManager();
+
+        $pops = [];
+        $pop_items = $em->getRepository('InventoryBundle:PopItem')->findBy(['active' => true, 'channel' => $this->getUser()->getActiveChannel(), 'is_hide_on_order' => false]);
+        foreach($pop_items as $pop_item) {
+            $pops[] = $pop_item->toArray();
+        }
+
+        $variants = [];
+        $products = $em->getRepository('InventoryBundle:Product')->getAllActiveProductsForChannel($channel, true);
+        foreach($products as $product) {
+            $variants[$product->getId()] = $product->toArray();
+            $variants[$product->getId()]['variants'] = [];
+        }
+
+
+        foreach($user->getPriceGroups() as $price_group) {
+            if ( $price_group->getChannel()->getId() == $channel->getId() ) {
+                foreach($price_group->getPrices() as $price) {
+                    $vid = $price->getProductVariant()->getId();
+                    $pid = $price->getProductVariant()->getProduct()->getId();
+                    if ( !isset($variants[$pid]) ) {
+                        continue;
+                        $variants[$pid] = $price->getProductVariant()->getProduct()->toArray();
+                    }
+                    if ( !isset($variants[$pid]['variants'][$vid]) || $variants[$pid]['variants'][$vid]['price'] > $price->getPrice() ) {
+                        $variants[$pid]['variants'][$vid] = [
+                            'price' => $price->getPrice(),
+                            'variant' => $price->getProductVariant()->toArray($user)
+                        ];
+                    }
+                }
+            }
+        }
+        $variants = array_values($variants);
+        foreach($variants as $k => $product) {
+            if ( isset($variants[$k]['variants']) ) {
+                $variants[$k]['variants'] = array_values($variants[$k]['variants']);
+            }
+        }
+        return [
+            'pop_items' => array_values($pops),
+            'products'  => array_values($variants)
+        ];
+    }
 
     /**
      * @Route("/api_save_products_order_form", name="api_save_products_order_form")

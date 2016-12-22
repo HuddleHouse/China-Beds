@@ -105,7 +105,9 @@ class WarrantyClaimController extends Controller
      */
     public function editAction(Request $request, WarrantyClaim $warrantyClaim)
     {
-
+        if ( !$this->getUser()->hasRole('ROLE_ADMIN') ) {
+            return $this->redirectToRoute('warrantyclaim_index');
+        }
         $oldPath1 = $warrantyClaim->getPath1();
         $oldPath2 = $warrantyClaim->getPath2();
         $oldPath3 = $warrantyClaim->getPath3();
@@ -182,8 +184,10 @@ class WarrantyClaimController extends Controller
                         $warrantyClaim->getSubmittedByUser(),
                         $warrantyClaim->getChannel(),
                         $warrantyClaim->getDescription(),
-                        'Warranty',
-                        $warrantyClaim->getId()
+                        Ledger::TYPE_CLAIM,
+                        $warrantyClaim->getId(),
+                        false,
+                        true
                     );
                 }
                 $warrantyClaim->setIsArchived(true);

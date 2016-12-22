@@ -681,4 +681,23 @@ class Product
     {
         return $this->hideBackend;
     }
+
+    public function toArray() {
+        $categories = [];
+        foreach($this->getCategories() as $category) {
+            $categories[] = $category->getCategory()->toArray();
+        }
+        $images = [];
+        foreach($this->getImages() as $image) {
+            $images[] = $image->getWebPath();
+        }
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'description'   => $this->getDescription(),
+            'hide_backend'  => $this->getHideBackend(),
+            'categories'    => $categories,
+            'images'        => $images
+        ];
+    }
 }
