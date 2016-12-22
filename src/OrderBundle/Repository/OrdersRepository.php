@@ -250,7 +250,7 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('o')
             ->andWhere('o.submitDate between :today and :tomorrow')
             ->setParameters(array('today' => new \DateTime('today'), 'tomorrow' => new \DateTime('tomorrow')));
-        if ( $user->hasRole('ROLE_USER') || $user->hasRole('ROLE_DISTRIBUTOR') ) {
+        if ( $user->hasRole('ROLE_RETAILER') || $user->hasRole('ROLE_DISTRIBUTOR') ) {
             $qb->andWhere('o.submitted_for_user = :user_id')
                 ->setParameter('user_id', $user->getId());
         }
