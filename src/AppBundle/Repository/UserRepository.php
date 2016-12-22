@@ -18,6 +18,63 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $users = [];
 
         if ( $user->hasRole('ROLE_ADMIN') ) {
+            $all_users = $this->getEntityManager()
+                ->createQuery(
+                    'SELECT u 
+                       FROM AppBundle\Entity\User u
+                       LEFT JOIN u.user_channels c
+                       WHERE c IN (:channel)
+                      ORDER BY u.company_name ASC, u.first_name ASC, u.last_name ASC'
+                )
+                ->setParameter('channel', $user->getActiveChannel())
+                ->getResult();
+
+            foreach($all_users as $user) {
+                $users[$user->getRoleString()][] = $user;
+            }
+            return $users;
+        }
+
+        foreach($user->getSalesReps() as $salesRep) {
+            foreach($salesRep->getRetailers() as $user) {
+                $users['Retailers'][$user->getId()] = $salesRep;
+            }
+            foreach($salesRep->getDistributors() as $user) {
+                $users['Distributors'][$user->getId()] = $salesRep;
+            }
+            $users['Sales Reps'][$salesRep->getId()] = $salesRep;
+        }
+
+        foreach($user->getRetailers() as $retailer) {
+            $users['Retailers'][$retailer->getId()] = $retailer;
+        }
+
+        if($user->hasRole('ROLE_RETAILER')){
+            $users['Retailers'][$user->getId()] = $user;
+        }
+
+        foreach($user->getDistributors() as $distributor) {
+            $users['Distributors'][$distributor->getId()] = $distributor;
+        }
+
+        return $users;
+
+//        usort($users, function($a, $b) {
+//            return $a->getDisplayName() - $b->getDisplayName();
+//        });
+
+        $return = new ArrayCollection();
+        foreach($users as $user) {
+            $return->add($user);
+        }
+        return $return;
+    }
+
+
+    public function findUsersForUserNew(User $user) {
+        $users = [];
+
+        if ( $user->hasRole('ROLE_ADMIN') ) {
             return $this->getEntityManager()
                 ->createQuery(
                     'SELECT u
