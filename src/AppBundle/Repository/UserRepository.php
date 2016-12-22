@@ -105,40 +105,6 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                 ->setParameter('user_id', $user->getId())
                 ->getResult();
         }
-
-        foreach($user->getSalesReps() as $salesRep) {
-            foreach($salesRep->getRetailers() as $user) {
-                $users['Retailers'][$user->getId()] = $salesRep;
-            }
-            foreach($salesRep->getDistributors() as $user) {
-                $users['Distributors'][$user->getId()] = $salesRep;
-            }
-            $users['Sales Reps'][$salesRep->getId()] = $salesRep;
-        }
-
-        foreach($user->getRetailers() as $retailer) {
-            $users['Retailers'][$retailer->getId()] = $retailer;
-        }
-
-        if($user->hasRole('ROLE_RETAILER')){
-            $users['Retailers'][$user->getId()] = $user;
-        }
-
-        foreach($user->getDistributors() as $distributor) {
-            $users['Distributors'][$distributor->getId()] = $distributor;
-        }
-
-        return $users;
-
-//        usort($users, function($a, $b) {
-//            return $a->getDisplayName() - $b->getDisplayName();
-//        });
-
-        $return = new ArrayCollection();
-        foreach($users as $user) {
-            $return->add($user);
-        }
-        return $return;
     }
 
     public function getAllDistributorsArray(Channel $channel = null) {
