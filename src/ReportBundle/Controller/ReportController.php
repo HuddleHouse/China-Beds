@@ -86,7 +86,7 @@ class ReportController extends Controller
         );
 
         //2D array of data from the query for each row[column] of data
-        $report['data'] = $em->getRepository('OrderBundle:Orders')->getDailyOrderReportData();
+        $report['data'] = $em->getRepository('OrderBundle:Orders')->getDailyOrderReportData($this->getUser());
         //total to be displayed if applicable
         $report['total'] = 0;
 
@@ -137,6 +137,12 @@ class ReportController extends Controller
         $query = $orders->createQueryBuilder('o')
             ->where('o.submitDate between ?0 AND ?1 ')
             ->setParameters(array($d, $d2));
+
+        if ( $this->getUser()->hasRole('ROLE_USER') || $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
+            $query->andWhere('o.submitted_for_user = :user_id')
+                ->setParameter('user_id', $this->getUser()->getId());
+        }
+
         $result = $query->getQuery()->getResult();
 
         $report['data'] = $result;
