@@ -45,6 +45,7 @@
                 self.searchTextChange   = searchTextChange;
                 self.updateCartItem   = updateCartItem;
                 self.warehouseChange   = warehouseChange;
+                self.remove             = remove;
                 self.save = save;
                 self.cart = [];
                 self.cart_items = [];
@@ -64,6 +65,11 @@
 
                 function warehouseChange(type) {
                     updateCart(type)
+                }
+
+                function remove(item) {
+                    var index = self.cart.indexOf(item);
+                    self.cart.splice(index, 1);
                 }
 
                 function updateCart(type) {
@@ -323,7 +329,7 @@
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.receiving_warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
                             </td>
-                            <td></td>
+                            <td><i class="fa fa-trash fa-2x" ng-click="ctrl.remove(item)" ></i> </td>
                                 {% endverbatim %}
                             </div>
                         </tr>

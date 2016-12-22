@@ -45,6 +45,7 @@
                 self.warehouseChange = warehouseChange;
                 self.updateCartItem   = updateCartItem;
                 self.save = save;
+                self.remove             = remove;
                 self.cart = [];
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -62,6 +63,11 @@
 
                 function warehouseChange() {
                     updateCart()
+                }
+
+                function remove(item) {
+                    var index = self.cart.indexOf(item);
+                    self.cart.splice(index, 1);
                 }
 
                 function updateCart() {
@@ -284,6 +290,7 @@
                             <th class="table-name" style="width: 100px;">Quantity</th>
                             <th class="table-name" style="width: 175px;">Warehouse Inv</th>
                             <th class="table-name" style="width: 175px;">Total Inventory</th>
+                            <th>&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -303,6 +310,7 @@
                             <td class="table-form" >
                                 <input ng-model="item.total_quantity" class="form-control" style="border-bottom: none;" disabled>
                             </td>
+                            <td><i class="fa fa-trash fa-2x" ng-click="ctrl.remove(item)" ></i> </td>
                                 {% endverbatim %}
                             </div>
                         </tr>
@@ -342,6 +350,7 @@
                             </md-content>
                                 {% endverbatim %}
                             </td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
