@@ -130,8 +130,10 @@ class ReportController extends Controller
         $d = new \DateTime();
         $d2 = new \DateTime();
         $month = $request->get('month') ? $request->get('month') : date('m');
-        $d->setDate(date('Y'), $month, 01);
-        $d2->setDate(date('Y'), $month, date('t'));
+        $year = $request->get('year') ? $request->get('month') : date('Y');
+
+        $d->setDate($year, $month, 01);
+        $d2->setDate($year, $month, date('t'));
 
         $em = $this->getDoctrine()->getManager();
 
