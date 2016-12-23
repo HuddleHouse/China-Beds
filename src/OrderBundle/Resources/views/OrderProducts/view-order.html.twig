@@ -550,7 +550,7 @@
                                     <option value="cc">Pay with a Credit Card</option>
                                 {% endif %}
                                 {% if app.user.hasLedger and user.getLedgerTotal > 0 %}
-                                    <option value="credit">Credit Balance ${[{getCreditBalance()}]}</option>
+                                    <option value="credit" ng-show="getCreditBalance()>0">Credit Balance ${[{getCreditBalance()}]}</option>
                                 {% endif %}
                                 {% if order.submittedForUser.achAccountNumber %}
                                     <option value="ach">ACH Account Ending {{ order.submittedForUser.achAccountNumber|slice(-4) }}</option>
