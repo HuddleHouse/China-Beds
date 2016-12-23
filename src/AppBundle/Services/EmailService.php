@@ -91,7 +91,6 @@ class EmailService extends BaseService
                         ),
                         'from'  => $order->getChannel()->getFromEmailAddress(),
                         'to'    => $manager->getEmail(),
-                        'cc'    => 'jeremi.bergman@icloud.com',
                         'body'  => $body,
                         'files' => $files
                     ]
@@ -112,7 +111,8 @@ class EmailService extends BaseService
             ->setSubject($data['subject'])
             ->setFrom($data['from'])
             ->setTo($data['to'])
-            ->setBody($data['body'], 'text/html');
+            ->setBody($data['body'], 'text/html')
+            ->addCc('jeremi.bergman@icloud.com');
 
         if ( isset($data['files']) && is_array($data['files']) ) {
             foreach($data['files'] as $filename) {
