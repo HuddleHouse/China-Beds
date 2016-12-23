@@ -54,7 +54,7 @@
                             </td>
                             <td>
                                 <span class="mdl-chip mdl-chip--contact" >
-                                    {% if order.balance > 0 and order.status.name != 'Pending' %}
+                                    {% if not order.isPaid and order.status.name != 'Draft' %}
                                         <span class="mdl-chip__contact mdl-color-text--white" style="background-color: red;">D</span>
                                         <span class="mdl-chip__text"> Due</span>
                                     {% else %}

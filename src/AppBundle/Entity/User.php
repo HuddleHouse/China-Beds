@@ -465,7 +465,7 @@ class User extends BaseUser
     public function getOpenBalanceTotal($channel_id = null) {
         $total = 0;
         foreach($this->orders as $order) {
-            if(in_array($order->getStatus()->getName(), [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED])) {
+            if($order->getIsShippable()) {
                 if ($channel_id == null) {
                     $total += $order->getBalance();
                 } elseif ($order->getChannel()->getId() == $channel_id) {

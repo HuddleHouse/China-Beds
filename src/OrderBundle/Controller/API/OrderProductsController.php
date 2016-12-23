@@ -115,8 +115,7 @@ class OrderProductsController extends Controller
     public function saveProductsOrderForm(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $channel_id = $request->request->get('channel_id');
-        $channel = $em->getRepository('InventoryBundle:Channel')->find($channel_id);
+        $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
         $products = $request->request->get('products');
         $pop = $request->request->get('pop');
         $cart = $request->request->get('cart');
@@ -160,6 +159,10 @@ class OrderProductsController extends Controller
             $order->setSubmittedForUser($this->getUser());
         else
             $order->setSubmittedForUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
+
+        if ( $order->getSubmittedByUser()->hasRole('ROLE_ADMIN') ) {
+            $order->setIsShippable(true);
+        }
 
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
@@ -592,6 +595,8 @@ class OrderProductsController extends Controller
         try {
             $this->validatePayments($order, $payments);
             $this->processPayments($order, $payments);
+            $order->setIsShippable(true);
+            $order->setIsPaid(true);
 
             if ( $type == 'complete' ) {
                 try {

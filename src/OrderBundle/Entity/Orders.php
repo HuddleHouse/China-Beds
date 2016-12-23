@@ -100,6 +100,18 @@ class Orders
      * @ORM\Column(name="is_manual", type="boolean")
      */
     private $isManual = false;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_paid", type="boolean")
+     */
+    private $isPaid = false;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_shippable", type="boolean")
+     */
+    private $isShippable = false;
 
     /**
      * @var string
@@ -302,6 +314,7 @@ class Orders
         $this->rebate_submissions = new ArrayCollection();
         $this->ledgers = new ArrayCollection();
         $this->creditRequest = new ArrayCollection();
+        $this->order_payments = new ArrayCollection();
         $this->submitDate = new \DateTime();
 //        $this->orderId = time().rand(1000,9999);
         if($info != null) {
@@ -1382,6 +1395,19 @@ class Orders
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setFlags() {
+//        if ( $this->getBalance() == 0 ) {
+//            $this->setIsPaid(true);
+//        }
+//        if ( $this->getBalance() == 0 || $this->getIsManual() ) {
+//            $this->setIsShippable(true);
+//        }
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreatedOn()
@@ -1445,5 +1471,53 @@ class Orders
 
     public function getIdentifier() {
         return sprintf('O-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
+    }
+
+    /**
+     * Set isPaid
+     *
+     * @param boolean $isPaid
+     *
+     * @return Orders
+     */
+    public function setIsPaid($isPaid)
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    /**
+     * Get isPaid
+     *
+     * @return boolean
+     */
+    public function getIsPaid()
+    {
+        return $this->isPaid;
+    }
+
+    /**
+     * Set isShippable
+     *
+     * @param boolean $isShippable
+     *
+     * @return Orders
+     */
+    public function setIsShippable($isShippable)
+    {
+        $this->isShippable = $isShippable;
+
+        return $this;
+    }
+
+    /**
+     * Get isShippable
+     *
+     * @return boolean
+     */
+    public function getIsShippable()
+    {
+        return $this->isShippable;
     }
 }
