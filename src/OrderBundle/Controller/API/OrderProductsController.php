@@ -163,9 +163,9 @@ class OrderProductsController extends Controller
         else
             $order->setSubmittedForUser($em->getRepository('AppBundle:User')->find($ship_to_user_id));
 
-        if ( $order->getSubmittedByUser()->hasRole('ROLE_ADMIN') ) {
-            $order->setIsShippable(true);
-        }
+//        if ( $order->getSubmittedByUser()->hasRole('ROLE_ADMIN') ) {
+//            $order->setIsShippable(true);
+//        }
 
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
