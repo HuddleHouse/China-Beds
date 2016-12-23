@@ -373,7 +373,7 @@
                                     <a href="{{ path('warehouse_channelled', {'channelName': app.user.activechannel.name}) }}"><i class="fa fa-circle-o"></i>Warehouses</a>
                                 </li>
                                 {% endif %}
-                                {% if isGrantedRoute(app.user, 'purchaseorder_index') %}
+                                {% if isGrantedRoute(app.user, 'purchaseorder_index') and ( not is_granted('ROLE_WAREHOUSE') ) %}
                                 <li {% if (app.request.get('_route') in sidebar_purchase_orders) %} class="active"{% endif %}>
                                     <a href="{{ path('purchaseorder_index') }}"><i class="fa fa-circle-o"></i>Receiving Stock</a>
                                 </li>
