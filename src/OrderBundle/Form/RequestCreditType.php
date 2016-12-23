@@ -61,7 +61,7 @@ class RequestCreditType extends AbstractType
                     'placeholder' => 'Select Order ID',
                     'choices' => [],
                     'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
-                    'required' => true
+                    'required' => false
                 )
             )
             ->add('productVariant', EntityType::class, array(
@@ -72,7 +72,7 @@ class RequestCreditType extends AbstractType
                     'choice_label' => function(ProductVariant $productVariant) {
                         return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();
                     },
-                    'required' => true
+                    'required' => false
                 )
             )
             ->add('requestAmount', MoneyType::class, array(
