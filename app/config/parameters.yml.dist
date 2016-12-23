@@ -42,3 +42,5 @@ parameters:
     channel_upload_directory: '%kernel.root_dir%/../web/uploads/websites'
     pop_upload_directory: '%kernel.root_dir%/../web/uploads/documents/'
     retailer_recaptcha_secret: 6LcNZAsUAAAAAExNNxEAqidcHy5oWFZ2DOmFqsd7
+
+    dev_delivery_email: info@245tech.com

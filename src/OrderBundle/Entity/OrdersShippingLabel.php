@@ -119,7 +119,7 @@ class OrdersShippingLabel
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir() . '/' . $this->path;
+            : $this->getUploadRootDir() . '/' . basename($this->path);
     }
 
     public function getWebPath()

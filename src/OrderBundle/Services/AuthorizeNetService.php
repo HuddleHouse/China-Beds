@@ -28,12 +28,11 @@ class AuthorizeNetService extends BaseService
      *      expiry-month = 12
      *      expiry-year = 26
      *      cvv = 123
+     *      order_id = 203943089038
      *
      * @return AnetAPI\AnetApiResponseType
      */
-    function chargeCreditCard(array $data){
-
-        $sandboxUrl = "https://apitest.authorize.net/xml/v1/xrequest.api";
+    function chargeCreditCard(array $data, $transaction_type = 'authCaptureTransaction'){
 
         // Common setup for API credentials
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -52,10 +51,13 @@ class AuthorizeNetService extends BaseService
         $order->setDescription("Payment for Order #" . $data['order_id']);
         //create a transaction
         $transactionRequestType = new AnetAPI\TransactionRequestType();
-        $transactionRequestType->setTransactionType( "authCaptureTransaction");
+        $transactionRequestType->setTransactionType( $transaction_type );
         $transactionRequestType->setAmount($data['amount']);
         $transactionRequestType->setOrder($order);
         $transactionRequestType->setPayment($paymentOne);
+        if ( isset($data['trans_id']) ) {
+            $transactionRequestType->setRefTransId($data['trans_id']);
+        }
 
         $request = new AnetAPI\CreateTransactionRequest();
         $request->setMerchantAuthentication($merchantAuthentication);

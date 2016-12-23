@@ -57,6 +57,13 @@ class OrderPayment
     private $order;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Ledger", inversedBy="ledger", cascade={"persist"})
+     */
+    private $ledger;
+
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -208,5 +215,29 @@ class OrderPayment
     public function getDetail()
     {
         return $this->detail;
+    }
+
+    /**
+     * Set ledger
+     *
+     * @param \OrderBundle\Entity\Ledger $ledger
+     *
+     * @return OrderPayment
+     */
+    public function setLedger(\OrderBundle\Entity\Ledger $ledger = null)
+    {
+        $this->ledger = $ledger;
+
+        return $this;
+    }
+
+    /**
+     * Get ledger
+     *
+     * @return \OrderBundle\Entity\Ledger
+     */
+    public function getLedger()
+    {
+        return $this->ledger;
     }
 }

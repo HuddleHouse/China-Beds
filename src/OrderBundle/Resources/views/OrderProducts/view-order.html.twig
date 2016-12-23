@@ -21,7 +21,87 @@
                 "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
         });
 
-        var app = angular.module('myApp', ['ngMaterial']);
+        var app = angular.module('myApp', ['ngMaterial']).config(function($interpolateProvider){
+            $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+        });
+
+        function isEmpty(value) {
+            return angular.isUndefined(value) || value === '' || value === null || value !== value;
+        }
+
+        function valid_credit_card(value) {
+            // accept only digits, dashes or spaces
+            if (/[^0-9-\s]+/.test(value)) return false;
+
+            // The Luhn Algorithm. It's so pretty.
+            var nCheck = 0, nDigit = 0, bEven = false;
+            value = value.replace(/\D/g, "");
+
+            for (var n = value.length - 1; n >= 0; n--) {
+                var cDigit = value.charAt(n),
+                    nDigit = parseInt(cDigit, 10);
+
+                if (bEven) {
+                    if ((nDigit *= 2) > 9) nDigit -= 9;
+                }
+
+                nCheck += nDigit;
+                bEven = !bEven;
+            }
+
+            return (nCheck % 10) == 0;
+        }
+
+        app.directive('ngMin', function() {
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function(scope, elem, attr, ctrl) {
+                    scope.$watch(attr.ngMin, function(){
+                        ctrl.$setViewValue(ctrl.$viewValue);
+                    });
+                    var minValidator = function(value) {
+                        var min = scope.$eval(attr.ngMin) || 0;
+                        if (!isEmpty(value) && value < min) {
+                            ctrl.$setValidity('ngMin', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('ngMin', true);
+                            return value;
+                        }
+                    };
+
+                    ctrl.$parsers.push(minValidator);
+                    ctrl.$formatters.push(minValidator);
+                }
+            };
+        });
+
+        app.directive('ngMax', function() {
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function(scope, elem, attr, ctrl) {
+                    scope.$watch(attr.ngMax, function(){
+                        ctrl.$setViewValue(ctrl.$viewValue);
+                    });
+                    var maxValidator = function(value) {
+                        var max = scope.$eval(attr.ngMax) || Infinity;
+                        if (!isEmpty(value) && value > max) {
+                            ctrl.$setValidity('ngMax', false);
+                            return undefined;
+                        } else {
+                            ctrl.$setValidity('ngMax', true);
+                            return value;
+                        }
+                    };
+
+                    ctrl.$parsers.push(maxValidator);
+                    ctrl.$formatters.push(maxValidator);
+                }
+            };
+        });
+
         app.controller('myCtrl', ['$scope', function($scope) {
             $scope.is_distributor = {{ is_dis }};
             $scope.is_retailer = {{ is_retail }};
@@ -33,13 +113,15 @@
             $scope.form_info.pick_up_date = new Date();
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
-            $scope.payment_type = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}''{% else %}'cc'{% endif %};
+            $scope.payment_type = 'cc';
             $scope.cc = {};
+            $scope.credit = {}
             $scope.ledgerTotal = {{ user.getLedgerTotal }};
             $scope.cart_total = {{ order.getTotal  }};
             $scope.is_paid = {{ is_paid }};
             $scope.admin_paid = 0;
             $scope.order_status = '{{ order.status.name }}';
+            $scope.payments = [];
 
             {% if order.status.name == 'Pending' %}
                 $scope.admin_paid = 1;
@@ -55,52 +137,125 @@
             $scope.changePayment = function () {
             };
 
+            $scope.balance = function() {
+                return (parseFloat($scope.cart_total) - $scope.paymentsTotal()).toFixed(2);
+            }
+
+            $scope.paymentsTotal = function() {
+                var total = 0;
+                $scope.payments.forEach(function(payment) {
+                    total += parseFloat(payment.amount);
+                });
+                return total;
+            }
+            $scope.addPayment = function(payment) {
+                if ( payment.method == 'credit' && payment.amount > $scope.getCreditBalance() ) {
+                    payment.amount = $scope.getCreditBalance();
+                }
+
+                if ( payment.amount > $scope.balance() ) {
+                    payment.amount = $scope.balance();
+                }
+                if ( payment.amount > 0 ) {
+                    $scope.payments.push(payment);
+                    $scope.resetPaymentDefaults();
+                }
+            }
+
+            $scope.getCreditPaymentsTotal = function() {
+                var total = 0;
+                $scope.payments.forEach(function(payment) {
+                    if ( payment.method == 'credit' ) {
+                        total += parseFloat(payment.amount);
+                    }
+                });
+                return total;
+            }
+
+            $scope.getCreditBalance = function() {
+                return parseFloat($scope.ledgerTotal) - $scope.getCreditPaymentsTotal();
+            }
+
+            $scope.resetPaymentDefaults = function() {
+                $scope.cc = {
+                    'method':   'cc',
+                    'label':   'Credit Card',
+                    'amount':   $scope.balance()
+                }
+                $scope.credit = {
+                    'method':   'credit',
+                    'label':    'Credit',
+                    'amount':   $scope.balance() > $scope.getCreditBalance() ? $scope.getCreditBalance() : $scope.balance()
+                }
+                $scope.ach = {
+                    'method':   'ach',
+                    'label':    'ACH',
+                    'amount':   $scope.balance()
+                }
+            }
+
+            $scope.validateCreditCardFormData = function(payment) {
+                if ( payment.amount.length == 0 ) { return false; }
+                if ( parseFloat(payment.amount) < 0 ) { return false; }
+                if ( typeof payment.name === 'undefined' || payment.name.length == 0 ) { return false; }
+                if ( typeof payment.number === 'undefined' || payment.number.length == 0 ) { return false; }
+                if ( typeof payment.expires_month === 'undefined' || payment.expires_month.length == 0 ) { return false; }
+                if ( typeof payment.expires_year === 'undefined' || payment.expires_year.length == 0 ) { return false; }
+                if ( typeof payment.cvv === 'undefined' || payment.cvv.length == 0 ) { return false; }
+                if ( !valid_credit_card(payment.number) ) { return false; }
+                return true;
+            }
+
+            $scope.validateAchFormData = function(payment) {
+                if ( payment.amount.length == 0 ) { return false; }
+                if ( parseFloat(payment.amount) < 0 ) { return false; }
+                return true;
+            }
+
+            $scope.validateCreditFormData = function(payment) {
+                if ( payment.amount.length == 0 ) { return false; }
+                if ( parseFloat(payment.amount) < 0 ) { return false; }
+                if ( parseFloat(payment.amount) > $scope.getCreditBalance() ) { return false; }
+                return true;
+            }
+
+            $scope.validatePaymentFormData = function(payment) {
+                switch(payment.method) {
+                    case 'cc':
+                        return $scope.validateCreditCardFormData(payment);
+                        break;
+                    case 'ach':
+                        return $scope.validateAchFormData(payment);
+                        break;
+                    case 'credit':
+                        return $scope.validateCreditFormData(payment);
+                        break;
+                    default:
+                        false;
+                }
+            }
+
+
             $scope.formValidate = function (type) {
-                var count = 0;
-                if($scope.payment_type == '') {
-                    $('#payment').addClass('has-error');
-                    count++;
-                }
-                else
-                    $('#payment').removeClass('has-error');
-
-                console.log(type);
-
-                if($scope.payment_type == 'cc') {
-                    if($scope.cc['name'] == undefined) {$('#cc-name').addClass('has-error');count++;}
-                    else
-                        $('#cc-name').removeClass('has-error');
-
-                    if($scope.cc['number'] == undefined) {$('#cc-number').addClass('has-error');count++;}
-                    else
-                        $('#cc-number').removeClass('has-error');
-
-                    if($scope.cc['expiry-month'] == undefined || $scope.cc['expiry-year'] == undefined) {$('#cc-date').addClass('has-error');count++;}
-                    else
-                        $('#cc-date').removeClass('has-error');
-
-                    if($scope.cc['cvv'] == undefined) {$('#cc-cvv').addClass('has-error');count++;}
-                    else
-                        $('#cc-cvv').removeClass('has-error');
-                }
-
-                if($scope.is_admin == 1) {
-                    count = 0;
-                    $scope.ledgerTotal = $scope.cart_total;
-                }
-
-                if(count > 0)
-                    showErrorModal('Please fix the form errors.');
-                else if ($scope.cart_total > $scope.ledgerTotal && $scope.payment_type != 'cc')
-                    showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
-                else {
+//                var count = 0;
+//
+//                if($scope.is_admin == 1) {
+//                    count = 0;
+//                    $scope.ledgerTotal = $scope.cart_total;
+//                }
+//
+//                if(count > 0)
+//                    showErrorModal('Please fix the form errors.');
+//                else if ($scope.cart_total > $scope.ledgerTotal && $scope.payment_type != 'cc')
+//                    showErrorModal('You do not have enough in your ledger. Please add more to your ledger or pay with a Credit Card.');
+//                else {
                     showSpinner();
                     $.ajax({
                         type: 'POST',
                         url: "{{ path('api_pay_for_order') }}",
                         dataType: 'json',
-                        data: {cc: $scope.cc,
-                            payment_type: $scope.payment_type,
+                        data: {
+                            payments: $scope.payments,
                             order_id: {{ order.id}},
                             type: type
                         },
@@ -114,7 +269,7 @@
                             }
                         }
                     });
-                }
+//                }
 
             };
 
@@ -146,6 +301,13 @@
                 $scope.calculateCart();
             };
 
+            $scope.removePayment = function(payment) {
+                var index = $scope.payments.indexOf(payment);
+                $scope.payments.splice(index, 1);
+                $scope.resetPaymentDefaults();
+            }
+
+            $scope.resetPaymentDefaults();
 
         }]);
 
@@ -379,7 +541,7 @@
             <div class="row" style="padding-top: 40px;">
                 <!-- accepted payments column -->
                 <div class="col-md-6">
-                    <fieldset style="margin-top: 20px;margin-bottom: 50px;" ng-show="is_admin == 0">
+                    <fieldset style="margin-top: 20px;margin-bottom: 50px;" ng-show="is_admin == 0  && !is_paid && balance()>0">
                         <legend>Payment</legend>
                         <div id="payment" class="form-group" style="margin-top: 0px;">
                             <label for="payment-type">Payment Type</label>
@@ -387,25 +549,57 @@
                                 {% if not order.submittedForUser.hideCC %}
                                     <option value="cc">Pay with a Credit Card</option>
                                 {% endif %}
-                                {% if app.user.hasLedger %}
-                                    <option value="ledger">Credit Balance ${{ user.getLedgerTotal|number_format(2, '.', ',') }}</option>
+                                {% if app.user.hasLedger and user.getLedgerTotal > 0 %}
+                                    <option value="credit">Credit Balance ${[{getCreditBalance()}]}</option>
                                 {% endif %}
                                 {% if order.submittedForUser.achAccountNumber %}
-                                    <option value="ledger">ACH Account Ending {{ order.submittedForUser.achAccountNumber|slice(-4) }}</option>
+                                    <option value="ach">ACH Account Ending {{ order.submittedForUser.achAccountNumber|slice(-4) }}</option>
                                 {% endif %}
                             </select>
                         </div>
-                        <div id="cc" ng-show="payment_type=='cc'" ng-hide="is_paid">
+                        <div id="ach" ng-show="payment_type=='ach'&&!is_paid">
+                            <div id="ach-amount" class="form-group">
+                                <label class="col-sm-3 control-label" for="credit-amount">Amount</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-min="0" ng-max="balance()" class="form-control" ng-model="ach.amount" name="ach-amount" id="ach-amount" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-success btn-raised pull-right" ng-click="addPayment(ach)" ng-disabled="!validatePaymentFormData(ach)">Add ACH Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="credit" ng-show="payment_type=='credit'&&!is_paid">
+                            <div id="credit-amount" class="form-group">
+                                <label class="col-sm-3 control-label" for="credit-amount">Amount</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-min="0" ng-max="getCreditBalance()" class="form-control" ng-model="credit.amount" name="credit-amount" id="credit-amount" placeholder="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-success btn-raised pull-right" ng-click="addPayment(credit)" ng-disabled="!validatePaymentFormData(credit)">Apply Credit</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="cc" ng-show="payment_type=='cc'&&!is_paid">
+                            <div id="cc-amount" class="form-group">
+                                <label class="col-sm-3 control-label" for="card-amount">Amount</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" ng-min="0" ng-max="balance()" ng-model="cc.amount" name="card-amount" id="card-amount" placeholder="">
+                                </div>
+                            </div>
                             <div id="cc-name" class="form-group">
                                 <label class="col-sm-3 control-label" for="card-holder-name">Name on Card</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" ng-model="cc['name']" name="card-holder-name" id="card-holder-name" placeholder="Card Holder's Name">
+                                    <input type="text" class="form-control" ng-model="cc.name" name="card-holder-name" id="card-holder-name" placeholder="Card Holder's Name">
                                 </div>
                             </div>
                             <div id="cc-number" class="form-group">
                                 <label class="col-sm-3 control-label" for="card-number">Card Number</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" ng-model="cc['number']" name="card-number" id="card-number" placeholder="Debit/Credit Card Number">
+                                    <input type="text" class="form-control" ng-model="cc.number" name="card-number" id="card-number" placeholder="Debit/Credit Card Number">
                                 </div>
                             </div>
                             <div id="cc-date" class="form-group">
@@ -413,7 +607,7 @@
                                 <div class="col-sm-9">
                                     <div class="row">
                                         <div class="col-xs-3">
-                                            <select class="form-control col-sm-2" ng-model="cc['expiry-month']" name="expiry-month" id="expiry-month">
+                                            <select class="form-control col-sm-2" ng-model="cc.expires_month" name="expiry-month" id="expiry-month">
                                                 <option selected value="">Month</option>
                                                 <option value="01">Jan (01)</option>
                                                 <option value="02">Feb (02)</option>
@@ -430,24 +624,11 @@
                                             </select>
                                         </div>
                                         <div class="col-xs-3">
-                                            <select class="form-control" name="expiry-year" ng-model="cc['expiry-year']">
+                                            <select class="form-control" name="expiry-year" ng-model="cc.expires_year">
                                                 <option selected value="">Year</option>
-                                                <option value="13">2013</option>
-                                                <option value="14">2014</option>
-                                                <option value="15">2015</option>
-                                                <option value="16">2016</option>
-                                                <option value="17">2017</option>
-                                                <option value="18">2018</option>
-                                                <option value="19">2019</option>
-                                                <option value="20">2020</option>
-                                                <option value="21">2021</option>
-                                                <option value="22">2022</option>
-                                                <option value="23">2023</option>
-                                                <option value="24">2024</option>
-                                                <option value="25">2025</option>
-                                                <option value="26">2026</option>
-                                                <option value="27">2027</option>
-                                                <option value="28">2028</option>
+                                                {% for year in "now"|date("Y").."+10 years"|date("Y") %}
+                                                <option value="{{ year }}">{{ year }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -456,13 +637,13 @@
                             <div id="cc-cvv" class="form-group">
                                 <label class="col-sm-3 control-label" for="cvv">Card CVV</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" ng-model="cc['cvv']" name="cvv" id="cvv" placeholder="Security Code">
+                                    <input type="text" class="form-control" ng-model="cc.cvv" name="cvv" id="cvv" placeholder="Security Code" maxlength="4">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="button" class="btn btn-success btn-raised pull-right">Add Payment</button>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-success btn-raised pull-right" ng-click="addPayment(cc)" ng-disabled="!validatePaymentFormData(cc)">Add Credit Card Payment</button>
+                                </div>
                             </div>
                         </div>
 
@@ -514,37 +695,59 @@
                             </tr>
                             {% endif %}
                             <tr>
-                                <th>Total:</th>
+                                <th>Total Due:</th>
                                 <td>${{ order.getTotal |number_format(2, '.', ',') }}</td>
                             </tr>
+
+                            {% if is_paid %}
+                            {% for payment in order.orderPayments %}
+                                <tr >
+                                    <th>{{ payment.method|upper }}</th>
+                                    <td>${{ payment.amount|number_format(2, '.', ',') }} {% if payment.detail %}(x{{ payment.detail }}){% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                                <tr style="border-top:2px solid black;">
+                                    <th>Balance:</th>
+                                    <td>${{ order.balance|number_format(2, '.', ',') }}</td>
+                                </tr>
+                            {% else %}
+                                <tr ng-repeat="payment in payments track by $index">
+                                    <th><i class="fa fa-times" ng-click="removePayment(payment)"></i> {[{ payment.label }]}</th>
+                                    <td>{[{ payment.amount|currency }]}</td>
+                                </tr>
+                                <tr style="border-top:2px solid black;">
+                                    <th>Balance:</th>
+                                    <td>${[{balance()}]}</td>
+                                </tr>
+                            {% endif %}
+
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <!-- this row will not appear when printing -->
+                <div class="row no-print">
+                    <div class="col-md-6">
+
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="alert alert-error hide" id="process-error">Test</div>
+                        <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
+
+                        <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                            Submit Order for User
+                        </button>
+                        <button type="button" ng-show="is_paid == 0 && is_admin == 0 && balance() == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                            Complete Order
+                        </button>
+                        <a ng-show="order_status=='Draft'" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
+                            Edit Order
+                        </a>
                     </div>
                 </div>
                 <!-- /.col -->
             </div>
             <!-- /.row -->
-
-            <!-- this row will not appear when printing -->
-            <div class="row no-print">
-                <div class="col-md-6">
-
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="alert alert-error hide" id="process-error">Test</div>
-                    <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
-
-                    <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
-                        Submit Order for User
-                    </button>
-                    <button type="button" ng-show="is_paid == 0 && is_admin == 0 && payment_type" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
-                        Complete Order
-                    </button>
-                    <a ng-show="order_status=='Draft'" href="{{ path('order_products_edit',{"id_channel":  channel.id, "id_order":  order.id }) }}" class="btn btn-info btn-raised" style="margin-right: 5px;float: right;">
-                        Edit Order
-                    </a>
-                </div>
-            </div>
 
         </div>
     </div>

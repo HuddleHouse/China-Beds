@@ -314,6 +314,7 @@
                             cost: cost
                         };
                 }
+                $scope.product_variant_order_quan[variantId] = $scope.cart[type][variantId].quantity;
                 if(type == 'variant') {
                     if($scope.product_variant_order_quan[variantId] > max) {
                         $scope.product_variant_order_quan[variantId] = max;

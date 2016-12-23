@@ -180,4 +180,8 @@ class OrdersPopItem
     {
         $this->warehouse_info->removeElement($warehouseInfo);
     }
+
+    public function getTotal() {
+        return $this->getQuantity() * $this->getPrice();
+    }
 }

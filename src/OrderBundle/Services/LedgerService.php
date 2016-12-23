@@ -63,7 +63,7 @@ class LedgerService
      * @return Ledger
      * @throws \Exception if updating the entities fails
      */
-    public function newEntry($amount, User $submittedForUser, User $submittedByUser, Channel $channel, $description = null, $type = 'Credit', $typeId = null, $returnArray = false, $approved = false) {
+    public function newEntry($amount, User $submittedForUser, User $submittedByUser, Channel $channel, $description = null, $type = 'Credit', $typeId = null, $returnArray = false, $approved = false, $flush = true) {
         $em = $this->getDoctrine()->getManager();
 
         $ledger = new Ledger();
@@ -81,9 +81,9 @@ class LedgerService
         $ledger->setDatePosted(new \DateTime());
 
         //put the ledger records where they belong
-        $submittedByUser->getSubmittedLedgers()->add($ledger);
-        $submittedForUser->getLedgers()->add($ledger);
-        $channel->getLedgers()->add($ledger);
+        $ledger->setSubmittedByUser($submittedByUser);
+        $ledger->setSubmittedForUser($submittedForUser);
+        $ledger->setChannel($channel);
 
         $ledger->setIsApproved($approved);
 
@@ -91,24 +91,27 @@ class LedgerService
             case 'Order':
                 $order = $em->getRepository('OrderBundle:Orders')->find($typeId);
                 $ledger->setOrder($order);
-                $order->getLedgers()->add($ledger);
                 break;
             case 'Rebate':
                 $rebateSubmission = $em->getRepository('InventoryBundle:RebateSubmission')->find($typeId);
                 $ledger->setRebateSubmission($rebateSubmission);
                 $ledger->setIsArchived(true);
-                $rebateSubmission->getLedgers()->add($ledger);
+                $ledger->setRebateSubmission($ledger);
                 break;
             case 'Warranty':
                 $warrantyClaim = $em->getRepository('InventoryBundle:WarrantyClaim')->find($typeId);
                 $ledger->setWarrantyClaim($warrantyClaim);
                 $ledger->setIsArchived(true);
-                $warrantyClaim->getLedgers()->add($ledger);
+                $ledger->setWarrantyClaim($warrantyClaim);
                 break;
         }
 
-        $em->persist($ledger);
-        $em->flush();
+
+
+        if ( $flush ) {
+            $em->persist($ledger);
+            $em->flush();
+        }
 
         if($returnArray)
             return $ledger->toArray();

@@ -5,6 +5,7 @@ namespace OrderBundle\Controller\API;
 use AppBundle\Entity\User;
 use AppBundle\Services\EmailService;
 use InventoryBundle\Entity\Channel;
+use OrderBundle\Entity\Ledger;
 use OrderBundle\Entity\OrderPayment;
 use OrderBundle\Entity\Orders;
 use OrderBundle\Entity\OrdersManualItem;
@@ -167,8 +168,8 @@ class OrderProductsController extends Controller
             foreach($products as $product) {
                 if(isset($product['variants'])) {
                     foreach($product['variants'] as $variant) {
-                        if(isset($product_variant_order_quan[$variant['variant_id']]))
-                            $quantity = $product_variant_order_quan[$variant['variant_id']];
+                        if(isset($variant['variant_id']) && isset($cart['variant'][$variant['variant_id']]['quantity']))
+                            $quantity = $cart['variant'][$variant['variant_id']]['quantity'];
                         else
                             $quantity = 0;
                         if($quantity > 0) {
@@ -208,17 +209,15 @@ class OrderProductsController extends Controller
         }
 
 
-        if($pop != null && !empty($pop)) {
-            foreach ($pop as $popitem) {
-                $quantity = 0;
-                if (isset($pop_order_quan[$popitem['id']]))
-                    $quantity = $pop_order_quan[$popitem['id']];
-                if ($quantity > 0) {
-                    $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['id']);
+        if ( isset($cart['pop']) ) {
+            foreach ($cart['pop'] as $popitem) {
+                if ( !is_array($popitem) ) { continue;}
+                if ($popitem['quantity'] > 0) {
+                    $pop_item = $em->getRepository('InventoryBundle:PopItem')->find($popitem['variant_id']);
                     $orders_pop_item = new OrdersPopItem();
                     $orders_pop_item->setOrder($order);
                     $orders_pop_item->setPrice($popitem['cost']);
-                    $orders_pop_item->setQuantity($quantity);
+                    $orders_pop_item->setQuantity($popitem['quantity']);
                     $orders_pop_item->setPopItem($pop_item);
                     $em->persist($orders_pop_item);
                     $order->getPopItems()->add($orders_pop_item);
@@ -429,6 +428,151 @@ class OrderProductsController extends Controller
         return $data;
     }
 
+
+    private function validateCreditPayment(Orders $order, &$payment) {
+        if ( empty($payment['amount']) ) { throw new \Exception('Amount cannot be empty.'); }
+        if ( $payment['amount'] < 0 ) { throw new \Exception('Amount cannot be less than 0.'); }
+        if ( $order->getSubmittedForUser()->getLedgerTotal() < $payment['amount'] ) { throw new \Exception('Ledger Total is less than Payment Amount'); }
+        return true;
+    }
+
+    private function validateCreditCardPayment(Orders $order, &$payment) {
+        if ( empty($payment['amount']) ) { throw new \Exception('Amount cannot be empty.'); }
+        if ( $payment['amount'] < 0 ) { throw new \Exception('Amount cannot be less than 0.'); }
+
+        $result = $this->get('authorize.net')->chargeCreditCard([
+            'amount'        => $payment['amount'],
+            'number'        => $payment['number'],
+            'expiry-month'  => $payment['expires_month'],
+            'expiry-year'   => $payment['expires_year'],
+            'cvv'           => $payment['cvv'],
+            'order_id'      => $order->getOrderId()
+        ], 'authOnlyTransaction');
+
+        if ( $result['success'] ) {
+            return $payment['trans_id'] = $result['trans_id'];
+            return true;
+        } else {
+            throw new \Exception($result['error_message']);
+        }
+
+    }
+
+    private function validateAchPayment(Orders $order, &$payment) {
+        if ( empty($payment['amount']) ) { return ['error' => true, 'message' => 'Amount cannot be empty.']; }
+        if ( $payment['amount'] < 0 ) { return ['error' => true, 'message' => 'Amount cannot be less than 0.']; }
+        return true;
+    }
+
+    private function processCreditPayment(Orders &$order, $payment) {
+        $ledger_service = $this->get('ledger.service');
+        $ledger = $ledger_service->newEntry($payment['amount']*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order using credit balance.", Ledger::TYPE_ORDER, $order->getId(), false, true, false);
+
+        $order_payment = new OrderPayment();
+        $order_payment->setMethod($payment['method']);
+        $order_payment->setAmount($payment['amount']);
+        $order_payment->setLedger($ledger);
+
+        $order->addOrderPayment($order_payment);
+
+        return true;
+    }
+
+    private function processCreditCardPayment(Orders &$order, $payment) {
+        if ( empty($payment['amount']) ) { return ['error' => true, 'message' => 'Amount cannot be empty.']; }
+        if ( $payment['amount'] < 0 ) { return ['error' => true, 'message' => 'Amount cannot be less than 0.']; }
+
+        $result = $this->get('authorize.net')->chargeCreditCard([
+            'amount'        => $payment['amount'],
+            'number'        => $payment['number'],
+            'expiry-month'  => $payment['expires_month'],
+            'expiry-year'   => $payment['expires_year'],
+            'cvv'           => $payment['cvv'],
+            'order_id'      => $order->getOrderId(),
+            'trans_id'      => $payment['trans_id']
+        ], 'priorAuthCaptureTransaction');
+
+        $order_payment = new OrderPayment();
+        $order_payment->setMethod($payment['method']);
+        $order_payment->setAmount($payment['amount']);
+        $order_payment->setGatewayAuthCode($result['auth_code']);
+        $order_payment->setGatewayTransactionId($result['trans_id']);
+        $order_payment->setDetail(substr($payment['number'], -4));
+
+        $order->addOrderPayment($order_payment);
+
+        if ( $result['success'] ) {
+            return true;
+        } else {
+            return [
+                'error'     => true,
+                'message'     => $result['error_message']
+            ];
+        }
+
+    }
+
+    private function processAchPayment(Orders &$order, $payment) {
+        $ledger_service = $this->get('ledger.service');
+        // first we need to create one for the debit
+        $ledger = $ledger_service->newEntry($payment['amount'], $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "ACH transfer for order", Ledger::TYPE_PAYMENT, $order->getId(), false, false, false);
+        $order->addLedger($ledger);
+
+        // second create one for the credit
+        $ledger = $ledger_service->newEntry($payment['amount']*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order using ach transfer", Ledger::TYPE_ORDER, $order->getId(), false, true, false);
+
+        $order_payment = new OrderPayment();
+        $order_payment->setMethod($payment['method']);
+        $order_payment->setAmount($payment['amount']);
+        $order_payment->setLedger($ledger);
+
+        $order->addOrderPayment($order_payment);
+
+        return true;
+    }
+
+    private function validatePayments(Orders $order, &$payments = []) {
+        try {
+            foreach ($payments as &$payment) {
+                switch ($payment['method']) {
+                    case 'credit':
+                        $this->validateCreditPayment($order, $payment);
+                        break;
+                    case 'cc':
+                        $this->validateCreditCardPayment($order, $payment);
+                        break;
+                    case 'ach':
+                        $this->validateAchPayment($order, $payment);
+                        break;
+                }
+            }
+            return true;
+        } catch(\Exception $e) {
+            throw $e;
+        }
+    }
+
+    private function processPayments(Orders $order, $payments = []) {
+        try {
+            foreach ($payments as $payment) {
+                switch ($payment['method']) {
+                    case 'credit':
+                        $this->processCreditPayment($order, $payment);
+                        break;
+                    case 'cc':
+                        $this->processCreditCardPayment($order, $payment);
+                        break;
+                    case 'ach':
+                        $this->processAchPayment($order, $payment);
+                        break;
+                }
+            }
+            return true;
+        } catch(\Exception $e) {
+            throw $e;
+        }
+    }
+
     /**
      * @Route("/api_pay_for_order", name="api_pay_for_order")
      *
@@ -441,82 +585,51 @@ class OrderProductsController extends Controller
         $order = $em->getRepository('OrderBundle:Orders')->find($order_id);
         $type = $request->request->get('type');
 
-        $order_payment = new OrderPayment();
-        $order_payment->setAmount($order->getTotal());
-        $order->addOrderPayment($order_payment);
 
-        $payment_type = $request->request->get('payment_type');
-        if($payment_type == 'ledger' && $type == 'complete') {
-            $order = $this->generateShippingLabels($order);
-            $ledger_service = $this->get('ledger.service');
-            $ledger_service->newEntry($order->getTotal()*-1, $order->getSubmittedForUser(), $order->getSubmittedForUser(), $order->getChannel(), "Paid for order #".$order->getOrderNumber(), 'Order', $order->getId());
-            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
-            $order->setAmountPaid($order->getTotal());
+        $payments = $request->request->get('payments');
 
-            $order_payment->setMethod('ledger');
-            $order_payment->setAmount($order->getTotal());
-        }
-        elseif($payment_type == 'cc' && $type == 'complete') {
-            $order = $this->generateShippingLabels($order);
-            $cc = $request->request->get('cc');
-            $cc['amount'] = $order->getTotal();
-            $cc['order_id'] = $order->getId();
-
-            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
-
-            // Charge CC here
-
-            try {
-                $result = $this->get('authorize.net')->chargeCreditCard($cc);
-                if ( $result['success'] ) {
-                    $order_payment->setMethod('cc');
-                    $order_payment->setGatewayAuthCode($result['auth_code']);
-                    $order_payment->setGatewayTransactionId($result['trans_id']);
-                    $order_payment->setDetail(substr($cc['number'], -4));
-                } else {
-                    return new JsonResponse(['success' => false, 'error_message' => $result['error_message']]);
-                }
-                $order = $this->generateShippingLabels($order);
-                $order->setAmountPaid($order->getTotal());
-            }
-            catch(\Exception $e) {
-                $order->removeOrderPayment($order_payment);
-                return JsonResponse::create($e);
-            }
-
-
-        }
-        else if($type == 'admin' && $payment_type == '') {
-            $order = $this->generateShippingLabels($order);
-            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => Orders::STATUS_PENDING));
-            $order->removeOrderPayment($order_payment);
-        }
-
-        $order->addOrderPayment($order_payment);
-        $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
-
-        $order->setStatus($status);
-        $order->setPaymentType($payment_type);
-        $em->persist($order);
-        $em->flush();
 
         try {
+            $this->validatePayments($order, $payments);
+            $this->processPayments($order, $payments);
+
+            if ( $type == 'complete' ) {
+                try {
+                    $this->generateShippingLabels($order);
+                } catch(\Exception $e) {
+                    //email someone
+                    $h;
+                }
+
+            }
+
+            $status = $em->getRepository('WarehouseBundle:Status')->findOneBy(array('name' => 'Paid'));
+            $order->setAmountPaid($order->getPaidTotal());
+            $order->setStatus($status);
+
+
+            $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
+
+            $order->setStatus($status);
+            $em->persist($order);
+            $em->flush();
+
             $this->get('email_service')->sendAdminOrderNotification($order);
             $this->get('email_service')->sendCustomerOrderNotification($order);
             $this->get('email_service')->sendWarehouseOrderNotification($order);
+
+            return new JsonResponse(['success' => true, 'error_message' => null]);
+
         } catch (\Exception $e) {
-            // @todo ignore for now.  Need to log
+            return new JsonResponse(['success' => false, 'error_message' => $e->getMessage()]);
         }
-
-
-        return new JsonResponse(['success' => true, 'error_message' => null]);
     }
 
     /**
      * @param Orders $orders
      * @return Orders
      */
-    private function generateShippingLabels(Orders $orders) {
+    private function generateShippingLabels(Orders &$orders) {
         $em = $this->getDoctrine()->getManager();
         $numProdVariants = 0; //count($orders->getProductVariants());
         foreach($orders->getProductVariants() as $variant)
@@ -600,7 +713,7 @@ class OrderProductsController extends Controller
                             $shipmentId = $response['trk_main'];
                         }
                     } else {
-                        return $orders;
+                        throw new \Exception($response['error']);
 
                     }
 
@@ -617,7 +730,7 @@ class OrderProductsController extends Controller
                         $orderShippingLabel->setTrackingNumber($pkg['pkg_trk_num']);
                         $info->addShippingLabel($orderShippingLabel);
                     }
-                    $em->persist($orders);
+//                    $em->persist($orders);
 
                     if ($count == $numProdVariants) {
                         $charges = $response['charges'];
@@ -629,8 +742,8 @@ class OrderProductsController extends Controller
             }
         }
 
-        $em->flush();
-        return $orders;
+//        $em->flush();
+//        return $orders;
     }
 
     /**

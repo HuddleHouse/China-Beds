@@ -58,22 +58,42 @@ class EmailService extends BaseService
 
             $products = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouse($order, $warehouse);
 
+            /*
+             *                                                                                 {% for variant in products %}
+                                                                                    {% for info in variant.warehouseinfo %}
+                                                                                        {% for label in info.shippinglabels %}
+                                                                                            <a href="{{ order.channel.backendurl }}/{{ label.path }}"
+                                                                                               style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
+                                                                                        {% endfor %}
+                                                                                    {% endfor %}
+                                                                                {% endfor %}
+             */
+
             foreach($warehouse->getManagers() as $manager) {
+                $files = [];
+                foreach($products as $product) {
+                    foreach ($product->getWarehouseInfo() as $info) {
+                        foreach ($info->getShippingLabels() as $label) {
+                            $files[] = $label->getAbsolutePath();
+                        }
+                    }
+                }
                 $body = $this->container->get('twig')->render(
                     '@Order/Emails/warehouse-order-notification.html.twig',
                     ['order' => $order, 'products' => $products, 'manager' => $manager]
                 );
-
                 $this->sendEmail(
                     [
                         'subject' => sprintf(
-                            '%s Order #%s Received!',
+                            '%s Order #%s Ready To Ship!',
                             $order->getChannel()->getName(),
                             $order->getOrderId()
                         ),
-                        'from' => $order->getChannel()->getFromEmailAddress(),
-                        'to' => $order->getSubmittedForUser()->getEmail(),
-                        'body' => $body
+                        'from'  => $order->getChannel()->getFromEmailAddress(),
+                        'to'    => $manager->getEmail(),
+                        'cc'    => 'jeremi.bergman@icloud.com',
+                        'body'  => $body,
+                        'files' => $files
                     ]
                 );
             }
@@ -93,6 +113,13 @@ class EmailService extends BaseService
             ->setFrom($data['from'])
             ->setTo($data['to'])
             ->setBody($data['body'], 'text/html');
+
+        if ( isset($data['files']) && is_array($data['files']) ) {
+            foreach($data['files'] as $filename) {
+                $message->attach(\Swift_Attachment::fromPath($filename));
+            }
+
+        }
 
         if ( isset($data['cc']) ) {
             $message->addCc($data['cc']);

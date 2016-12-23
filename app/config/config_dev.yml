@@ -33,4 +33,4 @@ monolog:
         #    level:  info
 
 swiftmailer:
-    delivery_address: colin@245tech.com
+    delivery_address: %dev_delivery_email%

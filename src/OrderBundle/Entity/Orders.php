@@ -250,7 +250,7 @@ class Orders
      */
     private $ship_code;
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\Ledger", mappedBy="order", cascade={"persist"})
      */
     private $ledgers;
 
@@ -303,6 +303,7 @@ class Orders
         $this->ledgers = new ArrayCollection();
         $this->creditRequest = new ArrayCollection();
         $this->submitDate = new \DateTime();
+//        $this->orderId = time().rand(1000,9999);
         if($info != null) {
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
@@ -1131,6 +1132,7 @@ class Orders
      */
     public function addLedger(\OrderBundle\Entity\Ledger $ledger)
     {
+        $ledger->setOrder($this);
         $this->ledgers[] = $ledger;
 
         return $this;
@@ -1241,6 +1243,9 @@ class Orders
         $total = 0;
         foreach($this->getProductVariants() as $variant) {
             $total += $variant->getTotal();
+        }
+        foreach($this->getPopItems() as $item) {
+            $total += $item->getTotal();
         }
         return $total;
     }
