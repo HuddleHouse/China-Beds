@@ -98,7 +98,9 @@ class ReportController extends Controller
             $this->addFlash('notice', 'No Orders Today');
 
         return $this->render('ReportBundle:Reports:daily-order.html.twig', array(
-            'report' => $report
+            'report' => $report,
+            'channel' => $this->getUser()->getActiveChannel()
+
         ));
     }
 

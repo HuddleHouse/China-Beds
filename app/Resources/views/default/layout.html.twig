@@ -52,7 +52,7 @@
                             <a href="{{ path('my_open_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
                                 <div class="ledger-total-box">
                                     <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
-                                        Open Orders: ${{ app.user.getOpenBalanceTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                        Balance Due: ${{ app.user.getOpenBalanceTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
                                     </h6>
                                 </div>
                             </a>
