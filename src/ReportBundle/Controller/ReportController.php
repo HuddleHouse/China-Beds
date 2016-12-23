@@ -130,7 +130,7 @@ class ReportController extends Controller
         $d = new \DateTime();
         $d2 = new \DateTime();
         $month = $request->get('month') ? $request->get('month') : date('m');
-        $year = $request->get('year') ? $request->get('month') : date('Y');
+        $year = $request->get('year') ? $request->get('year') : date('Y');
 
         $d->setDate($year, $month, 01);
         $d2->setDate($year, $month, date('t'));
@@ -156,7 +156,7 @@ class ReportController extends Controller
             $report['total'] += $order->getSubtotal();
         }
 
-        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y') ));
+        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y'), 'month'=>$month,'year'=>$year ));
     }
 
     /**
