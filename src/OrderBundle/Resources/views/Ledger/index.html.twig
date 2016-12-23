@@ -93,7 +93,7 @@
                         <td>Source</td>
                         <th>Description</th>
                         {% if app.user.hasRole('ROLE_ADMIN') %}
-                            <th>ACH STATUS</th>
+                            {#<th>ACH STATUS</th>#}
                             <th>Actions</th>
                         {% endif %}
 
@@ -124,15 +124,16 @@
 
                             {#<td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>#}
                             <td id="description">{% if ledger.description is not null %}<span>Click to expand</span>{% else %}--{% endif %}</td>
+                            
                             {% if app.user.hasRole('ROLE_ADMIN') %}
 
-                            <td>
-                                {% if ledger.type|upper == 'LEDGER"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% endif %}
-                            {% if ledger.type|upper == 'LEDGER' and not ledger.achRequested %}
-                                    <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
-                            {% endif %}
-                            </td>
+                                <td>
+                                    {% if ledger.type|upper == 'LEDGER"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% endif %}
+                                {% if ledger.type|upper == 'LEDGER' and not ledger.achRequested %}
+                                        <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
                                 {% endif %}
+                                </td>
+                            {% endif %}
                         </tr>
                         {% endif %}
                     {% endfor %}
