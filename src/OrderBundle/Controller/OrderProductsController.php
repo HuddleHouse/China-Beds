@@ -51,8 +51,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('isShippable' => false, 'isPaid' => false, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
         $channel = $this->getUser()->getActiveChannel();
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
@@ -70,8 +69,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('isShippable' => true, 'isPaid' => false, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
 
         $the_orders = [];
         foreach($orders as $order) {
