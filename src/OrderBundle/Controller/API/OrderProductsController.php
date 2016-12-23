@@ -961,6 +961,7 @@ class OrderProductsController extends Controller
             $channel->getOrders()->add($order);
             $this->getUser()->getSubmittedOrders()->add($order);
             $user->getOrders()->add($order);
+            $order->setIsShippable(true);
 
             if ($products != null) {
                 foreach ($products as $product) {

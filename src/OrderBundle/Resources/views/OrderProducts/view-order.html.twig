@@ -734,9 +734,9 @@
                         <div class="alert alert-error hide" id="process-error">Test</div>
                         <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
-                        <button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
-                            Submit Order for User
-                        </button>
+                        {#<button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">#}
+                            {#Submit Order for User#}
+                        {#</button>#}
                         <button type="button" ng-show="is_paid == 0 && is_admin == 0 && balance() == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                             Complete Order
                         </button>
