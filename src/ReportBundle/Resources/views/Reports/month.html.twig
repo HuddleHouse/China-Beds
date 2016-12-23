@@ -129,28 +129,29 @@
             <div class="table">
 				<div class="row">
 					<form action="{{path('monthly_order')}}" class="form-horizontal" style="margin-bottom:40px; float:left; width:100%;">
-						<div class="col-md-5">    
+						
+                        <div class="col-md-5">
+                            <select class="form-control" name="month">
+                                <option value="">Pick a Month</option>
+                                <option value="01">January</option>
+                                <option value="02">Febuary</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">    
 							<select class="form-control" name="year">
 								<option value="">Pick a Year</option>
 								<option value="{{ date }}">{{ date }}</option>
 								<option value="{{ date+1 }}">{{ date+1 }}</option>
-							</select>
-						</div>
-						<div class="col-md-5">
-							<select class="form-control" name="month">
-								<option value="">Pick a Month</option>
-								<option value="01">January {{ date }}</option>
-								<option value="02">Febuary {{ date }}</option>
-								<option value="03">March {{ date }}</option>
-								<option value="04">April {{ date }}</option>
-								<option value="05">May {{ date }}</option>
-								<option value="06">June {{ date }}</option>
-								<option value="07">July {{ date }}</option>
-								<option value="08">August {{ date }}</option>
-								<option value="09">September {{ date }}</option>
-								<option value="10">October {{ date }}</option>
-								<option value="11">November {{ date }}</option>
-								<option value="12">December {{ date }}</option>
 							</select>
 						</div>
 						<div class="col-md-2" style="padding-top: 17px">
