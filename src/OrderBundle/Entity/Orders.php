@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use WarehouseBundle\Entity\Status;
 
 /**
  * Orders
@@ -731,6 +732,12 @@ class Orders
      */
     public function getStatus()
     {
+        if ( $this->isShippable && !$this->isPaid ) {
+            $status = new Status();
+            $status->setName('Due');
+            $status->setColor('red');
+            return $status;
+        }
         return $this->status;
     }
 
