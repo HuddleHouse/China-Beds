@@ -123,6 +123,9 @@ class OrderProductsController extends Controller
         $order_id = $request->request->get('order_id');
         $info = $request->request->get('form_info');
         $ship_to_user_id = $request->request->get('ship_to_user_id');
+        if ( !$ship_to_user_id ) {
+            $ship_to_user_id = $cart['dist_ship'];
+        }
         //array indexed at prod variant id that tell you the ordered quantity
         $product_variant_order_quan = $request->request->get('product_variant_order_quan');
         $pop_order_quan = $request->request->get('pop_order_quan');
