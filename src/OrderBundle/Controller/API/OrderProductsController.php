@@ -601,12 +601,11 @@ class OrderProductsController extends Controller
             $order->setIsShippable(true);
             $order->setIsPaid(true);
 
-            if ( $type == 'complete' ) {
+            if ( $type == 'complete' && !$order->getIsManual() ) {
                 try {
                     $this->generateShippingLabels($order);
                 } catch(\Exception $e) {
                     //email someone
-                    $h;
                 }
 
             }
@@ -622,9 +621,11 @@ class OrderProductsController extends Controller
             $em->persist($order);
             $em->flush();
 
-            $this->get('email_service')->sendAdminOrderNotification($order);
-            $this->get('email_service')->sendCustomerOrderNotification($order);
-            $this->get('email_service')->sendWarehouseOrderNotification($order);
+            if ( !$order->getIsManual() ) {
+                $this->get('email_service')->sendAdminOrderNotification($order);
+                $this->get('email_service')->sendCustomerOrderNotification($order);
+                $this->get('email_service')->sendWarehouseOrderNotification($order);
+            }
 
             return new JsonResponse(['success' => true, 'error_message' => null]);
 
@@ -1021,13 +1022,13 @@ class OrderProductsController extends Controller
             $em->persist($order);
             $em->flush();
 
-            try {
-                $this->get('email_service')->sendAdminOrderNotification($order);
-                $this->get('email_service')->sendCustomerOrderNotification($order);
-                $this->get('email_service')->sendWarehouseOrderNotification($order);
-            } catch (\Exception $e) {
-                // @todo ignore for now.  Need to log
-            }
+//            try {
+//                $this->get('email_service')->sendAdminOrderNotification($order);
+//                $this->get('email_service')->sendCustomerOrderNotification($order);
+//                $this->get('email_service')->sendWarehouseOrderNotification($order);
+//            } catch (\Exception $e) {
+//                // @todo ignore for now.  Need to log
+//            }
 
 //            $groups = $user->getGroupsArray();
 //            $is_dis = $is_retail = 0;
