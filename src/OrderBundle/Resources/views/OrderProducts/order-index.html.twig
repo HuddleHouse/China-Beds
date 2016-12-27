@@ -805,10 +805,10 @@
 <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
     <div class="table"  style="min-height: 100vh;">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-5 col-xs-12">
                 {% include '@Order/OrderProducts/order-form.html.twig' %}
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 col-xs-12">
                 {#<div class="table" style="background:rgba(2,177,242,.35); min-height: 250px;">#}
                     <img src="{{ asset('uploads/websites/' ~ channel.backendOrdersPic) }}" style="max-height:300px;">
                 {#</div>#}
@@ -824,20 +824,20 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-xs-12">
                 <div class="table" style="background-color: #02B1F2;">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4">
+                        <div class="col-lg-3 col-md-4 col-xs-12">
                             <center>Item (s)</center>
                             <input ng-model="cart_num_items" class="cart_info" style="width: 100%; height: 38px;" readonly>
                         </div>
-                        <div class="col-lg-4 col-md-4">
+                        <div class="col-lg-4 col-md-4 col-xs-12">
                             <center>Total ($)</center>
                             {% verbatim %}
                                 <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px; min-width: 91px;" >{{ cart_total | currency:'$' }}</div>
                             {% endverbatim %}
                         </div>
-                        <div class="col-lg-4 col-md-4">
+                        <div class="col-lg-4 col-md-4 col-xs-12">
                             <button class="btn btn-raised review_cart_button" id="submit-button" ng-click="submitCart()" type="submit" style="width: 100%;">Review ></button>
                         </div>
                     </div>
@@ -850,7 +850,7 @@
                 <div class="row">
                 {#{% for product in products %}#}
                 {% verbatim %}
-                    <div ng-repeat="product in products  | orderBy:['cat_name', 'name']" class="col-md-5 element-item {{ product.cat_ids }} order_product" style="padding-bottom:25px">
+                    <div ng-repeat="product in products  | orderBy:['cat_name', 'name']" class="col-md-5 col-xs-12 element-item {{ product.cat_ids }} order_product" style="padding-bottom:25px">
                         <div class="product_image" style="display: table; margin: 0 auto;">
                             <img src="{{ product.path }}" style="max-width: 350px; max-height: 150px;">
                             <div class="product_name">
@@ -909,7 +909,7 @@
                         </div>
                     </div>
 
-                <div ng-repeat="item in pop track by $index" class="col-md-3 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
+                <div ng-repeat="item in pop track by $index" class="col-md-3 col-xs-12 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
                     <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
                         <img src="{{item.picture}}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
                         <div class="product_name" style="min-height: 41px;">
