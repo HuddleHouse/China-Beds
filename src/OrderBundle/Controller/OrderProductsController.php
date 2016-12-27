@@ -489,4 +489,16 @@ select coalesce(sum(i.quantity), 0) as quantity
         ));
     }
 
+
+    /**
+     * @Route("/delete/{id_channel}/{id_order}", name="order_products_delete")
+     */
+    public function deleteOrderAction(Channel $channel, Orders $order)
+    {
+        $that = $channel;
+        $that2 = $order;
+        $that3 = "something";
+
+    }
+
 }

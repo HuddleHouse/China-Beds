@@ -88,10 +88,11 @@
                                 data: {product_variant_id: value.id, warehouse_id: warehouse_id},
                                 success: function (data) {
                                     $scope.$apply(function () {
-                                        if(type === 'departing')
+                                        if(type === 'departing') {
                                             self.cart[key].departing_warehouse_quantity = parseInt(data, 10) - parseInt(self.cart[key].quantity, 10);
-                                        else if(type === 'receiving')
+                                        }else if(type === 'receiving') {
                                             self.cart[key].receiving_warehouse_quantity = parseInt(data, 10) + parseInt(self.cart[key].quantity, 10);
+                                        }
                                     });
                                 }
                             });
@@ -164,19 +165,13 @@
                 function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
 
-                    var rec_check = parseInt(self.cart[index].departing_warehouse_quantity,10) - parseInt(newVal - oldVal,10);
+                    self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity, 10) - parseInt(newVal - oldVal, 10);
+                    self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity, 10) + parseInt(newVal - oldVal, 10);
+                    angular.forEach(self.cart, function(value, key) {
+                        total += value.quantity;
+                    });
+                    self.cart_total = total;
 
-                    if(rec_check > 0) {
-                        self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity, 10) - parseInt(newVal - oldVal, 10);
-                        self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity, 10) + parseInt(newVal - oldVal, 10);
-                        angular.forEach(self.cart, function(value, key) {
-                            total += value.quantity;
-                        });
-                        self.cart_total = total;
-
-                    }else{
-                        self.cart[index].quantity = oldVal;
-                    }
 
                 }
 
@@ -330,7 +325,7 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" max="{{item.departing_warehouse_quantity}}" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" max="{{item.warehouse_quantity}}" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.departing_warehouse_quantity" min="0" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
