@@ -163,12 +163,21 @@
 
                 function updateCartItem(newVal, oldVal, index) {
                     var total = 0;
-                    self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity,10) - parseInt(newVal - oldVal,10);
-                    self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity,10) + parseInt(newVal - oldVal,10);
-                    angular.forEach(self.cart, function(value, key) {
-                        total += value.quantity;
-                    });
-                    self.cart_total = total;
+
+                    var rec_check = parseInt(self.cart[index].departing_warehouse_quantity,10) - parseInt(newVal - oldVal,10);
+
+                    if(rec_check > 0) {
+                        self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity, 10) - parseInt(newVal - oldVal, 10);
+                        self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity, 10) + parseInt(newVal - oldVal, 10);
+                        angular.forEach(self.cart, function(value, key) {
+                            total += value.quantity;
+                        });
+                        self.cart_total = total;
+
+                    }else{
+                        self.cart[index].quantity = oldVal;
+                    }
+
                 }
 
                 function save(draft){
@@ -321,10 +330,10 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" max="{{item.departing_warehouse_quantity}}" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.departing_warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
+                                <input ng-model="item.departing_warehouse_quantity" min="0" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.receiving_warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
