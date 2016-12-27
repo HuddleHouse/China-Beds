@@ -1084,12 +1084,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "c0ba63245f4155b3bc7060298089c2bf806cc002"
+                "reference": "694e6d36588f128e8ee0abe622bdcb4c102bd75e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/c0ba63245f4155b3bc7060298089c2bf806cc002",
-                "reference": "c0ba63245f4155b3bc7060298089c2bf806cc002",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/694e6d36588f128e8ee0abe622bdcb4c102bd75e",
+                "reference": "694e6d36588f128e8ee0abe622bdcb4c102bd75e",
                 "shasum": ""
             },
             "require": {
@@ -1151,7 +1151,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-12-19 10:39:33"
+            "time": "2016-12-27 09:35:48"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -3477,16 +3477,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.29.0",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "74f723e542368ca2080b252740be5f1113ebb898"
+                "reference": "c6ff71094fde15d12398eaba029434b013dc5e59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/74f723e542368ca2080b252740be5f1113ebb898",
-                "reference": "74f723e542368ca2080b252740be5f1113ebb898",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/c6ff71094fde15d12398eaba029434b013dc5e59",
+                "reference": "c6ff71094fde15d12398eaba029434b013dc5e59",
                 "shasum": ""
             },
             "require": {
@@ -3499,7 +3499,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.29-dev"
+                    "dev-master": "1.30-dev"
                 }
             },
             "autoload": {
@@ -3534,7 +3534,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-12-13 17:28:18"
+            "time": "2016-12-23 11:06:22"
         },
         {
             "name": "willdurand/jsonp-callback-validator",
