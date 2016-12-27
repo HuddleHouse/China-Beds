@@ -31,23 +31,6 @@
 
                 return false;
             });
-
-            /////////////////////////
-            //    TOP RETAILERS
-            /////////////////////////
-
-            $.ajax({
-                type: 'POST',
-                url: "{{ path('get_top_retailer_by_sales') }}",
-                dataType: 'json',
-                //data:
-                success: function (data) {
-
-                }
-            });
-
-
-
         });
 
         $(function () {
@@ -192,8 +175,6 @@
         {% include "AppBundle:Profile:show_side_bar.html.twig" %}
         {% include "AppBundle:Profile:new_user_modal.html.twig" %}
 
-        {# TOP RETAILERS #}
-        {#{% include "AppBundle:Profile:show_top_retailers.html.twig" %}#}
     </div>
     </div>
 {% endblock content %}

@@ -106,11 +106,11 @@
             </tr>
             <tr>
                 <td>Image 2</td>
-                <td>{% if(warranty_claim.path2 is not null) %}<a target="_blank" href="{{ warranty_claim.webPath2 }}">View</a>/<a download href="{{ warranty_claim.webPath2 }}">Download</a>{% else %}--{% endif %}</td>
+                <td>{% if(warranty_claim.path2 is not null) %}<a target="_blank" href="{{ asset(warranty_claim.webPath2) }}">View</a>/<a download href="{{ warranty_claim.webPath2 }}">Download</a>{% else %}--{% endif %}</td>
             </tr>
             <tr>
                 <td>Image 3</td>
-                <td>{% if(warranty_claim.path1 is not null) %}<a target="_blank" href="{{ warranty_claim.webPath1 }}">View</a>/<a download href="{{ warranty_claim.webPath3 }}">Download</a>{% else %}--{% endif %}</td>
+                <td>{% if(warranty_claim.path1 is not null) %}<a target="_blank" href="{{ asset(warranty_claim.webPath1) }}">View</a>/<a download href="{{ warranty_claim.webPath3 }}">Download</a>{% else %}--{% endif %}</td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align: center">Comments</td>
