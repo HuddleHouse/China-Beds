@@ -557,6 +557,7 @@
                                 {% endif %}
                             </select>
                         </div>
+                        {% if order.submittedForUser.achAccountNumber %}
                         <div id="ach" ng-show="payment_type=='ach'&&!is_paid">
                             <div id="ach-amount" class="form-group">
                                 <label class="col-sm-3 control-label" for="credit-amount">Amount</label>
@@ -570,6 +571,8 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if app.user.hasLedger and user.getLedgerTotal > 0 %}
                         <div id="credit" ng-show="payment_type=='credit'&&!is_paid">
                             <div id="credit-amount" class="form-group">
                                 <label class="col-sm-3 control-label" for="credit-amount">Amount</label>
@@ -583,6 +586,8 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if not order.submittedForUser.hideCC %}
                         <div id="cc" ng-show="payment_type=='cc'&&!is_paid">
                             <div id="cc-amount" class="form-group">
                                 <label class="col-sm-3 control-label" for="card-amount">Amount</label>
@@ -646,7 +651,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        {% endif %}
                     </fieldset>
                     {% if order.path != '' and order.path != NULL %}
                     <div class="row">
