@@ -41,6 +41,13 @@ class Specification
      */
     private $product_specifications;
 
+    public function toArray() {
+            return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'code'           => $this->getCode(),
+        ];
+    }
 
     public function __construct() {
         $this->product_specifications = new ArrayCollection();

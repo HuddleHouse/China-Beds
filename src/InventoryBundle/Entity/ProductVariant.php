@@ -630,7 +630,20 @@ class ProductVariant
         }
         return $total;
     }
+    
+    public function toArrayWithoutRelation() {
 
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'sku'           => $this->getSku(),
+            'weight'        => $this->getWeight(),
+            'dimensions'    => $this->getFedexDimensions(),
+            'msrp'          => $this->getMsrp()
+
+        ];
+    }
+    
     public function toArray(User $user = null) {
         $inventory = [];
         foreach($this->getWarehouseInventory() as $warehouse_inventory) {

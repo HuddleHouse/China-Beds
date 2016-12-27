@@ -689,15 +689,40 @@ class Product
         }
         $images = [];
         foreach($this->getImages() as $image) {
-            $images[] = $image->getWebPath();
+            $images[] = $image->toArray();
         }
+        $variants = [];
+	foreach ($this->getVariants() as $variant) {
+	    $variants[] = $variant->toArrayWithoutRelation();
+	}
+	$attributes = [];
+	foreach ($this->getAttributes() as $attribute) {
+	    $attributes[] = $attribute->getAttribute()->toArray();
+	}
+	$specifications = [];
+	foreach ($this->getSpecifications() as $specification) {
+	    $specifications[] = $specification->getSpecification()->toArray();
+	}
+	
         return [
-            'id'            => $this->getId(),
-            'name'          => $this->getName(),
-            'description'   => $this->getDescription(),
-            'hide_backend'  => $this->getHideBackend(),
-            'categories'    => $categories,
-            'images'        => $images
+            'id'                => $this->getId(),
+            'name'              => $this->getName(),
+            'description'       => $this->getDescription(),
+            'metaDescription'   =>$this->getMetaDescription(),
+            'shortDescription'  =>$this->getShortDescription(),
+            'sku'               => $this->getSku(),
+            'active'            => $this->getActive(),
+	    'tagline'           => $this->getTagline(),
+            'frontHeadline'     => $this->getFrontHeadline(),
+            'hideFrontend'      =>$this->getHideFrontend(),
+            'promoKitAvailable' => $this->getPromoKitAvailable(),
+            'listId'            => $this->getListId(),
+            'hide_backend'      => $this->getHideBackend(), 
+            'categories'        => $categories,
+            'images'            => $images,
+            'variants'          => $variants,
+            'attributes'        => $attributes,
+            'specifications'    => $specifications
         ];
     }
 }

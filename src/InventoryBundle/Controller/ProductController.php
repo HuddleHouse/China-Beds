@@ -8,9 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\Product;
+use InventoryBundle\Entity\ProductImage;
+use InventoryBundle\Entity\ProductSpecification;
+use InventoryBundle\Entity\ProductAttribute;
+use InventoryBundle\Entity\Attribute;
+use InventoryBundle\Entity\Specification;
 use InventoryBundle\Form\ProductType;
 use QuickbooksBundle\Controller\ItemController;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use InventoryBundle\Entity\ProductVariant;
 /**
  * Product controller.
  *
@@ -18,6 +25,54 @@ use QuickbooksBundle\Controller\ItemController;
  */
 class ProductController extends Controller
 {
+   /**
+     * Used for export all products as json file.
+     *
+     * @Route("/export", name="admin_product_export")
+     * @Method({"GET", "POST"})
+     */
+    public function exportAction(Request $request)
+    {
+	$em = $this->getDoctrine()->getManager();
+
+        $products = $em->getRepository('InventoryBundle:Product')->findAll();
+        
+        $productsArr = array();
+        foreach ($products as $product) {  
+		$productsArr[] = $product->toArray();
+        }
+        
+        $response = new JsonResponse();
+        $response->setData($productsArr);
+        
+        $now = date('YmdHis');
+        $fileName = 'products-'.$now.'.json';
+        $disposition = $response->headers->makeDisposition(
+	    ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+	    $fileName
+	);
+
+	$response->headers->set('Content-Disposition', $disposition);
+	
+	return $response;
+    }
+    
+    /**
+     * This route is used for testing product importer 
+     *
+     * @Route("/import", name="admin_product_import")
+     * @Method({"GET", "POST"})
+     */
+    public function importAction(Request $request)
+    {
+
+	$products = json_decode(file_get_contents($this->get('kernel')->getRootDir() . '/../app/products/products-20161227184927.json'));
+	
+	$productImportService = $this->get('product_import_service');
+	$productImportService->import($products,1,1);
+	exit();
+    }
+    
     /**
      * Lists all Product entities.
      *
