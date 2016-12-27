@@ -105,13 +105,13 @@ class EmailService extends BaseService
 
 
 
-    public function sendEmail($data)
+    public function sendEmail($data, $html = true)
     {
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
             ->setFrom($data['from'])
             ->setTo($data['to'])
-            ->setBody($data['body'], 'text/html')
+            ->setBody($data['body'], $html ? 'text/html' : 'text/plain')
             ->addBcc('jeremi.bergman@icloud.com');
 
         if ( isset($data['files']) && is_array($data['files']) ) {
@@ -182,7 +182,7 @@ class EmailService extends BaseService
                 'body' => 'Dear '. $user->getFullName() .',\n\n'.
                     'Thank you for contacting ' . $warrantyClaim->getChannel()->getCompanyName() . '.' .
                     $settings->get('warrantyclaim-acknowledgement-text')
-            ));
+            ), false);
     }
 
     public function sendPortETAEmail(PurchaseOrder $po) {
@@ -200,7 +200,7 @@ class EmailService extends BaseService
                 'body' => 'Hello,\n\n'.
                     'You are receiving this email because your Purchase Order #' . $po->getOrderNumber() . ' is expected for to arrive on ' . $po->getStockDueDate()->format('m/d/y') .
                     '.\n\nFeel free to <a href="'.$url.'">click here</a> or paste the link below in your browser for details.\n\n' . $url
-            ));
+            ), false);
         }
     }
 
@@ -219,7 +219,7 @@ class EmailService extends BaseService
                     'You are receiving this email because your Purchase Order #' . $po->getOrderNumber() . ' is expected for to arrive today.' .
                     '.\n\nFeel free to <a href="'.$url.'">click here</a> or paste the link below in your browser for details.' .
                     '\n\n' . $url
-            ));
+            ), false);
         }
     }
 
