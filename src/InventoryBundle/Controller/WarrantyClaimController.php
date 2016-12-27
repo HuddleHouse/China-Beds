@@ -116,6 +116,9 @@ class WarrantyClaimController extends Controller
         $oldPath1 = $warrantyClaim->getPath1();
         $oldPath2 = $warrantyClaim->getPath2();
         $oldPath3 = $warrantyClaim->getPath3();
+        $oldLawLabel = $warrantyClaim->getLawLabel();
+        $oldFrLabel = $warrantyClaim->getFrLabel();
+        
         $oldOrder = $warrantyClaim->getOrder();
 
         $editForm = $this->createForm('InventoryBundle\Form\WarrantyClaimType', $warrantyClaim, array('method' => 'PATCH'));
@@ -138,6 +141,16 @@ class WarrantyClaimController extends Controller
                     $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldPath3;
                     if(file_exists($file_path)) unlink($file_path);
                     $warrantyClaim->upload3();
+                }
+		if($oldLawLabel != $warrantyClaim->getLawLabel()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldLawLabel;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload4();
+                }
+		if($oldFrLabel != $warrantyClaim->getFrLabel()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldFrLabel;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload5();
                 }
                 if($oldOrder != $warrantyClaim->getOrder()) {
                     $oldOrder->getWarrantyClaims()->remove($warrantyClaim);

@@ -52,6 +52,14 @@
                     $('#charNum').text(l);
                 }
             });
+                    
+	    $('#warranty_claim_file4').change(function () {
+		    $('#warranty_claim_lawLabel').val($(this).val());	
+	    });
+
+	    $('#warranty_claim_file5').change(function () {
+		    $('#warranty_claim_frLabel').val($(this).val());
+	    });
         });
 
         function openFileBrowser1() {
