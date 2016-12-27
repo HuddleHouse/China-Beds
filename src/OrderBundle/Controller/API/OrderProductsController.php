@@ -659,6 +659,9 @@ class OrderProductsController extends Controller
                     $shipment = new \RocketShipIt\Shipment('fedex');
 
                     $shipment->setParameter('accountNumber', $orders->getChannel()->getFedexNumber());
+                    $shipment->setParameter('key', $orders->getChannel()->getFedexKey());
+                    $shipment->setParameter('password', $orders->getChannel()->getFedexPassword());
+                    $shipment->setParameter('meterNumber', $orders->getChannel()->getFedexMeterNumber());
                     $shipment->setParameter('toCompany', $orders->getShipName());
                     $shipment->setParameter('toName', $orders->getShipName());
                     $shipment->setParameter('toPhone', $orders->getShipPhone());
