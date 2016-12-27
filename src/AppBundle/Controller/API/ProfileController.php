@@ -160,6 +160,7 @@ class ProfileController extends Controller
         $statement->execute();
         $results = $statement->fetchAll();
         $that = $results;
+        return JsonResponse::create($results);
     }
 }
 
