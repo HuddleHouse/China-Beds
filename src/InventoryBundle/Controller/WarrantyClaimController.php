@@ -54,7 +54,6 @@ class WarrantyClaimController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-
                 if ( empty($warrantyClaim->getFile2()) ) {
                     throw new \Exception("You must have at least 2 images uploaded.");
                 }
@@ -74,10 +73,16 @@ class WarrantyClaimController extends Controller
                 $warrantyClaim->upload1();
                 $warrantyClaim->upload2();
                 $warrantyClaim->upload3();
+                $warrantyClaim->upload4();
+                $warrantyClaim->upload5();
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
+                
+         
                 $this->get('email_service')->sendWarrantyClaimAcknowledgementEmail($this->getUser(), $warrantyClaim);
+                
+                
                 return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
             }
             catch(\Exception $e) {
