@@ -15,9 +15,16 @@
     <script>
         $(document).ready(function () {
             $('#part-table').DataTable({
-            "iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
-        });
-
+		"iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
+	    });
+	
+	
+	    
+	    $('#edit_user_settings').submit(function() {
+		var c = confirm("Are you sure, you want to save changes ?");
+		return c; //you can just return c because it will be true or false
+	    });
+	
         var app = angular.module('myApp', ['ngMaterial']);
 
         app.directive('phoneInput', function($filter, $browser) {
