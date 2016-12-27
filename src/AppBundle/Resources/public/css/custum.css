@@ -159,3 +159,71 @@ input.form-control.input-sm {
 		padding:15px;
 	}
 }
+.forget-pass-box {
+	width:360px;
+	margin:150px auto 0;
+}
+.forget-pass-box .login-box-body {
+	background:#e5e5e5;
+	padding: 20px;
+	border-top: 0;
+	color: #666;
+	border-radius:21px;
+	-moz-border-radius:21px;
+	text-align:center;
+}
+.forget-pass-box legend {
+	display:block;
+	width:100%;
+	padding:0;
+	line-height:inherit;
+	color:#95989a;
+	border:0;
+	font-size: 24px;
+	margin-bottom: 22px;
+	text-align:left;
+}
+.forget-pass-box .form-group {
+	margin: 28px 0 0;
+	padding-bottom: 7px;
+	position: relative;
+	text-align:left;
+}
+.forget-pass-box .form-group label {
+	color:#95989a;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.42857;
+	display:inline-block;
+	margin-bottom:5px;
+	max-width:100%;
+	text-align:left;
+}
+.forget-pass-box .form-group .form-control {
+	background-color: #fff;
+	border-radius: 10px;
+	font-size: 20px;
+	height: 50px;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-bottom: 1px solid #ccc !important;
+	margin-bottom: 7px;
+}
+.forget-pass-box .btn {
+	background-color: #050200 !important;
+	border-radius: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 15px;
+	width: 50%;
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	color: rgba(255, 255, 255, 0.84);
+	font-size:16px;
+}
+@media (max-width: 768px) {
+	.forget-pass-box {
+		width: 90%;
+		margin-top: 20px;
+	}
+}
