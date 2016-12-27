@@ -37,6 +37,13 @@ class Status
     private $color;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="warranty_allowed", type="boolean")
+     */
+    private $warranty_allowed = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="WarehouseBundle\Entity\PurchaseOrder", mappedBy="status")
      */
     private $purchase_orders;
@@ -241,5 +248,21 @@ class Status
     public function removeStockAdjustment(\WarehouseBundle\Entity\StockAdjustment $stockAdjustment)
     {
         $this->stock_adjustments->removeElement($stockAdjustment);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWarrantyAllowed()
+    {
+        return $this->warranty_allowed;
+    }
+
+    /**
+     * @param mixed $warranty_allowed
+     */
+    public function setWarrantyAllowed($warranty_allowed)
+    {
+        $this->warranty_allowed = $warranty_allowed;
     }
 }

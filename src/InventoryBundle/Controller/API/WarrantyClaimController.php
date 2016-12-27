@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use InventoryBundle\Entity\Channel;
 use InventoryBundle\Form\WarrantyApprovalType;
 use OrderBundle\Entity\Ledger;
+use OrderBundle\Entity\Orders;
 use OrderBundle\Services\LedgerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use InventoryBundle\Entity\WarrantyClaim;
 use InventoryBundle\Form\WarrantyClaimType;
 use Symfony\Component\HttpFoundation\Response;
+use WarehouseBundle\Entity\Status;
 
 /**
  * WarrantyClaim controller.
@@ -68,6 +70,7 @@ class WarrantyClaimController extends Controller
         $rtn = array();
         $rtn[] = "<option selected disabled>Select Order Id</option>";
         foreach($user->getOrders() as $order) {
+            if ( !$order->getStatus()->getWarrantyAllowed() ) { continue; }
             if ( $order->getChannel()->getId() == $this->getUser()->getActiveChannel()->getId() ) {
                 $rtn[] = sprintf('<option value="%d">%s</option>', $order->getId(), $order->getOrderId());
             }
