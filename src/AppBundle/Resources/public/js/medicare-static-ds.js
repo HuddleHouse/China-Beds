@@ -44,7 +44,7 @@ MedicareDataSource.prototype.parse_ = function(csv) {
     var locality = that.join_([row.city, row.state, row.zip], ', ');
     var store = new storeLocator.Store(row.id, position, false, {
       title: row.company_name,
-      address: that.join_([row.address1, locality], '<br>'),
+      address: that.join_([row.address1, locality, row.phone.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3')], '<br>'),
 
     });
     stores.push(store);
