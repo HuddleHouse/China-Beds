@@ -68,6 +68,18 @@ class Attribute
         $this->product_attributes = new ArrayCollection();
     }
     
+    
+    public function toArray() {
+
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'code'           => $this->getCode(),
+            'alt_tag'        => $this->getAltTag(),
+            'path'    => $this->getPath(),
+        ];
+    }
+    
     /**
      * Get id
      *
