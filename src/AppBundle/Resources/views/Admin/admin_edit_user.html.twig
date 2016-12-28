@@ -160,10 +160,12 @@
                     </div>
                 {% endif %}
                 <div class="row" style="display: block;">
+                    {% if form.my_distributor is defined %}
                     <div class="col-md-6 form-group">
                         {{ form_label(form.my_distributor) }}
                         {{ form_widget(form.my_distributor) }}
                     </div>
+                    {% endif %}
                     <div class="col-md-6 form-group">
                         {{ form_label(form.my_sales_rep) }}
                         {{ form_widget(form.my_sales_rep) }}
