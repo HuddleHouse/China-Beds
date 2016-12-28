@@ -1,14 +1,23 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% if not form.vars.valid %}
-    <div class="col-md-12">
-        <div class="bs-callout bs-callout-danger ">
-            {{ form_errors(form.username) }}
-            {{ form_errors(form.email) }}
-            {{ form_errors(form.current_password) }}
-        </div>
-    </div>
+
+
+{% set messages = [] %}
+{% for child in form.children %}
+    {% for error in child.vars.errors %}
+        {% set messages = messages|merge([error.message]) %}
+    {% endfor %}
+{% endfor %}
+{% if messages|length %}
+	<div class="alert alert-danger alert-white rounded">
+	    <ul>
+		{% for message in messages %}
+		    <li>{{ message }}</li>
+		{% endfor %}
+	    </ul>
+	</div>
 {% endif %}
+
 <div class="body" ng-app="myApp">
     <div class="wrapper" ng-controller="MyCtrl">
         <div class="table">
