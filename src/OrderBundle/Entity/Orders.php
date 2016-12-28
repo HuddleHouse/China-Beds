@@ -202,7 +202,7 @@ class Orders
 //    private $shipping_labels;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist", "remove"})
      */
     private $pop_items;
 

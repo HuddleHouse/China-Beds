@@ -118,7 +118,7 @@ class ReportController extends Controller
 
         $report['headers'] = array(
             'Order ID',
-            'Order Number',
+            'PO #',
             'Pickup Date',
             'Ship Name',
             'User Name',
@@ -156,7 +156,7 @@ class ReportController extends Controller
             $report['total'] += $order->getSubtotal();
         }
 
-        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y'), 'month'=>$month,'year'=>$year ));
+        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y'), 'month'=>$month,'year'=>$year, 'channel' => $this->getUser()->getActiveChannel() ));
     }
 
     /**

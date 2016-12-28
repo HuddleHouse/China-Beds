@@ -23,8 +23,10 @@ class StockAdjustmentController extends Controller
      */
     public function saveStockAdjustment(Request $request)
     {
+    
         $em = $this->getDoctrine()->getManager();
-        $status_name = $request->request->get('status');
+    
+	$status_name = $request->request->get('status');
         $reason = $request->request->get('reason');
         $connection = $em->getConnection();
         $statement = $connection->prepare("SELECT id FROM status WHERE name = :name");

@@ -52,11 +52,13 @@
 
                     {% if app.user.hasLedger %}
                         <li id="ledger-total" class="">
-                            <div class="ledger-total-box">
-                                <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
-                                    Credit: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
-                                </h6>
-                            </div>
+                            <a href="{{ path('credit_request_index') }}" style="padding-top: 0; padding-bottom: 0;">
+                                <div class="ledger-total-box">
+                                    <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
+                                        Credit: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                    </h6>
+                                </div>
+                            </a>
                         </li>
                     {% endif %}
 

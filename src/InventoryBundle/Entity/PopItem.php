@@ -714,5 +714,4 @@ class PopItem
             'image_path'    => $this->getWebPath()
         ];
     }
-
 }
