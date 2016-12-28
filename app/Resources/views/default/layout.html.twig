@@ -45,7 +45,7 @@
                         <li id="ledger-total" class="">
                             <div class="ledger-total-box">
                                 <h6 style="color: #222; padding: 2px; margin: 5px 5px 5px 5px;">
-                                    Credit Balance: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                    Credit: ${{ app.user.getLedgerTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
                                 </h6>
                             </div>
                         </li>
@@ -56,7 +56,7 @@
                             <a href="{{ path('my_open_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
                                 <div class="ledger-total-box">
                                     <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
-                                        Balance Due: ${{ app.user.getOpenBalanceTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                        Balance: ${{ app.user.getOpenBalanceTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
                                     </h6>
                                 </div>
                             </a>
@@ -69,7 +69,7 @@
                             <a href="{{ path('my_pending_orders_index') }}" style="padding-top: 0; padding-bottom: 0;">
                             <div class="ledger-total-box">
                                 <h6 style=" color: #fff; padding: 2px; margin: 5px 5px 5px 5px; ">
-                                    Pending Orders: ${{ app.user.getPendingOrderTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
+                                    Pending: ${{ app.user.getPendingOrderTotal(app.user.activechannel.id) | number_format(2, '.', ',')}}
                                 </h6>
                             </div>
                             </a>
