@@ -311,6 +311,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                         }
                     }
                 }
+                foreach($user->getRetailers() as $retailer) {
+                    if(!isset($user_ids[$retailer->getId()])) {
+                        $user_ids[$retailer->getId()] = $retailer->getId();
+                        $data = $em->getRepository('OrderBundle:Orders')->findBy(array('submitted_for_user' => $retailer, 'channel' => $user->getActiveChannel()));
+                        foreach($data as $item)
+                            $orders[] = $item;
+                    }
+                }
             }
             if($user->hasRole('ROLE_SALES_MANAGER')) {
                 foreach($user->getSalesReps() as $salesRep) {
