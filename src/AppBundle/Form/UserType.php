@@ -243,21 +243,21 @@ class UserType extends AbstractType
         $user = $event->getData();
         $form = $event->getForm();
 
-        if($user->hasRole('ROLE_DISTRIBUTOR')) {
-            $form->add('retailers', EntityType::class, array(
-                'class' => 'AppBundle\Entity\User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 5');
-                },
-                'label' => 'Retailers',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
-                'required' => false,
-                'multiple' => true,
-            ));
-        }
+//        if($user->hasRole('ROLE_DISTRIBUTOR')) {
+//            $form->add('retailers', EntityType::class, array(
+//                'class' => 'AppBundle\Entity\User',
+//                'query_builder' => function (EntityRepository $er) {
+//                    return $er->createQueryBuilder('u')
+//                        ->leftJoin('u.groups', 'g')
+//                        ->where('g.id = 5');
+//                },
+//                'label' => 'Retailers',
+//                'choice_label' => 'name',
+//                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
+//                'required' => false,
+//                'multiple' => true,
+//            ));
+//        }
         if($user->hasRole('ROLE_WAREHOUSE')) {
             $form->add('managed_warehouses', EntityType::class, array(
                 'class' => 'WarehouseBundle\Entity\Warehouse',
