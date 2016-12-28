@@ -395,13 +395,18 @@ class OrderProductsController extends Controller
      */
     private function calculateShipping(Orders $order) {
         $rate = new \RocketShipIt\Rate('fedex');
-        $rate->setParameter('shipCode', '37919');
+        $rate->setParameter('accountNumber', $order->getChannel()->getFedexNumber());
+        $rate->setParameter('key', $order->getChannel()->getFedexKey());
+        $rate->setParameter('password', $order->getChannel()->getFedexPassword());
+        $rate->setParameter('meterNumber', $order->getChannel()->getFedexMeterNumber());
+
         $rate->setParameter('residentialAddressIndicator','1');
         $rate->setParameter('service', 'FEDEX_GROUND');
 
         foreach($order->getProductVariants() as $productVariant) {
             foreach($productVariant->getWarehouseInfo() as $info) {
-                $rate->setParameter('toCode', $info->getWarehouse()->getZip());
+                $rate->setParameter('toCode', $$order->getShipZip());
+                $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
 
                 $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
                 if ( count($dimensions) == 1 ) {
