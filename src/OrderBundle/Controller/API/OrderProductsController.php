@@ -394,10 +394,16 @@ class OrderProductsController extends Controller
      * calculates shipping
      */
     private function calculateShipping(Orders $order) {
-        $rate = new \RocketShipIt\Rate('fedex');
+        $config = new RocketShipIt\Config();
+        $config->setDefault('fedex', 'key', $order->getChannel()->getFedexKey());
+        $config->setDefault('fedex', 'password', $order->getChannel()->getFedexPassword());
+        $config->setDefault('fedex', 'accountNumber', $order->getChannel()->getFedexNumber());
+        $config->setDefault('fedex', 'meterNumber', $order->getChannel()->getFedexMeterNumber());
+
+        $rate = new \RocketShipIt\Rate('fedex', ['config' => $config]);
         $rate->setParameter('accountNumber', $order->getChannel()->getFedexNumber());
-        $rate->setParameter('key', $order->getChannel()->getFedexKey());
-        $rate->setParameter('password', $order->getChannel()->getFedexPassword());
+//        $rate->setParameter('key', $order->getChannel()->getFedexKey());
+//        $rate->setParameter('password', $order->getChannel()->getFedexPassword());
         $rate->setParameter('meterNumber', $order->getChannel()->getFedexMeterNumber());
 
         $rate->setParameter('residentialAddressIndicator','1');
