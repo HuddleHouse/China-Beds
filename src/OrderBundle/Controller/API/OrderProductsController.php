@@ -405,7 +405,7 @@ class OrderProductsController extends Controller
 
         foreach($order->getProductVariants() as $productVariant) {
             foreach($productVariant->getWarehouseInfo() as $info) {
-                $rate->setParameter('toCode', $$order->getShipZip());
+                $rate->setParameter('toCode', $order->getShipZip());
                 $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
 
                 $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
