@@ -56,40 +56,55 @@ class AdminController extends Controller
         $user_clone = clone $user;
 
         $form = $this->createForm(($this->getUser()->hasRole('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) ? UserType::class : UserRestrictedType::class, $user);
-        $form->handleRequest($request);
+	
+	$errors = null;
+	
+	if ($request->getMethod()=='POST') {
+		
+		$form->handleRequest($request);
 
-        if($form->isValid()) {
-            try {
-                $event = new FormEvent($form, $request);
+	      
+		$validator = $this->get('validator');
+		$errors = $validator->validate($user, null, array('editUser'));
 
-                if($user->getPlainPassword() == '' || $user->getPlainPassword() == null){
-                    $user->setPlainPassword($user_clone->getPlainPassword());
-                }else{
-                    $user->setPlainPassword($user->getPlainPassword());
-                }
+		if (count($errors) <= 0) {
+		
+			if($form->isValid()) {
+			
+			    try {
+				$event = new FormEvent($form, $request);
 
-                $userManager->updateUser($user);
-                $successMessage = "User information updated successfully.";
-                $this->addFlash('notice', $successMessage);
+				if($user->getPlainPassword() == '' || $user->getPlainPassword() == null){
+				    $user->setPlainPassword($user_clone->getPlainPassword());
+				}else{
+				    $user->setPlainPassword($user->getPlainPassword());
+				}
 
-                return $this->redirectToRoute('admin_edit_user', array('user_id' => $user_id));
-            }
-            catch(\Exception $e) {
-                $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
-                return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
-                    'form' => $form->createView(),
-                    'user_id' => $user_id,
-                    'user' => $user
-                ));
-            }
-        }
+				$userManager->updateUser($user);
+				$successMessage = "User information updated successfully.";
+				$this->addFlash('notice', $successMessage);
 
-        return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
-            'referral' => $referral,
-            'form' => $form->createView(),
-            'user_id' => $user_id,
-            'user' =>$user
-        ));
+				return $this->redirectToRoute('admin_edit_user', array('user_id' => $user_id));
+			    }
+			    catch(\Exception $e) {
+				$this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+				return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+				    'form' => $form->createView(),
+				    'user_id' => $user_id,
+				    'user' => $user
+				));
+			    }
+			}
+		}
+	}
+	
+	return $this->render('AppBundle:Admin:admin_edit_user.html.twig', array(
+	    'referral' => $referral,
+	    'form' => $form->createView(),
+	    'user_id' => $user_id,
+	    'user' =>$user,
+	    'errors' => $errors
+	));
     }
 
     /**
@@ -98,31 +113,45 @@ class AdminController extends Controller
      * @Route("/add-user", name="admin_add_user")
      */
    public function adminAddUserAction(Request $request){
-       $userManager = $this->get('fos_user.user_manager');
-       $user = $userManager->createUser();
+	
+	$userManager = $this->get('fos_user.user_manager');
+	$user = $userManager->createUser();
 
-       $form = $this->createForm(UserType::class, $user);
-       $form->handleRequest($request);
+	$form = $this->createForm(UserType::class, $user);
+	$errors = null;
+	
+	if ($request->getMethod()=='POST') {
+		
+		$form->handleRequest($request);
 
-       if($form->isValid()) {
-           try {
-               $event = new FormEvent($form, $request);
-               $userManager->updateUser($user);
-               $successMessage = "User information updated successfully.";
-               $this->addFlash('notice', $successMessage);
+	      
+		$validator = $this->get('validator');
+		$errors = $validator->validate($user, null, array('register'));
 
-               return $this->redirectToRoute('view_users');
-           } catch (\Exception $e) {
-               $this->addFlash('error', 'Error updating user: ' . $e->getMessage());
-               return $this->redirectToRoute('view_users');
-           }
-       }
+		if (count($errors) <= 0) {
 
-       return $this->render('@App/Admin/admin_edit_user.html.twig', array(
-           'form' => $form->createView(),
-           'user' =>$user,
-           'referral' => ''
-       ));
+			if($form->isValid()) {
+			    try {
+				$event = new FormEvent($form, $request);
+				$userManager->updateUser($user);
+				$successMessage = "User information updated successfully.";
+				$this->addFlash('notice', $successMessage);
+
+				return $this->redirectToRoute('view_users');
+			    } catch (\Exception $e) {
+				$this->addFlash('error', 'Error updating user: ' . $e->getMessage());
+				return $this->redirectToRoute('view_users');
+			    }
+			}
+		}
+	}
+	
+	return $this->render('@App/Admin/admin_edit_user.html.twig', array(
+	    'form' => $form->createView(),
+	    'user' =>$user,
+	    'referral' => '',
+	    'errors' => $errors
+	));
 
    }
 
