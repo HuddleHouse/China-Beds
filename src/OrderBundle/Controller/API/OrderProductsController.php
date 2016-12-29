@@ -198,12 +198,14 @@ class OrderProductsController extends Controller
                                     $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
                                     break;
                                 }
-                                else if($quantity > $warehouse_data['quantity']) {
+                                elseif($quantity > $warehouse_data['quantity'] && $warehouse_data['quantity'] > 0) {
                                     $orders_warehouse_info = new OrdersWarehouseInfo($warehouse_data['quantity'], $orders_product_variant, $warehouse);
                                     $quantity -= $warehouse_data['quantity'];
                                 }
-                                $em->persist($orders_warehouse_info);
-                                $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+                                if ( isset($orders_warehouse_info) ) {
+                                    $em->persist($orders_warehouse_info);
+                                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+                                }
                             }
                             $em->persist($orders_product_variant);
 

@@ -57,25 +57,25 @@ class EmailService extends BaseService
         foreach($order->getProductVariants() as $product) {
             foreach($product->getWarehouseInfo() as $info) {
                 if ( $info->getQuantity() > 0 ) {
-                    $warehouses[$info->getWarehouse()->getId()][] = $info->getOrdersProductVariant();
+                    $warehouses[$info->getWarehouse()->getId()][] = $info;
                 }
             }
         }
 
         foreach($warehouses as $warehouse_id => $products) {
             $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
-//            echo "==== " . $warehouse->getName() . " ====\n";
+            echo "==== " . $warehouse->getName() . " ====\n";
 //            foreach($warehouse->getManagers() as $manager) {
 //                echo "      " . $manager->getDisplayName() . "\n";
                 $files = [];
-                foreach($products as $product) {
-//                    echo "      " . $product->getProductVariant()->getProduct()->getName() . ' ' . $product->getProductVariant()->getName() . "\n";
-                    foreach ($product->getWarehouseInfo() as $info) {
-                        foreach ($info->getShippingLabels() as $label) {
+                foreach($products as $ordersWarehouseInfo) {
+                    echo "      " . $ordersWarehouseInfo->getId() . " " . get_class($ordersWarehouseInfo) . ' qty ' . $ordersWarehouseInfo->getQuantity() . ' '  . $ordersWarehouseInfo->getOrdersProductVariant()->getProductVariant()->getProduct()->getName() . ' ' . $ordersWarehouseInfo->getOrdersProductVariant()->getProductVariant()->getName() . "\n";
+                    foreach ($ordersWarehouseInfo->getShippingLabels() as $label) {
+                            echo "      " . $label->getId() . " " . get_class($label) . "\n";
                             $files[] = $label->getAbsolutePath();
-                        }
                     }
                 }
+
                 $body = $this->container->get('twig')->render(
                     '@Order/Emails/warehouse-order-notification.html.twig',
                     ['order' => $order, 'products' => $products, 'warehouse' => $warehouse]

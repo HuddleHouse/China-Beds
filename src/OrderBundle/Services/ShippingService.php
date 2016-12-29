@@ -27,7 +27,7 @@ class ShippingService
         $this->container = $container;
     }
 
-    public function generateShippingLabelsForOrder(Orders &$orders) {
+    public function generateShippingLabelsForOrder(Orders &$orders, $flush = false) {
         $em = $this->container->get('doctrine')->getManager();
 
         $config = $this->getConfigForChannel($orders->getChannel());
@@ -142,6 +142,11 @@ class ShippingService
 
                 }
             }
+        }
+
+        if ( $flush ) {
+            $em->persist($orders);
+            $em->flush();
         }
 
         return [
