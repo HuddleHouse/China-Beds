@@ -1261,7 +1261,7 @@ class User extends BaseUser
 
         foreach($this->getUserChannels() as $user_channel) {
             foreach($channel as $chan) {
-                if ($user_channel->getId() == $chan->getId()) {
+                if (null != $user_channel && null != $chan && $user_channel->getId() == $chan->getId()) {
                     return true;
                 }
             }
