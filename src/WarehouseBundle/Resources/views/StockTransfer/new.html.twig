@@ -64,6 +64,21 @@
                 self.receiving_warehouse = {};
 
                 function warehouseChange(type) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_get_warehouse_products') }}",
+                        dataType: 'json',
+                        data: {warehouse_id: $('#departing-warehouse').val()},
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                self.repos = data.map( function (repo) {
+                                    repo.value = repo.name.toLowerCase();
+                                    return repo;
+                                });
+                            });
+                        }
+                    });
+
                     updateCart(type)
                 }
 
@@ -363,10 +378,6 @@
                                         <span class="item-metastat">
                                             <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
                                         </span>
-                                        <span class="item-metastat">
-                                           <strong>{{item.total_quantity}}</strong> total quantity
-                                        </span>
-
                                      </span>
                                 </md-item-template>
                                 <md-not-found>

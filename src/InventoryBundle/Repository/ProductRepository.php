@@ -300,6 +300,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
                     $products[] = array(
                         'name' => $prod->getName().": ".$variant->getName(),
+                        'warehouse_name' => $warehouse ? $warehouse->getName() : '',
                         'id' => $variant->getId(),
                         'image_url' => $image_url,
                         'total_quantity' => $total_quantity['total'],
