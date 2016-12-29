@@ -219,6 +219,7 @@ class ShippingService
             $data = array_pop($response);
 
             if (!isset($data['rate'])) {
+                mail('jeremib@gmail.com', 'Error calc shipping', $rate->debug());
                 $data = array();
                 $data['rate'] = 0;
                 $data['service_code'] = 'FEDEX_GROUND';
