@@ -60,6 +60,9 @@ class ShippingService
                     $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
                     $shipment->setParameter('toCode', $orders->getShipZip());
 
+                    $shipment->setParameter('residentialAddressIndicator','0');
+                    $shipment->setParameter('service', 'FEDEX_GROUND');
+
                     /*
                      * THis needs to change once warehouses have addresses.
                      *
@@ -106,7 +109,6 @@ class ShippingService
 //                    }
 
                     $response = $shipment->submitShipment();
-
                     if (isset($response['trk_main'])) {
                         if ($count == 1) {
                             $shipmentId = $response['trk_main'];
@@ -132,6 +134,7 @@ class ShippingService
 //                    $em->persist($orders);
 
                     if ($count == $numProdVariants) {
+//                        print_r($response); exit;
                         $charges = $response['charges'];
                         $orders->setEstimatedShipping($orders->getShipping());
                         $orders->setShipping($charges);
@@ -140,6 +143,10 @@ class ShippingService
                 }
             }
         }
+
+        return [
+            'rate' => $charges
+        ];
     }
 
     public function getConfigForChannel(Channel $channel) {
@@ -151,62 +158,75 @@ class ShippingService
         $config->setDefault('fedex', 'meterNumber', $channel->getFedexMeterNumber());
     }
 
-    public function calculateShipping(Orders $order) {
+    public function calculateShipping(Orders $order)
+    {
         $config = $this->getConfigForChannel($order->getChannel());
 
-        $rate = new \RocketShipIt\Rate('fedex', ['config' => $config]);
+        $rates = [];
+        foreach ($order->getProductVariants() as $productVariant) {
+            for($i=0;$i<$productVariant->getQuantity();$i++) {
+                foreach ($productVariant->getWarehouseInfo() as $info) {
+                    if (!isset($rates[$info->getWarehouse()->getId()])) {
+                        $rate = new \RocketShipIt\Rate('fedex', ['config' => $config]);
+                        $rate->setParameter('residentialAddressIndicator', '0');
+                        $rate->setParameter('service', 'FEDEX_GROUND');
 
-        $rate->setParameter('residentialAddressIndicator','0');
-        $rate->setParameter('service', 'FEDEX_GROUND');
+                        $rate->setParameter('toName', $order->getShipName());
+                        $rate->setParameter('toPhone', $order->getShipPhone());
+                        $rate->setParameter('toAddr1', $order->getShipAddress());
+                        $rate->setParameter('toAddr2', $order->getShipAddress2());
+                        $rate->setParameter('toCity', $order->getShipCity());
+                        $rate->setParameter(
+                            'toState',
+                            $order->getState() ? $order->getState()->getAbbreviation() : null
+                        );
+                        $rate->setParameter('toCode', $order->getShipZip());
 
-        foreach($order->getProductVariants() as $productVariant) {
-            foreach($productVariant->getWarehouseInfo() as $info) {
-//                $rate->setParameter('toCode', $order->getShipZip());
-//                $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
+                        $rate->setParameter('shipContact', $info->getWarehouse()->getContact());
+                        $rate->setParameter('shipPhone', $info->getWarehouse()->getPhone());
+                        $rate->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
+                        $rate->setParameter('shipCity', $info->getWarehouse()->getCity());
+                        $rate->setParameter(
+                            'shipState',
+                            $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation(
+                            ) : null
+                        );
+                        $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
 
-                $rate->setParameter('toName', $order->getShipName());
-                $rate->setParameter('toPhone', $order->getShipPhone());
-                $rate->setParameter('toAddr1', $order->getShipAddress());
-                $rate->setParameter('toAddr2', $order->getShipAddress2());
-                $rate->setParameter('toCity', $order->getShipCity());
-                $rate->setParameter('toState', $order->getState() ? $order->getState()->getAbbreviation() : null);
-                $rate->setParameter('toCode', $order->getShipZip());
-                $rate->setParameter('residentialAddressIndicator', 0);
+                        $rates[$info->getWarehouse()->getId()] = $rate;
+                    }
 
-                $rate->setParameter('shipContact', $info->getWarehouse()->getContact());
-                $rate->setParameter('shipPhone', $info->getWarehouse()->getPhone());
-                $rate->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
-                $rate->setParameter('shipCity', $info->getWarehouse()->getCity());
-                $rate->setParameter('shipState', $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation() : null);
-                $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
 
-                $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
-                if ( count($dimensions) == 1 ) {
-                    $dimensions = explode('X', $productVariant->getProductVariant()->getFedexDimensions());
+                    $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+                    if (count($dimensions) == 1) {
+                        $dimensions = explode('X', $productVariant->getProductVariant()->getFedexDimensions());
+                    }
+
+                    $package = new \RocketShipIt\Package('fedex');
+
+                    $package->setParameter('length', "$dimensions[0]");
+                    $package->setParameter('width', "$dimensions[1]");
+                    $package->setParameter('height', "$dimensions[2]");
+                    $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
+                    $rates[$info->getWarehouse()->getId()]->addPackageToShipment($package);
                 }
-
-                $package = new \RocketShipIt\Package('fedex');
-
-                $package->setParameter('length', "$dimensions[0]");
-                $package->setParameter('width', "$dimensions[1]");
-                $package->setParameter('height', "$dimensions[2]");
-                $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
-                $rate->addPackageToShipment($package);
             }
         }
 
+        $total_rate = 0;
+        foreach ($rates as $warehouse_id => $rate) {
+            $response = $rate->getSimpleRates();
+            $data = array_pop($response);
 
-        $response = $rate->getSimpleRates();
-        $data = array_pop($response);
-
-        //if $data['rate'] isn't there then they are only ordering pop items, which the shipping for them is free.
-        if(!isset($data['rate'])) {
-            $data = array();
-            $data['rate'] = 0;
-            $data['service_code'] = 'FEDEX_GROUND';
-            $data['desc'] = 'FedEx Ground';
+            if (!isset($data['rate'])) {
+                $data = array();
+                $data['rate'] = 0;
+                $data['service_code'] = 'FEDEX_GROUND';
+                $data['desc'] = 'FedEx Ground';
+            } else {
+                $total_rate += $data['rate'];
+            }
         }
-
-        return $data;
+        return $total_rate;
     }
 }
