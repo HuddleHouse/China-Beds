@@ -131,8 +131,9 @@
                                 <td>{{ rebate.name }}</td>
                                 {% if rebate.description is not null %}<td id="description"><span>Click to expand</span></td>
                                 {% else %} <td>--</td> {% endif %}
-                                <td class="active-field">
-					<input type="checkbox" value="1" {% if rebate.active %}checked="checked"{% endif %} data-rebate-id="{{rebate.id}}">
+                                
+                                <td>
+					{% if rebate.active %}Active{%else%}Inactive{% endif %} 
 				</td>
                                 <td>{{ rebate.channel.name | default('--') }}</td>
                                 <td>

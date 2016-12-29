@@ -44,7 +44,7 @@
                         <tr>
                             <td>
                                 {%if order.orderId!=''%}
-                                    <a href="{{path('order_products_review',{'id_channel':channel.id,'id_order':order.orderId})}}">{{ order.orderId | default('--') }}</a>
+                                    <a href="{{path('order_products_review',{'id_channel':channel.id,'id_order':order.id})}}">{{ order.orderId | default('--') }}</a>
                                 {%else%}
                                     --
                                 {%endif%}

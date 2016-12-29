@@ -76,7 +76,7 @@ class ReportController extends Controller
         //array of string to go in the table headers
         $report['headers'] = array(
             'Order ID',
-            'Order Number',
+            'PO #',
             'Pickup Date',
             'Ship Name',
             'User Name',
