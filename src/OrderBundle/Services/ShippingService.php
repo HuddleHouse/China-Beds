@@ -225,10 +225,17 @@ class ShippingService
                 $data['rate'] = 0;
                 $data['service_code'] = 'FEDEX_GROUND';
                 $data['desc'] = 'FedEx Ground';
+                $total_rate += 0;
             } else {
                 $total_rate += $data['rate'];
             }
         }
-        return $total_rate;
+
+        return [
+            'rate' => $total_rate,
+            'service_code' => 'FEDEX_GROUND',
+            'desc' =>  'FedEx Ground'
+        ];
+
     }
 }
