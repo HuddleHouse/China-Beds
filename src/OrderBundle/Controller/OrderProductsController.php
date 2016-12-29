@@ -489,4 +489,28 @@ select coalesce(sum(i.quantity), 0) as quantity
         ));
     }
 
+
+    /**
+     * @Route("/delete/{id_channel}/{id_order}", name="order_products_delete")
+     */
+    public function deleteOrderAction($id_channel, $id_order)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $channel = $em->getRepository("InventoryBundle:Channel")->find($id_channel);
+            $order = $em->getRepository("OrderBundle:Orders")->find($id_order);
+
+            $em->remove($order);
+
+            $em->flush();
+            $this->addFlash('notice', 'order deleted');
+            return $this->redirectToRoute('my_orders_index');
+        }catch(\Exception $e){
+            $this->addFlash('notice', 'Problem: ' . $e );
+            return $this->redirectToRoute('my_orders_index');
+        }
+
+    }
+
 }
