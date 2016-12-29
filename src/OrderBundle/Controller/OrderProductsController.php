@@ -292,19 +292,28 @@ select coalesce(sum(i.quantity), 0) as quantity
                         'variant' => $inventory->getProductVariant()->getName(),
                         'quantity' => $inventory->getQuantity()
                     );
-                    if(!$warehouse->getPopItems()->isEmpty()) {
-                        $popWarehouseArray[$wid]['id'] = $wid;
-                        $popWarehouseArray[$wid]['name'] = $warehouse->getName();
-                        foreach($warehouse->getPopItems() as $popItem) {
-                            /** @var \InventoryBundle\Entity\PopItem $popItem */
-                            $popItemArray[$wid][$popItem->getId()] = array(
-                                'id' => $popItem->getId(),
-                                'product' => $popItem->getName(),
-                            );
-                        }
-                    }
+//                    if(!$warehouse->getPopItems()->isEmpty()) {
+//                        $popWarehouseArray[$wid]['id'] = $wid;
+//                        $popWarehouseArray[$wid]['name'] = $warehouse->getName();
+//                        foreach($warehouse->getPopItems() as $popItem) {
+//                            /** @var \InventoryBundle\Entity\PopItem $popItem */
+//                            $popItemArray[$wid][$popItem->getId()] = array(
+//                                'id' => $popItem->getId(),
+//                                'product' => $popItem->getName(),
+//                            );
+//                        }
+//                    }
                 }
             }
+        }
+
+        $popItems = $this->getDoctrine()->getRepository('InventoryBundle:PopItem')->findAll();
+        foreach($popItems as $popItem) {
+            /** @var \InventoryBundle\Entity\PopItem $popItem */
+            $popItemArray[$popItem->getId()] = array(
+                'id' => $popItem->getId(),
+                'product' => $popItem->getName(),
+            );
         }
 
         $distributors = $em->getRepository('AppBundle:User')->getAllDistributorsArray($this->getUser()->getActiveChannel());

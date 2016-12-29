@@ -24,9 +24,9 @@
         var products = {{ products | json_encode | raw }};
         var popItems = {{ popItems | json_encode | raw }};
         var warehouse_opts = '{% for warehouse in warehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
-        var pop_warehouse_opts = '{% for warehouse in popWarehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
+        {#var pop_warehouse_opts = '{% for warehouse in popWarehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';#}
         $('#products-warehouse-0').html(warehouse_opts);
-        $('#pop-warehouse-0').html(pop_warehouse_opts);
+//        $('#pop-warehouse-0').html(pop_warehouse_opts);
 
         $(document).ready(function () {
             $('#add_product').on('click', addProductHandler);
@@ -60,9 +60,9 @@
         }
 
         function getPopOptions(index) {
-            var wid = $('#pop-warehouse-'+index).val();
+//            var wid = $('#pop-warehouse-'+index).val();
             $('#pop-product-'+index).html('');
-            $.each(popItems[wid], function(key, val) {
+            $.each(popItems, function(key, val) {
                 $('#pop-product-'+index).append('<option value="' + key + '">' + val.product + '</option>');
             });
         }
@@ -81,7 +81,7 @@
             $.each($("#product-table tr td:nth-child(5) div input"), function(key, value) {
                 subtotal += Number($(value).val());
             });
-            $.each($("#pop-table tr td:nth-child(5) div input"), function(key, value) {
+            $.each($("#pop-table tr td:nth-child(4) div input"), function(key, value) {
                 subtotal += Number($(value).val());
             });
             $('#subtotal').html(subtotal.toFixed(2));
@@ -134,7 +134,7 @@
             $('#pop-table tr:last').remove();
             $('#pop-table').append(
                     '<tr id="pop-'+ index + '">' +
-                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]" onchange="getPopOptions('+ index + ')">' + pop_warehouse_opts + '</select></td>' +
+//                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]" onchange="getPopOptions('+ index + ')">' + pop_warehouse_opts + '</select></td>' +
                     '<td><select class="form-control" id="pop-product-'+ index + '" name="pop['+ index + '][product]"></select></td>' +
                     '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal('+ index + ')"></td>' +
                     '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]" onchange="calculatePopSubtotal('+ index + ')"></td>' +
@@ -558,8 +558,8 @@
                         <table id="pop-table" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th style="width: 20%;">Warehouse</th>
-                                <th style="width: 40%;">Product</th>
+                                {#<th style="width: 20%;">Warehouse</th>#}
+                                <th style="width: 60%;">Product</th>
                                 <th style="width: 15%;">Unit Cost</th>
                                 <th style="width: 6%;">Qty</th>
                                 <th style="width: 15%;">Subtotal</th>
@@ -568,7 +568,7 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
+                                <td colspan="5" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
                             </tr>
                             </tbody>
                         </table>
