@@ -85,7 +85,8 @@ class EmailService extends BaseService
                 $this->sendEmail(
                     [
                         'subject' => sprintf(
-                            '%s Order #%s Ready To Ship!',
+                            '%s Order #%s Ready %!',
+                            $order->getIsPickUp() ? 'For Pick Up' : 'To Ship',
                             $order->getChannel()->getName(),
                             $order->getOrderId()
                         ),
