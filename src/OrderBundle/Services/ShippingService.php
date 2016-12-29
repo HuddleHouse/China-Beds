@@ -27,7 +27,7 @@ class ShippingService
     }
 
     public function generateShippingLabelsForOrder(Orders &$orders) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->container->get('doctrine')->getManager();
 
         $config = $this->getConfigForChannel($orders->getChannel());
 
