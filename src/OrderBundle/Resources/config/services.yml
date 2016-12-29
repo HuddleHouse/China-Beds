@@ -5,6 +5,9 @@ services:
     ledger.service:
         class: OrderBundle\Services\LedgerService
         arguments: ["@service_container"]
+    shipping.service:
+        class: OrderBundle\Services\ShippingService
+        arguments: ["@service_container"]
     form.type.creditrequest:
         class: OrderBundle\Form\CreditRequestType
         arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]

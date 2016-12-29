@@ -84,7 +84,7 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
     public function getProductsByWarehouse(Orders $order, Warehouse $warehouse = null) {
         $em = $this->getEntityManager();
         $variants = $em
-            ->createQuery("SELECT v, o, i, l FROM OrderBundle\Entity\OrdersProductVariant v JOIN v.order o JOIN v.warehouse_info i JOIN i.warehouse w LEFT JOIN i.shipping_labels l WHERE o.id = :order AND w.id = :warehouse")
+            ->createQuery("SELECT v, o, i FROM OrderBundle\Entity\OrdersProductVariant v JOIN v.order o JOIN v.warehouse_info i JOIN i.warehouse w WHERE o.id = :order AND w.id = :warehouse")
             ->setParameter('order', $order)
             ->setParameter('warehouse', $warehouse)
             ->getResult();

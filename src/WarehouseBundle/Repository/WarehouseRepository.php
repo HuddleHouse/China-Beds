@@ -222,7 +222,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
 
         $em = $this->getEntityManager();
         $orders = $em
-            ->createQuery("SELECT o, v, i FROM OrderBundle\Entity\Orders o JOIN o.product_variants v JOIN v.warehouse_info i WHERE o.id = :id")
+            ->createQuery("SELECT o, v, i FROM OrderBundle\Entity\Orders o JOIN o.product_variants v JOIN v.warehouse_info i WHERE o.id = :id GROUP BY i.warehouse")
             ->setParameter('id', $order)
             ->getResult();
 

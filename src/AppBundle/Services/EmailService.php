@@ -52,26 +52,24 @@ class EmailService extends BaseService
     public function sendWarehouseOrderNotification(Orders $order) {
         $em = $this->container->get('doctrine')->getManager();
 
-        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getWarehousesForOrder($order);
+        $warehouses = [];
 
-        foreach($warehouses as $warehouse) {
+        foreach($order->getProductVariants() as $product) {
+            foreach($product->getWarehouseInfo() as $info) {
+                if ( $info->getQuantity() > 0 ) {
+                    $warehouses[$info->getWarehouse()->getId()][] = $info->getOrdersProductVariant();
+                }
+            }
+        }
 
-            $products = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouse($order, $warehouse);
-
-            /*
-             *                                                                                 {% for variant in products %}
-                                                                                    {% for info in variant.warehouseinfo %}
-                                                                                        {% for label in info.shippinglabels %}
-                                                                                            <a href="{{ order.channel.backendurl }}/{{ label.path }}"
-                                                                                               style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
-                                                                                        {% endfor %}
-                                                                                    {% endfor %}
-                                                                                {% endfor %}
-             */
-
-            foreach($warehouse->getManagers() as $manager) {
+        foreach($warehouses as $warehouse_id => $products) {
+            $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+            echo "==== " . $warehouse->getName() . " ====\n";
+//            foreach($warehouse->getManagers() as $manager) {
+//                echo "      " . $manager->getDisplayName() . "\n";
                 $files = [];
                 foreach($products as $product) {
+                    echo "      " . $product->getProductVariant()->getProduct()->getName() . ' ' . $product->getProductVariant()->getName() . "\n";
                     foreach ($product->getWarehouseInfo() as $info) {
                         foreach ($info->getShippingLabels() as $label) {
                             $files[] = $label->getAbsolutePath();
@@ -80,7 +78,7 @@ class EmailService extends BaseService
                 }
                 $body = $this->container->get('twig')->render(
                     '@Order/Emails/warehouse-order-notification.html.twig',
-                    ['order' => $order, 'products' => $products, 'manager' => $manager]
+                    ['order' => $order, 'products' => $products, 'warehouse' => $warehouse]
                 );
                 $this->sendEmail(
                     [
@@ -91,11 +89,55 @@ class EmailService extends BaseService
                             $order->getOrderId()
                         ),
                         'from'  => $order->getChannel()->getFromEmailAddress(),
-                        'to'    => $manager->getEmail(),
+                        'to'    => explode(',', $warehouse->getEmail()),
                         'body'  => $body,
                         'files' => $files
                     ]
                 );
+//            }
+        }
+
+//        print_r($warehouses); exit;
+        exit;
+
+        $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getWarehousesForOrder($order);
+
+        foreach($warehouses as $warehouse) {
+            echo "==== " . $warehouse->getName() . " ====\n";
+            $products = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouse($order, $warehouse);
+            echo "  " . count($products) . "\n";
+            foreach($products as $product) {
+                echo "      " . $product->getProductVariant()->getProduct()->getName() . ' ' . $product->getProductVariant()->getName() . "\n";
+            }
+            foreach($warehouse->getManagers() as $manager) {
+                echo "      " . $manager->getDisplayName() . "\n";
+                $files = [];
+                foreach($products as $product) {
+                    echo "      " . $product->getProductVariant()->getProduct()->getName() . ' ' . $product->getProductVariant()->getName() . "\n";
+                    foreach ($product->getWarehouseInfo() as $info) {
+                        foreach ($info->getShippingLabels() as $label) {
+                            $files[] = $label->getAbsolutePath();
+                        }
+                    }
+                }
+                $body = $this->container->get('twig')->render(
+                    '@Order/Emails/warehouse-order-notification.html.twig',
+                    ['order' => $order, 'products' => $products, 'manager' => $manager]
+                );
+//                $this->sendEmail(
+//                    [
+//                        'subject' => sprintf(
+//                            '%s Order #%s Ready %!',
+//                            $order->getIsPickUp() ? 'For Pick Up' : 'To Ship',
+//                            $order->getChannel()->getName(),
+//                            $order->getOrderId()
+//                        ),
+//                        'from'  => $order->getChannel()->getFromEmailAddress(),
+//                        'to'    => $manager->getEmail(),
+//                        'body'  => $body,
+//                        'files' => $files
+//                    ]
+//                );
             }
         }
     }
