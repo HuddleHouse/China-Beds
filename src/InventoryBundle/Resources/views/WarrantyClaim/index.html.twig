@@ -170,25 +170,29 @@
                 <table id="part-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                     <thead>
                     <tr>
+                        <th>Date of Claim</th>
+                        <th>Approved</th>
                         <th>Warranty ID</th>
                         <th>Order ID</th>
                         {#<th>Date Aware</th>#}
-                        <th>Date of Claim</th>
                         <th>Submitted By</th>
                         <th>Product</th>
                         <th>Description</th>
                         <th>Resolution</th>
-                        {% if user.hasRole('ROLE_ADMIN') %}<th>Channel</th>{% endif %}
+                        {% if user.hasRole('ROLE_ADMIN') %}
+                        <th>Channel</th>
                         <th>Actions</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
                     {% for warranty_claim in warranty_claims %}
                         <tr data-description-body="{{ warranty_claim.description }}" data-description-expanded="0" data-resolution-body="{{ warranty_claim.resolution | default('--') }}" data-resolution-expanded="0">
+                            <td>{% if warranty_claim.dateOfClaim %}{{ warranty_claim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
+                            <td>{{ warranty_claim.isArchived ? '<span class="label label-success">Yes</span>' : '<span class="label label-warning">No</span>' }}</td>
                             <td>{{ warranty_claim.warrantyClaimId | default('--') }}</td>
                             <td>{{ warranty_claim.order.orderId | default('--') }}</td>
                             {#<td>{% if warranty_claim.dateMadeAware %}{{ warranty_claim.dateMadeAware|date('m/d/y') }}{% else %}--{% endif %}</td>#}
-                            <td>{% if warranty_claim.dateOfClaim %}{{ warranty_claim.dateOfClaim|date('m/d/y') }}{% else %}--{% endif %}</td>
                             <td>{{ warranty_claim.submittedByUser }}</td>
                             {% if warranty_claim.productVariant %}
                             <td>{{ warranty_claim.productVariant.product.name }} {{ warranty_claim.productVariant.name }}</td>
@@ -200,13 +204,15 @@
                             {% else %}<td>--</td>{% endif %}
                             {% if warranty_claim.resolution is not null %}<td id="resolution">Click to expand</td>
                             {% else %}<td>--</td>{% endif %}
-                            {% if user.hasRole('ROLE_ADMIN') %}<td>{{ warranty_claim.channel.name | default('--') }}</td>{% endif %}
+                            {% if user.hasRole('ROLE_ADMIN') %}
+                            <td>{{ warranty_claim.channel.name | default('--') }}</td>
                             <td>
-                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('warrantyclaim_edit', { 'id': warranty_claim.id }) }}">Edit</a>
+                                {#<a class="btn btn-raised btn-default btn-xs purple" href="{{ path('warrantyclaim_edit', { 'id': warranty_claim.id }) }}">Edit</a>#}
                                 {% if(is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER')) %}
-                                    <button class="btn btn-raised btn-default btn-xs purple" onclick="showClaim({{ warranty_claim.id }})">Show</button>
+                                    <button class="btn btn-raised btn-success btn-xs purple" onclick="showClaim({{ warranty_claim.id }})">Show{% if not warranty_claim.isArchived %}/Approve{% endif %}</button>
                                 {% endif %}
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

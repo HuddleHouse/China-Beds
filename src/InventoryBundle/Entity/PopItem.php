@@ -703,4 +703,16 @@ class PopItem
     {
         $this->warehouses->removeElement($warehouse);
     }
+
+    public function toArray() {
+        return [
+            'id'            => $this->getId(),
+            'sku'           => $this->getSku(),
+            'name'          => $this->getName(),
+            'description'   => $this->getDescription(),
+            'price'         => $this->getPricePer(),
+            'image_path'    => $this->getWebPath()
+        ];
+    }
+
 }

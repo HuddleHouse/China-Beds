@@ -91,3 +91,6 @@ fos_user:
     profile:
             form:
                 type: AppBundle\Form\ProfileFormType
+    from_email:
+        address:        %fos_user_from_email%
+        sender_name:    %fos_user_from_name%

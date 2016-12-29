@@ -396,6 +396,30 @@ class ChannelController extends Controller
                     $channel->setRetailFourthPic($retailFourthPicName);
                 }
 
+                $backendHeader = $channel->getBackendHeaderPic();
+                if($backendHeader != NULL && $backendHeader != ''){
+                    $backendHeaderName = md5(uniqid()). '.' . $backendHeader->guessExtension();
+                    $backendHeader->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $backendHeaderName
+                    );
+                    $channel->setBackendHeaderPic($backendHeaderName);
+                }
+
+                $backendOrders = $channel->getBackendOrdersPic();
+                if($backendOrders != NULL && $backendOrders != ''){
+                    $backendOrdersName = md5(uniqid()). '.' . $backendOrders->guessExtension();
+                    $backendOrders->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $backendOrdersName
+                    );
+                    $channel->setBackendOrdersPic($backendOrdersName);
+                }
+
+                ///////////////////////////////////
+                // Backend (app) picture uploads
+                ///////////////////////////////////
+
                 $em->persist($channel);
                 $em->flush();
 
@@ -836,6 +860,30 @@ class ChannelController extends Controller
                     $channel->setRetailFourthPic($retailFourthPicName);
                 }else{
                     $channel->setRetailFourthPic($channel_clone->getRetailFourthPic());
+                }
+
+                $backendHeader = $channel->getBackendHeaderPic();
+                if($backendHeader != NULL && $backendHeader != ''){
+                    $backendHeaderName = md5(uniqid()). '.' . $backendHeader->guessExtension();
+                    $backendHeader->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $backendHeaderName
+                    );
+                    $channel->setBackendHeaderPic($backendHeaderName);
+                }else{
+                    $channel->setBackendHeaderPic($channel_clone->getBackendHeaderPic());
+                }
+
+                $backendOrders = $channel->getBackendOrdersPic();
+                if($backendOrders != NULL && $backendOrders != ''){
+                    $backendOrdersName = md5(uniqid()). '.' . $backendOrders->guessExtension();
+                    $backendOrders->move(
+                        $this->getParameter('channel_upload_directory'),
+                        $backendOrdersName
+                    );
+                    $channel->setBackendOrdersPic($backendOrdersName);
+                }else{
+                    $channel->setBackendOrdersPic($channel_clone->getBackendOrdersPic());
                 }
 
 //                $detailMattressFooter = $channel->getDetailMattressFooter();

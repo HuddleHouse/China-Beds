@@ -54,7 +54,6 @@ class WarrantyClaimController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-
                 if ( empty($warrantyClaim->getFile2()) ) {
                     throw new \Exception("You must have at least 2 images uploaded.");
                 }
@@ -74,10 +73,16 @@ class WarrantyClaimController extends Controller
                 $warrantyClaim->upload1();
                 $warrantyClaim->upload2();
                 $warrantyClaim->upload3();
+                $warrantyClaim->upload4();
+                $warrantyClaim->upload5();
                 $em->persist($warrantyClaim);
                 $em->flush();
                 $this->addFlash('notice', 'Warranty Claim created successfully.');
+                
+         
                 $this->get('email_service')->sendWarrantyClaimAcknowledgementEmail($this->getUser(), $warrantyClaim);
+                
+                
                 return $this->redirectToRoute('warrantyclaim_edit', array('id' => $warrantyClaim->getId()));
             }
             catch(\Exception $e) {
@@ -105,10 +110,15 @@ class WarrantyClaimController extends Controller
      */
     public function editAction(Request $request, WarrantyClaim $warrantyClaim)
     {
-
+        if ( !$this->getUser()->hasRole('ROLE_ADMIN') ) {
+            return $this->redirectToRoute('warrantyclaim_index');
+        }
         $oldPath1 = $warrantyClaim->getPath1();
         $oldPath2 = $warrantyClaim->getPath2();
         $oldPath3 = $warrantyClaim->getPath3();
+        $oldLawLabel = $warrantyClaim->getLawLabel();
+        $oldFrLabel = $warrantyClaim->getFrLabel();
+        
         $oldOrder = $warrantyClaim->getOrder();
 
         $editForm = $this->createForm('InventoryBundle\Form\WarrantyClaimType', $warrantyClaim, array('method' => 'PATCH'));
@@ -131,6 +141,16 @@ class WarrantyClaimController extends Controller
                     $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldPath3;
                     if(file_exists($file_path)) unlink($file_path);
                     $warrantyClaim->upload3();
+                }
+		if($oldLawLabel != $warrantyClaim->getLawLabel()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldLawLabel;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload4();
+                }
+		if($oldFrLabel != $warrantyClaim->getFrLabel()) {
+                    $file_path = $warrantyClaim->getUploadRootDir() . '/' . $oldFrLabel;
+                    if(file_exists($file_path)) unlink($file_path);
+                    $warrantyClaim->upload5();
                 }
                 if($oldOrder != $warrantyClaim->getOrder()) {
                     $oldOrder->getWarrantyClaims()->remove($warrantyClaim);
@@ -182,8 +202,10 @@ class WarrantyClaimController extends Controller
                         $warrantyClaim->getSubmittedByUser(),
                         $warrantyClaim->getChannel(),
                         $warrantyClaim->getDescription(),
-                        'Warranty',
-                        $warrantyClaim->getId()
+                        Ledger::TYPE_CLAIM,
+                        $warrantyClaim->getId(),
+                        false,
+                        true
                     );
                 }
                 $warrantyClaim->setIsArchived(true);

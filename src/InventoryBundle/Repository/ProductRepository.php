@@ -57,6 +57,26 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $products;
     }
 
+    public function getAllActiveProductsForChannel(Channel $channel, $hide_backend = false) {
+        $q =  $this->createQueryBuilder('p')
+            ->leftJoin('p.channels', 'pc')
+            ->leftJoin('pc.channel', 'c')
+            ->leftJoin('p.categories', 'cc')
+            ->leftJoin('cc.category', 'cat')
+            ->where('c in (:channel)')
+            ->andWhere('p.active = 1')
+            ->setParameter('channel' , $channel)
+            ->orderBy('cat.name')
+            ->addOrderBy('p.name', 'ASC')
+            ->addOrderBy('c.name', 'ASC');
+
+        if ( $hide_backend ) {
+            $q->andWhere('p.hideBackend = 0');
+        }
+
+        return $q->getQuery()->getResult();
+    }
+
     /**
      * Returns single product based on variant
      *

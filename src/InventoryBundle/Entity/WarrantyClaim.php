@@ -153,9 +153,19 @@ class WarrantyClaim
     private $lawLabel;
 
     /**
+     * @Assert\Image
+     */
+    private $file4;
+    
+    /**
      * @ORM\Column(name="fr_label", type="string", nullable=true)
      */
     private $frLabel;
+
+    /**
+     * @Assert\Image
+     */
+    private $file5;
 
     /**
      * WarrantyClaim constructor.
@@ -575,7 +585,39 @@ class WarrantyClaim
     {
         $this->path3 = $path3;
     }
+    
+    /**
+     * @return mixed
+     */
+    public function getFile4()
+    {
+        return $this->file4;
+    }
 
+    /**
+     * @param mixed $file1
+     */
+    public function setFile4($file4)
+    {
+        $this->file4 = $file4;
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function getFile5()
+    {
+        return $this->file5;
+    }
+
+    /**
+     * @param mixed $file1
+     */
+    public function setFile5($file5)
+    {
+        $this->file5 = $file5;
+    }
+    
     public function upload1()
     {
         // the file property can be empty if the field is not required
@@ -654,6 +696,58 @@ class WarrantyClaim
         $this->file3 = null;
     }
 
+    public function upload4()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile4()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile4()->getClientOriginalName()) . '-' . $this->getFile4()->getClientOriginalName();
+
+        $this->getFile4()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->lawLabel = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file4 = null;
+    }
+    
+    public function upload5()
+    {
+        // the file property can be empty if the field is not required
+        if(null === $this->getFile5()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $fname = md5(rand(0,100000) . $this->getFile5()->getClientOriginalName()) . '-' . $this->getFile5()->getClientOriginalName();
+
+        $this->getFile5()->move(
+            $this->getUploadRootDir(),
+            $fname
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->frLabel = $fname;
+
+        // clean up the file property as you won't need it anymore
+        $this->file5 = null;
+    }
+    
     public function getAbsolutePath1()
     {
         return null === $this->path1
@@ -725,6 +819,10 @@ class WarrantyClaim
     }
 
     public function getWarrantyClaimId() {
+        return $this->getIdentifier();
+    }
+
+    public function getIdentifier() {
         return sprintf('W-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
     }
 

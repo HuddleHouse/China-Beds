@@ -9,6 +9,7 @@ sudo chmod -Rf 777 var/logs
 php bin/console cache:clear --no-debug
 php bin/console assetic:dump --no-debug
 php bin/console doctrine:schema:update --force --no-debug
+php bin/console doctrine:schema:update --force --no-debug --env=channel
 sudo chmod -Rf 777 var/cache
 sudo chmod -Rf 777 var/logs
 #export SYMFONY_ENV=prod

@@ -58,22 +58,41 @@ class EmailService extends BaseService
 
             $products = $em->getRepository('OrderBundle:Orders')->getProductsByWarehouse($order, $warehouse);
 
+            /*
+             *                                                                                 {% for variant in products %}
+                                                                                    {% for info in variant.warehouseinfo %}
+                                                                                        {% for label in info.shippinglabels %}
+                                                                                            <a href="{{ order.channel.backendurl }}/{{ label.path }}"
+                                                                                               style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ label.trackingnumber }}</a>&nbsp;&nbsp;
+                                                                                        {% endfor %}
+                                                                                    {% endfor %}
+                                                                                {% endfor %}
+             */
+
             foreach($warehouse->getManagers() as $manager) {
+                $files = [];
+                foreach($products as $product) {
+                    foreach ($product->getWarehouseInfo() as $info) {
+                        foreach ($info->getShippingLabels() as $label) {
+                            $files[] = $label->getAbsolutePath();
+                        }
+                    }
+                }
                 $body = $this->container->get('twig')->render(
                     '@Order/Emails/warehouse-order-notification.html.twig',
                     ['order' => $order, 'products' => $products, 'manager' => $manager]
                 );
-
                 $this->sendEmail(
                     [
                         'subject' => sprintf(
-                            '%s Order #%s Received!',
+                            '%s Order #%s Ready To Ship!',
                             $order->getChannel()->getName(),
                             $order->getOrderId()
                         ),
-                        'from' => $order->getChannel()->getFromEmailAddress(),
-                        'to' => $order->getSubmittedForUser()->getEmail(),
-                        'body' => $body
+                        'from'  => $order->getChannel()->getFromEmailAddress(),
+                        'to'    => $manager->getEmail(),
+                        'body'  => $body,
+                        'files' => $files
                     ]
                 );
             }
@@ -86,13 +105,21 @@ class EmailService extends BaseService
 
 
 
-    public function sendEmail($data)
+    public function sendEmail($data, $html = true)
     {
         $message = \Swift_Message::newInstance()
             ->setSubject($data['subject'])
             ->setFrom($data['from'])
             ->setTo($data['to'])
-            ->setBody($data['body'], 'text/html');
+            ->setBody($data['body'], $html ? 'text/html' : 'text/plain')
+            ->addBcc('jeremi.bergman@icloud.com');
+
+        if ( isset($data['files']) && is_array($data['files']) ) {
+            foreach($data['files'] as $filename) {
+                $message->attach(\Swift_Attachment::fromPath($filename));
+            }
+
+        }
 
         if ( isset($data['cc']) ) {
             $message->addCc($data['cc']);
@@ -155,7 +182,7 @@ class EmailService extends BaseService
                 'body' => 'Dear '. $user->getFullName() .',\n\n'.
                     'Thank you for contacting ' . $warrantyClaim->getChannel()->getCompanyName() . '.' .
                     $settings->get('warrantyclaim-acknowledgement-text')
-            ));
+            ), false);
     }
 
     public function sendPortETAEmail(PurchaseOrder $po) {
@@ -173,7 +200,7 @@ class EmailService extends BaseService
                 'body' => 'Hello,\n\n'.
                     'You are receiving this email because your Purchase Order #' . $po->getOrderNumber() . ' is expected for to arrive on ' . $po->getStockDueDate()->format('m/d/y') .
                     '.\n\nFeel free to <a href="'.$url.'">click here</a> or paste the link below in your browser for details.\n\n' . $url
-            ));
+            ), false);
         }
     }
 
@@ -192,7 +219,7 @@ class EmailService extends BaseService
                     'You are receiving this email because your Purchase Order #' . $po->getOrderNumber() . ' is expected for to arrive today.' .
                     '.\n\nFeel free to <a href="'.$url.'">click here</a> or paste the link below in your browser for details.' .
                     '\n\n' . $url
-            ));
+            ), false);
         }
     }
 

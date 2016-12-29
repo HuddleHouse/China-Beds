@@ -25,13 +25,13 @@
 		p.attribution, p.attribution a { color: #666; }
 	</style>
     <script src="{{ asset('bundles/app/js/medicare-static-ds.js') }}"></script>
-    <script src="{{ asset('bundles/app/js/panel.js') }}"></script>
+    {#<script src="{{ asset('bundles/app/js/panel.js') }}"></script>#}
 		
 		
 {% endblock footer %}
 
 {% block content %}
-	<input type="hidden" value="{{path('retailer_affiliates_get_users')}}" id="retaler_user_routing">
+	<input type="hidden" value="{{path('retailer_affiliates_get_users', {'channel': app.user.activechannel.id})}}" id="retaler_user_routing">
 	<div class="row">
 		<div class="col-md-12">
 			<div id="panel"></div>

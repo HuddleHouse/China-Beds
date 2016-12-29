@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CreditRequest
  *
  * @ORM\Table(name="credit_request")
- * @ORM\Entity(repositoryClass="OrderBundle\Repository\CreditRequestRepository")
+ * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
 class CreditRequest
@@ -72,9 +72,23 @@ class CreditRequest
     /**
      * @var float
      *
-     * @ORM\Column(name="request_amount", type="float", nullable=false)
+     * @ORM\Column(name="request_amount", type="integer")
      */
     private $requestAmount;
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="applied_amount", type="integer")
+     */
+    private $appliedAmount = 0;
+
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_approved", type="boolean")
+     */
+    private $isApproved = false;
 
     /**
      * @ORM\PrePersist
@@ -217,7 +231,7 @@ class CreditRequest
      */
     public function getRequestAmount()
     {
-        return $this->requestAmount;
+        return $this->requestAmount/100;
     }
 
     /**
@@ -225,9 +239,60 @@ class CreditRequest
      */
     public function setRequestAmount($requestAmount)
     {
-        $this->requestAmount = $requestAmount;
+        $this->requestAmount = $requestAmount*100;
     }
 
 
-}
 
+    /**
+     * Set isApproved
+     *
+     * @param boolean $isApproved
+     *
+     * @return CreditRequest
+     */
+    public function setIsApproved($isApproved)
+    {
+        $this->isApproved = $isApproved;
+
+        return $this;
+    }
+
+    /**
+     * Get isApproved
+     *
+     * @return boolean
+     */
+    public function getIsApproved()
+    {
+        return $this->isApproved;
+    }
+
+    /**
+     * Set appliedAmount
+     *
+     * @param integer $appliedAmount
+     *
+     * @return CreditRequest
+     */
+    public function setAppliedAmount($appliedAmount)
+    {
+        $this->appliedAmount = $appliedAmount * 100;
+
+        return $this;
+    }
+
+    /**
+     * Get appliedAmount
+     *
+     * @return integer
+     */
+    public function getAppliedAmount()
+    {
+        return $this->appliedAmount/100;
+    }
+
+    public function getIdentifier() {
+        return sprintf('CR-%s', str_pad($this->getId(), 5, 0, STR_PAD_LEFT));
+    }
+}

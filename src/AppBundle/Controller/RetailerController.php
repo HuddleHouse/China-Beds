@@ -2,6 +2,7 @@
 
 
 namespace AppBundle\Controller;
+use InventoryBundle\Entity\Channel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,35 +26,33 @@ class RetailerController extends Controller
         return $this->render('AppBundle:Retailer:affiliates.html.twig');
     }
 
-          /**
-     * @Route("/get/retailer/users", name="retailer_affiliates_get_users")
+     /**
+     * @Route("/get/retailer/users/{channel}", name="retailer_affiliates_get_users")
      */
-    public function usersAction(Request $request)
+    public function usersAction(Channel $channel)
     {
         $em = $this->getDoctrine()->getManager();
-        $users = $em->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel());
+        $users = $em->getRepository('AppBundle:User')->getAllRetailersArray($channel);
 
 
         $userObjects = array();
         foreach ($users as $user) {
-          if($user->hasRole('ROLE_RETAILER')) {
-
-              $latlong = $this->latLongConvert(sprintf('%s, %s %s, %s', $user->getAddress1(), $user->getCity(), $user->getState()->getAbbreviation(), $user->getZip()));
-
-            $userObjects[] = [
-                'company_name' => $user->getCompanyName(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'address1' => $user->getAddress1(),
-                'address2' => $user->getAddress2(),
-                'city' => $user->getCity(),
-                'state' => $user->getState()->getAbbreviation(),
-                'zip' => $user->getZip(),
-                'phone' => $user->getPhone(),
-                'lat' => $latlong['lat'],
-                'long' => $latlong['long']
-            ];
-          }
+            if ( $user->getAddressLatitude() ) {
+                $userObjects[] = [
+                    'id' => $user->getId(),
+                    'company_name' => $user->getCompanyName(),
+                    'first_name' => $user->getFirstName(),
+                    'last_name' => $user->getLastName(),
+                    'address1' => $user->getAddress1(),
+                    'address2' => $user->getAddress2(),
+                    'city' => $user->getCity(),
+                    'state' => $user->getState() ? $user->getState()->getAbbreviation() : null,
+                    'zip' => $user->getZip(),
+                    'phone' => $user->getPhone(),
+                    'lat' => $user->getAddressLatitude(),
+                    'long' => $user->getAddressLongitude()
+                ];
+            }
         }
         return new JsonResponse($userObjects, 200);
 

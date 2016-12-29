@@ -51,8 +51,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_PENDING, Orders::STATUS_DRAFT]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('isShippable' => false, 'isPaid' => false, 'submitted_for_user' => $user, 'channel' => $this->getUser()->getActiveChannel()->getId()));
         $channel = $this->getUser()->getActiveChannel();
 
         return $this->render('@Order/OrderProducts/my-orders.html.twig', array(
@@ -70,8 +69,7 @@ class OrderProductsController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $user = $this->getUser();
-        $status = $em->getRepository('WarehouseBundle:Status')->findBy(array('name' => [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED]));
-        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('status' => $status, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
+        $orders = $em->getRepository('OrderBundle:Orders')->findBy(array('isShippable' => true, 'isPaid' => false, 'submitted_for_user' => $user,'channel' => $this->getUser()->getActiveChannel()->getId()));
 
         $the_orders = [];
         foreach($orders as $order) {
@@ -88,6 +86,20 @@ class OrderProductsController extends Controller
 
     /**
      *
+     * @Route("/new", name="order_new", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function newAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        return $this->render('@Order/OrderProducts/order-index-new.html.twig', [
+            'channel'   => $this->getUser()->getActiveChannel(),
+            'states'    => $em->getRepository('AppBundle:State')->findAll()
+        ]);
+    }
+
+    /**
+     *
      * @Route("/products", name="order_products_index", options={"expose"=true})
      * @Route("/{id}/products", name="order_products_index_old")
      * @Method("GET")
@@ -95,6 +107,7 @@ class OrderProductsController extends Controller
     public function orderProductsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
+
 
         $channel = $em->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
 
@@ -153,29 +166,33 @@ select coalesce(sum(i.quantity), 0) as quantity
         //
 
         $user_warehouses = [];
-        if ( $user->getWarehouse1() ) {
-            $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
+        foreach($user->getWarehouses() as $warehouse) {
+            $user_warehouses[] = [
+                'id'    => $warehouse->getId(),
+                'name'  => $warehouse->getName()
+            ];
         }
-        if ( $user->getWarehouse2() ) {
-            $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
-        }
-        if ( $user->getWarehouse3()) {
-            $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
-        }
+//        if ( $user->getWarehouse1() ) {
+//            $user_warehouses[] = array('id' => $user->getWarehouse1()->getId(), 'name' => $user->getWarehouse1()->getName());
+//        }
+//        if ( $user->getWarehouse2() ) {
+//            $user_warehouses[] = array('id' => $user->getWarehouse2()->getId(), 'name' => $user->getWarehouse2()->getName());
+//        }
+//        if ( $user->getWarehouse3()) {
+//            $user_warehouses[] = array('id' => $user->getWarehouse3()->getId(), 'name' => $user->getWarehouse3()->getName());
+//        }
 
 
         $states = $em->getRepository('AppBundle:State')->findAll();
+//
+//        if($user->hasRole('ROLE_DISTRIBUTOR'))
+//            $user_retailers = $user->getRetailers();
+//        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
+//            $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
+//        else
+//            $user_retailers = [];
 
-        if($user->hasRole('ROLE_DISTRIBUTOR'))
-            $user_retailers = $user->getRetailers();
-        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
-            $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
-        else
-            $user_retailers = [];
-
-        usort($user_retailers, function($a, $b) {
-            return $a->getDisplayName() - $b->getDisplayName();
-        });
+        $user_retailers = $em->getRepository('AppBundle:User')->findUsersForUser($this->getUser());
 
         return $this->render('@Order/OrderProducts/order-index.html.twig', array(
             'products' => $product_data,
@@ -190,6 +207,7 @@ select coalesce(sum(i.quantity), 0) as quantity
             'is_edit' => 0
       ));
     }
+
 
     /**
      *
@@ -261,30 +279,41 @@ select coalesce(sum(i.quantity), 0) as quantity
         $productArray = array();
         $popItemArray = array();
         foreach($warehouses as $warehouse) {
-            /** @var \WarehouseBundle\Entity\Warehouse $warehouse */
-            /** @var \WarehouseBundle\Entity\WarehouseInventory $inventory */
-            $wid = $warehouse->getId();
-            $warehouseArray[$wid]['id'] = $wid;
-            $warehouseArray[$wid]['name'] = $warehouse->getName();
-            foreach ($warehouse->getInventory() as $inventory) {
-                $productArray[$wid][$inventory->getProductVariant()->getId()] = array(
-                    'id' => $inventory->getProductVariant()->getId(),
-                    'product' => $inventory->getProductVariant()->getProduct()->getName(),
-                    'variant' => $inventory->getProductVariant()->getName(),
-                    'quantity' => $inventory->getQuantity()
-                );
-                if(!$warehouse->getPopItems()->isEmpty()) {
-                    $popWarehouseArray[$wid]['id'] = $wid;
-                    $popWarehouseArray[$wid]['name'] = $warehouse->getName();
-                    foreach($warehouse->getPopItems() as $popItem) {
-                        /** @var \InventoryBundle\Entity\PopItem $popItem */
-                        $popItemArray[$wid][$popItem->getId()] = array(
-                            'id' => $popItem->getId(),
-                            'product' => $popItem->getName(),
-                        );
-                    }
+            if($warehouse->isActive()){
+                /** @var \WarehouseBundle\Entity\Warehouse $warehouse */
+                /** @var \WarehouseBundle\Entity\WarehouseInventory $inventory */
+                $wid = $warehouse->getId();
+                $warehouseArray[$wid]['id'] = $wid;
+                $warehouseArray[$wid]['name'] = $warehouse->getName();
+                foreach ($warehouse->getInventory() as $inventory) {
+                    $productArray[$wid][$inventory->getProductVariant()->getId()] = array(
+                        'id' => $inventory->getProductVariant()->getId(),
+                        'product' => $inventory->getProductVariant()->getProduct()->getName(),
+                        'variant' => $inventory->getProductVariant()->getName(),
+                        'quantity' => $inventory->getQuantity()
+                    );
+//                    if(!$warehouse->getPopItems()->isEmpty()) {
+//                        $popWarehouseArray[$wid]['id'] = $wid;
+//                        $popWarehouseArray[$wid]['name'] = $warehouse->getName();
+//                        foreach($warehouse->getPopItems() as $popItem) {
+//                            /** @var \InventoryBundle\Entity\PopItem $popItem */
+//                            $popItemArray[$wid][$popItem->getId()] = array(
+//                                'id' => $popItem->getId(),
+//                                'product' => $popItem->getName(),
+//                            );
+//                        }
+//                    }
                 }
             }
+        }
+
+        $popItems = $this->getDoctrine()->getRepository('InventoryBundle:PopItem')->findAll();
+        foreach($popItems as $popItem) {
+            /** @var \InventoryBundle\Entity\PopItem $popItem */
+            $popItemArray[$popItem->getId()] = array(
+                'id' => $popItem->getId(),
+                'product' => $popItem->getName(),
+            );
         }
 
         $distributors = $em->getRepository('AppBundle:User')->getAllDistributorsArray($this->getUser()->getActiveChannel());
@@ -301,7 +330,7 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
                 'city' => $user->getCity(),
-                'state' => strval($user->getState()->getId())
+                'state' => strval($user->getState() ? $user->getState()->getId() : 0)
             );
         }
 
@@ -314,7 +343,7 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'address' => $user->getAddress1(),
                 'address2' => $user->getAddress2(),
                 'city' => $user->getCity(),
-                'state' => strval($user->getState()->getId())
+                'state' => strval($user->getState() ? $user->getState()->getId() : 0)
             );
         }
 
@@ -418,23 +447,11 @@ select coalesce(sum(i.quantity), 0) as quantity
         $path = '/uploads/documents/';
         $pop = $em->getRepository('InventoryBundle:PopItem')->getAllPopItemsArrayForCart($this->getUser()->getActiveChannel(), $path);
 
-        if ( $user->getWarehouse1() ) {
-            $user_warehouses[] = array(
-                'id' => $user->getWarehouse1()->getId(),
-                'name' => $user->getWarehouse1()->getName()
-            );
-        }
-        if ( $user->getWarehouse2() ) {
-            $user_warehouses[] = array(
-                'id' => $user->getWarehouse2()->getId(),
-                'name' => $user->getWarehouse2()->getName()
-            );
-        }
-        if ( $user->getWarehouse3() ) {
-            $user_warehouses[] = array(
-                'id' => $user->getWarehouse3()->getId(),
-                'name' => $user->getWarehouse3()->getName()
-            );
+        foreach($user->getWarehouses() as $warehouse) {
+            $user_warehouses[] = [
+                'id'    => $warehouse->getId(),
+                'name'  => $warehouse->getName()
+            ];
         }
 
         $states = $em->getRepository('AppBundle:State')->findAll();

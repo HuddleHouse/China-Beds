@@ -34,36 +34,12 @@ class AdminController extends Controller
      */
     public function viewAllUsersAction(Request $request)
     {
-        $users = [];
         $em = $this->getDoctrine()->getManager();
-        if ( $this->getUser()->hasRole('ROLE_ADMIN') ) {
-            $users = $em->getRepository('AppBundle:User')->findAll();
-        } elseif ( $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
-            $users = [];
-            foreach($this->getUser()->getRetailers() as $user) {
-                $users[$user->getId()] = $user;
-            }
-        } elseif ( $this->getUser()->hasRole('ROLE_SALES_REP') || $this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
-            foreach($this->getUser()->getDistributors() as $user) {
-                $users[$user->getId()] = $user;
-                foreach($user->getRetailers() as $user) {
-                    $users[$user->getId()] = $user;
-                }
-            }
-            foreach($this->getUser()->getRetailers() as $user) {
-                $users[$user->getId()] = $user;
-            }
-
-            if ( $this->getUser()->hasRole('ROLE_SALES_MANAGER') ) {
-                foreach($this->getUser()->getSalesReps() as $user) {
-                    $users[$user->getId()] = $user;
-                    foreach($user->getRetailers() as $user) {
-                        $users[$user->getId()] = $user;
-                    }
-                }
-            }
+        $users = [];
+        foreach($em->getRepository('AppBundle:User')->findUsersForUserNew($this->getUser()) as $user) {
+            if ( $user == $this->getUser() ) { continue; }
+            $users[] = $user;
         }
-
         return $this->render('AppBundle:Admin:view_users.html.twig', array(
             'users' => $users
         ));
@@ -366,8 +342,10 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         try{
-            $um = $this->get('fos_user.user_manager');
-            $um->deleteUser($user);
+            //$um = $this->get('fos_user.user_manager');
+            //$um->deleteUser($user);
+            $em->remove($user);
+            $em->flush();
             $this->addFlash('notice', 'User ' . $user->getDisplayName() . ' deleted successfully');
             return $this->redirectToRoute('view_users');
         }catch(Exception $e){

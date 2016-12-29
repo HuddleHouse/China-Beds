@@ -50,45 +50,67 @@ class ProfileController extends Controller
 
         $new_user_form = $this->createForm(NewUserType::class, $user);
 
+        $users = $em->getRepository('AppBundle:User')->findUsersForUserNew($this->getUser());
+
+        $retailers = [];
+        $distributors = [];
+        $sales_reps = [];
+        foreach($users as $user) {
+            if ( $user == $this->getUser() ) { continue; }
+            if ( $user->hasRole('ROLE_RETAILER') ) {
+                $retailers[] = $user;
+            }
+            if ( $user->hasRole('ROLE_DISTRIBUTOR') ) {
+                $distributors[] = $user;
+            }
+            if ( $user->hasRole('ROLE_SALES_REP') ) {
+                $sales_reps[] = $user;
+            }
+        }
+
         //get the correct data to be shown.
-        if($this->getUser()->hasRole('ROLE_ADMIN')) {
-            $retailers_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Retailer'));
-            $retailers = $retailers_data->getUsersForChannel($this->getUser()->getActiveChannel());
-
-            $sales_reps_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Sales Rep'));
-            $sales_reps = $sales_reps_data->getUsersForChannel($this->getUser()->getActiveChannel());
-
-            $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
-            $distributors = $distributors_data->getUsersForChannel($this->getUser()->getActiveChannel());
-
-        }
-        else if($this->getUser()->hasRole('ROLE_SALES_REP')) {
-            $distributors = $this->getUser()->getDistributors();
-            $retailers = array();
-            $sales_reps = $this->getUser()->getSalesReps();
-
-            foreach($distributors as $distributor)
-                foreach($distributor->getRetailers() as $retailer)
-                    $retailers[] = $retailer;
-        }
-        else if($this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
-            $sales_reps = $this->getUser()->getSalesReps();
-            $distributors = array();
-            $retailers = array();
-
-            foreach($sales_reps as $sales_rep)
-                foreach($sales_rep->getDistributors() as $distributor)
-                $distributors[] = $distributor;
-
-            foreach($distributors as $distributor)
-                foreach($distributor->getRetailers() as $retailer)
-                $retailers[] = $retailer;
-        }
-        else {
-            $retailers = $this->getUser()->getRetailers();
-            $sales_reps = $this->getUser()->getSalesReps();
-            $distributors = $this->getUser()->getDistributors();
-        }
+//        if($this->getUser()->hasRole('ROLE_ADMIN')) {
+//            $retailers_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Retailer'));
+//            $retailers = $retailers_data->getUsersForChannel($this->getUser()->getActiveChannel());
+//
+//            $sales_reps_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Sales Rep'));
+//            $sales_reps = $sales_reps_data->getUsersForChannel($this->getUser()->getActiveChannel());
+//
+//            $distributors_data = $em->getRepository('AppBundle:Role')->findOneBy(array('name' => 'Distributor'));
+//            $distributors = $distributors_data->getUsersForChannel($this->getUser()->getActiveChannel());
+//
+//        }
+//        else if($this->getUser()->hasRole('ROLE_SALES_REP')) {
+//            $distributors = $this->getUser()->getDistributors();
+//            $retailers = array();
+//            $sales_reps = $this->getUser()->getSalesReps();
+//
+//            foreach($distributors as $distributor)
+//                foreach($distributor->getRetailers() as $retailer)
+//                    $retailers[] = $retailer;
+//        }
+//        else if($this->getUser()->hasRole('ROLE_SALES_MANAGER')) {
+//            $sales_reps = $this->getUser()->getSalesReps();
+//            $distributors = array();
+//            $retailers = array();
+//
+//            foreach($this->getUser()->getDistributors() as $distributor) {
+//                $distributors[] = $distributor;
+//            }
+//
+//            foreach($sales_reps as $sales_rep)
+//                foreach($sales_rep->getDistributors() as $distributor)
+//                $distributors[] = $distributor;
+//
+//            foreach($distributors as $distributor)
+//                foreach($distributor->getRetailers() as $retailer)
+//                $retailers[] = $retailer;
+//        }
+//        else {
+//            $retailers = $this->getUser()->getRetailers();
+//            $sales_reps = $this->getUser()->getSalesReps();
+//            $distributors = $this->getUser()->getDistributors();
+//        }
 
         $orders = $em->getRepository('AppBundle:User')->getLatestOrdersForUser($this->getUser());
 
@@ -137,7 +159,7 @@ class ProfileController extends Controller
      * Edit the user
      * @Route("/user/edit/{id}", name="edit_child_user")
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id = null)
     {
         if ( $id ) {
             return $this->redirectToRoute('admin_edit_user', array('user_id' => $id));

@@ -178,4 +178,16 @@ class PriceGroup
     {
         return $this->channel;
     }
+
+    public function toArray() {
+        $prices = [];
+        foreach($this->getPrices() as $price) {
+            $prices[] = $price->toArray();
+        }
+        return [
+            'id'        => $this->getId(),
+            'name'      => $this->getName(),
+            'prices'    => $prices
+        ];
+    }
 }

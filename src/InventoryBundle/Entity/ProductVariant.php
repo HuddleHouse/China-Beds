@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Entity;
 
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -115,11 +116,6 @@ class ProductVariant
      */
     private $promo_kit_orders;
 
-//    /**
-//     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\CreditRequest", mappedBy="productVariant", cascade={"persist", "remove"})
-//     */
-//    protected $creditRequest;
-
 
     public function __construct() {
         $this->price_group_prices = new ArrayCollection();
@@ -130,7 +126,6 @@ class ProductVariant
         $this->stock_adjustment_product_variant = new ArrayCollection();
         $this->warranty_claims = new ArrayCollection();
         $this->promo_kit_orders = new ArrayCollection();
-//        $this->creditRequest = new ArrayCollection();
     }
 
     /**
@@ -626,37 +621,45 @@ class ProductVariant
         $this->promo_kit_orders->removeElement($promoKitOrder);
     }
 
-    /**
-     * Add creditRequest
-     *
-     * @param \OrderBundle\Entity\CreditRequest $creditRequest
-     *
-     * @return ProductVariant
-     */
-    public function addCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
-    {
-        $this->creditRequest[] = $creditRequest;
-
-        return $this;
+    public function getTotalInventory(User $user = null) {
+        $total = 0;
+        foreach($this->getWarehouseInventory() as $warehouse_inventory) {
+            if ( $user == null || ($user && in_array($warehouse_inventory->getWarehouse(), $user->getWarehouses()->toArray()))) {
+                $total += $warehouse_inventory->getQuantity();
+            }
+        }
+        return $total;
     }
+    
+    public function toArrayWithoutRelation() {
 
-    /**
-     * Remove creditRequest
-     *
-     * @param \OrderBundle\Entity\CreditRequest $creditRequest
-     */
-    public function removeCreditRequest(\OrderBundle\Entity\CreditRequest $creditRequest)
-    {
-        $this->creditRequest->removeElement($creditRequest);
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'sku'           => $this->getSku(),
+            'weight'        => $this->getWeight(),
+            'dimensions'    => $this->getFedexDimensions(),
+            'msrp'          => $this->getMsrp()
+
+        ];
     }
-
-    /**
-     * Get creditRequest
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCreditRequest()
-    {
-        return $this->creditRequest;
+    
+    public function toArray(User $user = null) {
+        $inventory = [];
+        foreach($this->getWarehouseInventory() as $warehouse_inventory) {
+            if ( $user == null || ($user && in_array($warehouse_inventory->getWarehouse(), $user->getWarehouses()->toArray()))) {
+                $inventory[] = $warehouse_inventory->toArray();
+            }
+        }
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'product'       => $this->getProduct()->toArray(),
+            'sku'           => $this->getSku(),
+            'weight'        => $this->getWeight(),
+            'dimensions'    => $this->getFedexDimensions(),
+            'total_on_hand' => $this->getTotalInventory($user),
+            'inventory'     => $inventory
+        ];
     }
 }

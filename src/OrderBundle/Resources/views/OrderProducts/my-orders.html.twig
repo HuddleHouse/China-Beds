@@ -54,10 +54,13 @@
                             </td>
                             <td>
                                 <span class="mdl-chip mdl-chip--contact" >
+                                    {% if not order.isPaid and order.isShippable %}
+                                        <span class="mdl-chip__contact mdl-color-text--white" style="background-color: red;">D</span>
+                                        <span class="mdl-chip__text"> Due</span>
+                                    {% else %}
                                     <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
-                                    <span class="mdl-chip__text">
-                                    {{ order.status.name }}
-                                    </span>
+                                    <span class="mdl-chip__text">{{ order.status.name }}</span>
+                                    {% endif %}
                                 </span>
                             </td>
                             <td>

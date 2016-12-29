@@ -24,9 +24,9 @@
         var products = {{ products | json_encode | raw }};
         var popItems = {{ popItems | json_encode | raw }};
         var warehouse_opts = '{% for warehouse in warehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
-        var pop_warehouse_opts = '{% for warehouse in popWarehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';
+        {#var pop_warehouse_opts = '{% for warehouse in popWarehouses %}<option value="{{ warehouse.id }}">{{ warehouse.name }}</option>{% endfor %}';#}
         $('#products-warehouse-0').html(warehouse_opts);
-        $('#pop-warehouse-0').html(pop_warehouse_opts);
+//        $('#pop-warehouse-0').html(pop_warehouse_opts);
 
         $(document).ready(function () {
             $('#add_product').on('click', addProductHandler);
@@ -60,9 +60,9 @@
         }
 
         function getPopOptions(index) {
-            var wid = $('#pop-warehouse-'+index).val();
+//            var wid = $('#pop-warehouse-'+index).val();
             $('#pop-product-'+index).html('');
-            $.each(popItems[wid], function(key, val) {
+            $.each(popItems, function(key, val) {
                 $('#pop-product-'+index).append('<option value="' + key + '">' + val.product + '</option>');
             });
         }
@@ -81,7 +81,7 @@
             $.each($("#product-table tr td:nth-child(5) div input"), function(key, value) {
                 subtotal += Number($(value).val());
             });
-            $.each($("#pop-table tr td:nth-child(5) div input"), function(key, value) {
+            $.each($("#pop-table tr td:nth-child(4) div input"), function(key, value) {
                 subtotal += Number($(value).val());
             });
             $('#subtotal').html(subtotal.toFixed(2));
@@ -134,7 +134,7 @@
             $('#pop-table tr:last').remove();
             $('#pop-table').append(
                     '<tr id="pop-'+ index + '">' +
-                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]" onchange="getPopOptions('+ index + ')">' + pop_warehouse_opts + '</select></td>' +
+//                    '<td><select class="form-control" id="pop-warehouse-'+ index + '" name="pop['+ index + '][warehouse]" onchange="getPopOptions('+ index + ')">' + pop_warehouse_opts + '</select></td>' +
                     '<td><select class="form-control" id="pop-product-'+ index + '" name="pop['+ index + '][product]"></select></td>' +
                     '<td><input type="text" class="form-control" id="pop-unit_cost-'+ index + '" name="pop['+ index + '][unit_cost]" placeholder="0.00" onchange="calculatePopSubtotal('+ index + ')"></td>' +
                     '<td><input type="number" class="form-control" id="pop-qty-'+ index + '" name="pop['+ index + '][qty]" onchange="calculatePopSubtotal('+ index + ')"></td>' +
@@ -427,14 +427,14 @@
                 </div>
                 <div class="row invoice-info">
                     <!-- /.col -->
-                    <div class="col-md-2 invoice-col">
-                        <div class="radio">
+                    <div class="col-md-4 invoice-col">
+                        <div class="checkbox-inline">
                             <label class="not-dumb">
                                 <input type="radio" id="isPickup-f" name="isPickup" ng-value="false" value="false" ng-model="isPickup" onclick="calculateTotal()">
                                 Ship
                             </label>
                         </div>
-                        <div class="radio">
+                        <div class="checkbox-inline">
                             <label class="not-dumb">
                                 <input type="radio" id="isPickup-t" name="isPickup" ng-value="true" value="true" ng-model="isPickup" onclick="calculateTotal()">
                                 For Pickup
@@ -457,14 +457,15 @@
                         </div>
                         <div class="form-group">
                             <label for="eta">Order Date</label>
-                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="order_date" name="order_date" ng-model="order_date" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px; margin:0 0 28px; width:100%;" id="order_date" name="order_date" ng-model="order_date" md-min-date="min_date"></md-datepicker>
                         </div>
                         <div class="form-group">
                             <label for="eta">ETA</label>
-                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px; width:100%; margin:0 0 28px;" id="eta" name="eta" ng-model="eta" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
-                    <div id="other-stuff" class="col-md-2 invoice-col move-up">
+                    <div id="other-stuff" class="col-md-4 invoice-col move-up">
+                        <br><br>
                         <div class="form-group label-floating">
                             <label for="poNumber" class="control-label">PO #</label>
                             <input type="text" class="form-control" id="poNumber" name="poNumber" ng-model="poNumber">
@@ -474,17 +475,18 @@
                             <input type="text" class="form-control" id="containerNumber" name="containerNumber" ng-model="containerNumber">
                         </div>
                     </div>
-                    <div id="pickup-info" class="col-md-3 invoice-col move-up" ng-show="isPickup">
+                    <div id="pickup-info" class="col-md-4 invoice-col move-up" ng-show="isPickup">
+                        <br><br>
                         <div class="form-group label-floating">
                             <label for="pickupAgent" class="control-label">Pickup Agent</label>
                             <input type="text" class="form-control" id="pickupAgent" name="pickupAgent" ng-model="pickupAgent">
                         </div>
                         <div class="form-group">
                             <label for="pickupDate">Pickup Date</label>
-                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;-webkit-border-radius: 99px;-moz-border-radius: 99px;border-radius: 99px" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
+                            <md-datepicker style="float: right; border: #d0d5dd solid 1px;width:100%; margin:0 0 28px;" id="pickupDate" name="pickupDate" ng-model="pickupDate" md-min-date="min_date"></md-datepicker>
                         </div>
                     </div>
-                    <div id="ship-info-left" class="col-md-2 invoice-col move-up" ng-show="!isPickup">
+                    <div id="ship-info-left" class="col-md-6 invoice-col move-up" ng-show="!isPickup" style="clear:left">
                         <div class="form-group label-floating">
                             <label for="shipName" class="control-label">Name</label>
                             <input type="text" class="form-control" id="shipName" name="shipName" ng-model="shipName">
@@ -502,7 +504,7 @@
                             <input type="text" class="form-control" id="shipZip" name="shipZip" ng-model="shipZip">
                         </div>
                     </div>
-                    <div id="ship-info-right" class="col-md-4 invoice-col move-up" ng-show="!isPickup">
+                    <div id="ship-info-right" class="col-md-6 invoice-col move-up" ng-show="!isPickup">
                         <div class="form-group label-floating">
                             <label for="shipAddress" class="control-label">Address</label>
                             <input type="text" class="form-control" id="shipAddress" name="shipAddress" ng-model="shipAddress">
@@ -556,8 +558,8 @@
                         <table id="pop-table" class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
-                                <th style="width: 20%;">Warehouse</th>
-                                <th style="width: 40%;">Product</th>
+                                {#<th style="width: 20%;">Warehouse</th>#}
+                                <th style="width: 60%;">Product</th>
                                 <th style="width: 15%;">Unit Cost</th>
                                 <th style="width: 6%;">Qty</th>
                                 <th style="width: 15%;">Subtotal</th>
@@ -566,7 +568,7 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td colspan="6" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
+                                <td colspan="5" style="text-align: center"><a href id="add_pop_item" class="stretch">Add a Pop Item</a></td>
                             </tr>
                             </tbody>
                         </table>

@@ -1,0 +1,603 @@
+{% extends ':default:layout.html.twig' %}
+
+{% block title %}Order Products{% endblock %}
+{% block page_title %}
+    Order Products
+{% endblock page_title %}
+
+
+    {% block footer %}
+        <script type="text/javascript">
+            var app = angular.module('myApp', ['ngMaterial']).config(function($interpolateProvider){
+                $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+            });
+
+            function isEmpty(value) {
+                return angular.isUndefined(value) || value === '' || value === null || value !== value;
+            }
+
+            app.directive('ngMin', function() {
+                return {
+                    restrict: 'A',
+                    require: 'ngModel',
+                    link: function(scope, elem, attr, ctrl) {
+                        scope.$watch(attr.ngMin, function(){
+                            ctrl.$setViewValue(ctrl.$viewValue);
+                        });
+                        var minValidator = function(value) {
+                            var min = scope.$eval(attr.ngMin) || 0;
+                            if (!isEmpty(value) && value < min) {
+                                ctrl.$setValidity('ngMin', false);
+                                return undefined;
+                            } else {
+                                ctrl.$setValidity('ngMin', true);
+                                return value;
+                            }
+                        };
+
+                        ctrl.$parsers.push(minValidator);
+                        ctrl.$formatters.push(minValidator);
+                    }
+                };
+            });
+
+            app.directive('ngMax', function() {
+                return {
+                    restrict: 'A',
+                    require: 'ngModel',
+                    link: function(scope, elem, attr, ctrl) {
+                        scope.$watch(attr.ngMax, function(){
+                            ctrl.$setViewValue(ctrl.$viewValue);
+                        });
+                        var maxValidator = function(value) {
+                            var max = scope.$eval(attr.ngMax) || Infinity;
+                            if (!isEmpty(value) && value > max) {
+                                ctrl.$setValidity('ngMax', false);
+                                return undefined;
+                            } else {
+                                ctrl.$setValidity('ngMax', true);
+                                return value;
+                            }
+                        };
+
+                        ctrl.$parsers.push(maxValidator);
+                        ctrl.$formatters.push(maxValidator);
+                    }
+                };
+            });
+
+            app.directive('convertToNumber', function() {
+                return {
+                    require: 'ngModel',
+                    link: function(scope, element, attrs, ngModel) {
+                        ngModel.$parsers.push(function(val) {
+                            return val != null ? parseInt(val, 10) : null;
+                        });
+                        ngModel.$formatters.push(function(val) {
+                            return val != null ? '' + val : null;
+                        });
+                    }
+                };
+            });
+
+            app.controller('myCtrl', ['$scope', function($scope) {
+                $scope.products = [];
+                $scope.cart = {
+                    ship_method: 'ship',
+                    warehouse: {
+                        id: null
+                    }
+                };
+
+                $scope.filter = 'ALL';
+
+                $scope.original_user = null;
+
+                $scope.updateCartUser = function(user_id) {
+//                    $scope.cart.user = user;
+                    $scope.loadUserInfo(user_id);
+                }
+
+//                $scope.$watch('cart.user', function (newVal, oldVal) {
+//                    if (oldVal == newVal) return;
+//                    $scope.loadUserInfo(newVal);
+//                }, true);
+
+                $scope.calculateNumberOfItems = function() {
+                    var number_of_items = 0;
+                    if ( typeof $scope.products.products !== 'undefined' ) {
+                        $scope.products.products.forEach(function (product) {
+                            product.variants.forEach(function (variant) {
+                                if (typeof variant.total_to_purchase === 'undefined') {
+                                    variant.total_to_purchase = 0;
+                                }
+                                number_of_items += variant.total_to_purchase;
+                            });
+                        });
+                    }
+                    if ( typeof $scope.products.pop_items !== 'undefined' ) {
+                        $scope.products.pop_items.forEach(function (product) {
+                            if (typeof product.total_to_purchase === 'undefined') {
+                                product.total_to_purchase = 0;
+                            }
+                            number_of_items += product.total_to_purchase;
+                        });
+                    }
+                    return number_of_items;
+                };
+
+                $scope.calculateTotalDue = function() {
+                    var total_due = 0;
+                    if ( typeof $scope.products.products !== 'undefined' ) {
+                        $scope.products.products.forEach(function (product) {
+                            product.variants.forEach(function (variant) {
+                                if (typeof variant.total_to_purchase === 'undefined') {
+                                    variant.total_to_purchase = 0;
+                                }
+                                total_due += (variant.total_to_purchase * variant.price);
+                            });
+                        });
+                    }
+                    if ( typeof $scope.products.pop_items !== 'undefined' ) {
+                        $scope.products.pop_items.forEach(function (product) {
+                            if (typeof product.total_to_purchase === 'undefined') {
+                                product.total_to_purchase = 0;
+                            }
+                            total_due += (product.total_to_purchase * product.price);
+                        });
+                    }
+                    return total_due;
+                };
+
+                $scope.getCategories = function() {
+                    var categories = [];
+                    if ( typeof $scope.products.products !== 'undefined' ) {
+                        $scope.products.products.forEach(function (product) {
+                            product.variants.forEach(function (variant) {
+                                variant.variant.product.categories.forEach(function (category) {
+                                    var found = false;
+                                    categories.forEach(function (cat) {
+                                        if (cat.id == category.id) {
+                                            found = true;
+                                        }
+                                    });
+                                    if (!found) {
+                                        categories.push(category);
+                                    }
+                                });
+                            });
+                        });
+                    }
+                    return categories;
+                }
+
+                $scope.getTotalOnHand = function(variant) {
+                    var total = 0;
+                    variant.inventory.forEach(function(inventory) {
+                        if ( $scope.cart.ship_method == 'ship' || ($scope.cart.ship_method == 'pickup' && inventory.warehouse.id == $scope.cart.warehouse.id)) {
+                            total += inventory.quantity;
+                        }
+                    });
+                    return total;
+                }
+
+                $scope.loadUserInfo = function(user_id) {
+                    showSpinner();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_get_data_for_order_form') }}?user_id=" + user_id,
+                        dataType: 'json',
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                $scope.cart.user = data;
+                                $scope.products = data.products;
+                                if ( $scope.original_user == null ) {
+                                    $scope.original_user = data;
+                                }
+                                hideSpinner();
+                            });
+                        }
+                    });
+                }
+
+                $scope.init = function() {
+                    $scope.loadUserInfo({{ app.user.id }});
+                }
+
+                $scope.init();
+            }]);
+        </script>
+    {% endblock %}
+
+{% block content %}
+<style>
+    #floaty-box {
+        float: right;
+        position: fixed;
+        top: 60vh;
+        display: inline;
+        right: 0;
+    }
+    .form_field {
+        border: 1px solid rgba(149,152,154,.37);
+        display: block;
+        width: 100%;
+        border-radius: 8px;
+        height: 35px;
+        font-size: 17px;
+    }
+    .cart_info {
+        background-color: #fff !important;
+        text-align: center;
+        color: #078BB2;
+        font-size: large;
+    }
+    .review_cart_button {
+        padding-left: 6px;
+        padding-right: 6px;
+        margin-top: 20px;
+        -webkit-box-shadow: 0 0 0 0 !important;
+        height: 38px !important;
+    }
+    .button {
+        display: inline-block;
+        margin-bottom: 10px;
+        background: #EEE;
+        border: none;
+        border-radius: 7px;
+        color: #222;
+        font-family: sans-serif;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: transparent;
+    }
+    .button:hover {
+        color: #02B1F2;
+    }
+    .button:active,
+    .button.is-checked {
+        color: #02B1F2;
+    }
+    .button.is-checked {
+        color: #02B1F2;
+    }
+    .button:active {
+        box-shadow: inset 0 1px 10px hsla(0, 0%, 0%, 0.8);
+    }
+    .price_box_row {
+        text-align: center;
+    }
+    .gray_box {
+        border: 2px solid #EFEFEF;
+    }
+    .solid_gray_box {
+        background-color: #EFEFEF;
+    }
+    .variant_price {
+        font-weight: 600;
+    }
+    .variant_name {
+        font-weight: 600;
+    }
+    .product_name {
+        font-weight: 800;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+    .element-item {
+        padding: 0px;
+        min-height: 285px;
+    }
+    .col-md-2 {
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+    }
+
+    .class_checkbox {
+        width: 20px;
+        height: 20px;
+        background-image: url("/images/unchecked@2x.png");
+        background-size: 20px 20px;
+        background-repeat: no-repeat;
+    }
+    .class_checkbox.checked {
+        background-image: url("/images/checked@2x.png");
+        background-size: 20px 20px;
+        background-repeat: no-repeat;
+    }
+    .price_box {
+        max-width: 15%;
+        width: 13%;
+        display: inline-block;
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+    #retailer-ship {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: -15px;
+    }
+    select {
+        border: 3px solid #02B1F2 !important;
+        border-bottom: 3px solid #02B1F2 !important;
+    }
+    .form-control {
+        margin-bottom: 0px !important;
+    }
+    button.btn.btn-raised.review_cart_button.disabled, .button-error {
+        color: antiquewhite !important;
+        background-color: lightcoral !important;
+    }
+    .error {
+        border: 3px solid lightcoral !important;
+    }
+    ul
+    {
+        list-style-type: none;
+        color: #AAAAAA;
+    }
+    .order_product .product_image {
+        padding-top:150px;
+    }
+    .order_product .product_image img {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        margin:auto;
+    }
+</style>
+    <div ng-app="myApp" ng-controller="myCtrl" id="MainCtrl">
+        <div class="table"  style="min-height: 100vh;" ng-init="init">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="table" style="background-color: #EFEFEF;">
+                        <center><h2>{%  if is_granted('ROLE_DISTRIBUTOR') %}Distributor{% elseif is_granted('ROLE_RETAILER') %}Retailer{% endif %} Order Form</h2></center>
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label" for="po">PO#</label>
+                                        <input id="po" name="po" ng-model="form_info['po']" type="text" class="form_field input-md">
+                                    </div>
+                                    <div class="col-md-3" style="margin-top: 25px; display: inline-flex;">
+                                        <input type="radio" ng-model="cart.ship_method" class="input_class_checkbox" style="display: inline;margin-right: 8px;" value="ship">
+                                        <label class="checkbox" for="shipping" style=" margin-top: -7px;">Ship</label>
+                                    </div>
+                                    <div class="col-md-3" style="margin-top: 25px; display: inline-flex;">
+                                        <input type="radio" ng-model="cart.ship_method" class="input_class_checkbox" style="display: inline;margin-right: 8px;" value="pickup">
+                                        <label class="checkbox" for="pick_up" style="margin-top: -7px;">Pick Up</label>
+                                    </div>
+                                </div>
+
+                                {% if is_granted('ROLE_DISTRIBUTOR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP') %}
+                                    <div class="row" id="" style="margin-bottom: 10px; margin-top: 10px;">
+                                        <div class="col-md-12">
+                                            <select class="" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart.user.id" ng-change="updateCartUser(cart.user.id)"  convert-to-number>
+                                                <option value="{[{ original_user.id }]}">{[{ original_user.display_name }]}</option>
+                                                <optgroup ng-repeat="(group,users) in original_user.users" label="{[{ group }]}">
+                                                    <option ng-repeat="user in users" ng-value="user.id">{[{ user.display_name }]}</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="pick_up_agent" ng-show="cart.ship_method=='pickup'" >
+                                            <label class="control-label" for="agent_name">Pick Up Agent Name *</label>
+                                            <input id="agent_name" ng-model="form_info['agent_name']" name="agent_name" type="text" class="form_field input-md">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="pick_up_date" ng-show="cart.ship_method=='pickup'" >
+                                            <label class="control-label" for="pick_up_date">Pick Up Date *</label>
+                                            {#<md-datepicker ng-model="form_info['pick_up_date']" md-min-date="min_date()"></md-datepicker>#}
+                                            <md-datepicker ng-model="min_date" md-min-date="min_date" md-max-date="max_date"></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="pick_up_warehouse" ng-show="cart.ship_method=='pickup'" style="margin-bottom: 10px;">
+                                    <div class="col-md-12">
+                                    <select class="" id="warehouse_pick_up" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart.warehouse.id">
+                                        <option value="">Select Warehouse</option>
+                                        <option value="{[{ warehouse.id }]}" ng-value="warehouse.id" ng-repeat="warehouse in cart.user.warehouses">{[{warehouse.name}]}</option>
+                                    </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12" style="    margin-bottom: 25px;">
+                                        <label class="control-label" for="comments">Comments</label>
+                                        <textarea class="form_field" ng-model="form_info['comments']" id="comments" name="comments" style="min-height: 50px;"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="table" ng-show="cart.ship_method=='ship'" style="background-color: #EFEFEF; margin-top: -19px;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label" for="ship_name">Name *</label>
+                                <input id="ship_name" name="ship_name" ng-model="cart.user.display_name" type="text" class="form_field input-md">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label" for="address">Address *</label>
+                                <input id="address" name="address" ng-model="cart.user.address_1" type="text" class="form_field input-md">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label" for="address2">Address 2/Province</label>
+                                <input id="address2" ng-model="cart.user.address_2" type="text" class="form_field input-md">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label" for="city">City *</label>
+                                <input id="city" ng-model="cart.user.city" type="text" class="form_field input-md">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="state">ST *</label>
+                                <select id="state" ng-model="cart.user.state_id" class="form_field input-md"  convert-to-number>
+                                    {% for state in states %}
+                                        <option value="{{ state.id }}" ng-value="{{ state.id }}">{{ state.abbreviation }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="zip">Zip *</label>
+                                <input id="zip" ng-model="cart.user.zip" type="text" class="form_field input-md">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label" for="phone">Phone *</label>
+                                <input id="phone" ng-model="cart.user.phone" phone-input class="form_field input-md">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label" for="email">Email *</label>
+                                <input id="email" ng-model="cart.user.email" type="email" class="form_field input-md">
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-12">
+                                <p>Please confirm shipping to residential address.
+                                    <input type="checkbox" ng-model="form_info['confirm_residential']" name="confirm_residential" id="confirm_residential" class="input_class_checkbox" style="display: inline;margin-right: 8px;">
+                                </p>
+                                <p style="font-size: 10px; margin-top: -23px;">Shipping is based FedEx rates.</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    {% if channel.backendOrdersPic %}
+                    <img src="{{ asset('uploads/websites/' ~ channel.backendOrdersPic) }}" style="max-height:300px;">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row" style="padding-bottom: 40px;padding-top: 20px;">
+                <div class="col-md-6">
+                    <div class="button-group filters-button-group" style="text-align: center; margin-top: 29px;">
+                        <button class="button is-checked" data-filter="*">ALL</button>
+                        <button class="button filters-button-item" ng-click="filterProductsBy(category.name)" ng-repeat="category in getCategories()">{[{ category.name }]}</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table" style="background-color: #02B1F2;">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4">
+                                <center>Item (s)</center>
+                                <input value="{[{ calculateNumberOfItems() }]}" class="cart_info" style="width: 100%; height: 38px;" readonly>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <center>Total ($)</center>
+                                <div class="cart_info" style="width: 100%; height: 38px; padding-top: 10px; min-width: 91px;" >{[{ calculateTotalDue() | currency:'$' }]}</div>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <button class="btn btn-raised review_cart_button" id="submit-button" ng-click="submitCart()" type="submit" style="width: 100%;">Review ></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="grid md-col-12 col-lg-10">
+                    <div class="row">
+                        {#{% for product in products %}#}
+                    <div ng-repeat="product in products.products" class="col-md-5 element-item {[{ product.cat_ids }]} order_product" style="padding-bottom:25px">
+                        <div class="product_image" style="display: table; margin: 0 auto;">
+                            <img src="/{[{ product.images[0] }]}" style="max-width: 350px; max-height: 150px;">
+                            <div class="product_name">
+                                <center>{[{ product.name }]}</center>
+                            </div>
+                        </div>
+
+                        <div class="price_box_row " style="font-size: smaller;">
+
+                                <div ng-repeat="variant in product.variants track by $index" class="price_box">
+                                    <div class="variant_name gray_box">
+                                        {[{ variant.variant.name }]}
+                                    </div>
+                                    <div id="" class="variant_quantity gray_box">
+                                        <input type="number"
+                                               min="0"
+                                               onclick="this.select()"
+                                               style="text-align: center; width: 100%;    border: none;"
+                                               max="{[{ getTotalOnHand(variant.variant, cart.warehouse) }]}"
+                                               ng-min="0"
+                                               ng-max="getTotalOnHand(variant.variant, cart.warehouse)"
+                                               ng-model="variant.total_to_purchase"
+                                               ng-readonly="variant.variant.total_on_hand<1"
+                                        >
+                                    </div>
+                        {#{% if  false and (is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_SALES_REP')) %}#}
+                            {#<div class="variant_price gray_box">#}
+                                             {#<input#}
+                                               {#onclick="this.select()"#}
+                                               {#style="text-align: center; width: 100%;    border: none;"#}
+                                               {#ng-model="variant.price"#}
+                                               {#ng-change="calculateCart()"#}
+                                               {#>#}
+                            {#</div>#}
+                        {#{% else %}#}
+                            <div class="variant_price gray_box">
+                                            {[{ variant.price | currency}]}
+                            </div>
+                        {#{% endif %}#}
+                                    <div ng-switch="getTotalOnHand(variant.variant)">
+                                        <div ng-switch-when="0" class="variant_inventory">0 Avail</div>
+                                        <div ng-switch-default class="variant_inventory">{[{ getTotalOnHand(variant.variant) > 10 ? '10+' : getTotalOnHand(variant.variant) }]} Avail</div>
+                                    </div>
+
+                                </div>
+                        </div>
+                    </div>
+
+                <div ng-repeat="item in products.pop_items" class="col-md-3 element-item 11 order_product" style="margin-bottom: 25px; margin-top:45px;">
+                    <div class="product_image" style="display: table; margin: 0 auto; width: 60%;">
+                        <img src="/{[{item.image_path}]}" style="margin-left: auto; margin-right: auto; display: inherit;max-width: 175px;max-height: 150px;">
+                        <div class="product_name" style="min-height: 41px;">
+                            <center>{[{item.name}]}</center>
+                        </div>
+                        <div class="row solid_gray_box" style="margin-right: 0px; margin-left: 0px;">
+                            <div class="col-md-12">
+                                <div class="pop_name" style="padding-top: 13px;">{[{item.description}]}</div>
+                            </div>
+                            <div class="col-md-12" >
+                                <input id="pop-{[{item.id}]}" type="number" class="pop_amount form-control" style="margin-top: -20px; background-color: #fff; text-align: center; width: 100%;    border: none;;"
+                                               min="0"
+                                               onclick="this.select()"
+                                       ng-model="item.total_to_purchase"
+                                        >
+                                <div class="pop_price" style="text-align: center; padding-bottom:10px;">{[{item.price | currency}]}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="floaty-box" class="col-lg-2 visible-lg">
+                <ul class="filters-button-group">
+                    <li><h6 style="margin: 0;"><i id="side-all" class="fa fa-circle" aria-hidden="true"></i> All</h6></li>
+                    {#{% for category in categories %}#}
+                        {#<li class="filters-button-item" data-filter=".{[{ category.id }]}"><h6 style="margin: 0;"><i id="side-{[{ category.id }]}" class="fa fa-circle-thin"></i> {[{ category.name }]}</h6></li>#}
+                    {#{% endfor %}#}
+                    <li><h6 style="margin: 0;color: #02B1F2;"><i id="side-review" class="fa fa-circle-thin" aria-hidden="true"></i> Review Order</h6></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

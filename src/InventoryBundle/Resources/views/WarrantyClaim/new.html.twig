@@ -27,9 +27,15 @@
             });
             $('#warranty_claim_order').append($('<option>', {value:'', text:'None/Unknown'}));
         });
+        
+	$('#warranty_claim_file4').change(function () {
+		$('#warranty_claim_lawLabel').val($(this).val());	
+	});
 
-
-
+	$('#warranty_claim_file5').change(function () {
+		$('#warranty_claim_frLabel').val($(this).val());
+	});
+	
         function getProductVariants() {
             var el = $('#warranty_claim_productVariant');
             $.ajax({
@@ -85,6 +91,13 @@
 
         function openFileBrowser3() {
             $('#warranty_claim_file3').click();
+        }
+        
+	function openFileBrowser4() {
+            $('#warranty_claim_file4').click();
+        }
+	function openFileBrowser5() {
+            $('#warranty_claim_file5').click();
         }
     </script>
 {% endblock footer %}
@@ -156,11 +169,25 @@
             <div class="row">
                 <div class="col-md-4">
                     {{ form_label(form.lawLabel) }}
-                    {{ form_widget(form.lawLabel) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+				<span class="btn btn-file btn-raised">
+				    Browse&hellip; <input type="file" id="warranty_claim_file4" name="warranty_claim[file4]" accept="image/*">
+				</span>
+                        </label>
+                        {{ form_widget(form.lawLabel) }}
+                    </div>
                 </div>
                 <div class="col-md-4">
                     {{ form_label(form.frLabel) }}
-                    {{ form_widget(form.frLabel) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+				<span class="btn btn-file btn-raised">
+				    Browse&hellip; <input type="file" id="warranty_claim_file5" name="warranty_claim[file5]" accept="image/*">
+				</span>
+                        </label>
+                        {{ form_widget(form.frLabel) }}
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -174,6 +201,8 @@
             {% do form.file1.setRendered %}
             {% do form.file2.setRendered %}
             {% do form.file3.setRendered %}
+            {% do form.file4.setRendered %}
+            {% do form.file5.setRendered %}
             {{ form_end(form) }}
         </div>
     </div>

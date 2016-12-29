@@ -85,12 +85,18 @@
                         <th>Type</th>
                         <th>Amount</th>
                         <th>Date Created</th>
-                        <th>Submitted by</th>
-                        <th>On Behalf of</th>
+                        {% if app.user.hasRole('ROLE_ADMIN') %}
+                            <th>Submitted by</th>
+                            <th>On Behalf of</th>
+                        {% endif %}
                         {#<th>ACH</th>#}
+                        <td>Source</td>
                         <th>Description</th>
-                        {% if user.hasRole('ROLE_ADMIN') %}<th>ACH STATUS</th>{% endif %}
-                        <th>Actions</th>
+                        {% if app.user.hasRole('ROLE_ADMIN') %}
+                            {#<th>ACH STATUS</th>#}
+                            <th>Actions</th>
+                        {% endif %}
+
                     </tr>
                     </thead>
                     <tbody>
@@ -104,16 +110,30 @@
                                 <td>$<span style="color:red">{{ ledger.amountCredited | number_format(2) }}</span></td>
                             {% endif %}
                             <td>{{ ledger.dateCreated | date('m/d/y') }}</td>
-                            <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
-                            <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
+                            {% if app.user.hasRole('ROLE_ADMIN') %}
+                                <td>{{ ledger.submittedByUser.fullName | default('--') }}</td>
+                                <td>{{ ledger.submittedForUser.fullName | default('--') }}</td>
+                            {% endif %}
+
+                            <td>
+                                {% if ledger.creditRequest %}{{ ledger.creditRequest.identifier }}{% endif %}
+                                {% if ledger.warrantyClaim %}{{ ledger.warrantyClaim.identifier }}{% endif %}
+                                {% if ledger.rebateSubmission %}{{ ledger.rebateSubmission.identifier }}{% endif %}
+                                {% if ledger.order %}{{ ledger.order.identifier }}{% endif %}
+                            </td>
+
                             {#<td>{% if ledger.achRequested %}Yes{% else %}No{% endif %}</td>#}
                             <td id="description">{% if ledger.description is not null %}<span>Click to expand</span>{% else %}--{% endif %}</td>
-                            {% if user.hasRole('ROLE_ADMIN') %}<td>{% if ledger.type|upper == 'CREDIT"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% endif %}</td>{% endif %}
-                            <td>
-                        {% if app.user.hasRole('ROLE_ADMIN') and ledger.type|upper == 'CREDIT' and not ledger.achRequested %}
-                                <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
-                        {% endif %}
-                            </td>
+                            
+                            {% if app.user.hasRole('ROLE_ADMIN') %}
+
+                                <td>
+                                    {% if ledger.type|upper == 'LEDGER"' %}{{ ledger.achRequested  ? "SENT" : "PENDING" }}{% endif %}
+                                {% if ledger.type|upper == 'LEDGER' and not ledger.achRequested %}
+                                        <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('ledger_edit', { 'id': ledger.id }) }}">Edit</a>
+                                {% endif %}
+                                </td>
+                            {% endif %}
                         </tr>
                         {% endif %}
                     {% endfor %}

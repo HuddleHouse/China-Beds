@@ -51,6 +51,7 @@
                 self.save = save;
                 self.warehouseChange = warehouseChange;
                 self.updateDateReceived = updateDateReceived;
+                self.newSave = newSave;
                 self.cart = {{ cart | json_encode | raw}};
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -102,6 +103,38 @@
                         }
                     });
                 }
+
+                function newSave() {
+
+                    addSpinner();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_save_purchase_order') }}",
+                        dataType: 'json',
+                        data: {cart: self.cart, due_date: self.due_date, message: self.message, warehouse_id: {{ purchaseOrder.warehouse.id }}, status: 'Active', purchase_order_id: {{ purchaseOrder.id }} },
+                        success: function (data) {
+                            $.ajax({
+                                type: 'POST',
+                                url: "{{ path('api_update_purchase_order_numbers') }}",
+                                dataType: 'json',
+                                data: {
+                                    physicalContainerNumber: self.physicalContainerNumber,
+                                    factoryOrderNumber: self.factoryOrderNumber,
+                                    purchaseOrderId: {{ purchaseOrder.id }},
+                                    'portEta': self.portEta,
+                                    due_date: self.due_date
+
+                                },
+                                success: function (data) {
+                                    window.location.href = Routing.generate('purchaseorder_show', {id: data});
+                                }
+                            });
+                        }
+                    });
+                }
+
+
 
                 function updateCart() {
                     angular.forEach(self.cart, function(value, key) {
@@ -428,8 +461,7 @@
                     {% endif %}
                     </div>
                     <div style="margin: 15px 20px 0;" ng-if="ctrl.isEdit == 1">
-                        <a class="btn btn-raised btn-warning" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.updatePurchaseOrderNumbers()">SAVE META</a>
-                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.save('Active')">UPDATE LINE ITEMS</a>
+                        <a class="btn btn-raised btn-success" style="float: right;  font-weight: 700;margin-right: 10px;" ng-click="ctrl.newSave()">SAVE</a>
                     </div>
                 </div>
             </div>

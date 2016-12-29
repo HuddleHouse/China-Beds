@@ -2,6 +2,7 @@
 
 namespace InventoryBundle\Form;
 
+use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InventoryBundle\Entity\Channel;
@@ -49,7 +50,7 @@ class RebateSubmissionType extends AbstractType
                     'label' => 'Rebate',
                     'choice_label' => 'name',
                     'choices' => $builder->getData()->getChannel()->getActiveRebates(),
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                     'required' => true,
                 )
             )
@@ -83,8 +84,10 @@ class RebateSubmissionType extends AbstractType
                 'label' => 'Retailer/Distributor submitting for',
                 'placeholder' => 'Retailer/Distributor',
                 'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
-                'choice_label' => 'username',
-                'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
+                'choice_label' => function (User $user) {
+                    return $user->getDisplayName();
+                },
+                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
                 'required' => true
             ))
             ->add('order', EntityType::class, array(
@@ -92,7 +95,7 @@ class RebateSubmissionType extends AbstractType
                     'label' => 'Order ID',
                     'placeholder' => 'Select Order ID',
                     'choices' => [],
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
                     'required' => true
                 )
             )

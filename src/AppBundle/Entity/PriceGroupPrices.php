@@ -60,7 +60,7 @@ class PriceGroupPrices
      */
     public function setPrice($price)
     {
-        $this->price = $price;
+        $this->price = $price * 100;
 
         return $this;
     }
@@ -72,7 +72,7 @@ class PriceGroupPrices
      */
     public function getPrice()
     {
-        return $this->price;
+        return $this->price / 100;
     }
 
     /**
@@ -107,5 +107,12 @@ class PriceGroupPrices
         $this->price_group = $price_group;
     }
 
+    public function toArray() {
+        return [
+            'id'        => $this->getId(),
+//            'variant'   => $this->getProductVariant()->toArray(),
+            'price'     => $this->getPrice()
+        ];
+    }
 
 }

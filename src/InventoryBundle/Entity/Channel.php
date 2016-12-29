@@ -43,6 +43,34 @@ class Channel
     /**
      * @var string
      *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fedex_number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fedex_key;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fedex_password;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fedex_meter_number;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
@@ -340,6 +368,20 @@ class Channel
      * @ORM\Column(name="ach_company_name", type="string", length=25, nullable=true)
      */
     private $ach_company_name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="backend_header_pic", type="string")
+     */
+    private $backendHeaderPic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="backend_orders_pic", type="string")
+     */
+    private $backendOrdersPic;
 
     /**
      * @ORM\OneToMany(targetEntity="InventoryBundle\Entity\ProductChannel", mappedBy="channel")
@@ -1955,6 +1997,37 @@ class Channel
     }
 
     /**
+     * @return string
+     */
+    public function getBackendHeaderPic()
+    {
+        return $this->backendHeaderPic;
+    }
+
+    /**
+     * @param string $backendHeaderPic
+     */
+    public function setBackendHeaderPic($backendHeaderPic)
+    {
+        $this->backendHeaderPic = $backendHeaderPic;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackendOrdersPic()
+    {
+        return $this->backendOrdersPic;
+    }
+
+    /**
+     * @param string $backendOrdersPic
+     */
+    public function setBackendOrdersPic($backendOrdersPic)
+    {
+        $this->backendOrdersPic = $backendOrdersPic;
+    }
+    /**
      * @return mixed
      */
     public function getPriceGroups()
@@ -1984,5 +2057,143 @@ class Channel
     public function setWarehouses($warehouses)
     {
         $this->warehouses = $warehouses;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFedexNumber()
+    {
+        return $this->fedex_number;
+    }
+
+    /**
+     * @param string $fedex_number
+     */
+    public function setFedexNumber($fedex_number)
+    {
+        $this->fedex_number = $fedex_number;
+    }
+
+
+
+    /**
+     * Set fedexKey
+     *
+     * @param string $fedexKey
+     *
+     * @return Channel
+     */
+    public function setFedexKey($fedexKey)
+    {
+        $this->fedex_key = $fedexKey;
+
+        return $this;
+    }
+
+    /**
+     * Get fedexKey
+     *
+     * @return string
+     */
+    public function getFedexKey()
+    {
+        return $this->fedex_key;
+    }
+
+    /**
+     * Set fedexPassword
+     *
+     * @param string $fedexPassword
+     *
+     * @return Channel
+     */
+    public function setFedexPassword($fedexPassword)
+    {
+        $this->fedex_password = $fedexPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get fedexPassword
+     *
+     * @return string
+     */
+    public function getFedexPassword()
+    {
+        return $this->fedex_password;
+    }
+
+    /**
+     * Set fedexMeterNumber
+     *
+     * @param string $fedexMeterNumber
+     *
+     * @return Channel
+     */
+    public function setFedexMeterNumber($fedexMeterNumber)
+    {
+        $this->fedex_meter_number = $fedexMeterNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get fedexMeterNumber
+     *
+     * @return string
+     */
+    public function getFedexMeterNumber()
+    {
+        return $this->fedex_meter_number;
+    }
+
+    /**
+     * Add priceGroup
+     *
+     * @param \AppBundle\Entity\PriceGroup $priceGroup
+     *
+     * @return Channel
+     */
+    public function addPriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
+    {
+        $this->price_groups[] = $priceGroup;
+
+        return $this;
+    }
+
+    /**
+     * Remove priceGroup
+     *
+     * @param \AppBundle\Entity\PriceGroup $priceGroup
+     */
+    public function removePriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
+    {
+        $this->price_groups->removeElement($priceGroup);
+    }
+
+    /**
+     * Add warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     *
+     * @return Channel
+     */
+    public function addWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses[] = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * Remove warehouse
+     *
+     * @param \WarehouseBundle\Entity\Warehouse $warehouse
+     */
+    public function removeWarehouse(\WarehouseBundle\Entity\Warehouse $warehouse)
+    {
+        $this->warehouses->removeElement($warehouse);
     }
 }

@@ -3,6 +3,7 @@
 namespace OrderBundle\Controller;
 
 use OrderBundle\Entity\CreditRequest;
+use OrderBundle\Entity\Ledger;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,7 @@ use OrderBundle\Form\RequestCreditType;
 /**
  * Creditrequest controller.
  *
- * @Route("/creditrequest")
+ * @Route("/credit/requests")
  */
 class CreditRequestController extends Controller
 {
@@ -61,7 +62,14 @@ class CreditRequestController extends Controller
                 $em->persist($user);
                 $em->flush();
 
-                return $this->redirectToRoute('credit_request_index');
+                $this->addFlash('notice', 'Successfully requested credit request');
+
+                if ( $this->getUser()->hasRole('ROLE_ADMIN') ) {
+                    return $this->redirectToRoute('credit_request_edit', ['id' => $creditRequest->getId()]);
+                } else {
+                    return $this->redirectToRoute('credit_request_index');
+                }
+
             }catch(\Exception $e){
                 $this->addFlash('notice', 'Error creating credit request: ' . $e);
 
@@ -86,6 +94,9 @@ class CreditRequestController extends Controller
      */
     public function editAction(Request $request, CreditRequest $creditRequest)
     {
+        if ( $creditRequest->getIsApproved() ) {
+            return $this->redirectToRoute('credit_request_index');
+        }
         $editForm = $this->createForm(RequestCreditType::class, $creditRequest);
         $editForm->handleRequest($request);
 
@@ -119,6 +130,48 @@ class CreditRequestController extends Controller
             return $this->redirectToRoute('credit_request_index');
         }catch(\Exception $e){
             $this->addFlash('error', 'Credit request not deleted : ' . $e);
+            return $this->redirectToRoute('credit_request_index');
+        }
+
+    }
+
+    /**
+     * @param CreditRequest $creditRequest
+     * @Route("/approve/{id}", name="credit_request_approve")
+     */
+    public function approveCreditRequestAction(CreditRequest $creditRequest) {
+        if ( $creditRequest->getIsApproved() ) {
+            $this->addFlash('error', 'Credit request was already approved.');
+            return $this->redirectToRoute('credit_request_index');
+        }
+
+        $creditRequest->setIsApproved(true);
+
+        $ledger = new Ledger();
+        $ledger->setAmountRequested($creditRequest->getRequestAmount());
+        $ledger->setAmountCredited($creditRequest->getRequestAmount());
+        $ledger->setDescription('Created from Credit Request #' . $creditRequest->getId());
+        $ledger->setType(Ledger::TYPE_CREDIT);
+        $ledger->setDatePosted(new \DateTime());
+        $ledger->setDateCreated(new \DateTime());
+        $ledger->setSubmittedByUser($creditRequest->getSubmittedByUser());
+        $ledger->setSubmittedForUser($creditRequest->getSubmittedForUser());
+        $ledger->setCreditRequest($creditRequest);
+        $ledger->setChannel($creditRequest->getChannel());
+        $ledger->setIsApproved(true);
+
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($creditRequest);
+            $em->persist($ledger);
+
+            $em->flush();
+
+            $this->addFlash('notice', 'Credit request approved and ledger entry added.');
+            return $this->redirectToRoute('credit_request_index');
+
+        }catch(\Exception $e){
+            $this->addFlash('error', 'Credit request not be approved : ' . $e);
             return $this->redirectToRoute('credit_request_index');
         }
 

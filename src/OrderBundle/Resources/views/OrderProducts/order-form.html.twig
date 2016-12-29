@@ -22,8 +22,12 @@
                     <div class="col-md-12">
                         <select class="select2" id="dist_ship" style="width: 100%;height: 37px;margin-top:8px;" ng-model="cart['dist_ship']" ng-change="updateShipForm()" required>
                             <option value="">Buyer: {{ app.user.displayName }}</option>
-                            {% for retailer in user_retailers %}
-                                <option value="{{ retailer.id }}">{{ retailer.displayName }}</option>
+                            {% for key,group in user_retailers %}
+                                <optgroup label="{{ key }}">
+                                    {% for user in group %}
+                                    <option value="{{ user.id }}">{{ user.displayName }}</option>
+                                    {% endfor %}
+                                </optgroup>
                             {% endfor %}
                         </select>
                     </div>

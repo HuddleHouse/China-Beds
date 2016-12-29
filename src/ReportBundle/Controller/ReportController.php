@@ -86,7 +86,7 @@ class ReportController extends Controller
         );
 
         //2D array of data from the query for each row[column] of data
-        $report['data'] = $em->getRepository('OrderBundle:Orders')->getDailyOrderReportData();
+        $report['data'] = $em->getRepository('OrderBundle:Orders')->getDailyOrderReportData($this->getUser());
         //total to be displayed if applicable
         $report['total'] = 0;
 
@@ -98,7 +98,9 @@ class ReportController extends Controller
             $this->addFlash('notice', 'No Orders Today');
 
         return $this->render('ReportBundle:Reports:daily-order.html.twig', array(
-            'report' => $report
+            'report' => $report,
+            'channel' => $this->getUser()->getActiveChannel()
+
         ));
     }
 
@@ -128,8 +130,10 @@ class ReportController extends Controller
         $d = new \DateTime();
         $d2 = new \DateTime();
         $month = $request->get('month') ? $request->get('month') : date('m');
-        $d->setDate(date('Y'), $month, 01);
-        $d2->setDate(date('Y'), $month, date('t'));
+        $year = $request->get('year') ? $request->get('year') : date('Y');
+
+        $d->setDate($year, $month, 01);
+        $d2->setDate($year, $month, date('t'));
 
         $em = $this->getDoctrine()->getManager();
 
@@ -137,6 +141,12 @@ class ReportController extends Controller
         $query = $orders->createQueryBuilder('o')
             ->where('o.submitDate between ?0 AND ?1 ')
             ->setParameters(array($d, $d2));
+
+        if ( $this->getUser()->hasRole('ROLE_RETAILER') || $this->getUser()->hasRole('ROLE_DISTRIBUTOR') ) {
+            $query->andWhere('o.submitted_for_user = :user_id')
+                ->setParameter('user_id', $this->getUser()->getId());
+        }
+
         $result = $query->getQuery()->getResult();
 
         $report['data'] = $result;
@@ -146,7 +156,7 @@ class ReportController extends Controller
             $report['total'] += $order->getSubtotal();
         }
 
-        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y') ));
+        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y'), 'month'=>$month,'year'=>$year ));
     }
 
     /**

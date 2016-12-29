@@ -44,7 +44,17 @@ class ProductImage
      * @ORM\Column(type="boolean")
      */
     public $detail_image = false;
-
+    
+    public function toArray() {
+      
+      return [
+            'id'                => $this->getId(),
+            'path'              => $this->getWebPath(),
+            'detailImage'       => $this->getDetailImage(),
+        ];
+    }
+    
+    
     /**
      * Get id
      *

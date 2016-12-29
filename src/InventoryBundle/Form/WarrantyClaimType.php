@@ -61,7 +61,7 @@ class WarrantyClaimType extends AbstractType
                     'choice_label' => function (User $user) {
                         return $user->getDisplayName();
                     },
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
                     'required' => false,
                     'mapped'    => false
                 )
@@ -71,14 +71,14 @@ class WarrantyClaimType extends AbstractType
                     'label' => 'Order ID',
                     'placeholder' => 'Select Order ID',
                     'choices' => [],
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getProductVariants()'),
                     'required' => false
                 )
             )
             ->add('productVariant', EntityType::class, array(
                     'class' => 'InventoryBundle\Entity\ProductVariant',
                     'label' => 'Product',
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
+                    'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'disabled' => 'disabled'),
                     'placeholder' => 'Select Order ID first',
                     'choice_label' => function(ProductVariant $productVariant) {
                         return $productVariant->getProduct()->getName() . ' ' . $productVariant->getName();
@@ -134,15 +134,32 @@ class WarrantyClaimType extends AbstractType
                 )
             )
             ->add('lawLabel', TextType::class, array(
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;'),
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser4()', 'readonly' => 'readonly'),
                     'required' => true,
                 )
             )
+
             ->add('frLabel', TextType::class, array(
-                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;'),
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px; margin-left: 10px;', 'onclick' => 'openFileBrowser5()', 'readonly' => 'readonly'),
                     'required' => true,
                 )
-            );
+            )
+            	    
+	    ->add('file4', FileType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'label' => 'Proof Image 3',
+                    'required' => false,
+                    'label' => false,
+                )
+            )
+	    ->add('file5', FileType::class, array(
+                    'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
+                    'label' => 'Proof Image 3',
+                    'required' => false,
+                    'label' => false,
+                )
+            )
+            ;
     }
 
 

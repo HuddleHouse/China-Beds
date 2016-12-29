@@ -22,3 +22,6 @@ services:
         arguments: ["@security.token_storage", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: form.type, alias: popitem_type }
+  product_import_service:
+        class: InventoryBundle\Services\ProductImportService
+        arguments: ["@doctrine.orm.default_entity_manager"]

@@ -43,11 +43,10 @@ class NewCreditType extends AbstractType
                     'class' => 'AppBundle:User',
                     'label' => 'On Behalf of',
                     'placeholder' => 'Select Retailer or Distributor Requesting Credit',
-                    'choice_label' => 'fullname',
-
-
-                    'choices' => $this->usersRepository->findDR($this->tokenStorage->getToken()->getUser()),
-
+                    'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
+                    'choice_label' => function (User $user) {
+                        return $user->getDisplayName();
+                    },
                     'attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'),
                     'required' => true
                 )

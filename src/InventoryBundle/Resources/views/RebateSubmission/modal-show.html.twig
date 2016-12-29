@@ -91,7 +91,13 @@
             </tr>
             <tr>
                 <td>Order #</td>
-                <td><a href="{{ path('order_products_review', {'id_channel': rebateSubmission.channel.id, 'id_order': order.id}) }}" target="_blank">{{ order.orderId | default('--') }}</a></td>
+                <td>
+                    {% if rebateSubmission.order %}
+                    <a href="{{ path('order_products_review', {'id_channel': rebateSubmission.channel.id, 'id_order': rebateSubmission.order.id}) }}" target="_blank">{{ rebateSubmission.order.orderId | default('--') }}</a>
+                    {% else %}
+                        --
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td>Channel</td>

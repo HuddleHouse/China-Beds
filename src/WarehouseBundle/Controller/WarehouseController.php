@@ -48,7 +48,8 @@ class WarehouseController extends Controller
                 'name' => $warehouse->getName(),
                 'list_id' => $warehouse->getListId(),
                 'quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventory($warehouse),
-                'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse)
+                'po_quantity' => $em->getRepository('WarehouseBundle:Warehouse')->getWarehouseInventoryOnPurchaseOrder($warehouse),
+                'active' => $warehouse->isActive()
             );
         }
 
@@ -72,10 +73,8 @@ class WarehouseController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $em = $this->getDoctrine()->getManager();
-                if ($warehouse->getChannels()->isEmpty()) {
-                    $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
-                    $warehouse->addChannel($channel);
-                }
+                $channel = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Channel')->find($this->getUser()->getActiveChannel()->getId());
+                $warehouse->setChannel($channel);
                 $em->persist($warehouse);
                 $em->flush();
                 $this->addFlash('notice', 'Warehouse created successfully.');

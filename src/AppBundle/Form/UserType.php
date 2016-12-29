@@ -39,6 +39,7 @@ class UserType extends AbstractType
             ->add('address_1', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('address_2', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
+            ->add('additional_emails', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('company_name', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px'), 'required' => false))
             ->add('zip', NumberType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
             ->add('city', TextType::class, array('attr' => array('class' => 'form-control', 'style' => 'margin-bottom: 10px')))
@@ -78,6 +79,7 @@ class UserType extends AbstractType
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('w')
                         ->where('w.channel in (:channel)')
+                        ->andWhere('w.active = true')
                         ->setParameter('channel',  $options['data']->getUserChannels());
                 },
                 'choice_label' => function (Warehouse $warehouse) {
@@ -241,21 +243,21 @@ class UserType extends AbstractType
         $user = $event->getData();
         $form = $event->getForm();
 
-        if($user->hasRole('ROLE_DISTRIBUTOR')) {
-            $form->add('retailers', EntityType::class, array(
-                'class' => 'AppBundle\Entity\User',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->leftJoin('u.groups', 'g')
-                        ->where('g.id = 5');
-                },
-                'label' => 'Retailers',
-                'choice_label' => 'name',
-                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
-                'required' => false,
-                'multiple' => true,
-            ));
-        }
+//        if($user->hasRole('ROLE_DISTRIBUTOR')) {
+//            $form->add('retailers', EntityType::class, array(
+//                'class' => 'AppBundle\Entity\User',
+//                'query_builder' => function (EntityRepository $er) {
+//                    return $er->createQueryBuilder('u')
+//                        ->leftJoin('u.groups', 'g')
+//                        ->where('g.id = 5');
+//                },
+//                'label' => 'Retailers',
+//                'choice_label' => 'name',
+//                'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px'),
+//                'required' => false,
+//                'multiple' => true,
+//            ));
+//        }
         if($user->hasRole('ROLE_WAREHOUSE')) {
             $form->add('managed_warehouses', EntityType::class, array(
                 'class' => 'WarehouseBundle\Entity\Warehouse',

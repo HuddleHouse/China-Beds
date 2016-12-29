@@ -52,6 +52,14 @@
                     $('#charNum').text(l);
                 }
             });
+                    
+	    $('#warranty_claim_file4').change(function () {
+		    $('#warranty_claim_lawLabel').val($(this).val());	
+	    });
+
+	    $('#warranty_claim_file5').change(function () {
+		    $('#warranty_claim_frLabel').val($(this).val());
+	    });
         });
 
         function openFileBrowser1() {
@@ -64,6 +72,14 @@
 
         function openFileBrowser3() {
             $('#warranty_claim_file3').click();
+        }
+	
+	function openFileBrowser4() {
+            $('#warranty_claim_file4').click();
+        }
+        
+	function openFileBrowser5() {
+            $('#warranty_claim_file5').click();
         }
     </script>
 {% endblock footer %}
@@ -84,6 +100,10 @@
         <div class="form-body">
             {{ form_start(edit_form, {'attr': { 'class': 'form-horizontal' } }) }}
             <div class="row">
+		<div class="col-md-4 form-group">
+                    {{ form_label(edit_form.user) }}
+                    {{ form_widget(edit_form.user) }}
+                </div>
                 <div class="col-md-4 form-group">
                     {{ form_label(edit_form.order) }}
                     {{ form_widget(edit_form.order) }}
@@ -131,11 +151,25 @@
             <div class="row">
                 <div class="col-md-4">
                     {{ form_label(edit_form.lawLabel) }}
-                    {{ form_widget(edit_form.lawLabel) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+				<span class="btn btn-file btn-raised">
+				    Browse&hellip; <input type="file" id="warranty_claim_file4" name="warranty_claim[file4]" accept="image/*">
+				</span>
+                        </label>
+                        {{ form_widget(edit_form.lawLabel) }}
+                    </div>
                 </div>
                 <div class="col-md-4">
                     {{ form_label(edit_form.frLabel) }}
-                    {{ form_widget(edit_form.frLabel) }}
+                    <div class="input-group">
+                        <label class="input-group-btn" style="padding: 0;">
+				<span class="btn btn-file btn-raised">
+				    Browse&hellip; <input type="file" id="warranty_claim_file5" name="warranty_claim[file5]" accept="image/*">
+				</span>
+                        </label>
+                        {{ form_widget(edit_form.frLabel) }}
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -152,6 +186,8 @@
             {% do edit_form.file1.setRendered %}
             {% do edit_form.file2.setRendered %}
             {% do edit_form.file3.setRendered %}
+	    {% do edit_form.file4.setRendered %}
+            {% do edit_form.file5.setRendered %}
             {{ form_end(edit_form) }}
         </div>
     </div>

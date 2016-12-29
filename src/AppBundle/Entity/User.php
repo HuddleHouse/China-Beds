@@ -17,17 +17,18 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use WarehouseBundle\Entity\Warehouse;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="fos_user.username.already_used")
- * @ORM\AttributeOverrides({
- *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=true)),
- *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=true))
- * })
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
+// * @ORM\GeneratedValue(fieldName="deletedAt", timeAware=false)
+
 class User extends BaseUser
 {
     /**
@@ -89,6 +90,11 @@ class User extends BaseUser
      *
      */
     protected $distributor_fedex_number;
+
+    /**
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * @var int
@@ -174,6 +180,23 @@ class User extends BaseUser
      *
      */
     protected $online_web_url;
+
+    /**
+     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     */
+    protected $address_latitude;
+
+    /**
+     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     */
+    protected $address_longitude;
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    protected $additional_emails;
 
     /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role", inversedBy="users")
@@ -284,34 +307,34 @@ class User extends BaseUser
     private $warehouse_3;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_distributor", cascade={"persist"})
      */
-    private $retailers;
+    private $retailers;//cascade previously set to {"all"} if any issues, set back to
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="retailers", cascade={"persist"})
      * @ORM\JoinColumn(name="my_distributor_id", referencedColumnName="id")
      */
     private $my_distributor;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_rep", cascade={"persist"})
      */
-    private $distributors;
+    private $distributors;//cascade previously set to {"all"} if any issues, set back to
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="distributors", cascade={"persist"})
      * @ORM\JoinColumn(name="my_sales_rep_id", referencedColumnName="id")
      */
     private $my_sales_rep;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="my_sales_manager", cascade={"persist"})
      */
-    private $sales_reps;
+    private $sales_reps;//cascade previously set to {"all"} if any issues, set back to
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="sales_reps", cascade={"persist"})
      * @ORM\JoinColumn(name="my_sales_manager_id", referencedColumnName="id")
      */
     private $my_sales_manager;
@@ -404,6 +427,9 @@ class User extends BaseUser
 //        }
     }
 
+    public function getChannel(){
+        $this->getActiveChannel();
+    }
 
 
     public function getFullName() {
@@ -439,7 +465,7 @@ class User extends BaseUser
     public function getOpenBalanceTotal($channel_id = null) {
         $total = 0;
         foreach($this->orders as $order) {
-            if(in_array($order->getStatus()->getName(), [Orders::STATUS_READY_TO_SHIP, Orders::STATUS_SHIPPED])) {
+            if($order->getIsShippable() && !$order->getIsPaid()) {
                 if ($channel_id == null) {
                     $total += $order->getBalance();
                 } elseif ($order->getChannel()->getId() == $channel_id) {
@@ -826,6 +852,39 @@ class User extends BaseUser
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        $roles = $this->roles;
+
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+
+        // we need to make sure to have at least one role
+        if ( count($roles) == 0 ) {
+            $roles[] = static::ROLE_DEFAULT;
+        }
+
+        return array_unique($roles);
+    }
+
+    public function getRoleString() {
+        return implode(', ', $this->friendlyRoleNames($this->getRoles()));
+    }
+
+    private function friendlyRoleNames($strings) {
+        foreach($strings as &$string) {
+            $string = str_replace('ROLE_', '', $string);
+            $string = str_replace('_', ' ', $string);
+
+            $string = ucwords(strtolower($string));
+        }
+        return $strings;
+    }
+
     public function addPriceGroup(\AppBundle\Entity\PriceGroup $priceGroup)
     {
         if(!$this->price_groups->contains($priceGroup))
@@ -1202,7 +1261,7 @@ class User extends BaseUser
 
         foreach($this->getUserChannels() as $user_channel) {
             foreach($channel as $chan) {
-                if ($user_channel->getId() == $chan->getId()) {
+                if (null != $user_channel && null != $chan && $user_channel->getId() == $chan->getId()) {
                     return true;
                 }
             }
@@ -1948,4 +2007,120 @@ class User extends BaseUser
     {
         $this->hideCC = $hideCC;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param mixed $deletedAt
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressLatitude()
+    {
+        return $this->address_latitude;
+    }
+
+    /**
+     * @param mixed $address_latitude
+     */
+    public function setAddressLatitude($address_latitude)
+    {
+        $this->address_latitude = $address_latitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressLongitude()
+    {
+        return $this->address_longitude;
+    }
+
+    /**
+     * @param mixed $address_longitude
+     */
+    public function setAddressLongitude($address_longitude)
+    {
+        $this->address_longitude = $address_longitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalEmails()
+    {
+        return $this->additional_emails;
+    }
+
+    /**
+     * @param mixed $additional_emails
+     */
+    public function setAdditionalEmails($additional_emails)
+    {
+        $this->additional_emails = $additional_emails;
+    }
+
+    public function getOneLineAddress() {
+        return implode(', ', [
+            $this->getAddress1(),
+            $this->getAddress2(),
+            $this->getCity(),
+            $this->getState() ? $this->getState()->getAbbreviation() : null,
+            $this->getZip()
+        ]);
+    }
+
+    public function toArray() {
+        $warehouses = [];
+        foreach($this->getWarehouses() as $warehouse) {
+            $warehouses[] = $warehouse->toArray();
+        }
+        $price_groups = [];
+        foreach($this->getPriceGroups() as $pg) {
+            $price_groups[] = $pg->toArray();
+        }
+        return [
+            'id'                => $this->getId(),
+            'display_name'      => $this->getDisplayName(),
+            'first_name'        => $this->getFirstName(),
+            'last_name'         => $this->getLastName(),
+            'address_1'         => $this->getAddress1(),
+            'address_2'         => $this->getAddress2(),
+            'city'              => $this->getCity(),
+            'zip'               => $this->getZip(),
+            'state'             => $this->getState() ? $this->getState()->getAbbreviation() : null,
+            'state_id'          => $this->getState() ? $this->getState()->getId() : null,
+            'email'             => $this->getEmail(),
+            'phone'             => $this->getPhone(),
+            'warehouses'        => $warehouses,
+            'price_groups'      => $price_groups
+        ];
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+//    public function updateLatLong() {
+//        if ( $data = file_get_contents(sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyAZBJ_imRRYJyCqWmxrqhAG9aovC56Tdnk", urlencode($this->getOneLineAddress()))) ) {
+//            $decoded = json_decode($data, true);
+//          if ( $decoded['results'][0]['geometry']['location'] ) {
+//              $this->setAddressLatitude($decoded['results'][0]['geometry']['location']['lat']);
+//              $this->setAddressLongitude($decoded['results'][0]['geometry']['location']['lng']);
+//          }
+//        }
+//    }
 }
