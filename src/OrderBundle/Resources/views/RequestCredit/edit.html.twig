@@ -1,7 +1,7 @@
 {% extends ':default:layout.html.twig' %}
 
-{% block title %}New Ledger Fund Request{% endblock %}
-{% block page_title %}New Credit Request{% endblock page_title %}
+{% block title %}Edit Credit Request{% endblock %}
+{% block page_title %}Edit Credit Request{% endblock page_title %}
 
 {% block page_name %}
     <a href="{{ path('credit_request_index') }}">< Back to the list</a>
@@ -21,6 +21,14 @@
                 } else {
                     var l = 255 - len;
                     $('#charNum').text(l);
+                }
+            });
+            var original_request_amount = $('#request_credit_requestAmount').val();
+            $('#request_credit_requestAmount').on('change', function(el) {
+                if ( parseFloat($(this).val()) != parseFloat(original_request_amount) ) {
+                    $('#approve-request-btn').hide();
+                } else {
+                    $('#approve-request-btn').show();
                 }
             });
         });
@@ -108,7 +116,7 @@
         </div>
         <input class="btn btn-raised btn-default" type="submit" value="Save" />
         {% if not creditRequest.isApproved %}
-            <a class="btn btn-raised btn-success" href="{{ path('credit_request_approve', {id: creditRequest.id}) }}">Approve</a>
+            <a id="approve-request-btn" class="btn btn-raised btn-success" href="{{ path('credit_request_approve', {id: creditRequest.id}) }}">Approve</a>
         {% endif %}
         {{ form_end(edit_form) }}
     </div>
