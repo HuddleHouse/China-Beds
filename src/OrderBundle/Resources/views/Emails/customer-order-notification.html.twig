@@ -204,7 +204,7 @@
                                                                                     <td width="211" valign="top"
                                                                                         class="header2TD" align="left"
                                                                                         style="color: #425065;font-family: sans-serif;font-size: 14px;text-align: left;line-height: 19px;font-weight: lighter;">
-                                                                                        Shipping
+                                                                                        {% if order.ispickup %}Pick Up{% else %}Shipping{% endif %}
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -212,7 +212,7 @@
                                                                                     <td width="179" valign="top"
                                                                                         class="RegularText4TD"
                                                                                         align="left"
-                                                                                        style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: bold;text-align: left;line-height: 23px;">{{ order.shipname }}</td>
+                                                                                        style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: bold;text-align: left;line-height: 23px;">{{ order.ispickup ? order.pickupagent : order.shipname }}</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td colspan="3" height="10"
@@ -224,18 +224,22 @@
                                                                                     <td colspan="3"
                                                                                         class="RegularTextTD"
                                                                                         style="color: #727e8d;font-family: sans-serif;font-size: 13px;font-weight: lighter;text-align: left;line-height: 23px;">
-                                                                                        {{ order.shipname }}<br>
-                                                                                        {{ order.shipaddress }}<br>
-                                                                                        {% if order.shipaddress2 %}
-                                                                                            {{ order.shipaddress2 }}<br>
+                                                                                        {% if order.ispickup %}
+                                                                                            Pickup Date: {{ order.pickupdate|date("m/d/Y") }}
+                                                                                        {% else %}
+                                                                                            {{ order.shipname }}<br>
+                                                                                            {{ order.shipaddress }}<br>
+                                                                                            {% if order.shipaddress2 %}
+                                                                                                {{ order.shipaddress2 }}<br>
+                                                                                            {% endif %}
+                                                                                            {{ order.shipcity }}
+                                                                                            , {{ order.state.name }} {{ order.shipzip }}
+                                                                                            <br>
+                                                                                            {{ order.shipphone }}<br>
+                                                                                            <a href="mailto:{{ order.shipemail }}"
+                                                                                               target="_blank"
+                                                                                               style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ order.shipemail }}</a><br>
                                                                                         {% endif %}
-                                                                                        {{ order.shipcity }}
-                                                                                        , {{ order.state.name }} {{ order.shipzip }}
-                                                                                        <br>
-                                                                                        {{ order.shipphone }}<br>
-                                                                                        <a href="mailto:{{ order.shipemail }}"
-                                                                                           target="_blank"
-                                                                                           style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ order.shipemail }}</a><br>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
