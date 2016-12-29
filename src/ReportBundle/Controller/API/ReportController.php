@@ -27,8 +27,9 @@ class ReportController extends Controller
     public function getRetailersAction()
     {
         $rtn = '<option>Select a Retailer</option>';
-        foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel()) as $retailer)
-            $rtn .= '<option value="'.$retailer->getId().'">'.$retailer->getDisplayName().'</option>';
+        foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel()) as &$retailer)
+            if($retailer != null && null != $retailer->getId())
+                $rtn .= '<option value="'.$retailer->getId().'">'.$retailer->getFullName().'</option>';
         return new JsonResponse($rtn);
     }
 
@@ -41,8 +42,9 @@ class ReportController extends Controller
     public function getDistributorsAction()
     {
         $rtn = '<option>Select a Distributor</option>';
-        foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllDistributorsArray() as $distributor)
-            $rtn .= '<option value="'.$distributor->getId().'">'.$distributor->getDisplayName().'</option>';
+        foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllDistributorsArray() as &$distributor)
+            if($distributor != null && null != $distributor->getId())
+                $rtn .= '<option value="'.$distributor->getId().'">'.$distributor->getFullName().'</option>';
         return new JsonResponse($rtn);
     }
 }
