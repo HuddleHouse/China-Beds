@@ -61,6 +61,12 @@
                     {{ form_widget(edit_form.description) }}
                 </div>
             </div>
+	    <div class="row">
+                <div class="col-md-8 form-group">
+                    {{ form_label(edit_form.active) }}
+                    {{ form_widget(edit_form.active) }}
+                </div>
+            </div>
             <input class="btn btn-raised btn-success" type="submit" value="Update" />
             {{ form_end(edit_form) }}
         </div>
