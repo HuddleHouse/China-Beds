@@ -118,7 +118,7 @@ class ShippingService
                     foreach ($response['pkgs'] as $pkg) {
                         $path = 'uploads/shipping/' . $pkg['pkg_trk_num'] . '.' . $pkg['label_fmt'];
                         file_put_contents(
-                            $this->get('kernel')->getRootDir() . '/../web/' . $path,
+                            $this->container->get('kernel')->getRootDir() . '/../web/' . $path,
                             base64_decode($pkg['label_img'])
                         );
 
