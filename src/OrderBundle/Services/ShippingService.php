@@ -10,6 +10,7 @@ namespace OrderBundle\Services;
 
 use InventoryBundle\Entity\Channel;
 use OrderBundle\Entity\Orders;
+use OrderBundle\Entity\OrdersShippingLabel;
 use RocketShipIt;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
