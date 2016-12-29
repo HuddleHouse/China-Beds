@@ -29,7 +29,7 @@ class ReportController extends Controller
         $rtn = '<option>Select a Retailer</option>';
         foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllRetailersArray($this->getUser()->getActiveChannel()) as &$retailer)
             if($retailer != null && null != $retailer->getId())
-                $rtn .= '<option value="'.$retailer->getId().'">'.$retailer->getFullName().'</option>';
+                $rtn .= '<option value="'.$retailer->getId().'">'.$retailer->getDisplayName().'</option>';
         return new JsonResponse($rtn);
     }
 
@@ -44,7 +44,7 @@ class ReportController extends Controller
         $rtn = '<option>Select a Distributor</option>';
         foreach($this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->getAllDistributorsArray() as &$distributor)
             if($distributor != null && null != $distributor->getId())
-                $rtn .= '<option value="'.$distributor->getId().'">'.$distributor->getFullName().'</option>';
+                $rtn .= '<option value="'.$distributor->getId().'">'.$distributor->getDisplayName().'</option>';
         return new JsonResponse($rtn);
     }
 }
