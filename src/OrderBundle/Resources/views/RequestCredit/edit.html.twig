@@ -24,7 +24,7 @@
                 }
             });
             var original_request_amount = $('#request_credit_requestAmount').val();
-            $('#request_credit_requestAmount').on('change', function(el) {
+            $('#request_credit_requestAmount').on('keyup', function(el) {
                 if ( parseFloat($(this).val()) != parseFloat(original_request_amount) ) {
                     $('#approve-request-btn').hide();
                 } else {

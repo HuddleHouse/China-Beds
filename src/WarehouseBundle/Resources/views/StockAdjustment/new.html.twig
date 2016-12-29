@@ -62,6 +62,21 @@
 
 
                 function warehouseChange() {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_get_warehouse_products') }}",
+                        dataType: 'json',
+                        data: {warehouse_id: $('#warehouse').val()},
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                self.repos = data.map( function (repo) {
+                                    repo.value = repo.name.toLowerCase();
+                                    return repo;
+                                });
+                            });
+                        }
+                    });
+
                     updateCart()
                 }
 
@@ -274,7 +289,7 @@
                     <label for="reason">Reason</label>
                     <select class="form-control" id="reason" style="width: 100%;margin: 24px 0 16px;" required>
                         <option value="" disabled selected>Reason</option>
-                        <option value="Damanged">Damaged</option>
+                        <option value="Damaged">Damaged</option>
                         <option value="Cycle Count Adj">Cycle Count Adj</option>
                         <option value="Receiving Error">Receiving Error</option>
                     </select>
@@ -340,7 +355,7 @@
                                     </span>
                                     <span class="item-metadata">
                                         <span class="item-metastat">
-                                           <strong>{{item.total_quantity}}</strong> total quantity
+                                           <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
                                         </span>
 
                                      </span>
