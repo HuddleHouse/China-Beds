@@ -456,12 +456,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         $states = $em->getRepository('AppBundle:State')->findAll();
 
-        if($user->hasRole('ROLE_DISTRIBUTOR'))
-            $user_retailers = $user->getRetailers();
-        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
-            $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
-        else
-            $user_retailers = null;
+        $user_retailers = $em->getRepository('AppBundle:User')->findUsersForUser($this->getUser());
 
         $order_variants = $order_pop = array();
 

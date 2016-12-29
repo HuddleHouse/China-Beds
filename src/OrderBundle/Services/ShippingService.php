@@ -156,6 +156,7 @@ class ShippingService
         $config->setDefault('fedex', 'password', $channel->getFedexPassword());
         $config->setDefault('fedex', 'accountNumber', $channel->getFedexNumber());
         $config->setDefault('fedex', 'meterNumber', $channel->getFedexMeterNumber());
+        return $config;
     }
 
     public function calculateShipping(Orders $order)
