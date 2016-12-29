@@ -155,7 +155,7 @@ class ShippingService
 
         $rate = new \RocketShipIt\Rate('fedex', ['config' => $config]);
 
-        $rate->setParameter('residentialAddressIndicator','1');
+        $rate->setParameter('residentialAddressIndicator','0');
         $rate->setParameter('service', 'FEDEX_GROUND');
 
         foreach($order->getProductVariants() as $productVariant) {

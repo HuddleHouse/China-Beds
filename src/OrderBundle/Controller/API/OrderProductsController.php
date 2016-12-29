@@ -394,7 +394,7 @@ class OrderProductsController extends Controller
      * calculates shipping
      */
     private function calculateShipping(Orders $order) {
-        $this->get('shipping.service')->calculateShipping($order);
+        return $this->get('shipping.service')->calculateShipping($order);
     }
 
 
