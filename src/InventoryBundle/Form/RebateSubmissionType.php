@@ -83,10 +83,11 @@ class RebateSubmissionType extends AbstractType
                 'class' => 'AppBundle\Entity\User',
                 'label' => 'Retailer/Distributor submitting for',
                 'placeholder' => 'Retailer/Distributor',
-                'choices' => $this->usersRepository->findUsersForUser($this->tokenStorage->getToken()->getUser()),
+                'choices' => $this->tokenStorage->getToken()->getUser()->hasRole('ROLE_ADMIN') ? $this->usersRepository->findUsersForUserNew($this->tokenStorage->getToken()->getUser()) : [$this->tokenStorage->getToken()->getUser()],
                 'choice_label' => function (User $user) {
                     return $user->getDisplayName();
                 },
+                'data' => $this->tokenStorage->getToken()->getUser(),
                 'attr' => array('class' => 'form-control select2', 'style' => 'margin-bottom: 10px', 'onchange' => 'getOrders()'),
                 'required' => true
             ))
