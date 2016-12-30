@@ -1,0 +1,42 @@
+                <table id="part-table" class="table table-striped table-hover table-bordered no-footer" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+		      <th>
+			      Amount Requested
+		      </th>
+		      <th>
+			      Date Created
+		      </th>
+		      <th>
+			      Display Name
+		      </th>
+		      <th>
+				Routing Number
+		      </th>
+		      <th>
+				Account Number
+		      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+				{%for ledger in ledgerEntities %}
+					<tr>
+						<th>
+							{{ledger.amountRequested}}
+						</th>
+						<th>
+							{{ledger.dateCreated|date}}
+						</th>
+						<th>
+							{{ledger.submittedForUser.displayName}}
+						</th>
+						<th>
+							  {{ledger.submittedForUser.achRoutingNumber}}
+						</th>
+						<th>
+							  {{ledger.submittedForUser.achAccountNumber}}
+						</th>
+					</tr>
+				{%endfor%}
+                    </tbody>
+                </table>

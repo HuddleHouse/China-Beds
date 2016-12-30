@@ -311,4 +311,68 @@ class ReportController extends Controller
         $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->findUsersByChannel($this->getUser()->getActiveChannel());
         return $this->render('ReportBundle:Reports:contact-list.html.twig', array('report' => $report));
     }
+    
+    /**
+     * Description
+     *
+     * @Route("/ach/pending", name="ach_pending")
+     * @Method({"GET", "POST"})
+     */
+    public function achAction(Request $request) {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+	
+	if ($request->getMethod()=="POST") {
+		$ledgers = $request->get('ledger');
+		
+		if (count($ledgers)>0) {
+			foreach ($ledgers as $ledgerId) {
+				$ledgerEntity = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->find($ledgerId);
+				$ledgerEntity->setAchRequested(1);
+				$em->persist($ledgerEntity);
+				$em->flush();
+			}
+			
+			$this->addFlash('notice', 'Ach requested successfully');
+		} else {
+			$this->addFlash('error', 'Select any record to update');
+		}
+		
+		return $this->redirect($this->generateUrl('ach_pending'));
+	}
+	
+	
+	$ledgerEntities = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->findBy(array('type'=>'Payment', 'achRequested'=>0));
+	
+	
+	return $this->render('ReportBundle:Reports:ach-pending.html.twig', array('ledgerEntities' => $ledgerEntities));
+        
+    
+    }
+    
+    /**
+     * Description
+     *
+     * @Route("/ach/pending/export/csv", name="ach_pending_export_csv")
+     * @Method({"GET", "POST"})
+     */
+    public function achPendingExportCsvAction(Request $request) {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+	$ledgerEntities = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->findBy(array('type'=>'Payment', 'achRequested'=>0));
+	
+	$fileName = 'pending-ach'.date('YmdHis');
+	$response = $this->render('ReportBundle:Reports:ach-pending-export-csv.html.twig', array('ledgerEntities' => $ledgerEntities));
+
+	$response->headers->set('Content-Type', 'text/csv');
+	
+	$response->headers->set('Content-Disposition', "attachment; filename=$fileName");
+
+	return $response;
+        
+        exit();
+    
+    }
 }
