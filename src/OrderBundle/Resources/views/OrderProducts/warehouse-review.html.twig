@@ -186,7 +186,7 @@
             <!-- /.row -->
             <div class="row">
                 <div class="col-md-12">
-                    <a class="pull-right btn btn-success btn-raised" id="save-qty-btn">Confirm Order Shipment</a>
+                    <a class="pull-right btn btn-success btn-raised" id="save-qty-btn">Confirm Order {% if order.isPickUp %}Pickup{% else %}Shipment{% endif %}</a>
                 </div>
             </div>
             <hr>
