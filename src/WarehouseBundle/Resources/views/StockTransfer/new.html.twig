@@ -47,6 +47,7 @@
                 self.warehouseChange   = warehouseChange;
                 self.remove             = remove;
                 self.save = save;
+                self.cartTotal = cartTotal;
                 self.cart = [];
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -187,12 +188,16 @@
 
                     self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity, 10) - parseInt(newVal - oldVal, 10);
                     self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity, 10) + parseInt(newVal - oldVal, 10);
+                }
+
+                function cartTotal() {
+                    var total = 0;
                     angular.forEach(self.cart, function(value, key) {
+
                         total += value.quantity;
                     });
                     self.cart_total = total;
-
-
+                    return total;
                 }
 
                 function save(draft){
@@ -330,7 +335,7 @@
                         <thead>
                         <tr>
                             <th class="mdl-data-table__cell--non-numeric">Item</th>
-                            <th class="table-name" style="width: 100px;">Quantity</th>
+                            <th class="table-name" style="width: 100px;">Qty to Transfer</th>
                             <th class="table-name" style="width: 100px;">Dep Warehouse Inv</th>
                             <th class="table-name" style="width: 100px;">Rec Warehouse Inv</th>
                             <th style="width: 50px;"></th>
@@ -420,7 +425,7 @@
                                 <th style="width:50%">Total Items:</th>
                                 <td>
                                     {% verbatim %}
-                                <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
+                                <input value="{{ctrl.cartTotal()}}" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
                                 {% endverbatim %}
                                 </td>
                             </tr>

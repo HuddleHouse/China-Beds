@@ -53,6 +53,8 @@
                 self.save = save;
                 self.add = add;
                 self.warehouseChange = warehouseChange;
+                self.cartTotal = cartTotal;
+
                 self.cart = [];
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -185,11 +187,17 @@
                     var total = 0;
                     self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
+                }
+
+
+                function cartTotal() {
+                    var total = 0;
                     angular.forEach(self.cart, function(value, key) {
 
-                        total += value.ordered_quantity;
+                        total += value.quantity;
                     });
                     self.cart_total = total;
+                    return total;
                 }
 
                 function removeCartItem(index) {
@@ -447,7 +455,7 @@
                                 <th style="width:50%">Total Items:</th>
                                 <td>
                                 {% verbatim %}
-                                <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
+                                <input value="{{ctrl.cartTotal()}}" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
                                 {% endverbatim %}
                                 </td>
                             </tr>
