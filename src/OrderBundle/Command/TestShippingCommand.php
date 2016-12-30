@@ -32,8 +32,8 @@ class TestShippingCommand extends ContainerAwareCommand
         $service = $this->getContainer()->get('shipping.service');
 
         if ( $order = $em->getRepository('OrderBundle:Orders')->find($input->getArgument('order-id')) ) {
-            print_r($service->calculateShipping($order));
-//            print_r($service->generateShippingLabelsForOrder($order, 1));
+//            print_r($service->calculateShipping($order, true));
+            print_r($service->generateShippingLabelsForOrder($order, 1));
         }
     }
 }

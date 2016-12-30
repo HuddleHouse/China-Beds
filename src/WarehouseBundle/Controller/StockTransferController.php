@@ -68,9 +68,9 @@ class StockTransferController extends Controller
         $warehouses = $em->getRepository('WarehouseBundle:Warehouse')->getAllWarehousesArray($this->getUser()->getActiveChannel());
         $cart = $em->getRepository('WarehouseBundle:StockTransfer')->getCartArray($stockTransfer);
 
-        if ( in_array($stockTransfer->getReceivingWarehouse(), $this->getUser()->getManagedWarehouses()) ) {
+        if ( in_array($stockTransfer->getReceivingWarehouse(), $this->getUser()->getManagedWarehouses()->toArray()) ) {
             $warehouse = $stockTransfer->getReceivingWarehouse();
-        } elseif ( in_array($stockTransfer->getDepartingWarehouse(), $this->getUser()->getManagedWarehouses()) ) {
+        } elseif ( in_array($stockTransfer->getDepartingWarehouse(), $this->getUser()->getManagedWarehouses()->toArray()) ) {
             $warehouse = $stockTransfer->getDepartingWarehouse();
         }
 

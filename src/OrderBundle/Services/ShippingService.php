@@ -46,6 +46,7 @@ class ShippingService
 
         $shipmentId = '';
         $count = 0;
+        $charges = 0;
         foreach ($orders->getProductVariants() as $variant) {
             foreach ($variant->getWarehouseInfo() as $info) {
                 for ($i = 0; $i < $info->getQuantity(); $i++) {
@@ -112,6 +113,7 @@ class ShippingService
 //                    }
 
                     $response = $shipment->submitShipment();
+//                    file_put_contents('/tmp/shipping.log', PHP_EOL . $shipment->debug(), FILE_APPEND);
 //                    echo $shipment->debug();
                     if (isset($response['trk_main'])) {
                         if ($count == 1) {
@@ -170,14 +172,17 @@ class ShippingService
         return $config;
     }
 
-    public function calculateShipping(Orders $order)
+    public function calculateShipping(Orders $order, $debug = false)
     {
         $config = $this->getConfigForChannel($order->getChannel());
 
         $rates = [];
-        foreach ($order->getProductVariants() as $productVariant) {
-            for ($i = 0; $i < $productVariant->getQuantity(); $i++) {
-                foreach ($productVariant->getWarehouseInfo() as $info) {
+        foreach ($order->getProductVariants() as $variant) {
+//            file_put_contents('/tmp/shipping.log', PHP_EOL . "=== variant id " . get_class($variant) . " " . $variant->getId() . "\n", FILE_APPEND);
+            foreach ($variant->getWarehouseInfo() as $info) {
+//                file_put_contents('/tmp/shipping.log', PHP_EOL . "==== info id " . get_class($info) . " " . $info->getId() . "\n", FILE_APPEND);
+                for ($i = 0; $i < $info->getQuantity(); $i++) {
+//                    file_put_contents('/tmp/shipping.log', PHP_EOL . "===== qty " . $info->getQuantity() . "  i  " . $i . "\n", FILE_APPEND);
                     if (!isset($rates[$info->getWarehouse()->getId()])) {
                         $rate = new \RocketShipIt\Rate('fedex', ['config' => $config]);
                         $rate->setParameter('residentialAddressIndicator', '0');
@@ -206,14 +211,13 @@ class ShippingService
                         $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
 
 
-
                         $rates[$info->getWarehouse()->getId()] = $rate;
                     }
 
 
-                    $dimensions = explode('x', $productVariant->getProductVariant()->getFedexDimensions());
+                    $dimensions = explode('x', $variant->getProductVariant()->getFedexDimensions());
                     if (count($dimensions) == 1) {
-                        $dimensions = explode('X', $productVariant->getProductVariant()->getFedexDimensions());
+                        $dimensions = explode('X', $variant->getProductVariant()->getFedexDimensions());
                     }
 
                     $package = new \RocketShipIt\Package('fedex', ['config' => $config]);
@@ -224,14 +228,13 @@ class ShippingService
                     $package->setParameter('shipCity', $info->getWarehouse()->getCity());
                     $package->setParameter(
                         'shipState',
-                        $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation(
-                        ) : null
+                        $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation() : null
                     );
                     $package->setParameter('shipCode', $info->getWarehouse()->getZip());
                     $package->setParameter('length', "$dimensions[0]");
                     $package->setParameter('width', "$dimensions[1]");
                     $package->setParameter('height', "$dimensions[2]");
-                    $package->setParameter('weight', $productVariant->getProductVariant()->getWeight());
+                    $package->setParameter('weight', $variant->getProductVariant()->getWeight());
                     $rates[$info->getWarehouse()->getId()]->addPackageToShipment($package);
                 }
             }
@@ -240,7 +243,10 @@ class ShippingService
         $total_rate = 0;
         foreach ($rates as $warehouse_id => $rate) {
             $response = $rate->getSimpleRates();
-//            echo $rate->debug();
+//            file_put_contents('/tmp/shipping.log', PHP_EOL . $rate->debug(), FILE_APPEND);
+//            file_put_contents('/tmp/shipping.log', PHP_EOL . $rate->packageCount, FILE_APPEND);
+
+
             $data = array_pop($response);
 
             if (!isset($data['rate'])) {

@@ -170,51 +170,78 @@ class OrderProductsController extends Controller
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
 
-        if($products != null) {
-            foreach($products as $product) {
-                if(isset($product['variants'])) {
-                    foreach($product['variants'] as $variant) {
-                        if(isset($variant['variant_id']) && isset($cart['variant'][$variant['variant_id']]['quantity']))
-                            $quantity = $cart['variant'][$variant['variant_id']]['quantity'];
-                        else
-                            $quantity = 0;
-                        if($quantity > 0) {
-                            $pop_item = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
-                            $orders_product_variant = new OrdersProductVariant();
-                            $orders_product_variant->setOrder($order);
-                            $orders_product_variant->setPrice($variant['cost']);
-                            $orders_product_variant->setQuantity($quantity);
-                            $orders_product_variant->setProductVariant($pop_item);
-                            $em->persist($orders_product_variant);
-                            $em->flush();
-
-                            //we passed in the complete warehouse quantities at start so we know where to go ahead and pull the inventory from.
-                            foreach($variant['warehouse_data'] as $warehouse_data) {
-                                $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_data['warehouse_id']);
-                                $warehouses[] = $warehouse_data['warehouse_id'];
-                                if($quantity <= $warehouse_data['quantity']) {
-                                    $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouse);
-                                    $em->persist($orders_warehouse_info);
-                                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
-                                    break;
-                                }
-                                elseif($quantity > $warehouse_data['quantity'] && $warehouse_data['quantity'] > 0) {
-                                    $orders_warehouse_info = new OrdersWarehouseInfo($warehouse_data['quantity'], $orders_product_variant, $warehouse);
-                                    $quantity -= $warehouse_data['quantity'];
-                                }
-                                if ( isset($orders_warehouse_info) ) {
-                                    $em->persist($orders_warehouse_info);
-                                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
-                                }
-                            }
-                            $em->persist($orders_product_variant);
-
-                            $order->addProductVariants($orders_product_variant);
-                        }
-                    }
-                }
-            }
+        foreach($cart['variant'] as $k => $cart_info) {
+            if ( !is_array($cart_info) ) { unset($cart['variant'][$k]); continue; }
+            $cart['variant'][$k]['warehouses'] = $em->getRepository('WarehouseBundle:Warehouse')->getWarehousesWithQuantityForVariantByUser($cart_info['variant_id'], $order->getSubmittedForUser()->getId(), $cart_info['quantity']);
         }
+
+        foreach($cart['variant'] as $variant) {
+            $pv = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
+
+            $opv = new OrdersProductVariant();
+            $opv->setPrice($variant['cost']);
+
+            $opv->setProductVariant($pv);
+
+            $quantity = 0;
+            foreach($variant['warehouses'] as $warehouse) {
+                $w = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse['warehouse_id']);
+                $owi = new OrdersWarehouseInfo($warehouse['quantity'], $opv, $w);
+                $quantity += $warehouse['quantity'];
+
+                $opv->addWarehouseInfo($owi);
+            }
+
+            $opv->setQuantity($quantity);
+            $order->addProductVariant($opv);
+        }
+
+
+//        if($products != null) {
+//            foreach($products as $product) {
+//                if(isset($product['variants'])) {
+//                    foreach($product['variants'] as $variant) {
+//                        if(isset($variant['variant_id']) && isset($cart['variant'][$variant['variant_id']]['quantity']))
+//                            $quantity = $cart['variant'][$variant['variant_id']]['quantity'];
+//                        else
+//                            $quantity = 0;
+//                        if($quantity > 0) {
+//                            $pop_item = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
+//                            $orders_product_variant = new OrdersProductVariant();
+//                            $orders_product_variant->setOrder($order);
+//                            $orders_product_variant->setPrice($variant['cost']);
+//                            $orders_product_variant->setQuantity($quantity);
+//                            $orders_product_variant->setProductVariant($pop_item);
+//                            $em->persist($orders_product_variant);
+//                            $em->flush();
+//
+//                            //we passed in the complete warehouse quantities at start so we know where to go ahead and pull the inventory from.
+//                            foreach($variant['warehouse_data'] as $warehouse_data) {
+//                                $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_data['warehouse_id']);
+//                                $warehouses[] = $warehouse_data['warehouse_id'];
+//                                if($quantity <= $warehouse_data['quantity']) {
+//                                    $orders_warehouse_info = new OrdersWarehouseInfo($quantity, $orders_product_variant, $warehouse);
+//                                    $em->persist($orders_warehouse_info);
+//                                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+//                                    break;
+//                                }
+//                                elseif($quantity > $warehouse_data['quantity'] && $warehouse_data['quantity'] > 0) {
+//                                    $orders_warehouse_info = new OrdersWarehouseInfo($warehouse_data['quantity'], $orders_product_variant, $warehouse);
+//                                    $quantity -= $warehouse_data['quantity'];
+//                                }
+//                                if ( isset($orders_warehouse_info) ) {
+//                                    $em->persist($orders_warehouse_info);
+//                                    $orders_product_variant->addWarehouseInfo($orders_warehouse_info);
+//                                }
+//                            }
+//                            $em->persist($orders_product_variant);
+//
+//                            $order->addProductVariants($orders_product_variant);
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
 
         if ( isset($cart['pop']) ) {
@@ -231,16 +258,6 @@ class OrderProductsController extends Controller
                     $order->getPopItems()->add($orders_pop_item);
                 }
             }
-        }
-        if ( !$order->getIsPickUp()) {
-            $shipping = $this->calculateShipping($order);
-            $order->setShipping($shipping['rate']);
-            $order->setShipCode($shipping['service_code']);
-            $order->setShipDescription($shipping['desc']);
-        } else {
-            $order->setShipping(null);
-            $order->setShipCode(null);
-            $order->setShipDescription(null);
         }
 
         $em->persist($order);
@@ -306,6 +323,22 @@ class OrderProductsController extends Controller
 //                'shipped_status' => $shipped_status
 //            )));
         }
+
+        $order = $em->getRepository('OrderBundle:Orders')->find($order->getId());
+
+        if ( !$order->getIsPickUp()) {
+            $shipping = $this->calculateShipping($order);
+            $order->setShipping($shipping['rate']);
+            $order->setShipCode($shipping['service_code']);
+            $order->setShipDescription($shipping['desc']);
+        } else {
+            $order->setShipping(null);
+            $order->setShipCode(null);
+            $order->setShipDescription(null);
+        }
+
+        $em->persist($order);
+        $em->flush();
 
         return JsonResponse::create($order->getId());
     }

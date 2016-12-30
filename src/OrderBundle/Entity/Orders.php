@@ -1070,6 +1070,7 @@ class Orders
      */
     public function addProductVariant(\OrderBundle\Entity\OrdersProductVariant $productVariant)
     {
+        $productVariant->setOrder($this);
         $this->product_variants[] = $productVariant;
 
         return $this;

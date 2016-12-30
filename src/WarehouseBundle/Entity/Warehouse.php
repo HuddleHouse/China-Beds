@@ -231,6 +231,17 @@ class Warehouse
      */
     private $pop_items;
 
+
+    /**
+     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     */
+    protected $address_latitude;
+
+    /**
+     * @ORM\Column(type="decimal", precision=11, scale=8, nullable=true)
+     */
+    protected $address_longitude;
+
     public function __construct() {
         $this->purchase_orders = new ArrayCollection();
         $this->stock_adjustments = new ArrayCollection();
@@ -1276,5 +1287,37 @@ class Warehouse
             'id'    => $this->getId(),
             'name'  => $this->getName(),
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressLatitude()
+    {
+        return $this->address_latitude;
+    }
+
+    /**
+     * @param mixed $address_latitude
+     */
+    public function setAddressLatitude($address_latitude)
+    {
+        $this->address_latitude = $address_latitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressLongitude()
+    {
+        return $this->address_longitude;
+    }
+
+    /**
+     * @param mixed $address_longitude
+     */
+    public function setAddressLongitude($address_longitude)
+    {
+        $this->address_longitude = $address_longitude;
     }
 }

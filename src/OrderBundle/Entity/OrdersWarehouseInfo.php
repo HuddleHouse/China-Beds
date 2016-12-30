@@ -49,7 +49,7 @@ class OrdersWarehouseInfo
 
     /**
      * OrdersProductVariant constructor.
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="orders_warehouse_info", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersShippingLabel", mappedBy="orders_warehouse_info", cascade={"persist", "remove"})
      */
     private $shipping_labels;
 
