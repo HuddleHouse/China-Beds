@@ -907,13 +907,13 @@ class OrderProductsController extends Controller
             $em->persist($order);
             $em->flush();
 
-//            try {
-//                $this->get('email_service')->sendAdminOrderNotification($order);
-//                $this->get('email_service')->sendCustomerOrderNotification($order);
-//                $this->get('email_service')->sendWarehouseOrderNotification($order);
-//            } catch (\Exception $e) {
-//                // @todo ignore for now.  Need to log
-//            }
+            try {
+                //$this->get('email_service')->sendAdminOrderNotification($order);
+                $this->get('email_service')->sendCustomerOrderNotification($order);
+                $this->get('email_service')->sendWarehouseOrderNotification($order);
+            } catch (\Exception $e) {
+                // @todo ignore for now.  Need to log
+            }
 
 //            $groups = $user->getGroupsArray();
 //            $is_dis = $is_retail = 0;
