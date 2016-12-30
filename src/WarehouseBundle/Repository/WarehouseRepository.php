@@ -128,6 +128,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         foreach($warehouse->getInventory() as $item) {
             $inventory_data[] = array(
                 'id' => $item->getId(),
+                'sku' => $item->getProductVariant()->getSku(),
                 'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
                 'quantity' => $item->getQuantity(),
                 'po_quantity' => $this->getWarehouseInventoryForItemOnPurchaseOrder($warehouse, $item->getProductVariant())
