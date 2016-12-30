@@ -240,7 +240,7 @@ class ShippingService
         $total_rate = 0;
         foreach ($rates as $warehouse_id => $rate) {
             $response = $rate->getSimpleRates();
-            echo $rate->debug();
+//            echo $rate->debug();
             $data = array_pop($response);
 
             if (!isset($data['rate'])) {
