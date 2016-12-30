@@ -510,6 +510,11 @@ select coalesce(sum(i.quantity), 0) as quantity
                 return $this->redirectToRoute('my_orders_index');
             }
 
+            if ( $order->getStatus()->getName() != 'Draft' ) {
+                $this->addFlash('error', 'You cannot delete an order that is not in Draft status.' );
+                return $this->redirectToRoute('my_orders_index');
+            }
+
             $em->remove($order);
 
             $em->flush();
