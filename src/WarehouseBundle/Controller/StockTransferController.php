@@ -73,7 +73,8 @@ class StockTransferController extends Controller
             'products' => $products,
             'warehouses' => $warehouses,
             'stockTransfer' => $stockTransfer,
-            'cart' => $cart
+            'cart' => $cart,
+            'warehouse_id' => $this->getUser()->hasRole('ROLE_WAREHOUSE') ? $stockTransfer->getReceivingWarehouse()->getId() : null
         ));
     }
 
