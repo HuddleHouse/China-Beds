@@ -1,6 +1,11 @@
 AppBundle\Entity\User:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [username]
+            errorPath: username
+            message: 'This username is already in use.'
+            groups: [register, editUser]
+        
     properties:
         username:
             - NotBlank: { message: "Username is required!!!", groups: [register, editUser] }
