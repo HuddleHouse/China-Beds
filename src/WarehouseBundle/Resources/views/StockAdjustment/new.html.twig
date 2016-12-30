@@ -163,6 +163,11 @@
                 }
 
                 function updateCartItem(newVal, oldVal, index) {
+                    var newVal = parseInt(newVal);
+                    var newVal = isNaN(newVal) ? 0 : newVal;
+                    var oldVal = parseInt(oldVal);
+                    var oldVal = isNaN(oldVal) ? 0 : oldVal;
+
                     var total = 0;
                     self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
@@ -319,7 +324,7 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="-3000" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="number_select form-control">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="-3000" ng-change="ctrl.updateCartItem(item.quantity, '{{item.quantity || 0}}', $index)" jq-spinner class="number_select form-control">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
