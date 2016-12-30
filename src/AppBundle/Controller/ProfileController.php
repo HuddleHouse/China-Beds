@@ -156,6 +156,13 @@ class ProfileController extends Controller
 //    }
 
     /**
+     * @Route("/", name="index")
+     */
+    public function indexAction() {
+        return $this->redirectToRoute('fos_user_profile_show');
+    }
+
+    /**
      * Edit the user
      * @Route("/user/edit/{id}", name="edit_child_user")
      */
