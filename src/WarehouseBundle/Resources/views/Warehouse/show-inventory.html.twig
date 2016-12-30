@@ -4,6 +4,7 @@
             <table id="inventory-table" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%">
                 <thead>
                 <tr>
+                    <th>SKU</th>
                     <th>Name</th>
                     <th style="text-align: center;">Quantity on Hand</th>
                     <th style="text-align: center;">Quantity on P.O.</th>
@@ -12,6 +13,7 @@
                 <tbody>
                 {% for data in inventory_data %}
                     <tr>
+                        <td>{{ data.sku }}</td>
                         <td>{{ data.name }}</td>
                         <td><center>{{ data.quantity }}</center></td>
                         <td><center>{{ data.po_quantity }}</center></td>
