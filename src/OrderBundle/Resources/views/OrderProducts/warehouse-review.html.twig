@@ -5,11 +5,11 @@
     Order #{{ order.orderId }}
 {% endblock page_title %}
 
-{#{% block page_name %}#}
-    {#<div class="">#}
-        {#<img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">#}
-    {#</div>#}
-{#{% endblock page_name %}#}
+{% block page_name %}
+    {% if warehouse_id != 'none' %}
+        <a href="{{ path('warehouse_show', { 'id': warehouse_id }) }}">< Back to Warehouse</a>
+    {% endif %}
+{% endblock page_name %}
 
 {% block actions %}
 {% endblock actions %}

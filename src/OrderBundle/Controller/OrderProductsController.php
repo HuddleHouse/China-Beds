@@ -411,7 +411,8 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
                 'shipped_status' => $shipped_status,
                 'manual_items' => $manualItems = $order->getManualItems(),
-                'manual_items_count' => count($manualItems = $order->getManualItems())
+                'manual_items_count' => count($manualItems = $order->getManualItems()),
+                'warehouse_id' => $warehouse->getId()
             ));
         }
         else
