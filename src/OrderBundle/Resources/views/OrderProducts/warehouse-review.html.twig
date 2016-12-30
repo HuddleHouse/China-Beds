@@ -250,7 +250,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 10%;">Qty</th>
-                                <th style="width: 10%;">Shipped Qty</th>
+                                <th style="width: 10%;">{% if order.isPickUp %}Pickup{% else %}Shipped{% endif %} Qty</th>
                                 <th>Product</th>
                                 <th style="width: 24%;">Subtotal</th>
                             </tr>
