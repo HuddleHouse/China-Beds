@@ -27,25 +27,28 @@ class ShippingService
         $this->container = $container;
     }
 
-    public function generateShippingLabelsForOrder(Orders &$orders, $flush = false) {
+    public function generateShippingLabelsForOrder(Orders &$orders, $flush = false)
+    {
         $em = $this->container->get('doctrine')->getManager();
 
         $config = $this->getConfigForChannel($orders->getChannel());
 
         $numProdVariants = 0; //count($orders->getProductVariants());
-        foreach($orders->getProductVariants() as $variant)
+        foreach ($orders->getProductVariants() as $variant) {
             $numProdVariants += $variant->getQuantity();
+        }
 
-        foreach($orders->getShippingLabels() as $label)
+        foreach ($orders->getShippingLabels() as $label) {
             $em->remove($label);
+        }
 
         $em->persist($orders);
 
         $shipmentId = '';
         $count = 0;
-        foreach($orders->getProductVariants() as $variant) {
-            for($i=0;$i<$variant->getQuantity();$i++) {
-                foreach ($variant->getWarehouseInfo() as $info) {
+        foreach ($orders->getProductVariants() as $variant) {
+            foreach ($variant->getWarehouseInfo() as $info) {
+                for ($i = 0; $i < $info->getQuantity(); $i++) {
                     $count++;
                     $shipment = new \RocketShipIt\Shipment('fedex', ['config' => $config]);
 
@@ -60,7 +63,7 @@ class ShippingService
                     $shipment->setParameter('toState', $orders->getState()->getAbbreviation());
                     $shipment->setParameter('toCode', $orders->getShipZip());
 
-                    $shipment->setParameter('residentialAddressIndicator','0');
+                    $shipment->setParameter('residentialAddressIndicator', '0');
                     $shipment->setParameter('service', 'FEDEX_GROUND');
 
                     /*
@@ -109,6 +112,7 @@ class ShippingService
 //                    }
 
                     $response = $shipment->submitShipment();
+//                    echo $shipment->debug();
                     if (isset($response['trk_main'])) {
                         if ($count == 1) {
                             $shipmentId = $response['trk_main'];
@@ -144,7 +148,7 @@ class ShippingService
             }
         }
 
-        if ( $flush ) {
+        if ($flush) {
             $em->persist($orders);
             $em->flush();
         }
@@ -154,13 +158,15 @@ class ShippingService
         ];
     }
 
-    public function getConfigForChannel(Channel $channel) {
+    public function getConfigForChannel(Channel $channel)
+    {
         $config = new RocketShipIt\Config();
-        $config->setDefault('generic',  'debugMode', '0');
+        $config->setDefault('generic', 'debugMode', '0');
         $config->setDefault('fedex', 'key', $channel->getFedexKey());
         $config->setDefault('fedex', 'password', $channel->getFedexPassword());
         $config->setDefault('fedex', 'accountNumber', $channel->getFedexNumber());
         $config->setDefault('fedex', 'meterNumber', $channel->getFedexMeterNumber());
+
         return $config;
     }
 
@@ -170,7 +176,7 @@ class ShippingService
 
         $rates = [];
         foreach ($order->getProductVariants() as $productVariant) {
-            for($i=0;$i<$productVariant->getQuantity();$i++) {
+            for ($i = 0; $i < $productVariant->getQuantity(); $i++) {
                 foreach ($productVariant->getWarehouseInfo() as $info) {
                     if (!isset($rates[$info->getWarehouse()->getId()])) {
                         $rate = new \RocketShipIt\Rate('fedex', ['config' => $config]);
@@ -188,16 +194,7 @@ class ShippingService
                         );
                         $rate->setParameter('toCode', $order->getShipZip());
 
-                        $rate->setParameter('shipContact', $info->getWarehouse()->getContact());
-                        $rate->setParameter('shipPhone', $info->getWarehouse()->getPhone());
-                        $rate->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
-                        $rate->setParameter('shipCity', $info->getWarehouse()->getCity());
-                        $rate->setParameter(
-                            'shipState',
-                            $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation(
-                            ) : null
-                        );
-                        $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
+
 
                         $rates[$info->getWarehouse()->getId()] = $rate;
                     }
@@ -208,8 +205,18 @@ class ShippingService
                         $dimensions = explode('X', $productVariant->getProductVariant()->getFedexDimensions());
                     }
 
-                    $package = new \RocketShipIt\Package('fedex');
+                    $package = new \RocketShipIt\Package('fedex', ['config' => $config]);
 
+                    $package->setParameter('shipContact', $info->getWarehouse()->getContact());
+                    $package->setParameter('shipPhone', $info->getWarehouse()->getPhone());
+                    $package->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
+                    $package->setParameter('shipCity', $info->getWarehouse()->getCity());
+                    $package->setParameter(
+                        'shipState',
+                        $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation(
+                        ) : null
+                    );
+                    $package->setParameter('shipCode', $info->getWarehouse()->getZip());
                     $package->setParameter('length', "$dimensions[0]");
                     $package->setParameter('width', "$dimensions[1]");
                     $package->setParameter('height', "$dimensions[2]");
@@ -239,7 +246,7 @@ class ShippingService
         return [
             'rate' => $total_rate,
             'service_code' => 'FEDEX_GROUND',
-            'desc' =>  'FedEx Ground'
+            'desc' => 'FedEx Ground'
         ];
 
     }

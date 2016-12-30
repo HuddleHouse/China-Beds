@@ -64,15 +64,17 @@ class EmailService extends BaseService
 
         foreach($warehouses as $warehouse_id => $products) {
             $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
-            echo "==== " . $warehouse->getName() . " ====\n";
+//            echo "==== " . $warehouse->getName() . " ====\n";
 //            foreach($warehouse->getManagers() as $manager) {
 //                echo "      " . $manager->getDisplayName() . "\n";
                 $files = [];
                 foreach($products as $ordersWarehouseInfo) {
-                    echo "      " . $ordersWarehouseInfo->getId() . " " . get_class($ordersWarehouseInfo) . ' qty ' . $ordersWarehouseInfo->getQuantity() . ' '  . $ordersWarehouseInfo->getOrdersProductVariant()->getProductVariant()->getProduct()->getName() . ' ' . $ordersWarehouseInfo->getOrdersProductVariant()->getProductVariant()->getName() . "\n";
+//                    echo "      " . $ordersWarehouseInfo->getId() . " " . get_class($ordersWarehouseInfo) . ' qty ' . $ordersWarehouseInfo->getQuantity() . ' '  . $ordersWarehouseInfo->getOrdersProductVariant()->getProductVariant()->getProduct()->getName() . ' ' . $ordersWarehouseInfo->getOrdersProductVariant()->getProductVariant()->getName() . "\n";
                     foreach ($ordersWarehouseInfo->getShippingLabels() as $label) {
-                            echo "      " . $label->getId() . " " . get_class($label) . "\n";
-                            $files[] = $label->getAbsolutePath();
+//                            echo "      " . $label->getId() . " " . get_class($label) . "\n";
+                            if ( file_exists($label->getAbsolutePath()) ) {
+                                $files[$label->getId()] = $label->getAbsolutePath();
+                            }
                     }
                 }
 
@@ -83,10 +85,10 @@ class EmailService extends BaseService
                 $this->sendEmail(
                     [
                         'subject' => sprintf(
-                            '%s Order #%s Ready %!',
-                            $order->getIsPickUp() ? 'For Pick Up' : 'To Ship',
+                            '%s Order #%s Ready %s!',
                             $order->getChannel()->getName(),
-                            $order->getOrderId()
+                            $order->getOrderId(),
+                            $order->getIsPickUp() ? 'For Pick Up' : 'To Ship'
                         ),
                         'from'  => $order->getChannel()->getFromEmailAddress(),
                         'to'    => explode(',', $warehouse->getEmail()),
