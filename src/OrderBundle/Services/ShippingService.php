@@ -194,6 +194,17 @@ class ShippingService
                         );
                         $rate->setParameter('toCode', $order->getShipZip());
 
+                        $rate->setParameter('shipContact', $info->getWarehouse()->getContact());
+                        $rate->setParameter('shipPhone', $info->getWarehouse()->getPhone());
+                        $rate->setParameter('shipAddr1', $info->getWarehouse()->getAddress1());
+                        $rate->setParameter('shipCity', $info->getWarehouse()->getCity());
+                        $rate->setParameter(
+                            'shipState',
+                            $info->getWarehouse()->getState() ? $info->getWarehouse()->getState()->getAbbreviation(
+                            ) : null
+                        );
+                        $rate->setParameter('shipCode', $info->getWarehouse()->getZip());
+
 
 
                         $rates[$info->getWarehouse()->getId()] = $rate;
@@ -229,6 +240,7 @@ class ShippingService
         $total_rate = 0;
         foreach ($rates as $warehouse_id => $rate) {
             $response = $rate->getSimpleRates();
+            echo $rate->debug();
             $data = array_pop($response);
 
             if (!isset($data['rate'])) {

@@ -50,7 +50,7 @@ class OrdersProductVariant
     private $order;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersWarehouseInfo", mappedBy="orders_product_variant", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersWarehouseInfo", mappedBy="orders_product_variant", cascade={"persist", "remove"})
      */
     private $warehouse_info;
 

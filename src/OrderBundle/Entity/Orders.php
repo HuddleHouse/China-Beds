@@ -192,7 +192,7 @@ class Orders
     private $shipEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order", cascade={"persist", "remove"})
      */
     private $product_variants;
 
@@ -207,7 +207,7 @@ class Orders
     private $pop_items;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order", cascade={"persist", "remove"})
      */
     private $manual_items;
 
@@ -539,7 +539,7 @@ class Orders
      */
     public function getEstimatedShipping()
     {
-        return $this->estimatedShipping;
+        return $this->estimatedShipping / 100;
     }
 
     /**
@@ -547,7 +547,7 @@ class Orders
      */
     public function setEstimatedShipping($estimatedShipping)
     {
-        $this->estimatedShipping = $estimatedShipping;
+        $this->estimatedShipping = $estimatedShipping * 100;
     }
 
     /**

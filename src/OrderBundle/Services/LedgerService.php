@@ -71,7 +71,7 @@ class LedgerService
         $ledger->setSubmittedForUser($submittedForUser);
         $ledger->setSubmittedByUser($submittedByUser);
         $ledger->setChannel($channel);
-        if($type == 'Credit')
+        if($type == Ledger::TYPE_CREDIT || $type == Ledger::TYPE_PAYMENT)
             $ledger->setAchRequested(false);
         $ledger->setDescription($description);
         $ledger->setType($type);

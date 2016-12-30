@@ -505,13 +505,18 @@ select coalesce(sum(i.quantity), 0) as quantity
             $channel = $em->getRepository("InventoryBundle:Channel")->find($id_channel);
             $order = $em->getRepository("OrderBundle:Orders")->find($id_order);
 
+            if ( !$this->getUser()->hasRole('ROLE_ADMIN') && ($order->getSubmittedForUser() != $this->getUser()) ) {
+                $this->addFlash('error', 'You do not have permission.' );
+                return $this->redirectToRoute('my_orders_index');
+            }
+
             $em->remove($order);
 
             $em->flush();
-            $this->addFlash('notice', 'order deleted');
+            $this->addFlash('notice', 'Order Deleted Successfully');
             return $this->redirectToRoute('my_orders_index');
         }catch(\Exception $e){
-            $this->addFlash('notice', 'Problem: ' . $e );
+            $this->addFlash('error', 'Problem: ' . $e );
             return $this->redirectToRoute('my_orders_index');
         }
 
