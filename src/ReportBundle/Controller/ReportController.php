@@ -363,7 +363,7 @@ class ReportController extends Controller
         
 	$ledgerEntities = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->findBy(array('type'=>'Payment', 'achRequested'=>0));
 	
-	$fileName = 'pending-ach'.date('YmdHis');
+	$fileName = 'pending-ach'.date('Y-m-d_H_i').'.csv';
 	$response = $this->render('ReportBundle:Reports:ach-pending-export-csv.html.twig', array('ledgerEntities' => $ledgerEntities));
 
 	$response->headers->set('Content-Type', 'text/csv');
