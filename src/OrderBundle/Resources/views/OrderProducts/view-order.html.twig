@@ -463,9 +463,9 @@
                             <strong>Shipping To</strong><br />
                             {{ order.shipName }}<br>
                             {{ order.shipAddress }}, {{ order.shipAddress2 }}<br>
-                            {{ order.shipCity }},  {{ order.shipZip }}<br>
-                            Phone: {{ order.shipPhone }}<br>
-                            Email: {{ order.shipEmail }}
+                            {{ order.shipCity }}, {{ order.state.name }} {{ order.shipZip }}<br />
+                            <a href="tel:{{ order.shipPhone }}">{{ order.shipPhone }}</a><br>
+                            <a href="mailto:{{ order.shipEmail }}">{{ order.shipEmail }}</a>
                         </address>
                     {% else %}
                         <address>
