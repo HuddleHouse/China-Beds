@@ -578,6 +578,22 @@ class OrderProductsController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/api_mark_approved", name="api_marked_approved")
+     */
+    public function markAdminApprovedAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        if ( $order = $em->getRepository('OrderBundle:Orders')->find($request->request->get('order_id')) ) {
+            $order->setAdminApproved(true);
+            $em->persist($order);
+            $em->flush();
+            return new JsonResponse(['success' => true]);
+        }
+        return new JsonResponse(['success' => false, 'error_message' => 'Could not find order.']);
+    }
+
+    /**
      * @Route("/api_pay_for_order", name="api_pay_for_order")
      *
      */

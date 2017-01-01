@@ -121,6 +121,7 @@
             $scope.is_paid = {{ is_paid }};
             $scope.admin_paid = 0;
             $scope.order_status = '{{ order.status.name }}';
+            $scope.admin_approved = '{{ order.adminApproved }}';
             $scope.payments = [];
 
             {% if order.status.name == 'Pending' %}
@@ -273,6 +274,28 @@
 
             };
 
+            $scope.adminApprove = function() {
+                showSpinner();
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ path('api_marked_approved') }}',
+                    dataType: 'json',
+                    data: {
+                        order_id: {{ order.id}},
+                    },
+                    success: function(result) {
+                        hideSpinner();
+                        if ( !result.success ) {
+                            $scope.admin_approved = '1';
+                            showErrorModal('Error:<br />' + result.error_message);
+                        } else {
+                            showSuccessModal('Order Submitted successfully.');
+                            location.reload();
+                        }
+                    }
+                })
+            }
+
 
             //not
             $scope.updateCart = function (variantId, cost, max) {
@@ -383,7 +406,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="color-block">
-                            Preview Only! Must confirm order to complete the process.
+                            Preview Only! Must enter payment to complete the process.
                         </div>
                     </div>
                     <!-- /.col -->
@@ -739,9 +762,9 @@
                         <div class="alert alert-error hide" id="process-error">Test</div>
                         <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
-                        {#<button type="button" ng-show="admin_paid == 0 && is_admin == 1" ng-click="formValidate('admin')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">#}
-                            {#Submit Order for User#}
-                        {#</button>#}
+                        <button type="button" ng-show="is_admin&&!admin_approved" ng-click="adminApprove();" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                            Submit Order for User
+                        </button>
                         <button type="button" ng-show="is_paid == 0 && is_admin == 0 && balance() == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                             Complete Order
                         </button>

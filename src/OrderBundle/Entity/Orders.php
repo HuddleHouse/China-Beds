@@ -113,6 +113,12 @@ class Orders
      * @ORM\Column(name="is_shippable", type="boolean")
      */
     private $isShippable = false;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="admin_approved", type="boolean")
+     */
+    private $adminApproved = false;
 
     /**
      * @var string
@@ -1528,4 +1534,21 @@ class Orders
     {
         return $this->isShippable;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAdminApproved()
+    {
+        return $this->adminApproved;
+    }
+
+    /**
+     * @param bool $adminApproved
+     */
+    public function setAdminApproved($adminApproved)
+    {
+        $this->adminApproved = $adminApproved;
+    }
+
 }
