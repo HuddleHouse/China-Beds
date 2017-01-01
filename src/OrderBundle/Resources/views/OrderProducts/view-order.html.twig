@@ -140,7 +140,7 @@
             };
 
             $scope.balance = function() {
-                return (parseFloat($scope.cart_total) - $scope.paymentsTotal()).toFixed(2);
+                return parseFloat((parseFloat($scope.cart_total) - $scope.paymentsTotal()).toFixed(2));
             }
 
             $scope.paymentsTotal = function() {
