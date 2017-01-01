@@ -26,7 +26,12 @@ class CreditRequestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $creditRequests = $em->getRepository('OrderBundle:CreditRequest')->findAll();
+        if ( $this->getUser()->hasRole('ROLE_ADMIN') ) {
+            $creditRequests = $em->getRepository('OrderBundle:CreditRequest')->findAll();
+        } else {
+            $creditRequests = $em->getRepository('OrderBundle:CreditRequest')->findBy(['submittedForUser' => $this->getUser()]);
+        }
+
 
         return $this->render('OrderBundle:RequestCredit:index.html.twig', array(
             'creditRequests' => $creditRequests,
