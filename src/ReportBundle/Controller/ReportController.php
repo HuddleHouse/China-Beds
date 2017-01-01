@@ -275,6 +275,8 @@ class ReportController extends Controller
      * @Method({"GET", "POST"})
      */
     public function priceListAction(Request $request){
+        $users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findBy([], ['company_name' => 'ASC']);
+
         if($request->get('uid') != null) {
             $user = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->find($request->get('uid'));
             $report = array();
@@ -284,10 +286,11 @@ class ReportController extends Controller
                 'Price'
             );
             $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user);
-            return $this->render('ReportBundle:Reports:price-list.html.twig', array('report' => $report, 'user' => $user));
+            return $this->render('ReportBundle:Reports:price-list.html.twig', array('report' => $report, 'user' => $user, 'users' => $users, 'user_id' => $request->get('uid')));
         }
 
-        return $this->render('ReportBundle:Reports:price-list.html.twig', array());
+
+        return $this->render('ReportBundle:Reports:price-list.html.twig',['users' => $users, 'user_id' => $request->get('uid')]);
     }
 
     /**

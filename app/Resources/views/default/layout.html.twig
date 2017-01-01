@@ -568,6 +568,11 @@
 						<a href="{{ path('ach_pending')}}"><i class="fa fa-circle-o"></i>Ach Pending</a>
 					    </li>
 				    {%endif%}
+				    {% if isGrantedRoute(app.user, 'price_list') %}
+					    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+						<a href="{{ path('price_list')}}"><i class="fa fa-circle-o"></i>Price List</a>
+					    </li>
+				    {%endif%}
                             </ul>
                         </li>
                         {% endif %}
