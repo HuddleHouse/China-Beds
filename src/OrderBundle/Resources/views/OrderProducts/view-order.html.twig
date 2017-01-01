@@ -121,7 +121,8 @@
             $scope.is_paid = {{ is_paid }};
             $scope.admin_paid = 0;
             $scope.order_status = '{{ order.status.name }}';
-            $scope.admin_approved = '{{ order.adminApproved }}';
+            $scope.admin_submitted = {{ order.submittedByUser.hasRole('ROLE_ADMIN') ? '1' : '0' }}
+            $scope.admin_approved = {{ order.adminApproved ? '1' : '0' }} ;
             $scope.payments = [];
 
             {% if order.status.name == 'Pending' %}
@@ -424,12 +425,21 @@
             <div class="row" style="margin-top: 20px;">
                 <div class="col-xs-12">
                     <h2 class="page-header">
-                        <div class="pull-right">Date: {{ order.submitDate | date }}</div>
+                        <div class="pull-right">Date: {{ order.submitDate | date("m/d/Y h:iA") }}</div>
                         <span class="mdl-chip mdl-chip--contact" >
                             <span class="mdl-chip__contact mdl-color-text--white" style="background-color: {{ order.status.color }};">{{ order.status.nameFirstLetter }}</span>
                             <span class="mdl-chip__text">
                                 {{ order.status.name }}
                             </span>
+                        </span>
+                        <span class="mdl-chip mdl-chip--contact" >
+                            {% if order.isPickUp %}
+                                <span class="mdl-chip__contact mdl-color-text--white" style="background-color: #7adddd;">P</span>
+                                <span class="mdl-chip__text"> Pickup</span>
+                            {% else %}
+                                <span class="mdl-chip__contact mdl-color-text--white" style="background-color: #2b542c;">S</span>
+                                <span class="mdl-chip__text"> Ship</span>
+                            {% endif %}
                         </span>
                     </h2>
                 </div>
@@ -438,11 +448,19 @@
             <!-- info row -->
             <div class="row invoice-info">
                 <!-- /.col -->
-                <div class="col-sm-4 invoice-col">
 
+                    <div class="col-sm-4 invoice-col">
+                        <address>
+                            <strong>Customer</strong><br />
+                            {{ order.submittedForUser.displayName }}<br />
+                            {{ order.submittedForUser.address1 }}<br />
+                            {{ order.submittedForUser.city }}, {{ order.submittedForUser.state.name }} {{ order.submittedForUser.zip }}<br />
+                        </address>
+                    </div>
+                <div class="col-sm-4 invoice-col">
                     {% if order.isPickUp == 0%}
                         <address>
-                            <strong>Shipping To</strong>
+                            <strong>Shipping To</strong><br />
                             {{ order.shipName }}<br>
                             {{ order.shipAddress }}, {{ order.shipAddress2 }}<br>
                             {{ order.shipCity }},  {{ order.shipZip }}<br>
@@ -453,7 +471,7 @@
                         <address>
                             <strong>Pick Up</strong><br>
                             <strong>Agent: </strong>{{ order.pickUpAgent }}<br>
-                            <strong>Date:</strong> {{ order.pickUpDate | date }}<br>
+                            <strong>Date:</strong> {{ order.pickUpDate | date("m/d/Y") }}<br>
 
                         </address>
                     {% endif %}
@@ -462,9 +480,6 @@
                 <div class="col-sm-4 invoice-col">
                     <b>PO #{{ order.orderNumber }}</b><br>
                     <br>
-                </div>
-                <div class="col-sm-4 invoice-col">
-
                 </div>
                 <!-- /.col -->
             </div>
@@ -762,7 +777,7 @@
                         <div class="alert alert-error hide" id="process-error">Test</div>
                         <button onclick="printPage()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
 
-                        <button type="button" ng-show="is_admin&&!admin_approved" ng-click="adminApprove();" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
+                        <button type="button" ng-show="is_admin && admin_submitted && !admin_approved" ng-click="adminApprove();" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">
                             Submit Order for User
                         </button>
                         <button type="button" ng-show="is_paid == 0 && is_admin == 0 && balance() == 0" ng-click="formValidate('complete')" class="btn btn-success btn-raised" style="margin-right: 5px;float: right;">

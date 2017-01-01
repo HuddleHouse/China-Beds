@@ -36,6 +36,7 @@
                         <th>Shipping</th>
                         <th>Channel</th>
                         <th>Status</th>
+                        <th>Type</th>
                         <th style="width: 250px;">Actions</th>
                     </tr>
                     </thead>
@@ -64,11 +65,23 @@
                                 </span>
                             </td>
                             <td>
+                                <span class="mdl-chip mdl-chip--contact" >
+                                {% if order.isPickUp %}
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: #7adddd;">P</span>
+                                    <span class="mdl-chip__text"> Pickup</span>
+                                {% else %}
+                                    <span class="mdl-chip__contact mdl-color-text--white" style="background-color: #2b542c;">S</span>
+                                    <span class="mdl-chip__text"> Ship</span>
+                                {% endif %}
+                                </span>
+                            </td>
+                            <td>
                                 <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('order_products_review', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> View</a>
                                 {% if order.status.name == "Draft" %}
                                     <a class="btn btn-raised btn-default btn-xs purple" href="{{ path('order_products_delete', {'id_channel': order.channel.id, 'id_order': order.id}) }}"><i class="fa fa-edit"></i> Delete</a>
                                 {% endif %}
                             </td>
+
                         </tr>
                     {% endfor %}
                     </tbody>
