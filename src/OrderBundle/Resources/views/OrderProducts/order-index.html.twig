@@ -166,7 +166,7 @@
 
         app.controller('myCtrl', ['$scope', function($scope) {
             var tomorrow = new Date();
-            tomorrow.setDate(date.getDate() + 1);
+            tomorrow.setDate(tomorrow.getDate() + 1);
 
             $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
             $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
