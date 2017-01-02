@@ -124,7 +124,7 @@
 
         app.filter('tel', function () {
             return function (tel) {
-                console.log(tel);
+//                console.log(tel);
                 if (!tel) { return ''; }
 
                 var value = tel.toString().trim().replace(/^\+/, '');
@@ -211,7 +211,7 @@
             {% if is_edit == 1 %}
                 $scope.order_pop = {{ order_pop | json_encode | raw}};
                 $scope.order_variants = {{ order_variants | json_encode | raw}};
-                console.log($scope.order);
+//                console.log($scope.order);
 
                 $( document ).ready(function() {
                     $scope.$apply(function () {
@@ -232,7 +232,7 @@
 
                         $('#dist_ship').val({{ order.submittedForUser.id }});
                         var is_pickup = '{{ order.isPickUp }}';
-                        console.log(is_pickup);
+//                        console.log(is_pickup);
                         if (is_pickup == 1) {
                             $('#ship').hide();
                             $scope.form_info['ship'] = false;
@@ -299,7 +299,7 @@
                         $scope.cart[type][variantId].quantity = $scope.product_variant_order_quan[variantId];
                     if(type == 'pop')
                         $scope.cart[type][variantId].quantity = $scope.pop_order_quan[variantId];
-                    console.log('cost: '+ JSON.stringify($scope.cart));
+//                    console.log('cost: '+ JSON.stringify($scope.cart));
 
                 }
                 else {
@@ -406,7 +406,7 @@
 
             $scope.submitCart = function () {
                 var errors = $scope.validate();
-                console.log(errors);
+//                console.log(errors);
                 $('#submit-button').prop('disabled', true);
                 $('#submit-button').addClass('button-error');
                 $('.fa.fa-circle').addClass('fa-circle-thin');
