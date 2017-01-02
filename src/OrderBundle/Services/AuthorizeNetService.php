@@ -70,36 +70,52 @@ class AuthorizeNetService extends BaseService
             $response = $controller->executeWithApiResponse(ANetEnvironment::PRODUCTION);
         }
 
+        error_log(print_r($response, 1));
+
 
         if ($response != null)
         {
             if($response->getMessages()->getResultCode() == "Ok")
             {
                 $tresponse = $response->getTransactionResponse();
-                return [
-                    'success' => true,
-                    'auth_code' => $tresponse->getAuthCode(),
-                    'trans_id'  => $tresponse->getTransId()
-                ];
+
+                if ($tresponse != null && $tresponse->getMessages() != null)
+                {
+                    return [
+                        'success' => true,
+                        'auth_code' => $tresponse->getAuthCode(),
+                        'trans_id'  => $tresponse->getTransId()
+                    ];
+                }
+                else
+                {
+                    return [
+                        'success' => false,
+                        'error_code' => $tresponse->getErrors()[0]->getErrorCode(),
+                        'error_message'  => $tresponse->getErrors()[0]->getErrorText()
+                    ];
+                }
             }
             else
             {
                 $tresponse = $response->getTransactionResponse();
+
                 if($tresponse != null && $tresponse->getErrors() != null)
                 {
-                    $error_code = $tresponse->getErrors()[0]->getErrorCode();
-                    $error_message = $tresponse->getErrors()[0]->getErrorText();
+                    return [
+                        'success' => false,
+                        'error_code' => $tresponse->getErrors()[0]->getErrorCode(),
+                        'error_message'  => $tresponse->getErrors()[0]->getErrorText()
+                    ];
                 }
                 else
                 {
-                    $error_code = $response->getMessages()->getMessage()[0]->getCode();
-                    $error_message = $response->getMessages()->getMessage()[0]->getText();
+                    return [
+                        'success' => false,
+                        'error_code' => $response->getMessages()->getMessage()[0]->getCode(),
+                        'error_message'  => $response->getMessages()->getMessage()[0]->getText()
+                    ];
                 }
-                return [
-                    'success' => false,
-                    'error_code' => $error_code,
-                    'error_message'  => $error_message
-                ];
             }
         }
         else
