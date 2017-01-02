@@ -328,7 +328,7 @@ class Orders
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
             if(isset($info['pick_up_date']))
-                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+                $this->pickUpDate = get_class($info['pick_up_date']) == 'DateTime' ? $info['pick_up_date'] : new \DateTime($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
@@ -366,7 +366,7 @@ class Orders
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
             if(isset($info['pick_up_date']))
-                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+                $this->pickUpDate = get_class($info['pick_up_date']) == 'DateTime' ? $info['pick_up_date'] : new \DateTime($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 

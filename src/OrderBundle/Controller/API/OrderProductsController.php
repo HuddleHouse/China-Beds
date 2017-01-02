@@ -831,7 +831,7 @@ class OrderProductsController extends Controller
                     'po' => $info['poNumber'],
                     'comments' => $info['comments'],
                     'pick_up' => 'true',
-                    'pick_up_date' => $request->get('pickupDate'),
+                    'pick_up_date' => $this->fixWindowsDate($request->get('pickupDate')),
                     'agent_name' => $info['pickupAgent']
                 ));
 
@@ -919,7 +919,7 @@ class OrderProductsController extends Controller
             }
 
             $this->get('warehouse.warehouse_service')->modifyInventoryLevelForOrder($order);
-            $order->setSubmitDate(new \DateTime($request->get('orderDate')));
+            $order->setSubmitDate($this->fixWindowsDate($request->get('orderDate')));
             $em->persist($order);
             $em->flush();
 
@@ -995,6 +995,15 @@ class OrderProductsController extends Controller
             return JsonResponse::create(array(true, 'Shipping Label Deleted'));
         }catch(\Exception $e){
             return JsonResponse::create(array(false, $e));
+        }
+    }
+
+    private function fixWindowsDate($input) {
+        try {
+            return new \DateTime($input);
+        } catch(\Exception $e) {
+            return \DateTime::createFromFormat('D M d Y H:i:s e+', $input); // Thu Nov 15 2012 00:00:00 GMT-0700 (Mountain Standard Time)
+
         }
     }
 }
