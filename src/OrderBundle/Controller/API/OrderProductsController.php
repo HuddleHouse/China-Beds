@@ -146,7 +146,6 @@ class OrderProductsController extends Controller
             $order->setData($info);
         }
 
-        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
 
         /*
         * Save the manual Items here
@@ -269,6 +268,11 @@ class OrderProductsController extends Controller
                 }
             }
         }
+
+        $em->persist($order);
+        $em->flush();
+
+        $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
 
         $em->persist($order);
         $em->flush();
