@@ -328,7 +328,7 @@ class Orders
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
             if(isset($info['pick_up_date']))
-                $this->pickUpDate = get_class($info['pick_up_date']) == 'DateTime' ? $info['pick_up_date'] : new \DateTime($info['pick_up_date']);
+                $this->pickUpDate = $this->fixWindowsDate($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
@@ -366,7 +366,7 @@ class Orders
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
             if(isset($info['pick_up_date']))
-                $this->pickUpDate = get_class($info['pick_up_date']) == 'DateTime' ? $info['pick_up_date'] : new \DateTime($info['pick_up_date']);
+                $this->pickUpDate = $this->fixWindowsDate($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
@@ -1551,4 +1551,12 @@ class Orders
         $this->adminApproved = $adminApproved;
     }
 
+    private function fixWindowsDate($input) {
+        try {
+            return new \DateTime($input);
+        } catch(\Exception $e) {
+            return \DateTime::createFromFormat('D M d Y H:i:s e+', $input); // Thu Nov 15 2012 00:00:00 GMT-0700 (Mountain Standard Time)
+
+        }
+    }
 }
