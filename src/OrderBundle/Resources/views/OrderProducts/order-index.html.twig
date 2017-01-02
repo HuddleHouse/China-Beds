@@ -448,7 +448,16 @@
                             order_id: {% if order is defined %}{{ order.id }}{% else %}0{% endif %}
                         },
                         success: function (data) {
-                                window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });
+                            if ( data.success ) {
+                                window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data.order_id });
+                            } else {
+                                hideDimmer();
+                                showErrorModal(data.message);
+                            }
+
+                        },
+                        error: function(data) {
+                            console.log(data);
                         }
                     });
                 }

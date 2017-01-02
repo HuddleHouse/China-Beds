@@ -145,8 +145,7 @@ class OrderProductsController extends Controller
 
             $order->setData($info);
         }
-        $em->persist($order);
-        $em->flush();
+
         $order->setOrderId('O-'. str_pad($order->getId(), 5, "0", STR_PAD_LEFT));
 
         /*
@@ -170,10 +169,21 @@ class OrderProductsController extends Controller
         $state = $em->getRepository('AppBundle:State')->find($info['state']);
         $order->setState($state);
 
+        $added_to_cart = false;
         foreach($cart['variant'] as $k => $cart_info) {
-            if ( !is_array($cart_info) ) { unset($cart['variant'][$k]); continue; }
+            if ( !is_array($cart_info) || (isset($cart_info['quantity']) && $cart_info['quantity'] < 1) ) { unset($cart['variant'][$k]); continue; }
+            $added_to_cart = true;
             $cart['variant'][$k]['warehouses'] = $em->getRepository('WarehouseBundle:Warehouse')->getWarehousesWithQuantityForVariantByUser($cart_info['variant_id'], $order->getSubmittedForUser()->getId(), $cart_info['quantity']);
         }
+
+        if ( !$added_to_cart ) {
+            return new JsonResponse([
+                    'success' => false,
+                    'message' => "Error adding items to your cart.  Please try again.  If this problem exists, please contact support."
+                ]);
+        }
+
+
 
         foreach($cart['variant'] as $variant) {
             $pv = $em->getRepository('InventoryBundle:ProductVariant')->find($variant['variant_id']);
@@ -340,7 +350,7 @@ class OrderProductsController extends Controller
         $em->persist($order);
         $em->flush();
 
-        return JsonResponse::create($order->getId());
+        return new JsonResponse(['success' => true, 'order_id' => $order->getId()]);
     }
 
     /**
