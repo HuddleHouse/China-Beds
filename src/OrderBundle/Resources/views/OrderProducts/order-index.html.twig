@@ -165,6 +165,9 @@
         });
 
         app.controller('myCtrl', ['$scope', function($scope) {
+            var tomorrow = new Date();
+            tomorrow.setDate(date.getDate() + 1);
+
             $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
             $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
             $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
@@ -180,7 +183,7 @@
             $scope.pop_order_quan = [];
             $scope.cart = {'variant': [], 'pop': [], 'customItems': []};
             $scope.form_info = {};
-            $scope.form_info.pick_up_date = new Date();
+            $scope.form_info.pick_up_date = tomorrow;
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
             $scope.hasError = [];
