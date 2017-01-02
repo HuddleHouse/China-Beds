@@ -1,7 +1,7 @@
 {% extends 'OrderBundle:Emails:email.html.twig' %}
 {% block title %}
     Order #{{ order.orderid }} - {{ order.status.name }}
-    {% if order.orderNumber %}<br />PO #{{ order.orderNumber }}
+    {% if order.orderNumber %}<br />PO #{{ order.orderNumber }}{% endif %}
 {% endblock %}
 {% block body %}
     <!-- 1 COLUMN === YOUR PAYMENT IS PROCESSING TEXT MODULE -->
