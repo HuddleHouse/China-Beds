@@ -11,7 +11,16 @@
 
         .expand {
             height: 70vh;
-        }
+        }		
+		.sidebar-mini.md-datepicker-is-showing {
+			top:auto !important;
+		}
+		@media (max-width: 767px) {
+			.color-block {
+				height:auto !important;
+				line-height:normal !important;
+			}
+		}
     </style>
     <div class="wrapper">
 
@@ -537,23 +546,33 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                            {% if isGrantedRoute(app.user, 'daily_order') %}
-                                <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
-                                    <a href="{{ path('daily_order') }}"><i class="fa fa-circle-o"></i>Daily Orders</a>
-                                </li>
-                                {% endif %}
-                            {% if isGrantedRoute(app.user, 'monthly_order') %}
-                                <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
-                                    <a href="{{ path('monthly_order', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Monthly Orders</a>
-                                </li>
-                                {% endif %}
-                            {% if isGrantedRoute(app.user, 'recent_orders') %}
-                                {% if (is_granted('ROLE_ADMIN')) %}
-                                    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
-                                        <a href="{{ path('recent_orders', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Recent Orders</a>
-                                    </li>
-                                {% endif %}
-                                {% endif %}
+				    {% if isGrantedRoute(app.user, 'daily_order') %}
+					<li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+					    <a href="{{ path('daily_order') }}"><i class="fa fa-circle-o"></i>Daily Orders</a>
+					</li>
+					{% endif %}
+				    {% if isGrantedRoute(app.user, 'monthly_order') %}
+					<li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+					    <a href="{{ path('monthly_order', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Monthly Orders</a>
+					</li>
+				    {% endif %}
+				    {% if isGrantedRoute(app.user, 'recent_orders') %}
+					{% if (is_granted('ROLE_ADMIN')) %}
+					    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+						<a href="{{ path('recent_orders', {'id': app.user.activechannel.id}) }}"><i class="fa fa-circle-o"></i>Recent Orders</a>
+					    </li>
+					{% endif %}
+				    {% endif %}
+				    {% if isGrantedRoute(app.user, 'ach_pending') %}
+					    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+						<a href="{{ path('ach_pending')}}"><i class="fa fa-circle-o"></i>Ach Pending</a>
+					    </li>
+				    {%endif%}
+				    {% if isGrantedRoute(app.user, 'price_list') %}
+					    <li {% if (app.request.get('_route') in sidebar_reports) %} class="active"{% endif %}>
+						<a href="{{ path('price_list')}}"><i class="fa fa-circle-o"></i>Price List</a>
+					    </li>
+				    {%endif%}
                             </ul>
                         </li>
                         {% endif %}

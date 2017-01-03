@@ -411,7 +411,8 @@ select coalesce(sum(i.quantity), 0) as quantity
                 'is_paid' => ($order->getStatus()->getName() == 'Paid' ? 1 : 0),
                 'shipped_status' => $shipped_status,
                 'manual_items' => $manualItems = $order->getManualItems(),
-                'manual_items_count' => count($manualItems = $order->getManualItems())
+                'manual_items_count' => count($manualItems = $order->getManualItems()),
+                'warehouse_id' => $warehouse->getId()
             ));
         }
         else
@@ -456,12 +457,7 @@ select coalesce(sum(i.quantity), 0) as quantity
 
         $states = $em->getRepository('AppBundle:State')->findAll();
 
-        if($user->hasRole('ROLE_DISTRIBUTOR'))
-            $user_retailers = $user->getRetailers();
-        else if($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SALES_REP') || $user->hasRole('ROLE_SALES_MANAGER'))
-            $user_retailers = $em->getRepository('AppBundle:User')->findUsersByChannel($channel);
-        else
-            $user_retailers = null;
+        $user_retailers = $em->getRepository('AppBundle:User')->findUsersForUser($this->getUser());
 
         $order_variants = $order_pop = array();
 
@@ -496,6 +492,40 @@ select coalesce(sum(i.quantity), 0) as quantity
             'num_items' => $order->getNumItems(),
             'total' => $order->getTotal()
         ));
+    }
+
+
+    /**
+     * @Route("/delete/{id_channel}/{id_order}", name="order_products_delete")
+     */
+    public function deleteOrderAction($id_channel, $id_order)
+    {
+        try{
+            $em = $this->getDoctrine()->getManager();
+
+            $channel = $em->getRepository("InventoryBundle:Channel")->find($id_channel);
+            $order = $em->getRepository("OrderBundle:Orders")->find($id_order);
+
+            if ( !$this->getUser()->hasRole('ROLE_ADMIN') && ($order->getSubmittedForUser() != $this->getUser()) ) {
+                $this->addFlash('error', 'You do not have permission.' );
+                return $this->redirectToRoute('my_orders_index');
+            }
+
+            if ( $order->getStatus()->getName() != 'Draft' ) {
+                $this->addFlash('error', 'You cannot delete an order that is not in Draft status.' );
+                return $this->redirectToRoute('my_orders_index');
+            }
+
+            $em->remove($order);
+
+            $em->flush();
+            $this->addFlash('notice', 'Order Deleted Successfully');
+            return $this->redirectToRoute('my_orders_index');
+        }catch(\Exception $e){
+            $this->addFlash('error', 'Problem: ' . $e );
+            return $this->redirectToRoute('my_orders_index');
+        }
+
     }
 
 }

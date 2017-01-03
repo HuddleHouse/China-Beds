@@ -47,6 +47,7 @@
                 self.warehouseChange   = warehouseChange;
                 self.remove             = remove;
                 self.save = save;
+                self.cartTotal = cartTotal;
                 self.cart = [];
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -64,6 +65,21 @@
                 self.receiving_warehouse = {};
 
                 function warehouseChange(type) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_get_warehouse_products') }}",
+                        dataType: 'json',
+                        data: {warehouse_id: $('#departing-warehouse').val()},
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                self.repos = data.map( function (repo) {
+                                    repo.value = repo.name.toLowerCase();
+                                    return repo;
+                                });
+                            });
+                        }
+                    });
+
                     updateCart(type)
                 }
 
@@ -88,10 +104,11 @@
                                 data: {product_variant_id: value.id, warehouse_id: warehouse_id},
                                 success: function (data) {
                                     $scope.$apply(function () {
-                                        if(type === 'departing')
+                                        if(type === 'departing') {
                                             self.cart[key].departing_warehouse_quantity = parseInt(data, 10) - parseInt(self.cart[key].quantity, 10);
-                                        else if(type === 'receiving')
+                                        }else if(type === 'receiving') {
                                             self.cart[key].receiving_warehouse_quantity = parseInt(data, 10) + parseInt(self.cart[key].quantity, 10);
+                                        }
                                     });
                                 }
                             });
@@ -162,13 +179,25 @@
                 }
 
                 function updateCartItem(newVal, oldVal, index) {
+                    var newVal = parseInt(newVal);
+                    var newVal = isNaN(newVal) ? 0 : newVal;
+                    var oldVal = parseInt(oldVal);
+                    var oldVal = isNaN(oldVal) ? 0 : oldVal;
+
                     var total = 0;
-                    self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity,10) - parseInt(newVal - oldVal,10);
-                    self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity,10) + parseInt(newVal - oldVal,10);
+
+                    self.cart[index].departing_warehouse_quantity = parseInt(self.cart[index].departing_warehouse_quantity, 10) - parseInt(newVal - oldVal, 10);
+                    self.cart[index].receiving_warehouse_quantity = parseInt(self.cart[index].receiving_warehouse_quantity, 10) + parseInt(newVal - oldVal, 10);
+                }
+
+                function cartTotal() {
+                    var total = 0;
                     angular.forEach(self.cart, function(value, key) {
+
                         total += value.quantity;
                     });
                     self.cart_total = total;
+                    return total;
                 }
 
                 function save(draft){
@@ -306,7 +335,7 @@
                         <thead>
                         <tr>
                             <th class="mdl-data-table__cell--non-numeric">Item</th>
-                            <th class="table-name" style="width: 100px;">Quantity</th>
+                            <th class="table-name" style="width: 100px;">Qty to Transfer</th>
                             <th class="table-name" style="width: 100px;">Dep Warehouse Inv</th>
                             <th class="table-name" style="width: 100px;">Rec Warehouse Inv</th>
                             <th style="width: 50px;"></th>
@@ -321,10 +350,10 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" max="{{item.warehouse_quantity}}" ng-change="ctrl.updateCartItem(item.quantity, '{{item.quantity || 0}}', $index)" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
-                                <input ng-model="item.departing_warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
+                                <input ng-model="item.departing_warehouse_quantity" min="0" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.receiving_warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
@@ -359,10 +388,6 @@
                                         <span class="item-metastat">
                                             <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
                                         </span>
-                                        <span class="item-metastat">
-                                           <strong>{{item.total_quantity}}</strong> total quantity
-                                        </span>
-
                                      </span>
                                 </md-item-template>
                                 <md-not-found>
@@ -400,7 +425,7 @@
                                 <th style="width:50%">Total Items:</th>
                                 <td>
                                     {% verbatim %}
-                                <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
+                                <input value="{{ctrl.cartTotal()}}" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
                                 {% endverbatim %}
                                 </td>
                             </tr>

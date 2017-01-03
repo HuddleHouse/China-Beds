@@ -1,0 +1,39 @@
+version: '2'
+services:
+  nginx:
+    build: docker/nginx
+    ports:
+     - "80:80"
+    volumes:
+     - ./:/var/www/html
+    networks:
+     - appnet
+  php:
+    build: docker/php
+    volumes:
+     - ./:/var/www/html
+    networks:
+     - appnet
+  redis:
+    image: redis:alpine
+    networks:
+     - appnet
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: r00t
+      MYSQL_DATABASE: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: appr00t
+    volumes:
+     - data:/var/lib/mysql
+    networks:
+     - appnet
+    ports:
+     - "3306:3306"
+networks:
+  appnet:
+    driver: "bridge"
+volumes:
+  data:
+    driver: "local"

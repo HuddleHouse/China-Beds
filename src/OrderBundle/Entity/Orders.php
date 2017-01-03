@@ -113,6 +113,12 @@ class Orders
      * @ORM\Column(name="is_shippable", type="boolean")
      */
     private $isShippable = false;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="admin_approved", type="boolean")
+     */
+    private $adminApproved = false;
 
     /**
      * @var string
@@ -192,7 +198,7 @@ class Orders
     private $shipEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersProductVariant", mappedBy="order", cascade={"persist", "remove"})
      */
     private $product_variants;
 
@@ -202,12 +208,12 @@ class Orders
 //    private $shipping_labels;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersPopItem", mappedBy="order", cascade={"persist", "remove"})
      */
     private $pop_items;
 
     /**
-     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OrderBundle\Entity\OrdersManualItem", mappedBy="order", cascade={"persist", "remove"})
      */
     private $manual_items;
 
@@ -322,7 +328,7 @@ class Orders
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
             if(isset($info['pick_up_date']))
-                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+                $this->pickUpDate = $this->fixWindowsDate($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
@@ -360,7 +366,7 @@ class Orders
             if(isset($info['po']))
                 $this->orderNumber = $info['po'];
             if(isset($info['pick_up_date']))
-                $this->pickUpDate = new \DateTime($info['pick_up_date']);
+                $this->pickUpDate = $this->fixWindowsDate($info['pick_up_date']);
             if(isset($info['agent_name']))
                 $this->pickUpAgent = $info['agent_name'];
 
@@ -539,7 +545,7 @@ class Orders
      */
     public function getEstimatedShipping()
     {
-        return $this->estimatedShipping;
+        return $this->estimatedShipping / 100;
     }
 
     /**
@@ -547,7 +553,7 @@ class Orders
      */
     public function setEstimatedShipping($estimatedShipping)
     {
-        $this->estimatedShipping = $estimatedShipping;
+        $this->estimatedShipping = $estimatedShipping * 100;
     }
 
     /**
@@ -1070,6 +1076,7 @@ class Orders
      */
     public function addProductVariant(\OrderBundle\Entity\OrdersProductVariant $productVariant)
     {
+        $productVariant->setOrder($this);
         $this->product_variants[] = $productVariant;
 
         return $this;
@@ -1526,5 +1533,30 @@ class Orders
     public function getIsShippable()
     {
         return $this->isShippable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminApproved()
+    {
+        return $this->adminApproved;
+    }
+
+    /**
+     * @param bool $adminApproved
+     */
+    public function setAdminApproved($adminApproved)
+    {
+        $this->adminApproved = $adminApproved;
+    }
+
+    private function fixWindowsDate($input) {
+        try {
+            return new \DateTime($input);
+        } catch(\Exception $e) {
+            return \DateTime::createFromFormat('D M d Y H:i:s e+', $input); // Thu Nov 15 2012 00:00:00 GMT-0700 (Mountain Standard Time)
+
+        }
     }
 }

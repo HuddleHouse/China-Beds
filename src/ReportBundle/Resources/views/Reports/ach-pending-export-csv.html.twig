@@ -1,0 +1,4 @@
+Amount Requested,Date Created,Display Name,Routing Number,Account Number
+{%for ledger in ledgerEntities %}
+    {{ledger.amountRequested}},{{ledger.dateCreated|date('Y-m-d')}},{{ledger.submittedForUser.displayName}},{{ledger.submittedForUser.achRoutingNumber}},{{ledger.submittedForUser.achAccountNumber}}
+{%endfor%}

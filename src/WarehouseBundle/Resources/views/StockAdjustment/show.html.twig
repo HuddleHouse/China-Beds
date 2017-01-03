@@ -44,7 +44,7 @@
                 self.cart_items = [];
                 self.selectedItem = [];
                 self.searchText = '';
-                self.message = '';
+                self.message = '{{ stockAdjustment.message }}';
                 self.cart_total = {{ cart.total | json_encode | raw}};
                 self.date = new Date("{{ stockAdjustment.date |date("Y,m,d") }}");
                 self.setActive = setActive;
@@ -309,9 +309,11 @@
                     <label for="reason">Reason</label>
                     <select class="form-control" id="reason" ng-disabled="ctrl.isEdit == 0" style="width: 100%;margin: 24px 0 16px;" required>
                         <option value="" disabled selected>Reason</option>
-                        <option value="Damanged">Damaged</option>
+                        <option value="Damaged">Damaged</option>
                         <option value="Cycle Count Adj">Cycle Count Adj</option>
                         <option value="Receiving Error">Receiving Error</option>
+                        <option value="Manual Adjustment">Manual Adjustment</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
             </div>
@@ -336,7 +338,7 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" ng-model="item.quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner ng-disabled="ctrl.isEdit == 0" class="form-control number_select">
+                                 <input id="{{item.id}}" ng-model="item.quantity" type="number"  ng-change="ctrl.updateCartItem(item.quantity, {{item.quantity}}, $index)" jq-spinner ng-disabled="ctrl.isEdit == 0" class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
@@ -397,7 +399,7 @@
                 <div class="col-md-9">
                     <p class="text-muted well well-sm no-shadow" >
                         <label for="message">Comments</label>
-                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;"></textarea>
+                        <textarea type="text" rows="1" id="message" ng-model="ctrl.message" class="form-control" style="height: 100px;" disabled></textarea>
                     </p>
 
                 </div>

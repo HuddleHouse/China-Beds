@@ -14,6 +14,10 @@
 {% block footer %}
     <script>
         $(document).ready(function () {
+        
+	    $('#edit_user_settings_ach_routing_number').attr('type', 'password');
+	    $('#edit_user_settings_ach_account_number').attr('type', 'password');
+	    
             $('#part-table').DataTable({
 		"iDisplayLength": 50, responsive: true, "fnDrawCallback": function(oSettings) {if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {$(oSettings.nTableWrapper).find('.dataTables_paginate').hide();}} });
 	    });

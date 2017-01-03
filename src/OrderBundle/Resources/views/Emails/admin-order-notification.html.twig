@@ -204,7 +204,7 @@
                                                                                     <td width="211" valign="top"
                                                                                         class="header2TD" align="left"
                                                                                         style="color: #425065;font-family: sans-serif;font-size: 14px;text-align: left;line-height: 19px;font-weight: lighter;">
-                                                                                        Shipping
+                                                                                        {% if order.ispickup %}Pick Up{% else %}Shipping{% endif %}
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -212,7 +212,7 @@
                                                                                     <td width="179" valign="top"
                                                                                         class="RegularText4TD"
                                                                                         align="left"
-                                                                                        style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: bold;text-align: left;line-height: 23px;">{{ order.shipname }}</td>
+                                                                                        style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: bold;text-align: left;line-height: 23px;">{{ order.ispickup ? order.pickupagent : order.shipname }}</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td colspan="3" height="10"
@@ -224,18 +224,22 @@
                                                                                     <td colspan="3"
                                                                                         class="RegularTextTD"
                                                                                         style="color: #727e8d;font-family: sans-serif;font-size: 13px;font-weight: lighter;text-align: left;line-height: 23px;">
-                                                                                        {{ order.shipname }}<br>
-                                                                                        {{ order.shipaddress }}<br>
-                                                                                        {% if order.shipaddress2 %}
-                                                                                            {{ order.shipaddress2 }}<br>
+                                                                                        {% if order.ispickup %}
+                                                                                            Pickup Date: {{ order.pickupdate|date("m/d/Y") }}
+                                                                                        {% else %}
+                                                                                            {{ order.shipname }}<br>
+                                                                                            {{ order.shipaddress }}<br>
+                                                                                            {% if order.shipaddress2 %}
+                                                                                                {{ order.shipaddress2 }}<br>
+                                                                                            {% endif %}
+                                                                                            {{ order.shipcity }}
+                                                                                            , {{ order.state.name }} {{ order.shipzip }}
+                                                                                            <br>
+                                                                                            {{ order.shipphone }}<br>
+                                                                                            <a href="mailto:{{ order.shipemail }}"
+                                                                                               target="_blank"
+                                                                                               style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ order.shipemail }}</a><br>
                                                                                         {% endif %}
-                                                                                        {{ order.shipcity }}
-                                                                                        , {{ order.state.name }} {{ order.shipzip }}
-                                                                                        <br>
-                                                                                        {{ order.shipphone }}<br>
-                                                                                        <a href="mailto:{{ order.shipemail }}"
-                                                                                           target="_blank"
-                                                                                           style="text-decoration: none;color: #67bffd;font-weight: bold;">{{ order.shipemail }}</a><br>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -811,6 +815,184 @@
                                                             </tr>
                                                                 {% endfor %}
                                                         {% endfor %}
+                                                        {% for item in order.popitems %}
+                                                            <tr>
+                                                                <th width="" class="stack2"
+                                                                    style="margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0" class="table60032"
+                                                                           style="border-bottom-color:#dde5f1;">
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- DESCRIPTION -->
+                                                                            <td class="header2TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;text-align: left;line-height: 19px;font-weight: lighter;">{{ item.popitem.name }}</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                                <th width="100" class="stack3"
+                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0" class="table60033"
+                                                                           style="border-bottom-color:#dde5f1;">
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- PRICE -->
+                                                                            <td class="RegularText5TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
+                                                                                ${{ item.price|number_format(2,'.',',') }}</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                                <th width="100" class="stack3"
+                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0"
+                                                                           class="table60033">
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- QUANTITY -->
+                                                                            <td class="RegularText5TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">{{ item.quantity }}</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                                <th width="100" class="stack3"
+                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0"
+                                                                           class="table60033">
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- TOTAL -->
+                                                                            <td class="RegularText5TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
+                                                                                ${{ (item.price * item.quantity)|number_format(2, '.', ',') }}</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                            </tr>
+                                                            {% for warehouse in item.warehouseinfo %}
+                                                            <tr>
+                                                                <th width="" colspan="2" class="stack2"
+                                                                    style="margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0" class="table60032"
+                                                                           style="border-bottom-color:#dde5f1;">
+                                                                        <tr>
+                                                                            <td colspan="3" height="10"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- DESCRIPTION -->
+                                                                            <td class="header2TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 11px;text-align: left;line-height: 15px;font-weight: lighter;">{{ warehouse.warehouse.name }}</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                                <th width="100" class="stack3"
+                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0"
+                                                                           class="table60033">
+                                                                        <tr>
+                                                                            <td colspan="3" height="10"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- QUANTITY -->
+                                                                            <td class="RegularText5TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 11px;font-weight: lighter;text-align: center;line-height: 25px;">{{ warehouse.quantity }}</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                                <th width="100" class="stack3"
+                                                                    style="border-left:1px solid #dde5f1;margin:0; padding:0;">
+                                                                    <table width="100%" align="center" cellpadding="0"
+                                                                           cellspacing="0" border="0"
+                                                                           class="table60033">
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30" class="wz2"></td>
+                                                                            <!-- TOTAL -->
+                                                                            <td class="RegularText5TD"
+                                                                                style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">&nbsp;</td>
+                                                                            <td width="30" class="wz2"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" height="20"
+                                                                                style="font-size:0;line-height:0;"
+                                                                                class="va2">&nbsp;</td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </th>
+                                                            </tr>
+                                                                {% endfor %}
+                                                        {% endfor %}
                                                     </table>
                                                 </td>
                                             </tr>
@@ -1056,7 +1238,8 @@
                                                                             <td class="RegularText5TD"
                                                                                 style="color: #425065;font-family: sans-serif;font-size: 14px;font-weight: lighter;text-align: center;line-height: 23px;">
                                                                                 {% if payment.method == 'cc' %}CREDIT CARD {{ payment.detail }} - auth {{ payment.gatewayauthcode }}{% endif %}
-                                                                                {% if payment.method == 'ledger' %}LEDGER{% endif %}
+                                                                                {% if payment.method == 'ach' %}ACH{% endif %}
+                                                                                {% if payment.method == 'credit' %}CREDIT{% endif %}
                                                                                 {% if payment.method == '' %}PENDING - NO PAYMENT{% endif %}
                                                                             </td>
                                                                             <td width="30" class="wz2"></td>

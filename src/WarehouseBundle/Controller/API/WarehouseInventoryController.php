@@ -15,6 +15,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class WarehouseInventoryController extends Controller
 {
+
+    /**
+     * @Route("/api_get_warehouse_products", name="api_get_warehouse_products")
+     */
+    public function getProductsForWarehouse(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $warehouse_id = $request->request->get('warehouse_id');
+        $warehouse = $em->getRepository('WarehouseBundle:Warehouse')->find($warehouse_id);
+
+        return new JsonResponse($em->getRepository('InventoryBundle:Product')->getAllProductsWithQuantityArray($warehouse));
+    }
+
     /**
      * @Route("/api_add_warehouse_inventory", name="api_add_warehouse_inventory")
      */

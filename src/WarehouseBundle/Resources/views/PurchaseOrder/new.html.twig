@@ -53,6 +53,8 @@
                 self.save = save;
                 self.add = add;
                 self.warehouseChange = warehouseChange;
+                self.cartTotal = cartTotal;
+
                 self.cart = [];
                 self.cart_items = [];
                 self.selectedItem = [];
@@ -73,6 +75,20 @@
                 }
 
                 function warehouseChange() {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ path('api_get_warehouse_products') }}",
+                        dataType: 'json',
+                        data: {warehouse_id: $('#warehouse').val()},
+                        success: function (data) {
+                            $scope.$apply(function () {
+                                self.repos = data.map( function (repo) {
+                                    repo.value = repo.name.toLowerCase();
+                                    return repo;
+                                });
+                            });
+                        }
+                    });
                     updateCart()
                 }
 
@@ -153,10 +169,16 @@
                 }
 
                 function updateCartItem(newVal, oldVal, index, id) {
+                    var newVal = parseInt(newVal);
+                    var newVal = isNaN(newVal) ? 0 : newVal;
+                    var oldVal = parseInt(oldVal);
+                    var oldVal = isNaN(oldVal) ? 0 : oldVal;
+
                     if(newVal == null) {
                         $('#'+id).val('');
                         return;
                     }
+
                     if(newVal < 0) {
                         newVal = 0;
                         self.cart[index].order_quantity = 0;
@@ -165,11 +187,17 @@
                     var total = 0;
                     self.cart[index].warehouse_quantity =  parseInt(self.cart[index].warehouse_quantity,10) + parseInt(newVal - oldVal,10);
                     self.cart[index].total_quantity = parseInt(self.cart[index].total_quantity,10) + parseInt(newVal - oldVal,10);
+                }
+
+
+                function cartTotal() {
+                    var total = 0;
                     angular.forEach(self.cart, function(value, key) {
 
-                        total += value.ordered_quantity;
+                        total += value.quantity;
                     });
                     self.cart_total = total;
+                    return total;
                 }
 
                 function removeCartItem(index) {
@@ -346,7 +374,7 @@
                                 {{ item.name }}
                             </td>
                             <td class="table-form">
-                                 <input id="{{item.id}}" min="0" ng-model="item.ordered_quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.ordered_quantity, {{ item.ordered_quantity || 0 }}, $index, {{item.id}})" jq-spinner class="form-control number_select">
+                                 <input id="{{item.id}}" min="0" ng-model="item.ordered_quantity" type="number" min="0" ng-change="ctrl.updateCartItem(item.ordered_quantity, '{{ item.ordered_quantity || 0 }}', $index, {{item.id}})" jq-spinner class="form-control number_select">
                             </td>
                             <td class="table-form" style="text-align: center;">
                                 <input ng-model="item.warehouse_quantity" class="form-control" style="border-bottom: none; width: 50%; margin-left: auto; margin-right: auto;" disabled>
@@ -387,7 +415,7 @@
                                             <!--<strong>{{item.warehouse_quantity}}</strong> warehouse quantity-->
                                         <!--</span>-->
                                         <span class="item-metastat">
-                                           <strong>{{item.total_quantity}}</strong> total quantity
+                                           <strong>{{item.warehouse_quantity}}</strong> warehouse quantity
                                         </span>
 
                                      </span>
@@ -427,7 +455,7 @@
                                 <th style="width:50%">Total Items:</th>
                                 <td>
                                 {% verbatim %}
-                                <input ng-model="ctrl.cart_total" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
+                                <input value="{{ctrl.cartTotal()}}" class="form-control" style="border-bottom: none; font-size: xx-large; font-weight: 800;" disabled>
                                 {% endverbatim %}
                                 </td>
                             </tr>

@@ -124,7 +124,7 @@
 
         app.filter('tel', function () {
             return function (tel) {
-                console.log(tel);
+//                console.log(tel);
                 if (!tel) { return ''; }
 
                 var value = tel.toString().trim().replace(/^\+/, '');
@@ -165,6 +165,9 @@
         });
 
         app.controller('myCtrl', ['$scope', function($scope) {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
             $scope.is_distributor = {% if is_granted('ROLE_DISTRIBUTOR') %}1{% else %}0{% endif %};
             $scope.is_retailer = {% if is_granted('ROLE_RETAILER') %}1{% else %}0{% endif %};
             $scope.is_admin = {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_REP') or is_granted('ROLE_SALES_MANAGER') %}1{% else %}0{% endif %};
@@ -180,7 +183,7 @@
             $scope.pop_order_quan = [];
             $scope.cart = {'variant': [], 'pop': [], 'customItems': []};
             $scope.form_info = {};
-            $scope.form_info.pick_up_date = new Date();
+            $scope.form_info.pick_up_date = tomorrow;
             $scope.form_info.pick_up = false;
             $scope.form_info.ship = false;
             $scope.hasError = [];
@@ -208,7 +211,7 @@
             {% if is_edit == 1 %}
                 $scope.order_pop = {{ order_pop | json_encode | raw}};
                 $scope.order_variants = {{ order_variants | json_encode | raw}};
-                console.log($scope.order);
+//                console.log($scope.order);
 
                 $( document ).ready(function() {
                     $scope.$apply(function () {
@@ -229,7 +232,7 @@
 
                         $('#dist_ship').val({{ order.submittedForUser.id }});
                         var is_pickup = '{{ order.isPickUp }}';
-                        console.log(is_pickup);
+//                        console.log(is_pickup);
                         if (is_pickup == 1) {
                             $('#ship').hide();
                             $scope.form_info['ship'] = false;
@@ -296,7 +299,7 @@
                         $scope.cart[type][variantId].quantity = $scope.product_variant_order_quan[variantId];
                     if(type == 'pop')
                         $scope.cart[type][variantId].quantity = $scope.pop_order_quan[variantId];
-                    console.log('cost: '+ JSON.stringify($scope.cart));
+//                    console.log('cost: '+ JSON.stringify($scope.cart));
 
                 }
                 else {
@@ -403,7 +406,7 @@
 
             $scope.submitCart = function () {
                 var errors = $scope.validate();
-                console.log(errors);
+//                console.log(errors);
                 $('#submit-button').prop('disabled', true);
                 $('#submit-button').addClass('button-error');
                 $('.fa.fa-circle').addClass('fa-circle-thin');
@@ -445,7 +448,16 @@
                             order_id: {% if order is defined %}{{ order.id }}{% else %}0{% endif %}
                         },
                         success: function (data) {
-                                window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data });
+                            if ( data.success ) {
+                                window.location.href = Routing.generate('order_products_review', {id_channel: {{ channel.id}}, id_order: data.order_id });
+                            } else {
+                                hideDimmer();
+                                showErrorModal(data.message);
+                            }
+
+                        },
+                        error: function(data) {
+                            console.log(data);
                         }
                     });
                 }

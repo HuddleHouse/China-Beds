@@ -7,7 +7,12 @@
 {% endblock page_title %}
 
 {% block page_name %}
-    <a href="{{ path('stocktransfer_index') }}">< Back to Stock Transfers</a>
+    {% if warehouse_id %}
+        <a href="{{ path('warehouse_show', {'id' : warehouse_id}) }}">< Back to Warehouse</a>
+    {% else %}
+        <a href="{{ path('stocktransfer_index') }}">< Back to Stock Transfers</a>
+    {% endif %}
+
 {% endblock page_name %}
 
 {% block actions %}

@@ -76,7 +76,7 @@ class ReportController extends Controller
         //array of string to go in the table headers
         $report['headers'] = array(
             'Order ID',
-            'Order Number',
+            'PO #',
             'Pickup Date',
             'Ship Name',
             'User Name',
@@ -118,7 +118,7 @@ class ReportController extends Controller
 
         $report['headers'] = array(
             'Order ID',
-            'Order Number',
+            'PO #',
             'Pickup Date',
             'Ship Name',
             'User Name',
@@ -133,7 +133,9 @@ class ReportController extends Controller
         $year = $request->get('year') ? $request->get('year') : date('Y');
 
         $d->setDate($year, $month, 01);
+        $d->setTime(0, 0, 0);
         $d2->setDate($year, $month, date('t'));
+        $d2->setTime(23, 59, 59);
 
         $em = $this->getDoctrine()->getManager();
 
@@ -156,7 +158,7 @@ class ReportController extends Controller
             $report['total'] += $order->getSubtotal();
         }
 
-        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y'), 'month'=>$month,'year'=>$year ));
+        return $this->render('ReportBundle:Reports:month.html.twig', array('report' => $report, 'date' => date('Y'), 'month'=>$month,'year'=>$year, 'channel' => $this->getUser()->getActiveChannel() ));
     }
 
     /**
@@ -273,6 +275,8 @@ class ReportController extends Controller
      * @Method({"GET", "POST"})
      */
     public function priceListAction(Request $request){
+        $users = $this->getDoctrine()->getManager()->getRepository('AppBundle:User')->findBy([], ['company_name' => 'ASC']);
+
         if($request->get('uid') != null) {
             $user = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->find($request->get('uid'));
             $report = array();
@@ -282,10 +286,11 @@ class ReportController extends Controller
                 'Price'
             );
             $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('InventoryBundle:Channel')->getProductArrayForChannel($this->getUser()->getActiveChannel(), $user);
-            return $this->render('ReportBundle:Reports:price-list.html.twig', array('report' => $report, 'user' => $user));
+            return $this->render('ReportBundle:Reports:price-list.html.twig', array('report' => $report, 'user' => $user, 'users' => $users, 'user_id' => $request->get('uid')));
         }
 
-        return $this->render('ReportBundle:Reports:price-list.html.twig', array());
+
+        return $this->render('ReportBundle:Reports:price-list.html.twig',['users' => $users, 'user_id' => $request->get('uid')]);
     }
 
     /**
@@ -310,5 +315,69 @@ class ReportController extends Controller
         );
         $report['data'] = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:User')->findUsersByChannel($this->getUser()->getActiveChannel());
         return $this->render('ReportBundle:Reports:contact-list.html.twig', array('report' => $report));
+    }
+    
+    /**
+     * Description
+     *
+     * @Route("/ach/pending", name="ach_pending")
+     * @Method({"GET", "POST"})
+     */
+    public function achAction(Request $request) {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+	
+	if ($request->getMethod()=="POST") {
+		$ledgers = $request->get('ledger');
+		
+		if (count($ledgers)>0) {
+			foreach ($ledgers as $ledgerId) {
+				$ledgerEntity = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->find($ledgerId);
+				$ledgerEntity->setAchRequested(1);
+				$em->persist($ledgerEntity);
+				$em->flush();
+			}
+			
+			$this->addFlash('notice', 'Ach requested successfully');
+		} else {
+			$this->addFlash('error', 'Select any record to update');
+		}
+		
+		return $this->redirect($this->generateUrl('ach_pending'));
+	}
+	
+	
+	$ledgerEntities = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->findBy(array('type'=>'Payment', 'achRequested'=>0));
+	
+	
+	return $this->render('ReportBundle:Reports:ach-pending.html.twig', array('ledgerEntities' => $ledgerEntities));
+        
+    
+    }
+    
+    /**
+     * Description
+     *
+     * @Route("/ach/pending/export/csv", name="ach_pending_export_csv")
+     * @Method({"GET", "POST"})
+     */
+    public function achPendingExportCsvAction(Request $request) {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+	$ledgerEntities = $this->getDoctrine()->getEntityManager()->getRepository('OrderBundle:Ledger')->findBy(array('type'=>'Payment', 'achRequested'=>0));
+	
+	$fileName = 'pending-ach'.date('Y-m-d_H_i').'.csv';
+	$response = $this->render('ReportBundle:Reports:ach-pending-export-csv.html.twig', array('ledgerEntities' => $ledgerEntities));
+
+	$response->headers->set('Content-Type', 'text/csv');
+	
+	$response->headers->set('Content-Disposition', "attachment; filename=$fileName");
+
+	return $response;
+        
+        exit();
+    
     }
 }

@@ -24,8 +24,9 @@ class Ledger
      ************************************
      ************************************/
 
-    const TYPE_LEDGER   = 'Ledger';   //default
-    const TYPE_CREDIT   = 'Credit';   //default
+    const TYPE_ACH      = 'ACH';
+    const TYPE_LEDGER   = 'Ledger';
+    const TYPE_CREDIT   = 'Credit';
     const TYPE_PAYMENT  = 'Payment';
     const TYPE_REBATE   = 'Rebate';
     const TYPE_TRANSFER = 'Transfer';
@@ -387,16 +388,16 @@ class Ledger
      */
     public function setType($type)
     {
-        $types = array(
-            self::TYPE_CLAIM,
-            self::TYPE_CREDIT,
-            self::TYPE_REBATE,
-            self::TYPE_TRANSFER,
-            self::TYPE_ORDER,
-            self::TYPE_PAYMENT
-        );
-        if (!in_array($type, $types))
-            throw new \InvalidArgumentException("Invalid type. Values must be one of the following: " . implode(', ', $types));
+//        $types = array(
+//            self::TYPE_CLAIM,
+//            self::TYPE_CREDIT,
+//            self::TYPE_REBATE,
+//            self::TYPE_TRANSFER,
+//            self::TYPE_ORDER,
+//            self::TYPE_PAYMENT
+//        );
+//        if (!in_array($type, $types))
+//            throw new \InvalidArgumentException("Invalid type. Values must be one of the following: " . implode(', ', $types));
 
         $this->type = $type;
     }
@@ -414,7 +415,6 @@ class Ledger
      */
     public function setWarrantyClaim($warrantyClaim)
     {
-        $this->setType(self::TYPE_CLAIM);
         $this->warrantyClaim = $warrantyClaim;
     }
 
@@ -431,7 +431,6 @@ class Ledger
      */
     public function setOrder($order)
     {
-        $this->setType(self::TYPE_ORDER);
         $this->order = $order;
     }
 
@@ -448,7 +447,6 @@ class Ledger
      */
     public function setRebateSubmission($rebateSubmission)
     {
-        $this->setType(self::TYPE_REBATE);
         $this->rebateSubmission = $rebateSubmission;
     }
 

@@ -83,30 +83,29 @@
     }
 </style>
     <div class="row">
-    <div class="col-md-12">
-        <center><h2>{{ warehouse.name }}</h2></center>
-    </div>
+	    <div class="col-md-12">
+		<center><h2>{{ warehouse.name }}</h2></center>
+	    </div>
     </div>
     <div class="row" style="margin-bottom: 25px;">
         <div class="col-md-12">
             <center>
                 {% if isGrantedRoute(app.user, 'warehouse_new_purchase_order') %}
-                <a href="{{ path('warehouse_new_purchase_order', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Purchase Order</a>
+			<a href="{{ path('warehouse_new_purchase_order', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Purchase Order</a>
                 {% endif %}
                 {% if isGrantedRoute(app.user, 'warehouse_new_stock_adjustment') %}
-                <a href="{{ path('warehouse_new_stock_adjustment', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Adjustment</a>
+			<a href="{{ path('warehouse_new_stock_adjustment', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Adjustment</a>
                 {% endif %}
                 {% if isGrantedRoute(app.user, 'warehouse_new_stock_transfer') %}
-                <a href="{{ path('warehouse_new_stock_transfer', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Transfer</a>
+			<a href="{{ path('warehouse_new_stock_transfer', { 'id': warehouse.id }) }}" class="btn btn-raised btn-primary">New Transfer</a>
                 {% endif %}
                 {% if isGrantedRoute(app.user, 'warehouse_edit') %}
-                <a href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}" class="btn btn-raised btn-warning">Edit Warehouse Info</a>
+			<a href="{{ path('warehouse_edit', { 'id': warehouse.id }) }}" class="btn btn-raised btn-warning">Edit Warehouse Info</a>
                 {% endif %}
             </center>
         </div>
     </div>
-    <div ng-app="myApp" ng-controller="myCtrl">
-        <div class="nav-tabs-custom" style="    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);">
+        <div class="nav-tabs-custom" style="box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#all_active" data-toggle="tab" aria-expanded="true">Active</a></li>
                 <li class=""><a href="#all" data-toggle="tab" aria-expanded="false">All</a></li>
@@ -146,5 +145,5 @@
             </div>
             <!-- /.tab-content -->
         </div>
-    </div>
+    
 {% endblock %}

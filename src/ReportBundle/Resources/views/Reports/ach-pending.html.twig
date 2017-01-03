@@ -1,0 +1,115 @@
+{% extends ":default:layout.html.twig" %}
+
+{% block title %}{{ report.title | default('Ach Pending List') }}{% endblock %}
+{% block page_title %}
+    {{ report.title | default('Ach Pending') }}
+{% endblock page_title %}
+
+{% block page_name %}
+{% endblock page_name %}
+
+{% block actions %}
+{% endblock actions %}
+
+{% block footer %}
+    <script>
+        $(document).ready(function () {
+		var table = $('#part-table').DataTable({
+			"iDisplayLength": 50, 
+			responsive: true, 
+			"fnDrawCallback": function(oSettings) {
+				  if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+					  $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+				  }
+			}, 
+			order: [[ 0, "desc" ]],
+			buttons: [
+			{
+			      text: 'My button',
+			      action: function ( e, dt, node, config ) {
+				  alert( 'Button activated' );
+			      }
+			  }
+			]
+		});
+		
+		
+		 $('body').on("change", "#selectAll", function (ev) {
+			if ($(this).prop('checked')) {
+				$('.ledger-checkbox').each(function( index ) {
+					$(this).attr("checked", "checked");
+				});
+			} else {
+				$('.ledger-checkbox').each(function( index ) {
+					$(this).attr("checked", false);
+				});
+			}
+		});
+		
+		$('body').on("change", ".ledger-checkbox", function (ev) {
+			if (!$(this).prop('checked')) {
+				$('#selectAll').attr("checked", false);
+			}
+		});
+        });
+    </script>
+{% endblock footer %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+	   
+            <div class="table">
+		<form action="" method="POST">
+			<div  style="padding:0px 20px 20px 0px; width:100%; clear:both; float:left;">
+				<div class="pull-left"><button class="btn btn-success btn-raised">Complete ACH Request for selected</button></div>
+				<div class="pull-right"><a href="{{path('ach_pending_export_csv')}}">Export Csv</a></div>
+			</div>
+			<table id="part-table" class="table table-striped table-hover table-bordered no-footer" cellspacing="0" width="100%">
+			    <thead>
+			    <tr>
+			      <th><input type="checkbox" id="selectAll"></th>
+			      <th>
+				      Amount Requested
+			      </th>
+			      <th>
+				      Date Created
+			      </th>
+			      <th>
+				      Display Name
+			      </th>
+			      <th>
+					Routing Number
+			      </th>
+			      <th>
+					Account Number
+			      </th>
+			    </tr>
+			    </thead>
+			    <tbody>
+					{%for ledger in ledgerEntities %}
+						<tr  data-id="{{ledger.id}}">
+							<td><input name="ledger[]" type="checkbox" class="ledger-checkbox" value="{{ledger.id}}"></td>
+							<td>
+								{{ledger.amountRequested}}
+							</td>
+							<td>
+								{{ledger.dateCreated|date("m/d/Y h:i A")}}
+							</td>
+							<td>
+								{{ledger.submittedForUser.displayName}}
+							</td>
+							<td>
+								  {{ledger.submittedForUser.achRoutingNumber}}
+							</td>
+							<td>
+								  {{ledger.submittedForUser.achAccountNumber}}
+							</td>
+						</tr>
+					{%endfor%}
+			    </tbody>
+			</table>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

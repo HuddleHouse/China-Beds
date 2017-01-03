@@ -128,6 +128,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         foreach($warehouse->getInventory() as $item) {
             $inventory_data[] = array(
                 'id' => $item->getId(),
+                'sku' => $item->getProductVariant()->getSku(),
                 'name' => $item->getProductVariant()->getProduct()->getName().": ".$item->getProductVariant()->getName(),
                 'quantity' => $item->getQuantity(),
                 'po_quantity' => $this->getWarehouseInventoryForItemOnPurchaseOrder($warehouse, $item->getProductVariant())
@@ -222,7 +223,7 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
 
         $em = $this->getEntityManager();
         $orders = $em
-            ->createQuery("SELECT o, v, i FROM OrderBundle\Entity\Orders o JOIN o.product_variants v JOIN v.warehouse_info i WHERE o.id = :id")
+            ->createQuery("SELECT o, v, i FROM OrderBundle\Entity\Orders o JOIN o.product_variants v JOIN v.warehouse_info i WHERE o.id = :id GROUP BY i.warehouse")
             ->setParameter('id', $order)
             ->getResult();
 
@@ -235,5 +236,46 @@ class WarehouseRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $warehouses;
+    }
+
+    public function getWarehousesWithQuantityForVariantByUser($variant_id, $user_id, $total_quantity) {
+        $pdo = $this->getEntityManager()->getConnection();
+
+        $sql = <<<SQL
+select w.id warehouse_id, w.name, p.name, pv.name, wi.quantity, GeoDistDiff('mi', u.address_latitude, u.address_longitude, w.address_latitude, w.address_longitude) distance from warehouse_inventory wi
+left join warehouses w on (wi.warehouse_id = w.id)
+left join product_variant pv on (wi.product_variant_id = pv.id)
+left join product p on (pv.product_id = p.id)
+left join users u on (u.id = :user_id)
+where w.id in (select uw.warehouse_id from user_warehouses uw where uw.user_id = u.id)
+and pv.id = :variant_id
+order by distance asc
+SQL;
+
+        $results = [];
+        $quantity_left = $total_quantity;
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam('user_id', $user_id);
+        $stmt->bindParam('variant_id', $variant_id);
+        $stmt->execute();
+
+        while(($row = $stmt->fetch(\PDO::FETCH_ASSOC)) && $quantity_left > 0) {
+            if ( $row['quantity'] >= $quantity_left ) {
+                $quantity_fulfilled = $quantity_left;
+                $results[] = [
+                    'warehouse_id'  => $row['warehouse_id'],
+                    'quantity'      => $quantity_left
+                ];
+            } else {
+                $quantity_fulfilled = $row['quantity'];
+                $results[] = [
+                    'warehouse_id'  => $row['warehouse_id'],
+                    'quantity'      => $row['quantity']
+                ];
+            }
+            $quantity_left -= $quantity_fulfilled;
+        }
+
+        return $results;
     }
 }

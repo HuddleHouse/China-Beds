@@ -5,11 +5,11 @@
     Order #{{ order.orderId }}
 {% endblock page_title %}
 
-{#{% block page_name %}#}
-    {#<div class="">#}
-        {#<img src="/images/logo-{{ channel.id }}.png" style="max-width: 121px;">#}
-    {#</div>#}
-{#{% endblock page_name %}#}
+{% block page_name %}
+    {% if warehouse_id != 'none' %}
+        <a href="{{ path('warehouse_show', { 'id': warehouse_id }) }}">< Back to Warehouse</a>
+    {% endif %}
+{% endblock page_name %}
 
 {% block actions %}
 {% endblock actions %}
@@ -27,7 +27,9 @@
 
             $('#save-qty-btn').on('click', function(ev) {
                 ev.preventDefault();
-                alert('Saved Successfully');
+                $("#tracking-return").modal("show");
+                $("#tracking-return .modal-body p").empty();
+                $("#tracking-return .modal-body p").html('Order shipment quantities updated successfully.');
             });
         });
 
@@ -44,12 +46,14 @@
         }
 
         function removeTracking() {
+            showSpinner();
             var tracknum = $("#tracking-id").html();
             $.ajax({
                 type: "GET",
                 url: "{{ path('api-delete-tracking') }}",
                 data: {'track-id': tracknum},
                 success: function (data) {
+                    hideSpinner();
                     $("#tracking-return").modal("show");
                     $("#tracking-return .modal-body p").empty();
                     $("#tracking-return .modal-body p").html(data[1]);
@@ -182,7 +186,7 @@
             <!-- /.row -->
             <div class="row">
                 <div class="col-md-12">
-                    <a class="pull-right btn btn-success btn-raised" id="save-qty-btn">Confirm Order Shipment</a>
+                    <a class="pull-right btn btn-success btn-raised" id="save-qty-btn">Confirm Order {% if order.isPickUp %}Pickup{% else %}Shipment{% endif %}</a>
                 </div>
             </div>
             <hr>
@@ -195,7 +199,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 10%;">Qty</th>
-                                <th style="width: 10%;">Shipped Qty</th>
+                                <th style="width: 10%;">{% if order.isPickUp %}Shipped{% else %}Pickup{% endif %} Qty</th>
                                 <th>Product</th>
                                 {#<th style="width: 24%;">Subtotal</th>#}
                             </tr>
@@ -219,7 +223,9 @@
                                                 <span href ="https://www.fedex.com/apps/fedextrack/?tracknumbers={{ label.tracking_number }}">
                                                     {{ label.tracking_number }}
                                                     <a href="{{ asset(label.path) }}" download><i class="fa fa-print"></i></a>
+                                                    {% if app.user.hasRole('ROLE_ADMIN') %}
                                                     <span onclick="showTrackingModal({{ label.tracking_number }}, {{ label.id }})" style="color:orangered; cursor: pointer;"><i class="fa fa-times"></i></span>
+                                                    {% endif %}
                                                 </span>
                                             {% endfor %}
                                         {% endif %}
@@ -244,7 +250,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 10%;">Qty</th>
-                                <th style="width: 10%;">Shipped Qty</th>
+                                <th style="width: 10%;">{% if order.isPickUp %}Pickup{% else %}Shipped{% endif %} Qty</th>
                                 <th>Product</th>
                                 <th style="width: 24%;">Subtotal</th>
                             </tr>
